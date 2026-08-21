@@ -55,8 +55,29 @@ export const colorWithTransparency = (
   a: number,
 ): TransparentColor => color(opaqueColor.r, opaqueColor.g, opaqueColor.b, a);
 
+// CAS Design System primitives (Figma: CAS Design System → primitives → colour)
+// Only tokens whose exact values are used in this project are listed.
+export const colour = {
+  brand: {
+    crn: {
+      100: color(191, 227, 211),
+      500: color(52, 162, 112),
+      800: color(40, 121, 83),
+    },
+    gp2: {
+      25: color(230, 243, 249),
+      100: color(192, 223, 237),
+      500: color(12, 141, 195),
+      800: color(0, 106, 146),
+    },
+  },
+  neutral: {
+    0: color(255, 255, 255),
+  },
+} as const;
+
 // Monochrome
-export const paper = color(255, 255, 255);
+export const paper = colour.neutral[0];
 export const pearl = color(252, 253, 254);
 export const silver = color(237, 241, 243);
 export const steel = color(223, 229, 234);
@@ -73,12 +94,12 @@ export const sandstone = color(233, 166, 76);
 export const clay = color(206, 128, 26);
 export const apricot = color(248, 237, 222);
 
-export const fern = color(52, 162, 112);
-export const pine = color(40, 121, 83);
+export const fern = colour.brand.crn[500];
+export const pine = colour.brand.crn[800];
 export const mint = color(228, 245, 238);
 
 export const cerulean = color(0, 140, 198);
-export const denim = color(0, 106, 146);
+export const denim = colour.brand.gp2[800];
 
 export const prussian = color(0, 93, 129);
 export const space = color(0, 69, 97);
@@ -96,15 +117,15 @@ export const error100 = color(247, 232, 234);
 export const error500 = color(205, 20, 38);
 export const error900 = color(176, 10, 26);
 
-export const info100 = color(230, 243, 249);
-export const info150 = color(192, 223, 237);
-export const info200 = color(191, 227, 211);
-export const info500 = color(12, 141, 195);
-export const info900 = color(0, 106, 146);
+export const info100 = colour.brand.gp2[25];
+export const info150 = colour.brand.gp2[100];
+export const info200 = colour.brand.crn[100];
+export const info500 = colour.brand.gp2[500];
+export const info900 = colour.brand.gp2[800];
 
-export const information100 = color(230, 243, 249);
-export const information500 = color(12, 141, 195);
-export const information900 = color(0, 106, 146);
+export const information100 = colour.brand.gp2[25];
+export const information500 = colour.brand.gp2[500];
+export const information900 = colour.brand.gp2[800];
 
 export const neutral200 = color(246, 249, 251);
 export const neutral300 = color(237, 241, 243);
@@ -115,8 +136,8 @@ export const neutral900 = color(77, 100, 107);
 export const neutral1000 = color(0, 32, 44);
 
 export const success100 = color(228, 245, 238);
-export const success500 = color(52, 162, 112);
-export const success900 = color(40, 121, 83);
+export const success500 = colour.brand.crn[500];
+export const success900 = colour.brand.crn[800];
 
 export const warning100 = color(248, 237, 222);
 export const warning150 = color(242, 225, 203);
