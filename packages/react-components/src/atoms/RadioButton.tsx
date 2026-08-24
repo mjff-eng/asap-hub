@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { rem } from '../pixels';
-import { fern, lead, paper, pine, steel } from '../colors';
+import { lead, steel, colour } from '../colors';
 import { noop } from '../utils';
 
 const styles = css({
@@ -20,7 +20,7 @@ const styles = css({
   // inner circle
   padding: rem(6),
   backgroundClip: 'content-box',
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
 
   ':disabled': {
     borderColor: steel.rgb,
@@ -33,12 +33,12 @@ const styles = css({
     borderColor: lead.rgb,
   },
   ':checked': {
-    borderColor: fern.rgb,
-    backgroundColor: fern.rgb,
+    borderColor: colour.brand.crn[500].rgb,
+    backgroundColor: colour.brand.crn[500].rgb,
 
     ':hover, :focus': {
-      borderColor: pine.rgb,
-      backgroundColor: pine.rgb,
+      borderColor: colour.brand.crn[800].rgb,
+      backgroundColor: colour.brand.crn[800].rgb,
     },
   },
 });

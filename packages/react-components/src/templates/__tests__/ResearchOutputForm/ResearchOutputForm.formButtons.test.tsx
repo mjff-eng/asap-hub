@@ -13,7 +13,7 @@ import {
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ResearchOutputForm from '../../ResearchOutputForm';
-import { fern, paper } from '../../../colors';
+import { colour } from '../../../colors';
 import {
   getDefaultProps,
   initialResearchOutputData,
@@ -116,8 +116,8 @@ describe('form buttons', () => {
     );
   };
 
-  const primaryButtonBg = fern.rgb;
-  const notPrimaryButtonBg = paper.rgb;
+  const primaryButtonBg = colour.brand.crn[500].rgb;
+  const notPrimaryButtonBg = colour.neutral[0].rgb;
 
   it('shows Cancel, Save Draft and Publish buttons when user has editing and publishing permissions and the research output has not been published yet', async () => {
     await setupForm({

@@ -4,7 +4,7 @@ import {
   charcoal,
   lead,
   neutral1000,
-  paper,
+  colour,
   silver,
   steel,
   tin,
@@ -162,7 +162,7 @@ export const deleteButtonStyles = (
     padding: 0,
     border: `1px solid ${enabled ? steel.rgb : disabledBorder.rgb}`,
     borderRadius: rem(4),
-    backgroundColor: enabled ? paper.rgb : disabledBackground.rgb,
+    backgroundColor: enabled ? colour.neutral[0].rgb : disabledBackground.rgb,
     boxShadow: enabled ? undefined : `0 2px 4px rgba(223, 229, 234, 0.3)`,
     color: enabled ? neutral1000.rgb : lead.rgb,
     [`@media (max-width: ${mobileScreen.max}px)`]: {

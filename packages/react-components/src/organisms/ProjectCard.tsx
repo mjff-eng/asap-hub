@@ -25,7 +25,7 @@ import {
   InactiveBadgeIcon,
   TraineeIcon,
 } from '../icons';
-import { fern, lead } from '../colors';
+import { lead, colour } from '../colors';
 
 const cardStyles = css({
   padding: `${rem(32)} ${rem(24)}`,
@@ -76,7 +76,7 @@ const iconStyles = css({
 });
 
 const teamNameStyles = css({
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   fontWeight: 500,
 });
 

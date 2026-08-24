@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { layoutStyles } from '../text';
 import { rem } from '../pixels';
-import { fern, lead, charcoal, info500 } from '../colors';
+import { lead, charcoal, info500, colour } from '../colors';
 
 const styles = css({
   display: 'inline-block',
@@ -17,7 +17,7 @@ const styles = css({
 
 const activeStyles = css({
   paddingBottom: rem(12 - 4),
-  borderBottom: `solid ${rem(4)} ${fern.rgb}`,
+  borderBottom: `solid ${rem(4)} ${colour.brand.crn[500].rgb}`,
 
   color: charcoal.rgb,
   cursor: 'default',

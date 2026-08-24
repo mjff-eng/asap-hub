@@ -2,7 +2,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Avatar, Button, Link, Paragraph, PillSelector } from '../atoms';
-import { fern, neutral1000, warning100, warning900 } from '../colors';
+import { neutral1000, warning100, warning900, colour } from '../colors';
 import { binIcon, plusIcon, WarningIcon } from '../icons';
 import { deleteButtonStyles } from '../organisms/shared-event-card-styles';
 import { mobileScreen, rem } from '../pixels';
@@ -93,7 +93,7 @@ const nameSlotStyles = css({
 });
 
 const nameStyles = css({
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),

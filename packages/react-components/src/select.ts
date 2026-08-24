@@ -6,15 +6,13 @@ import { MultiSelectOptionsType } from './atoms/MultiSelect';
 import {
   charcoal,
   ember,
-  fern,
   lead,
   mint,
-  paper,
-  pine,
   rose,
   silver,
   steel,
   tin,
+  colour,
 } from './colors';
 import {
   borderWidth,
@@ -97,7 +95,11 @@ export const reactSelectStyles = <
   M extends boolean = boolean,
 >(
   {
-    colors: { primary100 = mint, primary500 = fern, primary900 = pine } = {},
+    colors: {
+      primary100 = mint,
+      primary500 = colour.brand.crn[500],
+      primary900 = colour.brand.crn[800],
+    } = {},
   }: Theme,
   isInvalid: boolean,
 ): StylesConfig<T, M, GroupBase<T>> =>
@@ -157,7 +159,11 @@ export const reactMultiSelectStyles = <
   M extends boolean = true,
 >(
   {
-    colors: { primary100 = mint, primary500 = fern, primary900 = pine } = {},
+    colors: {
+      primary100 = mint,
+      primary500 = colour.brand.crn[500],
+      primary900 = colour.brand.crn[800],
+    } = {},
   }: Theme,
   isInvalid: boolean,
   isMulti: boolean,
@@ -188,7 +194,7 @@ export const reactMultiSelectStyles = <
       ...(isInvalid
         ? {
             borderColor: isFocused ? primary900.rgba : ember.rgb,
-            backgroundColor: isFocused ? paper.rgb : rose.rgb,
+            backgroundColor: isFocused ? colour.neutral[0].rgb : rose.rgb,
             svg: { fill: 'unset' },
           }
         : {}),
@@ -205,7 +211,7 @@ export const reactMultiSelectStyles = <
       borderWidth: `${borderWidth}px`,
       borderColor: isInvalid ? tin.rgba : steel.rgb,
       borderRadius: rem(18),
-      backgroundColor: paper.rgb,
+      backgroundColor: colour.neutral[0].rgb,
     }),
     multiValueLabel: (provided) => ({
       ...provided,

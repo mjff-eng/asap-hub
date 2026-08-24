@@ -1,6 +1,6 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { colors } from '..';
-import { lead, paper, steel, tin } from '../colors';
+import { lead, steel, tin, colour } from '../colors';
 import { borderWidth } from '../form';
 import { mobileScreen, rem } from '../pixels';
 
@@ -44,7 +44,7 @@ const pillStyles = (selected: boolean, error: boolean) =>
     borderRadius: rem(24),
     cursor: 'pointer',
     userSelect: 'none',
-    backgroundColor: selected ? colors.info100.rgba : paper.rgb,
+    backgroundColor: selected ? colors.info100.rgba : colour.neutral[0].rgb,
     color: selected ? colors.info500.rgba : lead.rgba,
     '> svg': {
       width: rem(24),

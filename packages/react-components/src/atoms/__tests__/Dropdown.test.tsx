@@ -5,7 +5,7 @@ import { Theme } from '@emotion/react';
 import { matchers } from '@emotion/jest';
 import { GroupBase, SingleValueProps } from 'react-select';
 
-import { ember, fern, lead, pine, silver, tin } from '../../colors';
+import { ember, lead, silver, tin, colour } from '../../colors';
 import Dropdown from '../Dropdown';
 import { Option, reactSelectStyles } from '../../select';
 
@@ -128,7 +128,7 @@ it('shows the focused option in green', async () => {
       / /g,
       '',
     ),
-  ).toBe(pine.rgb.replace(/ /g, ''));
+  ).toBe(colour.brand.crn[800].rgb.replace(/ /g, ''));
 
   await userEvent.hover(screen.getByText('Heathrow'));
   expect(
@@ -136,7 +136,7 @@ it('shows the focused option in green', async () => {
       / /g,
       '',
     ),
-  ).not.toBe(pine.rgb.replace(/ /g, ''));
+  ).not.toBe(colour.brand.crn[800].rgb.replace(/ /g, ''));
 });
 
 it('gets a green border when focused', async () => {
@@ -151,12 +151,12 @@ it('gets a green border when focused', async () => {
   await userEvent.click(screen.getByText('Select'));
   expect(
     findParentWithStyle(screen.getByText('Select'), 'borderColor')?.borderColor,
-  ).toBe(fern.rgba);
+  ).toBe(colour.brand.crn[500].rgba);
 
   await userEvent.tab();
   expect(
     findParentWithStyle(screen.getByText('Select'), 'borderColor')?.borderColor,
-  ).not.toBe(fern.rgb);
+  ).not.toBe(colour.brand.crn[500].rgb);
 });
 
 it('gets greyed out when disabled', () => {

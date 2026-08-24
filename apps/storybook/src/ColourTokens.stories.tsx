@@ -436,13 +436,16 @@ export const CodeStatus = () => (
         this ramp with new values; the closest CAS candidate is shown next to
         ours, and adopting it is a visible change that needs design sign-off.{' '}
         <b>Not in CAS</b> (red): no CAS colour is close to this value in any
-        collection (primitives, mode or theme), so it either gets added to Figma
-        or retired. Matching is alpha-aware: a CAS alpha token (900-A4 to
-        900-A40) only counts as used when code has the same base colour at the
-        same opacity. The .rgb and .rgba forms of a palette colour are the same
-        value, and the few transparent colours in code (tin at 34% and 70%, lead
-        at 0%) match no CAS alpha token, whose bases are all 900-level colours
-        we do not use.
+        collection (primitives, mode or theme). Agreed with design: these keep
+        their current name and value in code, and no Figma colour is used in
+        their place; the nearest CAS colour is shown only for context. Amber
+        colours also keep their current name and value until design signs off
+        the ramp migration. Matching is alpha-aware: a CAS alpha token (900-A4
+        to 900-A40) only counts as used when code has the same base colour at
+        the same opacity. The .rgb and .rgba forms of a palette colour are the
+        same value, and the few transparent colours in code (tin at 34% and 70%,
+        lead at 0%) match no CAS alpha token, whose bases are all 900-level
+        colours we do not use.
       </>
     }
   >

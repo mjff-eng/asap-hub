@@ -25,6 +25,7 @@ import {
   pearl,
   steel,
   tin,
+  colour,
 } from '../colors';
 import {
   binIcon,

@@ -11,8 +11,8 @@ import {
   info500,
   info100,
   mint,
-  pine,
   tin,
+  colour,
 } from '../colors';
 import { WarningIcon, infoInfoIcon, liveIcon, paperClipIcon } from '../icons';
 import { borderRadius, paddingStyles } from '../card';
@@ -57,8 +57,8 @@ const infoStyles = css({
 
 const liveStyles = css({
   backgroundColor: mint.rgb,
-  color: pine.rgb,
-  fill: pine.rgb,
+  color: colour.brand.crn[800].rgb,
+  fill: colour.brand.crn[800].rgb,
 });
 
 const leadStyles = css({

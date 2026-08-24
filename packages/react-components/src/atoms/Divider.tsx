@@ -1,7 +1,7 @@
 import { ReactText } from 'react';
 import { css } from '@emotion/react';
 
-import { lead, steel, paper } from '../colors';
+import { lead, steel, colour } from '../colors';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -32,7 +32,7 @@ const textStyles = css({
   justifySelf: 'center',
   textAlign: 'center',
 
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
   color: lead.rgb,
   textTransform: 'uppercase',
   fontWeight: 'bold',

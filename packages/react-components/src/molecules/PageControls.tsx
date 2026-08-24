@@ -10,7 +10,7 @@ import {
   mobileScreen,
   largeDesktopScreen,
 } from '../pixels';
-import { steel, fern, tin, lead, mint, paper } from '../colors';
+import { steel, tin, lead, mint, colour } from '../colors';
 import {
   firstPageIcon,
   nextPageIcon,
@@ -35,7 +35,7 @@ const listStyles = css({
   gridAutoColumns: rem(30),
   gridGap: vminLinearCalc(mobileScreen, 6, largeDesktopScreen, 12, 'px'),
 
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
 });
 
 const itemStyles = css({
@@ -62,7 +62,9 @@ const itemStyles = css({
   },
 });
 
-const textStyles = ({ primary500 = fern }: Theme['colors'] = {}) =>
+const textStyles = ({
+  primary500 = colour.brand.crn[500],
+}: Theme['colors'] = {}) =>
   css({
     height: '100%',
     display: 'grid',
@@ -76,7 +78,7 @@ const textStyles = ({ primary500 = fern }: Theme['colors'] = {}) =>
     },
   });
 const activeTextStyles = ({
-  primary500 = fern,
+  primary500 = colour.brand.crn[500],
   primary100 = mint,
 }: Theme['colors'] = {}) =>
   css({

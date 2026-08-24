@@ -4,13 +4,12 @@ import { InputHTMLAttributes } from 'react';
 import {
   ember,
   lead,
-  paper,
-  pine,
   rose,
   silver,
   steel,
   tin,
   neutral800,
+  colour,
 } from '../colors';
 import {
   indicatorPadding,
@@ -77,9 +76,9 @@ const invalidStyles = css({
     [`& ~ .${LABEL_INDICATOR_CLASS_NAME}`]: {
       backgroundColor: ember.rgb,
       borderColor: ember.rgb,
-      color: paper.rgb,
+      color: colour.neutral[0].rgb,
       svg: {
-        stroke: paper.rgb,
+        stroke: colour.neutral[0].rgb,
         fill: 'white',
       },
     },
@@ -88,7 +87,7 @@ const invalidStyles = css({
 
 const textFieldStyles = (
   hasValue: boolean,
-  { primary900 = pine }: Theme['colors'] = {},
+  { primary900 = colour.brand.crn[800] }: Theme['colors'] = {},
 ) =>
   css({
     backgroundPosition: `right ${rem(paddingLeftRight)} top ${rem(
