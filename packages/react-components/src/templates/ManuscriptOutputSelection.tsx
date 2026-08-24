@@ -14,6 +14,7 @@ import {
   Pill,
 } from '..';
 import { mobileScreen, rem } from '../pixels';
+import { colour, lead, steel } from '../colors';
 
 const mainStyles = css({
   display: 'flex',
@@ -98,12 +99,12 @@ const pillContainerStyles = (isFocused?: boolean) =>
       flexDirection: 'column',
     },
     '& > *:nth-of-type(1), & > *:nth-of-type(2)': {
-      backgroundColor: isFocused ? '#DFE5EA' : undefined,
-      color: isFocused ? '#4D646B' : undefined,
+      backgroundColor: isFocused ? steel.hex : undefined,
+      color: isFocused ? lead.hex : undefined,
     },
     '& > *:nth-of-type(3)': {
       backgroundColor: isFocused ? '#CFEDFB' : undefined,
-      color: isFocused ? '#006A92' : undefined,
+      color: isFocused ? colour.brand.gp2[800].hex : undefined,
     },
   });
 

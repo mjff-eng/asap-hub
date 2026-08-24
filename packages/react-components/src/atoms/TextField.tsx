@@ -1,7 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { css, Theme } from '@emotion/react';
 import { InputHTMLAttributes } from 'react';
-import { ember, lead, paper, pine, rose, silver, steel, tin } from '../colors';
+import {
+  ember,
+  lead,
+  paper,
+  pine,
+  rose,
+  silver,
+  steel,
+  tin,
+  neutral800,
+} from '../colors';
 import {
   indicatorPadding,
   indicatorSize,
@@ -91,7 +101,7 @@ const textFieldStyles = (
       color: tin.rgb,
     },
     '&[type="date"]': {
-      color: hasValue ? '#000' : '#92999E',
+      color: hasValue ? '#000' : neutral800.hex,
     },
 
     // see invalid
