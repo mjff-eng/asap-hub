@@ -14,7 +14,7 @@ import {
   Caption,
   CopyButton,
 } from '../atoms';
-import { pine } from '../colors';
+import { colour } from '../colors';
 import {
   Breadcrumbs,
   UserAvatarList,
@@ -120,7 +120,7 @@ const dropdownButtonStyling = css({
   display: 'flex',
   columnGap: rem(9),
   svg: {
-    color: pine.rgb,
+    color: colour.brand.crn[800].rgb,
   },
 });
 

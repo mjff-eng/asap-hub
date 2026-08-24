@@ -6,7 +6,7 @@ import {
   magentaCeruleanGradientStyles,
 } from '../appearance';
 import { rem } from '../pixels';
-import { paper } from '../colors';
+import { colour } from '../colors';
 import { paddingStyles, borderRadius } from '../card';
 import { Card } from '../atoms';
 import { validTickIcon, warningTransparentIcon } from '../icons';
@@ -25,7 +25,7 @@ const bannerStyles = css({
   flexDirection: 'column',
   alignItems: 'center',
 
-  svg: { stroke: paper.rgb, fill: paper.rgb },
+  svg: { stroke: colour.neutral[0].rgb, fill: colour.neutral[0].rgb },
 });
 
 const contentStyles = css({

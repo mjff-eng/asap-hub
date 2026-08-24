@@ -12,15 +12,14 @@ import { Anchor, Button } from '../atoms';
 import { rem, mobileScreen, formTargetWidth } from '../pixels';
 
 import {
-  paper,
   steel,
   colorWithTransparency,
   tin,
   mint,
   lead,
-  pine,
   silver,
   neutral200,
+  colour,
 } from '../colors';
 
 const containerStyles = css({
@@ -48,7 +47,7 @@ const menuContainerStyles = (customMenuWidth?: number) =>
     width: '100%',
     top: 0,
     right: 0,
-    backgroundColor: paper.rgb,
+    backgroundColor: colour.neutral[0].rgb,
     border: `1px solid ${steel.rgb}`,
     boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
 
@@ -110,7 +109,7 @@ export type ItemType = 'title' | 'inner' | 'default';
 
 const itemStyles = ({
   primary100 = mint,
-  primary900 = pine,
+  primary900 = colour.brand.crn[800],
   type = 'default',
 }: { type?: ItemType } & Theme['colors']) =>
   css({

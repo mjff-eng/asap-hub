@@ -15,10 +15,10 @@ import {
   lead,
   neutral1000,
   pearl,
-  pine,
   silver,
   steel,
   tin,
+  colour,
 } from '../colors';
 import { crossIcon, plusIcon, searchIcon } from '../icons';
 import { ConfirmableModalFooter, Modal } from '../molecules';
@@ -105,7 +105,7 @@ const searchOptionStyles = css([
 ]);
 
 const searchUserNameStyles = css({
-  color: pine.rgb,
+  color: colour.brand.crn[800].rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),

@@ -1,8 +1,8 @@
-import { fern, info500, iris } from '../colors';
+import { info500, iris, colour } from '../colors';
 
 // Multi-stop brand ramp (purple → blue → teal → green) shared by the
 // preliminary-findings wheel and bar so the two can't drift apart.
-const findingsRampStops = `${iris.hex} 30.25%, ${info500.hex} 51.91%, #1491B2 66.74%, #299C86 79.82%, ${fern.hex} 90.01%`;
+const findingsRampStops = `${iris.hex} 30.25%, ${info500.hex} 51.91%, #1491B2 66.74%, #299C86 79.82%, ${colour.brand.crn[500].hex} 90.01%`;
 
 export const findingsGradient = `linear-gradient(90deg, ${findingsRampStops})`;
 

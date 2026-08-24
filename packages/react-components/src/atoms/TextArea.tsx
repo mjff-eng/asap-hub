@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 
 import { useValidation, styles, validationMessageStyles } from '../form';
 import { noop } from '../utils';
-import { ember, rose, fern, tin, lead, silver } from '../colors';
+import { ember, rose, tin, lead, silver, colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const containerStyles = css({
@@ -139,7 +139,7 @@ const TextArea: React.FC<TextAreaProps> = ({
 
         {maxLength !== undefined && (
           <div
-            css={({ colors: { primary500 = fern } = {} }) => [
+            css={({ colors: { primary500 = colour.brand.crn[500] } = {} }) => [
               validationMessageStyles,
               limitStyles,
               { color: reachedMaxLength ? ember.rgb : primary500.rgba },

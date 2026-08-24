@@ -4,7 +4,7 @@ import { ThemeProvider } from '@emotion/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, useLocation, StaticRouter } from 'react-router';
 import { activePrimaryBackgroundColorDefault } from '../../button';
-import { color, pine } from '../../colors';
+import { color, colour } from '../../colors';
 import NavigationLink from '../NavigationLink';
 
 // Helper to capture location in tests
@@ -240,7 +240,7 @@ describe('with ThemeProvider', () => {
     const { color: primaryColor, backgroundColor } = getComputedStyle(
       screen.getByRole('link'),
     );
-    expect(primaryColor).toBe(pine.rgb);
+    expect(primaryColor).toBe(colour.brand.crn[800].rgb);
     expect(backgroundColor).toBe(activePrimaryBackgroundColorDefault.rgba);
   });
   it('uses ThemeProvider theme primaryColor', () => {

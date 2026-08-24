@@ -6,7 +6,7 @@ import {
 import fc from 'fast-check';
 
 import PageControls from '../PageControls';
-import { fern, tin } from '../../colors';
+import { tin, colour } from '../../colors';
 
 mockConsoleError();
 
@@ -50,7 +50,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(fern.rgba.replace(/ /g, ''));
+    ).toBe(colour.brand.crn[500].rgba.replace(/ /g, ''));
     expect(getByTitle(/first page/i).closest('a')).toHaveAttribute(
       'href',
       '#0',
@@ -86,7 +86,7 @@ describe('the arrow controls', () => {
         getByTitle(/previous page/i),
         'stroke',
       )?.stroke?.replace(/ /g, ''),
-    ).toBe(fern.rgba.replace(/ /g, ''));
+    ).toBe(colour.brand.crn[500].rgba.replace(/ /g, ''));
     expect(getByTitle(/previous page/i).closest('a')).toHaveAttribute(
       'href',
       '#1',
@@ -124,7 +124,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(fern.rgba.replace(/ /g, ''));
+    ).toBe(colour.brand.crn[500].rgba.replace(/ /g, ''));
     expect(getByTitle(/next page/i).closest('a')).toHaveAttribute('href', '#1');
   });
   it('disable the link to the next page on the last page', () => {
@@ -157,7 +157,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(fern.rgba.replace(/ /g, ''));
+    ).toBe(colour.brand.crn[500].rgba.replace(/ /g, ''));
     expect(getByTitle(/last page/i).closest('a')).toHaveAttribute('href', '#2');
   });
   it('disable the link to the last page on the last page', () => {
@@ -269,8 +269,12 @@ it('highlights the active page number', () => {
       renderPageHref={renderPageHref}
     />,
   );
-  expect(getComputedStyle(getByText('4')).color).not.toBe(fern.rgb);
-  expect(getComputedStyle(getByText('5')).color).toBe(fern.rgb);
+  expect(getComputedStyle(getByText('4')).color).not.toBe(
+    colour.brand.crn[500].rgb,
+  );
+  expect(getComputedStyle(getByText('5')).color).toBe(
+    colour.brand.crn[500].rgb,
+  );
 });
 
 it('links page numbers to the respective pages', () => {

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { lineHeight, rem } from '../pixels';
-import { steel, paper, tin, charcoal, lead, silver } from '../colors';
+import { steel, tin, charcoal, lead, silver, colour } from '../colors';
 import { noop } from '../utils';
 
 const styles = css({
@@ -32,7 +32,7 @@ const iconStyles = css({
   paddingRight: rem(6),
 });
 const activeStyles = css({
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
   border: `1px solid ${steel.rgb}`,
   color: charcoal.rgb,
   svg: {

@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import React, { ComponentProps, useMemo } from 'react';
 import { rem, tabletScreen } from '../pixels';
 import { LabsList, MembersList, RolesList, TabbedCard } from '../molecules';
-import { fern } from '../colors';
+import { colour } from '../colors';
 import { getTeamMembersByStatus, GroupedTeamMember } from '../utils';
 import { Paragraph } from '../atoms';
 
@@ -19,7 +19,7 @@ const containerStyles = css({
 });
 
 const nameStyles = css({
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   fontWeight: 'normal',
 });
 
