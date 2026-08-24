@@ -17,6 +17,7 @@ import {
   PastEventsDashboardCard,
   RecentSharedOutputs,
   NewsCard,
+  neutral1000,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
@@ -138,17 +139,23 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         </Paragraph>
         <div css={contentCardsStyles}>
           <InfoCard
-            icon={<LabIcon color="#00202C" size={40} />}
+            icon={<LabIcon color={neutral1000.hex} size={40} />}
             title="Samples Processed & Shared"
             total={latestStats.sampleCount}
           />
           <InfoCard
-            icon={<WorkingGroupsIcon color="#00202C" width={40} height={40} />}
+            icon={
+              <WorkingGroupsIcon
+                color={neutral1000.hex}
+                width={40}
+                height={40}
+              />
+            }
             title="Cohorts Pledged"
             total={latestStats.cohortCount}
           />
           <InfoCard
-            icon={<ArticleIcon color="#00202C" size={40} />}
+            icon={<ArticleIcon color={neutral1000.hex} size={40} />}
             title="Research Articles"
             total={latestStats.articleCount}
           />
