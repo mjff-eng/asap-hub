@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Pill, Spinner } from '../atoms';
 import {
-  paper,
   steel,
   colorWithTransparency,
   tin,
@@ -18,6 +17,7 @@ import {
   success500,
   error100,
   error500,
+  colour,
 } from '../colors';
 import { chevronDownIcon, chevronUpIcon } from '../icons';
 import { rem } from '../pixels';
@@ -96,7 +96,7 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     left,
     zIndex: 1,
     minWidth: rem(160),
-    backgroundColor: paper.rgb,
+    backgroundColor: colour.neutral[0].rgb,
     border: `1px solid ${steel.rgb}`,
     boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
     padding: `${rem(8)} 0`,

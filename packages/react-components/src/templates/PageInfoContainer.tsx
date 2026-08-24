@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
-import { paper, steel } from '../colors';
+import { steel, colour } from '../colors';
 import PageConstraints from './PageConstraints';
 import { rem } from '../pixels';
 
@@ -12,7 +12,7 @@ type PageInfoContainerProps = {
 };
 
 const containerStyles = css({
-  background: paper.rgb,
+  background: colour.neutral[0].rgb,
   boxShadow: `0 2px 4px -2px ${steel.rgb}`,
 });
 

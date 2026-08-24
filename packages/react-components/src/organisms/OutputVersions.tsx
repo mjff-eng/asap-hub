@@ -4,15 +4,7 @@ import { useState } from 'react';
 
 import { Button, Card, Headline2, Link, Paragraph, Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import {
-  charcoal,
-  fern,
-  lead,
-  neutral200,
-  paper,
-  pine,
-  steel,
-} from '../colors';
+import { charcoal, lead, neutral200, steel, colour } from '../colors';
 import { formatDateToTimezone } from '../date';
 import { ExternalLinkIcon } from '../icons';
 import { contentSidePaddingWithNavigation } from '../layout';
@@ -90,10 +82,16 @@ const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    stroke: fern.rgb,
+    stroke: colour.brand.crn[500].rgb,
   }),
-  grey: css({ stroke: fern.rgb, ':active': { stroke: pine.rgb } }),
-  dark: css({ stroke: paper.rgb, ':active': { stroke: paper.rgb } }),
+  grey: css({
+    stroke: colour.brand.crn[500].rgb,
+    ':active': { stroke: colour.brand.crn[800].rgb },
+  }),
+  dark: css({
+    stroke: colour.neutral[0].rgb,
+    ':active': { stroke: colour.neutral[0].rgb },
+  }),
 };
 
 const mainStyles = css({

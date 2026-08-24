@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import userEvent from '@testing-library/user-event';
 import Tag from '../Tag';
-import { mint, neutral1000, paper, silver, steel } from '../../colors';
+import { mint, neutral1000, silver, steel, colour } from '../../colors';
 
 it('renders a tag with content', () => {
   const { container } = render(<Tag>Text</Tag>);
@@ -13,7 +13,7 @@ it('renders a white tag with a mint background when highlighted', () => {
   const { getByText, rerender } = render(<Tag>Text</Tag>);
   expect(
     findParentWithStyle(getByText('Text'), 'backgroundColor')?.backgroundColor,
-  ).toBe(paper.rgb);
+  ).toBe(colour.neutral[0].rgb);
 
   rerender(<Tag highlight>Text</Tag>);
   expect(
@@ -26,7 +26,9 @@ it('renders a tag with disabled styles when disabled', () => {
   const getParentStyle = (prop: keyof CSSStyleDeclaration) =>
     findParentWithStyle(getByText('Text'), prop);
 
-  expect(getParentStyle('backgroundColor')?.backgroundColor).toBe(paper.rgb);
+  expect(getParentStyle('backgroundColor')?.backgroundColor).toBe(
+    colour.neutral[0].rgb,
+  );
 
   rerender(<Tag enabled={false}>Text</Tag>);
 

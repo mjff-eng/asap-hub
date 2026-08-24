@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 
 import { rem } from '../pixels';
 import { Label, Paragraph, TextArea } from '../atoms';
-import { lead, paper } from '../colors';
+import { lead, colour } from '../colors';
 import { TooltipInfo } from '.';
 
 const tipStyles = css({
@@ -36,7 +36,7 @@ const infoStyle = css({
   },
   [`& p`]: {
     textAlign: 'left',
-    color: paper.rgb,
+    color: colour.neutral[0].rgb,
     marginTop: 0,
   },
 });

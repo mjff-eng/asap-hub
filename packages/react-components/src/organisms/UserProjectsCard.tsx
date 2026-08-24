@@ -3,7 +3,7 @@ import { UserProjectMembership, ProjectStatus } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
 import { Card, Paragraph, Button, Headline2, Anchor, Pill } from '../atoms';
-import { charcoal, fern, neutral900, steel } from '../colors';
+import { charcoal, neutral900, steel, colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { getProjectRoute } from '../utils';
 import { getStatusPillAccent } from './ProjectCard';
@@ -78,7 +78,7 @@ const lastRowNoBorder = css({
 const projectNameStyles = css({
   fontSize: rem(17),
   fontWeight: '500',
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',
@@ -98,7 +98,7 @@ const showMoreButtonStyles = css({
   justifyContent: 'center',
   width: '100%',
   fontWeight: 'normal',
-  color: fern.rgba,
+  color: colour.brand.crn[500].rgba,
   borderTop: `1px solid ${steel.rgb}`,
   marginTop: rem(16),
   paddingTop: rem(16),
@@ -161,7 +161,7 @@ const mobileFieldValue = css({
 const mobileProjectNameValue = css({
   fontSize: rem(17),
   fontWeight: '500',
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',

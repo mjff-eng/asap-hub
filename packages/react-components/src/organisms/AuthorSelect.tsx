@@ -5,7 +5,7 @@ import { ReactElement, ReactNode } from 'react';
 import { components } from 'react-select';
 import { Avatar } from '../atoms';
 import { MultiSelectOptionsType } from '../atoms/MultiSelect';
-import { paper, steel } from '../colors';
+import { steel, colour } from '../colors';
 import { borderWidth } from '../form';
 import { crossIcon, plusIcon, userPlaceholderIcon } from '../icons';
 import LabeledMultiSelect, {
@@ -75,7 +75,7 @@ const singleValueStyles = css({
   borderWidth: `${borderWidth}px`,
   borderColor: steel.rgb,
   borderRadius: rem(18),
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
 
   // Position above react-select's input overlay to enable click interactions
   position: 'relative',

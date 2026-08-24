@@ -6,12 +6,12 @@ import { Button, Headline2, Link, Paragraph, Tag } from '../atoms';
 import {
   error500,
   error900,
-  fern,
   lead,
   neutral1000,
   pearl,
   silver,
   steel,
+  colour,
 } from '../colors';
 import {
   binIcon,
@@ -274,7 +274,7 @@ const matchedTeamStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: rem(8),
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   '> svg': {
     width: rem(24),
     height: rem(24),
@@ -283,7 +283,7 @@ const matchedTeamStyles = css({
 });
 
 const matchedTeamNameStyles = css({
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   fontWeight: 400,
 });
 
@@ -311,7 +311,7 @@ const unmatchedMetaStyles = css({
 });
 
 const suggestionLinkStyles = css({
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
 });
 
 const addSuggestionButtonStyles = css({

@@ -3,7 +3,7 @@ import { css, CSSObject, Theme } from '@emotion/react';
 
 import { Anchor } from '../atoms';
 import { ExternalLinkIcon } from '../icons';
-import { fern, pine } from '../colors';
+import { colour } from '../colors';
 import { mobileScreen, rem } from '../pixels';
 import { getLinkColors } from '../atoms/Link';
 
@@ -24,22 +24,24 @@ const styles = (
     width: 'max-content',
     borderRadius: rem(36),
     minWidth: '24px',
-    color: colors?.primary500?.rgba || fern.rgb,
+    color: colors?.primary500?.rgba || colour.brand.crn[500].rgb,
     boxSizing: 'border-box',
-    border: `${borderWidth}px solid ${colors?.primary500?.rgba || fern.rgb}`,
+    border: `${borderWidth}px solid ${
+      colors?.primary500?.rgba || colour.brand.crn[500].rgb
+    }`,
     margin: noMargin ? '0' : `${rem(12)} 0`,
     padding: withLabel ? `0 ${rem(12 - borderWidth)}` : rem(3),
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       padding: full ? `0 ${rem(12 - borderWidth)}` : rem(3),
     },
     svg: {
-      stroke: colors?.primary500?.rgba || fern.rgb,
+      stroke: colors?.primary500?.rgba || colour.brand.crn[500].rgb,
     },
     ':hover, :focus': {
-      color: colors?.primary500?.rgba || pine.rgb,
-      borderColor: colors?.primary500?.rgba || pine.rgb,
+      color: colors?.primary500?.rgba || colour.brand.crn[800].rgb,
+      borderColor: colors?.primary500?.rgba || colour.brand.crn[800].rgb,
       svg: {
-        stroke: colors?.primary500?.rgba || pine.rgb,
+        stroke: colors?.primary500?.rgba || colour.brand.crn[800].rgb,
       },
     },
   });

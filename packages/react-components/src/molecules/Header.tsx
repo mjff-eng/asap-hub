@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Link } from '../atoms';
-import { paper } from '../colors';
+import { colour } from '../colors';
 import { crnLogoFull, crnLogoFullWhite, crnLogoMobile } from '../icons';
 import { contentSidePaddingWithNavigation } from '../layout';
 import { mobileScreen, rem } from '../pixels';
@@ -21,7 +21,7 @@ const containerStyles = (logoAlignment: 'center' | 'left') =>
         : undefined,
   });
 const containerOpaqueStyles = css({
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
 });
 
 const logoStyles = css({

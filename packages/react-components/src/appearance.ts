@@ -1,7 +1,7 @@
-import { cerulean, fern, magenta, iris } from './colors';
+import { cerulean, magenta, iris, colour } from './colors';
 
 export const ceruleanFernGradientStyles = {
-  background: `linear-gradient(to right, ${cerulean.rgb}, ${fern.rgb})`,
+  background: `linear-gradient(to right, ${cerulean.rgb}, ${colour.brand.crn[500].rgb})`,
 } as const;
 export const magentaCeruleanGradientStyles = {
   background: `linear-gradient(to right, ${magenta.rgb}, ${cerulean.rgb})`,
