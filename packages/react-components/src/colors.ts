@@ -86,10 +86,8 @@ export const charcoal = color(0, 34, 44);
 
 // Accent
 export const ember = color(205, 20, 38);
-export const pepper = color(176, 10, 26);
 export const rose = color(247, 232, 234);
 
-export const sandstone = color(233, 166, 76);
 export const clay = color(206, 128, 26);
 export const apricot = color(248, 237, 222);
 
@@ -97,7 +95,6 @@ export const mint = color(228, 245, 238);
 
 export const cerulean = color(0, 140, 198);
 
-export const prussian = color(0, 93, 129);
 export const space = color(0, 69, 97);
 export const azure = color(231, 247, 254);
 
