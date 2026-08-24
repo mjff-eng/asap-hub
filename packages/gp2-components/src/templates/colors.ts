@@ -1,4 +1,9 @@
-import { color, colour } from '@asap-hub/react-components';
+import {
+  color,
+  colour,
+  success500,
+  success900,
+} from '@asap-hub/react-components';
 
 const colors = {
   error100: color(247, 232, 234, 1),
@@ -19,11 +24,11 @@ const colors = {
   primary500: colour.brand.gp2[500],
   primary900: colour.brand.gp2[800],
   secondary100: color(228, 245, 238),
-  secondary500: colour.brand.crn[500],
-  secondary900: colour.brand.crn[800],
-  success100: colour.brand.crn[500],
-  success500: colour.brand.crn[500],
-  success900: colour.brand.crn[800],
+  secondary500: success500,
+  secondary900: success900,
+  success100: success500,
+  success500,
+  success900,
   warning100: color(248, 237, 222),
   warning500: color(206, 128, 26),
   warning900: color(181, 107, 11),
