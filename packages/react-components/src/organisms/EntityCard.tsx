@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Anchor, Card, Ellipsis, Link, Pill } from '../atoms';
-import { fern, lead } from '../colors';
+import { lead, colour } from '../colors';
 import { googleDriveIcon } from '../icons';
 import { LinkHeadline, TagList } from '../molecules';
 import { mobileScreen, rem } from '../pixels';
@@ -33,7 +33,7 @@ const googleDriveButtonStyle = css({
 });
 
 const textStyles = css({
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   display: 'flex',
 });
 

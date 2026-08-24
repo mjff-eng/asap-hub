@@ -4,7 +4,7 @@ import { network } from '@asap-hub/routing';
 
 import { Card, Headline3, Paragraph, Pill } from '../atoms';
 import { mobileScreen, rem } from '../pixels';
-import { fern, lead, neutral200, paper, pine } from '../colors';
+import { lead, neutral200, colour } from '../colors';
 import { ThemeVariant } from '../theme';
 import { contentSidePaddingWithNavigation } from '../layout';
 
@@ -28,10 +28,16 @@ const pillContainerStyles = css({
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    stroke: fern.rgb,
+    stroke: colour.brand.crn[500].rgb,
   }),
-  grey: css({ stroke: fern.rgb, ':active': { stroke: pine.rgb } }),
-  dark: css({ stroke: paper.rgb, ':active': { stroke: paper.rgb } }),
+  grey: css({
+    stroke: colour.brand.crn[500].rgb,
+    ':active': { stroke: colour.brand.crn[800].rgb },
+  }),
+  dark: css({
+    stroke: colour.neutral[0].rgb,
+    ':active': { stroke: colour.neutral[0].rgb },
+  }),
 };
 const mainStyles = css({
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} 0`,
@@ -55,7 +61,7 @@ const titleStyles = css({
 const linkStyles = css({
   textDecoration: 'underline solid transparent',
   transition: 'text-decoration 100ms ease-in-out, color 100ms ease-in-out',
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
 
   ':hover': {
     textDecoration: 'underline',

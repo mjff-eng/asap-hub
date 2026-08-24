@@ -2,13 +2,13 @@ import { css, Theme } from '@emotion/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import { rem } from '../pixels';
-import { fern, lead, pine, steel } from '../colors';
+import { lead, steel, colour } from '../colors';
 import { noop } from '../utils';
 import { tickIcon } from '../icons';
 
 const checkboxStyles = ({
-  primary500 = fern,
-  primary900 = pine,
+  primary500 = colour.brand.crn[500],
+  primary900 = colour.brand.crn[800],
 }: Theme['colors'] = {}) =>
   css({
     flexShrink: 0,

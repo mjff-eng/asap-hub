@@ -10,13 +10,13 @@ import {
   Headline6,
 } from '../atoms';
 import { styles } from '../atoms/Link';
-import { fern } from '../colors';
+import { colour } from '../colors';
 import { headlineStyles } from '../text';
 
 export const hover = (colors: Theme['colors']): SerializedStyles =>
   css({
     ':hover': {
-      color: colors?.primary500?.rgba || fern.rgb,
+      color: colors?.primary500?.rgba || colour.brand.crn[500].rgb,
     },
   });
 

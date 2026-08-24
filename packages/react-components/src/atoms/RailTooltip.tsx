@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-import { paper, space } from '../colors';
+import { space, colour } from '../colors';
 import { rem } from '../pixels';
 import { canHover } from '../utils/common';
 import { Portal } from '../utils/portal';
@@ -32,7 +32,7 @@ const bubbleStyles = css({
   pointerEvents: 'none',
 
   backgroundColor: space.rgb,
-  color: paper.rgb,
+  color: colour.neutral[0].rgb,
   borderRadius: rem(4),
   padding: `${rem(6)} ${rem(12)}`,
   whiteSpace: 'nowrap',

@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { ember, fern, steel } from './colors';
+import { ember, steel, colour } from './colors';
 import { lineHeight, rem } from './pixels';
 import { themes } from './theme';
 
@@ -39,7 +39,7 @@ export const styles = {
   borderWidth: rem(borderWidth),
   borderColor: steel.rgb,
   ':focus': {
-    borderColor: fern.rgb,
+    borderColor: colour.brand.crn[500].rgb,
   },
 } as const;
 

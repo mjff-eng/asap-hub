@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { rem, tabletScreen } from '../pixels';
-import { fern, lead, neutral900, neutral1000 } from '../colors';
+import { lead, neutral900, neutral1000, colour } from '../colors';
 
 export const descriptionContainerStyles = css({
   display: 'flex',
@@ -39,7 +39,7 @@ export const clampedDescriptionStyles = (isExpanded: boolean) =>
 export const readMoreButtonStyles = css({
   background: 'none',
   border: 'none',
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   cursor: 'pointer',
   padding: 0,
   fontSize: rem(17),

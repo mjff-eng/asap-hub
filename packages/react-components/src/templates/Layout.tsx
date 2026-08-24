@@ -16,12 +16,12 @@ import { ScrollContext } from '@asap-hub/react-context';
 
 import {
   steel,
-  paper,
   tin,
   colorWithTransparency,
   pearl,
   charcoal,
   success900,
+  colour,
 } from '../colors';
 import { MenuHeader, OnboardingFooter, ToastStack } from '../organisms';
 import { Overlay } from '../atoms';
@@ -180,7 +180,7 @@ export const userButtonStyles = css({
 });
 
 export const menuStyles = css({
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
   gridRow: `main-menu`,
   gridColumnStart: '1',
   overflowY: 'auto',
@@ -277,7 +277,7 @@ const SearchIconStyles = css({
   height: '100%',
 });
 const userMenuStyles = css({
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
   gridArea: 'user-menu',
   flexGrow: 1,
   [drawerQuery]: {

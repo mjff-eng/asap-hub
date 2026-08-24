@@ -20,7 +20,6 @@ import { rem, mobileScreen, formTargetWidth } from '../pixels';
 import { Portal } from '../utils/portal';
 
 import {
-  paper,
   steel,
   colorWithTransparency,
   tin,
@@ -32,6 +31,7 @@ import {
   warning500,
   success100,
   success500,
+  colour,
 } from '../colors';
 
 const containerStyles = css({
@@ -59,7 +59,7 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     maxWidth: rem(formTargetWidth),
     top,
     left,
-    backgroundColor: paper.rgb,
+    backgroundColor: colour.neutral[0].rgb,
     border: `1px solid ${steel.rgb}`,
     boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
     flexDirection: 'column',

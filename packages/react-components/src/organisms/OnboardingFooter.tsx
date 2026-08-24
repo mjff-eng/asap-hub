@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 import { successIcon } from '../icons';
 import { Link, Headline2, Paragraph } from '../atoms';
-import { paper, steel } from '../colors';
+import { steel, colour } from '../colors';
 
 import { rem, tabletScreen } from '../pixels';
 import { irisCeruleanGradientStyles } from '../appearance';
@@ -35,11 +35,11 @@ const containerStyles = css({
 
 const titleStyles = css({
   gridArea: 'title / title / span 2',
-  color: paper.rgb,
+  color: colour.neutral[0].rgb,
 });
 
 const subtitleStyles = css({
-  color: paper.rgb,
+  color: colour.neutral[0].rgb,
   display: 'none',
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     gridArea: 'subtitle / subtitle / span 2',

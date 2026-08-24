@@ -10,8 +10,8 @@ import {
   LabeledMultiSelect,
   LabeledRadioButtonGroup,
   MultiSelectOptionsType,
-  paper,
   Pill,
+  colour,
 } from '..';
 import { mobileScreen, rem } from '../pixels';
 import { info900, lead, steel } from '../colors';
@@ -87,7 +87,7 @@ const singleValueStyles = css({
   flexFlow: 'column',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
 });
 
 const pillContainerStyles = (isFocused?: boolean) =>

@@ -77,7 +77,6 @@ export const colour = {
 } as const;
 
 // Monochrome
-export const paper = colour.neutral[0];
 export const pearl = color(252, 253, 254);
 export const silver = color(237, 241, 243);
 export const steel = color(223, 229, 234);
@@ -94,12 +93,9 @@ export const sandstone = color(233, 166, 76);
 export const clay = color(206, 128, 26);
 export const apricot = color(248, 237, 222);
 
-export const fern = colour.brand.crn[500];
-export const pine = colour.brand.crn[800];
 export const mint = color(228, 245, 238);
 
 export const cerulean = color(0, 140, 198);
-export const denim = colour.brand.gp2[800];
 
 export const prussian = color(0, 93, 129);
 export const space = color(0, 69, 97);

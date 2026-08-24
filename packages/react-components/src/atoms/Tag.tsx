@@ -4,10 +4,9 @@ import {
   mint,
   neutral900,
   neutral1000,
-  paper,
   silver,
-  pine,
   charcoal,
+  colour,
 } from '../colors';
 import { crossSmallIcon } from '../icons';
 import { rem } from '../pixels';
@@ -28,7 +27,7 @@ const styles = css({
   justifyContent: 'center',
   alignItems: 'center',
 
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
   borderStyle: 'solid',
   borderWidth: `${borderWidth}px`,
   borderColor: steel.rgb,
@@ -41,7 +40,7 @@ const highlightStyles = css({
 
 const hoverStyles = ({
   primary100 = mint,
-  primary900 = pine,
+  primary900 = colour.brand.crn[800],
 }: Theme['colors'] = {}) =>
   css({
     ':hover': {
