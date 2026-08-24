@@ -14,7 +14,7 @@ import {
   Pill,
 } from '..';
 import { mobileScreen, rem } from '../pixels';
-import { colour, lead, steel } from '../colors';
+import { info900, lead, steel } from '../colors';
 
 const mainStyles = css({
   display: 'flex',
@@ -104,7 +104,7 @@ const pillContainerStyles = (isFocused?: boolean) =>
     },
     '& > *:nth-of-type(3)': {
       backgroundColor: isFocused ? '#CFEDFB' : undefined,
-      color: isFocused ? colour.brand.gp2[800].hex : undefined,
+      color: isFocused ? info900.hex : undefined,
     },
   });
 
