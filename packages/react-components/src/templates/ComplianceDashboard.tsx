@@ -5,6 +5,7 @@ import { article, PageControls, TeamIcon } from '..';
 import { Headline3, Paragraph } from '../atoms';
 import { ComplianceTable } from '../organisms';
 import { rem } from '../pixels';
+import { neutral1000 } from '../colors';
 
 const pageControlsStyles = css({
   justifySelf: 'center',
@@ -17,7 +18,7 @@ const noResultsIconStyles = css({
   svg: {
     width: rem(48),
     height: rem(48),
-    stroke: '#00202C',
+    stroke: neutral1000.hex,
   },
 });
 
@@ -27,7 +28,7 @@ const iconStyles = css({
     width: rem(48),
     height: rem(48),
     path: {
-      fill: '#00202C',
+      fill: neutral1000.hex,
     },
   },
 });
