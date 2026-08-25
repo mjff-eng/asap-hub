@@ -3,7 +3,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import React, { ComponentProps } from 'react';
 import { Paragraph, StateTag } from '../atoms';
-import { charcoal, steel } from '../colors';
+import { charcoal, neutral500 } from '../colors';
 import { InactiveBadgeIcon, TeamIcon } from '../icons';
 import { LinkHeadline, TabbedCard } from '../molecules';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
@@ -31,7 +31,7 @@ const listElementStyles = css({
   gap: rem(24),
   paddingTop: rem(28),
   paddingBottom: rem(28),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   ':last-child': {
     borderBottom: 'none',
   },
@@ -109,7 +109,7 @@ const TeamInterestGroupsTabbedCard: React.FC<TeamGroupsTabbedCardProps> = ({
           truncateFrom: 2,
           disabled: isTeamInactive,
           empty: (
-            <Paragraph accent="lead" noMargin>
+            <Paragraph accent="neutral900" noMargin>
               There are no active memberships.
             </Paragraph>
           ),
@@ -124,7 +124,9 @@ const TeamInterestGroupsTabbedCard: React.FC<TeamGroupsTabbedCardProps> = ({
           truncateFrom: 2,
           disabled: inactiveInterestGroups.length === 0,
           empty: (
-            <Paragraph accent="lead">There are no past memberships.</Paragraph>
+            <Paragraph accent="neutral900">
+              There are no past memberships.
+            </Paragraph>
           ),
         },
       ]}
@@ -158,7 +160,7 @@ const TeamInterestGroupsTabbedCard: React.FC<TeamGroupsTabbedCardProps> = ({
                     )}
                   </div>
 
-                  <Paragraph noMargin accent="lead">
+                  <Paragraph noMargin accent="neutral900">
                     {description}
                   </Paragraph>
                   <span css={teamsStyles}>

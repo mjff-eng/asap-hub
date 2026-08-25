@@ -3,7 +3,7 @@ import { UserProjectMembership, ProjectStatus } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
 import { Card, Paragraph, Button, Headline2, Anchor, Pill } from '../atoms';
-import { charcoal, neutral900, steel, colour } from '../colors';
+import { charcoal, neutral900, colour, neutral500 } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { getProjectRoute } from '../utils';
 import { getStatusPillAccent } from './ProjectCard';
@@ -51,7 +51,7 @@ const tableHeaderLastColumnStyles = css({
 
 const tableCellStyles = css({
   padding: `${rem(16)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   verticalAlign: 'top',
   wordBreak: 'break-word',
   overflowWrap: 'break-word',
@@ -67,7 +67,7 @@ const tableCellLastColumnStyles = css({
   width: '1%',
   whiteSpace: 'nowrap',
   padding: `${rem(16)} 0 ${rem(16)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   verticalAlign: 'top',
 });
 
@@ -99,7 +99,7 @@ const showMoreButtonStyles = css({
   width: '100%',
   fontWeight: 'normal',
   color: colour.brand.crn[500].rgba,
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
   marginTop: rem(16),
   paddingTop: rem(16),
   textDecoration: 'none',
@@ -129,7 +129,7 @@ const mobileProjectItem = css({
   display: 'flex',
   flexDirection: 'column',
   padding: `${rem(20)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   gap: rem(32),
   ':last-child': {
     borderBottom: 'none',
@@ -185,7 +185,7 @@ const UserProjectsCard: React.FC<UserProjectsCardProps> = ({ projects }) => {
           <Headline2 styleAsHeading={3} noMargin>
             Projects
           </Headline2>
-          <Paragraph accent="lead" noMargin>
+          <Paragraph accent="neutral900" noMargin>
             This user is not currently assigned to any projects.
           </Paragraph>
         </div>
@@ -201,7 +201,7 @@ const UserProjectsCard: React.FC<UserProjectsCardProps> = ({ projects }) => {
         <Headline2 styleAsHeading={3} noMargin>
           Projects
         </Headline2>
-        <Paragraph accent="lead" noMargin>
+        <Paragraph accent="neutral900" noMargin>
           Explore all projects this user has contributed to.
         </Paragraph>
       </div>

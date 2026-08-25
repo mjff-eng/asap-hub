@@ -38,7 +38,7 @@ const NewsPageHeader: React.FC<NewsPageHeaderProps> = ({
     <PageInfoContainer>
       <Display styleAsHeading={2}>News</Display>
       <div css={textStyles}>
-        <Paragraph accent="lead">
+        <Paragraph accent="neutral900">
           Stay up to date with all the latest activity from the CRN. You'll be
           able to access news and newsletters
         </Paragraph>

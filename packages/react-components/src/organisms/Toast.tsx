@@ -19,9 +19,6 @@ import {
   largeDesktopScreen,
 } from '../pixels';
 import {
-  rose,
-  ember,
-  apricot,
   warning900,
   info100,
   info900,
@@ -30,6 +27,9 @@ import {
   success100,
   success900,
   success500,
+  error100,
+  error500,
+  warning100,
 } from '../colors';
 
 const SIDE_PADDING = 24;
@@ -101,10 +101,10 @@ const accentIcons: Record<ToastAccents, EmotionJSX.Element> = {
 
 const accentStyles: Record<ToastAccents, CSSObject> = {
   error: {
-    backgroundColor: rose.rgb,
-    borderColor: ember.rgb,
-    color: ember.rgb,
-    svg: { stroke: ember.rgb },
+    backgroundColor: error100.rgb,
+    borderColor: error500.rgb,
+    color: error500.rgb,
+    svg: { stroke: error500.rgb },
   },
   info: {
     backgroundColor: info100.rgb,
@@ -113,7 +113,7 @@ const accentStyles: Record<ToastAccents, CSSObject> = {
     svg: { stroke: info500.rgb },
   },
   warning: {
-    backgroundColor: apricot.rgb,
+    backgroundColor: warning100.rgb,
     borderColor: warning900.rgb,
     color: warning900.rgb,
     svg: { stroke: warning500.rgb },

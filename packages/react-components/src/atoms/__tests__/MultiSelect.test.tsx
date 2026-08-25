@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { waitFor } from '@testing-library/dom';
 
-import { ember, colour } from '../../colors';
+import { colour, error500 } from '../../colors';
 
 import MultiSelect from '../MultiSelect';
 import { searchIcon } from '../../icons';
@@ -169,7 +169,7 @@ describe('invalidity', () => {
 
     expect(getByText('Nope.')).toBeDefined();
     expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-      ember.rgb,
+      error500.rgb,
     );
   });
 

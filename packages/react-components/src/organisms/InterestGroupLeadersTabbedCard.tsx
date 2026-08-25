@@ -43,7 +43,9 @@ const InterestGroupLeadersTabbedCard: React.FC<
           items: activeLeaders,
           disabled: !isGroupActive,
           empty: (
-            <Paragraph accent="lead">There are no active leaders.</Paragraph>
+            <Paragraph accent="neutral900">
+              There are no active leaders.
+            </Paragraph>
           ),
         },
         {
@@ -52,7 +54,9 @@ const InterestGroupLeadersTabbedCard: React.FC<
           disabled: inactiveLeaders.length === 0,
 
           empty: (
-            <Paragraph accent="lead">There are no past leaders.</Paragraph>
+            <Paragraph accent="neutral900">
+              There are no past leaders.
+            </Paragraph>
           ),
         },
       ]}

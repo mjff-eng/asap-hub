@@ -4,7 +4,7 @@ import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { ThemeProvider } from '@emotion/react';
 
 import Link from '../Link';
-import { color as colorConstructor, silver, colour } from '../../colors';
+import { color as colorConstructor, colour, neutral300 } from '../../colors';
 
 it('renders the text in an anchor', () => {
   const { getByText } = render(<Link href="/">text</Link>);
@@ -192,7 +192,7 @@ describe('when button-styled', () => {
     expect(
       findParentWithStyle(getByText('text'), 'backgroundColor')!
         .backgroundColor,
-    ).not.toBe(silver.rgb);
+    ).not.toBe(neutral300.rgb);
 
     rerender(
       <Link href="/" buttonStyle enabled={false}>
@@ -202,7 +202,7 @@ describe('when button-styled', () => {
     expect(
       findParentWithStyle(getByText('text'), 'backgroundColor')!
         .backgroundColor,
-    ).toBe(silver.rgb);
+    ).toBe(neutral300.rgb);
   });
 
   it('removes the href when disabled', () => {

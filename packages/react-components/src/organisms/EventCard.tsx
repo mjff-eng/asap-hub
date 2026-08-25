@@ -14,7 +14,7 @@ import { subMinutes, parseISO } from 'date-fns';
 import { ToastCard, EventInfo } from '../molecules';
 import { rem, mobileScreen } from '../pixels';
 import { Link } from '../atoms';
-import { tin } from '../colors';
+import { neutral700 } from '../colors';
 import { useDateHasPassed } from '../date';
 import { considerEndedAfter } from '../utils';
 import { eventMaterialSectionIds } from './EventMaterials';
@@ -72,7 +72,7 @@ const materialListStyles = css({
 });
 
 const unavailableMaterialStyles = css({
-  color: tin.rgb,
+  color: neutral700.rgb,
 });
 
 const EventCard: React.FC<EventCardProps> = ({

@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph } from '../atoms';
-import { lead, neutral800, neutral1000, steel } from '../colors';
+import { neutral900, neutral800, neutral1000, neutral500 } from '../colors';
 import {
   ExportIcon,
   InactiveBadgeIcon,
@@ -39,7 +39,7 @@ const tableStyles = css({
 });
 
 const rowDividerStyles = css({
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
 });
 
 const minGapOnMobile = css({
@@ -96,7 +96,7 @@ const sectionTitleStyles = css([
 const sectionSeparatorStyles = css([
   sectionLineStyles,
   {
-    color: lead.rgb,
+    color: neutral900.rgb,
     padding: `0 ${rem(8)}`,
     [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
   },
@@ -105,7 +105,7 @@ const sectionSeparatorStyles = css([
 const sectionCountStyles = css([
   sectionLineStyles,
   {
-    color: lead.rgb,
+    color: neutral900.rgb,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       display: 'block',
       marginTop: rem(8),
@@ -198,7 +198,7 @@ const TeamRows: React.FC<{
             {team.attended ? (
               tickInCircleIcon
             ) : (
-              <InvalidTickIcon color={steel.rgb} />
+              <InvalidTickIcon color={neutral500.rgb} />
             )}
           </span>
         </td>
@@ -317,7 +317,7 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
       <Card>
         <div css={emptyStateStyles}>
           {header}
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="neutral900">
             No attendance recorded yet
           </Paragraph>
         </div>

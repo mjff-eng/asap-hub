@@ -6,11 +6,11 @@ import { Card, Display } from '../atoms';
 import { rem, mobileScreen } from '../pixels';
 import { formatDate } from '../date';
 import { ExternalLink, UsersList, AssociationList } from '../molecules';
-import { lead } from '..';
+import { neutral900 } from '..';
 import { captionStyles } from '../text';
 
 const timestampStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   display: 'flex',
   flexDirection: 'row',
   whiteSpace: 'pre',

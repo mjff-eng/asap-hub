@@ -36,7 +36,11 @@ const WorkingGroupsTabbedCard: React.FC<WorkingGroupsTabbedCardProps> = ({
     <TabbedCard
       title="Working Groups"
       description={
-        <Paragraph noMargin accent="lead" styles={css({ margin: '0 0 8px' })}>
+        <Paragraph
+          noMargin
+          accent="neutral900"
+          styles={css({ margin: '0 0 8px' })}
+        >
           Working groups allow CRN members to work together to solve problems.
           Find out the membership status of this member.
         </Paragraph>
@@ -52,7 +56,7 @@ const WorkingGroupsTabbedCard: React.FC<WorkingGroupsTabbedCardProps> = ({
           disabled: isUserAlumni,
 
           empty: (
-            <Paragraph accent="lead" noMargin>
+            <Paragraph accent="neutral900" noMargin>
               There are no active memberships.
             </Paragraph>
           ),
@@ -63,7 +67,7 @@ const WorkingGroupsTabbedCard: React.FC<WorkingGroupsTabbedCardProps> = ({
           items: inactiveMemberships,
           disabled: inactiveMemberships.length === 0,
           empty: (
-            <Paragraph accent="lead" noMargin>
+            <Paragraph accent="neutral900" noMargin>
               There are no past memberships.
             </Paragraph>
           ),

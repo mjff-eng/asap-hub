@@ -3,7 +3,7 @@ import { dashboard, network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { useMemo } from 'react';
 import { CopyButton, Display, Link, Pill, StateTag, TabLink } from '../atoms';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import {
   DiscoveryProjectIcon,
   InactiveBadgeIcon,
@@ -72,7 +72,7 @@ const labCountStyles = css({
   display: 'flex',
   alignItems: 'center',
   padding: `${rem(12)} 0`,
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 const projectNameStyles = css({
   gridArea: 'info',

@@ -12,7 +12,7 @@ import { PageControls, PerformanceCard } from '..';
 
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, lead, neutral200, steel } from '../colors';
+import { charcoal, neutral200, neutral900, neutral500 } from '../colors';
 import {
   AlphabeticalSortingIcon,
   alumniBadgeIcon,
@@ -45,7 +45,7 @@ const rowTitleStyles = css({
 const rowStyles = css({
   display: 'grid',
   padding: `${rem(20)} ${rem(24)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   ':first-of-type': {
     borderBottom: 'none',
   },
@@ -63,7 +63,7 @@ const rowStyles = css({
     columnGap: rem(15),
     paddingTop: 0,
     paddingBottom: 0,
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${neutral500.rgb}`,
   },
 });
 
@@ -83,11 +83,11 @@ const rowValueStyles = css({
 
 const counterStyle = css({
   display: 'inline-flex',
-  color: lead.rgb,
+  color: neutral900.rgb,
   marginLeft: rem(9),
   textAlign: 'center',
   minWidth: rem(24),
-  border: `1px solid ${steel.rgb}`,
+  border: `1px solid ${neutral500.rgb}`,
   borderRadius: '100%',
   fontSize: '14px',
   fontWeight: 'bold',

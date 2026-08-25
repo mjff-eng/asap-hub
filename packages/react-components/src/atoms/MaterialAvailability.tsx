@@ -1,6 +1,6 @@
 import { eventMaterialTypes } from '@asap-hub/model';
 import { css } from '@emotion/react';
-import { charcoal, tin } from '../colors';
+import { charcoal, neutral700 } from '../colors';
 import { crossSmallIcon, tickSmallIcon } from '../icons';
 import { rem } from '../pixels';
 
@@ -20,10 +20,10 @@ const availableStyles = css({
 });
 
 const unavailableStyles = css({
-  color: tin.rgb,
+  color: neutral700.rgb,
   svg: {
-    fill: tin.rgb,
-    stroke: tin.rgb,
+    fill: neutral700.rgb,
+    stroke: neutral700.rgb,
   },
 });
 

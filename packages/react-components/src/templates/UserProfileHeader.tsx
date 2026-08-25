@@ -13,7 +13,7 @@ import {
   CopyButton,
   Spinner,
 } from '../atoms';
-import { tin, colour } from '../colors';
+import { colour, neutral700 } from '../colors';
 import { editIcon, uploadIcon, alumniBadgeIcon } from '../icons';
 import { createMailTo } from '../mail';
 import {
@@ -345,7 +345,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                       {degree ? (
                         <Display styleAsHeading={2}>, {degree}</Display>
                       ) : isOwnProfile ? (
-                        <div css={{ color: tin.rgb }}>
+                        <div css={{ color: neutral700.rgb }}>
                           <Display styleAsHeading={2}>, Degree</Display>
                         </div>
                       ) : null}

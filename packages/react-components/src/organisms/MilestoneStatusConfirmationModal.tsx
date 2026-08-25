@@ -166,7 +166,7 @@ const MilestoneStatusConfirmationModal: React.FC<
             {`Set status to ${status}? This action is irreversible.`}
           </Headline3>
         </header>
-        <Paragraph accent="lead" styles={bodyParagraphStyles}>
+        <Paragraph accent="neutral900" styles={bodyParagraphStyles}>
           {`Before marking a milestone as ${status}${
             status === 'Terminated' ? '' : ','
           } you may add any related articles associated with this milestone, if applicable. Once the status is set to ${status}, it cannot be changed, but related articles may still be added later. Relevant members will be notified via the CRN Hub and/or email. If further updates are required, please contact Technical Support.`}
@@ -196,7 +196,7 @@ const MilestoneStatusConfirmationModal: React.FC<
               onMenuClose={() => setIsMenuOpen(false)}
             />
             {loadError && (
-              <Paragraph accent="lead" styles={errorMessageStyles}>
+              <Paragraph accent="neutral900" styles={errorMessageStyles}>
                 Could not load existing articles. Please close this dialog and
                 try again.
               </Paragraph>

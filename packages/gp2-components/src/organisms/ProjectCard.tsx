@@ -2,10 +2,10 @@ import { gp2 as gp2Model } from '@asap-hub/model';
 import {
   Card,
   crossQuery,
-  lead,
   LinkHeadline,
   pixels,
   TagList,
+  neutral900,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
@@ -90,7 +90,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           [crossQuery]: {
             gap: rem(32),
           },
-          color: lead.rgb,
+          color: neutral900.rgb,
         }),
       ]}
     >

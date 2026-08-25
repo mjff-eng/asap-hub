@@ -35,7 +35,7 @@ const iframeContainer = css({
 
 export const parseComponents = {
   p: ({ children }: HTMLAttributes<HTMLParagraphElement>) => (
-    <Paragraph accent="lead">{children}</Paragraph>
+    <Paragraph accent="neutral900">{children}</Paragraph>
   ),
   iframe: (props: HTMLAttributes<HTMLIFrameElement>) => (
     <span css={iframeContainer}>

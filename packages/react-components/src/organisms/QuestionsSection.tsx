@@ -20,7 +20,7 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
   return questions.length || isOwnProfile ? (
     <Card>
       <Headline2 styleAsHeading={3}>Open Questions</Headline2>
-      <Paragraph accent="lead">
+      <Paragraph accent="neutral900">
         This member is interested in answering the following questions within
         their work.
       </Paragraph>

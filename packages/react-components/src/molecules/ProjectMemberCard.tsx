@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Link } from '../atoms';
 import { rem } from '../pixels';
-import { lead, colour } from '../colors';
+import { colour, neutral900 } from '../colors';
 import { GroupedProjectMember } from '../utils';
 import RolesList from './RolesList';
 import UserAvatar from './UserAvatar';
@@ -35,7 +35,7 @@ const nameStyles = css({
 });
 
 const noRoleStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontSize: rem(17),
   fontStyle: 'italic',
 });

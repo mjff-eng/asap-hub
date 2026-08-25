@@ -2,14 +2,14 @@ import { ComponentProps } from 'react';
 import { css } from '@emotion/react';
 
 import { Label, Paragraph, Checkbox } from '../atoms';
-import { lead, tin } from '../colors';
+import { neutral900, neutral700 } from '../colors';
 
 const containerStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const disabledStyles = css({
-  color: tin.rgb,
+  color: neutral700.rgb,
 });
 
 type LabeledCheckboxProps = {

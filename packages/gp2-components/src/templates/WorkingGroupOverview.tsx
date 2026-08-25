@@ -113,7 +113,7 @@ const WorkingGroupOverview: React.FC<WorkingGroupOverviewProps> = ({
       {tags.length ? (
         <Card overrideStyles={cardStyles}>
           <Headline3 noMargin>Tags</Headline3>
-          <Paragraph accent="lead">
+          <Paragraph accent="neutral900">
             Explore keywords related to skills, techniques, resources, and
             tools.
           </Paragraph>

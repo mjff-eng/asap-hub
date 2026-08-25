@@ -22,7 +22,7 @@ const TutorialsPageHeader: React.FC<TutorialsPageHeaderProps> = ({
   <div css={styles}>
     <section>
       <Headline2 styleAsHeading={3}>Tutorials</Headline2>
-      <Paragraph accent="lead">
+      <Paragraph accent="neutral900">
         Explore our tutorials to understand how you can use the Hub and work
         with the tools.
       </Paragraph>

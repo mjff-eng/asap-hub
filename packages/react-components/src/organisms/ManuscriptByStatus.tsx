@@ -5,14 +5,14 @@ import {
   info100,
   info200,
   info500,
-  lead,
   StatusType,
-  steel,
   success100,
   success500,
   warning100,
   warning150,
   warning500,
+  neutral900,
+  neutral500,
 } from '..';
 import { Card, Paragraph } from '../atoms';
 import { iconStyles, statusIcon } from '../molecules/StatusButton';
@@ -52,13 +52,13 @@ const getbuttonStyles = (
   const borderColors: ColorByType = {
     warning: warning150.rgb,
     final: info200.rgb,
-    default: isSelected ? info500.rgb : steel.rgb,
+    default: isSelected ? info500.rgb : neutral500.rgb,
   };
 
   const textColors: ColorByType = {
     warning: warning500.rgb,
     final: success500.rgb,
-    default: isSelected ? info500.rgb : lead.rgb,
+    default: isSelected ? info500.rgb : neutral900.rgb,
   };
 
   return css({

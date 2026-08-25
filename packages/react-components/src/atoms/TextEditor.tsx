@@ -31,7 +31,7 @@ import {
 } from '@lexical/markdown';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import { $nodesOfType, EditorState } from 'lexical';
-import { ember, lead, rose, silver } from '../colors';
+import { error500, neutral900, error100, neutral300 } from '../colors';
 import { styles, useValidation, validationMessageStyles } from '../form';
 import { noop } from '../utils';
 import ToolbarPlugin from './TextEditorToolbar';
@@ -336,8 +336,8 @@ const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                           styles,
                           inputStyles,
                           (validationMessage || hasError) && {
-                            backgroundColor: rose.rgb,
-                            borderColor: `${ember.rgb}!important`,
+                            backgroundColor: error100.rgb,
+                            borderColor: `${error500.rgb}!important`,
                           },
                           colors?.primary500 && {
                             ':focus': {
@@ -345,8 +345,8 @@ const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                             },
                           },
                           !enabled && {
-                            color: lead.rgb,
-                            backgroundColor: silver.rgb,
+                            color: neutral900.rgb,
+                            backgroundColor: neutral300.rgb,
                           },
                         ]
                       : [markdownStyles]
@@ -362,7 +362,7 @@ const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                   css={[
                     placeholderStyles,
                     validationMessage && {
-                      color: ember.rgb,
+                      color: error500.rgb,
                       opacity: 0.4,
                     },
                   ]}

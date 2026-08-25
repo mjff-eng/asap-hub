@@ -10,7 +10,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, useState } from 'react';
 import { Card, Pill } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, steel } from '../colors';
+import { charcoal, neutral500 } from '../colors';
 import { rem } from '../pixels';
 import APCCoverageModal, { APCCoverageFormData } from './APCCoverageModal';
 import ComplianceAssignUsersModal, {
@@ -29,14 +29,14 @@ const container = css({
   },
   'th, td': {
     textAlign: 'left',
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${neutral500.rgb}`,
     paddingRight: rem(32),
     ':nth-of-type(2)': {
       paddingLeft: rem(32),
     },
   },
   'th.sticky, td.sticky': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${neutral500.rgb}`,
     position: 'sticky',
     paddingLeft: rem(24),
     left: 0,

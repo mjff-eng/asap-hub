@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { staticPages } from '@asap-hub/routing';
 
 import { Link } from '../atoms';
-import { silver } from '../colors';
+import { neutral300 } from '../colors';
 import { asapImage } from '../images';
 import { ceruleanFernGradientStyles } from '../appearance';
 import { rem } from '../pixels';
@@ -32,7 +32,7 @@ const contentContainerStyles = css({
 });
 
 const footerContainerStyles = css({
-  backgroundColor: silver.rgb,
+  backgroundColor: neutral300.rgb,
   padding: rem(12),
 });
 

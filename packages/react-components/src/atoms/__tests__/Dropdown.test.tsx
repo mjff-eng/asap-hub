@@ -5,7 +5,13 @@ import { Theme } from '@emotion/react';
 import { matchers } from '@emotion/jest';
 import { GroupBase, SingleValueProps } from 'react-select';
 
-import { ember, lead, silver, tin, colour } from '../../colors';
+import {
+  colour,
+  error500,
+  neutral900,
+  neutral300,
+  neutral700,
+} from '../../colors';
 import Dropdown from '../Dropdown';
 import { Option, reactSelectStyles } from '../../select';
 
@@ -30,7 +36,9 @@ it('shows a placeholder without a selection', () => {
     />,
   );
   expect(screen.getByText('Select')).toBeVisible();
-  expect(getComputedStyle(screen.getByText('Select')).color).toBe(lead.rgb);
+  expect(getComputedStyle(screen.getByText('Select')).color).toBe(
+    neutral900.rgb,
+  );
 
   rerender(
     <Dropdown
@@ -42,7 +50,7 @@ it('shows a placeholder without a selection', () => {
 
   expect(screen.getByText('Choose something')).toBeVisible();
   expect(getComputedStyle(screen.getByText('Choose something')).color).toBe(
-    lead.rgb,
+    neutral900.rgb,
   );
 });
 
@@ -171,10 +179,10 @@ it('gets greyed out when disabled', () => {
 
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'color')?.color,
-  ).toBe(lead.rgb);
+  ).toBe(neutral900.rgb);
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'background')?.background,
-  ).toBe(silver.rgb);
+  ).toBe(neutral300.rgb);
   expect(screen.getByRole('combobox', { hidden: true })).toBeDisabled();
 
   rerender(
@@ -182,10 +190,10 @@ it('gets greyed out when disabled', () => {
   );
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'color')?.color,
-  ).not.toBe(lead.rgb);
+  ).not.toBe(neutral900.rgb);
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'background')?.background,
-  ).not.toBe(silver.rgb);
+  ).not.toBe(neutral300.rgb);
   expect(screen.getByRole('combobox', { hidden: true })).not.toBeDisabled();
 });
 
@@ -291,13 +299,13 @@ it('shows the field in red when required field not filled', async () => {
   );
   const input = screen.getByRole('combobox', { hidden: false });
   expect(findParentWithStyle(input, 'borderColor')?.borderColor).not.toBe(
-    ember.rgb,
+    error500.rgb,
   );
 
   await userEvent.click(input);
   await userEvent.tab();
   expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-    ember.rgb,
+    error500.rgb,
   );
 
   await userEvent.click(input);
@@ -313,7 +321,7 @@ it('shows the field in red when required field not filled', async () => {
       required={false}
     />,
   );
-  expect(findParentWithStyle(input, 'color')?.color).not.toBe(ember.rgb);
+  expect(findParentWithStyle(input, 'color')?.color).not.toBe(error500.rgb);
 });
 
 it('shows an error message when required field not filled', async () => {
@@ -490,13 +498,13 @@ const createSingleValueProps = (
     data: { value, label: '' },
   }) as unknown as SingleValueProps<TestOption, false, GroupBase<TestOption>>;
 
-it('applies tin color for singleValue when selected value is empty string', () => {
+it('applies neutral700 color for singleValue when selected value is empty string', () => {
   const styles = reactSelectStyles(mockTheme, false);
   const styleResult = styles?.singleValue!(
     baseProvided,
     createSingleValueProps(''),
   );
-  expect(styleResult?.color).toBe(tin.rgb);
+  expect(styleResult?.color).toBe(neutral700.rgb);
 });
 
 it('applies unset color for singleValue when selected value is not empty string', () => {

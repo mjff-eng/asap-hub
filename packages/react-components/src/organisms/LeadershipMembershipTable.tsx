@@ -8,7 +8,7 @@ import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, neutral200, steel } from '../colors';
+import { charcoal, neutral200, neutral500 } from '../colors';
 import {
   AlphabeticalSortingIcon,
   InactiveBadgeIcon,
@@ -41,7 +41,7 @@ const rowTitleStyles = css({
 const rowStyles = css({
   display: 'grid',
   padding: `${rem(20)} ${rem(24)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   ':first-of-type': {
     borderBottom: 'none',
   },
@@ -59,7 +59,7 @@ const rowStyles = css({
     columnGap: rem(15),
     paddingTop: 0,
     paddingBottom: 0,
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${neutral500.rgb}`,
   },
 });
 

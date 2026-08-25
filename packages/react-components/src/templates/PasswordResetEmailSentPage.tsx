@@ -36,7 +36,9 @@ const PasswordResetEmailSentPage: React.FC<PasswordResetEmailSentPageProps> = ({
   <div css={layoutStyles}>
     <BannerCard type="success">
       <Display styleAsHeading={2}>Email sent!</Display>
-      <Paragraph accent="lead">Check your inbox for an email link</Paragraph>
+      <Paragraph accent="neutral900">
+        Check your inbox for an email link
+      </Paragraph>
       <Link href={signInHref} buttonStyle primary>
         Back to sign in
       </Link>

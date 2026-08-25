@@ -38,7 +38,7 @@ const EventsPageHeader: React.FC<EventsPageHeaderProps> = ({
     >
       <Display styleAsHeading={2}>Calendar and Events</Display>
       <div css={textStyles}>
-        <Paragraph accent="lead">
+        <Paragraph accent="neutral900">
           Find out about upcoming events from ASAP and Groups. You can easily
           add specific calendars to your own Google Calendar to easily stay
           updated.

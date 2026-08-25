@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import { neutral300, steel, colour } from '../colors';
+import { neutral300, colour, neutral500 } from '../colors';
 import { contentSidePaddingWithNavigation } from '../layout';
 import { Header } from '../molecules';
 import {
@@ -68,7 +68,7 @@ const contentHeaderContainerStyles = css({
   boxSizing: 'border-box',
   gridColumn: '1 / -1',
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(48)}`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   backgroundColor: colour.neutral[0].rgb,
   rowGap: rem(12),
 });

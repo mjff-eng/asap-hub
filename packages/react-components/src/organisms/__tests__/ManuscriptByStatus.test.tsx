@@ -6,13 +6,13 @@ import {
   info100,
   info200,
   info500,
-  lead,
-  steel,
   success100,
   success500,
   warning100,
   warning150,
   warning500,
+  neutral900,
+  neutral500,
 } from '../../colors';
 import ManuscriptByStatus from '../ManuscriptByStatus';
 
@@ -113,8 +113,8 @@ describe('ManuscriptByStatus', () => {
     });
     expect(unselectedButton).toHaveStyle({
       backgroundColor: 'white',
-      borderColor: steel.rgb,
-      color: lead.rgb,
+      borderColor: neutral500.rgb,
+      color: neutral900.rgb,
     });
   });
 

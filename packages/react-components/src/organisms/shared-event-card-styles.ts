@@ -1,14 +1,6 @@
 import { css } from '@emotion/react';
 
-import {
-  charcoal,
-  lead,
-  neutral1000,
-  colour,
-  silver,
-  steel,
-  tin,
-} from '../colors';
+import { charcoal, neutral900, neutral1000, colour, neutral300, neutral500, neutral700 } from '../colors';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
 
 export const contentStyles = css({
@@ -36,9 +28,9 @@ export const iconButtonStyles = css({
   width: rem(40),
   height: rem(40),
   alignItems: 'center',
-  borderColor: tin.rgb,
+  borderColor: neutral700.rgb,
   ':hover, :focus': {
-    borderColor: tin.rgb,
+    borderColor: neutral700.rgb,
   },
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     // Button re-asserts flexGrow:1 at this breakpoint; re-declare it so the
@@ -74,7 +66,7 @@ export const viewMoreStyles = css({
   alignItems: 'center',
   justifyContent: 'center',
   height: rem(56),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 });
 
 export const emptyStateStyles = css({
@@ -147,8 +139,8 @@ export const deleteButtonStyles = (
   enabled: boolean,
   disabledPalette: 'default' | 'light' = 'default',
 ) => {
-  const disabledBorder = disabledPalette === 'light' ? steel : tin;
-  const disabledBackground = disabledPalette === 'light' ? silver : steel;
+  const disabledBorder = disabledPalette === 'light' ? neutral500 : neutral700;
+  const disabledBackground = disabledPalette === 'light' ? neutral300 : neutral500;
   return css({
     flexGrow: 0,
     flexShrink: 0,
@@ -160,18 +152,18 @@ export const deleteButtonStyles = (
     height: rem(24),
     minHeight: rem(24),
     padding: 0,
-    border: `1px solid ${enabled ? steel.rgb : disabledBorder.rgb}`,
+    border: `1px solid ${enabled ? neutral500.rgb : disabledBorder.rgb}`,
     borderRadius: rem(4),
     backgroundColor: enabled ? colour.neutral[0].rgb : disabledBackground.rgb,
     boxShadow: enabled ? undefined : `0 2px 4px rgba(223, 229, 234, 0.3)`,
-    color: enabled ? neutral1000.rgb : lead.rgb,
+    color: enabled ? neutral1000.rgb : neutral900.rgb,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       minWidth: rem(24),
     },
     '> svg': {
       width: rem(14.4),
       height: rem(14.4),
-      ...(enabled ? {} : { filter: 'none', stroke: lead.rgb }),
+      ...(enabled ? {} : { filter: 'none', stroke: neutral900.rgb }),
     },
   });
 };

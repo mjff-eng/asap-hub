@@ -2,14 +2,14 @@ import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { layoutStyles } from '../text';
 import { rem } from '../pixels';
-import { lead, charcoal, info500, colour } from '../colors';
+import { charcoal, info500, colour, neutral900 } from '../colors';
 
 const styles = css({
   display: 'inline-block',
   paddingTop: rem(12),
   paddingBottom: rem(12),
 
-  color: lead.rgb,
+  color: neutral900.rgb,
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   cursor: 'pointer',

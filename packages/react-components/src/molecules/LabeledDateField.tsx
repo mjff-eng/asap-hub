@@ -3,7 +3,7 @@ import { format, parseISO } from 'date-fns';
 import { ComponentProps } from 'react';
 
 import { Label, Paragraph, TextField } from '../atoms';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import { rem } from '../pixels';
 import { noop } from '../utils';
 
@@ -26,7 +26,7 @@ const subtitleStyles = css({
 });
 
 const descriptionStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 // The value is a date-only field stored at UTC midnight; format it in UTC so the
