@@ -39,7 +39,7 @@ const NoOutputsPage: React.FC<NoOutputsPageProps> = ({
     </span>
     <div>
       <Display styleAsHeading={3}>{title}</Display>
-      <Paragraph accent="lead">{description}</Paragraph>
+      <Paragraph accent="neutral900">{description}</Paragraph>
     </div>
     {!hideExploreButton && (
       <Link buttonStyle primary href={sharedResearch({}).$}>

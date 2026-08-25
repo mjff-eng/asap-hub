@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { rem, tabletScreen } from '../pixels';
-import { lead, neutral900, neutral1000, colour } from '../colors';
+import { neutral900, neutral1000, colour } from '../colors';
 
 export const descriptionContainerStyles = css({
   display: 'flex',
@@ -22,7 +22,7 @@ export const mobileLabelStyles = css({
 
 export const clampedDescriptionStyles = (isExpanded: boolean) =>
   css({
-    color: lead.rgb,
+    color: neutral900.rgb,
     fontSize: rem(17),
     lineHeight: rem(24),
     margin: 0,

@@ -19,7 +19,7 @@ import {
 } from '../pixels';
 import { NavigationLink } from '../atoms';
 import RailTooltip from '../atoms/RailTooltip';
-import { charcoal, silver, steel } from '../colors';
+import { charcoal, neutral300, neutral500 } from '../colors';
 import { crossQuery, menuTransitionMs } from '../layout';
 import {
   networkIcon,
@@ -74,7 +74,7 @@ const toggleContainerStyles = css({
 });
 const dividerStyles = css({
   border: 'none',
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
   width: rem(225),
   maxWidth: '100%',
   margin: `${rem(12)} auto`,
@@ -102,7 +102,7 @@ const toggleButtonStyles = css({
   transition: 'background-color 100ms ease-in-out',
   // :focus-visible, not :focus, so a click doesn't leave the background stuck.
   ':hover, :focus-visible': {
-    backgroundColor: silver.rgb,
+    backgroundColor: neutral300.rgb,
   },
 });
 const collapsedToggleButtonStyles = css({

@@ -5,8 +5,8 @@ import {
   Button,
   chevronCircleDownIcon,
   colorWithTransparency,
-  lead,
   pixels,
+  neutral900,
 } from '..';
 
 const { rem, lineHeight } = pixels;
@@ -22,13 +22,13 @@ const textStyles = css({
 const expandedTextStyles = css({
   maxHeight: rem(lineHeight * 500), // aproximation of possible max height (2500 characters)
   transition: 'max-height 300ms linear',
-  background: colorWithTransparency(lead, 0).rgba,
+  background: colorWithTransparency(neutral900, 0).rgba,
 });
 
 const expandableTextStyles = css({
   maxHeight: rem(expandableMaxHeight),
-  background: `linear-gradient(180deg, ${lead.rgb} 26.56%, ${
-    colorWithTransparency(lead, 0).rgba
+  background: `linear-gradient(180deg, ${neutral900.rgb} 26.56%, ${
+    colorWithTransparency(neutral900, 0).rgba
   } 100%)`,
   WebkitBackgroundClip: 'text',
   backgroundClip: 'text',

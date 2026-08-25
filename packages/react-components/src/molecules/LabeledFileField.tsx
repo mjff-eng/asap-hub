@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 import { ComponentProps, useId, useRef, useState } from 'react';
 import { Button, Label, Paragraph, Tag } from '../atoms';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import { validationMessageStyles } from '../form';
 import { plusIcon } from '../icons';
 import { rem } from '../pixels';
 
 const descriptionStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const descriptionContainerStyles = css({
@@ -21,7 +21,7 @@ const hintStyles = css({
   },
   paddingTop: rem(6),
 
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const subtitleStyles = css({

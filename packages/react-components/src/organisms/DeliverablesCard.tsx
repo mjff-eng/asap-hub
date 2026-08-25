@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 
 import { Button, Card, Headline3, Headline5, Paragraph, Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { steel } from '../colors';
+import { neutral500 } from '../colors';
 import { paddingStyles } from '../card';
 
 const statusToAccent: Record<
@@ -29,7 +29,7 @@ const deliverablesRowStyles = css({
 const deliverablesRowSeperatorStyles = css({
   paddingBottom: rem(9),
   marginBottom: rem(9),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   [`:nth-last-of-type(1)`]: {
     borderBottom: 'none',
     paddingBottom: 0,
@@ -42,7 +42,7 @@ const showMoreStyles = css({
   justifyContent: 'center',
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 });
 
 const mobileTitle = {
@@ -67,7 +67,7 @@ const DeliverablesCard: React.FC<DeliverablesCardProps> = ({
     <Card padding={false}>
       <div css={paddingStyles}>
         <Headline3>Purpose</Headline3>
-        <Paragraph accent="lead">
+        <Paragraph accent="neutral900">
           The deliverables of this working group are:
         </Paragraph>
         <div css={[deliverablesRowStyles, desktopTitles]}>
@@ -84,7 +84,7 @@ const DeliverablesCard: React.FC<DeliverablesCardProps> = ({
               <div css={mobileTitle}>
                 <Headline5>Deliverables</Headline5>
               </div>
-              <Paragraph accent="lead">{description}</Paragraph>
+              <Paragraph accent="neutral900">{description}</Paragraph>
               <div css={mobileTitle}>
                 <Headline5>Status</Headline5>
               </div>

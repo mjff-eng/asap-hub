@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { Label, TextField, Paragraph, Link, Button } from '../atoms';
 import { rem } from '../pixels';
 import { showPasswordIcon, hidePasswordIcon } from '../icons';
-import { ember, colour } from '../colors';
+import { colour, error500 } from '../colors';
 
 const forgotPasswordStyles = css({
   paddingTop: rem(6),
@@ -18,7 +18,7 @@ const showPasswordIndicatorStyles = (isInvalid: boolean) =>
     // move it down from the center to align with the field text that is also below center
     paddingTop: rem(1),
 
-    fill: isInvalid ? ember.rgb : colour.brand.crn[500].rgb,
+    fill: isInvalid ? error500.rgb : colour.brand.crn[500].rgb,
   });
 
 type LabeledPasswordFieldProps = {

@@ -6,7 +6,7 @@ import {
 import fc from 'fast-check';
 
 import PageControls from '../PageControls';
-import { tin, colour } from '../../colors';
+import { colour, neutral700 } from '../../colors';
 
 mockConsoleError();
 
@@ -69,7 +69,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(tin.rgb.replace(/ /g, ''));
+    ).toBe(neutral700.rgb.replace(/ /g, ''));
     expect(getByTitle(/first page/i).closest('a')).not.toHaveAttribute('href');
   });
 
@@ -105,7 +105,7 @@ describe('the arrow controls', () => {
         getByTitle(/previous page/i),
         'stroke',
       )?.stroke?.replace(/ /g, ''),
-    ).toBe(tin.rgb.replace(/ /g, ''));
+    ).toBe(neutral700.rgb.replace(/ /g, ''));
     expect(getByTitle(/previous page/i).closest('a')).not.toHaveAttribute(
       'href',
     );
@@ -140,7 +140,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(tin.rgb.replace(/ /g, ''));
+    ).toBe(neutral700.rgb.replace(/ /g, ''));
     expect(getByTitle(/next page/i).closest('a')).not.toHaveAttribute('href');
   });
 
@@ -173,7 +173,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(tin.rgb.replace(/ /g, ''));
+    ).toBe(neutral700.rgb.replace(/ /g, ''));
     expect(getByTitle(/last page/i).closest('a')).not.toHaveAttribute('href');
   });
 });

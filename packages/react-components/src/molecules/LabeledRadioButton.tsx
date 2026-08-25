@@ -1,10 +1,10 @@
 import { ComponentProps } from 'react';
 import { css } from '@emotion/react';
 import { Label, Paragraph, RadioButton } from '../atoms';
-import { steel } from '../colors';
+import { neutral500 } from '../colors';
 
 const disabledStyles = css({
-  color: steel.rgb,
+  color: neutral500.rgb,
 });
 
 type LabeledRadioButtonProps = {

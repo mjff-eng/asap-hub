@@ -1,12 +1,12 @@
 import { css, Theme } from '@emotion/react';
 import {
-  steel,
-  mint,
   neutral900,
   neutral1000,
-  silver,
   charcoal,
   colour,
+  neutral500,
+  success100,
+  neutral300,
 } from '../colors';
 import { crossSmallIcon } from '../icons';
 import { rem } from '../pixels';
@@ -30,16 +30,16 @@ const styles = css({
   backgroundColor: colour.neutral[0].rgb,
   borderStyle: 'solid',
   borderWidth: `${borderWidth}px`,
-  borderColor: steel.rgb,
+  borderColor: neutral500.rgb,
   borderRadius: rem(18),
 });
 
 const highlightStyles = css({
-  backgroundColor: mint.rgb,
+  backgroundColor: success100.rgb,
 });
 
 const hoverStyles = ({
-  primary100 = mint,
+  primary100 = success100,
   primary900 = colour.brand.crn[800],
 }: Theme['colors'] = {}) =>
   css({
@@ -51,8 +51,8 @@ const hoverStyles = ({
   });
 
 const disabledStyles = css({
-  backgroundColor: silver.rgb,
-  borderColor: steel.rgb,
+  backgroundColor: neutral300.rgb,
+  borderColor: neutral500.rgb,
   color: neutral1000.rgb,
 });
 

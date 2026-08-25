@@ -63,7 +63,7 @@ type ManuscriptCardProps = Pick<
 
 const manuscriptContainerStyles = css({
   marginTop: rem(12),
-  border: `1px solid ${colors.steel.rgb}`,
+  border: `1px solid ${colors.neutral500.rgb}`,
   borderRadius: `${rem(8)}`,
   boxSizing: 'border-box',
   width: '100%',

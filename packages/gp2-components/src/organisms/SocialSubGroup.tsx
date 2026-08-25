@@ -19,7 +19,7 @@ interface SocialSubGroupProps {
 
 const SocialSubGroup = ({ list, title }: SocialSubGroupProps) => (
   <div>
-    <Subtitle styleAsHeading={4} bold noMargin accent="lead">
+    <Subtitle styleAsHeading={4} bold noMargin accent="neutral900">
       {title}
     </Subtitle>
     <div css={buttonsContainerStyles}>

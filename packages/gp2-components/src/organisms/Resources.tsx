@@ -183,7 +183,7 @@ const Resources: React.FC<ResourcesProps> = ({
                     </Subtitle>
                   )}
                 </div>
-                <Paragraph noMargin accent="lead">
+                <Paragraph noMargin accent="neutral900">
                   {resource.description}
                 </Paragraph>
               </Card>

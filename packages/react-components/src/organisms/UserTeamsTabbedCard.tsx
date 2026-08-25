@@ -123,7 +123,11 @@ const UserTeamsTabbedCard: React.FC<UserTeamsTabbedCardProps> = ({
       <TabbedCard
         title="Teams and Roles"
         description={
-          <Paragraph noMargin accent="lead" styles={css({ margin: '0 0 8px' })}>
+          <Paragraph
+            noMargin
+            accent="neutral900"
+            styles={css({ margin: '0 0 8px' })}
+          >
             Teams are a constellation of labs focus on a specific grant
             proposal. Find out teams status and the member's current and past
             roles within them.
@@ -136,7 +140,7 @@ const UserTeamsTabbedCard: React.FC<UserTeamsTabbedCardProps> = ({
             items: activeTeams,
             truncateFrom: MAX_TEAMS,
             empty: (
-              <Paragraph accent="lead" noMargin>
+              <Paragraph accent="neutral900" noMargin>
                 No team affiliation.
               </Paragraph>
             ),
@@ -146,7 +150,7 @@ const UserTeamsTabbedCard: React.FC<UserTeamsTabbedCardProps> = ({
             items: inactiveTeams,
             truncateFrom: MAX_TEAMS,
             empty: (
-              <Paragraph accent="lead" noMargin>
+              <Paragraph accent="neutral900" noMargin>
                 There are no previous teams.
               </Paragraph>
             ),

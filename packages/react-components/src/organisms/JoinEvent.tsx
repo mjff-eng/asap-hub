@@ -7,7 +7,7 @@ import { subHours, parseISO, addSeconds, subMinutes } from 'date-fns';
 import { noop, considerEndedAfter } from '../utils';
 import { Headline2, Paragraph, Anchor, Link } from '../atoms';
 import { WarningIcon } from '../icons';
-import { clay } from '../colors';
+import { warning500 } from '../colors';
 import { layoutStyles } from '../text';
 import { rem, mobileScreen } from '../pixels';
 import { mailToSupport } from '../mail';
@@ -92,9 +92,9 @@ const JoinEvent: React.FC<JoinEventProps> = ({
           }}
         >
           <div css={layoutStyles}>
-            <WarningIcon color={clay.rgb} />
+            <WarningIcon color={warning500.rgb} />
           </div>
-          <Paragraph accent="ember">
+          <Paragraph accent="error500">
             We’re sorry but we couldn’t find the link to this event.{' '}
             <br
               css={{

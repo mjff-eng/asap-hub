@@ -5,9 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Pill, Spinner } from '../atoms';
 import {
-  steel,
   colorWithTransparency,
-  tin,
   neutral200,
   neutral300,
   neutral800,
@@ -18,6 +16,8 @@ import {
   error100,
   error500,
   colour,
+  neutral500,
+  neutral700,
 } from '../colors';
 import { chevronDownIcon, chevronUpIcon } from '../icons';
 import { rem } from '../pixels';
@@ -68,7 +68,7 @@ const triggerStyles = (accent: StatusAccent) => {
     lineHeight: 1.2,
     margin: 0,
     ':focus-visible': {
-      outline: `2px solid ${colorWithTransparency(tin, 0.7).rgba}`,
+      outline: `2px solid ${colorWithTransparency(neutral700, 0.7).rgba}`,
       outlineOffset: rem(2),
     },
     '& svg': {
@@ -97,8 +97,8 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     zIndex: 1,
     minWidth: rem(160),
     backgroundColor: colour.neutral[0].rgb,
-    border: `1px solid ${steel.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+    border: `1px solid ${neutral500.rgb}`,
+    boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
     padding: `${rem(8)} 0`,
     display: 'flex',
     flexDirection: 'column',

@@ -5,10 +5,10 @@ import {
   colorWithTransparency,
   drawerQuery,
   navigationGrey,
-  steel,
-  tin,
   pixels,
   colour,
+  neutral500,
+  neutral700,
 } from '@asap-hub/react-components';
 import { useCurrentUserGP2 } from '@asap-hub/react-context';
 import { css } from '@emotion/react';
@@ -34,8 +34,8 @@ const userMenuStyles = css({
   backgroundColor: colour.neutral[0].rgb,
   display: 'none',
   position: 'absolute',
-  border: `1px solid ${steel.rgb}`,
-  boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+  border: `1px solid ${neutral500.rgb}`,
+  boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
   right: 5,
 });
 

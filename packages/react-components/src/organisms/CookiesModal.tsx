@@ -73,7 +73,7 @@ const essentialCategoryStyles = css({
 
 const dividerStyles = css({
   paddingTop: rem(4),
-  borderBottom: `1px solid ${colors.steel.rgb}`,
+  borderBottom: `1px solid ${colors.neutral500.rgb}`,
 });
 
 const thirdPartyCookieLinkStyles = css({
@@ -97,7 +97,7 @@ const ThirdPartyCookieLink = ({ link, label }: ThirdPartyCookieLinkProps) => (
   <Link href={link}>
     <Pill>
       <span css={pillStyles}>
-        {label} <ExternalLinkIcon size={16} color={colors.lead} />
+        {label} <ExternalLinkIcon size={16} color={colors.neutral900} />
       </span>
     </Pill>
   </Link>
@@ -149,7 +149,11 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
               <div css={sectionStyles}>
                 <Headline3 noMargin>Privacy Preference Center</Headline3>
 
-                <Paragraph noMargin accent="lead" styles={paragraphStyles}>
+                <Paragraph
+                  noMargin
+                  accent="neutral900"
+                  styles={paragraphStyles}
+                >
                   When you visit our website, it may store or retrieve data in
                   your browser. This storage is often necessary for the basic
                   functionality of the website and also for analytics. Privacy
@@ -167,12 +171,12 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
                     <Paragraph noMargin>
                       <span css={essentialCategoryStyles}>
                         <strong>Essential</strong>
-                        <span css={css({ color: colors.lead.rgb })}>
+                        <span css={css({ color: colors.neutral900.rgb })}>
                           <strong>Always Active</strong>
                         </span>
                       </span>
                     </Paragraph>
-                    <Paragraph accent="lead">
+                    <Paragraph accent="neutral900">
                       These items are required to enable basic website
                       functionality.
                     </Paragraph>
@@ -193,7 +197,7 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
                         />
                       </span>
                     </Paragraph>
-                    <Paragraph accent="lead">
+                    <Paragraph accent="neutral900">
                       These items help the website operator understand how its
                       website performs, how visitors interact with the site, and
                       whether there may be technical issues. This storage type

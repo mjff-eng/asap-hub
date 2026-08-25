@@ -10,7 +10,7 @@ import {
 import { NewsSection, HelpSection, RemindersCard } from '../organisms';
 import { rem } from '../pixels';
 import { Link, Headline2, Card, Paragraph, Icon } from '../atoms';
-import { lead } from '..';
+import { neutral900 } from '..';
 import { Accordion } from '../molecules';
 import { ExternalLinkIcon } from '../icons';
 import { isInternalLink } from '../utils';
@@ -21,7 +21,7 @@ const styles = css({
 });
 
 const infoStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   padding: `${rem(3)} 0 ${rem(24)}`,
   lineHeight: rem(24),
 });

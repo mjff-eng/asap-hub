@@ -5,7 +5,7 @@ import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph, Pill } from '../atoms';
-import { charcoal, lead, steel } from '../colors';
+import { charcoal, neutral900, neutral500 } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const container = css({
@@ -40,7 +40,7 @@ const rowStyles = css({
   display: 'grid',
   paddingTop: rem(20),
   paddingBottom: rem(20),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   ':last-child': {
     borderBottom: 'none',
     marginBottom: 0,
@@ -58,7 +58,7 @@ const rowStyles = css({
 const rowDivider = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     paddingTop: rem(16),
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${neutral500.rgb}`,
   },
 });
 
@@ -69,7 +69,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const showMoreStyles = css({
@@ -78,7 +78,7 @@ const showMoreStyles = css({
   marginTop: rem(32),
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 });
 
 const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
@@ -135,12 +135,12 @@ const RelatedResearchCard = <
       >
         <Headline3 noMargin>{title}</Headline3>
         <div css={descriptionStyles}>
-          <Paragraph accent="lead" noMargin>
+          <Paragraph accent="neutral900" noMargin>
             {description}
           </Paragraph>
         </div>
         {relatedResearch.length === 0 ? (
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="neutral900">
             <b>No related research available.</b>
           </Paragraph>
         ) : (

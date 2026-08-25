@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
 
 import { formatDateToTimezone } from '../date';
-import { info100, info500, lead } from '../colors';
+import { info100, info500, neutral900 } from '../colors';
 import { rem } from '../pixels';
 import { calendarIcon, clockIcon } from '../icons';
 
@@ -17,7 +17,7 @@ const listStyles = css({
 });
 
 const listItemStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
