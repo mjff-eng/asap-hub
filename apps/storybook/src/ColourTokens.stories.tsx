@@ -60,80 +60,155 @@ registerPalette(gp2Colors as unknown as Record<string, unknown>, '(GP2)');
 const usedInCode = (entry: TokenEntry): string[] =>
   codeNamesByValue.get(valueKey(entry.hex, entry.alpha)) ?? [];
 
-// legacy palette colours with no exact CAS value, and the closest CAS
-// candidate in the semantically matching ramp
+// legacy palette colours whose values were not originally in CAS:
+// oldHex is the pre-migration production value; candidate is the CAS token
+// that replaced it (migrated) or the nearest one for context (kept as-is)
 interface LegacyEntry {
   name: string;
+  oldHex: string;
   candidate: string;
 }
 const legacyGroups: { group: string; entries: LegacyEntry[] }[] = [
   {
     group: 'monochrome',
     entries: [
-      { name: 'pearl', candidate: 'colour/neutral/25' },
-      { name: 'charcoal', candidate: 'colour/neutral/900' },
+      { name: 'pearl', oldHex: '#FCFDFE', candidate: 'colour/neutral/25' },
+      { name: 'charcoal', oldHex: '#00222C', candidate: 'colour/neutral/900' },
     ],
   },
   {
     group: 'accent',
     entries: [
-      { name: 'cerulean', candidate: 'colour/brand/gp2/500' },
-      { name: 'space', candidate: 'colour/brand/gp2/900' },
-      { name: 'azure', candidate: 'colour/brand/gp2/25' },
-      { name: 'magenta', candidate: 'colour/general/purple/iris/500' },
-      { name: 'berry', candidate: 'colour/general/purple/iris/800' },
-      { name: 'lilac', candidate: 'colour/general/purple/lavender/25' },
-      { name: 'iris', candidate: 'colour/general/purple/iris/600' },
-      { name: 'mauve', candidate: 'colour/general/purple/iris/800' },
-      { name: 'lavender', candidate: 'colour/general/purple/iris/25' },
+      {
+        name: 'cerulean',
+        oldHex: '#008CC6',
+        candidate: 'colour/brand/gp2/500',
+      },
+      { name: 'space', oldHex: '#004561', candidate: 'colour/brand/gp2/900' },
+      { name: 'azure', oldHex: '#E7F7FE', candidate: 'colour/brand/gp2/25' },
+      {
+        name: 'magenta',
+        oldHex: '#CF2FB3',
+        candidate: 'colour/general/purple/iris/500',
+      },
+      {
+        name: 'berry',
+        oldHex: '#9A2386',
+        candidate: 'colour/general/purple/iris/800',
+      },
+      {
+        name: 'lilac',
+        oldHex: '#F8EAF7',
+        candidate: 'colour/general/purple/lavender/25',
+      },
+      {
+        name: 'iris',
+        oldHex: '#8C4E9F',
+        candidate: 'colour/general/purple/iris/600',
+      },
+      {
+        name: 'mauve',
+        oldHex: '#693B77',
+        candidate: 'colour/general/purple/iris/800',
+      },
+      {
+        name: 'lavender',
+        oldHex: '#F2EDF5',
+        candidate: 'colour/general/purple/iris/25',
+      },
     ],
   },
   {
     group: 'semantic / error',
     entries: [
-      { name: 'error100', candidate: 'colour/utilitarian/red/100' },
-      { name: 'error500', candidate: 'colour/utilitarian/red/600' },
-      { name: 'error900', candidate: 'colour/utilitarian/red/700' },
+      {
+        name: 'error100',
+        oldHex: '#F7E8EA',
+        candidate: 'colour/utilitarian/red/100',
+      },
+      {
+        name: 'error500',
+        oldHex: '#CD1426',
+        candidate: 'colour/utilitarian/red/600',
+      },
+      {
+        name: 'error900',
+        oldHex: '#B00A1A',
+        candidate: 'colour/utilitarian/red/700',
+      },
     ],
   },
   {
     group: 'semantic / neutral',
     entries: [
-      { name: 'neutral200', candidate: 'colour/neutral/50' },
-      { name: 'neutral300', candidate: 'colour/neutral/50' },
-      { name: 'neutral500', candidate: 'colour/neutral/100' },
-      { name: 'neutral700', candidate: 'colour/neutral/200' },
-      { name: 'neutral800', candidate: 'colour/neutral/400' },
-      { name: 'neutral900', candidate: 'colour/neutral/600' },
-      { name: 'neutral1000', candidate: 'colour/neutral/900' },
+      { name: 'neutral200', oldHex: '#F6F9FB', candidate: 'colour/neutral/50' },
+      { name: 'neutral300', oldHex: '#EDF1F3', candidate: 'colour/neutral/50' },
+      {
+        name: 'neutral500',
+        oldHex: '#DFE5EA',
+        candidate: 'colour/neutral/100',
+      },
+      {
+        name: 'neutral700',
+        oldHex: '#C2C9CE',
+        candidate: 'colour/neutral/200',
+      },
+      {
+        name: 'neutral800',
+        oldHex: '#92999E',
+        candidate: 'colour/neutral/400',
+      },
+      {
+        name: 'neutral900',
+        oldHex: '#4D646B',
+        candidate: 'colour/neutral/600',
+      },
+      {
+        name: 'neutral1000',
+        oldHex: '#00202C',
+        candidate: 'colour/neutral/900',
+      },
     ],
   },
   {
     group: 'semantic / success',
-    entries: [{ name: 'success100', candidate: 'colour/brand/crn/25' }],
+    entries: [
+      {
+        name: 'success100',
+        oldHex: '#E4F5EE',
+        candidate: 'colour/brand/crn/25',
+      },
+    ],
   },
   {
     group: 'semantic / warning',
     entries: [
-      { name: 'warning100', candidate: 'colour/utilitarian/orange/50' },
-      { name: 'warning150', candidate: 'colour/utilitarian/orange/100' },
-      { name: 'warning500', candidate: 'colour/utilitarian/orange/600' },
-      { name: 'warning900', candidate: 'colour/utilitarian/orange/700' },
+      {
+        name: 'warning100',
+        oldHex: '#F8EDDE',
+        candidate: 'colour/utilitarian/orange/50',
+      },
+      {
+        name: 'warning150',
+        oldHex: '#F2E1CB',
+        candidate: 'colour/utilitarian/orange/100',
+      },
+      {
+        name: 'warning500',
+        oldHex: '#CE801A',
+        candidate: 'colour/utilitarian/orange/600',
+      },
+      {
+        name: 'warning900',
+        oldHex: '#B56B0B',
+        candidate: 'colour/utilitarian/orange/700',
+      },
     ],
   },
 ];
 
 const channel = (hex: string, i: number) =>
   parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16);
-const distance = (a: string, b: string): number =>
-  Math.sqrt(
-    [0, 1, 2]
-      .map((i) => (channel(a, i) - channel(b, i)) ** 2)
-      .reduce((sum, d) => sum + d, 0),
-  );
-// beyond this RGB distance a candidate is no longer a plausible restyle of
-// the same colour
-const ABSENT_THRESHOLD = 38;
 
 const nearMisses = [
   {
@@ -145,11 +220,6 @@ const nearMisses = [
     value: '#35A170',
     closest: 'colour/brand/crn/500 (#34A270)',
     where: 'gp2 logo and calendar icons',
-  },
-  {
-    value: '#008CC6 (cerulean)',
-    closest: 'colour/brand/gp2/500 (#0C8DC3)',
-    where: 'CRN palette',
   },
 ];
 
@@ -418,22 +488,18 @@ export const CodeStatus = () => (
     intro={
       <>
         Every colour in the production palette falls into one of three states.
-        <b> In sync</b> (green): the exact value exists in CAS, and styling code
-        references it through the CAS token (icon and image SVGs are exempt and
-        keep their values inline). <b>Redesigned in CAS</b> (amber): CAS rebuilt
-        this ramp with new values; the closest CAS candidate is shown next to
-        ours, and adopting it is a visible change that needs design sign-off.{' '}
-        <b>Not in CAS</b> (red): no CAS colour is close to this value in any
-        collection (primitives, mode or theme). Agreed with design: these keep
-        their current name and value in code, and no Figma colour is used in
-        their place; the nearest CAS colour is shown only for context. Amber
-        colours also keep their current name and value until design signs off
-        the ramp migration. Matching is alpha-aware: a CAS alpha token (900-A4
-        to 900-A40) only counts as used when code has the same base colour at
-        the same opacity. The .rgb and .rgba forms of a palette colour are the
-        same value, and the few transparent colours in code (tin at 34% and 70%,
-        lead at 0%) match no CAS alpha token, whose bases are all 900-level
-        colours we do not use.
+        <b> In sync</b> (green): the value has always matched CAS, and styling
+        code references it through the CAS token (icon and image SVGs are exempt
+        and keep their values inline). <b>Migrated to CAS</b> (green, with old
+        value struck through): CAS redesigned this colour and the codebase now
+        uses the new CAS value; the row shows the old production value next to
+        its replacement so the visual shift is reviewable. <b>Not in CAS</b>{' '}
+        (red): no CAS colour is close to this value. Agreed with design: these
+        keep their current name and value in code, and no Figma colour is used
+        in their place; the nearest CAS colour is shown only for context.
+        Matching is alpha-aware: a CAS alpha token (900-A4 to 900-A40) only
+        counts as used when code has the same base colour at the same opacity,
+        and the .rgb and .rgba forms of a palette colour are the same value.
       </>
     }
   >
@@ -455,12 +521,12 @@ export const CodeStatus = () => (
       </Fragment>
     ))}
     <h2 style={{ fontSize: '16px', marginTop: '32px' }}>
-      Redesigned or missing
+      Migrated or kept as-is
     </h2>
     {legacyGroups.map(({ group, entries }) => (
       <Fragment key={group}>
         <h2 style={groupHeaderStyle}>{group}</h2>
-        {entries.map(({ name, candidate }) => {
+        {entries.map(({ name, oldHex, candidate }) => {
           const ours = colors[name as keyof typeof colors] as unknown as {
             r: number;
             g: number;
@@ -468,25 +534,36 @@ export const CodeStatus = () => (
           };
           const hex = rgbToHex(ours);
           const candidateToken = primitiveByPath.get(candidate);
-          const away = candidateToken ? distance(hex, candidateToken.hex) : 0;
-          const absent = away > ABSENT_THRESHOLD;
+          const migrated = candidateToken?.hex === hex;
           return (
             <div style={rowStyle} key={name}>
-              <Swatch hex={hex} />
               <span style={nameStyle}>{name}</span>
-              <HexLabel hex={hex} />
-              <span style={chipStyle(absent ? 'red' : 'amber')}>
-                {absent ? 'not in CAS' : 'redesigned in CAS'}
-              </span>
-              {candidateToken && (
+              {migrated && candidateToken ? (
                 <>
-                  <span style={aliasStyle}>
-                    {absent ? 'nearest is' : 'closest:'}
+                  <Swatch hex={oldHex} />
+                  <span style={{ ...hexStyle, textDecoration: 'line-through' }}>
+                    {oldHex}
                   </span>
+                  <span style={aliasStyle}>→</span>
                   <Swatch hex={candidateToken.hex} />
-                  <span style={aliasStyle}>
-                    {candidate} {candidateToken.hex}
-                  </span>
+                  <HexLabel hex={candidateToken.hex} />
+                  <span style={chipStyle('green')}>migrated to CAS</span>
+                  <span style={aliasStyle}>{candidate}</span>
+                </>
+              ) : (
+                <>
+                  <Swatch hex={hex} />
+                  <HexLabel hex={hex} />
+                  <span style={chipStyle('red')}>not in CAS, kept as-is</span>
+                  {candidateToken && (
+                    <>
+                      <span style={aliasStyle}>nearest is</span>
+                      <Swatch hex={candidateToken.hex} />
+                      <span style={aliasStyle}>
+                        {candidate} {candidateToken.hex}
+                      </span>
+                    </>
+                  )}
                 </>
               )}
             </div>
