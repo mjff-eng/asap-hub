@@ -25,8 +25,8 @@ it('applies default colors (apricot/clay)', () => {
     container.firstElementChild as Element,
   );
 
-  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(248, 237, 222)"`);
-  expect(color).toMatchInlineSnapshot(`"rgb(206, 128, 26)"`);
+  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(252, 248, 238)"`);
+  expect(color).toMatchInlineSnapshot(`"rgb(220, 104, 3)"`);
 });
 
 it('applies green variant colors (success100/crn green)', () => {
@@ -37,7 +37,7 @@ it('applies green variant colors (success100/crn green)', () => {
     container.firstElementChild as Element,
   );
 
-  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(228, 245, 238)"`);
+  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(226, 238, 237)"`);
   expect(color).toMatchInlineSnapshot(`"rgb(52, 162, 112)"`);
 });
 

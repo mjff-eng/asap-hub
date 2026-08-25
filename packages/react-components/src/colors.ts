@@ -60,6 +60,7 @@ export const colorWithTransparency = (
 export const colour = {
   brand: {
     crn: {
+      25: color(226, 238, 237),
       100: color(191, 227, 211),
       500: color(52, 162, 112),
       800: color(40, 121, 83),
@@ -71,33 +72,63 @@ export const colour = {
       800: color(0, 106, 146),
     },
   },
+  general: {
+    purple: {
+      lavender: {
+        25: color(243, 243, 249),
+      },
+      iris: {
+        25: color(238, 238, 244),
+      },
+    },
+  },
   neutral: {
     0: color(255, 255, 255),
+    25: color(252, 252, 253),
+    50: color(250, 250, 250),
+    100: color(227, 230, 232),
+    200: color(197, 202, 206),
+    400: color(136, 147, 154),
+    600: color(86, 96, 102),
+    900: color(28, 31, 33),
+  },
+  utilitarian: {
+    red: {
+      100: color(254, 228, 226),
+      600: color(217, 45, 32),
+      700: color(180, 35, 24),
+    },
+    orange: {
+      50: color(252, 248, 238),
+      100: color(254, 240, 199),
+      600: color(220, 104, 3),
+      700: color(181, 71, 8),
+    },
   },
 } as const;
 
 // Monochrome
-export const pearl = color(252, 253, 254);
-export const charcoal = color(0, 34, 44);
+export const pearl = colour.neutral[25];
+export const charcoal = colour.neutral[900];
 
 // Accent
 
-export const cerulean = color(0, 140, 198);
+export const cerulean = colour.brand.gp2[500];
 
 export const space = color(0, 69, 97);
-export const azure = color(231, 247, 254);
+export const azure = colour.brand.gp2[25];
 
 export const magenta = color(207, 47, 179);
 export const berry = color(154, 35, 134);
-export const lilac = color(248, 234, 247);
+export const lilac = colour.general.purple.lavender[25];
 
 export const iris = color(140, 78, 159);
 export const mauve = color(105, 59, 119);
-export const lavender = color(242, 237, 245);
+export const lavender = colour.general.purple.iris[25];
 
-export const error100 = color(247, 232, 234);
-export const error500 = color(205, 20, 38);
-export const error900 = color(176, 10, 26);
+export const error100 = colour.utilitarian.red[100];
+export const error500 = colour.utilitarian.red[600];
+export const error900 = colour.utilitarian.red[700];
 
 export const info100 = colour.brand.gp2[25];
 export const info150 = colour.brand.gp2[100];
@@ -109,19 +140,19 @@ export const information100 = colour.brand.gp2[25];
 export const information500 = colour.brand.gp2[500];
 export const information900 = colour.brand.gp2[800];
 
-export const neutral200 = color(246, 249, 251);
-export const neutral300 = color(237, 241, 243);
-export const neutral500 = color(223, 229, 234);
-export const neutral700 = color(194, 201, 206);
-export const neutral800 = color(146, 153, 158);
-export const neutral900 = color(77, 100, 107);
-export const neutral1000 = color(0, 32, 44);
+export const neutral200 = colour.neutral[50];
+export const neutral300 = colour.neutral[50];
+export const neutral500 = colour.neutral[100];
+export const neutral700 = colour.neutral[200];
+export const neutral800 = colour.neutral[400];
+export const neutral900 = colour.neutral[600];
+export const neutral1000 = colour.neutral[900];
 
-export const success100 = color(228, 245, 238);
+export const success100 = colour.brand.crn[25];
 export const success500 = colour.brand.crn[500];
 export const success900 = colour.brand.crn[800];
 
-export const warning100 = color(248, 237, 222);
-export const warning150 = color(242, 225, 203);
-export const warning500 = color(206, 128, 26);
-export const warning900 = color(181, 107, 11);
+export const warning100 = colour.utilitarian.orange[50];
+export const warning150 = colour.utilitarian.orange[100];
+export const warning500 = colour.utilitarian.orange[600];
+export const warning900 = colour.utilitarian.orange[700];

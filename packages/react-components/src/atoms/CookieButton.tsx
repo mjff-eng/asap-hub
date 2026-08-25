@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import React from 'react';
-import { neutral200 } from '../colors';
+import { colorWithTransparency, neutral200, neutral500 } from '../colors';
 import { cookieIcon } from '../icons';
 
 type CookieButtonProps = {
@@ -15,7 +15,7 @@ const iconStyles = css({
   backgroundColor: neutral200.rgb,
   borderRadius: '4px',
   cursor: 'pointer',
-  border: `1.5px solid rgba(223, 229, 234, 0.3)`,
+  border: `1.5px solid ${colorWithTransparency(neutral500, 0.3).rgba}`,
 });
 
 const CookieButton: React.FC<CookieButtonProps> = ({ toggleCookieModal }) => (
