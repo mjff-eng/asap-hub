@@ -2,12 +2,12 @@ import { css, Theme } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import {
-  steel,
   colorWithTransparency,
-  tin,
-  mint,
   neutral900,
   colour,
+  neutral500,
+  neutral700,
+  success100,
 } from '../colors';
 import { GeneralSortingIcon } from '../icons';
 import { rem } from '../pixels';
@@ -29,8 +29,8 @@ const menuStyles = css({
   top: `-${rem(6)}`,
 
   backgroundColor: colour.neutral[0].rgb,
-  border: `1px solid ${steel.rgb}`,
-  boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+  border: `1px solid ${neutral500.rgb}`,
+  boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
 
   display: 'none',
   flexDirection: 'column',
@@ -56,13 +56,13 @@ const optionStyles = css({
   backgroundColor: 'unset',
 
   ':hover': {
-    backgroundColor: mint.rgba,
+    backgroundColor: success100.rgba,
     color: colour.brand.crn[800].rgba,
   },
 });
 
 const hoverStyles = ({
-  primary100 = mint,
+  primary100 = success100,
   primary900 = colour.brand.crn[800],
 }: Theme['colors'] = {}) =>
   css({

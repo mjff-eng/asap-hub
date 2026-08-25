@@ -38,11 +38,11 @@ export type AccentVariant =
 export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
   default: {
     backgroundColor: 'transparent',
-    borderColor: colors.steel.rgb,
-    color: colors.lead.rgb,
+    borderColor: colors.neutral500.rgb,
+    color: colors.neutral900.rgb,
   },
   green: {
-    backgroundColor: colors.mint.rgb,
+    backgroundColor: colors.success100.rgb,
     color: colors.colour.brand.crn[800].rgb,
     borderColor: colors.colour.brand.crn[800].rgb,
   },
@@ -72,8 +72,8 @@ export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
     borderColor: colors.success500.rgb,
   },
   gray: {
-    color: colors.lead.rgb,
-    backgroundColor: colors.silver.rgb,
+    color: colors.neutral900.rgb,
+    backgroundColor: colors.neutral300.rgb,
     border: 'transparent',
   },
   blue: {

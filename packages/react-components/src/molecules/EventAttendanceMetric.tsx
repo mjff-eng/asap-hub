@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import AttendanceProgressBar from '../atoms/AttendanceProgressBar';
-import { neutral200, neutral1000, steel } from '../colors';
+import { neutral200, neutral1000, neutral500 } from '../colors';
 import { mobileScreen, rem } from '../pixels';
 
 const containerStyles = css({
@@ -42,7 +42,7 @@ const dividerStyles = css({
   width: rem(1),
   height: rem(24),
   flexShrink: 0,
-  backgroundColor: steel.rgb,
+  backgroundColor: neutral500.rgb,
 });
 
 const captionStyles = css({

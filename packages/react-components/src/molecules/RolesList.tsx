@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import { rem } from '../pixels';
 import { OverflowBadge } from '../atoms';
 
@@ -9,7 +9,7 @@ const containerStyles = css({
 });
 
 const roleTextStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontSize: rem(17),
 });
 

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ThemeProvider } from '@emotion/react';
 
-import { silver, charcoal, color, colour } from '../../colors';
+import { charcoal, color, colour, neutral300 } from '../../colors';
 import { OrcidIcon } from '../../icons';
 import { activePrimaryBackgroundColorDefault } from '../../button';
 
@@ -142,13 +142,13 @@ it('renders a disabled button', () => {
   const { getByRole, rerender } = render(<Button />);
   expect((getByRole('button') as HTMLButtonElement).disabled).toBeFalsy();
   expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
-    silver.rgb,
+    neutral300.rgb,
   );
 
   rerender(<Button enabled={false} />);
   expect((getByRole('button') as HTMLButtonElement).disabled).toBe(true);
   expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
-    silver.rgb,
+    neutral300.rgb,
   );
 });
 

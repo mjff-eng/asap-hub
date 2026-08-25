@@ -36,7 +36,7 @@ export const eventMapper = ({
   hasSpeakersToBeAnnounced: speakers.length === 0,
   eventSpeakers: (
     <IconWithLabel icon={speakerIcon}>
-      <Paragraph noMargin accent="lead">
+      <Paragraph noMargin accent="neutral900">
         {utils.getCounterString(speakers.length, 'Speaker')}
       </Paragraph>
     </IconWithLabel>

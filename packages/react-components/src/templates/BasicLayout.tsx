@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Header } from '../molecules';
-import { steel } from '../colors';
+import { neutral500 } from '../colors';
 
 const styles = css({
   height: '100%',
@@ -13,7 +13,7 @@ const styles = css({
 const contentStyles = css({
   justifySelf: 'stretch',
 
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 
   display: 'flex',
   flexDirection: 'column',

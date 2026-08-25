@@ -94,7 +94,9 @@ const PageBanner: React.FC<PageBannerProp> = ({
         >
           {title}
         </h1>
-        {description && <Paragraph accent="lead">{description}</Paragraph>}
+        {description && (
+          <Paragraph accent="neutral900">{description}</Paragraph>
+        )}
         {children}
       </div>
     </div>

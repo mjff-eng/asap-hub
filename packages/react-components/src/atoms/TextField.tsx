@@ -2,14 +2,14 @@
 import { css, Theme } from '@emotion/react';
 import { InputHTMLAttributes } from 'react';
 import {
-  ember,
-  lead,
-  rose,
-  silver,
-  steel,
-  tin,
   neutral800,
   colour,
+  error500,
+  neutral900,
+  error100,
+  neutral300,
+  neutral500,
+  neutral700,
 } from '../colors';
 import {
   indicatorPadding,
@@ -35,32 +35,32 @@ type FieldType =
   | 'number';
 
 const disabledStyles = css({
-  color: lead.rgb,
-  backgroundColor: silver.rgb,
+  color: neutral900.rgb,
+  backgroundColor: neutral300.rgb,
   '&[type="date"]': {
-    color: lead.rgb,
+    color: neutral900.rgb,
   },
 });
 
 const LABEL_INDICATOR_CLASS_NAME = 'labelIndicator';
 const labelIndicatorStyles = css({
   padding: `${rem(15)} ${rem(18)}`,
-  backgroundColor: silver.rgb,
-  border: `1px solid ${steel.rgb}`,
+  backgroundColor: neutral300.rgb,
+  border: `1px solid ${neutral500.rgb}`,
   borderRight: 0,
   display: 'flex',
-  color: lead.rgb,
+  color: neutral900.rgb,
   order: -1,
 });
 
 const invalidStyles = css({
   ':invalid': {
-    color: ember.rgb,
-    borderColor: ember.rgb,
-    backgroundColor: rose.rgb,
+    color: error500.rgb,
+    borderColor: error500.rgb,
+    backgroundColor: error100.rgb,
 
     '::placeholder': {
-      color: ember.rgb,
+      color: error500.rgb,
       opacity: 0.4,
     },
 
@@ -68,14 +68,14 @@ const invalidStyles = css({
       display: 'block',
     },
     '~ div': {
-      color: ember.rgb,
+      color: error500.rgb,
     },
     '~ div svg': {
-      fill: ember.rgb,
+      fill: error500.rgb,
     },
     [`& ~ .${LABEL_INDICATOR_CLASS_NAME}`]: {
-      backgroundColor: ember.rgb,
-      borderColor: ember.rgb,
+      backgroundColor: error500.rgb,
+      borderColor: error500.rgb,
       color: colour.neutral[0].rgb,
       svg: {
         stroke: colour.neutral[0].rgb,
@@ -97,7 +97,7 @@ const textFieldStyles = (
     backgroundSize: `auto ${rem(indicatorSize)}`,
 
     '::placeholder': {
-      color: tin.rgb,
+      color: neutral700.rgb,
     },
     '&[type="date"]': {
       color: hasValue ? '#000' : neutral800.hex,
@@ -108,7 +108,7 @@ const textFieldStyles = (
       display: 'none',
     },
     '~ div svg': {
-      stroke: lead.rgb,
+      stroke: neutral900.rgb,
     },
     ':focus ~ div svg': {
       stroke: primary900.rgba,

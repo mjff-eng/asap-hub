@@ -2,13 +2,13 @@ import { css } from '@emotion/react';
 
 import { successIcon } from '../icons';
 import { Link, Headline2, Paragraph } from '../atoms';
-import { steel, colour } from '../colors';
+import { colour, neutral500 } from '../colors';
 
 import { rem, tabletScreen } from '../pixels';
 import { irisCeruleanGradientStyles } from '../appearance';
 
 const footerStyles = css({
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
   padding: `${rem(6)} ${rem(24)}`,
   display: 'flex',
   position: 'fixed',

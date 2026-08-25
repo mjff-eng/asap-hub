@@ -129,7 +129,7 @@ const ComplianceReportCard: React.FC<ComplianceReportCardProps> = ({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div css={{ borderBottom: `1px solid ${colors.steel.rgb}` }}>
+    <div css={{ borderBottom: `1px solid ${colors.neutral500.rgb}` }}>
       <div css={toastStyles}>
         <span css={toastHeaderStyles}>
           <span css={[iconStyles]}>
@@ -145,7 +145,7 @@ const ComplianceReportCard: React.FC<ComplianceReportCardProps> = ({
           <div css={titleContainerStyles}>
             <Subtitle noMargin>Compliance Report #{count}</Subtitle>
             <div css={addedByContainerStyles}>
-              <Caption accent="lead" noMargin>
+              <Caption accent="neutral900" noMargin>
                 <div css={addedByStyles}>
                   <span css={addedByTextStyles}>
                     Date added:

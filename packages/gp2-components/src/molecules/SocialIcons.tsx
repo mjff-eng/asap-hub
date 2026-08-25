@@ -4,7 +4,7 @@ import { Link, pixels, colors } from '@asap-hub/react-components';
 import { socialIconsMap } from '../utils';
 
 const { rem } = pixels;
-const { tin, lead } = colors;
+const { neutral700, neutral900 } = colors;
 
 const ROW_GAP = 12;
 
@@ -24,7 +24,9 @@ const iconStyles = css({
   },
 });
 
-const inactiveStyles = css({ svg: { fill: tin.rgb, stroke: tin.rgb } });
+const inactiveStyles = css({
+  svg: { fill: neutral700.rgb, stroke: neutral700.rgb },
+});
 
 type SocialIconsProps = gp2Model.UserSocial;
 
@@ -40,7 +42,7 @@ const SocialIcons: React.FC<SocialIconsProps> = ({
   researchGate,
   blog,
 }) => {
-  const iconProps = { color: lead.hex };
+  const iconProps = { color: neutral900.hex };
 
   const socialLinks = [
     { key: 'orcid', link: orcid, Icon: socialIconsMap.orcid },

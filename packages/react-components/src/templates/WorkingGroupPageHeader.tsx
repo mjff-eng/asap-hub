@@ -336,7 +336,7 @@ const WorkingGroupPageHeader: React.FC<WorkingGroupPageHeaderProps> = ({
             )}
           </div>
           <div css={lastUpdatedStyles}>
-            <Caption asParagraph accent="lead">
+            <Caption asParagraph accent="neutral900">
               Last updated:{' '}
               {formatDistance(new Date(), new Date(lastModifiedDate))} ago
             </Caption>

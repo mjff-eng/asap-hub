@@ -163,7 +163,7 @@ const CreateMilestoneModal: React.FC<CreateMilestoneModalProps> = ({
         >
           <div css={grantTypeStyles}>
             <Subtitle noMargin>Grant Type</Subtitle>
-            <Paragraph noMargin accent="lead">
+            <Paragraph noMargin accent="neutral900">
               {titleCase(grantType)}
             </Paragraph>
           </div>

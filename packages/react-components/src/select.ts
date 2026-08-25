@@ -5,14 +5,14 @@ import { ellipsisStyles } from './atoms/Ellipsis';
 import { MultiSelectOptionsType } from './atoms/MultiSelect';
 import {
   charcoal,
-  ember,
-  lead,
-  mint,
-  rose,
-  silver,
-  steel,
-  tin,
   colour,
+  error500,
+  neutral900,
+  success100,
+  error100,
+  neutral300,
+  neutral500,
+  neutral700,
 } from './colors';
 import {
   borderWidth,
@@ -34,11 +34,11 @@ export type OptionsType<T> = readonly T[];
 const { ...baseStyles } = styles;
 
 const disabledStyles = {
-  color: lead.rgb,
+  color: neutral900.rgb,
   svg: {
-    fill: lead.rgb,
+    fill: neutral900.rgb,
   },
-  backgroundColor: silver.rgb,
+  backgroundColor: neutral300.rgb,
 };
 
 const baseSelectStyles = {
@@ -74,14 +74,14 @@ const baseSelectStyles = {
     paddingTop: rem(9),
 
     borderRadius: 0,
-    boxShadow: `0px 2px 4px ${steel.rgb}`,
+    boxShadow: `0px 2px 4px ${neutral500.rgb}`,
   }),
   menuList: (provided: CSSObject) => ({
     ...provided,
 
     borderStyle: 'solid',
     borderWidth: rem(borderWidth),
-    borderColor: steel.rgb,
+    borderColor: neutral500.rgb,
   }),
 
   noOptionsMessage: () => ({
@@ -96,7 +96,7 @@ export const reactSelectStyles = <
 >(
   {
     colors: {
-      primary100 = mint,
+      primary100 = success100,
       primary500 = colour.brand.crn[500],
       primary900 = colour.brand.crn[800],
     } = {},
@@ -123,9 +123,9 @@ export const reactSelectStyles = <
       ...(isFocused ? { borderColor: primary500.rgba } : {}),
       ...(isInvalid
         ? {
-            color: ember.rgb,
-            borderColor: ember.rgb,
-            backgroundColor: rose.rgb,
+            color: error500.rgb,
+            borderColor: error500.rgb,
+            backgroundColor: error100.rgb,
           }
         : {}),
       ...(isDisabled ? disabledStyles : {}),
@@ -135,7 +135,7 @@ export const reactSelectStyles = <
       margin: 0,
       color: getValue()?.some((option) => option.value !== '')
         ? 'unset'
-        : tin.rgb,
+        : neutral700.rgb,
     }),
     valueContainer: (provided) => ({
       ...provided,
@@ -144,7 +144,7 @@ export const reactSelectStyles = <
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: isInvalid ? ember.rgb : lead.rgb,
+      color: isInvalid ? error500.rgb : neutral900.rgb,
       opacity: isInvalid ? 0.4 : provided.opacity,
     }),
     menu: (provided: CSSObject) => ({
@@ -160,7 +160,7 @@ export const reactMultiSelectStyles = <
 >(
   {
     colors: {
-      primary100 = mint,
+      primary100 = success100,
       primary500 = colour.brand.crn[500],
       primary900 = colour.brand.crn[800],
     } = {},
@@ -193,8 +193,8 @@ export const reactMultiSelectStyles = <
       ...(isFocused ? { borderColor: primary500.rgba } : {}),
       ...(isInvalid
         ? {
-            borderColor: isFocused ? primary900.rgba : ember.rgb,
-            backgroundColor: isFocused ? colour.neutral[0].rgb : rose.rgb,
+            borderColor: isFocused ? primary900.rgba : error500.rgb,
+            backgroundColor: isFocused ? colour.neutral[0].rgb : error100.rgb,
             svg: { fill: 'unset' },
           }
         : {}),
@@ -209,7 +209,7 @@ export const reactMultiSelectStyles = <
 
       borderStyle: 'solid',
       borderWidth: `${borderWidth}px`,
-      borderColor: isInvalid ? tin.rgba : steel.rgb,
+      borderColor: isInvalid ? neutral700.rgba : neutral500.rgb,
       borderRadius: rem(18),
       backgroundColor: colour.neutral[0].rgb,
     }),
@@ -255,7 +255,7 @@ export const reactMultiSelectStyles = <
     },
     placeholder: (provided) => ({
       ...provided,
-      color: isInvalid ? ember.rgb : provided.color,
+      color: isInvalid ? error500.rgb : provided.color,
       opacity: isInvalid ? 0.4 : provided.opacity,
       marginLeft: rem(6),
     }),

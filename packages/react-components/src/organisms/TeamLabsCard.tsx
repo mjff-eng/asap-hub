@@ -6,7 +6,7 @@ import { Card, Paragraph, Button, Headline3, Ellipsis, Link } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 
 import { LabIcon } from '../icons';
-import { steel } from '../colors';
+import { neutral500 } from '../colors';
 
 type TeamLabsCardProps = {
   readonly labs: ReadonlyArray<LabDataObject>;
@@ -41,7 +41,7 @@ const buttonWrapperStyle = css({
   display: 'flex',
   justifyContent: 'center',
   padding: `${rem(16)} 0`,
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 });
 
 const contentStyles = css({
@@ -57,7 +57,7 @@ const TeamLabsCard: React.FC<TeamLabsCardProps> = ({ labs, isTeamActive }) => {
       <div css={contentStyles}>
         <Headline3>Labs</Headline3>
         <div css={descriptionStyles}>
-          <Paragraph accent="lead">
+          <Paragraph accent="neutral900">
             {isTeamActive
               ? 'View the labs within this team and connect directly with their principal investigators.'
               : 'View the labs that were part of this team.'}

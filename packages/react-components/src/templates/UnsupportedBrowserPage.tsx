@@ -18,7 +18,7 @@ const UnsupportedBrowserPage: React.FC<Record<string, never>> = () => (
   <div css={styles}>
     <BannerCard type="warning">
       <Display styleAsHeading={2}>Browser not supported</Display>
-      <Paragraph accent="lead">
+      <Paragraph accent="neutral900">
         Unfortunately, ASAP Hub is not available on the browser you are using.
         Please ensure you are using the latest version of a supported browser (
         <Link href="https://www.google.com/chrome/">Google Chrome</Link>,{' '}

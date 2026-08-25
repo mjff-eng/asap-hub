@@ -21,7 +21,7 @@ const MilestonesMobilePage: React.FC = () => (
         Milestones are only available on the desktop version.
       </span>
     </Headline3>
-    <Paragraph accent="lead">
+    <Paragraph accent="neutral900">
       To access all milestones features, please use the desktop version. We
       apologize for any inconvenience this may cause.
     </Paragraph>

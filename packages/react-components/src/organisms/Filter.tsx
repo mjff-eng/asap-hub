@@ -5,7 +5,12 @@ import { useDebounce } from 'use-debounce';
 import { CheckboxGroup } from '.';
 import { FILTERS_KEY, FILTER_EVENT, FILTER_TITLE_KEY } from '../analytics';
 import { Button } from '../atoms';
-import { steel, colorWithTransparency, tin, colour } from '../colors';
+import {
+  colorWithTransparency,
+  colour,
+  neutral500,
+  neutral700,
+} from '../colors';
 import { filterIcon } from '../icons';
 import {
   tabletScreen,
@@ -33,8 +38,8 @@ const dropdownContainer = css({
   zIndex: 1000,
 
   backgroundColor: colour.neutral[0].rgb,
-  border: `1px solid ${steel.rgb}`,
-  boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+  border: `1px solid ${neutral500.rgb}`,
+  boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
 
   display: 'none',
   flexDirection: 'column',

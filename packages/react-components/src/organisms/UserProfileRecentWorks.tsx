@@ -15,7 +15,7 @@ import {
 } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 import { ExternalLinkIcon, OrcidIcon } from '../icons';
-import { charcoal, lead } from '../colors';
+import { charcoal, neutral900 } from '../colors';
 import { mailToSupport } from '../mail';
 import { LinkHeadline } from '../molecules';
 
@@ -111,7 +111,7 @@ const UserProfileRecentWork: React.FC<UserProfileRecentWorkProps> = ({
     );
 
     publishDateComponent = (
-      <Paragraph accent="lead">
+      <Paragraph accent="neutral900">
         Originally Published:{' '}
         {format(
           date,
@@ -154,13 +154,13 @@ const UserProfileRecentWorks: React.FC<UserProfileRecentWorksProps> = ({
         <Headline2 styleAsHeading={3}>
           Recent Publications ({orcidWorks.length})
         </Headline2>
-        <Paragraph accent="lead">Via ORCID</Paragraph>
-        <span css={{ display: 'grid', svg: { fill: lead.rgb } }}>
+        <Paragraph accent="neutral900">Via ORCID</Paragraph>
+        <span css={{ display: 'grid', svg: { fill: neutral900.rgb } }}>
           <OrcidIcon />
         </span>
       </div>
       {orcidWorks.length === 0 && isOwnProfile ? (
-        <Paragraph accent="lead">
+        <Paragraph accent="neutral900">
           <span css={titleStyle}>No works available on your ORCID.</span>
           <br />
           To complete this section, please add works to your ORCID.{' '}
