@@ -3,7 +3,6 @@ import { colors } from '@asap-hub/react-components';
 import { colors as gp2Colors } from '@asap-hub/gp2-components';
 import valueTokens from './cas-tokens/Value.tokens.json';
 import lightTokens from './cas-tokens/Light.tokens.json';
-import darkTokens from './cas-tokens/Dark.tokens.json';
 import crnTheme from './cas-tokens/CRN.tokens.json';
 import gp2Theme from './cas-tokens/GP2.tokens.json';
 import {
@@ -14,7 +13,6 @@ import {
 
 const primitives = parseColourTokens(valueTokens);
 const light = parseColourTokens(lightTokens);
-const dark = parseColourTokens(darkTokens);
 const crn = parseColourTokens(crnTheme);
 const gp2 = parseColourTokens(gp2Theme);
 
@@ -142,7 +140,11 @@ const legacyGroups: { group: string; entries: LegacyEntry[] }[] = [
     group: 'semantic / neutral',
     entries: [
       { name: 'neutral200', oldHex: '#F6F9FB', candidate: 'colour/neutral/50' },
-      { name: 'neutral300', oldHex: '#EDF1F3', candidate: 'colour/neutral/50' },
+      {
+        name: 'neutral300',
+        oldHex: '#EDF1F3',
+        candidate: 'colour/general/blue/cerulean/25',
+      },
       {
         name: 'neutral500',
         oldHex: '#DFE5EA',
@@ -404,43 +406,36 @@ export const Primitives = () => (
   </Page>
 );
 
-export const Modes = () => {
-  const darkByPath = new Map(dark.map((e) => [e.path.join('/'), e]));
-  return (
-    <Page
-      title="Modes (Light and Dark)"
-      intro={
-        <>
-          The mode collection remaps every ramp step to a primitive per mode: in
-          Dark the ramps flip (neutral/900 becomes neutral/0, and so on). The
-          products only implement Light today; Dark is shown for reference so
-          the naming stays future-proof.
-        </>
-      }
-    >
-      {groupInOrder(light).map(({ group, tokens }) => (
-        <Fragment key={group}>
-          <h2 style={groupHeaderStyle}>{group}</h2>
-          <div style={columnHeaderStyle}>
-            <span>Name</span>
-            <span>Light</span>
-            <span>Dark</span>
+export const Modes = () => (
+  <Page
+    title="Modes (Light)"
+    intro={
+      <>
+        The mode collection remaps every ramp step to a primitive per mode. The
+        products only implement Light; the Figma file also defines a Dark mode,
+        deliberately out of scope here.
+      </>
+    }
+  >
+    {groupInOrder(light).map(({ group, tokens }) => (
+      <Fragment key={group}>
+        <h2 style={groupHeaderStyle}>{group}</h2>
+        <div style={columnHeaderStyle}>
+          <span>Name</span>
+          <span>Light</span>
+          <span />
+        </div>
+        {tokens.map((token) => (
+          <div style={columnsRowStyle} key={token.name}>
+            <span style={nameStyle}>{token.name}</span>
+            <AliasChip entry={token} />
+            <span />
           </div>
-          {tokens.map((token) => {
-            const darkToken = darkByPath.get(token.path.join('/'));
-            return (
-              <div style={columnsRowStyle} key={token.name}>
-                <span style={nameStyle}>{token.name}</span>
-                <AliasChip entry={token} />
-                {darkToken ? <AliasChip entry={darkToken} /> : <span />}
-              </div>
-            );
-          })}
-        </Fragment>
-      ))}
-    </Page>
-  );
-};
+        ))}
+      </Fragment>
+    ))}
+  </Page>
+);
 
 export const Themes = () => {
   const gp2ByPath = new Map(gp2.map((e) => [e.path.join('/'), e]));

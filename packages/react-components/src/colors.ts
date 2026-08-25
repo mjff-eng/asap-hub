@@ -73,6 +73,11 @@ export const colour = {
     },
   },
   general: {
+    blue: {
+      cerulean: {
+        25: color(238, 243, 246),
+      },
+    },
     purple: {
       lavender: {
         25: color(243, 243, 249),
@@ -141,7 +146,7 @@ export const information500 = colour.brand.gp2[500];
 export const information900 = colour.brand.gp2[800];
 
 export const neutral200 = colour.neutral[50];
-export const neutral300 = colour.neutral[50];
+export const neutral300 = colour.general.blue.cerulean[25];
 export const neutral500 = colour.neutral[100];
 export const neutral700 = colour.neutral[200];
 export const neutral800 = colour.neutral[400];
