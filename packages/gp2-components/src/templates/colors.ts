@@ -1,25 +1,20 @@
-import {
-  color,
-  colour,
-  success500,
-  success900,
-} from '@asap-hub/react-components';
+import { colour, success500, success900 } from '@asap-hub/react-components';
 
 const colors = {
-  error100: color(247, 232, 234, 1),
-  error500: color(205, 20, 38, 1),
-  error900: color(176, 10, 26),
-  greyscale1000: color(77, 100, 107),
+  error100: colour.utilitarian.red[100],
+  error500: colour.utilitarian.red[600],
+  error900: colour.utilitarian.red[700],
+  greyscale1000: colour.neutral[600],
   info100: colour.brand.gp2[25],
   info150: colour.brand.gp2[100],
   info500: colour.brand.gp2[500],
   info900: colour.brand.gp2[800],
   neutral000: colour.neutral[0],
-  neutral1000: color(0, 32, 44),
-  neutral500: color(223, 229, 234),
-  neutral700: color(194, 201, 206),
-  neutral800: color(146, 153, 158),
-  neutral900: color(77, 100, 107),
+  neutral1000: colour.neutral[900],
+  neutral500: colour.neutral[100],
+  neutral700: colour.neutral[200],
+  neutral800: colour.neutral[400],
+  neutral900: colour.neutral[600],
   primary100: colour.brand.gp2[25],
   primary500: colour.brand.gp2[500],
   primary900: colour.brand.gp2[800],
@@ -27,8 +22,8 @@ const colors = {
   success100: success500,
   success500,
   success900,
-  warning100: color(248, 237, 222),
-  warning500: color(206, 128, 26),
-  warning900: color(181, 107, 11),
+  warning100: colour.utilitarian.orange[50],
+  warning500: colour.utilitarian.orange[600],
+  warning900: colour.utilitarian.orange[700],
 };
 export default colors;
