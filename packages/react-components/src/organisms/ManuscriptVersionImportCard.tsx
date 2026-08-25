@@ -4,7 +4,7 @@ import { network } from '@asap-hub/routing';
 
 import { Card, Headline3, Paragraph, Pill } from '../atoms';
 import { mobileScreen, rem } from '../pixels';
-import { lead, neutral200, colour } from '../colors';
+import { neutral200, colour, neutral900 } from '../colors';
 import { ThemeVariant } from '../theme';
 import { contentSidePaddingWithNavigation } from '../layout';
 
@@ -15,7 +15,7 @@ const container = css({
 
 const descriptionStyles = css({
   margin: `${rem(24)} 0`,
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const pillContainerStyles = css({
@@ -55,7 +55,7 @@ const cardStyles = css({
 
 const titleStyles = css({
   margin: `${rem(8)} 0 ${rem(12)}`,
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const linkStyles = css({

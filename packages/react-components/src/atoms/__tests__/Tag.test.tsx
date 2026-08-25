@@ -2,14 +2,20 @@ import { render, screen } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import userEvent from '@testing-library/user-event';
 import Tag from '../Tag';
-import { mint, neutral1000, silver, steel, colour } from '../../colors';
+import {
+  neutral1000,
+  colour,
+  success100,
+  neutral300,
+  neutral500,
+} from '../../colors';
 
 it('renders a tag with content', () => {
   const { container } = render(<Tag>Text</Tag>);
   expect(container.textContent).toEqual('Text');
 });
 
-it('renders a white tag with a mint background when highlighted', () => {
+it('renders a white tag with a success100 background when highlighted', () => {
   const { getByText, rerender } = render(<Tag>Text</Tag>);
   expect(
     findParentWithStyle(getByText('Text'), 'backgroundColor')?.backgroundColor,
@@ -18,7 +24,7 @@ it('renders a white tag with a mint background when highlighted', () => {
   rerender(<Tag highlight>Text</Tag>);
   expect(
     findParentWithStyle(getByText('Text'), 'backgroundColor')?.backgroundColor,
-  ).toBe(mint.rgb);
+  ).toBe(success100.rgb);
 });
 
 it('renders a tag with disabled styles when disabled', () => {
@@ -33,8 +39,10 @@ it('renders a tag with disabled styles when disabled', () => {
   rerender(<Tag enabled={false}>Text</Tag>);
 
   expect(getParentStyle('color')?.color).toBe(neutral1000.rgb);
-  expect(getParentStyle('borderColor')?.borderColor).toBe(steel.rgb);
-  expect(getParentStyle('backgroundColor')?.backgroundColor).toBe(silver.rgb);
+  expect(getParentStyle('borderColor')?.borderColor).toBe(neutral500.rgb);
+  expect(getParentStyle('backgroundColor')?.backgroundColor).toBe(
+    neutral300.rgb,
+  );
 });
 
 it('renders a tag with a title', () => {

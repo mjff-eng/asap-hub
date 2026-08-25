@@ -42,7 +42,7 @@ const fileLinkStyles = css({
   padding: `${rem(8)} ${rem(12)} ${rem(8)} ${rem(8)}`,
   transition: 'border-color 0.2s ease-in-out',
   ':hover': {
-    borderColor: colors.tin.rgb,
+    borderColor: colors.neutral700.rgb,
   },
 });
 

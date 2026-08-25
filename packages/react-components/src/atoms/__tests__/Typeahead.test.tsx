@@ -3,7 +3,7 @@ import { waitFor } from '@testing-library/dom';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { ember, lead, silver, colour } from '../../colors';
+import { colour, error500, neutral900, neutral300 } from '../../colors';
 import Typeahead from '../Typeahead';
 
 it('shows the selected value', () => {
@@ -77,8 +77,10 @@ it('gets greyed out when disabled', () => {
   // In react-select v5, the control element has the color/background styles
   const disabledControl = container.querySelector('[aria-disabled="true"]');
   expect(disabledControl).not.toBeNull();
-  expect(getComputedStyle(disabledControl!).color).toBe(lead.rgb);
-  expect(getComputedStyle(disabledControl!).backgroundColor).toBe(silver.rgb);
+  expect(getComputedStyle(disabledControl!).color).toBe(neutral900.rgb);
+  expect(getComputedStyle(disabledControl!).backgroundColor).toBe(
+    neutral300.rgb,
+  );
   const disabledInput = container.querySelector('input');
   expect(disabledInput).toBeDisabled();
 
@@ -88,9 +90,9 @@ it('gets greyed out when disabled', () => {
     '[class*="-container"] > div:not([aria-disabled])',
   );
   expect(enabledControl).not.toBeNull();
-  expect(getComputedStyle(enabledControl!).color).not.toBe(lead.rgb);
+  expect(getComputedStyle(enabledControl!).color).not.toBe(neutral900.rgb);
   expect(getComputedStyle(enabledControl!).backgroundColor).not.toBe(
-    silver.rgb,
+    neutral300.rgb,
   );
   const enabledInput = container.querySelector('input');
   expect(enabledInput).not.toBeDisabled();
@@ -105,7 +107,7 @@ describe('invalidity', () => {
     const inputBefore = container.querySelector('input')!;
     expect(
       findParentWithStyle(inputBefore, 'borderColor')?.borderColor,
-    ).not.toBe(ember.rgb);
+    ).not.toBe(error500.rgb);
 
     rerender(
       <Typeahead
@@ -114,10 +116,10 @@ describe('invalidity', () => {
         customValidationMessage="Nope."
       />,
     );
-    // After rerender with validation message, control should have ember color
+    // After rerender with validation message, control should have error500 color
     const inputAfter = container.querySelector('input')!;
     expect(findParentWithStyle(inputAfter, 'borderColor')?.borderColor).toBe(
-      ember.rgb,
+      error500.rgb,
     );
   });
 
@@ -132,7 +134,7 @@ describe('invalidity', () => {
       const inputElement = container.querySelector('input')!;
       expect(
         findParentWithStyle(inputElement, 'borderColor')?.borderColor,
-      ).toBe(ember.rgb);
+      ).toBe(error500.rgb);
     });
   });
 });

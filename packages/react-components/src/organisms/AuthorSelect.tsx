@@ -5,7 +5,7 @@ import { ReactElement, ReactNode } from 'react';
 import { components } from 'react-select';
 import { Avatar } from '../atoms';
 import { MultiSelectOptionsType } from '../atoms/MultiSelect';
-import { steel, colour } from '../colors';
+import { colour, neutral500 } from '../colors';
 import { borderWidth } from '../form';
 import { crossIcon, plusIcon, userPlaceholderIcon } from '../icons';
 import LabeledMultiSelect, {
@@ -73,7 +73,7 @@ const singleValueStyles = css({
 
   borderStyle: 'solid',
   borderWidth: `${borderWidth}px`,
-  borderColor: steel.rgb,
+  borderColor: neutral500.rgb,
   borderRadius: rem(18),
   backgroundColor: colour.neutral[0].rgb,
 

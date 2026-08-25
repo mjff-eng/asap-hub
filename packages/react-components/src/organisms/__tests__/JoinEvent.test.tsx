@@ -3,7 +3,7 @@ import { subMinutes, addMinutes, addDays, subHours } from 'date-fns';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import JoinEvent from '../JoinEvent';
-import { silver } from '../../colors';
+import { neutral300 } from '../../colors';
 
 jest.useFakeTimers();
 
@@ -55,7 +55,7 @@ it('renders a disabled link if the meeting link is missing', () => {
   expect(
     findParentWithStyle(getByText(/join.+meeting/i), 'backgroundColor')!
       .backgroundColor,
-  ).not.toBe(silver.rgb);
+  ).not.toBe(neutral300.rgb);
 
   rerender(
     <JoinEvent
@@ -67,7 +67,7 @@ it('renders a disabled link if the meeting link is missing', () => {
   expect(
     findParentWithStyle(getByText(/join.+meeting/i), 'backgroundColor')!
       .backgroundColor,
-  ).toBe(silver.rgb);
+  ).toBe(neutral300.rgb);
 });
 it('renders a disabled link if the meeting starts more than 24h from current time', () => {
   const startDate = addDays(new Date(), 2).toISOString();
@@ -84,7 +84,7 @@ it('renders a disabled link if the meeting starts more than 24h from current tim
   expect(
     findParentWithStyle(getByText(/join.+meeting/i), 'backgroundColor')!
       .backgroundColor,
-  ).toBe(silver.rgb);
+  ).toBe(neutral300.rgb);
 });
 
 it('informs you when to expect a link way before the event', () => {

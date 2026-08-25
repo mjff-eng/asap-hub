@@ -12,14 +12,14 @@ import { Anchor, Button } from '../atoms';
 import { rem, mobileScreen, formTargetWidth } from '../pixels';
 
 import {
-  steel,
   colorWithTransparency,
-  tin,
-  mint,
-  lead,
-  silver,
   neutral200,
   colour,
+  neutral500,
+  neutral700,
+  success100,
+  neutral900,
+  neutral300,
 } from '../colors';
 
 const containerStyles = css({
@@ -48,8 +48,8 @@ const menuContainerStyles = (customMenuWidth?: number) =>
     top: 0,
     right: 0,
     backgroundColor: colour.neutral[0].rgb,
-    border: `1px solid ${steel.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+    border: `1px solid ${neutral500.rgb}`,
+    boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
 
     flexDirection: 'column',
 
@@ -108,15 +108,15 @@ const alignLeftStyles = css({
 export type ItemType = 'title' | 'inner' | 'default';
 
 const itemStyles = ({
-  primary100 = mint,
+  primary100 = success100,
   primary900 = colour.brand.crn[800],
   type = 'default',
 }: { type?: ItemType } & Theme['colors']) =>
   css({
-    color: lead.rgb,
+    color: neutral900.rgb,
     backgroundColor:
       type === 'title'
-        ? silver.rgba
+        ? neutral300.rgba
         : type === 'inner'
           ? neutral200.rgba
           : 'none',

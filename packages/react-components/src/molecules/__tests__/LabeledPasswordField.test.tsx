@@ -2,7 +2,7 @@ import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { ember } from '../../colors';
+import { error500 } from '../../colors';
 
 import LabeledPasswordField from '../LabeledPasswordField';
 
@@ -59,7 +59,7 @@ it('changes the show password button color to red when invalid', () => {
 
   expect(
     findParentWithStyle(getByTitle(/show/i), 'fill')?.fill.replace(/ /g, ''),
-  ).not.toBe(ember.rgb.replace(/ /g, ''));
+  ).not.toBe(error500.rgb.replace(/ /g, ''));
 
   rerender(
     <LabeledPasswordField
@@ -73,7 +73,7 @@ it('changes the show password button color to red when invalid', () => {
 
   expect(
     findParentWithStyle(getByTitle(/show/i), 'fill')?.fill.replace(/ /g, ''),
-  ).toBe(ember.rgb.replace(/ /g, ''));
+  ).toBe(error500.rgb.replace(/ /g, ''));
 });
 
 describe('when showing the password', () => {

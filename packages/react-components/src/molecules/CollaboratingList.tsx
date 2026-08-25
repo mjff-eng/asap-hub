@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button } from '../atoms';
-import { lead, steel } from '../colors';
+import { neutral900, neutral500 } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 export const nonMobileQuery = `@media (min-width: ${tabletScreen.min}px)`;
@@ -22,7 +22,7 @@ export const listStyles = css({
 });
 
 export const rowStyles = css({
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
   padding: `${rem(16)} 0`,
   ':first-of-type': {
     borderTop: 'none',
@@ -52,7 +52,7 @@ export const chevronStyles = css({
 });
 
 export const emptyStateStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   margin: 0,
   padding: `${rem(24)} 0`,
   textAlign: 'left',
@@ -67,7 +67,7 @@ export const viewMoreContainerStyles = css({
   // padding so the divider spans the full card width.
   marginInline: `-${rem(24)}`,
   marginBottom: `-${rem(14)}`,
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 });
 
 export const articleRowStyles = css({

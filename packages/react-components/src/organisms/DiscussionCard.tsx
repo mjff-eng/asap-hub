@@ -28,8 +28,8 @@ const containerStyles = (isLast: boolean, unread: boolean) =>
 
     borderLeft: `8px solid ${unread ? colors.info500.rgb : 'transparent'}`,
 
-    borderTop: `1px solid ${colors.steel.rgb}`,
-    borderBottom: isLast ? `1px solid ${colors.steel.rgb}` : 0,
+    borderTop: `1px solid ${colors.neutral500.rgb}`,
+    borderBottom: isLast ? `1px solid ${colors.neutral500.rgb}` : 0,
 
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       flexDirection: 'column',
@@ -119,7 +119,7 @@ const replyButtonStyles = css({
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
-  borderColor: colors.steel.rgb,
+  borderColor: colors.neutral500.rgb,
   borderWidth: 1,
   borderStyle: 'solid',
   width: 'fit-content',
@@ -162,7 +162,7 @@ const replyCountStyles = css({
 const replyLineSeparatorStyles = css({
   flexGrow: 1,
   height: rem(1),
-  backgroundColor: colors.steel.rgb,
+  backgroundColor: colors.neutral500.rgb,
 });
 
 const fullWidthStyles = css({

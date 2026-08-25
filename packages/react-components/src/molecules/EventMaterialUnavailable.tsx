@@ -18,7 +18,7 @@ const EventMaterialUnavailable: React.FC<EventMaterialUnavailableProps> = ({
       {materialType}
     </Headline2>
     <div css={css({ marginTop: rem(24) })} />
-    <Paragraph noMargin accent="lead">
+    <Paragraph noMargin accent="neutral900">
       No {materialType.toLowerCase()} was shared for this event.
     </Paragraph>
   </Card>

@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Link, Pill } from '../atoms';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import {
   article as articleIcon,
   DiscoveryTeamIcon,
@@ -51,7 +51,7 @@ const teamNameStyles = css({
 });
 
 const articleCountStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   paddingLeft: rem(22),
   '& > [data-bullet]': {
     display: 'none',

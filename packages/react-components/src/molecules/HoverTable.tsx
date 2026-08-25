@@ -2,7 +2,7 @@ import { useState, ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 import { Tooltip } from '../atoms';
-import { lead, steel } from '../colors';
+import { neutral900, neutral500 } from '../colors';
 import { rem } from '../pixels';
 
 const buttonStyles = css({
@@ -22,11 +22,11 @@ const hoverBodyStyles = css({
 
 const counterStyle = css({
   display: 'inline-flex',
-  color: lead.rgb,
+  color: neutral900.rgb,
   marginLeft: rem(9),
   textAlign: 'center',
   minWidth: rem(24),
-  border: `1px solid ${steel.rgb}`,
+  border: `1px solid ${neutral500.rgb}`,
   borderRadius: '100%',
   fontSize: '14px',
   fontWeight: 'bold',

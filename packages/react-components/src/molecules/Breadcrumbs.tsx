@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Link } from '../atoms';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import { breadcrumbSeparatorIcon, homeIcon } from '../icons';
 import { rem } from '../pixels';
 
@@ -47,7 +47,7 @@ const separatorStyles = css({
 });
 
 const plainItemStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 export type BreadcrumbItem = {

@@ -71,21 +71,12 @@ const legacyGroups: { group: string; entries: LegacyEntry[] }[] = [
     group: 'monochrome',
     entries: [
       { name: 'pearl', candidate: 'colour/neutral/25' },
-      { name: 'silver', candidate: 'colour/neutral/50' },
-      { name: 'steel', candidate: 'colour/neutral/100' },
-      { name: 'tin', candidate: 'colour/neutral/200' },
-      { name: 'lead', candidate: 'colour/neutral/600' },
       { name: 'charcoal', candidate: 'colour/neutral/900' },
     ],
   },
   {
     group: 'accent',
     entries: [
-      { name: 'ember', candidate: 'colour/utilitarian/red/600' },
-      { name: 'rose', candidate: 'colour/utilitarian/red/100' },
-      { name: 'clay', candidate: 'colour/utilitarian/orange/600' },
-      { name: 'apricot', candidate: 'colour/utilitarian/orange/50' },
-      { name: 'mint', candidate: 'colour/brand/crn/25' },
       { name: 'cerulean', candidate: 'colour/brand/gp2/500' },
       { name: 'space', candidate: 'colour/brand/gp2/900' },
       { name: 'azure', candidate: 'colour/brand/gp2/25' },

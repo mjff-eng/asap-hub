@@ -6,7 +6,7 @@ import { createUserResponse } from '@asap-hub/fixtures';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import ExpertiseAndResourcesModal from '../ExpertiseAndResourcesModal';
-import { ember, steel } from '../../colors';
+import { error500, neutral500 } from '../../colors';
 
 const mapTags = (tags: string[]) => tags.map((tag) => ({ name: tag, id: tag }));
 
@@ -125,11 +125,11 @@ describe('tags selection', () => {
     );
     const input = getByLabelText(/tags\s*\(required\)/i);
     expect(findParentWithStyle(input, 'borderColor')?.borderColor).not.toEqual(
-      ember.rgb,
+      error500.rgb,
     );
     await userEvent.click(getByText(/save/i));
     expect(findParentWithStyle(input, 'borderColor')?.borderColor).toEqual(
-      steel.rgb,
+      neutral500.rgb,
     );
     expect(handleSave).not.toHaveBeenCalled();
   });
@@ -152,7 +152,7 @@ describe('tags selection', () => {
     fireEvent.blur(input);
 
     expect(findParentWithStyle(input, 'borderColor')?.borderColor).toEqual(
-      ember.rgb,
+      error500.rgb,
     );
     expect(getByText('Please add a minimum of 5 tags')).toBeVisible();
 
@@ -162,7 +162,7 @@ describe('tags selection', () => {
     fireEvent.blur(input);
 
     expect(findParentWithStyle(input, 'borderColor')?.borderColor).toEqual(
-      steel.rgb,
+      neutral500.rgb,
     );
     expect(
       queryByText('Please add a minimum of 5 tags'),

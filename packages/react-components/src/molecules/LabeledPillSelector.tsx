@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { Paragraph, PillSelector } from '../atoms';
 import { validationMessageStyles } from '../form';
-import { lead, rose, silver, steel } from '../colors';
+import { neutral900, error100, neutral300, neutral500 } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { colors } from '..';
 
@@ -22,7 +22,7 @@ const subtitleStyles = css({
 });
 
 const descriptionStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   display: 'inline-block',
   [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
     display: 'unset',
@@ -32,10 +32,14 @@ const descriptionStyles = css({
 const containerStyles = (hasError: boolean, enabled: boolean) =>
   css({
     border: '1px solid',
-    borderColor: hasError ? colors.error500.rgba : steel.rgba,
+    borderColor: hasError ? colors.error500.rgba : neutral500.rgba,
     padding: `${rem(3)} ${rem(9)}`,
 
-    backgroundColor: enabled ? (hasError ? rose.rgba : '#fff') : silver.rgba,
+    backgroundColor: enabled
+      ? hasError
+        ? error100.rgba
+        : '#fff'
+      : neutral300.rgba,
   });
 
 type LabeledPillSelectorProps = ComponentProps<typeof PillSelector> & {

@@ -29,7 +29,7 @@ it('applies default colors (apricot/clay)', () => {
   expect(color).toMatchInlineSnapshot(`"rgb(206, 128, 26)"`);
 });
 
-it('applies green variant colors (mint/crn green)', () => {
+it('applies green variant colors (success100/crn green)', () => {
   const { container } = render(<StateTag label="Text" accent="green" />);
 
   expect(container.firstElementChild).toBeDefined();

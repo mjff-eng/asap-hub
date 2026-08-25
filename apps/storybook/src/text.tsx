@@ -7,9 +7,9 @@ export const accentColor = () =>
     'Accent Color',
     {
       None: undefined,
-      Lead: 'lead',
-      Ember: 'ember',
-      Clay: 'clay',
+      Neutral900: 'neutral900',
+      Error500: 'error500',
+      Warning500: 'warning500',
       Cerulean: 'cerulean',
       Space: 'space',
       Berry: 'berry',

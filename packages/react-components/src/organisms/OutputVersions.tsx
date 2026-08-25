@@ -4,7 +4,13 @@ import { useState } from 'react';
 
 import { Button, Card, Headline2, Link, Paragraph, Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { charcoal, lead, neutral200, steel, colour } from '../colors';
+import {
+  charcoal,
+  neutral200,
+  colour,
+  neutral900,
+  neutral500,
+} from '../colors';
 import { formatDateToTimezone } from '../date';
 import { ExternalLinkIcon } from '../icons';
 import { contentSidePaddingWithNavigation } from '../layout';
@@ -22,7 +28,7 @@ const descriptionStyles = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     marginBottom: rem(32),
   },
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const gridTitleStyles = css({
@@ -44,7 +50,7 @@ const rowStyles = css({
   display: 'grid',
   paddingTop: rem(20),
   paddingBottom: rem(20),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   ':last-child': {
     borderBottom: 'none',
     marginBottom: 0,
@@ -66,7 +72,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const showMoreStyles = css({
@@ -75,7 +81,7 @@ const showMoreStyles = css({
   marginTop: rem(32),
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 });
 
 const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });

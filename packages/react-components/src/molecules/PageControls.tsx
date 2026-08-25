@@ -10,7 +10,13 @@ import {
   mobileScreen,
   largeDesktopScreen,
 } from '../pixels';
-import { steel, tin, lead, mint, colour } from '../colors';
+import {
+  colour,
+  neutral500,
+  neutral700,
+  neutral900,
+  success100,
+} from '../colors';
 import {
   firstPageIcon,
   nextPageIcon,
@@ -26,7 +32,7 @@ const containerStyles = css({
 const listStyles = css({
   margin: 0,
   padding: rem(12),
-  border: `${rem(1)} solid ${steel.rgb}`,
+  border: `${rem(1)} solid ${neutral500.rgb}`,
   borderRadius: rem(6),
 
   display: 'grid',
@@ -45,7 +51,7 @@ const itemStyles = css({
     justifySelf: 'center',
     alignSelf: 'center',
 
-    color: lead.rgb,
+    color: neutral900.rgb,
   },
 
   '&.follows-gap::before': {
@@ -71,7 +77,7 @@ const textStyles = ({
     justifyContent: 'center',
     alignContent: 'center',
 
-    color: lead.rgb,
+    color: neutral900.rgb,
     svg: {
       stroke: primary500.rgba,
       verticalAlign: 'middle',
@@ -79,7 +85,7 @@ const textStyles = ({
   });
 const activeTextStyles = ({
   primary500 = colour.brand.crn[500],
-  primary100 = mint,
+  primary100 = success100,
 }: Theme['colors'] = {}) =>
   css({
     backgroundColor: primary100.rgba,
@@ -87,7 +93,7 @@ const activeTextStyles = ({
   });
 const disabledTextStyles = css({
   svg: {
-    stroke: tin.rgb,
+    stroke: neutral700.rgb,
   },
 });
 

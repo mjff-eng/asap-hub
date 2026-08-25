@@ -4,7 +4,7 @@ import { UserAward, UserResponse, UserTeam } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
 
 import { rem, tabletScreen } from '../pixels';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import { Link, Anchor, Ellipsis } from '../atoms';
 import { alumniBadgeIcon } from '../icons';
 import { hoverStyle } from './ImageLink';
@@ -52,7 +52,7 @@ const addToColumnStyles = css({
   gridColumn: 2,
 });
 const textStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   minHeight: rem(24),
 });
 

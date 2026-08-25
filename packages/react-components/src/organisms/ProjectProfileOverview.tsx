@@ -3,14 +3,14 @@ import { sharedResearch } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { steel } from '..';
+import { neutral500 } from '..';
 import { Card, Display, Headline2, Link, Paragraph, TabButton } from '../atoms';
 import { TabNav } from '../molecules';
 import { mobileScreen, rem } from '../pixels';
 
 const tabsContainerStyles = css({
   display: 'flex',
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
 });
 
 const tabContentStyles = css({

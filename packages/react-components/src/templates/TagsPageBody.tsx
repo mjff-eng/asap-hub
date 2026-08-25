@@ -48,7 +48,7 @@ const MessageBody: React.FC<{ title: string; body: string }> = ({
   <main css={wrapperStyle}>
     <span css={iconStyles}>{tagsIcon}</span>
     <Headline3>{title}</Headline3>
-    <Paragraph accent="lead">{body}</Paragraph>
+    <Paragraph accent="neutral900">{body}</Paragraph>
   </main>
 );
 

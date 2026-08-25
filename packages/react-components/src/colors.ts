@@ -78,20 +78,9 @@ export const colour = {
 
 // Monochrome
 export const pearl = color(252, 253, 254);
-export const silver = color(237, 241, 243);
-export const steel = color(223, 229, 234);
-export const tin = color(194, 201, 206);
-export const lead = color(77, 100, 107);
 export const charcoal = color(0, 34, 44);
 
 // Accent
-export const ember = color(205, 20, 38);
-export const rose = color(247, 232, 234);
-
-export const clay = color(206, 128, 26);
-export const apricot = color(248, 237, 222);
-
-export const mint = color(228, 245, 238);
 
 export const cerulean = color(0, 140, 198);
 

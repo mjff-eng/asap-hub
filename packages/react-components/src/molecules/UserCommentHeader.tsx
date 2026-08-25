@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 
 import { Avatar } from '../atoms';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import { formatDate } from '../date';
 import { rem } from '../pixels';
 import { ImageLink } from '.';
@@ -38,7 +38,7 @@ const separatorStyles = css({
 
 const dateStyles = css({
   width: 'max-content',
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontSize: rem(14),
   fontWeight: 400,
 });

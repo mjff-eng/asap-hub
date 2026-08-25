@@ -22,7 +22,7 @@ const AnalyticsMobilePage: React.FC = () => (
         Analytics are only available on the desktop version.
       </span>
     </Headline3>
-    <Paragraph accent="lead">
+    <Paragraph accent="neutral900">
       To access all analytics features, please use the desktop version. We
       apologize for any inconvenience this may cause.
     </Paragraph>
