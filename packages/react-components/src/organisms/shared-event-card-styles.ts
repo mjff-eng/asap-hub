@@ -1,6 +1,15 @@
 import { css } from '@emotion/react';
 
-import { charcoal, neutral900, neutral1000, colour, neutral300, neutral500, neutral700 } from '../colors';
+import {
+  charcoal,
+  colorWithTransparency,
+  colour,
+  neutral300,
+  neutral500,
+  neutral700,
+  neutral900,
+  neutral1000,
+} from '../colors';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
 
 export const contentStyles = css({
@@ -155,7 +164,9 @@ export const deleteButtonStyles = (
     border: `1px solid ${enabled ? neutral500.rgb : disabledBorder.rgb}`,
     borderRadius: rem(4),
     backgroundColor: enabled ? colour.neutral[0].rgb : disabledBackground.rgb,
-    boxShadow: enabled ? undefined : `0 2px 4px rgba(223, 229, 234, 0.3)`,
+    boxShadow: enabled
+      ? undefined
+      : `0 2px 4px ${colorWithTransparency(neutral500, 0.3).rgba}`,
     color: enabled ? neutral1000.rgb : neutral900.rgb,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       minWidth: rem(24),

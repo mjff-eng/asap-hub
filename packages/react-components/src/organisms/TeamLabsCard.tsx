@@ -6,7 +6,7 @@ import { Card, Paragraph, Button, Headline3, Ellipsis, Link } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 
 import { LabIcon } from '../icons';
-import { neutral500 } from '../colors';
+import { neutral500, neutral900 } from '../colors';
 
 type TeamLabsCardProps = {
   readonly labs: ReadonlyArray<LabDataObject>;
@@ -23,7 +23,7 @@ const containerStyles = css({
     gridTemplateColumns: '1fr 1fr',
     columnGap: rem(32),
   },
-  color: 'rgb(77, 100, 107)',
+  color: neutral900.rgb,
 });
 
 const itemStyles = css({
