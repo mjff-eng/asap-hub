@@ -88,3 +88,48 @@ export const getAnalyticsOSChampion = async (
     searchScope: 'extended',
     sort: sort ? osChampionOpensearchSort[sort] : undefined,
   });
+
+export type TeamLeadershipMetricsOptions = {
+  teamId: string;
+};
+
+export type TeamLeadershipMetrics = {
+  workingGroupLead: boolean;
+  interestGroupLead: boolean;
+};
+
+const hasLeadership = (currentCount = 0, previousCount = 0): boolean =>
+  currentCount + previousCount > 0;
+
+export const getTeamLeadershipMetrics = async (
+  workingGroupClient: OpensearchClient<AnalyticsTeamLeadershipResponse>,
+  interestGroupClient: OpensearchClient<AnalyticsTeamLeadershipResponse>,
+  { teamId }: TeamLeadershipMetricsOptions,
+): Promise<TeamLeadershipMetrics> => {
+  const searchOptions = {
+    searchTags: [],
+    searchScope: 'flat' as const,
+    sort: [],
+    currentPage: 0,
+    pageSize: 1,
+    timeRange: 'all' as const,
+    teamId,
+  };
+  const [workingGroup, interestGroup] = await Promise.all([
+    workingGroupClient.search(searchOptions),
+    interestGroupClient.search(searchOptions),
+  ]);
+  const workingGroupItem = workingGroup.items[0];
+  const interestGroupItem = interestGroup.items[0];
+
+  return {
+    workingGroupLead: hasLeadership(
+      workingGroupItem?.workingGroupLeadershipRoleCount,
+      workingGroupItem?.workingGroupPreviousLeadershipRoleCount,
+    ),
+    interestGroupLead: hasLeadership(
+      interestGroupItem?.interestGroupLeadershipRoleCount,
+      interestGroupItem?.interestGroupPreviousLeadershipRoleCount,
+    ),
+  };
+};

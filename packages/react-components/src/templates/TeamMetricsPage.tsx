@@ -1,8 +1,13 @@
 import { css } from '@emotion/react';
+import { ComponentProps } from 'react';
 
 import { Headline3, Paragraph } from '../atoms';
 import { rem } from '../pixels';
-import { HubResearchOutputRow, HubResearchOutputsCard } from '../organisms';
+import {
+  HubResearchOutputRow,
+  HubResearchOutputsCard,
+  TeamLeadershipMetrics,
+} from '../organisms';
 
 const containerStyles = css({
   marginBottom: rem(56),
@@ -27,10 +32,12 @@ const MetricsSubtitle = ({ children }: { children: string }) => (
 
 type TeamMetricsPageProps = {
   readonly hubResearchOutputRows: HubResearchOutputRow[];
+  readonly leadershipMetrics: ComponentProps<typeof TeamLeadershipMetrics>;
 };
 
 const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
   hubResearchOutputRows,
+  leadershipMetrics,
 }) => (
   <div css={containerStyles}>
     <Headline3 noMargin>Metrics</Headline3>
@@ -41,6 +48,9 @@ const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
 
     <MetricsSubtitle>Hub Research Outputs</MetricsSubtitle>
     <HubResearchOutputsCard rows={hubResearchOutputRows} />
+
+    <MetricsSubtitle>Leadership</MetricsSubtitle>
+    <TeamLeadershipMetrics {...leadershipMetrics} />
   </div>
 );
 

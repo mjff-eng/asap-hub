@@ -9,6 +9,7 @@ import {
   AnalyticsSearchOptionsWithSort,
   getAnalyticsLeadership,
   getAnalyticsOSChampion,
+  getTeamLeadershipMetrics,
 } from '../api';
 
 import { OpensearchClient } from '../../utils/opensearch';
@@ -424,5 +425,124 @@ describe('getAnalyticsOSChampion', () => {
         total: 1,
       }),
     );
+  });
+});
+
+describe('getTeamLeadershipMetrics', () => {
+  let workingGroupClient: OpensearchClient<AnalyticsTeamLeadershipResponse>;
+  let interestGroupClient: OpensearchClient<AnalyticsTeamLeadershipResponse>;
+  let workingGroupSearch: jest.SpyInstance;
+  let interestGroupSearch: jest.SpyInstance;
+
+  const emptyResponse = { items: [], total: 0 };
+  const withCounts = (overrides: Partial<AnalyticsTeamLeadershipResponse>) => ({
+    items: [
+      {
+        ...teamLeadershipResponse,
+        workingGroupLeadershipRoleCount: 0,
+        workingGroupPreviousLeadershipRoleCount: 0,
+        interestGroupLeadershipRoleCount: 0,
+        interestGroupPreviousLeadershipRoleCount: 0,
+        ...overrides,
+      },
+    ],
+    total: 1,
+  });
+
+  beforeEach(() => {
+    workingGroupClient = new OpensearchClient('wg-leadership', 'token');
+    interestGroupClient = new OpensearchClient('ig-leadership', 'token');
+    workingGroupSearch = jest
+      .spyOn(workingGroupClient, 'search')
+      .mockResolvedValue(emptyResponse);
+    interestGroupSearch = jest
+      .spyOn(interestGroupClient, 'search')
+      .mockResolvedValue(emptyResponse);
+  });
+
+  it('searches both leadership indices filtered by the team id', async () => {
+    await getTeamLeadershipMetrics(workingGroupClient, interestGroupClient, {
+      teamId: 'team-id-1',
+    });
+
+    const expectedOptions = {
+      searchTags: [],
+      searchScope: 'flat',
+      sort: [],
+      currentPage: 0,
+      pageSize: 1,
+      timeRange: 'all',
+      teamId: 'team-id-1',
+    };
+    expect(workingGroupSearch).toHaveBeenCalledWith(expectedOptions);
+    expect(interestGroupSearch).toHaveBeenCalledWith(expectedOptions);
+  });
+
+  it('returns false for both metrics when the team is not indexed', async () => {
+    const result = await getTeamLeadershipMetrics(
+      workingGroupClient,
+      interestGroupClient,
+      { teamId: 'team-id-1' },
+    );
+
+    expect(result).toEqual({
+      workingGroupLead: false,
+      interestGroupLead: false,
+    });
+  });
+
+  it('flags current leadership', async () => {
+    workingGroupSearch.mockResolvedValue(
+      withCounts({ workingGroupLeadershipRoleCount: 1 }),
+    );
+    interestGroupSearch.mockResolvedValue(
+      withCounts({ interestGroupLeadershipRoleCount: 2 }),
+    );
+
+    const result = await getTeamLeadershipMetrics(
+      workingGroupClient,
+      interestGroupClient,
+      { teamId: 'team-id-1' },
+    );
+
+    expect(result).toEqual({ workingGroupLead: true, interestGroupLead: true });
+  });
+
+  it('flags previous leadership', async () => {
+    workingGroupSearch.mockResolvedValue(
+      withCounts({ workingGroupPreviousLeadershipRoleCount: 1 }),
+    );
+    interestGroupSearch.mockResolvedValue(withCounts({}));
+
+    const result = await getTeamLeadershipMetrics(
+      workingGroupClient,
+      interestGroupClient,
+      { teamId: 'team-id-1' },
+    );
+
+    expect(result).toEqual({
+      workingGroupLead: true,
+      interestGroupLead: false,
+    });
+  });
+
+  it('ignores membership counts', async () => {
+    workingGroupSearch.mockResolvedValue(
+      withCounts({ workingGroupMemberCount: 3 }),
+    );
+    interestGroupSearch.mockResolvedValue(
+      withCounts({ interestGroupPreviousMemberCount: 3 }),
+    );
+
+    const result = await getTeamLeadershipMetrics(
+      workingGroupClient,
+      interestGroupClient,
+      { teamId: 'team-id-1' },
+    );
+
+    expect(result).toEqual({
+      workingGroupLead: false,
+      interestGroupLead: false,
+    });
   });
 });

@@ -5,8 +5,16 @@ import { Component, ReactNode, Suspense } from 'react';
 
 import { Auth0Provider, WhenReady } from '../../../auth/test-utils';
 import { useAnalyticsOpensearch } from '../../../hooks/opensearch';
-import { getAnalyticsLeadership, getAnalyticsOSChampion } from '../api';
-import { useAnalyticsLeadership, useAnalyticsOSChampion } from '../state';
+import {
+  getAnalyticsLeadership,
+  getAnalyticsOSChampion,
+  getTeamLeadershipMetrics,
+} from '../api';
+import {
+  useAnalyticsLeadership,
+  useAnalyticsOSChampion,
+  useTeamLeadershipMetrics,
+} from '../state';
 
 jest.mock('../api');
 jest.mock('../../../hooks/opensearch', () => ({
@@ -163,5 +171,34 @@ describe('Error rejections propagate to the error boundary', () => {
 
     await waitFor(() => expect(getByText('errored')).toBeInTheDocument());
     consoleErrorSpy.mockRestore();
+  });
+});
+
+describe('useTeamLeadershipMetrics', () => {
+  it('fetches the metrics for the team from both leadership indices', async () => {
+    const metrics = { workingGroupLead: true, interestGroupLead: false };
+    (getTeamLeadershipMetrics as jest.Mock).mockResolvedValue(metrics);
+    const workingGroupClient = { index: 'wg-leadership' };
+    const interestGroupClient = { index: 'ig-leadership' };
+    mockUseAnalyticsOpensearch.mockImplementation(
+      (index) =>
+        ({
+          client:
+            index === 'wg-leadership'
+              ? workingGroupClient
+              : interestGroupClient,
+        }) as unknown as ReturnType<typeof useAnalyticsOpensearch>,
+    );
+
+    const { result } = renderStateHook(() =>
+      useTeamLeadershipMetrics({ teamId: 'team-id-1' }),
+    );
+
+    await waitFor(() => expect(result.current).toEqual(metrics));
+    expect(getTeamLeadershipMetrics).toHaveBeenCalledWith(
+      workingGroupClient,
+      interestGroupClient,
+      { teamId: 'team-id-1' },
+    );
   });
 });

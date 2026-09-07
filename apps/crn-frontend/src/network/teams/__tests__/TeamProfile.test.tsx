@@ -16,6 +16,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import { createTestQueryClient } from '@asap-hub/frontend-utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { getEvents } from '../../../events/api';
+import { getTeamLeadershipMetrics } from '../../../analytics/leadership/api';
 import { getTeamHubResearchOutputs } from '../../../analytics/productivity/api';
 import { getTeam } from '../api';
 import TeamProfile from '../TeamProfile';
@@ -45,6 +46,7 @@ jest.mock('../interest-groups/api');
 jest.mock('../../../shared-research/api');
 jest.mock('../../../events/api');
 jest.mock('../../../analytics/productivity/api');
+jest.mock('../../../analytics/leadership/api');
 
 const mockGetEventsFromAlgolia = getEvents as jest.MockedFunction<
   typeof getEvents
@@ -315,6 +317,10 @@ describe('the metrics tab', () => {
     getTeamHubResearchOutputs as jest.MockedFunction<
       typeof getTeamHubResearchOutputs
     >;
+  const mockGetTeamLeadershipMetrics =
+    getTeamLeadershipMetrics as jest.MockedFunction<
+      typeof getTeamLeadershipMetrics
+    >;
   const team = createTeamResponse();
   const teamMember = {
     teams: [{ id: team.id, role: 'Project Manager' as const }],
@@ -323,6 +329,10 @@ describe('the metrics tab', () => {
   beforeEach(() => {
     enable('TEAM_METRICS_TAB');
     mockGetTeamHubResearchOutputs.mockResolvedValue({});
+    mockGetTeamLeadershipMetrics.mockResolvedValue({
+      workingGroupLead: false,
+      interestGroupLead: false,
+    });
   });
 
   it('is shown to a member of the team', async () => {
@@ -370,6 +380,11 @@ describe('the metrics tab', () => {
       expect.anything(),
       { teamId: team.id },
     );
+    expect(mockGetTeamLeadershipMetrics).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      { teamId: team.id },
+    );
   });
 
   it('does not render the metrics route when the flag is disabled', async () => {
@@ -386,5 +401,6 @@ describe('the metrics tab', () => {
       screen.queryByTestId('hub-research-outputs-table'),
     ).not.toBeInTheDocument();
     expect(mockGetTeamHubResearchOutputs).not.toHaveBeenCalled();
+    expect(mockGetTeamLeadershipMetrics).not.toHaveBeenCalled();
   });
 });

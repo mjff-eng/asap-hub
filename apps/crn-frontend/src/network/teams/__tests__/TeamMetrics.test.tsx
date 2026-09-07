@@ -5,14 +5,20 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import { Suspense } from 'react';
 
 import { Auth0Provider, WhenReady } from '../../../auth/test-utils';
+import { getTeamLeadershipMetrics } from '../../../analytics/leadership/api';
 import { getTeamHubResearchOutputs } from '../../../analytics/productivity/api';
 import TeamMetrics from '../TeamMetrics';
 
 jest.mock('../../../analytics/productivity/api');
+jest.mock('../../../analytics/leadership/api');
 
 const mockGetTeamHubResearchOutputs =
   getTeamHubResearchOutputs as jest.MockedFunction<
     typeof getTeamHubResearchOutputs
+  >;
+const mockGetTeamLeadershipMetrics =
+  getTeamLeadershipMetrics as jest.MockedFunction<
+    typeof getTeamLeadershipMetrics
   >;
 
 const createDocument = (
@@ -29,6 +35,13 @@ const createDocument = (
   timeRange: 'all',
   outputType: 'all',
   ...overrides,
+});
+
+beforeEach(() => {
+  mockGetTeamLeadershipMetrics.mockResolvedValue({
+    workingGroupLead: false,
+    interestGroupLead: false,
+  });
 });
 
 afterEach(jest.clearAllMocks);
@@ -56,6 +69,18 @@ it('fetches the hub research outputs for the team', async () => {
   await renderTab('t42');
 
   expect(mockGetTeamHubResearchOutputs).toHaveBeenCalledWith(
+    expect.anything(),
+    { teamId: 't42' },
+  );
+});
+
+it('fetches the leadership metrics for the team', async () => {
+  mockGetTeamHubResearchOutputs.mockResolvedValue({});
+
+  await renderTab('t42');
+
+  expect(mockGetTeamLeadershipMetrics).toHaveBeenCalledWith(
+    expect.anything(),
     expect.anything(),
     { teamId: 't42' },
   );
@@ -95,4 +120,24 @@ it('renders N/A when the team has no outputs', async () => {
   const table = await screen.findByTestId('hub-research-outputs-table');
 
   expect(within(table).getAllByText('N/A')).toHaveLength(5);
+});
+
+it('renders the leadership statuses', async () => {
+  mockGetTeamHubResearchOutputs.mockResolvedValue({});
+  mockGetTeamLeadershipMetrics.mockResolvedValue({
+    workingGroupLead: true,
+    interestGroupLead: false,
+  });
+
+  await renderTab();
+
+  expect(screen.getByText('Leadership')).toBeVisible();
+  const workingGroupRow = screen
+    .getByText('Working Group(s) Lead')
+    .closest('article');
+  expect(within(workingGroupRow!).getByText('Y')).toBeVisible();
+  const interestGroupRow = screen
+    .getByText('Interest Group(s) Lead')
+    .closest('article');
+  expect(within(interestGroupRow!).getByText('N')).toBeVisible();
 });

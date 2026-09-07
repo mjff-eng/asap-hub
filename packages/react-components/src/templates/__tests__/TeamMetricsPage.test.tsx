@@ -8,6 +8,7 @@ describe('TeamMetricsPage', () => {
       { outputType: 'Article', numberOfOutputs: 4, publicPercentage: 75 },
       { outputType: 'Protocol', numberOfOutputs: 0, publicPercentage: null },
     ],
+    leadershipMetrics: { workingGroupLead: true, interestGroupLead: false },
   };
 
   it('renders the heading and the introduction', () => {
@@ -46,5 +47,19 @@ describe('TeamMetricsPage', () => {
     const table = screen.getByTestId('hub-research-outputs-table');
 
     expect(within(table).queryAllByRole('row')).toHaveLength(1);
+  });
+
+  it('renders the leadership section', () => {
+    render(<TeamMetricsPage {...props} />);
+
+    expect(screen.getByText('Leadership')).toBeVisible();
+    const workingGroupRow = screen
+      .getByText('Working Group(s) Lead')
+      .closest('article');
+    expect(within(workingGroupRow!).getByText('Y')).toBeVisible();
+    const interestGroupRow = screen
+      .getByText('Interest Group(s) Lead')
+      .closest('article');
+    expect(within(interestGroupRow!).getByText('N')).toBeVisible();
   });
 });
