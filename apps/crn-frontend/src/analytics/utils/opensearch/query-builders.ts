@@ -261,6 +261,11 @@ export const leadershipRecordSearchQueryBuilder = (
   });
 
   const mustClauses: MustClause[] = [];
+  if (options.teamId) {
+    mustClauses.push({
+      term: { id: options.teamId },
+    });
+  }
 
   return {
     from: options.currentPage * options.pageSize,
