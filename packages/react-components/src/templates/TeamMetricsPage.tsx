@@ -6,6 +6,8 @@ import { rem } from '../pixels';
 import {
   HubResearchOutputRow,
   HubResearchOutputsCard,
+  TeamAward,
+  TeamAwardMetrics,
   TeamLeadershipMetrics,
 } from '../organisms';
 
@@ -33,11 +35,13 @@ const MetricsSubtitle = ({ children }: { children: string }) => (
 type TeamMetricsPageProps = {
   readonly hubResearchOutputRows: HubResearchOutputRow[];
   readonly leadershipMetrics: ComponentProps<typeof TeamLeadershipMetrics>;
+  readonly awards: TeamAward[];
 };
 
 const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
   hubResearchOutputRows,
   leadershipMetrics,
+  awards,
 }) => (
   <div css={containerStyles}>
     <Headline3 noMargin>Metrics</Headline3>
@@ -51,6 +55,9 @@ const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
 
     <MetricsSubtitle>Leadership</MetricsSubtitle>
     <TeamLeadershipMetrics {...leadershipMetrics} />
+
+    <MetricsSubtitle>Awards</MetricsSubtitle>
+    <TeamAwardMetrics awards={awards} />
   </div>
 );
 

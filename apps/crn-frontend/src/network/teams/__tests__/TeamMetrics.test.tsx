@@ -7,10 +7,12 @@ import { Suspense } from 'react';
 import { Auth0Provider, WhenReady } from '../../../auth/test-utils';
 import { getTeamLeadershipMetrics } from '../../../analytics/leadership/api';
 import { getTeamHubResearchOutputs } from '../../../analytics/productivity/api';
+import { getTeamAwardMetrics } from '../api';
 import TeamMetrics from '../TeamMetrics';
 
 jest.mock('../../../analytics/productivity/api');
 jest.mock('../../../analytics/leadership/api');
+jest.mock('../api');
 
 const mockGetTeamHubResearchOutputs =
   getTeamHubResearchOutputs as jest.MockedFunction<
@@ -20,6 +22,9 @@ const mockGetTeamLeadershipMetrics =
   getTeamLeadershipMetrics as jest.MockedFunction<
     typeof getTeamLeadershipMetrics
   >;
+const mockGetTeamAwardMetrics = getTeamAwardMetrics as jest.MockedFunction<
+  typeof getTeamAwardMetrics
+>;
 
 const createDocument = (
   overrides: Partial<TeamProductivityOpensearchDocument> = {},
@@ -42,6 +47,7 @@ beforeEach(() => {
     workingGroupLead: false,
     interestGroupLead: false,
   });
+  mockGetTeamAwardMetrics.mockResolvedValue({ total: 0, items: [] });
 });
 
 afterEach(jest.clearAllMocks);
@@ -140,4 +146,48 @@ it('renders the leadership statuses', async () => {
     .getByText('Interest Group(s) Lead')
     .closest('article');
   expect(within(interestGroupRow!).getByText('N')).toBeVisible();
+});
+
+it('fetches the award metrics for the team', async () => {
+  mockGetTeamHubResearchOutputs.mockResolvedValue({});
+
+  await renderTab('t42');
+
+  expect(mockGetTeamAwardMetrics).toHaveBeenCalledWith(
+    't42',
+    expect.anything(),
+  );
+});
+
+it('renders a row per award type with its status', async () => {
+  mockGetTeamHubResearchOutputs.mockResolvedValue({});
+  mockGetTeamAwardMetrics.mockResolvedValue({
+    total: 2,
+    items: [
+      {
+        id: 'award-type-1',
+        name: 'Open Science Champion Award',
+        asapPhilosophy: 'Philosophy',
+        metricDefinition: 'Definition',
+        received: true,
+      },
+      {
+        id: 'award-type-2',
+        name: 'Network Spotlight',
+        asapPhilosophy: 'Philosophy',
+        metricDefinition: 'Definition',
+        received: false,
+      },
+    ],
+  });
+
+  await renderTab();
+
+  expect(screen.getByText('Awards')).toBeVisible();
+  const championRow = screen
+    .getByText('Open Science Champion Award')
+    .closest('article');
+  expect(within(championRow!).getByText('Y')).toBeVisible();
+  const spotlightRow = screen.getByText('Network Spotlight').closest('article');
+  expect(within(spotlightRow!).getByText('N')).toBeVisible();
 });

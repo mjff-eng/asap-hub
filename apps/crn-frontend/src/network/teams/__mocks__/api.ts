@@ -12,6 +12,7 @@ import {
   ListLabsResponse,
   ListManuscriptVersionResponse,
   ListPartialManuscriptResponse,
+  ListTeamAwardMetricsResponse,
   ListTeamResponse,
   ManuscriptVersionResponse,
   TeamResponse,
@@ -29,6 +30,13 @@ export const getTeam = jest.fn(
   async (id: string): Promise<TeamResponse> => ({
     ...createTeamResponse(),
     id,
+  }),
+);
+
+export const getTeamAwardMetrics = jest.fn(
+  async (): Promise<ListTeamAwardMetricsResponse> => ({
+    total: 0,
+    items: [],
   }),
 );
 

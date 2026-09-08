@@ -10,6 +10,7 @@ import {
   DiscussionRequest,
   DiscussionResponse,
   ListPartialManuscriptResponse,
+  ListTeamAwardMetricsResponse,
   ListTeamResponse,
   ManuscriptDataObject,
   ManuscriptFileResponse,
@@ -41,6 +42,7 @@ import {
   getManuscriptVersions,
   getManuscriptVersionByManuscriptId,
   getTeam,
+  getTeamAwardMetrics,
   ManuscriptsOptions,
   markDiscussionAsRead,
   updateDiscussion,
@@ -458,4 +460,20 @@ export const usePostPreprintResearchOutput = () => {
     },
   });
   return mutateAsync;
+};
+
+export const teamAwardMetricsQueryKeys = {
+  all: ['team-award-metrics'] as const,
+  detail: (teamId: string) =>
+    [...teamAwardMetricsQueryKeys.all, teamId] as const,
+};
+
+export const useTeamAwardMetrics = (
+  teamId: string,
+): ListTeamAwardMetricsResponse => {
+  const getAuthorization = useAuthorization();
+  return useSuspenseQuery({
+    queryKey: teamAwardMetricsQueryKeys.detail(teamId),
+    queryFn: async () => getTeamAwardMetrics(teamId, await getAuthorization()),
+  }).data;
 };

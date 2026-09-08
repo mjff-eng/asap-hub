@@ -9,6 +9,22 @@ describe('TeamMetricsPage', () => {
       { outputType: 'Protocol', numberOfOutputs: 0, publicPercentage: null },
     ],
     leadershipMetrics: { workingGroupLead: true, interestGroupLead: false },
+    awards: [
+      {
+        id: 'award-type-1',
+        name: 'Open Science Champion Award',
+        status: true,
+        philosophy: 'ASAP is built upon strong open science principles.',
+        metricDefinition: 'Recognition for Open Science Champion awards.',
+      },
+      {
+        id: 'award-type-2',
+        name: 'Network Spotlight',
+        status: false,
+        philosophy: 'ASAP believes in ensuring that credit is given.',
+        metricDefinition: 'Recognition for Network Spotlight awards.',
+      },
+    ],
   };
 
   it('renders the heading and the introduction', () => {
@@ -61,5 +77,19 @@ describe('TeamMetricsPage', () => {
       .getByText('Interest Group(s) Lead')
       .closest('article');
     expect(within(interestGroupRow!).getByText('N')).toBeVisible();
+  });
+
+  it('renders the awards section with a row per award type', () => {
+    render(<TeamMetricsPage {...props} />);
+
+    expect(screen.getByText('Awards')).toBeVisible();
+    const championRow = screen
+      .getByText('Open Science Champion Award')
+      .closest('article');
+    expect(within(championRow!).getByText('Y')).toBeVisible();
+    const spotlightRow = screen
+      .getByText('Network Spotlight')
+      .closest('article');
+    expect(within(spotlightRow!).getByText('N')).toBeVisible();
   });
 });

@@ -39,6 +39,7 @@ const algoliaManuscriptsResponse = {
 jest.mock('../api', () => ({
   ...jest.requireActual('../api'),
   getTeam: jest.fn(),
+  getTeamAwardMetrics: jest.fn().mockResolvedValue({ total: 0, items: [] }),
   getManuscripts: jest.fn().mockResolvedValue(algoliaManuscriptsResponse),
 }));
 

@@ -12,6 +12,7 @@ import {
   DiscussionResponse,
   ListLabDataProviderResponse,
   ListPartialManuscriptResponse,
+  ListTeamAwardMetricsResponse,
   ListTeamResponse,
   ManuscriptFileResponse,
   ManuscriptFileType,
@@ -603,4 +604,22 @@ export const downloadFullComplianceDataset = async (
   );
 
   return downloadUrl;
+};
+
+export const getTeamAwardMetrics = async (
+  teamId: string,
+  authorization: string,
+): Promise<ListTeamAwardMetricsResponse> => {
+  const resp = await fetch(`${API_BASE_URL}/teams/${teamId}/award-metrics`, {
+    headers: {
+      authorization,
+      ...createSentryHeaders(),
+    },
+  });
+  if (!resp.ok) {
+    throw new Error(
+      `Failed to fetch award metrics for team with id ${teamId}. Expected status 2xx. Received status ${`${resp.status} ${resp.statusText}`.trim()}.`,
+    );
+  }
+  return resp.json();
 };
