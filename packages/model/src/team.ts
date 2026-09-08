@@ -237,3 +237,19 @@ export type ListPublicTeamDataObject =
 export type PublicTeamListItemResponse = PublicTeamListItemDataObject;
 
 export type ListPublicTeamResponse = ListResponse<PublicTeamListItemResponse>;
+
+export type TeamAwardMetricDataObject = {
+  id: string;
+  name: string;
+  asapPhilosophy: string;
+  metricDefinition: string;
+  received: boolean;
+};
+
+export type ListTeamAwardMetricsDataObject =
+  ListResponse<TeamAwardMetricDataObject>;
+
+export type TeamAwardMetricResponse = TeamAwardMetricDataObject;
+
+export type ListTeamAwardMetricsResponse =
+  ListResponse<TeamAwardMetricResponse>;
