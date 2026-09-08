@@ -1,6 +1,7 @@
 import { NotFoundError } from '@asap-hub/errors';
 import Teams from '../../src/controllers/team.controller';
 import {
+  getListTeamAwardMetricsDataObject,
   getPublicTeamListItemDataObject,
   getTeamDataObject,
   getTeamResponse,
@@ -281,6 +282,22 @@ describe('Team Controller', () => {
       expect(teamDataProviderMock.update).toHaveBeenCalledWith('user-id', {
         tools: expectedTools,
       });
+    });
+  });
+
+  describe('FetchAwardMetricsByTeamId method', () => {
+    test('Should return the award metrics from the data provider', async () => {
+      const awardMetrics = getListTeamAwardMetricsDataObject();
+      teamDataProviderMock.fetchAwardMetricsByTeamId.mockResolvedValueOnce(
+        awardMetrics,
+      );
+
+      const result = await teamController.fetchAwardMetricsByTeamId('team-id');
+
+      expect(result).toEqual(awardMetrics);
+      expect(
+        teamDataProviderMock.fetchAwardMetricsByTeamId,
+      ).toHaveBeenCalledWith('team-id');
     });
   });
 });

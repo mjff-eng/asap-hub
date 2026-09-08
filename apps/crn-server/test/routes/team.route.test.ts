@@ -6,6 +6,7 @@ import Boom from '@hapi/boom';
 import supertest from 'supertest';
 import { appFactory } from '../../src/app';
 import * as fixtures from '../fixtures/interest-groups.fixtures';
+import { getListTeamAwardMetricsResponse } from '../fixtures/teams.fixtures';
 import {
   getListTeamResponse,
   getTeamResponse,
@@ -136,6 +137,50 @@ describe('/teams/ route', () => {
 
         expect(response.status).toBe(400);
       });
+    });
+  });
+
+  describe('GET /teams/{team_id}/award-metrics', () => {
+    const awardMetrics = getListTeamAwardMetricsResponse();
+
+    test('Should return the award metrics for a team member', async () => {
+      teamControllerMock.fetchAwardMetricsByTeamId.mockResolvedValueOnce(
+        awardMetrics,
+      );
+
+      const response = await supertest(app).get(
+        '/teams/team-id-1/award-metrics',
+      );
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(awardMetrics);
+      expect(teamControllerMock.fetchAwardMetricsByTeamId).toHaveBeenCalledWith(
+        'team-id-1',
+      );
+    });
+
+    test('Should return the award metrics for staff who are not on the team', async () => {
+      getLoggedUser.mockReturnValueOnce({ ...loggedUser, role: 'Staff' });
+      teamControllerMock.fetchAwardMetricsByTeamId.mockResolvedValueOnce(
+        awardMetrics,
+      );
+
+      const response = await supertest(app).get(
+        '/teams/another-team/award-metrics',
+      );
+
+      expect(response.status).toBe(200);
+    });
+
+    test('Should return 403 for a user who is neither staff nor on the team', async () => {
+      const response = await supertest(app).get(
+        '/teams/another-team/award-metrics',
+      );
+
+      expect(response.status).toBe(403);
+      expect(
+        teamControllerMock.fetchAwardMetricsByTeamId,
+      ).not.toHaveBeenCalled();
     });
   });
 

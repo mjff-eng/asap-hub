@@ -2,6 +2,7 @@ import {
   DataProvider,
   FetchTeamsOptions,
   ListPublicTeamDataObject,
+  ListTeamAwardMetricsDataObject,
   TeamCreateDataObject,
   TeamDataObject,
   TeamListItemDataObject,
@@ -22,4 +23,7 @@ export type TeamDataProvider = DataProvider<
   fetchPublicTeamById: (id: string) => Promise<TeamDataObject | null>;
   fetchById: (id: string) => Promise<TeamDataObject | null>;
   fetchTeamIdByProjectId: (projectId: string) => Promise<string | null>;
+  fetchAwardMetricsByTeamId: (
+    teamId: string,
+  ) => Promise<ListTeamAwardMetricsDataObject>;
 };
