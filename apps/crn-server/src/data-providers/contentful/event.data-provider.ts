@@ -2,6 +2,7 @@
 import {
   addLocaleToFields,
   createLink,
+  Entry,
   Environment,
   EventsFilter,
   EventsOrder,
@@ -335,11 +336,57 @@ export class EventContentfulDataProvider implements EventDataProvider {
     const environment = await this.getRestClient();
     const event = await environment.getEntry(id);
 
+    const patchFields: Record<string, unknown> = {};
+
+    if (data.attendance) {
+      patchFields.attendance = await this.buildAttendanceLinks(
+        environment,
+        event,
+        data.attendance,
+      );
+    }
+
+    if (data.speakersToRemove && data.speakersToRemove.length > 0) {
+      patchFields.speakers = await this.buildSpeakerLinks(
+        environment,
+        event,
+        data.speakersToRemove,
+      );
+    }
+
+    if (data.preliminaryDataShared && data.preliminaryDataShared.length > 0) {
+      patchFields.preliminaryDataShared =
+        await this.buildPreliminaryDataSharedLinks(
+          environment,
+          event,
+          data.preliminaryDataShared,
+        );
+    }
+
+    if (Object.keys(patchFields).length === 0) {
+      return;
+    }
+
+    const result = await patchAndPublish(event, patchFields);
+
+    const fetchEventById = () => this.fetchEventById(id);
+    await pollContentfulGql<FetchEventByIdQuery>(
+      result.sys.publishedVersion || Infinity,
+      fetchEventById,
+      'events',
+    );
+  }
+
+  private async buildAttendanceLinks(
+    environment: Environment,
+    event: Entry,
+    attendanceData: NonNullable<EventUpdateDetailsRequest['attendance']>,
+  ) {
     const existingLinks: Link<'Entry'>[] =
       event.fields.attendance?.['en-US'] || [];
 
     const incomingIds = new Set(
-      data.attendance
+      attendanceData
         .map((attendance) => attendance.id)
         .filter((attendanceId): attendanceId is string => !!attendanceId),
     );
@@ -379,7 +426,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
     );
 
     const attendanceEntries = await Promise.all(
-      data.attendance.map(async ({ id: attendanceId, teamId, attended }) => {
+      attendanceData.map(async ({ id: attendanceId, teamId, attended }) => {
         if (attendanceId) {
           let attendanceEntry;
           try {
@@ -416,18 +463,127 @@ export class EventContentfulDataProvider implements EventDataProvider {
       }),
     );
 
-    const attendance = attendanceEntries
+    return attendanceEntries
       .flatMap((attendanceEntry) => (attendanceEntry ? [attendanceEntry] : []))
       .map((attendanceEntry) => createLink(attendanceEntry.sys.id));
+  }
 
-    const result = await patchAndPublish(event, { attendance });
+  private async buildSpeakerLinks(
+    environment: Environment,
+    event: Entry,
+    speakersToRemove: string[],
+  ) {
+    const existingLinks: Link<'Entry'>[] =
+      event.fields.speakers?.['en-US'] || [];
+    const removeSet = new Set(speakersToRemove);
 
-    const fetchEventById = () => this.fetchEventById(id);
-    await pollContentfulGql<FetchEventByIdQuery>(
-      result.sys.publishedVersion || Infinity,
-      fetchEventById,
-      'events',
+    await Promise.all(
+      existingLinks
+        .filter((link) => removeSet.has(link.sys.id))
+        .map(async (link) => {
+          try {
+            const speakerEntry = await environment.getEntry(link.sys.id);
+            try {
+              if (speakerEntry.isPublished()) {
+                await speakerEntry.unpublish();
+              }
+              try {
+                await speakerEntry.delete();
+              } catch (error) {
+                logger.warn(
+                  { error, speakerId: link.sys.id },
+                  `Error deleting speaker entry with id: ${link.sys.id}`,
+                );
+              }
+            } catch (error) {
+              logger.warn(
+                { error, speakerId: link.sys.id },
+                `Error unpublishing speaker entry with id: ${link.sys.id}`,
+              );
+            }
+          } catch (error) {
+            logger.warn(
+              { error, speakerId: link.sys.id },
+              `Error fetching speaker entry with id: ${link.sys.id}`,
+            );
+          }
+        }),
     );
+
+    return existingLinks
+      .filter((link) => !removeSet.has(link.sys.id))
+      .map((link) => createLink(link.sys.id));
+  }
+
+  private async buildPreliminaryDataSharedLinks(
+    environment: Environment,
+    event: Entry,
+    preliminaryDataShared: NonNullable<
+      EventUpdateDetailsRequest['preliminaryDataShared']
+    >,
+  ) {
+    const existingLinks: Link<'Entry'>[] =
+      event.fields.preliminaryDataShared?.['en-US'] || [];
+
+    const existingByTeamId = new Map<string, Entry>();
+    await Promise.all(
+      existingLinks.map(async (link) => {
+        try {
+          const entry = await environment.getEntry(link.sys.id);
+          const teamId = entry.fields.team?.['en-US']?.sys?.id;
+          if (teamId) {
+            existingByTeamId.set(teamId, entry);
+          }
+        } catch (error) {
+          logger.warn(
+            { error, preliminaryDataSharedId: link.sys.id },
+            `Error fetching preliminary data sharing entry with id: ${link.sys.id}`,
+          );
+        }
+      }),
+    );
+
+    const createdLinks = await Promise.all(
+      preliminaryDataShared.map(async ({ teamId, shared }) => {
+        const existingEntry = existingByTeamId.get(teamId);
+        if (existingEntry) {
+          if (existingEntry.fields.preliminaryDataShared?.['en-US'] !== shared) {
+            existingEntry.fields = addLocaleToFields({
+              team: createLink(teamId),
+              preliminaryDataShared: shared,
+            });
+            const updatedEntry = await existingEntry.update();
+            await updatedEntry.publish();
+          }
+          return null;
+        }
+
+        if (!shared) {
+          return null;
+        }
+
+        try {
+          const newEntry = await environment.createEntry(
+            'preliminaryDataSharing',
+            {
+              fields: addLocaleToFields({
+                team: createLink(teamId),
+                preliminaryDataShared: shared,
+              }),
+            },
+          );
+          const publishedEntry = await newEntry.publish();
+          return createLink(publishedEntry.sys.id);
+        } catch (e) {
+          throw new Error(`Error creating preliminary data sharing entry: ${e}`);
+        }
+      }),
+    );
+
+    return [
+      ...existingLinks.map((link) => createLink(link.sys.id)),
+      ...createdLinks.flatMap((link) => (link ? [link] : [])),
+    ];
   }
 }
 
@@ -465,9 +621,17 @@ export const parseEventSpeakerExternalUser = (
 });
 
 export const parseGraphQLSpeakers = (speakers: SpeakerItem[]): EventSpeaker[] =>
-  (speakers || []).reduce((speakerList: EventSpeaker[], { team, user }) => {
+  (speakers || []).reduce((speakerList: EventSpeaker[], speaker) => {
+    const { team, user } = speaker;
+    // The eventSpeakers entry's own id is requested by the query (added to the
+    // shared fragment) but not reflected in the generated result type; widen
+    // locally to read it without regenerating graphql.ts.
+    const speakerId = (speaker as SpeakerItem & { sys?: { id: string } }).sys
+      ?.id;
+
     if (user?.__typename === 'ExternalAuthors') {
       speakerList.push({
+        id: speakerId,
         externalUser: parseEventSpeakerExternalUser(user),
       });
       return speakerList;
@@ -511,6 +675,7 @@ export const parseGraphQLSpeakers = (speakers: SpeakerItem[]): EventSpeaker[] =>
       }
 
       speakerList.push({
+        id: speakerId,
         team: {
           id: team.sys.id,
           displayName: team.displayName ?? '',

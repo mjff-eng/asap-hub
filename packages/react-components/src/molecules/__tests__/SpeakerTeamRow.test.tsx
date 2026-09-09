@@ -32,6 +32,15 @@ it('renders the team name, member count, and current switch state', () => {
   ).not.toBeChecked();
 });
 
+it('hides the preliminary findings switch when showShared is false', () => {
+  render(<SpeakerTeamRow {...defaultProps} showShared={false} />);
+  expect(
+    screen.queryByRole('checkbox', {
+      name: 'Team Alpha preliminary findings shared',
+    }),
+  ).not.toBeInTheDocument();
+});
+
 it('does not render the nested user list at all when collapsed', () => {
   render(<SpeakerTeamRow {...defaultProps} expanded={false} />);
   expect(screen.queryByText('Jane Doe')).not.toBeInTheDocument();

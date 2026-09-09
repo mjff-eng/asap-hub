@@ -22,7 +22,7 @@ type MutableTeamGroup = {
   teamName: string;
   isTeamInactive: boolean;
   preliminaryFindingsShared: boolean;
-  users: Map<string, SpeakerGroupUser & { roles: string[] }>;
+  users: Map<string, SpeakerGroupUser & { roles: string[]; speakerIds: string[] }>;
 };
 
 export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
@@ -40,6 +40,7 @@ export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
     if (isExternalSpeaker(speaker)) {
       externalUsers.push({
         id: `external-${index}`,
+        speakerIds: speaker.id ? [speaker.id] : [],
         displayName: speaker.externalUser.name,
       });
       return;
@@ -63,9 +64,13 @@ export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
       if (role && !existing.roles.includes(role)) {
         existing.roles.push(role);
       }
+      if (speaker.id && !existing.speakerIds.includes(speaker.id)) {
+        existing.speakerIds.push(speaker.id);
+      }
     } else {
       group.users.set(user.id, {
         id: user.id,
+        speakerIds: speaker.id ? [speaker.id] : [],
         displayName: user.displayName,
         avatarUrl: user.avatarUrl,
         isAlumni: !!user.alumniSinceDate,

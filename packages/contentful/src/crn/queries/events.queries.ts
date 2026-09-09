@@ -219,6 +219,9 @@ export const eventsContentQueryFragment = gql`
     }
     speakersCollection(limit: 25) {
       items {
+        sys {
+          id
+        }
         team {
           sys {
             id

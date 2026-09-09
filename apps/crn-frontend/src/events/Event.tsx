@@ -1,5 +1,6 @@
 import {
   EditEventAttendanceModal,
+  EditEventSpeakersModal,
   EventAttendance,
   EventAttendanceTeam,
   EventConversation,
@@ -10,7 +11,6 @@ import {
   EventSpeakers,
   getIconForDocumentType,
   NotFoundPage,
-  noop,
   resolveEventThumbnail,
   SpeakerList,
   useDateHasPassed,
@@ -24,6 +24,7 @@ import { Frame, useBackHref } from '@asap-hub/frontend-utils';
 import { useState } from 'react';
 
 import { downloadEventSpeakers } from './export';
+import { mapGroupsToSpeakersUpdate } from './map-groups-to-speakers-update';
 import { matchTeamNames } from './match-team-names';
 import { parseTeamRows } from './parse-team-list';
 import {
@@ -53,6 +54,7 @@ const Event: React.FC = () => {
   const { isEnabled } = useFlags();
   const user = useCurrentUserCRN();
   const [isEditingAttendance, setIsEditingAttendance] = useState(false);
+  const [isEditingSpeakers, setIsEditingSpeakers] = useState(false);
   const patchEvent = usePatchEvent(eventId);
   const fetchTeamsForMatching = useTeamsForMatching();
 
@@ -67,14 +69,9 @@ const Event: React.FC = () => {
     const teams = mapAttendanceTeams(event.attendance);
     const teamsTotal = teams.length;
     const teamsAttended = teams.filter(({ attended }) => attended).length;
-    const isEventProjectManager = !!user?.interestGroups.some(
-      (ig) =>
-        ig.id === event.interestGroup?.id &&
-        ig.role === 'Project Manager' &&
-        ig.active,
-    );
     const isTechSupport = !!user?.techSupport;
     const openAttendanceEditor = () => setIsEditingAttendance(true);
+    const openSpeakersEditor = () => setIsEditingSpeakers(true);
     const attendance = hasFinished ? (
       <>
         <EventAttendance
@@ -119,6 +116,36 @@ const Event: React.FC = () => {
       </>
     ) : undefined;
 
+    const speakers = (
+      <>
+        <EventSpeakers
+          groups={speakerGroups}
+          hasFinished={hasFinished}
+          onExport={
+            isTechSupport
+              ? () => downloadEventSpeakers(event, speakerGroups)
+              : undefined
+          }
+          onAddSpeaker={isTechSupport ? openSpeakersEditor : undefined}
+          onEdit={isTechSupport ? openSpeakersEditor : undefined}
+        />
+        {isEditingSpeakers && (
+          <EditEventSpeakersModal
+            groups={speakerGroups}
+            isPastEvent={hasFinished}
+            loadSearchOptions={async () => []}
+            onSave={async (savedGroups) => {
+              await patchEvent(
+                mapGroupsToSpeakersUpdate(speakerGroups, savedGroups),
+              );
+              setIsEditingSpeakers(false);
+            }}
+            onDismiss={() => setIsEditingSpeakers(false)}
+          />
+        )}
+      </>
+    );
+
     if (isEnabled('NEW_EVENT_PAGE')) {
       return (
         <Frame title={event.title}>
@@ -131,18 +158,7 @@ const Event: React.FC = () => {
             displayCalendar={displayCalendar}
             eventConversation={<EventConversation {...event} />}
             eventAttendance={attendance}
-            eventSpeakers={
-              <EventSpeakers
-                groups={speakerGroups}
-                hasFinished={hasFinished}
-                onExport={
-                  isTechSupport
-                    ? () => downloadEventSpeakers(event, speakerGroups)
-                    : undefined
-                }
-                onAddSpeaker={isEventProjectManager ? noop : undefined}
-              />
-            }
+            eventSpeakers={speakers}
           />
         </Frame>
       );

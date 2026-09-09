@@ -663,6 +663,7 @@ describe('Events Contentful Data Provider', () => {
         const speakerResult = result!.speakers;
         expect(speakerResult).toEqual([
           {
+            id: 'event-speaker-id-3',
             externalUser: {
               name: 'Jane Doe',
             },
@@ -680,6 +681,7 @@ describe('Events Contentful Data Provider', () => {
         const speakerResult = result!.speakers;
         expect(speakerResult).toEqual([
           {
+            id: 'event-speaker-id-3',
             role: 'Lead PI (Core Leadership)',
             team: {
               displayName: 'The team three',
@@ -1520,6 +1522,389 @@ describe('Events Contentful Data Provider', () => {
           attendance: [{ teamId: 'team-1', attended: true }],
         }),
       ).rejects.toThrow('Error creating attendance entry');
+    });
+
+    test('does nothing when the payload has no recognised fields', async () => {
+      const eventEntry = getEntry({}, { id: '123' });
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+
+      await eventDataProvider.updateEventDetails('123', {});
+
+      expect(patchAndPublish).not.toHaveBeenCalled();
+      expect(environmentMock.createEntry).not.toHaveBeenCalled();
+    });
+
+    test('deletes the speaker entries listed in speakersToRemove and relinks the remaining speakers', async () => {
+      const eventEntry = getEntry(
+        {
+          speakers: {
+            'en-US': [
+              { sys: { type: 'Link', linkType: 'Entry', id: 'speaker-1' } },
+              { sys: { type: 'Link', linkType: 'Entry', id: 'speaker-2' } },
+            ],
+          },
+        },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+
+      const speakerToDelete = getEntry({}, { id: 'speaker-1' });
+      speakerToDelete.isPublished = jest.fn(() => true);
+      speakerToDelete.unpublish = jest.fn().mockResolvedValue(speakerToDelete);
+      speakerToDelete.delete = jest.fn().mockResolvedValue(undefined);
+      when(environmentMock.getEntry)
+        .calledWith('speaker-1')
+        .mockResolvedValue(speakerToDelete);
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        speakersToRemove: ['speaker-1'],
+      });
+
+      expect(speakerToDelete.unpublish).toHaveBeenCalled();
+      expect(speakerToDelete.delete).toHaveBeenCalled();
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        speakers: [
+          { sys: { type: 'Link', linkType: 'Entry', id: 'speaker-2' } },
+        ],
+      });
+    });
+
+    test('warns and continues when a speaker entry to delete cannot be fetched', async () => {
+      const warnSpy = jest.spyOn(logger, 'warn').mockImplementation(() => {});
+      const eventEntry = getEntry(
+        {
+          speakers: {
+            'en-US': [
+              { sys: { type: 'Link', linkType: 'Entry', id: 'speaker-1' } },
+            ],
+          },
+        },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+      when(environmentMock.getEntry)
+        .calledWith('speaker-1')
+        .mockRejectedValue(new Error('gone'));
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        speakersToRemove: ['speaker-1'],
+      });
+
+      expect(warnSpy).toHaveBeenCalled();
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        speakers: [],
+      });
+      warnSpy.mockRestore();
+    });
+
+    test('warns and continues when unpublishing a speaker entry fails', async () => {
+      const warnSpy = jest.spyOn(logger, 'warn').mockImplementation(() => {});
+      const eventEntry = getEntry(
+        {
+          speakers: {
+            'en-US': [
+              { sys: { type: 'Link', linkType: 'Entry', id: 'speaker-1' } },
+            ],
+          },
+        },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+
+      const speakerToDelete = getEntry({}, { id: 'speaker-1' });
+      speakerToDelete.isPublished = jest.fn(() => true);
+      speakerToDelete.unpublish = jest
+        .fn()
+        .mockRejectedValue(new Error('locked'));
+      when(environmentMock.getEntry)
+        .calledWith('speaker-1')
+        .mockResolvedValue(speakerToDelete);
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        speakersToRemove: ['speaker-1'],
+      });
+
+      expect(warnSpy).toHaveBeenCalled();
+      warnSpy.mockRestore();
+    });
+
+    test('warns and continues when deleting a speaker entry fails', async () => {
+      const warnSpy = jest.spyOn(logger, 'warn').mockImplementation(() => {});
+      const eventEntry = getEntry(
+        {
+          speakers: {
+            'en-US': [
+              { sys: { type: 'Link', linkType: 'Entry', id: 'speaker-1' } },
+            ],
+          },
+        },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+
+      const speakerToDelete = getEntry({}, { id: 'speaker-1' });
+      speakerToDelete.isPublished = jest.fn(() => false);
+      speakerToDelete.delete = jest.fn().mockRejectedValue(new Error('busy'));
+      when(environmentMock.getEntry)
+        .calledWith('speaker-1')
+        .mockResolvedValue(speakerToDelete);
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        speakersToRemove: ['speaker-1'],
+      });
+
+      expect(warnSpy).toHaveBeenCalled();
+      warnSpy.mockRestore();
+    });
+
+    test('updates an existing preliminary data sharing entry when shared changes', async () => {
+      const eventEntry = getEntry(
+        {
+          preliminaryDataShared: {
+            'en-US': [
+              { sys: { type: 'Link', linkType: 'Entry', id: 'prelim-1' } },
+            ],
+          },
+        },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+
+      const prelimEntry = getEntry(
+        {
+          team: { 'en-US': { sys: { id: 'team-1' } } },
+          preliminaryDataShared: { 'en-US': false },
+        },
+        { id: 'prelim-1' },
+      );
+      prelimEntry.update = jest.fn().mockResolvedValue(prelimEntry);
+      prelimEntry.publish = jest.fn().mockResolvedValue(prelimEntry);
+      when(environmentMock.getEntry)
+        .calledWith('prelim-1')
+        .mockResolvedValue(prelimEntry);
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+      });
+
+      expect(prelimEntry.fields).toEqual({
+        team: {
+          'en-US': { sys: { type: 'Link', linkType: 'Entry', id: 'team-1' } },
+        },
+        preliminaryDataShared: { 'en-US': true },
+      });
+      expect(prelimEntry.update).toHaveBeenCalled();
+      expect(prelimEntry.publish).toHaveBeenCalled();
+      expect(environmentMock.createEntry).not.toHaveBeenCalled();
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        preliminaryDataShared: [
+          { sys: { type: 'Link', linkType: 'Entry', id: 'prelim-1' } },
+        ],
+      });
+    });
+
+    test('does not rewrite a preliminary data sharing entry when shared is unchanged', async () => {
+      const eventEntry = getEntry(
+        {
+          preliminaryDataShared: {
+            'en-US': [
+              { sys: { type: 'Link', linkType: 'Entry', id: 'prelim-1' } },
+            ],
+          },
+        },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+
+      const prelimEntry = getEntry(
+        {
+          team: { 'en-US': { sys: { id: 'team-1' } } },
+          preliminaryDataShared: { 'en-US': true },
+        },
+        { id: 'prelim-1' },
+      );
+      prelimEntry.update = jest.fn();
+      when(environmentMock.getEntry)
+        .calledWith('prelim-1')
+        .mockResolvedValue(prelimEntry);
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+      });
+
+      expect(prelimEntry.update).not.toHaveBeenCalled();
+      expect(environmentMock.createEntry).not.toHaveBeenCalled();
+    });
+
+    test('creates a preliminary data sharing entry when none exists and shared is true', async () => {
+      const eventEntry = getEntry(
+        { preliminaryDataShared: { 'en-US': [] } },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+
+      const publishedEntry = getEntry({}, { id: 'prelim-new' });
+      const newEntry = getEntry({}, { id: 'prelim-new' });
+      newEntry.publish = jest.fn().mockResolvedValue(publishedEntry);
+      environmentMock.createEntry.mockResolvedValue(newEntry);
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        preliminaryDataShared: [{ teamId: 'team-2', shared: true }],
+      });
+
+      expect(environmentMock.createEntry).toHaveBeenCalledWith(
+        'preliminaryDataSharing',
+        {
+          fields: {
+            team: {
+              'en-US': {
+                sys: { type: 'Link', linkType: 'Entry', id: 'team-2' },
+              },
+            },
+            preliminaryDataShared: { 'en-US': true },
+          },
+        },
+      );
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        preliminaryDataShared: [
+          { sys: { type: 'Link', linkType: 'Entry', id: 'prelim-new' } },
+        ],
+      });
+    });
+
+    test('does not create a preliminary data sharing entry when shared is false and none exists', async () => {
+      const eventEntry = getEntry(
+        { preliminaryDataShared: { 'en-US': [] } },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        preliminaryDataShared: [{ teamId: 'team-3', shared: false }],
+      });
+
+      expect(environmentMock.createEntry).not.toHaveBeenCalled();
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        preliminaryDataShared: [],
+      });
+    });
+
+    test('treats a preliminary data sharing entry without a team link as absent and creates a new one', async () => {
+      const eventEntry = getEntry(
+        {
+          preliminaryDataShared: {
+            'en-US': [
+              { sys: { type: 'Link', linkType: 'Entry', id: 'prelim-orphan' } },
+            ],
+          },
+        },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+
+      const orphanEntry = getEntry(
+        { preliminaryDataShared: { 'en-US': true } },
+        { id: 'prelim-orphan' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('prelim-orphan')
+        .mockResolvedValue(orphanEntry);
+
+      const publishedEntry = getEntry({}, { id: 'prelim-new' });
+      const newEntry = getEntry({}, { id: 'prelim-new' });
+      newEntry.publish = jest.fn().mockResolvedValue(publishedEntry);
+      environmentMock.createEntry.mockResolvedValue(newEntry);
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        preliminaryDataShared: [{ teamId: 'team-5', shared: true }],
+      });
+
+      expect(environmentMock.createEntry).toHaveBeenCalledWith(
+        'preliminaryDataSharing',
+        expect.objectContaining({
+          fields: expect.objectContaining({
+            team: {
+              'en-US': {
+                sys: { type: 'Link', linkType: 'Entry', id: 'team-5' },
+              },
+            },
+          }),
+        }),
+      );
+    });
+
+    test('warns and continues when a preliminary data sharing entry cannot be fetched', async () => {
+      const warnSpy = jest.spyOn(logger, 'warn').mockImplementation(() => {});
+      const eventEntry = getEntry(
+        {
+          preliminaryDataShared: {
+            'en-US': [
+              { sys: { type: 'Link', linkType: 'Entry', id: 'prelim-1' } },
+            ],
+          },
+        },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+      when(environmentMock.getEntry)
+        .calledWith('prelim-1')
+        .mockRejectedValue(new Error('gone'));
+      mockPollingConsistency();
+
+      await eventDataProvider.updateEventDetails('123', {
+        preliminaryDataShared: [{ teamId: 'team-9', shared: true }],
+      });
+
+      expect(warnSpy).toHaveBeenCalled();
+      warnSpy.mockRestore();
+    });
+
+    test('throws if creating a preliminary data sharing entry fails', async () => {
+      const eventEntry = getEntry(
+        { preliminaryDataShared: { 'en-US': [] } },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+      environmentMock.createEntry.mockRejectedValue(new Error('boom'));
+
+      await expect(
+        eventDataProvider.updateEventDetails('123', {
+          preliminaryDataShared: [{ teamId: 'team-2', shared: true }],
+        }),
+      ).rejects.toThrow('Error creating preliminary data sharing entry');
     });
   });
 

@@ -62,6 +62,7 @@ const eventUpdateDetailsValidationSchema: JSONSchemaType<EventUpdateDetailsReque
     properties: {
       attendance: {
         type: 'array',
+        nullable: true,
         items: {
           type: 'object',
           properties: {
@@ -73,9 +74,27 @@ const eventUpdateDetailsValidationSchema: JSONSchemaType<EventUpdateDetailsReque
           additionalProperties: false,
         },
       },
+      speakersToRemove: {
+        type: 'array',
+        nullable: true,
+        items: { type: 'string' },
+      },
+      preliminaryDataShared: {
+        type: 'array',
+        nullable: true,
+        items: {
+          type: 'object',
+          properties: {
+            teamId: { type: 'string' },
+            shared: { type: 'boolean' },
+          },
+          required: ['teamId', 'shared'],
+          additionalProperties: false,
+        },
+      },
     },
     additionalProperties: false,
-    required: ['attendance'],
+    required: [],
   };
 
 export const validateEventUpdateDetailsPayload = validateInput(

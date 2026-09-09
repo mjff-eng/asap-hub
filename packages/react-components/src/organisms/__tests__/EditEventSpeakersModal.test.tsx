@@ -67,6 +67,7 @@ const renderModal = (
       onSave={onSave}
       onDismiss={onDismiss}
       groups={groups}
+      isPastEvent
       {...overrides}
     />,
   );
@@ -80,7 +81,9 @@ describe('EditEventSpeakersModal', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Add speakers to this event')).toBeInTheDocument();
     expect(
-      screen.getByText('Search for a person to add them to this event.'),
+      screen.getByText(
+        "Search for a person to add them to this event. Once the event has taken place, you'll be able to mark whether each speaker shared preliminary findings.",
+      ),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Mark All Shared' }),
@@ -218,6 +221,110 @@ describe('EditEventSpeakersModal', () => {
         name: 'Team Beta preliminary findings shared',
       }),
     ).toBeChecked();
+  });
+
+  it('Should switch to "Mark All Not Shared" once every group is shared and unshare them all', async () => {
+    renderModal({
+      groups: [
+        {
+          id: 'team-1',
+          variant: 'team',
+          teamName: 'Team Alpha',
+          preliminaryFindingsShared: true,
+          users: [{ id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] }],
+        },
+        {
+          id: 'team-2',
+          variant: 'team',
+          teamName: 'Team Beta',
+          preliminaryFindingsShared: true,
+          users: [{ id: 'user-2', displayName: 'John Smith', roles: [] }],
+        },
+      ],
+    });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Mark All Not Shared' }),
+    );
+
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Team Alpha preliminary findings shared',
+      }),
+    ).not.toBeChecked();
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Team Beta preliminary findings shared',
+      }),
+    ).not.toBeChecked();
+    expect(
+      screen.getByRole('button', { name: 'Mark All Shared' }),
+    ).toBeVisible();
+  });
+
+  it('Should not offer a preliminary findings switch for the external group', () => {
+    renderModal({
+      groups: [
+        ...groups,
+        {
+          id: 'external',
+          variant: 'external',
+          preliminaryFindingsShared: false,
+          users: [{ id: 'ext-0', displayName: 'Guest Speaker' }],
+        },
+      ],
+    });
+
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Team Alpha preliminary findings shared',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', {
+        name: 'External Users preliminary findings shared',
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('Should base "Mark All Not Shared" only on team groups, ignoring the external group', async () => {
+    renderModal({
+      groups: [
+        {
+          id: 'team-1',
+          variant: 'team',
+          teamName: 'Team Alpha',
+          preliminaryFindingsShared: true,
+          users: [{ id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] }],
+        },
+        {
+          id: 'external',
+          variant: 'external',
+          preliminaryFindingsShared: false,
+          users: [{ id: 'ext-0', displayName: 'Guest Speaker' }],
+        },
+      ],
+    });
+
+    // Every team is already shared, so the button reflects the toggled state
+    // despite the external group never sharing.
+    expect(
+      screen.getByRole('button', { name: 'Mark All Not Shared' }),
+    ).toBeVisible();
+  });
+
+  it('Should hide preliminary findings controls on an upcoming event', () => {
+    renderModal({ isPastEvent: false });
+
+    expect(screen.queryByText('Preliminary Findings')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /Mark All/ }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', {
+        name: 'Team Alpha preliminary findings shared',
+      }),
+    ).not.toBeInTheDocument();
   });
 
   it('Should remove the team row entirely once its last member is removed', async () => {

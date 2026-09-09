@@ -204,8 +204,9 @@ describe('EventSpeakers', () => {
       expect(getByText('(2)')).toBeVisible();
       expect(getByText('Inactive Team')).toBeInTheDocument();
       expect(getByLabelText('Shared preliminary findings')).toBeInTheDocument();
-      // Team Beta + External Users both show the cross.
-      expect(getAllByLabelText('No preliminary findings')).toHaveLength(2);
+      // Only Team Beta shows the cross; the external group has no findings
+      // status (preliminary findings is a per-team concept).
+      expect(getAllByLabelText('No preliminary findings')).toHaveLength(1);
     });
 
     it('Should expand a team to reveal its members with roles', async () => {

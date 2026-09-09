@@ -179,6 +179,7 @@ const SpeakerRow: React.FC<{
   info: React.ReactNode;
   sharedPreliminaryFindings: boolean;
   showFindings: boolean;
+  hasFindings?: boolean;
   expanded: boolean;
   onToggle: () => void;
   label: string;
@@ -188,6 +189,7 @@ const SpeakerRow: React.FC<{
   info,
   sharedPreliminaryFindings,
   showFindings,
+  hasFindings = true,
   expanded,
   onToggle,
   label,
@@ -206,7 +208,7 @@ const SpeakerRow: React.FC<{
         </td>
         {showFindings && (
           <td css={[statusCellStyles, collapsedBottom]}>
-            {findingsIcon(sharedPreliminaryFindings)}
+            {hasFindings ? findingsIcon(sharedPreliminaryFindings) : null}
           </td>
         )}
         <td css={[statusCellStyles, chevronCellStyles, collapsedBottom]}>
@@ -483,6 +485,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
                   externalGroup.preliminaryFindingsShared
                 }
                 showFindings={showFindings}
+                hasFindings={false}
                 expanded={expandedRows.has('external')}
                 onToggle={() => toggleRow('external')}
                 collapsedBottomPadding={lastRowBottomPadding}

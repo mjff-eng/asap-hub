@@ -308,7 +308,14 @@ export const getContentfulGraphqlEvent = (
   },
   speakersCollection: {
     items: [
+      // The eventSpeakers entry's own `sys.id` is requested at runtime (added
+      // to the shared query fragment) but not reflected in the generated
+      // result type — see parseGraphQLSpeakers. Cast to keep the fixture in
+      // sync with what the query actually returns.
       {
+        sys: {
+          id: 'event-speaker-id-3',
+        },
         team: {
           sys: {
             id: 'team-id-3',
@@ -332,7 +339,15 @@ export const getContentfulGraphqlEvent = (
           },
           avatar: null,
         },
-      },
+      } as NonNullable<
+        NonNullable<
+          NonNullable<
+            NonNullable<
+              ContentfulFetchEventsQuery['eventsCollection']
+            >['items'][number]
+          >['speakersCollection']
+        >['items'][number]
+      >,
     ],
   },
 });
@@ -428,6 +443,7 @@ export const getInterestGroupCalendarResponse =
   });
 
 export const getEventSpeakerUser = (): EventSpeakerUser => ({
+  id: 'event-speaker-id-3',
   team: {
     id: 'team-id-3',
     displayName: 'The team three',

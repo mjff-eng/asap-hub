@@ -29,6 +29,10 @@ export type EventSpeakerTeam = {
 };
 
 export type EventSpeakerUser = {
+  // The Contentful eventSpeakers entry id. Populated by the CRN read path so
+  // speakers can be deleted by exact id; optional because other producers of
+  // this shared shape (GP2, calendar reminders) don't carry it.
+  id?: string;
   team: Pick<TeamResponse, 'displayName' | 'id' | 'inactiveSince'>;
   user: EventSpeakerUserData;
   role: string;
@@ -39,6 +43,7 @@ export type EventSpeakerUserWithoutTeam = {
 };
 
 export type EventSpeakerExternalUser = {
+  id?: string;
   externalUser: EventSpeakerExternalUserData;
 };
 
@@ -145,8 +150,15 @@ export type EventAttendanceUpdateItem = {
   attended: boolean;
 };
 
+export type EventPreliminaryDataSharingUpdateItem = {
+  teamId: string;
+  shared: boolean;
+};
+
 export type EventUpdateDetailsRequest = {
-  attendance: EventAttendanceUpdateItem[];
+  attendance?: EventAttendanceUpdateItem[];
+  speakersToRemove?: string[];
+  preliminaryDataShared?: EventPreliminaryDataSharingUpdateItem[];
 };
 
 type BaseFilterOptions = {

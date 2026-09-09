@@ -307,8 +307,35 @@ describe('/events/ routes', () => {
       expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
     });
 
-    test('Should return a validation error when attendance is missing', async () => {
-      const response = await supertest(app).patch('/events/123').send({});
+    test('Should update speakers and preliminary data sharing for a tech support user', async () => {
+      userMockFactory.mockReturnValueOnce({
+        ...createUserResponse(),
+        techSupport: true,
+      });
+      eventControllerMock.updateEventDetails.mockResolvedValueOnce(
+        getEventResponse(),
+      );
+
+      const payload = {
+        speakersToRemove: ['speaker-1'],
+        preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+      };
+      const response = await supertest(app)
+        .patch('/events/123')
+        .send(payload);
+
+      expect(response.status).toBe(200);
+      expect(eventControllerMock.updateEventDetails).toHaveBeenCalledWith(
+        '123',
+        payload,
+      );
+      expect(response.body).toEqual(getEventResponse());
+    });
+
+    test('Should return a validation error for an unknown property', async () => {
+      const response = await supertest(app)
+        .patch('/events/123')
+        .send({ unexpected: true });
 
       expect(response.status).toBe(400);
     });
@@ -317,6 +344,14 @@ describe('/events/ routes', () => {
       const response = await supertest(app)
         .patch('/events/123')
         .send({ attendance: [{ teamId: 'team-1' }] });
+
+      expect(response.status).toBe(400);
+    });
+
+    test('Should return a validation error when a preliminary data sharing item is missing required fields', async () => {
+      const response = await supertest(app)
+        .patch('/events/123')
+        .send({ preliminaryDataShared: [{ teamId: 'team-1' }] });
 
       expect(response.status).toBe(400);
     });
