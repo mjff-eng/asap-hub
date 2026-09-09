@@ -623,9 +623,8 @@ export const parseEventSpeakerExternalUser = (
 export const parseGraphQLSpeakers = (speakers: SpeakerItem[]): EventSpeaker[] =>
   (speakers || []).reduce((speakerList: EventSpeaker[], speaker) => {
     const { team, user } = speaker;
-    // The eventSpeakers entry's own id is requested by the query (added to the
-    // shared fragment) but not reflected in the generated result type; widen
-    // locally to read it without regenerating graphql.ts.
+    // sys.id is queried but absent from the generated type; widen to read it
+    // without regenerating graphql.ts.
     const speakerId = (speaker as SpeakerItem & { sys?: { id: string } }).sys
       ?.id;
 

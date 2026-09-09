@@ -390,8 +390,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       ),
     );
 
-  // Preliminary findings is a per-team concept; the synthetic external group
-  // never shares, so "Mark All" only considers (and toggles) team groups.
+  // Preliminary findings is per-team, so "Mark All" ignores the external group.
   const visibleTeamGroups = visibleGroups.filter(
     (group) => group.variant === 'team',
   );

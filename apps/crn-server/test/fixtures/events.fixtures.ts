@@ -308,10 +308,8 @@ export const getContentfulGraphqlEvent = (
   },
   speakersCollection: {
     items: [
-      // The eventSpeakers entry's own `sys.id` is requested at runtime (added
-      // to the shared query fragment) but not reflected in the generated
-      // result type — see parseGraphQLSpeakers. Cast to keep the fixture in
-      // sync with what the query actually returns.
+      // sys.id is queried but absent from the generated type (see
+      // parseGraphQLSpeakers); cast to match what the query returns.
       {
         sys: {
           id: 'event-speaker-id-3',

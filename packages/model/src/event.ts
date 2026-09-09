@@ -29,9 +29,7 @@ export type EventSpeakerTeam = {
 };
 
 export type EventSpeakerUser = {
-  // The Contentful eventSpeakers entry id. Populated by the CRN read path so
-  // speakers can be deleted by exact id; optional because other producers of
-  // this shared shape (GP2, calendar reminders) don't carry it.
+  // Contentful eventSpeakers entry id; optional as only the CRN read path sets it.
   id?: string;
   team: Pick<TeamResponse, 'displayName' | 'id' | 'inactiveSince'>;
   user: EventSpeakerUserData;

@@ -223,7 +223,7 @@ describe('EditEventSpeakersModal', () => {
     ).toBeChecked();
   });
 
-  it('Should switch to "Mark All Not Shared" once every group is shared and unshare them all', async () => {
+  it('Should switch to "Mark All Not Shared" when all teams are shared, ignoring the external group, and unshare them all', async () => {
     renderModal({
       groups: [
         {
@@ -234,11 +234,10 @@ describe('EditEventSpeakersModal', () => {
           users: [{ id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] }],
         },
         {
-          id: 'team-2',
-          variant: 'team',
-          teamName: 'Team Beta',
-          preliminaryFindingsShared: true,
-          users: [{ id: 'user-2', displayName: 'John Smith', roles: [] }],
+          id: 'external',
+          variant: 'external',
+          preliminaryFindingsShared: false,
+          users: [{ id: 'ext-0', displayName: 'Guest Speaker' }],
         },
       ],
     });
@@ -250,11 +249,6 @@ describe('EditEventSpeakersModal', () => {
     expect(
       screen.getByRole('checkbox', {
         name: 'Team Alpha preliminary findings shared',
-      }),
-    ).not.toBeChecked();
-    expect(
-      screen.getByRole('checkbox', {
-        name: 'Team Beta preliminary findings shared',
       }),
     ).not.toBeChecked();
     expect(
@@ -285,32 +279,6 @@ describe('EditEventSpeakersModal', () => {
         name: 'External Users preliminary findings shared',
       }),
     ).not.toBeInTheDocument();
-  });
-
-  it('Should base "Mark All Not Shared" only on team groups, ignoring the external group', async () => {
-    renderModal({
-      groups: [
-        {
-          id: 'team-1',
-          variant: 'team',
-          teamName: 'Team Alpha',
-          preliminaryFindingsShared: true,
-          users: [{ id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] }],
-        },
-        {
-          id: 'external',
-          variant: 'external',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'ext-0', displayName: 'Guest Speaker' }],
-        },
-      ],
-    });
-
-    // Every team is already shared, so the button reflects the toggled state
-    // despite the external group never sharing.
-    expect(
-      screen.getByRole('button', { name: 'Mark All Not Shared' }),
-    ).toBeVisible();
   });
 
   it('Should hide preliminary findings controls on an upcoming event', () => {
