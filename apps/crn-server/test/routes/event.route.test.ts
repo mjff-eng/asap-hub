@@ -320,9 +320,7 @@ describe('/events/ routes', () => {
         speakersToRemove: ['speaker-1'],
         preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
       };
-      const response = await supertest(app)
-        .patch('/events/123')
-        .send(payload);
+      const response = await supertest(app).patch('/events/123').send(payload);
 
       expect(response.status).toBe(200);
       expect(eventControllerMock.updateEventDetails).toHaveBeenCalledWith(

@@ -22,7 +22,10 @@ type MutableTeamGroup = {
   teamName: string;
   isTeamInactive: boolean;
   preliminaryFindingsShared: boolean;
-  users: Map<string, SpeakerGroupUser & { roles: string[]; speakerIds: string[] }>;
+  users: Map<
+    string,
+    SpeakerGroupUser & { roles: string[]; speakerIds: string[] }
+  >;
 };
 
 export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {

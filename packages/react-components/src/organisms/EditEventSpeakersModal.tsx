@@ -578,8 +578,8 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
               </Paragraph>
               <Paragraph noMargin accent="lead">
                 Search for a person to add them to this event. Once the event
-                has taken place, you&apos;ll be able to mark whether each speaker
-                shared preliminary findings.
+                has taken place, you&apos;ll be able to mark whether each
+                speaker shared preliminary findings.
               </Paragraph>
             </div>
           ) : (

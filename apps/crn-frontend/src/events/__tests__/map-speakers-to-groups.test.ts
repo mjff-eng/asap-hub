@@ -153,8 +153,16 @@ describe('mapSpeakersToGroups', () => {
       variant: 'external',
       preliminaryFindingsShared: false,
       users: [
-        { id: 'external-1', speakerIds: ['es-ext-1'], displayName: 'Jane External' },
-        { id: 'external-2', speakerIds: ['es-ext-2'], displayName: 'John External' },
+        {
+          id: 'external-1',
+          speakerIds: ['es-ext-1'],
+          displayName: 'Jane External',
+        },
+        {
+          id: 'external-2',
+          speakerIds: ['es-ext-2'],
+          displayName: 'John External',
+        },
       ],
     });
   });

@@ -231,7 +231,9 @@ describe('EditEventSpeakersModal', () => {
           variant: 'team',
           teamName: 'Team Alpha',
           preliminaryFindingsShared: true,
-          users: [{ id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] }],
+          users: [
+            { id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] },
+          ],
         },
         {
           id: 'external',

@@ -10,7 +10,12 @@ const teamGroup = (
   teamName: 'Team One',
   preliminaryFindingsShared: false,
   users: [
-    { id: 'user-1', speakerIds: ['speaker-1'], displayName: 'User One', roles: ['Lead'] },
+    {
+      id: 'user-1',
+      speakerIds: ['speaker-1'],
+      displayName: 'User One',
+      roles: ['Lead'],
+    },
   ],
   ...overrides,
 });
@@ -29,9 +34,9 @@ describe('mapGroupsToSpeakersUpdate', () => {
     const original = [teamGroup()];
     const saved = [teamGroup({ users: [] })];
 
-    expect(mapGroupsToSpeakersUpdate(original, saved).speakersToRemove).toEqual([
-      'speaker-1',
-    ]);
+    expect(mapGroupsToSpeakersUpdate(original, saved).speakersToRemove).toEqual(
+      ['speaker-1'],
+    );
   });
 
   test('Should remove every entry id a merged multi-role user maps to', () => {
@@ -49,10 +54,9 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ];
     const saved = [teamGroup({ users: [] })];
 
-    expect(mapGroupsToSpeakersUpdate(original, saved).speakersToRemove).toEqual([
-      'speaker-1',
-      'speaker-2',
-    ]);
+    expect(mapGroupsToSpeakersUpdate(original, saved).speakersToRemove).toEqual(
+      ['speaker-1', 'speaker-2'],
+    );
   });
 
   test('Should mark removed external speaker entry ids', () => {
@@ -63,9 +67,9 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ];
     const saved = [externalGroup([])];
 
-    expect(mapGroupsToSpeakersUpdate(original, saved).speakersToRemove).toEqual([
-      'ext-1',
-    ]);
+    expect(mapGroupsToSpeakersUpdate(original, saved).speakersToRemove).toEqual(
+      ['ext-1'],
+    );
   });
 
   test('Should not mark anything for removal when nothing was removed', () => {
@@ -96,8 +100,8 @@ describe('mapGroupsToSpeakersUpdate', () => {
       }),
     ];
 
-    expect(mapGroupsToSpeakersUpdate(original, original).speakersToRemove).toEqual(
-      [],
-    );
+    expect(
+      mapGroupsToSpeakersUpdate(original, original).speakersToRemove,
+    ).toEqual([]);
   });
 });

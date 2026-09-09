@@ -547,7 +547,9 @@ export class EventContentfulDataProvider implements EventDataProvider {
       preliminaryDataShared.map(async ({ teamId, shared }) => {
         const existingEntry = existingByTeamId.get(teamId);
         if (existingEntry) {
-          if (existingEntry.fields.preliminaryDataShared?.['en-US'] !== shared) {
+          if (
+            existingEntry.fields.preliminaryDataShared?.['en-US'] !== shared
+          ) {
             existingEntry.fields = addLocaleToFields({
               team: createLink(teamId),
               preliminaryDataShared: shared,
@@ -575,7 +577,9 @@ export class EventContentfulDataProvider implements EventDataProvider {
           const publishedEntry = await newEntry.publish();
           return createLink(publishedEntry.sys.id);
         } catch (e) {
-          throw new Error(`Error creating preliminary data sharing entry: ${e}`);
+          throw new Error(
+            `Error creating preliminary data sharing entry: ${e}`,
+          );
         }
       }),
     );
