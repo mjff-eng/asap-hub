@@ -35,6 +35,9 @@ const pageProps = (
   backHref: '#',
   displayCalendar: true,
   getIconForDocumentType: () => getIconForDocumentType('Article'),
+  aboutHref: '/events/1/about',
+  meetingMaterialsHref: '/events/1/meeting-materials',
+  selectedTab: 'about',
 });
 
 export const Normal = () => {
@@ -88,5 +91,6 @@ export const PastWithMaterials = () => (
       { isEventInThePast: true },
     )}
     hasFinished
+    selectedTab="meeting-materials"
   />
 );

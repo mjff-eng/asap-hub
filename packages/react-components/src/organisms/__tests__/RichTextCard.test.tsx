@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import React, { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -27,11 +27,24 @@ it('renders the rich text notes', () => {
 });
 
 it('is collapsible when prop set', async () => {
-  const { getByText, queryByText } = render(
+  const ref = { current: { scrollHeight: 125 } };
+  Object.defineProperty(ref, 'current', {
+    set(_current) {
+      this.mockedCurrent = _current;
+    },
+    get() {
+      return { scrollHeight: 125 };
+    },
+  });
+  jest.spyOn(React, 'useRef').mockReturnValue(ref);
+
+  const { getByRole, queryByText } = render(
     <RichTextCard {...props} text="example text" collapsible />,
   );
   expect(queryByText('example text')).toBeVisible();
 
-  await userEvent.click(getByText(/show/i));
-  expect(getByText(/hide/i)).toBeVisible();
+  const button = getByRole('button');
+  expect(button.textContent).toContain('Show more');
+  await userEvent.click(button);
+  expect(button.textContent).toContain('Show less');
 });

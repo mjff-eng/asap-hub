@@ -22,6 +22,7 @@ import { EventResponse } from '@asap-hub/model';
 import { events, useRouteParams } from '@asap-hub/routing';
 import { Frame, useBackHref } from '@asap-hub/frontend-utils';
 import { useState } from 'react';
+import { Navigate, Route, Routes } from 'react-router';
 
 import { downloadEventSpeakers } from './export';
 import { matchTeamNames } from './match-team-names';
@@ -120,30 +121,53 @@ const Event: React.FC = () => {
     ) : undefined;
 
     if (isEnabled('NEW_EVENT_PAGE')) {
+      const eventRoute = events({}).event({ eventId });
+      const pageProps = {
+        ...eventMapper(event),
+        hasFinished,
+        backHref,
+        onRefresh: refreshEvent,
+        getIconForDocumentType,
+        displayCalendar,
+        eventConversation: <EventConversation {...event} />,
+        eventAttendance: attendance,
+        eventSpeakers: (
+          <EventSpeakers
+            groups={speakerGroups}
+            hasFinished={hasFinished}
+            onExport={
+              isTechSupport
+                ? () => downloadEventSpeakers(event, speakerGroups)
+                : undefined
+            }
+            onAddSpeaker={isEventProjectManager ? noop : undefined}
+          />
+        ),
+        aboutHref: eventRoute.about({}).$,
+        meetingMaterialsHref: eventRoute.meetingMaterials({}).$,
+      };
+
       return (
         <Frame title={event.title}>
-          <EventDetailPage
-            {...eventMapper(event)}
-            hasFinished={hasFinished}
-            backHref={backHref}
-            onRefresh={refreshEvent}
-            getIconForDocumentType={getIconForDocumentType}
-            displayCalendar={displayCalendar}
-            eventConversation={<EventConversation {...event} />}
-            eventAttendance={attendance}
-            eventSpeakers={
-              <EventSpeakers
-                groups={speakerGroups}
-                hasFinished={hasFinished}
-                onExport={
-                  isTechSupport
-                    ? () => downloadEventSpeakers(event, speakerGroups)
-                    : undefined
-                }
-                onAddSpeaker={isEventProjectManager ? noop : undefined}
-              />
-            }
-          />
+          <Routes>
+            <Route
+              index
+              element={<Navigate to={eventRoute.about({}).$} replace />}
+            />
+            <Route
+              path={eventRoute.about.template.replace(/^\//, '')}
+              element={<EventDetailPage {...pageProps} selectedTab="about" />}
+            />
+            <Route
+              path={eventRoute.meetingMaterials.template.replace(/^\//, '')}
+              element={
+                <EventDetailPage
+                  {...pageProps}
+                  selectedTab="meeting-materials"
+                />
+              }
+            />
+          </Routes>
         </Frame>
       );
     }

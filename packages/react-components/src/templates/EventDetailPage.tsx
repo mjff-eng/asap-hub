@@ -4,8 +4,8 @@ import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
 
 import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
-import { BackLink, CtaCard } from '../molecules';
-import { Card, Link, Paragraph } from '../atoms';
+import { BackLink, TabNav } from '../molecules';
+import { Card, TabLink } from '../atoms';
 import { rem } from '../pixels';
 import {
   EventCard,
@@ -15,8 +15,8 @@ import {
   CalendarList,
   RelatedResearchCard,
   RelatedTutorialsCard,
+  EventSupport,
 } from '../organisms';
-import { createMailTo, TECH_SUPPORT_EMAIL } from '../mail';
 import { useScrollToHash } from '../routing';
 import { useDateHasPassed } from '../date';
 import { considerEndedAfter } from '../utils';
@@ -38,12 +38,17 @@ const heroContentStyles = css({
   display: 'flex',
   flexDirection: 'column',
   paddingTop: rem(12),
-  paddingBottom: rem(40),
 });
 
 const backLinkContainerStyles = css({
   marginBottom: rem(56),
 });
+
+const tabNavStyles = css({
+  marginTop: rem(40),
+});
+
+export type EventDetailTab = 'about' | 'meeting-materials';
 
 type EventDetailPageProps = ComponentProps<typeof EventCard> &
   ComponentProps<typeof JoinEvent> &
@@ -64,6 +69,9 @@ type EventDetailPageProps = ComponentProps<typeof EventCard> &
     ) => EmotionJSX.Element;
     readonly hasFinished?: boolean;
     readonly children?: ReactNode;
+    readonly aboutHref: string;
+    readonly meetingMaterialsHref: string;
+    readonly selectedTab: EventDetailTab;
   };
 const EventDetailPage = ({
   hasFinished,
@@ -79,12 +87,16 @@ const EventDetailPage = ({
   getIconForDocumentType,
   getSourceIcon,
   tableTitles,
+  aboutHref,
+  meetingMaterialsHref,
+  selectedTab,
   ...props
 }: EventDetailPageProps) => {
   useScrollToHash();
   const hasEnded = useDateHasPassed(considerEndedAfter(props.endDate));
   const finished = hasFinished ?? hasEnded;
   const displayJoinEvent = !props.hideMeetingLink && !finished;
+  const isMeetingMaterialsTab = selectedTab === 'meeting-materials';
 
   return (
     <article>
@@ -100,73 +112,59 @@ const EventDetailPage = ({
             </div>
           )}
           <EventCard {...props} titleLimit={null} />
+          {finished && (
+            <div css={tabNavStyles}>
+              <TabNav>
+                <TabLink href={aboutHref}>About</TabLink>
+                <TabLink href={meetingMaterialsHref}>Meeting Materials</TabLink>
+              </TabNav>
+            </div>
+          )}
         </div>
       </PageConstraints>
       <PageConstraints as="main">
         <div css={cardsStyles}>
-          {(props.description || props.tags.length > 0) && (
-            <Card>
-              <EventAbout {...props} variant="expandable" />
-            </Card>
-          )}
-          {eventSpeakers}
-          {eventAttendance}
-          {(children || displayJoinEvent) && (
-            <Card>
-              {children}
-              {displayJoinEvent && <JoinEvent {...props} />}
-            </Card>
-          )}
-          {relatedResearch && relatedResearch.length > 0 && (
-            <RelatedResearchCard
-              description="Find all related research."
-              relatedResearch={relatedResearch}
-              getIconForDocumentType={getIconForDocumentType}
-              getSourceIcon={getSourceIcon}
-              tableTitles={tableTitles}
-            />
-          )}
-          {relatedTutorials && relatedTutorials.length > 0 && (
-            <RelatedTutorialsCard
-              relatedTutorials={relatedTutorials}
-              truncateFrom={3}
-            />
-          )}
-          <EventMaterials {...props} />
-          {eventConversation}
-          {displayCalendar && (
-            <CalendarList
-              calendars={[calendar]}
-              title="Subscribe to this event's Calendar"
-              hideSupportText
-            />
-          )}
-
-          {!finished && (
-            <CtaCard
-              href={createMailTo(TECH_SUPPORT_EMAIL)}
-              buttonText="Contact tech support"
-              displayCopy
-            >
-              <strong>Having trouble accessing this event?</strong>
-              <br /> The tech support team is here to help.
-            </CtaCard>
+          {isMeetingMaterialsTab ? (
+            <EventMaterials {...props} />
+          ) : (
+            <>
+              {(props.description || props.tags.length > 0) && (
+                <Card>
+                  <EventAbout {...props} variant="expandable" />
+                </Card>
+              )}
+              {eventSpeakers}
+              {eventAttendance}
+              {(children || displayJoinEvent) && (
+                <Card>
+                  {children}
+                  {displayJoinEvent && <JoinEvent {...props} />}
+                </Card>
+              )}
+              <RelatedResearchCard
+                description="Find all shared research outputs related to this event."
+                relatedResearch={relatedResearch ?? []}
+                getIconForDocumentType={getIconForDocumentType}
+                getSourceIcon={getSourceIcon}
+                tableTitles={tableTitles}
+              />
+              <RelatedTutorialsCard
+                description="Find all tutorials related to this event."
+                relatedTutorials={relatedTutorials ?? []}
+                truncateFrom={3}
+              />
+              {eventConversation}
+              {displayCalendar && (
+                <CalendarList
+                  calendars={[calendar]}
+                  title="Subscribe to this event's Calendar"
+                  hideSupportText
+                />
+              )}
+              <EventSupport />
+            </>
           )}
         </div>
-        {!finished && (
-          <Paragraph noMargin accent="lead">
-            Having issues? Set up your calendar manually with these instructions
-            for{' '}
-            <Link href="https://support.apple.com/en-us/guide/calendar/icl1022/mac">
-              Apple Calendar
-            </Link>{' '}
-            or{' '}
-            <Link href="https://support.microsoft.com/en-us/office/import-or-subscribe-to-a-calendar-in-outlook-com-cff1429c-5af6-41ec-a5b4-74f2c278e98c">
-              Outlook
-            </Link>
-            .
-          </Paragraph>
-        )}
       </PageConstraints>
     </article>
   );
