@@ -136,7 +136,11 @@ const Event: React.FC = () => {
             loadSearchOptions={async () => []}
             onSave={async (savedGroups) => {
               await patchEvent(
-                mapGroupsToSpeakersUpdate(speakerGroups, savedGroups),
+                mapGroupsToSpeakersUpdate(
+                  speakerGroups,
+                  savedGroups,
+                  hasFinished,
+                ),
               );
               setIsEditingSpeakers(false);
             }}

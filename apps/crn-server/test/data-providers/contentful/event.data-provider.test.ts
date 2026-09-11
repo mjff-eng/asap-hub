@@ -1795,7 +1795,7 @@ describe('Events Contentful Data Provider', () => {
       });
     });
 
-    test('skips writing a redundant not-shared entry when a team has none (absence already means not shared)', async () => {
+    test('creates a not-shared preliminary data sharing entry when a team has none', async () => {
       const eventEntry = getEntry(
         { preliminaryDataShared: { 'en-US': [] } },
         { id: '123' },
@@ -1803,15 +1803,34 @@ describe('Events Contentful Data Provider', () => {
       when(environmentMock.getEntry)
         .calledWith('123')
         .mockResolvedValue(eventEntry);
+
+      const publishedEntry = getEntry({}, { id: 'prelim-new' });
+      const newEntry = getEntry({}, { id: 'prelim-new' });
+      newEntry.publish = jest.fn().mockResolvedValue(publishedEntry);
+      environmentMock.createEntry.mockResolvedValue(newEntry);
       mockPollingConsistency();
 
       await eventDataProvider.updateEventDetails('123', {
         preliminaryDataShared: [{ teamId: 'team-3', shared: false }],
       });
 
-      expect(environmentMock.createEntry).not.toHaveBeenCalled();
+      expect(environmentMock.createEntry).toHaveBeenCalledWith(
+        'preliminaryDataSharing',
+        {
+          fields: {
+            team: {
+              'en-US': {
+                sys: { type: 'Link', linkType: 'Entry', id: 'team-3' },
+              },
+            },
+            preliminaryDataShared: { 'en-US': false },
+          },
+        },
+      );
       expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
-        preliminaryDataShared: [],
+        preliminaryDataShared: [
+          { sys: { type: 'Link', linkType: 'Entry', id: 'prelim-new' } },
+        ],
       });
     });
 

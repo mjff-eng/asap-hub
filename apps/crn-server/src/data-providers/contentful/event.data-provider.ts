@@ -560,13 +560,6 @@ export class EventContentfulDataProvider implements EventDataProvider {
           return null;
         }
 
-        // A team with no preliminaryDataSharing entry reads as not shared, so a
-        // false with no existing entry needs no write — creating one would just
-        // persist the default.
-        if (!shared) {
-          return null;
-        }
-
         try {
           const newEntry = await environment.createEntry(
             'preliminaryDataSharing',

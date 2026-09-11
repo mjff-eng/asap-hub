@@ -553,7 +553,9 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
               {visibleGroups.length > 0 && (
                 <span css={statsGroupStyles}>
                   <span css={[separatorStyles, hideOnMobileStyles]}>•</span>
-                  <span css={statStyles}>{pluralizeTeams(teamCount, true)}</span>
+                  <span css={statStyles}>
+                    {pluralizeTeams(teamCount, true)}
+                  </span>
                   <span css={separatorStyles}>•</span>
                   <span css={statStyles}>{pluralize(userCount, 'User')}</span>
                 </span>

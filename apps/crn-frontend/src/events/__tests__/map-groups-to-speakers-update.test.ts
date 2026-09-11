@@ -34,9 +34,9 @@ describe('mapGroupsToSpeakersUpdate', () => {
     const original = [teamGroup()];
     const saved = [teamGroup({ users: [] })];
 
-    expect(mapGroupsToSpeakersUpdate(original, saved).speakersToRemove).toEqual(
-      ['speaker-1'],
-    );
+    expect(
+      mapGroupsToSpeakersUpdate(original, saved, true).speakersToRemove,
+    ).toEqual(['speaker-1']);
   });
 
   test('Should remove every entry id a merged multi-role user maps to', () => {
@@ -54,9 +54,9 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ];
     const saved = [teamGroup({ users: [] })];
 
-    expect(mapGroupsToSpeakersUpdate(original, saved).speakersToRemove).toEqual(
-      ['speaker-1', 'speaker-2'],
-    );
+    expect(
+      mapGroupsToSpeakersUpdate(original, saved, true).speakersToRemove,
+    ).toEqual(['speaker-1', 'speaker-2']);
   });
 
   test('Should mark removed external speaker entry ids', () => {
@@ -67,17 +67,17 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ];
     const saved = [externalGroup([])];
 
-    expect(mapGroupsToSpeakersUpdate(original, saved).speakersToRemove).toEqual(
-      ['ext-1'],
-    );
+    expect(
+      mapGroupsToSpeakersUpdate(original, saved, true).speakersToRemove,
+    ).toEqual(['ext-1']);
   });
 
   test('Should not mark anything for removal when nothing was removed', () => {
     const groups = [teamGroup()];
 
-    expect(mapGroupsToSpeakersUpdate(groups, groups).speakersToRemove).toEqual(
-      [],
-    );
+    expect(
+      mapGroupsToSpeakersUpdate(groups, groups, true).speakersToRemove,
+    ).toEqual([]);
   });
 
   test('Should map preliminary findings per team, excluding the external group', () => {
@@ -89,8 +89,16 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ];
 
     expect(
-      mapGroupsToSpeakersUpdate(saved, saved).preliminaryDataShared,
+      mapGroupsToSpeakersUpdate(saved, saved, true).preliminaryDataShared,
     ).toEqual([{ teamId: 'team-1', shared: true }]);
+  });
+
+  test('Should omit preliminary findings for an upcoming event', () => {
+    const saved = [teamGroup({ preliminaryFindingsShared: true })];
+
+    expect(mapGroupsToSpeakersUpdate(saved, saved, false)).not.toHaveProperty(
+      'preliminaryDataShared',
+    );
   });
 
   test('Should tolerate users without speakerIds', () => {
@@ -101,7 +109,7 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ];
 
     expect(
-      mapGroupsToSpeakersUpdate(original, original).speakersToRemove,
+      mapGroupsToSpeakersUpdate(original, original, true).speakersToRemove,
     ).toEqual([]);
   });
 });
