@@ -26,6 +26,7 @@ import PendingSpeakerCard from '../molecules/PendingSpeakerCard';
 import SpeakerTeamRow from '../molecules/SpeakerTeamRow';
 import { avatar24Styles, flexRowGap8Styles } from '../molecules/SpeakerUserRow';
 import { mobileScreen, rem } from '../pixels';
+import { pluralize, pluralizeTeams } from '../utils';
 import { splitDisplayName } from '../utils/user';
 import { EventTeamType } from './shared-event-card';
 import { iconButtonStyles } from './shared-event-card-styles';
@@ -552,9 +553,9 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
               {visibleGroups.length > 0 && (
                 <span css={statsGroupStyles}>
                   <span css={[separatorStyles, hideOnMobileStyles]}>•</span>
-                  <span css={statStyles}>{teamCount} Teams</span>
+                  <span css={statStyles}>{pluralizeTeams(teamCount, true)}</span>
                   <span css={separatorStyles}>•</span>
-                  <span css={statStyles}>{userCount} Users</span>
+                  <span css={statStyles}>{pluralize(userCount, 'User')}</span>
                 </span>
               )}
             </div>

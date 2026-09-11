@@ -107,8 +107,8 @@ describe('EditEventSpeakersModal', () => {
     expect(
       screen.getByRole('heading', { name: 'Edit Speakers' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('1 Teams')).toBeInTheDocument();
-    expect(screen.getByText('1 Users')).toBeInTheDocument();
+    expect(screen.getByText('1 Team')).toBeInTheDocument();
+    expect(screen.getByText('1 User')).toBeInTheDocument();
   });
 
   it('Should add a searched CRN user with exactly one team directly, without a pending card', async () => {
@@ -328,7 +328,7 @@ describe('EditEventSpeakersModal', () => {
 
     expect(screen.getByText('Team Alpha')).toBeInTheDocument();
     expect(screen.queryByText('Team Beta')).not.toBeInTheDocument();
-    expect(screen.getByText('1 Teams')).toBeInTheDocument();
+    expect(screen.getByText('1 Team')).toBeInTheDocument();
   });
 
   it('Should remove a user from one group without affecting another team or the External Users group', async () => {
@@ -390,7 +390,7 @@ describe('EditEventSpeakersModal', () => {
       throw new Error('Expected a nested user list to be rendered');
     }
     expect(within(nestedUserList).getAllByRole('listitem')).toHaveLength(1);
-    expect(screen.getByText('1 Users')).toBeInTheDocument();
+    expect(screen.getByText('1 User')).toBeInTheDocument();
   });
 
   it('Should collapse an already-expanded team when the chevron is clicked again', async () => {

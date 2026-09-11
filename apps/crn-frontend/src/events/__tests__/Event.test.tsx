@@ -734,6 +734,51 @@ describe('the NEW_EVENT_PAGE flag', () => {
         ),
       );
     });
+
+    it('runs the (empty) speaker search when typing in the modal', async () => {
+      mockGetEvent.mockResolvedValue({
+        ...createEventResponse(),
+        id,
+        endDate: pastEndDate,
+        speakers: [teamSpeaker('t1', 'Team One', 'u1')],
+      });
+      const techSupportWrapper = createWrapper({ techSupport: true });
+      const { findByRole, getByRole, findByText } = render(<Event />, {
+        wrapper: techSupportWrapper,
+      });
+
+      await userEvent.click(
+        await findByRole('button', { name: 'Edit speakers' }),
+      );
+      await userEvent.type(getByRole('combobox'), 'zzz');
+
+      // loadSearchOptions returns [], so only the creatable external option is
+      // offered — proving the search ran.
+      expect(await findByText('zzz')).toBeVisible();
+    });
+
+    it('closes the speakers modal without saving when dismissed', async () => {
+      mockGetEvent.mockResolvedValue({
+        ...createEventResponse(),
+        id,
+        endDate: pastEndDate,
+        speakers: [teamSpeaker('t1', 'Team One', 'u1')],
+      });
+      const techSupportWrapper = createWrapper({ techSupport: true });
+      const { findByRole, getByRole, queryByRole } = render(<Event />, {
+        wrapper: techSupportWrapper,
+      });
+
+      await userEvent.click(
+        await findByRole('button', { name: 'Edit speakers' }),
+      );
+      await userEvent.click(getByRole('button', { name: 'Cancel' }));
+
+      expect(
+        queryByRole('heading', { name: 'Edit Speakers' }),
+      ).not.toBeInTheDocument();
+      expect(mockPatchEvent).not.toHaveBeenCalled();
+    });
   });
 
   describe('speakers export', () => {

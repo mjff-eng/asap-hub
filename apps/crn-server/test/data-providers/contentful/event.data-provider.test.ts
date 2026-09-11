@@ -1795,7 +1795,7 @@ describe('Events Contentful Data Provider', () => {
       });
     });
 
-    test('does not create a preliminary data sharing entry when shared is false and none exists', async () => {
+    test('skips writing a redundant not-shared entry when a team has none (absence already means not shared)', async () => {
       const eventEntry = getEntry(
         { preliminaryDataShared: { 'en-US': [] } },
         { id: '123' },
