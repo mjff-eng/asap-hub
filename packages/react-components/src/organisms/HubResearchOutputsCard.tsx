@@ -45,17 +45,6 @@ const headerWithInfoStyles = css({
   display: 'inline',
 });
 
-const noWrapStyles = css({
-  whiteSpace: 'nowrap',
-});
-
-const headerInfoStyles = css({
-  verticalAlign: 'text-bottom',
-  'button, button > span': {
-    display: 'flex',
-  },
-});
-
 const cellStyles = css({
   padding: `${rem(20)} 0`,
   verticalAlign: 'middle',
@@ -183,17 +172,16 @@ const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
             Output Type
           </th>
           <th css={[headerCellStyles, paddedCellStyles]} scope="col">
-            # Outputs <span css={noWrapStyles}>(ASAP-Funded)</span>
+            # Outputs
+            <br />
+            (ASAP-Funded)
           </th>
           <th css={headerCellStyles} scope="col">
             <span css={headerWithInfoStyles}>
-              % Public Outputs{' '}
-              <span css={noWrapStyles}>
-                (ASAP-Funded)
-                <TooltipInfo overrideWrapperStyles={headerInfoStyles}>
-                  {PUBLIC_OUTPUTS_TOOLTIP}
-                </TooltipInfo>
-              </span>
+              % Public Outputs
+              <br />
+              (ASAP-Funded)
+              <TooltipInfo>{PUBLIC_OUTPUTS_TOOLTIP}</TooltipInfo>
             </span>
           </th>
         </tr>
