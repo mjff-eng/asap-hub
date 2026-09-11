@@ -7,6 +7,16 @@ import { addMinutes, subDays, subMinutes, addDays } from 'date-fns';
 import EventCard from '../EventCard';
 import { neutral200 } from '../../colors';
 
+const mockIsEnabled = jest.fn();
+jest.mock('@asap-hub/react-context', () => ({
+  ...jest.requireActual('@asap-hub/react-context'),
+  useFlags: () => ({ isEnabled: mockIsEnabled }),
+}));
+
+beforeEach(() => {
+  mockIsEnabled.mockReturnValue(false);
+});
+
 const props: ComponentProps<typeof EventCard> = {
   ...createEventResponse(),
   hasSpeakersToBeAnnounced: false,
@@ -239,6 +249,34 @@ describe('past events', () => {
       '/events/event-0#event-presentation',
     );
     expect(screen.queryByText('Meeting Materials')).not.toBeInTheDocument();
+  });
+
+  it('links materials to the meeting materials tab when NEW_EVENT_PAGE is enabled', () => {
+    mockIsEnabled.mockReturnValue(true);
+    render(
+      <EventCard
+        {...props}
+        status="Confirmed"
+        meetingMaterials={[{ title: '123', url: 'http://example.com' }]}
+        presentation="presentation"
+        notes="notes"
+        videoRecording="recording"
+        startDate={subDays(new Date(), 2).toISOString()}
+        endDate={subDays(new Date(), 1).toISOString()}
+      />,
+    );
+    expect(screen.getByText('Notes').closest('a')).toHaveAttribute(
+      'href',
+      '/events/event-0/meeting-materials#event-notes',
+    );
+    expect(screen.getByText('Recording').closest('a')).toHaveAttribute(
+      'href',
+      '/events/event-0/meeting-materials#event-video-recording',
+    );
+    expect(screen.getByText('Presentation').closest('a')).toHaveAttribute(
+      'href',
+      '/events/event-0/meeting-materials#event-presentation',
+    );
   });
 
   it('lists every material greyed out and non-clickable when none are available', () => {

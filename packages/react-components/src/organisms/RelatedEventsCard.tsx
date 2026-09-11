@@ -3,7 +3,7 @@ import { events } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import React, { useState } from 'react';
 
-import { Button, Card, Headline2, Link, Paragraph } from '../atoms';
+import { Button, Card, Headline3, Link, Paragraph } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 import { charcoal, lead, steel } from '../colors';
 import { formatDateToTimezone } from '../date';
@@ -79,12 +79,14 @@ type RelatedEventsCardProps = (
   | Pick<ResearchOutputResponse, 'relatedEvents'>
   | Pick<gp2.OutputBaseResponse, 'relatedEvents'>
 ) & {
+  description?: string;
   truncateFrom?: number;
   hub?: 'GP2' | 'CRN';
 };
 
 const RelatedEventsCard: React.FC<RelatedEventsCardProps> = ({
   relatedEvents,
+  description = 'Find all related Events.',
   truncateFrom = Number.POSITIVE_INFINITY,
   hub = 'CRN',
 }) => {
@@ -98,10 +100,10 @@ const RelatedEventsCard: React.FC<RelatedEventsCardProps> = ({
           ...(displayShowMoreButton ? [{ paddingBottom: 0 }] : []),
         ]}
       >
-        <Headline2 noMargin>Related {hub} Hub Events</Headline2>
+        <Headline3 noMargin>Related {hub} Hub Events</Headline3>
         <div css={descriptionStyles}>
           <Paragraph noMargin accent="lead">
-            Find all related Events.
+            {description}
           </Paragraph>
         </div>
         {relatedEvents.length === 0 ? (

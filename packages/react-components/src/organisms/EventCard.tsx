@@ -7,6 +7,7 @@ import {
   EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
 } from '@asap-hub/model';
 import { events } from '@asap-hub/routing';
+import { useFlags } from '@asap-hub/react-context';
 
 import { subMinutes, parseISO } from 'date-fns';
 
@@ -80,6 +81,7 @@ const EventCard: React.FC<EventCardProps> = ({
   hasSpeakersToBeAnnounced,
   ...props
 }) => {
+  const { isEnabled } = useFlags();
   const considerStartedAfter = subMinutes(
     parseISO(props.startDate),
     EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
@@ -145,7 +147,10 @@ const EventCard: React.FC<EventCardProps> = ({
         const value = props[key];
         return Array.isArray(value) ? value.length > 0 : Boolean(value);
       };
-      const eventHref = events({}).event({ eventId: props.id }).$;
+      const eventRoute = events({}).event({ eventId: props.id });
+      const eventHref = isEnabled('NEW_EVENT_PAGE')
+        ? eventRoute.meetingMaterials({}).$
+        : eventRoute.$;
       return {
         type: 'attachment',
         accent: 'neutral200',
