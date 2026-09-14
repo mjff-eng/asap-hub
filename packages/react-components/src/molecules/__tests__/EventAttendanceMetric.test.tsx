@@ -3,78 +3,32 @@ import { render } from '@testing-library/react';
 import EventAttendanceMetric from '../EventAttendanceMetric';
 
 describe('EventAttendanceMetric', () => {
-  it('renders the progress variant with its label, value, caption, wheel and bar', () => {
+  it('renders the percentage, both caption lines and a single bar', () => {
     const { getByText, getAllByRole } = render(
       <EventAttendanceMetric
-        variant="progress"
-        label="Attendance"
+        label="This event"
         value={72}
         caption="18 of 25 teams"
+        captionDetail="from the interest group"
       />,
     );
-    expect(getByText('Attendance')).toBeVisible();
     expect(getByText('72%')).toBeVisible();
     expect(getByText('18 of 25 teams')).toBeVisible();
-    // one ProgressWheel (desktop) + one ProgressBar (mobile), both in the DOM
-    // and toggled by media query — count including the media-hidden wheel.
-    expect(getAllByRole('progressbar', { hidden: true })).toHaveLength(2);
+    expect(getByText('from the interest group')).toBeVisible();
+    expect(getAllByRole('progressbar')).toHaveLength(1);
   });
 
-  it('renders an increase arrow for an up delta', () => {
-    const { getByLabelText, getByText } = render(
+  it('labels the bar and fills it to the value', () => {
+    const { getByRole } = render(
       <EventAttendanceMetric
-        variant="delta"
-        direction="up"
-        label="Since last event"
-        value={10}
-        caption="from 18 of 25 teams"
+        label="This event"
+        value={40}
+        caption="2 of 5 teams"
+        captionDetail="from the interest group"
       />,
     );
-    expect(getByText('+ 10')).toBeVisible();
-    expect(getByLabelText('Increase')).toBeInTheDocument();
-  });
-
-  it('renders a decrease arrow for a down delta', () => {
-    const { getByLabelText, getByText } = render(
-      <EventAttendanceMetric
-        variant="delta"
-        direction="down"
-        label="Since last event"
-        value={5}
-        caption="from 12 of 25 teams"
-      />,
-    );
-    expect(getByText('- 5')).toBeVisible();
-    expect(getByLabelText('Decrease')).toBeInTheDocument();
-  });
-
-  it('renders a plain value with no sign or arrow for a none delta', () => {
-    const { getByText, queryByLabelText } = render(
-      <EventAttendanceMetric
-        variant="delta"
-        direction="none"
-        label="Since last event"
-        value={0}
-        caption="No change from 18 of 25 teams"
-      />,
-    );
-    expect(getByText('0')).toBeVisible();
-    expect(getByText('No change from 18 of 25 teams')).toBeVisible();
-    expect(queryByLabelText('Increase')).not.toBeInTheDocument();
-    expect(queryByLabelText('Decrease')).not.toBeInTheDocument();
-  });
-
-  it('renders the empty variant with its label and message and no value', () => {
-    const { getByText, queryByLabelText } = render(
-      <EventAttendanceMetric
-        variant="empty"
-        label="Since last event"
-        message="No previous event to compare to."
-      />,
-    );
-    expect(getByText('Since last event')).toBeVisible();
-    expect(getByText('No previous event to compare to.')).toBeVisible();
-    expect(queryByLabelText('Increase')).not.toBeInTheDocument();
-    expect(queryByLabelText('Decrease')).not.toBeInTheDocument();
+    const bar = getByRole('progressbar', { name: 'This event' });
+    expect(bar).toHaveAttribute('aria-valuenow', '40');
+    expect(bar.firstChild).toHaveStyle('width: 40%');
   });
 });

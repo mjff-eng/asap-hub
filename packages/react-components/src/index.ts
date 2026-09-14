@@ -171,6 +171,7 @@ export {
   EmailPasswordSignin,
   EventAbout,
   EventAttendance,
+  compareAttendanceTeams,
   SourceLists,
   UploadListModal,
   EventCard,
