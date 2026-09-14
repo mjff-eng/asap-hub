@@ -627,7 +627,8 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
         <Paragraph noMargin accent="lead">
           Add teams from a list. Matched teams are added and marked attended. If
           a team is already in your list, their attendance will be updated to
-          match the file. CSV or XLSX files only.
+          match the file. CSV or XLSX files only. What format does the file
+          need?
           <TooltipInfo
             openOnHover
             floating
