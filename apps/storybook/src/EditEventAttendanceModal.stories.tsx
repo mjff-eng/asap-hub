@@ -2,16 +2,36 @@ import { EditEventAttendanceModal } from '@asap-hub/react-components';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StaticRouter } from 'react-router';
 
-const meta: Meta<typeof EditEventAttendanceModal> = {
+import {
+  AttendanceCounts,
+  buildAttendanceTeams,
+  countArgTypes,
+  fixedState,
+  loadAttendanceSearchOptions,
+} from './attendance-fixtures';
+
+const delay = (ms: number) =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
+const buildSourceLists = (count: number) =>
+  Array.from({ length: count }, (_, index) => ({
+    id: `file-${index}`,
+    filename: `attendees-day-${index + 1}.csv`,
+    addedDate: `1${index}/03/2025`,
+    // Round-trip so the Download spinner is visible.
+    onDownload: () => delay(1000),
+  }));
+
+type ControlArgs = AttendanceCounts & {
+  interestGroupName: string;
+  canUpload: boolean;
+  sourceLists: number;
+};
+
+const meta: Meta<ControlArgs> = {
   title: 'Organisms / Events / Edit Attendance Modal',
-  component: EditEventAttendanceModal,
-  argTypes: {
-    loadSearchOptions: { control: false },
-    onSelectInterestGroup: { control: false },
-    onUploadList: { control: false },
-    onSave: { control: false },
-    onDismiss: { control: false },
-  },
   decorators: [
     (Story) => (
       <StaticRouter location="/">
@@ -19,143 +39,138 @@ const meta: Meta<typeof EditEventAttendanceModal> = {
       </StaticRouter>
     ),
   ],
+  argTypes: {
+    interestGroupName: {
+      control: 'text',
+      description:
+        'Names the locked section ("From <name> (#)"). Cleared, it falls back to "From interest group (#)".',
+    },
+    interestGroupTeams: {
+      ...countArgTypes,
+      description:
+        'Teams from the hosting group — locked rows with a padlock instead of a bin. At 0 the whole section goes.',
+    },
+    interestGroupAttended: {
+      ...countArgTypes,
+      description: 'How many of the locked rows start with the toggle on.',
+    },
+    additionalTeams: {
+      ...countArgTypes,
+      description: 'Removable rows under "Additional teams".',
+    },
+    additionalTeamsAttended: {
+      ...countArgTypes,
+      description: 'How many of those start with the toggle on.',
+    },
+    hasInactiveTeam: {
+      control: 'boolean',
+      description: 'Mark the third row inactive (shows the inactive badge)',
+    },
+    canUpload: {
+      control: 'boolean',
+      description: 'Show the "Upload a List" section',
+    },
+    sourceLists: {
+      control: { type: 'range', min: 0, max: 3, step: 1 },
+      description: 'Files already recorded under "Source lists"',
+    },
+  },
+  render: ({ interestGroupName, canUpload, sourceLists, ...counts }) => (
+    <EditEventAttendanceModal
+      // The modal snapshots its rows on mount, so it remounts when a count
+      // control moves.
+      key={`${JSON.stringify(counts)}-${interestGroupName}`}
+      teams={buildAttendanceTeams(counts)}
+      interestGroupName={interestGroupName || undefined}
+      loadSearchOptions={loadAttendanceSearchOptions}
+      sourceLists={buildSourceLists(sourceLists)}
+      onUploadList={
+        canUpload ? async () => ({ matched: [], unmatched: [] }) : undefined
+      }
+      onSave={() => undefined}
+      onDismiss={() => undefined}
+    />
+  ),
 };
 
-type Story = StoryObj<typeof EditEventAttendanceModal>;
+export default meta;
 
-const teamTypes = ['Discovery Team', 'Resource Team'] as const;
+type Story = StoryObj<ControlArgs>;
 
-// Search returns a mix of interest groups (which add several teams) and single
-// teams — type any letter in the search field to see them.
-const searchResults = [
-  {
-    value: 'ig-search-a',
-    label: 'Alpha Synuclein',
-    optionType: 'interestGroup' as const,
-    teams: [
-      { teamId: 'sga-1', teamName: 'Aguzzi', attended: true },
-      { teamId: 'sga-2', teamName: 'Alessi', attended: true },
-      { teamId: 'sga-3', teamName: 'Chen', attended: true },
-    ],
-  },
-  {
-    value: 'ig-search-b',
-    label: 'Mitochondria',
-    optionType: 'interestGroup' as const,
-    teams: [
-      { teamId: 'sgb-1', teamName: 'Dawson', attended: true },
-      { teamId: 'sgb-2', teamName: 'Edwards', attended: true },
-    ],
-  },
-  {
-    value: 's1',
-    label: 'Ferguson',
-    optionType: 'team' as const,
-    teamType: 'Discovery Team' as const,
-  },
-  {
-    value: 's2',
-    label: 'Herzog',
-    optionType: 'team' as const,
-    teamType: 'Resource Team' as const,
-  },
-  {
-    value: 's3',
-    label: 'Lippincott-Schwartz',
-    optionType: 'team' as const,
-    teamType: 'Discovery Team' as const,
-  },
-];
+const baseArgs: ControlArgs = {
+  interestGroupName: 'Alpha Synuclein',
+  interestGroupTeams: 4,
+  interestGroupAttended: 3,
+  additionalTeams: 2,
+  additionalTeamsAttended: 1,
+  hasInactiveTeam: false,
+  canUpload: true,
+  sourceLists: 0,
+};
 
-const loadSearchOptions = async (inputValue: string) =>
-  searchResults.filter((option) =>
-    option.label.toLowerCase().includes(inputValue.toLowerCase()),
-  );
-
-// Six groups so desktop shows two columns of three (top-to-bottom, then a new
-// column); mobile stacks them in a single column.
-const interestGroups = [
-  { id: 'ig1', name: 'Alpha Synuclein' },
-  { id: 'ig2', name: 'Mitochondria' },
-  { id: 'ig3', name: 'GBA1' },
-  { id: 'ig4', name: 'LRRK2' },
-  { id: 'ig5', name: 'Autophagy' },
-  { id: 'ig6', name: 'Neuroinflammation' },
-];
-
-const teams = Array.from({ length: 6 }, (_, index) => ({
-  teamId: `team-${index + 1}`,
-  teamName: `Team ${index + 1}`,
-  attended: index < 5,
-  teamType: teamTypes[index % 2],
-}));
-
-// Simulate a round-trip so the Download loading spinner is visible.
-const delay = (ms: number) =>
-  new Promise<void>((resolve) => {
-    setTimeout(resolve, ms);
-  });
-
-const commonArgs = {
-  interestGroups,
-  loadSearchOptions,
-  onSelectInterestGroup: async (interestGroupId: string) => [
-    {
-      teamId: `${interestGroupId}-team-1`,
-      teamName: `${interestGroupId} Team A`,
-      attended: true,
-      teamType: 'Discovery Team' as const,
-    },
-    {
-      teamId: `${interestGroupId}-team-2`,
-      teamName: `${interestGroupId} Team B`,
-      attended: true,
-      teamType: 'Resource Team' as const,
-    },
-  ],
-  // Present only so the "Upload a list" button renders; the full upload flow is
-  // demonstrated in the Attendance > Edit and Save story, not here.
-  onUploadList: async () => ({
-    matched: [],
-    unmatched: [],
-  }),
-  onSave: () => undefined,
-  onDismiss: () => undefined,
+export const EditAttendance: Story = {
+  args: baseArgs,
 };
 
 export const AddAttendance: Story = {
   args: {
-    ...commonArgs,
-    teams: [],
+    ...baseArgs,
+    interestGroupTeams: 0,
+    interestGroupAttended: 0,
+    additionalTeams: 0,
+    additionalTeamsAttended: 0,
   },
+  ...fixedState,
 };
 
-export const EditAttendance: Story = {
+export const NoAdditionalTeams: Story = {
+  args: { ...baseArgs, additionalTeams: 0, additionalTeamsAttended: 0 },
+  ...fixedState,
+};
+
+export const AdditionalTeamsOnly: Story = {
   args: {
-    ...commonArgs,
-    teams,
+    ...baseArgs,
+    interestGroupTeams: 0,
+    interestGroupAttended: 0,
+    additionalTeams: 5,
+    additionalTeamsAttended: 2,
   },
+  ...fixedState,
+};
+
+export const AllAttended: Story = {
+  args: { ...baseArgs, interestGroupAttended: 4, additionalTeamsAttended: 2 },
+  ...fixedState,
+};
+
+export const NoneAttended: Story = {
+  args: { ...baseArgs, interestGroupAttended: 0, additionalTeamsAttended: 0 },
+  ...fixedState,
+};
+
+export const ManyTeams: Story = {
+  args: {
+    ...baseArgs,
+    interestGroupTeams: 12,
+    interestGroupAttended: 7,
+    additionalTeams: 8,
+    additionalTeamsAttended: 3,
+  },
+  ...fixedState,
+};
+
+export const WithInactiveTeam: Story = {
+  args: { ...baseArgs, hasInactiveTeam: true },
+  ...fixedState,
 };
 
 export const PostUpload: Story = {
-  args: {
-    ...commonArgs,
-    teams,
-    sourceLists: [
-      {
-        id: 'file-1',
-        filename: 'attendees-day-1.csv',
-        addedDate: '12/03/2025',
-        onDownload: () => delay(1000),
-      },
-      {
-        id: 'file-2',
-        filename: 'attendees-day-2.xlsx',
-        addedDate: '13/03/2025',
-        onDownload: () => delay(1000),
-      },
-    ],
-  },
+  args: { ...baseArgs, sourceLists: 2 },
+  ...fixedState,
 };
 
-export default meta;
+export const WithoutUpload: Story = {
+  args: { ...baseArgs, canUpload: false },
+  ...fixedState,
+};
