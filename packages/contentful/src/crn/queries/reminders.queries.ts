@@ -252,6 +252,21 @@ export const FETCH_REMINDERS = gql`
             }
           }
         }
+        projectMembershipCollection(limit: 10) {
+          items {
+            role
+            linkedFrom {
+              projectsCollection(limit: 1) {
+                items {
+                  sys {
+                    id
+                  }
+                  title
+                }
+              }
+            }
+          }
+        }
         eventSpeakersCollection(limit: 100) {
           items {
             team {
