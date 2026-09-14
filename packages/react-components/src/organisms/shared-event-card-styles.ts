@@ -1,6 +1,14 @@
 import { css } from '@emotion/react';
 
-import { charcoal, lead, neutral1000, paper, steel, tin } from '../colors';
+import {
+  charcoal,
+  lead,
+  neutral1000,
+  paper,
+  silver,
+  steel,
+  tin,
+} from '../colors';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
 
 export const contentStyles = css({
@@ -135,8 +143,13 @@ export const chevronButtonStyles = css({
   cursor: 'pointer',
 });
 
-export const deleteButtonStyles = (enabled: boolean) =>
-  css({
+export const deleteButtonStyles = (
+  enabled: boolean,
+  disabledPalette: 'default' | 'light' = 'default',
+) => {
+  const disabledBorder = disabledPalette === 'light' ? steel : tin;
+  const disabledBackground = disabledPalette === 'light' ? silver : steel;
+  return css({
     flexGrow: 0,
     flexShrink: 0,
     display: 'inline-flex',
@@ -147,9 +160,9 @@ export const deleteButtonStyles = (enabled: boolean) =>
     height: rem(24),
     minHeight: rem(24),
     padding: 0,
-    border: `1px solid ${enabled ? steel.rgb : tin.rgb}`,
+    border: `1px solid ${enabled ? steel.rgb : disabledBorder.rgb}`,
     borderRadius: rem(4),
-    backgroundColor: enabled ? paper.rgb : steel.rgb,
+    backgroundColor: enabled ? paper.rgb : disabledBackground.rgb,
     boxShadow: enabled ? undefined : `0 2px 4px rgba(223, 229, 234, 0.3)`,
     color: enabled ? neutral1000.rgb : lead.rgb,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
@@ -161,3 +174,4 @@ export const deleteButtonStyles = (enabled: boolean) =>
       ...(enabled ? {} : { filter: 'none', stroke: lead.rgb }),
     },
   });
+};
