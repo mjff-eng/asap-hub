@@ -707,6 +707,9 @@ describe('Events Contentful Data Provider', () => {
 
         (contentfulGraphQLResponse.speakersCollection!.items = [
           {
+            sys: {
+              id: 'event-speaker-id-3',
+            },
             team: {
               sys: {
                 id: 'team-id-3',
@@ -755,6 +758,9 @@ describe('Events Contentful Data Provider', () => {
 
         (contentfulGraphQLResponse.speakersCollection!.items = [
           {
+            sys: {
+              id: 'event-speaker-id-3',
+            },
             team: {
               sys: {
                 id: 'team-id-3',
@@ -801,6 +807,9 @@ describe('Events Contentful Data Provider', () => {
 
         (contentfulGraphQLResponse.speakersCollection!.items = [
           {
+            sys: {
+              id: 'event-speaker-id-3',
+            },
             team: {
               sys: {
                 id: 'team-id-3',
@@ -833,6 +842,9 @@ describe('Events Contentful Data Provider', () => {
 
         contentfulGraphQLResponse.speakersCollection!.items = [
           {
+            sys: {
+              id: 'event-speaker-id-3',
+            },
             team: null,
             user: {
               __typename: 'Users',
@@ -863,6 +875,9 @@ describe('Events Contentful Data Provider', () => {
         const contentfulGraphQLResponse = getContentfulGraphqlEvent();
         (contentfulGraphQLResponse.speakersCollection!.items = [
           {
+            sys: {
+              id: 'event-speaker-id-3',
+            },
             team: undefined,
             user: {
               __typename: 'ExternalAuthors',
@@ -870,6 +885,9 @@ describe('Events Contentful Data Provider', () => {
             },
           },
           {
+            sys: {
+              id: 'event-speaker-id-4',
+            },
             team: undefined,
             user: {
               __typename: 'Users',
@@ -896,6 +914,7 @@ describe('Events Contentful Data Provider', () => {
         const speakerResult = result!.speakers;
         expect(speakerResult).toEqual([
           {
+            id: 'event-speaker-id-3',
             externalUser: {
               name: 'Jane Doe',
             },

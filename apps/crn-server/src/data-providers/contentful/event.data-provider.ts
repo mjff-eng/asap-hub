@@ -622,11 +622,8 @@ export const parseEventSpeakerExternalUser = (
 
 export const parseGraphQLSpeakers = (speakers: SpeakerItem[]): EventSpeaker[] =>
   (speakers || []).reduce((speakerList: EventSpeaker[], speaker) => {
-    const { team, user } = speaker;
-    // sys.id is queried but absent from the generated type; widen to read it
-    // without regenerating graphql.ts.
-    const speakerId = (speaker as SpeakerItem & { sys?: { id: string } }).sys
-      ?.id;
+    const { sys, team, user } = speaker;
+    const speakerId = sys.id;
 
     if (user?.__typename === 'ExternalAuthors') {
       speakerList.push({

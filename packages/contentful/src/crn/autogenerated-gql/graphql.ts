@@ -28810,6 +28810,7 @@ export type EventsContentFragment = Pick<
   speakersCollection?: Maybe<{
     items: Array<
       Maybe<{
+        sys: Pick<Sys, 'id'>;
         team?: Maybe<
           Pick<Teams, 'displayName' | 'inactiveSince'> & {
             sys: Pick<Sys, 'id'>;
@@ -29282,6 +29283,7 @@ export type FetchEventByIdQuery = {
       speakersCollection?: Maybe<{
         items: Array<
           Maybe<{
+            sys: Pick<Sys, 'id'>;
             team?: Maybe<
               Pick<Teams, 'displayName' | 'inactiveSince'> & {
                 sys: Pick<Sys, 'id'>;
@@ -29918,6 +29920,7 @@ export type FetchEventsQuery = {
             speakersCollection?: Maybe<{
               items: Array<
                 Maybe<{
+                  sys: Pick<Sys, 'id'>;
                   team?: Maybe<
                     Pick<Teams, 'displayName' | 'inactiveSince'> & {
                       sys: Pick<Sys, 'id'>;
@@ -30660,6 +30663,7 @@ export type FetchEventsByUserIdQuery = {
                         speakersCollection?: Maybe<{
                           items: Array<
                             Maybe<{
+                              sys: Pick<Sys, 'id'>;
                               team?: Maybe<
                                 Pick<Teams, 'displayName' | 'inactiveSince'> & {
                                   sys: Pick<Sys, 'id'>;
@@ -31410,6 +31414,7 @@ export type FetchEventsByExternalAuthorIdQuery = {
                         speakersCollection?: Maybe<{
                           items: Array<
                             Maybe<{
+                              sys: Pick<Sys, 'id'>;
                               team?: Maybe<
                                 Pick<Teams, 'displayName' | 'inactiveSince'> & {
                                   sys: Pick<Sys, 'id'>;
@@ -32160,6 +32165,7 @@ export type FetchEventsByTeamIdQuery = {
                         speakersCollection?: Maybe<{
                           items: Array<
                             Maybe<{
+                              sys: Pick<Sys, 'id'>;
                               team?: Maybe<
                                 Pick<Teams, 'displayName' | 'inactiveSince'> & {
                                   sys: Pick<Sys, 'id'>;
@@ -42544,6 +42550,19 @@ export const EventsContentFragmentDoc = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'sys' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          ],
+                        },
+                      },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'team' },

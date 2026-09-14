@@ -308,8 +308,6 @@ export const getContentfulGraphqlEvent = (
   },
   speakersCollection: {
     items: [
-      // sys.id is queried but absent from the generated type (see
-      // parseGraphQLSpeakers); cast to match what the query returns.
       {
         sys: {
           id: 'event-speaker-id-3',
@@ -337,15 +335,7 @@ export const getContentfulGraphqlEvent = (
           },
           avatar: null,
         },
-      } as NonNullable<
-        NonNullable<
-          NonNullable<
-            NonNullable<
-              ContentfulFetchEventsQuery['eventsCollection']
-            >['items'][number]
-          >['speakersCollection']
-        >['items'][number]
-      >,
+      },
     ],
   },
 });
