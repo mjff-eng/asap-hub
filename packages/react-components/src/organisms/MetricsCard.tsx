@@ -133,14 +133,23 @@ export const BooleanStatus: React.FC<{ value: boolean }> = ({ value }) => (
   <>{value ? 'Y' : 'N'}</>
 );
 
+const moodLabelStyles = css({
+  display: 'flex',
+  maxWidth: rem(90),
+});
+
 export const MoodStatus: React.FC<{
   percentage: number | null;
   limitedData?: boolean;
 }> = ({ percentage, limitedData = false }) => {
   const label = getPerformanceMoodLabel(percentage, limitedData);
   return (
-    <Info label={label} icon={getPerformanceMoodIcon(percentage, limitedData)}>
-      {label}
+    <Info
+      label={label}
+      width={120}
+      icon={getPerformanceMoodIcon(percentage, limitedData)}
+    >
+      <span css={moodLabelStyles}>{label}</span>
     </Info>
   );
 };
