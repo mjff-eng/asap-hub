@@ -46,8 +46,8 @@ export const getResearchOutputVersionPublishedReminder =
         documentType: 'Bioinformatics',
         title: 'test-research-output-version',
         publishedAt: '2023-01-01T08:00:00Z',
-        associationType: 'team',
-        associationName: 'Team A',
+        associationType: 'project',
+        associationName: 'Genetic Determinants of Progression',
       },
     };
   };
@@ -65,13 +65,13 @@ export const getResearchOutputPublishedReminder =
         title: researchOutputDataObject.title,
         addedDate: researchOutputDataObject.addedDate,
         statusChangedBy: 'Tom Hardy',
-        associationType: 'team',
-        associationName: 'Team A',
+        associationType: 'project',
+        associationName: 'Genetic Determinants of Progression',
       },
     };
   };
 
-export const getResearchOutputDraftTeamReminder =
+export const getResearchOutputDraftProjectReminder =
   (): ResearchOutputDraftReminder => {
     const researchOutputDataObject = getResearchOutputDataObject();
     return {
@@ -82,8 +82,8 @@ export const getResearchOutputDraftTeamReminder =
         researchOutputId: researchOutputDataObject.id,
         title: researchOutputDataObject.title,
         createdDate: researchOutputDataObject.created,
-        associationName: researchOutputDataObject.teams[0]?.displayName || '',
-        associationType: 'team',
+        associationName: 'Genetic Determinants of Progression',
+        associationType: 'project',
         createdBy: 'Tom Hardy',
       },
     };
@@ -107,7 +107,7 @@ export const getResearchOutputDraftWorkingGroupReminder =
     };
   };
 
-export const getResearchOutputInReviewTeamReminder =
+export const getResearchOutputInReviewProjectReminder =
   (): ResearchOutputInReviewReminder => {
     const researchOutputDataObject = getResearchOutputDataObject();
     return {
@@ -118,8 +118,8 @@ export const getResearchOutputInReviewTeamReminder =
         researchOutputId: researchOutputDataObject.id,
         title: researchOutputDataObject.title,
         createdDate: researchOutputDataObject.created,
-        associationName: researchOutputDataObject.teams[0]?.displayName || '',
-        associationType: 'team',
+        associationName: 'Genetic Determinants of Progression',
+        associationType: 'project',
         documentType: researchOutputDataObject.documentType,
         statusChangedBy: 'Tom Hardy',
       },
@@ -275,7 +275,7 @@ export const getReminderResponse = (): ReminderResponse => {
   return {
     id: 'research-output-published-ec3086d4-aa64-4f30-a0f7-5c5b95ffbcca',
     description:
-      '**Tom Hardy** on team **Team A** published a team Lab Material output: Test Proposal 1234.',
+      '**Tom Hardy** published a project lab material for **Genetic Determinants of Progression**: Test Proposal 1234.',
     entity: 'Research Output',
     href: '/shared-research/ec3086d4-aa64-4f30-a0f7-5c5b95ffbcca',
   };
@@ -534,7 +534,7 @@ export const getTeamProjectManagerResponse =
     },
   });
 
-export const getResearchOutputSwitchToDraftTeamReminder =
+export const getResearchOutputSwitchToDraftProjectReminder =
   (): ResearchOutputSwitchToDraftReminder => {
     const researchOutputDataObject = getResearchOutputDataObject();
     return {
@@ -545,8 +545,8 @@ export const getResearchOutputSwitchToDraftTeamReminder =
         researchOutputId: researchOutputDataObject.id,
         title: researchOutputDataObject.title,
         statusChangedAt: '2021-05-21T13:18:31Z',
-        associationName: researchOutputDataObject.teams[0]?.displayName || '',
-        associationType: 'team',
+        associationName: 'Genetic Determinants of Progression',
+        associationType: 'project',
         documentType: researchOutputDataObject.documentType,
         statusChangedBy: 'Tom Hardy',
       },
