@@ -10,6 +10,7 @@ import { ProjectContentfulDataProvider } from '../../src/data-providers/project.
 import { getEntry } from '../fixtures/contentful.fixtures';
 import {
   getContentfulGraphqlProject,
+  getContentfulGraphqlProjectMembers,
   getContentfulGraphqlProjectsByUserResponse,
   getContentfulGraphqlProjectsResponse,
   getListProjectDataObject,
@@ -56,6 +57,33 @@ describe('Project Data Provider', () => {
       });
 
       expect(await projectDataProvider.fetchById('not-found')).toBeNull();
+    });
+    test('Should fetch remaining member pages when the collection is truncated', async () => {
+      const [member] = getContentfulGraphqlProjectMembers().items;
+      const other = {
+        ...member,
+        sys: { id: '33' },
+        user: { ...member!.user, sys: { id: '12' } },
+      };
+      contentfulGraphqlClientMock.request
+        .mockResolvedValueOnce({
+          projects: {
+            ...getContentfulGraphqlProject(),
+            membersCollection: { total: 2, items: [member] },
+          },
+        })
+        .mockResolvedValueOnce({
+          projects: { membersCollection: { total: 2, items: [other] } },
+        });
+
+      const result = await projectDataProvider.fetchById('id');
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(2);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenLastCalledWith(
+        gp2Contentful.FETCH_PROJECT_MEMBERS,
+        { id: '7', limit: 100, skip: 1 },
+      );
+      expect(result?.members.map(({ userId }) => userId)).toEqual(['11', '12']);
     });
     test('the project is parsed', async () => {
       contentfulGraphqlClientMock.request.mockResolvedValueOnce({
@@ -407,6 +435,50 @@ describe('Project Data Provider', () => {
       skip: 0,
     };
 
+    test('Should fetch remaining member pages for each truncated project', async () => {
+      const [member] = getContentfulGraphqlProjectMembers().items;
+      const response = getContentfulGraphqlProjectsResponse();
+      const project = response.projectsCollection!.items[0]!;
+      contentfulGraphqlClientMock.request
+        .mockResolvedValueOnce({
+          projectsCollection: {
+            ...response.projectsCollection,
+            items: [
+              {
+                ...project,
+                sys: { ...project.sys, id: 'project-1' },
+                membersCollection: { total: 2, items: [member] },
+              },
+            ],
+          },
+        })
+        .mockResolvedValueOnce({
+          projects: {
+            membersCollection: {
+              total: 2,
+              items: [
+                {
+                  ...member,
+                  sys: { id: '33' },
+                  user: { ...member!.user, sys: { id: '12' } },
+                },
+              ],
+            },
+          },
+        });
+
+      const result = await projectDataProvider.fetch({});
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(2);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenLastCalledWith(
+        gp2Contentful.FETCH_PROJECT_MEMBERS,
+        { id: 'project-1', limit: 100, skip: 1 },
+      );
+      expect(result.items[0]?.members.map(({ userId }) => userId)).toEqual([
+        '11',
+        '12',
+      ]);
+    });
     test('Should fetch the project from graphql', async () => {
       const result = await projectDataProviderWithMockServer.fetch(options);
 

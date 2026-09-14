@@ -1,6 +1,7 @@
 import { gp2 as gp2Contentful, GraphQLClient } from '@asap-hub/contentful';
 import { gp2 as gp2Model } from '@asap-hub/model';
 import { WorkingGroupNetworkDataProvider } from './types';
+import { fetchWorkingGroupMembersPage, withAllMembers } from './transformers';
 import {
   GraphQLWorkingGroup,
   parseWorkingGroupToDataObject,
@@ -31,7 +32,14 @@ export class WorkingGroupNetworkContentfulDataProvider
         total: 0,
       };
     }
-    const items = parseWorkingGroupNetworkToDataObject(workingGroupNetwork);
+    const items = await parseWorkingGroupNetworkToDataObject(
+      workingGroupNetwork,
+      (workingGroup) =>
+        withAllMembers(
+          workingGroup,
+          fetchWorkingGroupMembersPage(this.graphQLClient),
+        ),
+    );
     return {
       items,
       total: items.length,
@@ -45,14 +53,23 @@ export type GraphQLWorkingGroupNetwork = NonNullable<
 
 export const parseWorkingGroupNetworkToDataObject = (
   network: NonNullable<GraphQLWorkingGroupNetwork>,
-): gp2Model.WorkingGroupNetworkDataObject[] =>
-  workingGroupNetworkRole.map((role) => ({
-    role,
-    workingGroups:
-      network[`${role}Collection`]?.items
-        .filter(
-          (workingGroup): workingGroup is GraphQLWorkingGroup =>
-            workingGroup !== null,
-        )
-        .map(parseWorkingGroupToDataObject) || [],
-  }));
+  resolveAllMembers: (
+    workingGroup: GraphQLWorkingGroup,
+  ) => Promise<GraphQLWorkingGroup>,
+): Promise<gp2Model.WorkingGroupNetworkDataObject[]> =>
+  Promise.all(
+    workingGroupNetworkRole.map(async (role) => {
+      const workingGroups = await Promise.all(
+        (network[`${role}Collection`]?.items || [])
+          .filter(
+            (workingGroup): workingGroup is GraphQLWorkingGroup =>
+              workingGroup !== null,
+          )
+          .map(resolveAllMembers),
+      );
+      return {
+        role,
+        workingGroups: workingGroups.map(parseWorkingGroupToDataObject),
+      };
+    }),
+  );

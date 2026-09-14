@@ -2,6 +2,29 @@
 
 import { gql } from 'graphql-tag';
 
+export const workingGroupMemberQueryFragment = gql`
+  fragment WorkingGroupMemberData on WorkingGroupMembership {
+    sys {
+      id
+    }
+    role
+    inactiveSinceDate
+    user {
+      sys {
+        id
+      }
+      firstName
+      nickname
+      lastName
+      onboarded
+      alumniSinceDate
+      avatar {
+        url
+      }
+    }
+  }
+`;
+
 export const workingGroupsContentQueryFragment = gql`
   fragment WorkingGroupsContentData on WorkingGroups {
     sys {
@@ -18,27 +41,10 @@ export const workingGroupsContentQueryFragment = gql`
     primaryEmail
     secondaryEmail
     leadingMembers
-    membersCollection(limit: 50) {
+    membersCollection(limit: 100) {
       total
       items {
-        sys {
-          id
-        }
-        role
-        inactiveSinceDate
-        user {
-          sys {
-            id
-          }
-          firstName
-          nickname
-          lastName
-          onboarded
-          alumniSinceDate
-          avatar {
-            url
-          }
-        }
+        ...WorkingGroupMemberData
       }
     }
     milestonesCollection(limit: 10) {
@@ -81,6 +87,7 @@ export const workingGroupsContentQueryFragment = gql`
       }
     }
   }
+  ${workingGroupMemberQueryFragment}
 `;
 
 export const FETCH_WORKING_GROUP_BY_ID = gql`
@@ -102,4 +109,18 @@ export const FETCH_WORKING_GROUPS = gql`
     }
   }
   ${workingGroupsContentQueryFragment}
+`;
+
+export const FETCH_WORKING_GROUP_MEMBERS = gql`
+  query FetchWorkingGroupMembers($id: String!, $limit: Int!, $skip: Int!) {
+    workingGroups(id: $id) {
+      membersCollection(limit: $limit, skip: $skip) {
+        total
+        items {
+          ...WorkingGroupMemberData
+        }
+      }
+    }
+  }
+  ${workingGroupMemberQueryFragment}
 `;

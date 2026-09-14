@@ -16,11 +16,21 @@ import {
 import logger from '../utils/logger';
 import { parseTag, TagItem } from './tag.data-provider';
 import { parseOrcidWorkFromCMS } from './transformers/users';
+import {
+  fetchProjectMembersPage,
+  fetchWorkingGroupMembersPage,
+  memoizeMembersPage,
+  withAllMembers,
+} from './transformers';
 import { UserDataProvider } from './types';
 
 export type UserItem = NonNullable<
   NonNullable<gp2Contentful.FetchUsersQuery['usersCollection']>['items'][number]
 >;
+type MembersPageFetchers = {
+  project: ReturnType<typeof fetchProjectMembersPage>;
+  workingGroup: ReturnType<typeof fetchWorkingGroupMembersPage>;
+};
 
 type OrcidWorkContentful = {
   id: string;
@@ -74,20 +84,135 @@ export class UserContentfulDataProvider implements UserDataProvider {
   }
   async fetchById(id: string) {
     const { users } = await this.fetchUserById(id);
-    return users ? parseUserToDataObject(users) : null;
+    return users
+      ? parseUserToDataObject(
+          await this.withAllMembers(users, this.membersPageFetchers()),
+        )
+      : null;
   }
 
-  private getUserIdFilter = async ({
-    projects,
-    workingGroups,
-    tags,
-    userIds,
-  }: gp2Model.FetchUsersOptions['filter'] = {}): Promise<string[]> => {
+  private membersPageFetchers(): MembersPageFetchers {
+    return {
+      project: memoizeMembersPage(fetchProjectMembersPage(this.graphQLClient)),
+      workingGroup: memoizeMembersPage(
+        fetchWorkingGroupMembersPage(this.graphQLClient),
+      ),
+    };
+  }
+
+  private async withAllMembers(
+    user: UserItem,
+    fetchers: MembersPageFetchers,
+  ): Promise<UserItem> {
+    const { linkedFrom } = user;
+    if (!linkedFrom) {
+      return user;
+    }
+    const [projectMembershipCollection, workingGroupMembershipCollection] =
+      await Promise.all([
+        this.completeProjectMemberships(
+          linkedFrom.projectMembershipCollection,
+          fetchers.project,
+        ),
+        this.completeWorkingGroupMemberships(
+          linkedFrom.workingGroupMembershipCollection,
+          fetchers.workingGroup,
+        ),
+      ]);
+    return {
+      ...user,
+      linkedFrom: {
+        ...linkedFrom,
+        projectMembershipCollection,
+        workingGroupMembershipCollection,
+      },
+    };
+  }
+
+  private async completeProjectMemberships(
+    memberships: LinkedProject,
+    fetchMembersPage: MembersPageFetchers['project'],
+  ) {
+    if (!memberships) {
+      return memberships;
+    }
+    const items = await Promise.all(
+      memberships.items.map(async (membership) => {
+        const projects = membership?.linkedFrom?.projectsCollection;
+        if (!membership || !projects) {
+          return membership;
+        }
+        const projectItems = await Promise.all(
+          projects.items.map((project) =>
+            project ? withAllMembers(project, fetchMembersPage) : project,
+          ),
+        );
+        return {
+          ...membership,
+          linkedFrom: {
+            ...membership.linkedFrom,
+            projectsCollection: { ...projects, items: projectItems },
+          },
+        };
+      }),
+    );
+    return { ...memberships, items };
+  }
+
+  private async completeWorkingGroupMemberships(
+    memberships: LinkedWorkingGroup,
+    fetchMembersPage: MembersPageFetchers['workingGroup'],
+  ) {
+    if (!memberships) {
+      return memberships;
+    }
+    const items = await Promise.all(
+      memberships.items.map(async (membership) => {
+        const workingGroups = membership?.linkedFrom?.workingGroupsCollection;
+        if (!membership || !workingGroups) {
+          return membership;
+        }
+        const workingGroupItems = await Promise.all(
+          workingGroups.items.map((workingGroup) =>
+            workingGroup
+              ? withAllMembers(workingGroup, fetchMembersPage)
+              : workingGroup,
+          ),
+        );
+        return {
+          ...membership,
+          linkedFrom: {
+            ...membership.linkedFrom,
+            workingGroupsCollection: {
+              ...workingGroups,
+              items: workingGroupItems,
+            },
+          },
+        };
+      }),
+    );
+    return { ...memberships, items };
+  }
+
+  private getUserIdFilter = async (
+    {
+      projects,
+      workingGroups,
+      tags,
+      userIds,
+    }: NonNullable<gp2Model.FetchUsersOptions['filter']>,
+    fetchers: MembersPageFetchers,
+  ): Promise<string[]> => {
     const unfilteredUserIds = await Promise.all([
-      getEntityMemberUserIds(projects, this.fetchUsersByProject.bind(this)),
+      getEntityMemberUserIds(
+        projects,
+        this.fetchUsersByProject.bind(this),
+        fetchers.project,
+      ),
       getEntityMemberUserIds(
         workingGroups,
         this.fetchUsersByWorkingGroup.bind(this),
+        fetchers.workingGroup,
       ),
       this.getUsersByTags(tags),
       userIds,
@@ -100,12 +225,11 @@ export class UserContentfulDataProvider implements UserDataProvider {
   };
   async fetch(options: gp2Model.FetchUsersOptions) {
     const { projects, workingGroups, userIds, tags } = options.filter || {};
-    const userIdFilter = await this.getUserIdFilter({
-      projects,
-      workingGroups,
-      userIds,
-      tags,
-    });
+    const fetchers = this.membersPageFetchers();
+    const userIdFilter = await this.getUserIdFilter(
+      { projects, workingGroups, userIds, tags },
+      fetchers,
+    );
     if (
       userIdFilter.length === 0 &&
       (projects?.length || workingGroups?.length || tags?.length)
@@ -115,11 +239,14 @@ export class UserContentfulDataProvider implements UserDataProvider {
     logger.debug(`fetch users ${JSON.stringify(options, undefined, 2)} `);
     const result = await this.fetchUsers(options, userIdFilter);
 
+    const users = await Promise.all(
+      result.items
+        .filter((user: unknown): user is UserItem => user !== null)
+        .map((user) => this.withAllMembers(user, fetchers)),
+    );
     const items = {
       total: result.total,
-      items: result.items
-        .filter((user: unknown): user is UserItem => user !== null)
-        .map(parseUserToDataObject),
+      items: users.map(parseUserToDataObject),
     };
 
     logger.debug(JSON.stringify(items, undefined, 2));
@@ -667,6 +794,9 @@ const parsePositions = (
     }),
   ) || [];
 
+type MemberUserIdItems = {
+  items: Array<{ user?: { sys: { id: string } } | null } | null>;
+};
 const getEntityMemberUserIds = async (
   ids: string[] | undefined,
   queryFetchMemberData: (
@@ -675,16 +805,28 @@ const getEntityMemberUserIds = async (
     | gp2Contentful.FetchUsersByWorkingGroupIdsQuery['workingGroupsCollection']
     | gp2Contentful.FetchUsersByProjectIdsQuery['projectsCollection']
   >,
+  fetchMembersPage: (
+    entityId: string,
+    limit: number,
+    skip: number,
+  ) => Promise<MemberUserIdItems | null | undefined>,
 ) => {
   if (!ids) {
     return [];
   }
   const entities = await queryFetchMemberData(ids);
-  return entities?.items.flatMap(
+  if (!entities) {
+    return [];
+  }
+  const completedEntities = await Promise.all(
+    entities.items.map((entity) =>
+      entity ? withAllMembers(entity, fetchMembersPage) : entity,
+    ),
+  );
+  return completedEntities.flatMap(
     (entity) =>
-      entity?.membersCollection?.items?.map(
-        (member = {}) => member?.user?.sys.id,
-      ) || [],
+      entity?.membersCollection?.items.map((member) => member?.user?.sys.id) ||
+      [],
   );
 };
 

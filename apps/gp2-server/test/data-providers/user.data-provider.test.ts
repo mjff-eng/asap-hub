@@ -61,6 +61,105 @@ describe('User data provider', () => {
       const result = await userDataProvider.fetchById('user-id');
       expect(result).toEqual(getUserDataObject());
     });
+    test('Should not fetch members when the user has no linked entities', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        users: { ...getContentfulGraphqlUser(), linkedFrom: undefined },
+      });
+
+      const result = await userDataProvider.fetchById('user-id');
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(1);
+      expect(result?.projects).toEqual([]);
+      expect(result?.workingGroups).toEqual([]);
+    });
+    test('Should skip memberships and entities that are null or unlinked when completing members', async () => {
+      const user = getContentfulGraphqlUser();
+      const [projectMembership] =
+        user.linkedFrom!.projectMembershipCollection!.items;
+      const [workingGroupMembership] =
+        user.linkedFrom!.workingGroupMembershipCollection!.items;
+      user.linkedFrom!.projectMembershipCollection!.items = [
+        null,
+        { ...projectMembership!, linkedFrom: undefined },
+        {
+          ...projectMembership!,
+          linkedFrom: { projectsCollection: { items: [null] } },
+        },
+      ];
+      user.linkedFrom!.workingGroupMembershipCollection!.items = [
+        null,
+        { ...workingGroupMembership!, linkedFrom: undefined },
+        {
+          ...workingGroupMembership!,
+          linkedFrom: { workingGroupsCollection: { items: [null] } },
+        },
+      ];
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        users: user,
+      });
+
+      const result = await userDataProvider.fetchById('user-id');
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(1);
+      expect(result?.projects).toEqual([]);
+      expect(result?.workingGroups).toEqual([]);
+    });
+    test('Should fetch remaining member pages of the linked projects and working groups', async () => {
+      const user = getContentfulGraphqlUser();
+      const project =
+        user.linkedFrom!.projectMembershipCollection!.items[0]!.linkedFrom!
+          .projectsCollection!.items[0]!;
+      const workingGroup =
+        user.linkedFrom!.workingGroupMembershipCollection!.items[0]!.linkedFrom!
+          .workingGroupsCollection!.items[0]!;
+      project.membersCollection = {
+        ...project.membersCollection!,
+        total: project.membersCollection!.items.length + 1,
+      };
+      workingGroup.membersCollection = {
+        ...workingGroup.membersCollection!,
+        total: workingGroup.membersCollection!.items.length + 1,
+      };
+      const extraMember = (userId: string) => ({
+        sys: { id: `membership-${userId}` },
+        role: 'Contributor',
+        user: { sys: { id: userId }, onboarded: true },
+      });
+      contentfulGraphqlClientMock.request
+        .mockResolvedValueOnce({ users: user })
+        .mockResolvedValueOnce({
+          projects: {
+            membersCollection: { total: 3, items: [extraMember('p-2')] },
+          },
+        })
+        .mockResolvedValueOnce({
+          workingGroups: {
+            membersCollection: { total: 3, items: [extraMember('wg-2')] },
+          },
+        });
+
+      const result = await userDataProvider.fetchById('user-id');
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(3);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+        gp2Contentful.FETCH_PROJECT_MEMBERS,
+        { id: project.sys.id, limit: 100, skip: 2 },
+      );
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+        gp2Contentful.FETCH_WORKING_GROUP_MEMBERS,
+        { id: workingGroup.sys.id, limit: 100, skip: 2 },
+      );
+      expect(result?.projects[0]?.members.map(({ userId }) => userId)).toEqual([
+        ...getUserDataObject().projects[0]!.members.map((m) => m.userId),
+        'p-2',
+      ]);
+      expect(
+        result?.workingGroups[0]?.members.map(({ userId }) => userId),
+      ).toEqual([
+        ...getUserDataObject().workingGroups[0]!.members.map((m) => m.userId),
+        'wg-2',
+      ]);
+    });
 
     test.each(['middleName', 'nickname'] satisfies Array<
       keyof gp2Model.UserDataObject
@@ -1868,6 +1967,176 @@ describe('User data provider', () => {
       });
     });
 
+    test.each([
+      ['a missing collection', { projectsCollection: null }],
+      ['a null entity', { projectsCollection: { total: 1, items: [null] } }],
+    ])(
+      'Should return no users when the project filter yields %s',
+      async (_, response) => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(response);
+
+        const result = await userDataProvider.fetch({
+          take: 10,
+          skip: 0,
+          filter: { projects: ['project-id'] },
+        });
+
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(1);
+        expect(result).toEqual({ total: 0, items: [] });
+      },
+    );
+    test('Should page through working group members when filtering users', async () => {
+      const workingGroupId = 'working-group-id';
+      const response = getContentfulUsersByWorkingGroupIds('user-1');
+      response.workingGroupsCollection.items[0]!.membersCollection.total = 2;
+      contentfulGraphqlClientMock.request
+        .mockResolvedValueOnce(response)
+        .mockResolvedValueOnce({
+          workingGroups: {
+            membersCollection: {
+              total: 2,
+              items: [{ user: { sys: { id: 'user-2' } } }],
+            },
+          },
+        })
+        .mockResolvedValueOnce(getContentfulUsersGraphqlResponse());
+
+      await userDataProvider.fetch({
+        take: 10,
+        skip: 0,
+        filter: { workingGroups: [workingGroupId] },
+      });
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
+        2,
+        gp2Contentful.FETCH_WORKING_GROUP_MEMBERS,
+        { id: workingGroupId, limit: 100, skip: 1 },
+      );
+      expect(contentfulGraphqlClientMock.request).toHaveBeenLastCalledWith(
+        gp2Contentful.FETCH_USERS,
+        expect.objectContaining({
+          where: expect.objectContaining({
+            sys: { id_in: ['user-1', 'user-2'] },
+          }),
+        }),
+      );
+    });
+    test('Should fetch each truncated working group members page once for a page of users', async () => {
+      const makeUser = (id: string) => {
+        const user = getContentfulGraphqlUser();
+        const workingGroup =
+          user.linkedFrom!.workingGroupMembershipCollection!.items[0]!
+            .linkedFrom!.workingGroupsCollection!.items[0]!;
+        workingGroup.membersCollection = {
+          ...workingGroup.membersCollection!,
+          total: workingGroup.membersCollection!.items.length + 1,
+        };
+        return { ...user, sys: { ...user.sys, id } };
+      };
+      contentfulGraphqlClientMock.request
+        .mockResolvedValueOnce({
+          usersCollection: {
+            total: 2,
+            items: [makeUser('user-1'), makeUser('user-2')],
+          },
+        })
+        .mockResolvedValueOnce({
+          workingGroups: {
+            membersCollection: {
+              total: 3,
+              items: [
+                {
+                  sys: { id: 'membership-3' },
+                  role: 'Working group member',
+                  user: { sys: { id: 'user-3' }, onboarded: true },
+                },
+              ],
+            },
+          },
+        });
+
+      const result = await userDataProvider.fetch({ take: 10, skip: 0 });
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(2);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenLastCalledWith(
+        gp2Contentful.FETCH_WORKING_GROUP_MEMBERS,
+        expect.objectContaining({ skip: 2 }),
+      );
+      result.items.forEach((user) => {
+        expect(user.workingGroups[0]?.members.map((m) => m.userId)).toContain(
+          'user-3',
+        );
+      });
+    });
+    test('Should reuse the members page fetched for the filter when completing users', async () => {
+      const user = getContentfulGraphqlUser();
+      const workingGroup =
+        user.linkedFrom!.workingGroupMembershipCollection!.items[0]!.linkedFrom!
+          .workingGroupsCollection!.items[0]!;
+      const workingGroupId = workingGroup.sys.id;
+      const firstPage = workingGroup.membersCollection!.items;
+      workingGroup.membersCollection = {
+        ...workingGroup.membersCollection!,
+        total: firstPage.length + 1,
+      };
+      contentfulGraphqlClientMock.request
+        .mockResolvedValueOnce({
+          workingGroupsCollection: {
+            total: 1,
+            items: [
+              {
+                sys: { id: workingGroupId },
+                membersCollection: {
+                  total: firstPage.length + 1,
+                  items: firstPage.map((member) => ({ user: member!.user })),
+                },
+              },
+            ],
+          },
+        })
+        .mockResolvedValueOnce({
+          workingGroups: {
+            membersCollection: {
+              total: firstPage.length + 1,
+              items: [
+                {
+                  sys: { id: 'membership-extra' },
+                  role: 'Working group member',
+                  user: { sys: { id: 'user-extra' }, onboarded: true },
+                },
+              ],
+            },
+          },
+        })
+        .mockResolvedValueOnce({
+          usersCollection: { total: 1, items: [user] },
+        });
+
+      const result = await userDataProvider.fetch({
+        take: 10,
+        skip: 0,
+        filter: { workingGroups: [workingGroupId] },
+      });
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(3);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
+        2,
+        gp2Contentful.FETCH_WORKING_GROUP_MEMBERS,
+        { id: workingGroupId, limit: 100, skip: firstPage.length },
+      );
+      expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
+        3,
+        gp2Contentful.FETCH_USERS,
+        expect.objectContaining({
+          where: expect.objectContaining({
+            sys: { id_in: expect.arrayContaining(['user-extra']) },
+          }),
+        }),
+      );
+      expect(
+        result.items[0]?.workingGroups[0]?.members.map((m) => m.userId),
+      ).toContain('user-extra');
+    });
     test('Should query with code filters', async () => {
       contentfulGraphqlClientMock.request.mockResolvedValueOnce(
         getContentfulUsersGraphqlResponse(),

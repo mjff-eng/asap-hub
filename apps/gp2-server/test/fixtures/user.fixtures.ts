@@ -545,6 +545,7 @@ export const getContentfulGraphqlUser = (
                 {
                   ...getContentfulGraphqlProjects().items[0]!,
                   membersCollection: {
+                    total: getContentfulGraphqlProjectMembers().items.length,
                     items: getContentfulGraphqlProjectMembers().items,
                   },
                 },
@@ -565,6 +566,8 @@ export const getContentfulGraphqlUser = (
                 {
                   ...getContentfulGraphqlWorkingGroup().items[0]!,
                   membersCollection: {
+                    total:
+                      getContentfulGraphqlWorkingGroupMembers().items.length,
                     items: getContentfulGraphqlWorkingGroupMembers().items,
                   },
                 },
@@ -716,10 +719,10 @@ export const getContentfulUsersByProjectIds = (
     items: [
       {
         sys: {
-          id: user1Id,
+          id: 'project-id',
         },
         membersCollection: {
-          total: 1,
+          total: [user1Id, user2Id].filter(Boolean).length,
           items: [
             user1Id && {
               user: {
@@ -745,10 +748,10 @@ export const getContentfulUsersByWorkingGroupIds = (
     items: [
       {
         sys: {
-          id: user1Id,
+          id: 'working-group-id',
         },
         membersCollection: {
-          total: 1,
+          total: [user1Id, user2Id].filter(Boolean).length,
           items: [
             user1Id && {
               user: {

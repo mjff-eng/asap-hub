@@ -2,6 +2,29 @@
 
 import { gql } from 'graphql-tag';
 
+export const projectMemberQueryFragment = gql`
+  fragment ProjectMemberData on ProjectMembership {
+    sys {
+      id
+    }
+    role
+    inactiveSinceDate
+    user {
+      sys {
+        id
+      }
+      firstName
+      nickname
+      lastName
+      onboarded
+      alumniSinceDate
+      avatar {
+        url
+      }
+    }
+  }
+`;
+
 export const projectsContentQueryFragment = gql`
   fragment ProjectsContentFields on Projects {
     sys {
@@ -32,27 +55,10 @@ export const projectsContentQueryFragment = gql`
     opportunitiesShortText
     opportunitiesLinkName
     opportunitiesLink
-    membersCollection(limit: 50) {
+    membersCollection(limit: 100) {
       total
       items {
-        sys {
-          id
-        }
-        role
-        inactiveSinceDate
-        user {
-          sys {
-            id
-          }
-          firstName
-          nickname
-          lastName
-          onboarded
-          alumniSinceDate
-          avatar {
-            url
-          }
-        }
+        ...ProjectMemberData
       }
     }
     milestonesCollection(limit: 10) {
@@ -86,6 +92,7 @@ export const projectsContentQueryFragment = gql`
       name
     }
   }
+  ${projectMemberQueryFragment}
 `;
 
 export const FETCH_PROJECT_BY_ID = gql`
@@ -130,4 +137,18 @@ export const FETCH_PROJECTS_BY_USER = gql`
     }
   }
   ${projectsContentQueryFragment}
+`;
+
+export const FETCH_PROJECT_MEMBERS = gql`
+  query FetchProjectMembers($id: String!, $limit: Int!, $skip: Int!) {
+    projects(id: $id) {
+      membersCollection(limit: $limit, skip: $skip) {
+        total
+        items {
+          ...ProjectMemberData
+        }
+      }
+    }
+  }
+  ${projectMemberQueryFragment}
 `;
