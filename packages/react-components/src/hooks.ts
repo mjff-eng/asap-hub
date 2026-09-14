@@ -145,3 +145,26 @@ export const useDismiss = (
     };
   }, [enabled, onDismiss, refs]);
 };
+
+const visibleRowsPerSection = 5;
+
+/**
+ * Collapses a section to its first rows and reports what a "Show more" control
+ * needs. Expansion is derived, so a section that shrinks back under the
+ * threshold loses the control rather than keeping a "Show less" that hides
+ * nothing.
+ */
+export const useSectionExpansion = <T>(rows: readonly T[]) => {
+  const [expanded, setExpanded] = useState(false);
+  const canExpand = rows.length > visibleRowsPerSection;
+  const showingAll = expanded && canExpand;
+  const visibleRows = showingAll ? rows : rows.slice(0, visibleRowsPerSection);
+
+  return {
+    canExpand,
+    showingAll,
+    visibleRows,
+    hiddenCount: rows.length - visibleRows.length,
+    toggle: () => setExpanded(!showingAll),
+  };
+};
