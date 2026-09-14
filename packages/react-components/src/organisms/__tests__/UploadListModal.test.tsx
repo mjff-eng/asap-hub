@@ -431,6 +431,18 @@ describe('UploadListModal', () => {
     ).toBeInTheDocument();
   });
 
+  it('Should open an unmatched suggestion link in a new tab', async () => {
+    const { container } = renderModal({ initialSectionsOpen: true });
+
+    await upload(makeFile('teams.csv'), container);
+
+    const link = await screen.findByRole('link', {
+      name: 'Imaging Suggestion',
+    });
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
+  });
+
   it('Should warn instead of showing zeroed counts when no names were found', async () => {
     const { container } = renderModal({
       onUploadList: jest.fn(

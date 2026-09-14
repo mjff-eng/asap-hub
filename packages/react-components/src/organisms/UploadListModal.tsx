@@ -808,6 +808,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
                                     <span css={unmatchedMetaStyles}>
                                       • did you mean{' '}
                                       <Link
+                                        openInNewTab
                                         href={
                                           network({}).teams({}).team({
                                             teamId: suggestion.teamId,
