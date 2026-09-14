@@ -18,11 +18,11 @@ import {
   PageConstraints,
 } from '@asap-hub/react-components';
 import { useCurrentUserCRN, useFlags } from '@asap-hub/react-context';
-import { EventResponse } from '@asap-hub/model';
 import { events, useRouteParams } from '@asap-hub/routing';
 import { Frame, useBackHref } from '@asap-hub/frontend-utils';
 import { useState } from 'react';
 
+import { composeAttendanceRows } from './attendance-rows';
 import { downloadEventSpeakers } from './export';
 import { mapGroupsToSpeakersUpdate } from './map-groups-to-speakers-update';
 import { matchTeamNames } from './match-team-names';
@@ -30,20 +30,11 @@ import { parseTeamRows } from './parse-team-list';
 import {
   useEventById,
   useEventSpeakerGroups,
+  useInterestGroupTeams,
   usePatchEvent,
   useQuietRefreshEventById,
   useTeamsForMatching,
 } from './state';
-
-const mapAttendanceTeams = (attendance: EventResponse['attendance'] = []) =>
-  attendance.map(({ id, team, attended }) => ({
-    attendanceId: id,
-    teamId: team.id,
-    teamName: team.displayName,
-    attended,
-    teamType: team.teamType,
-    isTeamInactive: !!team.inactiveSince,
-  }));
 
 const Event: React.FC = () => {
   const { eventId } = useRouteParams(events({}).event);
@@ -57,6 +48,8 @@ const Event: React.FC = () => {
   const [isEditingSpeakers, setIsEditingSpeakers] = useState(false);
   const patchEvent = usePatchEvent(eventId);
   const fetchTeamsForMatching = useTeamsForMatching();
+  const { teams: interestGroupTeams, resolved: interestGroupResolved } =
+    useInterestGroupTeams(event?.interestGroup?.id);
 
   const hasFinished = useDateHasPassed(
     considerEndedAfter(event?.endDate || ''),
@@ -66,32 +59,22 @@ const Event: React.FC = () => {
     const displayCalendar =
       event.interestGroup === undefined || event.interestGroup.active;
 
-    const teams = mapAttendanceTeams(event.attendance);
-    const teamsTotal = teams.length;
-    const teamsAttended = teams.filter(({ attended }) => attended).length;
+    const teams = composeAttendanceRows(event.attendance, interestGroupTeams);
     const isTechSupport = !!user?.techSupport;
+    const canEditAttendance = isTechSupport && interestGroupResolved;
     const openAttendanceEditor = () => setIsEditingAttendance(true);
     const openSpeakersEditor = () => setIsEditingSpeakers(true);
     const attendance = hasFinished ? (
       <>
         <EventAttendance
-          teamsAttended={teamsAttended}
-          teamsTotal={teamsTotal}
           teams={teams}
-          sinceLastEvent={
-            event.previousEventAttendance && {
-              count:
-                teamsAttended - event.previousEventAttendance.teamsAttended,
-              teamsAttended: event.previousEventAttendance.teamsAttended,
-              teamsTotal: event.previousEventAttendance.teamsTotal,
-            }
-          }
-          onAddAttendance={isTechSupport ? openAttendanceEditor : undefined}
-          onEdit={isTechSupport ? openAttendanceEditor : undefined}
+          interestGroupName={event.interestGroup?.name}
+          onEdit={canEditAttendance ? openAttendanceEditor : undefined}
         />
         {isEditingAttendance && (
           <EditEventAttendanceModal
             teams={teams}
+            interestGroupName={event.interestGroup?.name}
             loadSearchOptions={async () => []}
             onUploadList={async (files: File[]) => {
               const [rows, corpus] = await Promise.all([
