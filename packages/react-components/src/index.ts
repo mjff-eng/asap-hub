@@ -58,6 +58,11 @@ export type { ManuscriptVersionOption } from './templates';
 export type {
   ResearchOutputToast,
   ResearchOutputToastLocationState,
+  TeamAward,
+  TeamCollaborationMetricsProps,
+  TeamEngagementMetricsProps,
+  Metric,
+  MetricsCardProps,
 } from './organisms';
 export * from './colors';
 export { borderWidth } from './form';
@@ -197,6 +202,8 @@ export {
   ManuscriptVersionImportCard,
   MenuHeader,
   MeetingRepAttendanceTable,
+  MetricsCard,
+  MoodStatus,
   NewsCard,
   NewsSection,
   NoEvents,
@@ -249,8 +256,11 @@ export {
   SharingPrelimFindingsTable,
   SpeakerList,
   SsoButtons,
+  TeamAwardMetrics,
   TeamCard,
+  TeamCollaborationMetrics,
   TeamCollaborationTable,
+  TeamEngagementMetrics,
   TeamInterestGroupsTabbedCard,
   TeamLeadershipMetrics,
   TeamMembersSection,

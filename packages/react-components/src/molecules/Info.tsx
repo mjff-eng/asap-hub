@@ -43,6 +43,7 @@ interface InfoProps {
   // Renders the bubble in a portal, for tooltips inside a scrollable area.
   floating?: boolean;
   icon?: ReactNode;
+  label?: string;
 }
 const Info: React.FC<InfoProps> = ({
   children,
@@ -51,6 +52,7 @@ const Info: React.FC<InfoProps> = ({
   background,
   openOnHover = false,
   floating = false,
+  label,
 }) => {
   const [tooltipShown, setTooltipShown] = useState(false);
   const [anchor, setAnchor] = useState<{ left: number; top: number } | null>(
@@ -113,6 +115,7 @@ const Info: React.FC<InfoProps> = ({
     <button
       ref={buttonRef}
       css={buttonStyles}
+      aria-label={label}
       // With hover on, the pointer already opened the tooltip by the time the
       // click lands, so toggling would close it mid-gesture; hovering out,
       // Escape and an outside click are what dismiss it.

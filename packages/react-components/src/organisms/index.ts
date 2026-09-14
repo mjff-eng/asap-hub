@@ -145,9 +145,17 @@ export type {
 export { default as SharedResearchOutputButtons } from './SharedResearchOutputButtons';
 export { default as SharedResearchOutputHeaderCard } from './SharedResearchOutputHeaderCard';
 export { default as SpeakerList } from './SpeakerList';
+export { default as TeamAwardMetrics } from './TeamAwardMetrics';
+export type { TeamAward } from './TeamAwardMetrics';
 export { default as TeamCard } from './TeamCard';
+export { default as TeamCollaborationMetrics } from './TeamCollaborationMetrics';
+export type { TeamCollaborationMetricsProps } from './TeamCollaborationMetrics';
 export { default as TeamCollaborationTable } from './TeamCollaborationTable';
+export { default as TeamEngagementMetrics } from './TeamEngagementMetrics';
+export type { TeamEngagementMetricsProps } from './TeamEngagementMetrics';
 export { default as TeamInterestGroupsTabbedCard } from './TeamInterestGroupsTabbedCard';
+export { default as MetricsCard, MoodStatus } from './MetricsCard';
+export type { Metric, MetricsCardProps } from './MetricsCard';
 export { default as TeamLeadershipMetrics } from './TeamLeadershipMetrics';
 export { default as TeamMembersSection } from './TeamMembersSection';
 export { default as TeamLabsCard } from './TeamLabsCard';
