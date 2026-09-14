@@ -135,7 +135,10 @@ export const BooleanStatus: React.FC<{ value: boolean }> = ({ value }) => (
 
 const moodLabelStyles = css({
   display: 'flex',
-  maxWidth: rem(90),
+  maxWidth: 'unset',
+  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+    maxWidth: rem(90),
+  },
 });
 
 export const MoodStatus: React.FC<{
@@ -146,7 +149,7 @@ export const MoodStatus: React.FC<{
   return (
     <Info
       label={label}
-      width={120}
+      width={180}
       icon={getPerformanceMoodIcon(percentage, limitedData)}
     >
       <span css={moodLabelStyles}>{label}</span>
