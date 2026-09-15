@@ -17,7 +17,7 @@ import { useDateHasPassed } from '../date';
 
 const cardsStyles = css({
   display: 'grid',
-  rowGap: rem(36),
+  rowGap: rem(33),
 });
 
 export const eventMaterialSectionIds: Record<

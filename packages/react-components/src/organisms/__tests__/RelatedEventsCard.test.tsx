@@ -6,7 +6,7 @@ import RelatedEventsCard from '../RelatedEventsCard';
 
 it('renders the related events card with no events message', () => {
   render(<RelatedEventsCard relatedEvents={[]} />);
-  expect(screen.getByRole('heading', { level: 2 }).textContent).toMatch(
+  expect(screen.getByRole('heading', { level: 3 }).textContent).toMatch(
     /Events/i,
   );
   expect(screen.getByText(/No related/i)).toBeInTheDocument();

@@ -72,7 +72,7 @@ const Events: FC<Record<string, never>> = () => {
         }
       />
       <Route
-        path={events({}).event.template}
+        path={`${events({}).event.template}/*`}
         element={
           <Frame title="Event">
             <Event />
