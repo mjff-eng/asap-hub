@@ -6,7 +6,6 @@ export const FETCH_REMINDERS = gql`
   query FetchReminders(
     $researchOutputFilter: ResearchOutputsFilter
     $eventFilter: EventsFilter
-    $userId: String!
     $researchOutputVersionsFilter: ResearchOutputVersionsFilter
     $manuscriptFilter: ManuscriptsFilter
   ) {
@@ -208,6 +207,66 @@ export const FETCH_REMINDERS = gql`
         }
       }
     }
+    researchOutputVersionsCollection(where: $researchOutputVersionsFilter) {
+      items {
+        sys {
+          id
+          publishedAt
+        }
+        linkedFrom {
+          researchOutputsCollection(limit: 1) {
+            items {
+              sys {
+                id
+              }
+              title
+              documentType
+              project {
+                sys {
+                  id
+                }
+                title
+              }
+              teamsCollection(limit: 10) {
+                items {
+                  sys {
+                    id
+                  }
+                  displayName
+                  linkedFrom {
+                    projectMembershipCollection(limit: 1) {
+                      items {
+                        linkedFrom {
+                          projectsCollection(limit: 1) {
+                            items {
+                              sys {
+                                id
+                              }
+                              title
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              workingGroup {
+                sys {
+                  id
+                }
+                title
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const FETCH_REMINDERS_USER = gql`
+  query FetchRemindersUser($userId: String!) {
     users(id: $userId) {
       role
       openScienceTeamMember
@@ -283,61 +342,6 @@ export const FETCH_REMINDERS = gql`
                   title
                   endDate
                 }
-              }
-            }
-          }
-        }
-      }
-    }
-    researchOutputVersionsCollection(where: $researchOutputVersionsFilter) {
-      items {
-        sys {
-          id
-          publishedAt
-        }
-        linkedFrom {
-          researchOutputsCollection(limit: 1) {
-            items {
-              sys {
-                id
-              }
-              title
-              documentType
-              project {
-                sys {
-                  id
-                }
-                title
-              }
-              teamsCollection(limit: 10) {
-                items {
-                  sys {
-                    id
-                  }
-                  displayName
-                  linkedFrom {
-                    projectMembershipCollection(limit: 1) {
-                      items {
-                        linkedFrom {
-                          projectsCollection(limit: 1) {
-                            items {
-                              sys {
-                                id
-                              }
-                              title
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-              workingGroup {
-                sys {
-                  id
-                }
-                title
               }
             }
           }

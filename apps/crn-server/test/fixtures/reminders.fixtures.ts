@@ -31,6 +31,7 @@ import {
   FetchMilestoneReminderProjectsQuery,
   FetchMilestoneRemindersQuery,
   FetchRemindersQuery,
+  FetchRemindersUserQuery,
   FetchTeamProjectManagerQuery,
 } from '@asap-hub/contentful';
 import { getContentfulGraphqlEvent, getEventResponse } from './events.fixtures';
@@ -434,7 +435,7 @@ export const getContentfulReminderResearchOutputVersionCollectionItem =
   };
 
 export const getContentfulReminderUsersContent =
-  (): FetchRemindersQuery['users'] => {
+  (): FetchRemindersUserQuery['users'] => {
     const eventResponse = getEventResponse();
 
     return {

@@ -20,7 +20,7 @@ import {
   getManuscriptStatusUpdatedReminder,
   getManuscriptVersion,
 } from '../../../fixtures/reminders.fixtures';
-import { FetchRemindersQuery } from '@asap-hub/contentful';
+import { FetchRemindersUserQuery } from '@asap-hub/contentful';
 
 describe('Reminders data provider', () => {
   const contentfulGraphqlClientMock = getContentfulGraphqlClientMock();
@@ -80,12 +80,15 @@ describe('Reminders data provider', () => {
     };
     const mockContentfulGraphqlResponse = (
       manuscript: ManuscriptItem | null = getContentfulReminderManuscriptCollectionItem(),
-      user: FetchRemindersQuery['users'] = getContentfulReminderUsersContent(),
+      user: FetchRemindersUserQuery['users'] = getContentfulReminderUsersContent(),
     ) => {
       contentfulGraphqlClientMock.request.mockResolvedValueOnce({
         manuscriptsCollection: {
           items: [manuscript],
         },
+      });
+
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
         users: user,
       });
 
@@ -175,6 +178,8 @@ describe('Reminders data provider', () => {
             manuscriptsCollection: {
               items: [getContentfulReminderManuscriptCollectionItem()],
             },
+          });
+          contentfulGraphqlClientMock.request.mockResolvedValueOnce({
             users: user,
           });
           mockEmptyDiscussionGraphqlResponse();
@@ -317,6 +322,9 @@ describe('Reminders data provider', () => {
           manuscriptsCollection: {
             items: [manuscriptResubmitted],
           },
+        });
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: getContentfulReminderUsersContent(),
         });
 
@@ -1033,6 +1041,8 @@ describe('Reminders data provider', () => {
           manuscriptsCollection: {
             items: [manuscript],
           },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: getContentfulReminderUsersContent(),
         });
         mockEmptyDiscussionGraphqlResponse();
@@ -1074,6 +1084,9 @@ describe('Reminders data provider', () => {
           manuscriptsCollection: {
             items: [manuscript],
           },
+        });
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: getContentfulReminderUsersContent(),
         });
 
@@ -1128,6 +1141,9 @@ describe('Reminders data provider', () => {
           manuscriptsCollection: {
             items: [manuscript],
           },
+        });
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: getContentfulReminderUsersContent(),
         });
 
@@ -1255,6 +1271,9 @@ describe('Reminders data provider', () => {
               manuscriptStatusUpdated,
             ],
           },
+        });
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: getContentfulReminderUsersContent(),
         });
 

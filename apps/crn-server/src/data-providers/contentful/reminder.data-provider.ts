@@ -6,6 +6,7 @@ import {
   FETCH_MILESTONE_REMINDERS,
   FETCH_MILESTONE_REMINDER_PROJECTS,
   FETCH_REMINDERS,
+  FETCH_REMINDERS_USER,
   FETCH_TEAM_PROJECT_MANAGER,
   FetchDiscussionRemindersQuery,
   FetchDiscussionRemindersQueryVariables,
@@ -17,6 +18,8 @@ import {
   FetchMilestoneRemindersQueryVariables,
   FetchRemindersQuery,
   FetchRemindersQueryVariables,
+  FetchRemindersUserQuery,
+  FetchRemindersUserQueryVariables,
   FetchTeamProjectManagerQuery,
   FetchTeamProjectManagerQueryVariables,
   GraphQLClient,
@@ -99,7 +102,7 @@ type ResearchOutputVersionItem = NonNullable<
   NonNullable<ResearchOutputVersionCollection>['items'][number]
 >;
 
-type User = FetchRemindersQuery['users'];
+type User = FetchRemindersUserQuery['users'];
 
 type TruncatableCollection = { total: number; items: unknown[] };
 
@@ -188,18 +191,23 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
     const {
       eventsCollection,
       researchOutputsCollection,
-      users: user,
       researchOutputVersionsCollection,
       manuscriptsCollection,
     } = await this.contentfulClient.request<
       FetchRemindersQuery,
       FetchRemindersQueryVariables
     >(FETCH_REMINDERS, {
-      userId,
       eventFilter,
       researchOutputFilter,
       researchOutputVersionsFilter,
       manuscriptFilter,
+    });
+
+    const { users: user } = await this.contentfulClient.request<
+      FetchRemindersUserQuery,
+      FetchRemindersUserQueryVariables
+    >(FETCH_REMINDERS_USER, {
+      userId,
     });
 
     const [
