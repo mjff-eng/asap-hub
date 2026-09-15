@@ -9,6 +9,7 @@ import {
   EngagementResponse,
   ListEngagementResponse,
 } from '@asap-hub/model';
+import { TeamEngagementMetricsProps } from '@asap-hub/react-components';
 import {
   AnalyticsPerformanceOptions,
   AnalyticsSearchOptions,
@@ -123,14 +124,7 @@ export type TeamEngagementMetricsOptions = {
   teamId: string;
 };
 
-export type TeamEngagementMetrics = {
-  speakerDiversity: number | null;
-  traineePresentations: number | null;
-  meetingRepAttendance: {
-    percentage: number | null;
-    limitedData: boolean;
-  };
-};
+export type TeamEngagementMetrics = TeamEngagementMetricsProps;
 
 export const getTeamEngagementMetrics = async (
   presenterClient: OpensearchClient<EngagementResponse>,
