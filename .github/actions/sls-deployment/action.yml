@@ -113,8 +113,6 @@ runs:
         environment-name: ${{ inputs.environment-name }}
     - name: Cache build typecheck output
       uses: ./.github/actions/cache-unplugged
-      with:
-        environment-name: ${{ inputs.environment-name }}
     - uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.app }}${{ inputs.package-suffix }}-sls-package-${{ inputs.environment-name }}

@@ -270,8 +270,6 @@ jobs:
         uses: ./.github/actions/build-rebuild
       - name: Cache build typecheck output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: Branch
       - name: Check PR Number
         if: ${{ github.event.inputs.pr-number }}
         uses: ./.github/actions/is-number
@@ -318,8 +316,6 @@ jobs:
         uses: ./.github/actions/build-rebuild
       - name: Cache build typecheck output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: Branch
       - name: Check PR Number
         if: ${{ github.event.inputs.pr-number }}
         uses: ./.github/actions/is-number

@@ -1,14 +1,14 @@
 name: 'Cache unplugged'
-description: 'Cache unplugged'
-inputs:
-  environment-name:
-    description: 'The name of the environment to cache'
-    required: true
+description: 'Restore .yarn/unplugged from cache, or run yarn rebuild when the cache is missing'
 runs:
   using: 'composite'
   steps:
-    - uses: actions/cache@v4
+    - id: cache
+      uses: actions/cache@v4
       with:
         path: |
           .yarn/unplugged/
-        key: rebuild-output-${{ inputs.environment-name }}-${{ github.sha }}
+        key: unplugged-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc.yml', '.github/Dockerfile') }}
+    - if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: yarn rebuild

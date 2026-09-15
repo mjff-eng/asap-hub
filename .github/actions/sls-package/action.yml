@@ -108,8 +108,6 @@ runs:
         environment-name: ${{ inputs.environment-name }}
     - name: Cache build output
       uses: ./.github/actions/cache-unplugged
-      with:
-        environment-name: ${{ inputs.environment-name }}
     - name: Cache build definitions
       uses: ./.github/actions/cache-build
       with:

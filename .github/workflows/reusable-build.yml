@@ -87,12 +87,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Re-Build
-        uses: ./.github/actions/build-rebuild
       - name: Cache build output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
 
   transpile:
     needs: [rebuild]
@@ -119,8 +115,6 @@ jobs:
             ${{ runner.os }}-turbo-transpile
       - name: Cache build output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
       - name: Build
         run: |
           yarn build:babel --cache-dir=.turbo --only
@@ -157,8 +151,6 @@ jobs:
             ${{ runner.os }}-turbo-definitions
       - name: Restore
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
       - name: Build
         run: |
           yarn build:typecheck --cache-dir=.turbo --only
@@ -211,8 +203,6 @@ jobs:
             ${{ runner.os }}-turbo-frontend
       - name: Restore .unplugged from cache
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
       - name: Re-Build
         uses: ./.github/actions/build-rebuild
       - name: Restore transpile output
@@ -293,8 +283,6 @@ jobs:
             ${{ runner.os }}-turbo-typecheck
       - name: Restore .unplugged from cache
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
       - name: Restore build:typecheck output from cache
         uses: ./.github/actions/cache-build
         with:
