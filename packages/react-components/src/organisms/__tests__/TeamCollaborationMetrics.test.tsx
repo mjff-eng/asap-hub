@@ -16,7 +16,7 @@ describe('TeamCollaborationMetrics', () => {
     expect(
       screen.getByText('Within Team Co-Production of Research Outputs'),
     ).toBeInTheDocument();
-    expect(getPerformanceMoodIcon).toHaveBeenCalledWith(62, false);
-    expect(getPerformanceMoodLabel).toHaveBeenCalledWith(62, false);
+    expect(getPerformanceMoodIcon).toHaveBeenCalledWith(62, false, undefined);
+    expect(getPerformanceMoodLabel).toHaveBeenCalledWith(62, false, undefined);
   });
 });

@@ -27,7 +27,7 @@ describe('TeamMetricsPage', () => {
     ],
     engagementMetrics: {
       speakerDiversity: 95,
-      traineePresentations: 84,
+      traineePresentations: 60,
       meetingRepAttendance: { percentage: null, limitedData: true },
     },
   };

@@ -6,7 +6,11 @@ import { charcoal, lead, steel } from '../colors';
 import { minusRectIcon, plusRectIcon } from '../icons';
 import { ExpandableText, Info } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
-import { getPerformanceMoodIcon, getPerformanceMoodLabel } from '../utils';
+import {
+  getPerformanceMoodIcon,
+  getPerformanceMoodLabel,
+  PerformanceMoodThresholds,
+} from '../utils';
 
 const gridTemplateColumns = `${rem(24)} minmax(0, 1fr) ${rem(64)}`;
 
@@ -143,13 +147,14 @@ const moodLabelStyles = css({
 export const MoodStatus: React.FC<{
   percentage: number | null;
   limitedData?: boolean;
-}> = ({ percentage, limitedData = false }) => {
-  const label = getPerformanceMoodLabel(percentage, limitedData);
+  thresholds?: PerformanceMoodThresholds;
+}> = ({ percentage, limitedData = false, thresholds }) => {
+  const label = getPerformanceMoodLabel(percentage, limitedData, thresholds);
   return (
     <Info
       label={label}
       width={180}
-      icon={getPerformanceMoodIcon(percentage, limitedData)}
+      icon={getPerformanceMoodIcon(percentage, limitedData, thresholds)}
     >
       <span css={moodLabelStyles}>{label}</span>
     </Info>

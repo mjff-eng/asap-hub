@@ -45,17 +45,28 @@ export const getPerformanceText = (
   return 'Above';
 };
 
+export type PerformanceMoodThresholds = {
+  outstanding: number;
+  adequate: number;
+};
+
+const defaultMoodThresholds: PerformanceMoodThresholds = {
+  outstanding: 90,
+  adequate: 80,
+};
+
 export const getPerformanceMoodIcon = (
   percentage: number | null,
   isLimitedData: boolean = false,
+  thresholds: PerformanceMoodThresholds = defaultMoodThresholds,
 ) => {
   if (isLimitedData || percentage === null) {
     return informationInverseIcon;
   }
-  if (percentage >= 90) {
+  if (percentage >= thresholds.outstanding) {
     return happyFaceIcon;
   }
-  if (percentage >= 80) {
+  if (percentage >= thresholds.adequate) {
     return neutralFaceIcon;
   }
   return sadFaceIcon;
@@ -64,14 +75,15 @@ export const getPerformanceMoodIcon = (
 export const getPerformanceMoodLabel = (
   percentage: number | null,
   isLimitedData: boolean = false,
+  thresholds: PerformanceMoodThresholds = defaultMoodThresholds,
 ) => {
   if (isLimitedData || percentage === null) {
     return 'There is limited available data to calculate this metric at this time.';
   }
-  if (percentage >= 90) {
+  if (percentage >= thresholds.outstanding) {
     return 'Your team is doing an outstanding job! Keep up the good work!';
   }
-  if (percentage >= 80) {
+  if (percentage >= thresholds.adequate) {
     return 'Your team is doing an adequate job for this metric.';
   }
   return 'We encourage your team to work to improve.';

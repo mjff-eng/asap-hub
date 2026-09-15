@@ -43,6 +43,17 @@ describe('getPerformanceText', () => {
     expect(getPerformanceMoodIcon(null, false)).toBe(informationInverseIcon);
   });
 
+  it('getPerformanceMoodIcon grades against custom thresholds', () => {
+    const thresholds = { outstanding: 81, adequate: 50 };
+    expect(getPerformanceMoodIcon(81, false, thresholds)).toBe(happyFaceIcon);
+    expect(getPerformanceMoodIcon(80, false, thresholds)).toBe(neutralFaceIcon);
+    expect(getPerformanceMoodIcon(50, false, thresholds)).toBe(neutralFaceIcon);
+    expect(getPerformanceMoodIcon(49, false, thresholds)).toBe(sadFaceIcon);
+    expect(getPerformanceMoodIcon(null, false, thresholds)).toBe(
+      informationInverseIcon,
+    );
+  });
+
   it('getPerformanceMoodIcon defaults isLimitedData to false', () => {
     expect(getPerformanceMoodIcon(95)).toBe(happyFaceIcon);
     expect(getPerformanceMoodIcon(null)).toBe(informationInverseIcon);
@@ -80,6 +91,22 @@ describe('getPerformanceMoodLabel', () => {
     );
     expect(getPerformanceMoodLabel(80, false)).toBe(
       'Your team is doing an adequate job for this metric.',
+    );
+  });
+
+  it('grades against custom thresholds', () => {
+    const thresholds = { outstanding: 81, adequate: 50 };
+    expect(getPerformanceMoodLabel(81, false, thresholds)).toBe(
+      'Your team is doing an outstanding job! Keep up the good work!',
+    );
+    expect(getPerformanceMoodLabel(80, false, thresholds)).toBe(
+      'Your team is doing an adequate job for this metric.',
+    );
+    expect(getPerformanceMoodLabel(50, false, thresholds)).toBe(
+      'Your team is doing an adequate job for this metric.',
+    );
+    expect(getPerformanceMoodLabel(49, false, thresholds)).toBe(
+      'We encourage your team to work to improve.',
     );
   });
 
