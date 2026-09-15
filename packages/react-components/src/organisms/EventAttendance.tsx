@@ -83,7 +83,9 @@ const sectionHeaderCellStyles = css({
   padding: `${rem(16)} 0 0`,
 });
 
-const sectionLineStyles = css({ fontSize: rem(14), lineHeight: rem(16) });
+// A ratio, not `rem`: line-height in `em` resolves against the element's own
+// font size, so `rem(16)` here would render 16/17 x 14px.
+const sectionLineStyles = css({ fontSize: rem(14), lineHeight: 16 / 14 });
 
 // Declared per line: a `> span` rule on the cell would outrank the separator's
 // own class and bring the bullet back on mobile.

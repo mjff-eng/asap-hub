@@ -27,12 +27,14 @@ const valueStyles = css({
   fontFamily: 'Roboto Slab',
   fontWeight: 'bold',
   fontSize: rem(30),
-  lineHeight: rem(40),
+  // A ratio, not `rem`: line-height in `em` resolves against the element's own
+  // font size, so `rem(40)` here would render 40/17 x 30px.
+  lineHeight: 40 / 30,
   color: neutral1000.rgb,
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     fontFamily: 'inherit',
     fontSize: rem(21),
-    lineHeight: rem(32),
+    lineHeight: 32 / 21,
   },
 });
 
@@ -46,7 +48,7 @@ const dividerStyles = css({
 const captionStyles = css({
   margin: 0,
   fontSize: rem(14),
-  lineHeight: rem(16),
+  lineHeight: 16 / 14,
   color: neutral1000.rgb,
 });
 
