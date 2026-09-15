@@ -10,6 +10,7 @@ import { MetricOption } from '@asap-hub/react-components';
 import { AnalyticsSearchOptionsWithFiltering } from '../utils/analytics-options';
 import { OpensearchClient } from '../utils/opensearch/client';
 import { OpensearchSort, OpensearchSortMap } from '../utils/opensearch/types';
+import { teamMetricsSearchOptions } from '../utils/team-metrics';
 
 export type AnalyticsSearchOptions = {
   metric?: MetricOption;
@@ -106,15 +107,7 @@ export const getTeamLeadershipMetrics = async (
   interestGroupClient: OpensearchClient<AnalyticsTeamLeadershipResponse>,
   { teamId }: TeamLeadershipMetricsOptions,
 ): Promise<TeamLeadershipMetrics> => {
-  const searchOptions = {
-    searchTags: [],
-    searchScope: 'flat' as const,
-    sort: [],
-    currentPage: 0,
-    pageSize: 1,
-    timeRange: 'all' as const,
-    teamId,
-  };
+  const searchOptions = teamMetricsSearchOptions(teamId);
   const [workingGroup, interestGroup] = await Promise.all([
     workingGroupClient.search(searchOptions),
     interestGroupClient.search(searchOptions),
