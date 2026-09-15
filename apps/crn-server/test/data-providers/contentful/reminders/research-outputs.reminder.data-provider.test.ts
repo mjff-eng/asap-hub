@@ -1,4 +1,7 @@
-import { FetchRemindersQuery } from '@asap-hub/contentful';
+import {
+  FetchRemindersQuery,
+  FetchRemindersUserQuery,
+} from '@asap-hub/contentful';
 import { FetchRemindersOptions } from '@asap-hub/model';
 import { DateTime } from 'luxon';
 
@@ -85,10 +88,13 @@ describe('Reminders data provider', () => {
 
       const setContentfulMock = (
         researchOutputsCollection: FetchRemindersQuery['researchOutputsCollection'],
-        users?: FetchRemindersQuery['users'],
+        users?: FetchRemindersUserQuery['users'],
       ) => {
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           researchOutputsCollection,
+        });
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users:
             users === undefined ? getContentfulReminderUsersContent() : users,
         });
@@ -880,6 +886,85 @@ describe('Reminders data provider', () => {
           });
         });
 
+        test('Should fetch the switch to draft reminder for a user-based project output when the user is a member of the project linked directly on the output', async () => {
+          switchToDraftResearchOutputItem!.workingGroup = null;
+          switchToDraftResearchOutputItem!.teamsCollection = { items: [] };
+          switchToDraftResearchOutputItem!.project = {
+            sys: { id: 'direct-project-id' },
+            title: 'Direct Project',
+          };
+          const researchOutputsCollection = {
+            items: [switchToDraftResearchOutputItem],
+          };
+          const usersResponse = getContentfulReminderUsersContent();
+          usersResponse!.linkedFrom!.projectMembershipCollection = {
+            items: [
+              buildProjectMembershipItem('direct-project-id', 'Direct Project'),
+            ],
+          };
+
+          setContentfulMock(researchOutputsCollection, usersResponse);
+          const result = await remindersDataProvider.fetch(
+            fetchRemindersOptions,
+          );
+
+          const expectedReminder =
+            getResearchOutputSwitchToDraftProjectReminder();
+          expectedReminder.data.associationName = 'Direct Project';
+
+          expect(result).toEqual({
+            total: 1,
+            items: [expectedReminder],
+          });
+        });
+
+        test('Should not fetch the switch to draft reminder for a user-based project output when the user is not a member of the project linked directly on the output', async () => {
+          switchToDraftResearchOutputItem!.workingGroup = null;
+          switchToDraftResearchOutputItem!.teamsCollection = { items: [] };
+          switchToDraftResearchOutputItem!.project = {
+            sys: { id: 'direct-project-id' },
+            title: 'Direct Project',
+          };
+          const researchOutputsCollection = {
+            items: [switchToDraftResearchOutputItem],
+          };
+
+          setContentfulMock(researchOutputsCollection);
+          const result = await remindersDataProvider.fetch(
+            fetchRemindersOptions,
+          );
+
+          expect(result).toEqual({ items: [], total: 0 });
+        });
+
+        test('Should fetch the switch to draft reminder for a user-based project output if the user is a Staff even if not a member of the project linked directly on the output', async () => {
+          switchToDraftResearchOutputItem!.workingGroup = null;
+          switchToDraftResearchOutputItem!.teamsCollection = { items: [] };
+          switchToDraftResearchOutputItem!.project = {
+            sys: { id: 'direct-project-id' },
+            title: 'Direct Project',
+          };
+          const researchOutputsCollection = {
+            items: [switchToDraftResearchOutputItem],
+          };
+          const usersResponse = getContentfulReminderUsersContent();
+          usersResponse!.role = 'Staff';
+
+          setContentfulMock(researchOutputsCollection, usersResponse);
+          const result = await remindersDataProvider.fetch(
+            fetchRemindersOptions,
+          );
+
+          const expectedReminder =
+            getResearchOutputSwitchToDraftProjectReminder();
+          expectedReminder.data.associationName = 'Direct Project';
+
+          expect(result).toEqual({
+            total: 1,
+            items: [expectedReminder],
+          });
+        });
+
         test('Should fetch the switch to draft reminder if user is not Staff but is part of the working group associated with the research output', async () => {
           const researchOutputsCollection = {
             items: [switchToDraftResearchOutputItem],
@@ -1368,7 +1453,7 @@ describe('Reminders data provider', () => {
       }: {
         researchOutputVersionsCollection: FetchRemindersQuery['researchOutputVersionsCollection'];
         researchOutputsCollection?: FetchRemindersQuery['researchOutputsCollection'];
-        users?: FetchRemindersQuery['users'];
+        users?: FetchRemindersUserQuery['users'];
       }) => {
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           researchOutputsCollection:
@@ -1376,6 +1461,9 @@ describe('Reminders data provider', () => {
               ? { items: [] }
               : researchOutputsCollection,
           researchOutputVersionsCollection,
+        });
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users:
             users === undefined ? getContentfulReminderUsersContent() : users,
         });

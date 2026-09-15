@@ -21,7 +21,7 @@ import {
   getDiscussionStartedByOpenScienceMemberReminder,
   getDiscussionRepliedToByOpenScienceMemberReminder,
 } from '../../../fixtures/reminders.fixtures';
-import { FetchRemindersQuery } from '@asap-hub/contentful';
+import { FetchRemindersUserQuery } from '@asap-hub/contentful';
 
 describe('Reminders data provider', () => {
   const contentfulGraphqlClientMock = getContentfulGraphqlClientMock();
@@ -81,6 +81,8 @@ describe('Reminders data provider', () => {
         discussion: DiscussionItem | null,
         message: MessageItem | null,
       ) => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({});
+
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: getContentfulReminderUsersContent(),
         });
@@ -131,10 +133,12 @@ describe('Reminders data provider', () => {
 
       const mockContentfulGraphqlResponse = (
         discussion: DiscussionItem | null = getContentfulReminderDiscussionCollectionItem(),
-        user: FetchRemindersQuery['users'] = getContentfulReminderUsersContent(),
+        user: FetchRemindersUserQuery['users'] = getContentfulReminderUsersContent(),
       ) => {
         discussion!.linkedFrom!.manuscriptsCollection!.items[0]!.versionsCollection!.items[0]!.teamsCollection =
           teamsCollection;
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({});
+
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: user,
         });
@@ -307,12 +311,14 @@ describe('Reminders data provider', () => {
       const mockContentfulGraphqlResponse = (
         replyAuthor: 'open-science-member' | 'grantee' = 'grantee',
         message: MessageItem | null = null,
-        user: FetchRemindersQuery['users'] = getContentfulReminderUsersContent(),
+        user: FetchRemindersUserQuery['users'] = getContentfulReminderUsersContent(),
       ): DiscussionRepliedToReminder => {
         const messageItem =
           message || getContentfulReminderMessageCollectionItem();
         messageItem!.linkedFrom!.discussionsCollection!.items[0]!.linkedFrom!.manuscriptsCollection!.items[0]!.versionsCollection!.items[0]!.teamsCollection =
           teamsCollection;
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({});
 
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: user,
@@ -518,8 +524,10 @@ describe('Reminders data provider', () => {
       const mockContentfulGraphqlResponse = (
         discussion: DiscussionItem | null,
         message: MessageItem | null,
-        user: FetchRemindersQuery['users'] = getContentfulReminderUsersContent(),
+        user: FetchRemindersUserQuery['users'] = getContentfulReminderUsersContent(),
       ) => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({});
+
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: user,
         });
@@ -640,6 +648,8 @@ describe('Reminders data provider', () => {
       };
 
       const mockContentfulGraphqlResponse = (discussion: DiscussionItem) => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({});
+
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: getContentfulReminderUsersContent(),
         });

@@ -112,6 +112,10 @@ describe('Reminders data provider', () => {
         },
       });
 
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        users: null,
+      });
+
       mockEmptyDiscussionGraphqlResponse();
 
       const result = await remindersDataProvider.fetch({
@@ -178,6 +182,9 @@ describe('Reminders data provider', () => {
           researchOutputsCollection: {
             items: [switchToDraftResearchOutputItem],
           },
+        });
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users,
         });
 
