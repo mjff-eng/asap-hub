@@ -28,6 +28,11 @@ jest.mock('../api');
 jest.mock('../../network/interest-groups/api');
 jest.mock('../export');
 
+// The upload cases drive the whole page — editor, upload modal, CSV parse,
+// matching, save — and take ~9s each locally, which the 5s default and even the
+// 15s CI budget cannot hold once coverage instrumentation is on.
+jest.setTimeout(30_000);
+
 const mockDownloadEventSpeakers = downloadEventSpeakers as jest.MockedFunction<
   typeof downloadEventSpeakers
 >;
