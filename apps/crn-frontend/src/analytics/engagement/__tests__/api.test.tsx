@@ -719,6 +719,25 @@ describe('getTeamEngagementMetrics', () => {
     });
   });
 
+  it('reports limited speaker data for a team without onboarded members', async () => {
+    presenterSearch.mockResolvedValue(
+      presenterResponse({
+        memberCount: 0,
+        uniqueAllRolesCountPercentage: 0,
+        uniqueKeyPersonnelCountPercentage: 0,
+      }),
+    );
+
+    const result = await getTeamEngagementMetrics(
+      presenterClient,
+      attendanceClient,
+      { teamId: 'team-id-1' },
+    );
+
+    expect(result.speakerDiversity).toBeNull();
+    expect(result.traineePresentations).toBeNull();
+  });
+
   it('keeps the limited data flag of the attendance record', async () => {
     attendanceSearch.mockResolvedValue(
       attendanceResponse({ attendancePercentage: null, limitedData: true }),

@@ -137,12 +137,13 @@ export const getTeamEngagementMetrics = async (
     attendanceClient.search(searchOptions),
   ]);
   const presenterItem = presenters.items[0];
+  const speakers =
+    presenterItem && presenterItem.memberCount > 0 ? presenterItem : undefined;
   const attendanceItem = attendance.items[0];
 
   return {
-    speakerDiversity: presenterItem?.uniqueAllRolesCountPercentage ?? null,
-    traineePresentations:
-      presenterItem?.uniqueKeyPersonnelCountPercentage ?? null,
+    speakerDiversity: speakers?.uniqueAllRolesCountPercentage ?? null,
+    traineePresentations: speakers?.uniqueKeyPersonnelCountPercentage ?? null,
     meetingRepAttendance: {
       percentage: attendanceItem?.attendancePercentage ?? null,
       limitedData: attendanceItem?.limitedData ?? true,
