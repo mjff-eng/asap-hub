@@ -1195,7 +1195,7 @@ __metadata:
     serverless-offline-ssm: "npm:^6.2.0"
     serverless-s3-sync: "npm:3.2.0"
     source-map-support: "npm:0.5.21"
-    stream-json: "npm:1.8.0"
+    stream-json: "npm:3.5.0"
     supertest: "npm:6.3.3"
     ts-node: "npm:10.9.2"
     uuid: "npm:8.3.2"
@@ -39470,19 +39470,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stream-chain@npm:^2.2.5":
-  version: 2.2.5
-  resolution: "stream-chain@npm:2.2.5"
-  checksum: 10/f9c65fe21251106083ca753d8b36f5a35dc426f5cb12851d9a872b6eb69e30ea2c94d87887bfda8c820503e842183812922532fb2adab18d5878d31a4516b956
+"stream-chain@npm:^4.2.5":
+  version: 4.2.5
+  resolution: "stream-chain@npm:4.2.5"
+  checksum: 10/a61dfdab1d07cc582e228afa5e326861f14af4ba46022fb16c28aff2fce64f0b1a431cb253939d619fdf2a7cd5cb829ec26f7966ede70edfb38114374893b088
   languageName: node
   linkType: hard
 
-"stream-json@npm:1.8.0":
-  version: 1.8.0
-  resolution: "stream-json@npm:1.8.0"
+"stream-json@npm:3.5.0":
+  version: 3.5.0
+  resolution: "stream-json@npm:3.5.0"
   dependencies:
-    stream-chain: "npm:^2.2.5"
-  checksum: 10/a1cc448dd71267e1e44bfae4a2b0590690213c97dd6d273cc93e345aa2442b0f959e7a3da6cfa5386a6718e0f8afee0774be5b13126a6e79943499fbc4479f6c
+    stream-chain: "npm:^4.2.5"
+  checksum: 10/7c144ddb42887d2ccbe57c686ccddfefafe97a49c4fe26b78482a56ec2c355e8834e0201dcafefa34f708f6a1e73592d09822a83e4a7617e97da8a7f974c40cf
   languageName: node
   linkType: hard
 
