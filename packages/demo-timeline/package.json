@@ -1,0 +1,26 @@
+{
+  "name": "@asap-hub/demo-timeline",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": "20.x"
+  },
+  "module": "build/index.js",
+  "main": "build-cjs/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build:babel": "../../scripts/build-babel.sh build",
+    "watch:babel": "../../scripts/build-babel.sh watch",
+    "test": "WORKSPACE_PATH=packages/demo-timeline yarn workspace asap-hub test:workspace",
+    "test:coverage": "WORKSPACE_PATH=packages/demo-timeline; yarn workspace asap-hub test:workspace --coverage --coverageDirectory=./$WORKSPACE_PATH/coverage/"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "7.28.6",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@asap-hub/eslint-config-asap-hub": "workspace:*",
+    "@babel/cli": "7.28.6",
+    "@types/jest": "29.5.14"
+  }
+}

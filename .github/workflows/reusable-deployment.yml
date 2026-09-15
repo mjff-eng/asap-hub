@@ -83,6 +83,99 @@ on:
         required: true
 
 jobs:
+  demo-changed:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+    steps:
+      - name: Check for demo changes
+        id: check
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # master pushes always redeploy; PRs are gated on their changed files
+          # via the API, avoiding a slow full-history checkout entirely. A merge
+          # queue entry deploys nothing: the master push behind it does, and
+          # deploying here would put an unrelated CRN or GP2 PR behind a demo
+          # deploy it never asked for
+          case "${{ github.event_name }}" in
+            pull_request) ;;
+            merge_group)
+              echo "changed=false" >> $GITHUB_OUTPUT
+              exit 0
+              ;;
+            *)
+              echo "changed=true" >> $GITHUB_OUTPUT
+              exit 0
+              ;;
+          esac
+          # buffer first: grep -q exiting early would SIGPIPE gh under pipefail
+          if ! FILES=$(gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
+              --paginate --jq '.[].filename'); then
+            echo "::warning::Could not list PR files; assuming demo changed"
+            echo "changed=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          if grep -qE '^(apps/demo-|packages/demo-timeline/)' <<< "$FILES"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+  demo-sls-deploy:
+    needs: [demo-changed]
+    # single shared dev stack: never from the Production phase, and only when
+    # the PR touches demo code (master pushes always redeploy)
+    if: ${{ needs.demo-changed.outputs.changed == 'true' && inputs.environment-name != 'Production' }}
+    concurrency:
+      # one shared stack, so runs queue rather than overlap. They must not
+      # cancel each other either: a cancelled job cancels the caller's
+      # deployment job, which skips verify-development and with it the CRN and
+      # GP2 production deploy that depends on it.
+      group: demo-hub-dev
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/yldio/asap-hub/node-python-sq:92bd02a49ed4fd0c99c86d1966869791bc1530fe
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    environment:
+      name: ${{ inputs.environment-name }}
+      url: ${{ steps.setup.outputs.demo-app-url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup-environment
+        with:
+          environment-name: ${{ inputs.environment-name }}
+      - name: Download demo frontend
+        uses: actions/download-artifact@v4
+        with:
+          name: demo-frontend-${{ inputs.environment-name }}
+          path: apps/demo-frontend/dist
+      - name: Deploy sls for demo
+        uses: ./.github/actions/demo-sls-deployment
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: ${{ steps.setup.outputs.aws-region }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          demo-auth0-audience: ${{ steps.setup.outputs.demo-auth0-audience }}
+          demo-auth0-client-id: ${{ steps.setup.outputs.demo-auth0-client-id }}
+          demo-auth0-domain: ${{ steps.setup.outputs.demo-auth0-domain }}
+          demo-aws-acm-certificate-arn: ${{ steps.setup.outputs.demo-aws-acm-certificate-arn }}
+          demo-cloudfront-public-key-b64: ${{ steps.setup.outputs.demo-cloudfront-public-key-b64 }}
+          demo-email-sender: ${{ steps.setup.outputs.demo-email-sender }}
+          demo-hosted-zone-name: ${{ steps.setup.outputs.demo-hosted-zone-name }}
+          demo-hostname: ${{ steps.setup.outputs.demo-hostname }}
+          demo-ses-region: ${{ steps.setup.outputs.demo-ses-region }}
+          demo-subnet-ids: ${{ steps.setup.outputs.demo-subnet-ids }}
+          demo-vpc-id: ${{ steps.setup.outputs.demo-vpc-id }}
+          environment-name: ${{ inputs.environment-name }}
+          sls-stage: dev
+
   crn-sls-deploy:
     concurrency:
       group: crn-${{ github.head_ref || inputs.environment-name }}
@@ -586,7 +679,7 @@ jobs:
           BASE_PR_APP_DOMAIN: ${{ steps.setup.outputs.crn-base-pr-app-domain }}
           API_URL: ${{ steps.setup.outputs.crn-api-url }}
           AUTH0_ADDITIONAL_CLAIM_DOMAIN: ${{ steps.setup.outputs.crn-auth0-additional-claim-domain }}
-          AUTH0_KEYWORD_REPLACE_MAPPINGS: '{"APPLICATION_NAME":"crn","BASE_PR_APP_DOMAIN":"${{ steps.setup.outputs.crn-base-pr-app-domain }}","API_URL":"${{ steps.setup.outputs.crn-api-url }}","AUTH0_ADDITIONAL_CLAIM_DOMAIN":"${{ steps.setup.outputs.crn-auth0-additional-claim-domain }}","AUTH0_SHARED_SECRET":"${{ secrets.CRN_AUTH0_SHARED_SECRET }}"}'
+          AUTH0_KEYWORD_REPLACE_MAPPINGS: '{"APPLICATION_NAME":"crn","BASE_PR_APP_DOMAIN":"${{ steps.setup.outputs.crn-base-pr-app-domain }}","API_URL":"${{ steps.setup.outputs.crn-api-url }}","AUTH0_ADDITIONAL_CLAIM_DOMAIN":"${{ steps.setup.outputs.crn-auth0-additional-claim-domain }}","AUTH0_SHARED_SECRET":"${{ secrets.CRN_AUTH0_SHARED_SECRET }}","DEMO_CLIENT_ID":""}'
 
       - name: Deploy CRN
         if: ${{ inputs.environment-name=='Development' || inputs.environment-name=='Production' }}
@@ -600,7 +693,9 @@ jobs:
           API_URL: ${{ steps.setup.outputs.crn-api-url }}
           AUTH0_ADDITIONAL_CLAIM_DOMAIN: ${{ steps.setup.outputs.crn-auth0-additional-claim-domain }}
           AUTH0_SHARED_SECRET: ${{ secrets.CRN_AUTH0_SHARED_SECRET }}
-          AUTH0_KEYWORD_REPLACE_MAPPINGS: '{"APPLICATION_NAME":"crn","BASE_PR_APP_DOMAIN":"${{ steps.setup.outputs.crn-base-pr-app-domain }}","API_URL":"${{ steps.setup.outputs.crn-api-url }}","AUTH0_ADDITIONAL_CLAIM_DOMAIN":"${{ steps.setup.outputs.crn-auth0-additional-claim-domain }}","AUTH0_SHARED_SECRET":"${{ secrets.CRN_AUTH0_SHARED_SECRET }}"}'
+          # DEMO_CLIENT_ID exempts the demo hub app (dev tenant only) from the
+          # CRN metadata action; in tenants without it the id never matches
+          AUTH0_KEYWORD_REPLACE_MAPPINGS: '{"APPLICATION_NAME":"crn","BASE_PR_APP_DOMAIN":"${{ steps.setup.outputs.crn-base-pr-app-domain }}","API_URL":"${{ steps.setup.outputs.crn-api-url }}","AUTH0_ADDITIONAL_CLAIM_DOMAIN":"${{ steps.setup.outputs.crn-auth0-additional-claim-domain }}","AUTH0_SHARED_SECRET":"${{ secrets.CRN_AUTH0_SHARED_SECRET }}","DEMO_CLIENT_ID":"${{ steps.setup.outputs.demo-auth0-client-id }}"}'
 
       - name: Deploy GP2 PR
         if: ${{ inputs.environment-name == 'Branch' && steps.setup.outputs.auth0-label == 'true' }}
@@ -614,7 +709,7 @@ jobs:
           BASE_PR_APP_DOMAIN: ${{ steps.setup.outputs.gp2-base-pr-app-domain }}
           API_URL: ${{ steps.setup.outputs.gp2-api-url }}
           AUTH0_ADDITIONAL_CLAIM_DOMAIN: ${{ steps.setup.outputs.gp2-auth0-additional-claim-domain }}
-          AUTH0_KEYWORD_REPLACE_MAPPINGS: '{"APPLICATION_NAME":"gp2","BASE_PR_APP_DOMAIN":"${{ steps.setup.outputs.gp2-base-pr-app-domain }}","API_URL":"${{ steps.setup.outputs.gp2-api-url }}","AUTH0_ADDITIONAL_CLAIM_DOMAIN":"${{ steps.setup.outputs.gp2-auth0-additional-claim-domain }}","AUTH0_SHARED_SECRET":"${{ secrets.GP2_AUTH0_SHARED_SECRET }}"}'
+          AUTH0_KEYWORD_REPLACE_MAPPINGS: '{"APPLICATION_NAME":"gp2","BASE_PR_APP_DOMAIN":"${{ steps.setup.outputs.gp2-base-pr-app-domain }}","API_URL":"${{ steps.setup.outputs.gp2-api-url }}","AUTH0_ADDITIONAL_CLAIM_DOMAIN":"${{ steps.setup.outputs.gp2-auth0-additional-claim-domain }}","AUTH0_SHARED_SECRET":"${{ secrets.GP2_AUTH0_SHARED_SECRET }}","DEMO_CLIENT_ID":""}'
 
       - name: Deploy GP2
         if: ${{ inputs.environment-name=='Development' || inputs.environment-name=='Production' }}
@@ -628,7 +723,7 @@ jobs:
           API_URL: ${{ steps.setup.outputs.gp2-api-url }}
           AUTH0_ADDITIONAL_CLAIM_DOMAIN: ${{ steps.setup.outputs.gp2-auth0-additional-claim-domain }}
           AUTH0_SHARED_SECRET: ${{ secrets.GP2_AUTH0_SHARED_SECRET }}
-          AUTH0_KEYWORD_REPLACE_MAPPINGS: '{"APPLICATION_NAME":"gp2","BASE_PR_APP_DOMAIN":"${{ steps.setup.outputs.gp2-base-pr-app-domain }}","API_URL":"${{ steps.setup.outputs.gp2-api-url }}","AUTH0_ADDITIONAL_CLAIM_DOMAIN":"${{ steps.setup.outputs.gp2-auth0-additional-claim-domain }}","AUTH0_SHARED_SECRET":"${{ secrets.GP2_AUTH0_SHARED_SECRET }}"}'
+          AUTH0_KEYWORD_REPLACE_MAPPINGS: '{"APPLICATION_NAME":"gp2","BASE_PR_APP_DOMAIN":"${{ steps.setup.outputs.gp2-base-pr-app-domain }}","API_URL":"${{ steps.setup.outputs.gp2-api-url }}","AUTH0_ADDITIONAL_CLAIM_DOMAIN":"${{ steps.setup.outputs.gp2-auth0-additional-claim-domain }}","AUTH0_SHARED_SECRET":"${{ secrets.GP2_AUTH0_SHARED_SECRET }}","DEMO_CLIENT_ID":""}'
 
   postmark-templates:
     if: ${{ inputs.environment-name != 'Branch' || contains(github.event.pull_request.labels.*.name, 'postmark-templates-update')}}

@@ -210,8 +210,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      # Three dots, so this is what the branch changed since it diverged rather
+      # than everything that differs from master. With two dots a file master
+      # has deleted reads as an addition here, and it is gone from the merge
+      # commit that is checked out, so jscpd fails on a path that is not there.
+      # The existence filter keeps that class of mismatch from failing the job.
       - name: Run copy-paste detection
-        run: git diff --name-only --diff-filter=d origin/master origin/${GITHUB_HEAD_REF} | xargs yarn jscpd
+        run: |
+          git diff --name-only --diff-filter=d "origin/master...origin/${GITHUB_HEAD_REF}" \
+            | while read -r file; do
+                if [ -f "$file" ]; then printf '%s\n' "$file"; fi
+              done \
+            | xargs -r yarn jscpd
 
   integration-test:
     if: false

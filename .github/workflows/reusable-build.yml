@@ -77,6 +77,46 @@ on:
         required: true
 
 jobs:
+  demo-changed:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+    steps:
+      - name: Check for demo changes
+        id: check
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # master pushes always redeploy; PRs are gated on their changed files
+          # via the API, avoiding a slow full-history checkout entirely. A merge
+          # queue entry deploys nothing: the master push behind it does, and
+          # deploying here would put an unrelated CRN or GP2 PR behind a demo
+          # deploy it never asked for
+          case "${{ github.event_name }}" in
+            pull_request) ;;
+            merge_group)
+              echo "changed=false" >> $GITHUB_OUTPUT
+              exit 0
+              ;;
+            *)
+              echo "changed=true" >> $GITHUB_OUTPUT
+              exit 0
+              ;;
+          esac
+          # buffer first: grep -q exiting early would SIGPIPE gh under pipefail
+          if ! FILES=$(gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
+              --paginate --jq '.[].filename'); then
+            echo "::warning::Could not list PR files; assuming demo changed"
+            echo "changed=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          if grep -qE '^(apps/demo-|packages/demo-timeline/)' <<< "$FILES"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
   rebuild:
     runs-on: ubuntu-latest
     container:
@@ -501,3 +541,100 @@ jobs:
           ses-region: ${{ steps.setup.outputs.gp2-ses-region }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
           sls-stage: ${{ steps.setup.outputs.sls-stage}}
+
+  demo-frontend:
+    needs: [demo-changed, definitions, transpile]
+    if: ${{ needs.demo-changed.outputs.changed == 'true' && inputs.environment-name != 'Production' }}
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/yldio/asap-hub/node-python-sq:92bd02a49ed4fd0c99c86d1966869791bc1530fe
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup-environment
+        with:
+          environment-name: ${{ inputs.environment-name }}
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-demo-frontend-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-demo-frontend
+      - name: Restore .unplugged from cache
+        uses: ./.github/actions/cache-unplugged
+        with:
+          environment-name: ${{ inputs.environment-name }}
+      - name: Re-Build
+        uses: ./.github/actions/build-rebuild
+      - name: Restore transpile output
+        uses: ./.github/actions/cache-build
+        with:
+          cache-prefix: ${{ steps.setup.outputs.cache-prefix-transpile }}
+          environment-name: ${{ inputs.environment-name }}
+      - name: Restore build typecheck output
+        uses: ./.github/actions/cache-build
+        with:
+          cache-prefix: ${{ steps.setup.outputs.cache-prefix-definitions }}
+          environment-name: ${{ inputs.environment-name }}
+      - name: Build
+        env:
+          # same-origin behind the demo CloudFront distribution, so no base url
+          VITE_APP_DEMO_API_BASE_URL: ''
+          VITE_APP_DEMO_AUTH0_AUDIENCE: ${{ steps.setup.outputs.demo-auth0-audience }}
+          VITE_APP_DEMO_AUTH0_CLIENT_ID: ${{ steps.setup.outputs.demo-auth0-client-id }}
+          VITE_APP_DEMO_AUTH0_DOMAIN: ${{ steps.setup.outputs.demo-auth0-domain }}
+          VITE_APP_ENVIRONMENT: ${{ steps.setup.outputs.react-app-environment }}
+          VITE_APP_RELEASE: ${{ steps.setup.outputs.app-release }}
+        run: |
+          yarn turbo build --filter=@asap-hub/demo-frontend --cache-dir=.turbo
+      - name: Demo frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-frontend-${{ inputs.environment-name }}
+          path: apps/demo-frontend/dist
+          retention-days: 1
+          overwrite: true
+
+  demo-sls-package:
+    needs: [demo-changed, definitions, transpile, rebuild]
+    if: ${{ needs.demo-changed.outputs.changed == 'true' && inputs.environment-name != 'Production' }}
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/yldio/asap-hub/node-python-sq:92bd02a49ed4fd0c99c86d1966869791bc1530fe
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    environment: ${{ inputs.environment-name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup-environment
+        with:
+          environment-name: ${{ inputs.environment-name }}
+      - name: Package sls for demo
+        uses: ./.github/actions/demo-sls-package
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: ${{ steps.setup.outputs.aws-region }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          demo-auth0-audience: ${{ steps.setup.outputs.demo-auth0-audience }}
+          demo-auth0-client-id: ${{ steps.setup.outputs.demo-auth0-client-id }}
+          demo-auth0-domain: ${{ steps.setup.outputs.demo-auth0-domain }}
+          demo-aws-acm-certificate-arn: ${{ steps.setup.outputs.demo-aws-acm-certificate-arn }}
+          demo-cloudfront-public-key-b64: ${{ steps.setup.outputs.demo-cloudfront-public-key-b64 }}
+          demo-email-sender: ${{ steps.setup.outputs.demo-email-sender }}
+          demo-hosted-zone-name: ${{ steps.setup.outputs.demo-hosted-zone-name }}
+          demo-hostname: ${{ steps.setup.outputs.demo-hostname }}
+          demo-ses-region: ${{ steps.setup.outputs.demo-ses-region }}
+          demo-subnet-ids: ${{ steps.setup.outputs.demo-subnet-ids }}
+          demo-vpc-id: ${{ steps.setup.outputs.demo-vpc-id }}
+          environment-name: ${{ inputs.environment-name }}
+          sls-stage: dev
