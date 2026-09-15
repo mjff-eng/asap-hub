@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { StaticRouter } from 'react-router';
 
-import { silver } from '../../colors';
+import { steel } from '../../colors';
 import EditEventAttendanceModal from '../EditEventAttendanceModal';
 import { EventAttendanceTeam } from '../EventAttendance';
 
@@ -13,6 +13,7 @@ const teams: EventAttendanceTeam[] = [
     teamName: 'Team Alpha',
     attended: true,
     teamType: 'Discovery Team',
+    isFromInterestGroup: true,
   },
   {
     teamId: 't2',
@@ -33,32 +34,12 @@ const loadSearchOptions = jest.fn(async () => [
     value: 'searched-group-1',
     label: 'Searched Group',
     optionType: 'interestGroup' as const,
-    teams: [{ teamId: 'sgt-1', teamName: 'Group Search Team', attended: true }],
+    teams: [
+      { teamId: 'sgt-1', teamName: 'Group Search Team', attended: true },
+      { teamId: 'sgt-2', teamName: 'Other Group Team', attended: true },
+    ],
   },
 ]);
-
-const onSelectInterestGroup = jest.fn(async (interestGroupId: string) => {
-  if (interestGroupId === 'ig2') {
-    return [
-      { teamId: 'shared', teamName: 'Shared Team', attended: true },
-      { teamId: 'only2', teamName: 'Only Two', attended: true },
-    ];
-  }
-  if (interestGroupId === 'ig3') {
-    return [
-      { teamId: 'shared', teamName: 'Shared Team', attended: true },
-      { teamId: 'only3', teamName: 'Only Three', attended: true },
-    ];
-  }
-  return [
-    {
-      teamId: 'ig-team-1',
-      teamName: 'Group Team',
-      attended: true,
-      teamType: 'Discovery Team' as const,
-    },
-  ];
-});
 
 const onUploadList = jest.fn(async () => ({
   matched: [
@@ -81,11 +62,10 @@ const renderModal = (
     <StaticRouter location="/">
       <EditEventAttendanceModal
         loadSearchOptions={loadSearchOptions}
-        onSelectInterestGroup={onSelectInterestGroup}
         onUploadList={onUploadList}
         onSave={onSave}
         onDismiss={onDismiss}
-        interestGroups={[{ id: 'ig1', name: 'Alpha Group' }]}
+        interestGroupName="Alpha Group"
         teams={teams}
         {...overrides}
       />
@@ -212,82 +192,157 @@ describe('EditEventAttendanceModal', () => {
     expect(screen.getByText('1 Expected')).toBeInTheDocument();
   });
 
-  it('Should collapse the list past ten teams and expand via "Show more"', async () => {
-    const manyTeams: EventAttendanceTeam[] = Array.from(
-      { length: 12 },
-      (_, index) => ({
-        teamId: `t${index}`,
-        teamName: `Team ${index}`,
-        attended: true,
-      }),
+  it('Should split the rows into an interest-group and an additional section', () => {
+    renderModal();
+
+    expect(screen.getByText('From Alpha Group (1)')).toBeInTheDocument();
+    expect(screen.getByText('Additional teams (1)')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Added automatically because this group is hosting. These cannot be removed.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('Should open a team in a new tab, so unsaved rows survive', () => {
+    renderModal();
+
+    expect(screen.getByRole('link', { name: 'Team Alpha' })).toHaveAttribute(
+      'target',
+      '_blank',
     );
-    renderModal({ teams: manyTeams });
+  });
+
+  it('Should title the interest-group section generically without a group name', () => {
+    renderModal({ interestGroupName: undefined });
+
+    expect(screen.getByText('From interest group (1)')).toBeInTheDocument();
+  });
+
+  it('Should render only the additional section when no row came from the group', () => {
+    renderModal({
+      teams: [{ teamId: 't2', teamName: 'Team Beta', attended: false }],
+    });
+
+    expect(screen.queryByText(/^From /)).not.toBeInTheDocument();
+    expect(screen.getByText('Additional teams (1)')).toBeInTheDocument();
+  });
+
+  it('Should lock interest-group rows while keeping their toggle usable', async () => {
+    renderModal();
+
+    expect(
+      screen.queryByRole('button', { name: 'Remove Team Alpha' }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Locked' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Remove Team Beta' }),
+    ).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('checkbox', { name: 'Team Alpha attendance' }),
+    );
+
+    expect(
+      screen.getByRole('checkbox', { name: 'Team Alpha attendance' }),
+    ).not.toBeChecked();
+    expect(screen.getByText('0 Attended')).toBeInTheDocument();
+  });
+
+  it('Should collapse each section past five teams and expand them independently', async () => {
+    const sectionTeams = (
+      prefix: string,
+      count: number,
+      isFromInterestGroup: boolean,
+    ): EventAttendanceTeam[] =>
+      Array.from({ length: count }, (_, index) => ({
+        teamId: `${prefix}${index + 1}`,
+        teamName: `${prefix} ${index + 1}`,
+        attended: true,
+        isFromInterestGroup,
+      }));
+    renderModal({
+      teams: [
+        ...sectionTeams('Group', 7, true),
+        ...sectionTeams('Extra', 6, false),
+      ],
+    });
 
     expect(screen.getAllByRole('listitem')).toHaveLength(10);
     expect(
-      screen.queryByRole('link', { name: 'Team 11' }),
+      screen.queryByRole('link', { name: 'Group 6' }),
     ).not.toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: 'Show 2 more' }));
 
-    expect(screen.getAllByRole('listitem')).toHaveLength(12);
-    expect(screen.getByRole('link', { name: 'Team 11' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Group 7' })).toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: /Show .* more/ }),
+      screen.queryByRole('link', { name: 'Extra 6' }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Show less' }));
+
+    expect(
+      screen.queryByRole('link', { name: 'Group 7' }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Show 1 more' }));
+
+    expect(screen.getByRole('link', { name: 'Extra 6' })).toBeInTheDocument();
+  });
+
+  it('Should divide a row from whatever follows it, and nothing else', () => {
+    const divider = `1px solid ${steel.rgb}`;
+    const row = (name: string) =>
+      screen.getByRole('link', { name }).closest('[role="listitem"]');
+    const { unmount } = renderModal();
+
+    expect(row('Team Beta')).not.toHaveStyleRule('border-bottom', divider);
+    unmount();
+
+    // The modal seeds its rows from the prop once, so this needs a fresh render.
+    renderModal({
+      teams: Array.from({ length: 6 }, (_, index) => ({
+        teamId: `t${index + 1}`,
+        teamName: `Team ${index + 1}`,
+        attended: true,
+      })),
+    });
+    expect(row('Team 5')).toHaveStyleRule('border-bottom', divider);
+  });
+
+  it('Should drop the show-more control once a section shrinks below it', async () => {
+    renderModal({
+      teams: Array.from({ length: 6 }, (_, index) => ({
+        teamId: `t${index + 1}`,
+        teamName: `Team ${index + 1}`,
+        attended: true,
+      })),
+    });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Show 1 more' }));
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Team 6' }),
+    );
+
+    expect(
+      screen.queryByRole('button', { name: /Show (less|\d+ more)/ }),
     ).not.toBeInTheDocument();
   });
 
-  it('Should remove a group-added team (not tracked as manual)', async () => {
-    renderModal({
-      teams: [],
-      interestGroups: [{ id: 'ig2', name: 'Group Two' }],
-    });
-
-    await userEvent.click(screen.getByRole('button', { name: /Group Two/ }));
-    await screen.findByRole('link', { name: 'Only Two' });
+  it('Should mark locked rows attended along with the rest', async () => {
+    renderModal();
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Remove Only Two' }),
+      screen.getByRole('button', { name: 'Mark All Attended' }),
     );
 
     expect(
-      screen.queryByRole('link', { name: 'Only Two' }),
-    ).not.toBeInTheDocument();
-  });
-
-  it('Should let a group be re-added after all its teams are removed', async () => {
-    renderModal({
-      teams: [],
-      interestGroups: [{ id: 'ig2', name: 'Group Two' }],
-    });
-
-    await userEvent.click(screen.getByRole('button', { name: /Group Two/ }));
-    await screen.findByRole('link', { name: 'Only Two' });
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Remove Shared Team' }),
-    );
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Remove Only Two' }),
-    );
-
-    // The group reverted to addable, so clicking it adds its teams again.
-    await userEvent.click(screen.getByRole('button', { name: /Group Two/ }));
-
-    expect(onSelectInterestGroup).toHaveBeenCalledTimes(2);
+      screen.getByRole('checkbox', { name: 'Team Alpha attendance' }),
+    ).toBeChecked();
     expect(
-      await screen.findByRole('link', { name: 'Only Two' }),
-    ).toBeInTheDocument();
-  });
-
-  it('Should add all teams from an interest group', async () => {
-    renderModal({ teams: [] });
-
-    await userEvent.click(screen.getByRole('button', { name: /Alpha Group/ }));
-
-    expect(onSelectInterestGroup).toHaveBeenCalledWith('ig1');
-    expect(
-      await screen.findByRole('link', { name: 'Group Team' }),
-    ).toBeInTheDocument();
+      screen.getByRole('checkbox', { name: 'Team Beta attendance' }),
+    ).toBeChecked();
   });
 
   it('Should add a team from the search field', async () => {
@@ -317,6 +372,7 @@ describe('EditEventAttendanceModal', () => {
     renderModal({
       teams: [
         { teamId: 'sgt-1', teamName: 'Group Search Team', attended: true },
+        { teamId: 'sgt-2', teamName: 'Other Group Team', attended: true },
       ],
     });
 
@@ -325,6 +381,18 @@ describe('EditEventAttendanceModal', () => {
     expect(
       await screen.findByText('• all teams already added'),
     ).toBeInTheDocument();
+  });
+
+  it('Should count only what a partly-added group would add', async () => {
+    renderModal({
+      teams: [
+        { teamId: 'sgt-1', teamName: 'Group Search Team', attended: true },
+      ],
+    });
+
+    await userEvent.type(screen.getByRole('combobox'), 'Sea');
+
+    expect(await screen.findByText('• adds 1 team')).toBeInTheDocument();
   });
 
   it('Should show a no-matches message when the search returns nothing', async () => {
@@ -357,92 +425,6 @@ describe('EditEventAttendanceModal', () => {
       screen.getByText('Search for a team or interest group to add…'),
     ).toBeInTheDocument();
     expect(screen.getByText('Search team or group…')).toBeInTheDocument();
-  });
-
-  it('Should toggle an interest group on and off', async () => {
-    renderModal({
-      teams: [],
-      interestGroups: [{ id: 'ig2', name: 'Group Two' }],
-    });
-
-    await userEvent.click(screen.getByRole('button', { name: /Group Two/ }));
-    expect(
-      await screen.findByRole('link', { name: 'Only Two' }),
-    ).toBeInTheDocument();
-
-    await userEvent.click(screen.getByRole('button', { name: /Group Two/ }));
-    await waitFor(() =>
-      expect(
-        screen.queryByRole('link', { name: 'Only Two' }),
-      ).not.toBeInTheDocument(),
-    );
-  });
-
-  it('Should keep shared teams when one of two groups is toggled off', async () => {
-    renderModal({
-      teams: [],
-      interestGroups: [
-        { id: 'ig2', name: 'Group Two' },
-        { id: 'ig3', name: 'Group Three' },
-      ],
-    });
-
-    await userEvent.click(screen.getByRole('button', { name: /Group Two/ }));
-    await screen.findByRole('link', { name: 'Only Two' });
-    await userEvent.click(screen.getByRole('button', { name: /Group Three/ }));
-    await screen.findByRole('link', { name: 'Only Three' });
-
-    await userEvent.click(screen.getByRole('button', { name: /Group Two/ }));
-
-    await waitFor(() =>
-      expect(
-        screen.queryByRole('link', { name: 'Only Two' }),
-      ).not.toBeInTheDocument(),
-    );
-    expect(
-      screen.getByRole('link', { name: 'Shared Team' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: 'Only Three' }),
-    ).toBeInTheDocument();
-  });
-
-  it('Should keep a manually added team when a group is toggled off', async () => {
-    renderModal({
-      teams: [{ teamId: 'shared', teamName: 'Shared Team', attended: true }],
-      interestGroups: [{ id: 'ig2', name: 'Group Two' }],
-    });
-
-    await userEvent.click(screen.getByRole('button', { name: /Group Two/ }));
-    await screen.findByRole('link', { name: 'Only Two' });
-
-    await userEvent.click(screen.getByRole('button', { name: /Group Two/ }));
-
-    await waitFor(() =>
-      expect(
-        screen.queryByRole('link', { name: 'Only Two' }),
-      ).not.toBeInTheDocument(),
-    );
-    // 'Shared Team' was seeded (manual), so toggling the group off keeps it.
-    expect(
-      screen.getByRole('link', { name: 'Shared Team' }),
-    ).toBeInTheDocument();
-  });
-
-  it('Should render every interest group when there are more than three', () => {
-    renderModal({
-      teams: [],
-      interestGroups: [
-        { id: 'ig1', name: 'Group One' },
-        { id: 'ig2', name: 'Group Two' },
-        { id: 'ig3', name: 'Group Three' },
-        { id: 'ig4', name: 'Group Four' },
-      ],
-    });
-
-    expect(
-      screen.getByRole('button', { name: /Group Four/ }),
-    ).toBeInTheDocument();
   });
 
   it('Should open the upload list modal when the upload button is clicked', async () => {
@@ -629,14 +611,19 @@ describe('EditEventAttendanceModal', () => {
 
   it('Should not add a team that is already in the list', async () => {
     renderModal({
-      teams: [{ teamId: 'ig-team-1', teamName: 'Group Team', attended: false }],
+      teams: [
+        { teamId: 'sgt-1', teamName: 'Group Search Team', attended: false },
+      ],
     });
 
-    await userEvent.click(screen.getByRole('button', { name: /Alpha Group/ }));
+    await userEvent.type(screen.getByRole('combobox'), 'Sea');
+    await userEvent.click(await screen.findByText('Searched Group'));
 
-    await waitFor(() => expect(onSelectInterestGroup).toHaveBeenCalled());
-    expect(screen.getAllByRole('link', { name: 'Group Team' })).toHaveLength(1);
-    expect(screen.getByText('1 Expected')).toBeInTheDocument();
+    expect(
+      screen.getAllByRole('link', { name: 'Group Search Team' }),
+    ).toHaveLength(1);
+    // The row it did not have is added; the one it had is not duplicated.
+    expect(screen.getByText('2 Expected')).toBeInTheDocument();
   });
 
   it('Should call onSave with the current teams', async () => {
@@ -746,31 +733,15 @@ describe('EditEventAttendanceModal', () => {
     expect(onDismiss).not.toHaveBeenCalled();
   });
 
-  it('Should hide the optional group and upload sections when their props are absent', () => {
-    renderModal({
-      teams: [],
-      interestGroups: [],
-      onSelectInterestGroup: undefined,
-      onUploadList: undefined,
-    });
+  it('Should hide the upload section when its prop is absent', () => {
+    renderModal({ teams: [], onUploadList: undefined });
 
-    expect(
-      screen.queryByRole('button', { name: /Alpha Group/ }),
-    ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: /Upload a List/ }),
     ).not.toBeInTheDocument();
   });
 
-  it('Should hide the group pills when there are no interest groups', () => {
-    renderModal({ teams: [], interestGroups: [] });
-
-    expect(
-      screen.queryByText("Add teams from this event's groups"),
-    ).not.toBeInTheDocument();
-  });
-
-  it('Should default to an empty list when attendees and groups are omitted', () => {
+  it('Should default to an empty list when attendees are omitted', () => {
     render(
       <StaticRouter location="/">
         <EditEventAttendanceModal
@@ -798,76 +769,30 @@ describe('EditEventAttendanceModal', () => {
       await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
     };
 
-    it('Should disable interest group pill buttons', async () => {
+    it('Should disable every control', async () => {
       await enterCancelConfirmation();
-      expect(
-        screen.getByRole('button', { name: /Alpha Group/ }),
-      ).toBeDisabled();
-    });
 
-    it('Should disable the search input', async () => {
-      await enterCancelConfirmation();
       expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
-    });
-
-    it('Should disable the Mark All Attended button', async () => {
-      await enterCancelConfirmation();
       expect(
         screen.getByRole('button', { name: 'Mark All Not Attended' }),
       ).toBeDisabled();
-    });
-
-    it('Should disable the Upload a List button', async () => {
-      await enterCancelConfirmation();
       expect(
         screen.getByRole('button', { name: /Upload a List/ }),
       ).toBeDisabled();
-    });
-
-    it('Should disable attendance switches', async () => {
-      await enterCancelConfirmation();
       expect(
         screen.getByRole('checkbox', { name: 'Team Alpha attendance' }),
       ).toBeDisabled();
       expect(
         screen.getByRole('checkbox', { name: 'Team Beta attendance' }),
       ).toBeDisabled();
-    });
-
-    it('Should disable delete buttons', async () => {
-      await enterCancelConfirmation();
-      expect(
-        screen.getByRole('button', { name: 'Remove Team Alpha' }),
-      ).toBeDisabled();
       expect(
         screen.getByRole('button', { name: 'Remove Team Beta' }),
       ).toBeDisabled();
     });
 
-    it('Should change attendees card background', async () => {
+    it('Should keep the lock icon on interest-group rows', async () => {
       await enterCancelConfirmation();
-      const list = screen.getByRole('list');
-      expect(list.parentElement).toHaveStyle({
-        backgroundColor: silver.rgb,
-      });
-    });
-
-    it('Should disable added interest group pill styling', async () => {
-      renderModal();
-      await userEvent.click(
-        screen.getByRole('button', { name: /Alpha Group/ }),
-      );
-      await waitFor(() =>
-        expect(onSelectInterestGroup).toHaveBeenCalledWith('ig1'),
-      );
-      await userEvent.click(
-        screen.getByRole('checkbox', { name: 'Team Beta attendance' }),
-      );
-      await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
-
-      expect(
-        screen.getByRole('button', { name: /Alpha Group/ }),
-      ).toBeDisabled();
+      expect(screen.getByRole('img', { name: 'Locked' })).toBeInTheDocument();
     });
 
     it('Should re-enable controls when Keep Editing is clicked', async () => {
@@ -882,7 +807,7 @@ describe('EditEventAttendanceModal', () => {
         screen.getByRole('checkbox', { name: 'Team Alpha attendance' }),
       ).toBeEnabled();
       expect(
-        screen.getByRole('button', { name: 'Remove Team Alpha' }),
+        screen.getByRole('button', { name: 'Remove Team Beta' }),
       ).toBeEnabled();
     });
   });

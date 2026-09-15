@@ -38,6 +38,7 @@ export type {
   SpeakerTeamGroup,
 } from './speaker-group';
 export { default as EventAttendance } from './EventAttendance';
+export { compareAttendanceTeams } from './EventAttendance';
 export type {
   EventAttendanceTeam,
   EventAttendanceTeamType,

@@ -21,9 +21,11 @@ import {
 } from '@asap-hub/crn-frontend/src/auth/test-utils';
 import Event from '../Event';
 import { getEvent, getTeamsForMatching, patchEvent } from '../api';
+import { getInterestGroup } from '../../network/interest-groups/api';
 import { downloadEventSpeakers } from '../export';
 
 jest.mock('../api');
+jest.mock('../../network/interest-groups/api');
 jest.mock('../export');
 
 const mockDownloadEventSpeakers = downloadEventSpeakers as jest.MockedFunction<
@@ -43,11 +45,16 @@ const mockPatchEvent = patchEvent as jest.MockedFunction<typeof patchEvent>;
 const mockGetTeamsForMatching = getTeamsForMatching as jest.MockedFunction<
   typeof getTeamsForMatching
 >;
+const mockGetInterestGroup = getInterestGroup as jest.MockedFunction<
+  typeof getInterestGroup
+>;
 beforeEach(() => {
   disable('NEW_EVENT_PAGE');
   mockGetEvent.mockClear();
   mockPatchEvent.mockClear();
   mockGetTeamsForMatching.mockClear();
+  mockGetInterestGroup.mockReset();
+  mockGetInterestGroup.mockResolvedValue(undefined);
   mockGetEvent.mockResolvedValue({
     ...createEventResponse(),
     id,
@@ -287,7 +294,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(getByTitle('Resource Team Icon')).toBeInTheDocument();
     });
 
-    it('shows the view more attendees control beyond ten teams', async () => {
+    it('shows the show-more control beyond five teams in a section', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
@@ -295,7 +302,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
         attendance: createAttendance(11),
       });
       const { findByText } = render(<Event />, { wrapper });
-      expect(await findByText('View More Attendees')).toBeVisible();
+      expect(await findByText('Show 6 more')).toBeVisible();
     });
 
     it('shows the empty state for a non project manager when no teams attended', async () => {
@@ -310,7 +317,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(queryByText('Add Attendance')).not.toBeInTheDocument();
     });
 
-    it('shows the add attendance cta for a tech support user', async () => {
+    it('opens the editor from the empty card for a tech support user', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
@@ -318,10 +325,17 @@ describe('the NEW_EVENT_PAGE flag', () => {
         attendance: [],
       });
       const techSupportWrapper = createWrapper({ techSupport: true });
-      const { findByText } = render(<Event />, {
+      const { findByRole, getByRole } = render(<Event />, {
         wrapper: techSupportWrapper,
       });
-      expect(await findByText('Add Attendance')).toBeVisible();
+
+      await userEvent.click(
+        await findByRole('button', { name: 'Edit attendance' }),
+      );
+
+      expect(
+        getByRole('heading', { name: 'Add Attendance' }),
+      ).toBeInTheDocument();
     });
 
     it('saves attendance changes for a tech support user', async () => {
@@ -554,7 +568,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(mockPatchEvent).not.toHaveBeenCalled();
     });
 
-    it('hides the add attendance cta for a user without tech support', async () => {
+    it('hides the edit control for a user without tech support', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
@@ -562,23 +576,185 @@ describe('the NEW_EVENT_PAGE flag', () => {
         attendance: [],
       });
       const nonTechSupportWrapper = createWrapper({ techSupport: false });
-      const { findByText, queryByText } = render(<Event />, {
+      const { findByText, queryByLabelText } = render(<Event />, {
         wrapper: nonTechSupportWrapper,
       });
       expect(await findByText('No attendance recorded yet')).toBeVisible();
-      expect(queryByText('Add Attendance')).not.toBeInTheDocument();
+      expect(queryByLabelText('Edit attendance')).not.toBeInTheDocument();
     });
 
-    it('shows the since last event metric when previous attendance exists', async () => {
-      mockGetEvent.mockResolvedValue({
-        ...createEventResponse(),
-        id,
-        endDate: pastEndDate,
-        attendance: createAttendance(3),
-        previousEventAttendance: { teamsAttended: 1, teamsTotal: 4 },
+    describe('interest group teams', () => {
+      const interestGroupTeam = (
+        overrides: Partial<ReturnType<typeof createTeamListItemResponse>> & {
+          endDate?: string;
+        } = {},
+      ) => ({
+        ...createTeamListItemResponse(),
+        id: 'ig-team-1',
+        displayName: 'Interest Group Team',
+        ...overrides,
       });
-      const { findByText } = render(<Event />, { wrapper });
-      expect(await findByText('Since last event')).toBeVisible();
+
+      const mockInterestGroupWithTeams = (
+        groupTeams: ReturnType<typeof interestGroupTeam>[],
+      ) =>
+        mockGetInterestGroup.mockResolvedValue({
+          ...createInterestGroupResponse(),
+          id: 'g-0',
+          name: 'Alpha Group',
+          teams: groupTeams,
+        });
+
+      it('seeds the interest group teams as locked rows', async () => {
+        mockGetEvent.mockResolvedValue({
+          ...createEventResponse(),
+          id,
+          endDate: pastEndDate,
+          attendance: [],
+        });
+        mockInterestGroupWithTeams([interestGroupTeam()]);
+
+        const { findByText, queryByRole, getByLabelText } = render(<Event />, {
+          wrapper: createWrapper({ techSupport: true }),
+        });
+
+        expect(await findByText('From Group 1')).toBeVisible();
+        expect(await findByText('Interest Group Team')).toBeVisible();
+        expect(getByLabelText('Did not attend')).toBeInTheDocument();
+        expect(
+          queryByRole('button', { name: 'Remove Interest Group Team' }),
+        ).not.toBeInTheDocument();
+      });
+
+      it('saves a seeded interest group team without an attendance id', async () => {
+        mockGetEvent.mockResolvedValue({
+          ...createEventResponse(),
+          id,
+          endDate: pastEndDate,
+          attendance: [],
+        });
+        mockPatchEvent.mockResolvedValue({ ...createEventResponse(), id });
+        mockInterestGroupWithTeams([interestGroupTeam()]);
+
+        const { findByRole, getByRole } = render(<Event />, {
+          wrapper: createWrapper({ techSupport: true }),
+        });
+
+        await userEvent.click(
+          await findByRole('button', { name: 'Edit attendance' }),
+        );
+        await userEvent.click(
+          getByRole('checkbox', { name: 'Interest Group Team attendance' }),
+        );
+        await userEvent.click(getByRole('button', { name: 'Save' }));
+
+        await waitFor(() =>
+          expect(mockPatchEvent).toHaveBeenCalledWith(
+            id,
+            {
+              attendance: [
+                { id: undefined, teamId: 'ig-team-1', attended: true },
+              ],
+            },
+            expect.anything(),
+          ),
+        );
+      });
+
+      it('locks a recorded team that is also a member of the group', async () => {
+        mockGetEvent.mockResolvedValue({
+          ...createEventResponse(),
+          id,
+          endDate: pastEndDate,
+          attendance: [
+            {
+              id: 'attendance-1',
+              team: { id: 'ig-team-1', displayName: 'Interest Group Team' },
+              attended: true,
+            },
+          ],
+        });
+        mockInterestGroupWithTeams([interestGroupTeam()]);
+
+        const { findByRole, queryByRole } = render(<Event />, {
+          wrapper: createWrapper({ techSupport: true }),
+        });
+
+        await userEvent.click(
+          await findByRole('button', { name: 'Edit attendance' }),
+        );
+
+        expect(
+          queryByRole('button', { name: 'Remove Interest Group Team' }),
+        ).not.toBeInTheDocument();
+      });
+
+      it('drops a team whose group membership has ended', async () => {
+        mockGetEvent.mockResolvedValue({
+          ...createEventResponse(),
+          id,
+          endDate: pastEndDate,
+          attendance: [
+            {
+              id: 'attendance-1',
+              team: { id: 'ig-team-1', displayName: 'Interest Group Team' },
+              attended: true,
+            },
+          ],
+        });
+        mockInterestGroupWithTeams([
+          interestGroupTeam({ endDate: '2024-01-01T00:00:00.000Z' }),
+        ]);
+
+        const { findByText, queryByText } = render(<Event />, {
+          wrapper: createWrapper({ techSupport: true }),
+        });
+
+        expect(await findByText('Additional teams')).toBeVisible();
+        expect(queryByText('From Group 1')).not.toBeInTheDocument();
+      });
+
+      it('keeps a hub-inactive team in the interest group section', async () => {
+        mockGetEvent.mockResolvedValue({
+          ...createEventResponse(),
+          id,
+          endDate: pastEndDate,
+          attendance: [],
+        });
+        mockInterestGroupWithTeams([
+          interestGroupTeam({ inactiveSince: '2024-01-01T00:00:00.000Z' }),
+        ]);
+
+        const { findByText, getByTitle } = render(<Event />, {
+          wrapper: createWrapper({ techSupport: true }),
+        });
+
+        expect(await findByText('From Group 1')).toBeVisible();
+        expect(getByTitle('Inactive Team')).toBeInTheDocument();
+      });
+
+      it('withholds the editor until the group teams are known', async () => {
+        mockGetEvent.mockResolvedValue({
+          ...createEventResponse(),
+          id,
+          endDate: pastEndDate,
+          attendance: [
+            {
+              id: 'attendance-1',
+              team: { id: 't1', displayName: 'Team One' },
+              attended: true,
+            },
+          ],
+        });
+        mockGetInterestGroup.mockReturnValue(new Promise(() => {}));
+
+        const { findByText, queryByLabelText } = render(<Event />, {
+          wrapper: createWrapper({ techSupport: true }),
+        });
+
+        expect(await findByText('Team One')).toBeVisible();
+        expect(queryByLabelText('Edit attendance')).not.toBeInTheDocument();
+      });
     });
 
     it('does not show the attendance card for an upcoming event', async () => {
