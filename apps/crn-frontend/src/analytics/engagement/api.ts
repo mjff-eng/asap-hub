@@ -16,6 +16,7 @@ import {
 } from '../utils/analytics-options';
 import { OpensearchClient } from '../utils/opensearch';
 import { OpensearchSortMap } from '../utils/opensearch/types';
+import { teamMetricsSearchOptions } from '../utils/team-metrics';
 
 export type EngagementListOptions = AnalyticsSearchOptions & {
   timeRange: TimeRangeOption;
@@ -136,15 +137,7 @@ export const getTeamEngagementMetrics = async (
   attendanceClient: OpensearchClient<MeetingRepAttendanceResponse>,
   { teamId }: TeamEngagementMetricsOptions,
 ): Promise<TeamEngagementMetrics> => {
-  const searchOptions = {
-    searchTags: [],
-    searchScope: 'flat' as const,
-    sort: [],
-    currentPage: 0,
-    pageSize: 1,
-    timeRange: 'all' as const,
-    teamId,
-  };
+  const searchOptions = teamMetricsSearchOptions(teamId);
   const [presenters, attendance] = await Promise.all([
     presenterClient.search(searchOptions),
     attendanceClient.search(searchOptions),
