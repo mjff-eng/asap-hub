@@ -204,6 +204,15 @@ describe('EditEventAttendanceModal', () => {
     ).toBeInTheDocument();
   });
 
+  it('Should open a team in a new tab, so unsaved rows survive', () => {
+    renderModal();
+
+    expect(screen.getByRole('link', { name: 'Team Alpha' })).toHaveAttribute(
+      'target',
+      '_blank',
+    );
+  });
+
   it('Should title the interest-group section generically without a group name', () => {
     renderModal({ interestGroupName: undefined });
 
