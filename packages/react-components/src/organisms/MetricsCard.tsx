@@ -94,6 +94,12 @@ const fieldLabelStyles = css({
 const detailsContentStyles = css({
   display: 'flex',
   flexDirection: 'column',
+  gap: rem(16),
+});
+
+const detailsBlockStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
   gap: rem(4),
 });
 
@@ -103,7 +109,7 @@ const desktopDetailsStyles = css({
     display: 'block',
     gridColumn: 2,
     minWidth: 0,
-    marginTop: rem(16),
+    marginTop: rem(24),
   },
 });
 
@@ -112,13 +118,6 @@ const mobileDetailsStyles = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     display: 'none',
   },
-});
-
-const definitionStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: rem(4),
-  marginTop: rem(16),
 });
 
 export type Metric = {
@@ -162,7 +161,7 @@ const MetricDetails: React.FC<Pick<Metric, 'philosophy' | 'definition'>> = ({
   definition,
 }) => (
   <div css={detailsContentStyles}>
-    <div>
+    <div css={detailsBlockStyles}>
       <Subtitle accent="lead" noMargin>
         ASAP Philosophy
       </Subtitle>
@@ -170,7 +169,7 @@ const MetricDetails: React.FC<Pick<Metric, 'philosophy' | 'definition'>> = ({
         {philosophy}
       </Paragraph>
     </div>
-    <div css={definitionStyles}>
+    <div css={detailsBlockStyles}>
       <Subtitle accent="lead" noMargin>
         Metric Definition
       </Subtitle>
