@@ -125,6 +125,17 @@ jobs:
         with:
           cache-prefix: ${{ steps.setup.outputs.cache-prefix-transpile }}
           environment-name: ${{ inputs.environment-name }}
+      - name: Upload transpile output
+        uses: actions/upload-artifact@v4
+        with:
+          name: transpile-output-${{ inputs.environment-name }}
+          path: |
+            apps/**/build*
+            apps/**/dist*
+            packages/**/build*
+          include-hidden-files: true
+          retention-days: 1
+          overwrite: true
 
   definitions:
     needs: [rebuild]
@@ -246,6 +257,17 @@ jobs:
         with:
           cache-prefix: ${{ steps.setup.outputs.cache-prefix-frontend }}
           environment-name: ${{ inputs.environment-name }}
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-output-${{ inputs.environment-name }}
+          path: |
+            apps/**/build*
+            apps/**/dist*
+            packages/**/build*
+          include-hidden-files: true
+          retention-days: 1
+          overwrite: true
       - name: CRN Auth frontend artifact
         uses: actions/upload-artifact@v4
         with:

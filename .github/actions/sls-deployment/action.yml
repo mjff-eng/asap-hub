@@ -106,11 +106,11 @@ runs:
       uses: ./.github/actions/setup-environment
       with:
         environment-name: ${{ inputs.environment-name }}
-    - name: Cache build output
-      uses: ./.github/actions/cache-build
+    - name: Download build output
+      uses: actions/download-artifact@v4
       with:
-        cache-prefix: ${{ steps.setup.outputs.cache-prefix-frontend }}
-        environment-name: ${{ inputs.environment-name }}
+        name: frontend-output-${{ inputs.environment-name }}
+        path: .
     - name: Cache build typecheck output
       uses: ./.github/actions/cache-unplugged
     - uses: actions/download-artifact@v4
