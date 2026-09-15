@@ -196,7 +196,7 @@
   },
   "dependencies": {
     "ts-node": "10.9.2",
-    "uuid": "8.3.2"
+    "uuid": "11.1.1"
   },
   "packageManager": "yarn@4.12.0"
 }
