@@ -1089,13 +1089,21 @@ export enum AttendanceOrder {
 export type AwardType = Entry &
   _Node & {
     _id: Scalars['ID'];
+    asapPhilosophy?: Maybe<Scalars['String']>;
     contentfulMetadata: ContentfulMetadata;
     icon?: Maybe<Asset>;
     linkedFrom?: Maybe<AwardTypeLinkingCollections>;
+    metricDefinition?: Maybe<Scalars['String']>;
     name?: Maybe<Scalars['String']>;
     smallIcon?: Maybe<Asset>;
     sys: Sys;
   };
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/awardType) */
+export type AwardTypeAsapPhilosophyArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/awardType) */
 export type AwardTypeIconArgs = {
@@ -1107,6 +1115,12 @@ export type AwardTypeIconArgs = {
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/awardType) */
 export type AwardTypeLinkedFromArgs = {
   allowedLocales?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/awardType) */
+export type AwardTypeMetricDefinitionArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/awardType) */
@@ -1138,8 +1152,22 @@ export type AwardTypeCursorCollection = {
 export type AwardTypeFilter = {
   AND?: InputMaybe<Array<InputMaybe<AwardTypeFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<AwardTypeFilter>>>;
+  asapPhilosophy?: InputMaybe<Scalars['String']>;
+  asapPhilosophy_contains?: InputMaybe<Scalars['String']>;
+  asapPhilosophy_exists?: InputMaybe<Scalars['Boolean']>;
+  asapPhilosophy_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  asapPhilosophy_not?: InputMaybe<Scalars['String']>;
+  asapPhilosophy_not_contains?: InputMaybe<Scalars['String']>;
+  asapPhilosophy_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
   icon_exists?: InputMaybe<Scalars['Boolean']>;
+  metricDefinition?: InputMaybe<Scalars['String']>;
+  metricDefinition_contains?: InputMaybe<Scalars['String']>;
+  metricDefinition_exists?: InputMaybe<Scalars['Boolean']>;
+  metricDefinition_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  metricDefinition_not?: InputMaybe<Scalars['String']>;
+  metricDefinition_not_contains?: InputMaybe<Scalars['String']>;
+  metricDefinition_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   name?: InputMaybe<Scalars['String']>;
   name_contains?: InputMaybe<Scalars['String']>;
   name_exists?: InputMaybe<Scalars['Boolean']>;
@@ -24471,8 +24499,22 @@ export type CfAttendanceNestedFilter = {
 export type CfAwardTypeNestedFilter = {
   AND?: InputMaybe<Array<InputMaybe<CfAwardTypeNestedFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<CfAwardTypeNestedFilter>>>;
+  asapPhilosophy?: InputMaybe<Scalars['String']>;
+  asapPhilosophy_contains?: InputMaybe<Scalars['String']>;
+  asapPhilosophy_exists?: InputMaybe<Scalars['Boolean']>;
+  asapPhilosophy_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  asapPhilosophy_not?: InputMaybe<Scalars['String']>;
+  asapPhilosophy_not_contains?: InputMaybe<Scalars['String']>;
+  asapPhilosophy_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
   icon_exists?: InputMaybe<Scalars['Boolean']>;
+  metricDefinition?: InputMaybe<Scalars['String']>;
+  metricDefinition_contains?: InputMaybe<Scalars['String']>;
+  metricDefinition_exists?: InputMaybe<Scalars['Boolean']>;
+  metricDefinition_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  metricDefinition_not?: InputMaybe<Scalars['String']>;
+  metricDefinition_not_contains?: InputMaybe<Scalars['String']>;
+  metricDefinition_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   name?: InputMaybe<Scalars['String']>;
   name_contains?: InputMaybe<Scalars['String']>;
   name_exists?: InputMaybe<Scalars['Boolean']>;
@@ -38787,6 +38829,31 @@ export type FetchTeamIdByProjectIdQuery = {
         }>
       >;
     }>;
+  }>;
+};
+
+export type FetchTeamAwardMetricsQueryVariables = Exact<{
+  teamId: Scalars['String'];
+}>;
+
+export type FetchTeamAwardMetricsQuery = {
+  awardTypeCollection?: Maybe<{
+    items: Array<
+      Maybe<
+        Pick<AwardType, 'name' | 'asapPhilosophy' | 'metricDefinition'> & {
+          sys: Pick<Sys, 'id'>;
+        }
+      >
+    >;
+  }>;
+  teamMembershipCollection?: Maybe<{
+    items: Array<
+      Maybe<{
+        awardsCollection?: Maybe<{
+          items: Array<Maybe<{ awardType?: Maybe<{ sys: Pick<Sys, 'id'> }> }>>;
+        }>;
+      }>
+    >;
   }>;
 };
 
@@ -73788,6 +73855,205 @@ export const FetchTeamIdByProjectIdDocument = {
 } as unknown as DocumentNode<
   FetchTeamIdByProjectIdQuery,
   FetchTeamIdByProjectIdQueryVariables
+>;
+export const FetchTeamAwardMetricsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchTeamAwardMetrics' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'teamId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'awardTypeCollection' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: { kind: 'IntValue', value: '50' },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'order' },
+                value: {
+                  kind: 'ListValue',
+                  values: [{ kind: 'EnumValue', value: 'name_ASC' }],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'sys' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'asapPhilosophy' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'metricDefinition' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'teamMembershipCollection' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: { kind: 'IntValue', value: '200' },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'team' },
+                      value: {
+                        kind: 'ObjectValue',
+                        fields: [
+                          {
+                            kind: 'ObjectField',
+                            name: { kind: 'Name', value: 'sys' },
+                            value: {
+                              kind: 'ObjectValue',
+                              fields: [
+                                {
+                                  kind: 'ObjectField',
+                                  name: { kind: 'Name', value: 'id' },
+                                  value: {
+                                    kind: 'Variable',
+                                    name: { kind: 'Name', value: 'teamId' },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'awardsCollection' },
+                        arguments: [
+                          {
+                            kind: 'Argument',
+                            name: { kind: 'Name', value: 'limit' },
+                            value: { kind: 'IntValue', value: '20' },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'items' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'awardType' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: { kind: 'Name', value: 'sys' },
+                                          selectionSet: {
+                                            kind: 'SelectionSet',
+                                            selections: [
+                                              {
+                                                kind: 'Field',
+                                                name: {
+                                                  kind: 'Name',
+                                                  value: 'id',
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FetchTeamAwardMetricsQuery,
+  FetchTeamAwardMetricsQueryVariables
 >;
 export const FetchTutorialByIdDocument = {
   kind: 'Document',

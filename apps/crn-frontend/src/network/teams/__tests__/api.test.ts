@@ -49,6 +49,7 @@ import {
   updateManuscript,
   updateTeamResearchOutput,
   uploadManuscriptFile,
+  getTeamAwardMetrics,
 } from '../api';
 
 jest.mock('../../../config', () => ({
@@ -1260,6 +1261,42 @@ describe('markDiscussionAsRead', () => {
 
     await expect(markDiscussionAsRead('42', 'Bearer x')).rejects.toThrow(
       'Failed to mark discussion with id 42 as read. Expected status 200. Received status 500.',
+    );
+  });
+});
+
+describe('getTeamAwardMetrics', () => {
+  it('makes an authorized GET request for the team award metrics', async () => {
+    nock(API_BASE_URL, { reqheaders: { authorization: 'Bearer x' } })
+      .get('/teams/42/award-metrics')
+      .reply(200, { total: 0, items: [] });
+    await getTeamAwardMetrics('42', 'Bearer x');
+    expect(nock.isDone()).toBe(true);
+  });
+
+  it('returns the fetched award metrics', async () => {
+    const awardMetrics = {
+      total: 1,
+      items: [
+        {
+          id: 'award-type-1',
+          name: 'Open Science Champion Award',
+          asapPhilosophy: 'Philosophy',
+          metricDefinition: 'Definition',
+          received: true,
+        },
+      ],
+    };
+    nock(API_BASE_URL).get('/teams/42/award-metrics').reply(200, awardMetrics);
+    expect(await getTeamAwardMetrics('42', '')).toEqual(awardMetrics);
+  });
+
+  it('errors for an error status', async () => {
+    nock(API_BASE_URL).get('/teams/42/award-metrics').reply(500);
+    await expect(
+      getTeamAwardMetrics('42', ''),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Failed to fetch award metrics for team with id 42. Expected status 2xx. Received status 500."`,
     );
   });
 });

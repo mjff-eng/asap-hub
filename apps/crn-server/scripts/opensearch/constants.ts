@@ -297,7 +297,7 @@ export const metricConfig: Record<Metrics, OpensearchMetricConfig> = {
     indexAlias: 'ig-leadership',
     mapping: {
       properties: {
-        id: { type: 'text' },
+        id: { type: 'keyword' },
         displayName: textWithNgramKeyword({
           normalizer: 'lowercase_normalizer',
           raw: true,
@@ -315,7 +315,7 @@ export const metricConfig: Record<Metrics, OpensearchMetricConfig> = {
     indexAlias: 'wg-leadership',
     mapping: {
       properties: {
-        id: { type: 'text' },
+        id: { type: 'keyword' },
         displayName: textWithNgramKeyword({
           normalizer: 'lowercase_normalizer',
           raw: true,

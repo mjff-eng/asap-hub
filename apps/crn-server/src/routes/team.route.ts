@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ListInterestGroupResponse,
+  ListTeamAwardMetricsResponse,
   ListTeamResponse,
   TeamResponse,
   TeamType,
@@ -92,6 +93,24 @@ export const teamRouteFactory = (
       const { teamId } = validateTeamParameters(params);
 
       const result = await interestGroupController.fetchByTeamId(teamId);
+
+      res.json(result);
+    },
+  );
+
+  teamRoutes.get<{ teamId: string }>(
+    '/teams/:teamId/award-metrics',
+    async (req, res: Response<ListTeamAwardMetricsResponse>) => {
+      const { params, loggedInUser } = req;
+      const { teamId } = validateTeamParameters(params);
+
+      const isStaff = loggedInUser!.role === 'Staff';
+      const isTeamMember = loggedInUser!.teams.some(({ id }) => id === teamId);
+      if (!isStaff && !isTeamMember) {
+        throw Boom.forbidden();
+      }
+
+      const result = await teamController.fetchAwardMetricsByTeamId(teamId);
 
       res.json(result);
     },

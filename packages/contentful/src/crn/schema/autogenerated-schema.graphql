@@ -624,9 +624,11 @@ enum AttendanceOrder {
 """[See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/awardType)"""
 type AwardType implements Entry & _Node {
   _id: ID!
+  asapPhilosophy(locale: String, useFallbackLocale: Boolean): String
   contentfulMetadata: ContentfulMetadata!
   icon(locale: String, preview: Boolean, useFallbackLocale: Boolean): Asset
   linkedFrom(allowedLocales: [String]): AwardTypeLinkingCollections
+  metricDefinition(locale: String, useFallbackLocale: Boolean): String
   name(locale: String, useFallbackLocale: Boolean): String
   smallIcon(locale: String, preview: Boolean, useFallbackLocale: Boolean): Asset
   sys: Sys!
@@ -648,8 +650,22 @@ type AwardTypeCursorCollection {
 input AwardTypeFilter {
   AND: [AwardTypeFilter]
   OR: [AwardTypeFilter]
+  asapPhilosophy: String
+  asapPhilosophy_contains: String
+  asapPhilosophy_exists: Boolean
+  asapPhilosophy_in: [String]
+  asapPhilosophy_not: String
+  asapPhilosophy_not_contains: String
+  asapPhilosophy_not_in: [String]
   contentfulMetadata: ContentfulMetadataFilter
   icon_exists: Boolean
+  metricDefinition: String
+  metricDefinition_contains: String
+  metricDefinition_exists: Boolean
+  metricDefinition_in: [String]
+  metricDefinition_not: String
+  metricDefinition_not_contains: String
+  metricDefinition_not_in: [String]
   name: String
   name_contains: String
   name_exists: Boolean
@@ -15555,8 +15571,22 @@ input cfAttendanceNestedFilter {
 input cfAwardTypeNestedFilter {
   AND: [cfAwardTypeNestedFilter]
   OR: [cfAwardTypeNestedFilter]
+  asapPhilosophy: String
+  asapPhilosophy_contains: String
+  asapPhilosophy_exists: Boolean
+  asapPhilosophy_in: [String]
+  asapPhilosophy_not: String
+  asapPhilosophy_not_contains: String
+  asapPhilosophy_not_in: [String]
   contentfulMetadata: ContentfulMetadataFilter
   icon_exists: Boolean
+  metricDefinition: String
+  metricDefinition_contains: String
+  metricDefinition_exists: Boolean
+  metricDefinition_in: [String]
+  metricDefinition_not: String
+  metricDefinition_not_contains: String
+  metricDefinition_not_in: [String]
   name: String
   name_contains: String
   name_exists: Boolean

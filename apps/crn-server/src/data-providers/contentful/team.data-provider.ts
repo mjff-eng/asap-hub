@@ -13,10 +13,13 @@ import {
   FetchTeamProjectByIdQueryVariables,
   FetchTeamsQuery,
   FetchTeamsQueryVariables,
+  FetchTeamAwardMetricsQuery,
+  FetchTeamAwardMetricsQueryVariables,
   FETCH_PROJECT_BY_TEAM_ID,
   FETCH_PUBLIC_TEAM_BY_ID,
   FETCH_PUBLIC_TEAMS,
   FETCH_TEAMS,
+  FETCH_TEAM_AWARD_METRICS,
   FETCH_TEAM_BY_ID,
   FETCH_TEAM_ID_BY_PROJECT_ID,
   GraphQLClient,
@@ -28,6 +31,7 @@ import {
   FetchTeamsOptions,
   LabResponse,
   ListPublicTeamDataObject,
+  ListTeamAwardMetricsDataObject,
   ListTeamDataObject,
   ProjectStatus,
   ProjectType,
@@ -311,6 +315,34 @@ export class TeamContentfulDataProvider implements TeamDataProvider {
       projects?.membersCollection?.items?.[0]?.projectMember;
 
     return projectMember && isTeam(projectMember) ? projectMember.sys.id : null;
+  }
+
+  async fetchAwardMetricsByTeamId(
+    teamId: string,
+  ): Promise<ListTeamAwardMetricsDataObject> {
+    const { awardTypeCollection, teamMembershipCollection } =
+      await this.contentfulClient.request<
+        FetchTeamAwardMetricsQuery,
+        FetchTeamAwardMetricsQueryVariables
+      >(FETCH_TEAM_AWARD_METRICS, { teamId });
+
+    const receivedAwardTypeIds = new Set(
+      cleanArray(teamMembershipCollection?.items).flatMap((membership) =>
+        cleanArray(membership.awardsCollection?.items).flatMap((award) =>
+          award.awardType ? [award.awardType.sys.id] : [],
+        ),
+      ),
+    );
+
+    const items = cleanArray(awardTypeCollection?.items).map((awardType) => ({
+      id: awardType.sys.id,
+      name: awardType.name ?? '',
+      asapPhilosophy: awardType.asapPhilosophy ?? '',
+      metricDefinition: awardType.metricDefinition ?? '',
+      received: receivedAwardTypeIds.has(awardType.sys.id),
+    }));
+
+    return { total: items.length, items };
   }
 
   async update(id: string, update: TeamUpdateDataObject): Promise<void> {

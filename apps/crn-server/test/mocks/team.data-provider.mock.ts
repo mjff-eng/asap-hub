@@ -5,4 +5,5 @@ export const teamDataProviderMock = {
   fetchPublicTeams: jest.fn(),
   fetchPublicTeamById: jest.fn(),
   fetchTeamIdByProjectId: jest.fn(),
+  fetchAwardMetricsByTeamId: jest.fn(),
 };

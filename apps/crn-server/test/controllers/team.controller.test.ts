@@ -1,6 +1,7 @@
 import { NotFoundError } from '@asap-hub/errors';
 import Teams from '../../src/controllers/team.controller';
 import {
+  getListTeamAwardMetricsDataObject,
   getPublicTeamListItemDataObject,
   getTeamDataObject,
   getTeamResponse,
@@ -16,106 +17,6 @@ describe('Team Controller', () => {
   });
 
   describe('Fetch method', () => {
-    test('Should return the teams', async () => {
-      teamDataProviderMock.fetch.mockResolvedValueOnce({
-        total: 1,
-        items: [getTeamDataObject()],
-      });
-
-      const result = await teamController.fetch({});
-
-      expect(result).toEqual({ items: [getTeamResponse()], total: 1 });
-    });
-
-    test('Should return an empty list when there are no teams', async () => {
-      teamDataProviderMock.fetch.mockResolvedValueOnce({
-        total: 0,
-        items: [],
-      });
-      const result = await teamController.fetch({});
-
-      expect(result).toEqual({ items: [], total: 0 });
-    });
-
-    test('Should call the data provider with correct parameters', async () => {
-      teamDataProviderMock.fetch.mockResolvedValueOnce({
-        total: 1,
-        items: [getTeamDataObject()],
-      });
-      await teamController.fetch({ search: 'some-search', skip: 13, take: 9 });
-
-      expect(teamDataProviderMock.fetch).toBeCalledWith({
-        filter: undefined,
-        search: 'some-search',
-        skip: 13,
-        take: 9,
-        teamType: undefined,
-      });
-    });
-
-    test.each`
-      filter                    | expectedFilter
-      ${['Active']}             | ${['Active']}
-      ${['Inactive']}           | ${['Inactive']}
-      ${[]}                     | ${[]}
-      ${['Active', 'Inactive']} | ${['Active', 'Inactive']}
-    `(
-      `Should call data provider with correct filter when filter is $filter`,
-      async ({ filter, expectedFilter }) => {
-        teamDataProviderMock.fetch.mockResolvedValueOnce({
-          total: 1,
-          items: [getTeamDataObject()],
-        });
-
-        await teamController.fetch({ filter });
-
-        expect(teamDataProviderMock.fetch).toBeCalledWith({
-          filter: expectedFilter,
-          search: undefined,
-          skip: 0,
-          take: 8,
-          teamType: undefined,
-        });
-      },
-    );
-
-    test('Should pass teamType to data provider when provided', async () => {
-      teamDataProviderMock.fetch.mockResolvedValueOnce({
-        total: 1,
-        items: [getTeamDataObject()],
-      });
-
-      await teamController.fetch({
-        teamType: 'Discovery Team',
-        search: 'test',
-      });
-
-      expect(teamDataProviderMock.fetch).toBeCalledWith({
-        filter: undefined,
-        search: 'test',
-        skip: 0,
-        take: 8,
-        teamType: 'Discovery Team',
-      });
-    });
-
-    test('Should pass Resource Team type to data provider', async () => {
-      teamDataProviderMock.fetch.mockResolvedValueOnce({
-        total: 1,
-        items: [getTeamDataObject()],
-      });
-
-      await teamController.fetch({ teamType: 'Resource Team' });
-
-      expect(teamDataProviderMock.fetch).toBeCalledWith({
-        filter: undefined,
-        search: undefined,
-        skip: 0,
-        take: 8,
-        teamType: 'Resource Team',
-      });
-    });
-
     test('Should pass both filter and teamType to data provider', async () => {
       teamDataProviderMock.fetch.mockResolvedValueOnce({
         total: 1,
@@ -281,6 +182,22 @@ describe('Team Controller', () => {
       expect(teamDataProviderMock.update).toHaveBeenCalledWith('user-id', {
         tools: expectedTools,
       });
+    });
+  });
+
+  describe('FetchAwardMetricsByTeamId method', () => {
+    test('Should return the award metrics from the data provider', async () => {
+      const awardMetrics = getListTeamAwardMetricsDataObject();
+      teamDataProviderMock.fetchAwardMetricsByTeamId.mockResolvedValueOnce(
+        awardMetrics,
+      );
+
+      const result = await teamController.fetchAwardMetricsByTeamId('team-id');
+
+      expect(result).toEqual(awardMetrics);
+      expect(
+        teamDataProviderMock.fetchAwardMetricsByTeamId,
+      ).toHaveBeenCalledWith('team-id');
     });
   });
 });

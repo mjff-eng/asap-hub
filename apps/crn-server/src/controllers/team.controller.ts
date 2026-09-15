@@ -3,6 +3,7 @@ import {
   FetchPaginationOptions,
   FetchTeamsOptions,
   ListPublicTeamResponse,
+  ListTeamAwardMetricsResponse,
   ListTeamResponse,
   TeamResponse,
   TeamTool,
@@ -95,5 +96,11 @@ export default class TeamController {
 
   async fetchTeamIdByProjectId(projectId: string): Promise<string | null> {
     return this.teamDataProvider.fetchTeamIdByProjectId(projectId);
+  }
+
+  async fetchAwardMetricsByTeamId(
+    teamId: string,
+  ): Promise<ListTeamAwardMetricsResponse> {
+    return this.teamDataProvider.fetchAwardMetricsByTeamId(teamId);
   }
 }

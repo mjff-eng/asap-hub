@@ -7,9 +7,12 @@ import {
   FetchPublicTeamsQuery,
   FetchPublicTeamByIdQuery,
   FetchTeamProjectByIdQuery,
+  FetchTeamAwardMetricsQuery,
 } from '@asap-hub/contentful';
 import {
   ListPublicTeamResponse,
+  ListTeamAwardMetricsDataObject,
+  ListTeamAwardMetricsResponse,
   ListTeamResponse,
   PublicTeamListItemDataObject,
   PublicTeamResponse,
@@ -896,3 +899,65 @@ export const getTeamMembershipUnpublishedEvent: TeamMembershipEventGenerator = (
   membershipId: string,
   teamId: string,
 ) => getTeamMembershipEvent(membershipId, teamId, 'TeamMembershipUnpublished');
+
+export const getContentfulGraphqlTeamAwardMetrics =
+  (): FetchTeamAwardMetricsQuery => ({
+    awardTypeCollection: {
+      items: [
+        {
+          sys: { id: 'award-type-1' },
+          name: 'Open Science Champion Award',
+          asapPhilosophy: 'ASAP is built upon strong open science principles.',
+          metricDefinition:
+            'The Open Science Champion Metric provides recognition to teams that have received an Open Science Champion award since the start of the grant.',
+        },
+        {
+          sys: { id: 'award-type-2' },
+          name: 'Network Spotlight',
+          asapPhilosophy: 'ASAP believes in ensuring that credit is given.',
+          metricDefinition:
+            'The Network Spotlight Metric provides recognition to teams that have received a Network Spotlight award.',
+        },
+      ],
+    },
+    teamMembershipCollection: {
+      items: [
+        {
+          awardsCollection: {
+            items: [{ awardType: { sys: { id: 'award-type-1' } } }],
+          },
+        },
+        {
+          awardsCollection: {
+            items: [],
+          },
+        },
+      ],
+    },
+  });
+
+export const getListTeamAwardMetricsDataObject =
+  (): ListTeamAwardMetricsDataObject => ({
+    total: 2,
+    items: [
+      {
+        id: 'award-type-1',
+        name: 'Open Science Champion Award',
+        asapPhilosophy: 'ASAP is built upon strong open science principles.',
+        metricDefinition:
+          'The Open Science Champion Metric provides recognition to teams that have received an Open Science Champion award since the start of the grant.',
+        received: true,
+      },
+      {
+        id: 'award-type-2',
+        name: 'Network Spotlight',
+        asapPhilosophy: 'ASAP believes in ensuring that credit is given.',
+        metricDefinition:
+          'The Network Spotlight Metric provides recognition to teams that have received a Network Spotlight award.',
+        received: false,
+      },
+    ],
+  });
+
+export const getListTeamAwardMetricsResponse =
+  (): ListTeamAwardMetricsResponse => getListTeamAwardMetricsDataObject();

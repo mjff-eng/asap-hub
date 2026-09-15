@@ -21,6 +21,10 @@ import {
 import { getContentfulGraphqlClientMock } from '../../mocks/contentful-graphql-client.mock';
 import { getContentfulEnvironmentMock } from '../../mocks/contentful-rest-client.mock';
 import { TeamContentfulDataProvider } from '../../../src/data-providers/contentful/team.data-provider';
+import {
+  getContentfulGraphqlTeamAwardMetrics,
+  getListTeamAwardMetricsDataObject,
+} from '../../fixtures/teams.fixtures';
 import { getEntry } from '../../fixtures/contentful.fixtures';
 import { TeamRole } from '@asap-hub/model';
 import { DateTime } from 'luxon';
@@ -3276,6 +3280,71 @@ describe('Teams data provider', () => {
           },
         },
       ]);
+    });
+  });
+
+  describe('FetchAwardMetricsByTeamId', () => {
+    test('Should query by team id and flag the award types the team received', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+        getContentfulGraphqlTeamAwardMetrics(),
+      );
+
+      const result =
+        await teamDataProvider.fetchAwardMetricsByTeamId('team-id-1');
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+        expect.anything(),
+        { teamId: 'team-id-1' },
+      );
+      expect(result).toEqual(getListTeamAwardMetricsDataObject());
+    });
+
+    test('Should return every award type as not received when the team has no awards', async () => {
+      const graphqlResponse = getContentfulGraphqlTeamAwardMetrics();
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        ...graphqlResponse,
+        teamMembershipCollection: { items: [] },
+      });
+
+      const result =
+        await teamDataProvider.fetchAwardMetricsByTeamId('team-id-1');
+
+      expect(result.items.map(({ received }) => received)).toEqual([
+        false,
+        false,
+      ]);
+    });
+
+    test('Should return an empty list when there are no award types', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        awardTypeCollection: { items: [] },
+        teamMembershipCollection: { items: [] },
+      });
+
+      const result =
+        await teamDataProvider.fetchAwardMetricsByTeamId('team-id-1');
+
+      expect(result).toEqual({ total: 0, items: [] });
+    });
+
+    test('Should ignore awards without an award type and null items', async () => {
+      const graphqlResponse = getContentfulGraphqlTeamAwardMetrics();
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        ...graphqlResponse,
+        teamMembershipCollection: {
+          items: [
+            null,
+            { awardsCollection: { items: [null, { awardType: null }] } },
+          ],
+        },
+      });
+
+      const result =
+        await teamDataProvider.fetchAwardMetricsByTeamId('team-id-1');
+
+      expect(result.items.every(({ received }) => received === false)).toBe(
+        true,
+      );
     });
   });
 });

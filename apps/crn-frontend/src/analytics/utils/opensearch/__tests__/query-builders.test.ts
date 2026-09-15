@@ -863,6 +863,33 @@ describe('leadershipRecordSearchQueryBuilder', () => {
     expect(result.query.bool.must).toEqual([]);
   });
 
+  it('includes teamId in must clauses when provided', () => {
+    const result = leadershipRecordSearchQueryBuilder({
+      searchTags: [],
+      currentPage: 0,
+      pageSize: 10,
+      timeRange: 'all',
+      searchScope: 'flat',
+      teamId: 'team-id-1',
+    });
+
+    expect(result.query.bool.must).toEqual([{ term: { id: 'team-id-1' } }]);
+    expect(result.query.bool).not.toHaveProperty('should');
+  });
+
+  it('excludes teamId from must clauses when undefined', () => {
+    const result = leadershipRecordSearchQueryBuilder({
+      searchTags: [],
+      currentPage: 0,
+      pageSize: 10,
+      timeRange: 'all',
+      searchScope: 'flat',
+      teamId: undefined,
+    });
+
+    expect(result.query.bool.must).toEqual([]);
+  });
+
   it('builds query with single search tag using wildcard', () => {
     const result = leadershipRecordSearchQueryBuilder({
       searchTags: ['Team Alpha'],

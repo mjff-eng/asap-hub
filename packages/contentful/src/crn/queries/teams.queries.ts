@@ -380,3 +380,34 @@ export const FETCH_TEAM_ID_BY_PROJECT_ID = gql`
     }
   }
 `;
+
+export const FETCH_TEAM_AWARD_METRICS = gql`
+  query FetchTeamAwardMetrics($teamId: String!) {
+    awardTypeCollection(limit: 50, order: [name_ASC]) {
+      items {
+        sys {
+          id
+        }
+        name
+        asapPhilosophy
+        metricDefinition
+      }
+    }
+    teamMembershipCollection(
+      limit: 200
+      where: { team: { sys: { id: $teamId } } }
+    ) {
+      items {
+        awardsCollection(limit: 20) {
+          items {
+            awardType {
+              sys {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
