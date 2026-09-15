@@ -475,6 +475,7 @@ const AttendeeGroup: React.FC<{
             <span css={teamCellStyles}>
               {teamIcon(team.teamType)}
               <Link
+                openInNewTab
                 href={network({}).teams({}).team({ teamId: team.teamId }).$}
               >
                 {team.teamName}
