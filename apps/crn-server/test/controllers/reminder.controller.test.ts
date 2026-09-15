@@ -28,11 +28,11 @@ import {
   getPresentationUpdatedReminder,
   getPublishMaterialReminder,
   getReminderResponse,
-  getResearchOutputDraftTeamReminder,
+  getResearchOutputDraftProjectReminder,
   getResearchOutputDraftWorkingGroupReminder,
-  getResearchOutputInReviewTeamReminder,
+  getResearchOutputInReviewProjectReminder,
   getResearchOutputPublishedReminder,
-  getResearchOutputSwitchToDraftTeamReminder,
+  getResearchOutputSwitchToDraftProjectReminder,
   getResearchOutputVersionPublishedReminder,
   getSharePresentationReminder,
   getUploadPresentationReminder,
@@ -87,209 +87,7 @@ describe('Reminder Controller', () => {
     });
 
     describe('Description and href', () => {
-      test('Should return the correct description and href for the research-output-version-published team reminder', async () => {
-        const researchOutputPublishedReminder =
-          getResearchOutputVersionPublishedReminder();
-        const reminderDataObject: ResearchOutputVersionPublishedReminder = {
-          ...researchOutputPublishedReminder,
-          data: {
-            ...researchOutputPublishedReminder.data,
-            documentType: 'Presentation',
-            title: 'Some Test title',
-            researchOutputId: 'some-research-output-id',
-            publishedAt: '2021-01-01',
-          },
-        };
-
-        reminderDataProviderMock.fetch.mockResolvedValueOnce({
-          total: 1,
-          items: [reminderDataObject],
-        });
-
-        const { items } = await reminderController.fetch(options);
-
-        expect(items[0]).toMatchObject({
-          description:
-            'Team **Team A** published a new team Presentation output version: Some Test title.',
-          href: `/shared-research/some-research-output-id`,
-        });
-      });
-
-      test('Should return the correct description and href for the research-output-version-published working group reminder', async () => {
-        const researchOutputPublishedReminder =
-          getResearchOutputVersionPublishedReminder();
-        const reminderDataObject: ResearchOutputVersionPublishedReminder = {
-          ...researchOutputPublishedReminder,
-          data: {
-            ...researchOutputPublishedReminder.data,
-            documentType: 'Presentation',
-            title: 'Some Test title',
-            researchOutputId: 'some-research-output-id',
-            publishedAt: '2021-01-01',
-            associationType: 'working group',
-            associationName: 'Working Group 1',
-          },
-        };
-
-        reminderDataProviderMock.fetch.mockResolvedValueOnce({
-          total: 1,
-          items: [reminderDataObject],
-        });
-
-        const { items } = await reminderController.fetch(options);
-
-        expect(items[0]).toMatchObject({
-          description:
-            'Working group **Working Group 1** published a new working group Presentation output version: Some Test title.',
-          href: `/shared-research/some-research-output-id`,
-        });
-      });
-
-      test('Should return the correct description and href for the research-output-published reminder', async () => {
-        const researchOutputPublishedReminder =
-          getResearchOutputPublishedReminder();
-        const reminderDataObject: ResearchOutputPublishedReminder = {
-          ...researchOutputPublishedReminder,
-          entity: 'Research Output',
-          type: 'Published',
-          data: {
-            ...researchOutputPublishedReminder.data,
-            documentType: 'Presentation',
-            title: 'Some Test title',
-            researchOutputId: 'some-research-output-id',
-            addedDate: '2021-01-01',
-          },
-        };
-
-        reminderDataProviderMock.fetch.mockResolvedValueOnce({
-          total: 1,
-          items: [reminderDataObject],
-        });
-
-        const { items } = await reminderController.fetch(options);
-
-        expect(items[0]).toMatchObject({
-          description:
-            '**Tom Hardy** on team **Team A** published a team Presentation output: Some Test title.',
-          href: `/shared-research/some-research-output-id`,
-        });
-      });
-
-      test('Should return the correct description and href for the research-output-draft team reminder', async () => {
-        const reminder: ResearchOutputDraftReminder = {
-          ...getResearchOutputDraftTeamReminder(),
-          entity: 'Research Output',
-          type: 'Draft',
-          data: {
-            title: 'Some Test title',
-            researchOutputId: 'some-research-output-id',
-            createdDate: '2021-01-01',
-            createdBy: 'some-user-id',
-            associationType: 'team',
-            associationName: 'Team 1',
-          },
-        };
-
-        reminderDataProviderMock.fetch.mockResolvedValueOnce({
-          total: 1,
-          items: [reminder],
-        });
-
-        const { items } = await reminderController.fetch(options);
-
-        expect(items[0]).toMatchObject({
-          description: `**${reminder.data.createdBy}** on team **${reminder.data.associationName}** created a draft team output: ${reminder.data.title}.`,
-          href: `/shared-research/some-research-output-id`,
-        });
-      });
-
-      test('Should return the correct description and href for the research-output-draft working group reminder', async () => {
-        const reminder: ResearchOutputDraftReminder = {
-          ...getResearchOutputDraftWorkingGroupReminder(),
-          entity: 'Research Output',
-          type: 'Draft',
-          data: {
-            title: 'Some Test title',
-            researchOutputId: 'some-research-output-id',
-            createdDate: '2021-01-01',
-            createdBy: 'some-user-id',
-            associationType: 'working group',
-            associationName: 'Working Group 1',
-          },
-        };
-
-        reminderDataProviderMock.fetch.mockResolvedValueOnce({
-          total: 1,
-          items: [reminder],
-        });
-
-        const { items } = await reminderController.fetch(options);
-
-        expect(items[0]).toMatchObject({
-          description: `**${reminder.data.createdBy}** on ${reminder.data.associationType} **${reminder.data.associationName}** created a draft ${reminder.data.associationType} output: ${reminder.data.title}.`,
-          href: `/shared-research/some-research-output-id`,
-        });
-      });
-
-      test('Should return the correct description and href for the research-output-in-review team reminder', async () => {
-        const reminder: ResearchOutputInReviewReminder = {
-          ...getResearchOutputInReviewTeamReminder(),
-          entity: 'Research Output',
-          type: 'In Review',
-          data: {
-            title: 'Some Test title',
-            researchOutputId: 'some-research-output-id',
-            createdDate: '2021-01-01',
-            associationType: 'team',
-            associationName: 'Team 1',
-            statusChangedBy: 'Some User',
-            documentType: 'Article',
-          },
-        };
-
-        reminderDataProviderMock.fetch.mockResolvedValueOnce({
-          total: 1,
-          items: [reminder],
-        });
-
-        const { items } = await reminderController.fetch(options);
-
-        expect(items[0]).toMatchObject({
-          description: `**${reminder.data.statusChangedBy}** on team **${reminder.data.associationName}** requested PMs to review a team ${reminder.data.documentType} output: ${reminder.data.title}.`,
-          href: `/shared-research/some-research-output-id`,
-        });
-      });
-
-      test('Should return the correct description and href for the research-output-in-review working group reminder', async () => {
-        const reminder: ResearchOutputInReviewReminder = {
-          ...getResearchOutputInReviewTeamReminder(),
-          entity: 'Research Output',
-          type: 'In Review',
-          data: {
-            title: 'Some Test title',
-            researchOutputId: 'some-research-output-id',
-            createdDate: '2021-01-01',
-            associationType: 'working group',
-            associationName: 'Working Group 1',
-            statusChangedBy: 'Some User',
-            documentType: 'Article',
-          },
-        };
-
-        reminderDataProviderMock.fetch.mockResolvedValueOnce({
-          total: 1,
-          items: [reminder],
-        });
-
-        const { items } = await reminderController.fetch(options);
-
-        expect(items[0]).toMatchObject({
-          description: `**${reminder.data.statusChangedBy}** on working group **${reminder.data.associationName}** requested PMs to review a working group ${reminder.data.documentType} output: ${reminder.data.title}.`,
-          href: `/shared-research/some-research-output-id`,
-        });
-      });
-
-      test('Should return the correct description and href for the research-output-version-published project reminder', async () => {
+      test('Should return the correct description and href for the research-output-version-published project output reminder', async () => {
         const researchOutputPublishedReminder =
           getResearchOutputVersionPublishedReminder();
         const reminderDataObject: ResearchOutputVersionPublishedReminder = {
@@ -319,7 +117,37 @@ describe('Reminder Controller', () => {
         });
       });
 
-      test('Should return the correct description and href for the research-output-published project reminder', async () => {
+      test('Should return the correct description and href for the research-output-version-published working group output reminder', async () => {
+        const researchOutputPublishedReminder =
+          getResearchOutputVersionPublishedReminder();
+        const reminderDataObject: ResearchOutputVersionPublishedReminder = {
+          ...researchOutputPublishedReminder,
+          data: {
+            ...researchOutputPublishedReminder.data,
+            documentType: 'Presentation',
+            title: 'Some Test title',
+            researchOutputId: 'some-research-output-id',
+            publishedAt: '2021-01-01',
+            associationType: 'working group',
+            associationName: 'Working Group 1',
+          },
+        };
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminderDataObject],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            '**Working Group 1** published a new working group presentation version: Some Test title.',
+          href: `/shared-research/some-research-output-id`,
+        });
+      });
+
+      test('Should return the correct description and href for the research-output-published project output reminder', async () => {
         const researchOutputPublishedReminder =
           getResearchOutputPublishedReminder();
         const reminderDataObject: ResearchOutputPublishedReminder = {
@@ -349,9 +177,39 @@ describe('Reminder Controller', () => {
         });
       });
 
-      test('Should return the correct description and href for the research-output-draft project reminder', async () => {
+      test('Should return the correct description and href for the research-output-published working group output reminder', async () => {
+        const researchOutputPublishedReminder =
+          getResearchOutputPublishedReminder();
+        const reminderDataObject: ResearchOutputPublishedReminder = {
+          ...researchOutputPublishedReminder,
+          data: {
+            ...researchOutputPublishedReminder.data,
+            documentType: 'Presentation',
+            title: 'Some Test title',
+            researchOutputId: 'some-research-output-id',
+            addedDate: '2021-01-01',
+            associationType: 'working group',
+            associationName: 'Working Group 1',
+          },
+        };
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminderDataObject],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            '**Tom Hardy** published a working group presentation for **Working Group 1**: Some Test title.',
+          href: `/shared-research/some-research-output-id`,
+        });
+      });
+
+      test('Should return the correct description and href for the research-output-draft project output reminder', async () => {
         const reminder: ResearchOutputDraftReminder = {
-          ...getResearchOutputDraftTeamReminder(),
+          ...getResearchOutputDraftProjectReminder(),
           entity: 'Research Output',
           type: 'Draft',
           data: {
@@ -360,7 +218,7 @@ describe('Reminder Controller', () => {
             createdDate: '2021-01-01',
             createdBy: 'Tom Hardy',
             associationType: 'project',
-            associationName: 'Genetic Determinants of Progression',
+            associationName: 'Project 1',
           },
         };
 
@@ -373,14 +231,43 @@ describe('Reminder Controller', () => {
 
         expect(items[0]).toMatchObject({
           description:
-            '**Tom Hardy** updated a draft output for **Genetic Determinants of Progression**: Some Test title.',
+            '**Tom Hardy** updated a draft output for **Project 1**: Some Test title.',
           href: `/shared-research/some-research-output-id`,
         });
       });
 
-      test('Should return the correct description and href for the research-output-in-review project reminder', async () => {
+      test('Should return the correct description and href for the research-output-draft working group output reminder', async () => {
+        const reminder: ResearchOutputDraftReminder = {
+          ...getResearchOutputDraftWorkingGroupReminder(),
+          entity: 'Research Output',
+          type: 'Draft',
+          data: {
+            title: 'Some Test title',
+            researchOutputId: 'some-research-output-id',
+            createdDate: '2021-01-01',
+            createdBy: 'Tom Hardy',
+            associationType: 'working group',
+            associationName: 'Working Group 1',
+          },
+        };
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminder],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            '**Tom Hardy** updated a draft output for **Working Group 1**: Some Test title.',
+          href: `/shared-research/some-research-output-id`,
+        });
+      });
+
+      test('Should return the correct description and href for the research-output-in-review project output reminder', async () => {
         const reminder: ResearchOutputInReviewReminder = {
-          ...getResearchOutputInReviewTeamReminder(),
+          ...getResearchOutputInReviewProjectReminder(),
           entity: 'Research Output',
           type: 'In Review',
           data: {
@@ -408,18 +295,19 @@ describe('Reminder Controller', () => {
         });
       });
 
-      test('Should return the correct description and href for the research-output-switch-to-draft project output reminder', async () => {
-        const reminder: ResearchOutputSwitchToDraftReminder = {
-          ...getResearchOutputSwitchToDraftTeamReminder(),
+      test('Should return the correct description and href for the research-output-in-review working group output reminder', async () => {
+        const reminder: ResearchOutputInReviewReminder = {
+          ...getResearchOutputInReviewProjectReminder(),
+          entity: 'Research Output',
+          type: 'In Review',
           data: {
-            ...getResearchOutputSwitchToDraftTeamReminder().data,
             title: 'Some Test title',
             researchOutputId: 'some-research-output-id',
-            associationType: 'team',
-            associationName: 'Team A',
+            createdDate: '2021-01-01',
+            associationType: 'working group',
+            associationName: 'Working Group 1',
             statusChangedBy: 'Some User',
             documentType: 'Article',
-            isProjectOutput: true,
           },
         };
 
@@ -432,20 +320,78 @@ describe('Reminder Controller', () => {
 
         expect(items[0]).toMatchObject({
           description:
-            '**Some User** on team **Team A** switched to draft a project article output: Some Test title.',
+            '**Some User** requested the PM to review a draft article from **Working Group 1**: Some Test title.',
           href: `/shared-research/some-research-output-id`,
         });
       });
 
-      test('Should return the correct description and href for the research-output-switch-to-draft team reminder', async () => {
-        const reminder: ResearchOutputSwitchToDraftReminder = {
-          ...getResearchOutputSwitchToDraftTeamReminder(),
+      test('Should return the correct description and href for the research-output-draft project output reminder', async () => {
+        const reminder: ResearchOutputDraftReminder = {
+          ...getResearchOutputDraftProjectReminder(),
+          entity: 'Research Output',
+          type: 'Draft',
           data: {
-            ...getResearchOutputSwitchToDraftTeamReminder().data,
             title: 'Some Test title',
             researchOutputId: 'some-research-output-id',
-            associationType: 'team',
-            associationName: 'Team A',
+            createdDate: '2021-01-01',
+            createdBy: 'Tom Hardy',
+            associationType: 'project',
+            associationName: 'Genetic Determinants of Progression',
+          },
+        };
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminder],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            '**Tom Hardy** updated a draft output for **Genetic Determinants of Progression**: Some Test title.',
+          href: `/shared-research/some-research-output-id`,
+        });
+      });
+
+      test('Should return the correct description and href for the research-output-draft working group output reminder', async () => {
+        const reminder: ResearchOutputDraftReminder = {
+          ...getResearchOutputDraftProjectReminder(),
+          entity: 'Research Output',
+          type: 'Draft',
+          data: {
+            title: 'Some Test title',
+            researchOutputId: 'some-research-output-id',
+            createdDate: '2021-01-01',
+            createdBy: 'Tom Hardy',
+            associationType: 'working group',
+            associationName: 'Working Group 1',
+          },
+        };
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminder],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            '**Tom Hardy** updated a draft output for **Working Group 1**: Some Test title.',
+          href: `/shared-research/some-research-output-id`,
+        });
+      });
+
+      test('Should return the correct description and href for the research-output-switch-to-draft project output reminder', async () => {
+        const reminder: ResearchOutputSwitchToDraftReminder = {
+          ...getResearchOutputSwitchToDraftProjectReminder(),
+          data: {
+            ...getResearchOutputSwitchToDraftProjectReminder().data,
+            title: 'Some Test title',
+            researchOutputId: 'some-research-output-id',
+            associationType: 'project',
+            associationName: 'Project A',
             statusChangedBy: 'Some User',
             documentType: 'Article',
           },
@@ -460,7 +406,35 @@ describe('Reminder Controller', () => {
 
         expect(items[0]).toMatchObject({
           description:
-            '**Some User** on team **Team A** switched to draft a team Article output: Some Test title.',
+            '**Some User** on project **Project A** switched to draft a project article output: Some Test title.',
+          href: `/shared-research/some-research-output-id`,
+        });
+      });
+
+      test('Should return the correct description and href for the research-output-switch-to-draft working group reminder', async () => {
+        const reminder: ResearchOutputSwitchToDraftReminder = {
+          ...getResearchOutputSwitchToDraftProjectReminder(),
+          data: {
+            ...getResearchOutputSwitchToDraftProjectReminder().data,
+            title: 'Some Test title',
+            researchOutputId: 'some-research-output-id',
+            associationType: 'working group',
+            associationName: 'Working Group 1',
+            statusChangedBy: 'Some User',
+            documentType: 'Article',
+          },
+        };
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminder],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            '**Some User** on working group **Working Group 1** switched to draft a working group article output: Some Test title.',
           href: `/shared-research/some-research-output-id`,
         });
       });
