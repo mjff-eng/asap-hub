@@ -72,11 +72,6 @@ const teamColumnHeaderStyles = css([
   minGapOnMobile,
 ]);
 
-const attendanceStatusCellStyles = css([
-  statusCellStyles,
-  { textAlign: 'center' },
-]);
-
 const sectionHeaderCellStyles = css({
   textAlign: 'left',
   fontWeight: 400,
@@ -194,7 +189,7 @@ const TeamRows: React.FC<{
             {team.isTeamInactive && <InactiveBadgeIcon />}
           </span>
         </td>
-        <td css={attendanceStatusCellStyles}>
+        <td css={statusCellStyles}>
           <span
             css={statusIconStyles}
             role="img"
