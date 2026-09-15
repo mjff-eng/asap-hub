@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 
 import { Auth0Provider, WhenReady } from '../../../auth/test-utils';
 import { getTeamCoProduction } from '../../../analytics/collaboration/api';
+import { getTeamEngagementMetrics } from '../../../analytics/engagement/api';
 import { getTeamLeadershipMetrics } from '../../../analytics/leadership/api';
 import { getTeamHubResearchOutputs } from '../../../analytics/productivity/api';
 import { getTeamAwardMetrics } from '../api';
@@ -14,6 +15,7 @@ import TeamMetrics from '../TeamMetrics';
 jest.mock('../../../analytics/collaboration/api');
 jest.mock('../../../analytics/productivity/api');
 jest.mock('../../../analytics/leadership/api');
+jest.mock('../../../analytics/engagement/api');
 jest.mock('../api');
 
 const mockGetTeamHubResearchOutputs =
@@ -30,6 +32,16 @@ const mockGetTeamAwardMetrics = getTeamAwardMetrics as jest.MockedFunction<
 const mockGetTeamCoProduction = getTeamCoProduction as jest.MockedFunction<
   typeof getTeamCoProduction
 >;
+const mockGetTeamEngagementMetrics =
+  getTeamEngagementMetrics as jest.MockedFunction<
+    typeof getTeamEngagementMetrics
+  >;
+
+const limitedEngagementMetrics = {
+  speakerDiversity: null,
+  traineePresentations: null,
+  meetingRepAttendance: { percentage: null, limitedData: true },
+};
 
 const createDocument = (
   overrides: Partial<TeamProductivityOpensearchDocument> = {},
@@ -57,6 +69,7 @@ beforeEach(() => {
     coProducedArticles: undefined,
     totalArticles: undefined,
   });
+  mockGetTeamEngagementMetrics.mockResolvedValue(limitedEngagementMetrics);
 });
 
 afterEach(jest.clearAllMocks);
@@ -243,4 +256,47 @@ describe('collaboration section', () => {
       within(row!).getByLabelText(/limited available data/i),
     ).toBeInTheDocument();
   });
+});
+
+it('fetches the engagement metrics for the team', async () => {
+  mockGetTeamHubResearchOutputs.mockResolvedValue({});
+
+  await renderTab('t42');
+
+  expect(mockGetTeamEngagementMetrics).toHaveBeenCalledWith(
+    expect.anything(),
+    expect.anything(),
+    { teamId: 't42' },
+  );
+});
+
+it('renders the engagement statuses', async () => {
+  mockGetTeamHubResearchOutputs.mockResolvedValue({});
+  mockGetTeamEngagementMetrics.mockResolvedValue({
+    speakerDiversity: 95,
+    traineePresentations: 40,
+    meetingRepAttendance: { percentage: null, limitedData: true },
+  });
+
+  await renderTab();
+
+  expect(screen.getByText('Engagement')).toBeVisible();
+  const speakerRow = screen.getByText('Speaker Diversity').closest('article');
+  expect(
+    within(speakerRow!).getByLabelText(/doing an outstanding job/i),
+  ).toBeVisible();
+  const traineeRow = screen
+    .getByText('Trainee Presentations')
+    .closest('article');
+  expect(
+    within(traineeRow!).getByLabelText(
+      /encourage your team to work to improve/i,
+    ),
+  ).toBeVisible();
+  const attendanceRow = screen
+    .getByText('Meeting Rep Attendance')
+    .closest('article');
+  expect(
+    within(attendanceRow!).getByLabelText(/limited available data/i),
+  ).toBeVisible();
 });

@@ -26,6 +26,11 @@ describe('TeamMetricsPage', () => {
       },
     ],
     collaborationMetrics: { withinTeamCoProduction: 62 },
+    engagementMetrics: {
+      speakerDiversity: 95,
+      traineePresentations: 84,
+      meetingRepAttendance: { percentage: null, limitedData: true },
+    },
   };
 
   it('renders the heading and the introduction', () => {
@@ -98,13 +103,16 @@ describe('TeamMetricsPage', () => {
     render(<TeamMetricsPage {...props} />);
 
     const subtitles = screen
-      .getAllByText(/^(Hub Research Outputs|Leadership|Awards|Collaboration)$/)
+      .getAllByText(
+        /^(Hub Research Outputs|Leadership|Awards|Collaboration|Engagement)$/,
+      )
       .map((node) => node.textContent);
     expect(subtitles).toEqual([
       'Hub Research Outputs',
       'Leadership',
       'Awards',
       'Collaboration',
+      'Engagement',
     ]);
   });
 
@@ -149,5 +157,27 @@ describe('TeamMetricsPage', () => {
     expect(
       within(mobileDetails).getByText(/facilitation of collaboration/i),
     ).toBeInTheDocument();
+  });
+
+  it('renders the engagement section with a status per metric', () => {
+    render(<TeamMetricsPage {...props} />);
+
+    expect(screen.getByText('Engagement')).toBeVisible();
+    const speakerRow = screen.getByText('Speaker Diversity').closest('article');
+    expect(
+      within(speakerRow!).getByLabelText(/doing an outstanding job/i),
+    ).toBeVisible();
+    const traineeRow = screen
+      .getByText('Trainee Presentations')
+      .closest('article');
+    expect(
+      within(traineeRow!).getByLabelText(/doing an adequate job/i),
+    ).toBeVisible();
+    const attendanceRow = screen
+      .getByText('Meeting Rep Attendance')
+      .closest('article');
+    expect(
+      within(attendanceRow!).getByLabelText(/limited available data/i),
+    ).toBeVisible();
   });
 });
