@@ -286,54 +286,6 @@ describe('Reminders data provider', () => {
         expect(result.items).toEqual([expectedReminder]);
       });
 
-      test('does not repeat a team when the open science member has multiple roles in it', async () => {
-        const discussionItem = getContentfulReminderDiscussionCollectionItem();
-        const user = getContentfulReminderUsersContent();
-        discussionItem!.message!.createdBy = {
-          ...discussionItem!.message!.createdBy,
-          openScienceTeamMember: true,
-          role: 'Staff',
-          sys: { id: 'user-who-started-discussion' },
-          teamsCollection: {
-            items: [
-              {
-                team: {
-                  sys: { id: 'team-1' },
-                  displayName: 'Alessi',
-                  inactiveSince: null,
-                },
-              },
-              {
-                team: {
-                  sys: { id: 'team-2' },
-                  displayName: 'Ant',
-                  inactiveSince: null,
-                },
-              },
-              {
-                team: {
-                  sys: { id: 'team-1' },
-                  displayName: 'Alessi',
-                  inactiveSince: null,
-                },
-              },
-            ],
-          },
-        };
-
-        const fetchRemindersOptions: FetchRemindersOptions = {
-          userId: 'first-author-user',
-          timezone,
-        };
-
-        mockContentfulGraphqlResponse(discussionItem, user);
-
-        const result = await remindersDataProvider.fetch(fetchRemindersOptions);
-        expect(
-          (result.items[0] as DiscussionCreatedReminder).data.userTeams,
-        ).toEqual('Team Alessi and Team Ant');
-      });
-
       test('returns reminder if user is os member assigned to manuscript and discussion was started by grantee', async () => {
         const discussionItem = getContentfulReminderDiscussionCollectionItem();
         const expectedReminder = getDiscussionStartedByGranteeReminder();
@@ -732,6 +684,11 @@ describe('Reminders data provider', () => {
 
     test('getTeamNames ignores empty team names', async () => {
       expect(getTeamNames([null, undefined, 'Ant'])).toEqual('Team Ant');
+    });
+
+    test('getTeamNames returns empty string for an empty or all-empty list', async () => {
+      expect(getTeamNames([])).toEqual('');
+      expect(getTeamNames([null, undefined])).toEqual('');
     });
   });
 });

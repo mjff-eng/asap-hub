@@ -1412,8 +1412,7 @@ export const getTeamNames = (
       ...new Set(teams.filter((teamName): teamName is string => !!teamName)),
     ].map((teamName) => `Team ${teamName}`);
 
-    if (teamNames.length === 1 && teamNames[0]) return teamNames[0];
-    if (teamNames.length === 2) return teamNames.join(' and ');
+    if (teamNames.length <= 2) return teamNames.join(' and ');
 
     return `${teamNames.slice(0, -1).join(', ')} and ${teamNames.slice(-1)}`;
   }
@@ -1517,9 +1516,6 @@ const createDiscussionCreatedReminder = (
 ): DiscussionCreatedReminder => {
   const manuscript = discussion.linkedFrom?.manuscriptsCollection?.items[0];
   const manuscriptVersion = manuscript?.versionsCollection?.items[0];
-  const userTeams = discussion.message.createdBy?.teamsCollection?.items.map(
-    (member) => member?.team?.displayName,
-  );
   const manuscriptTeams = getDiscussionManuscriptAssociationName(
     manuscript,
     manuscriptVersion as ManuscriptVersion,
@@ -1537,7 +1533,6 @@ const createDiscussionCreatedReminder = (
       title: manuscript?.title || '',
       manuscriptTeams,
       createdBy: `${discussion.message.createdBy.firstName} ${discussion.message.createdBy.lastName}`,
-      userTeams: getTeamNames(userTeams),
       publishedAt: discussion.sys.firstPublishedAt,
     },
   };
@@ -1556,9 +1551,6 @@ const createDiscussionRepliedToReminder = (
     manuscript,
     manuscriptVersion as ManuscriptVersion,
   );
-  const userTeams = message.createdBy?.teamsCollection?.items.map(
-    (member) => member?.team?.displayName,
-  );
 
   return {
     id: `discussion-replied-${message.sys.id}`,
@@ -1571,7 +1563,6 @@ const createDiscussionRepliedToReminder = (
       manuscriptId: manuscript?.sys.id || '',
       title: manuscript?.title || '',
       manuscriptTeams,
-      userTeams: getTeamNames(userTeams),
       createdBy: `${message.createdBy.firstName} ${message.createdBy.lastName}`,
       publishedAt: message.sys.firstPublishedAt,
     },

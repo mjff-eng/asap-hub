@@ -188,7 +188,6 @@ export interface DiscussionCreatedReminder extends Reminder {
     manuscriptId: ManuscriptDataObject['id'];
     title: ManuscriptDataObject['title'];
     manuscriptTeams: string;
-    userTeams: string;
     createdBy: string;
     publishedAt: string;
   };
@@ -203,7 +202,6 @@ export interface DiscussionRepliedToReminder extends Reminder {
     manuscriptId: ManuscriptDataObject['id'];
     title: ManuscriptDataObject['title'];
     manuscriptTeams: string;
-    userTeams: string;
     createdBy: string;
     publishedAt: string;
   };

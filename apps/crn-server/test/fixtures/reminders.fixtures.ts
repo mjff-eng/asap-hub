@@ -845,7 +845,6 @@ export const getDiscussionStartedByGranteeReminder =
       createdBy: 'Tom Hardy',
       publishedAt: '2025-01-07T16:21:33.824Z',
       manuscriptTeams: 'Team Reminder',
-      userTeams: 'Team Alessi',
       title: 'Contextual AI models for single-cell protein biology',
     },
   });
@@ -860,7 +859,6 @@ export const getDiscussionStartedByOpenScienceMemberReminder =
       createdBy: 'Tom Hardy',
       publishedAt: '2025-01-07T16:21:33.824Z',
       manuscriptTeams: 'Team Reminder',
-      userTeams: 'Team Alessi',
       title: 'Contextual AI models for single-cell protein biology',
     },
   });
@@ -875,7 +873,6 @@ export const getDiscussionRepliedToByGranteeReminder =
       createdBy: 'Tom Hardy',
       publishedAt: '2025-01-07T16:21:33.824Z',
       manuscriptTeams: 'Team Reminder',
-      userTeams: 'Team Alessi',
       title: 'Contextual AI models for single-cell protein biology',
     },
   });
@@ -890,7 +887,6 @@ export const getDiscussionRepliedToByOpenScienceMemberReminder =
       createdBy: 'Tom Hardy',
       publishedAt: '2025-01-07T16:21:33.824Z',
       manuscriptTeams: 'Team Reminder',
-      userTeams: 'Team Alessi',
       title: 'Contextual AI models for single-cell protein biology',
     },
   });

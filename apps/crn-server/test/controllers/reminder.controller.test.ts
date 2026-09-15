@@ -531,9 +531,26 @@ describe('Reminder Controller', () => {
         const { items } = await reminderController.fetch(options);
         expect(items[0]).toMatchObject({
           description:
-            '**Tom Hardy** on **Team Alessi** started a discussion on:',
+            '**Tom Hardy** on **Team Reminder** started a discussion on:',
           href: '/compliance/manuscripts/manuscript-id-1?tab=discussions',
           subtext: 'Contextual AI models for single-cell protein biology',
+        });
+      });
+
+      test('Should omit the association when the manuscript has no resolvable name (started)', async () => {
+        const reminderDataObject =
+          getDiscussionStartedByOpenScienceMemberReminder();
+        reminderDataObject.data.manuscriptTeams = '';
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminderDataObject],
+        });
+
+        const { items } = await reminderController.fetch(options);
+        expect(items[0]).toMatchObject({
+          description: '**Tom Hardy** started a discussion on:',
+          href: '/compliance/manuscripts/manuscript-id-1?tab=discussions',
         });
       });
 
@@ -565,9 +582,26 @@ describe('Reminder Controller', () => {
         const { items } = await reminderController.fetch(options);
         expect(items[0]).toMatchObject({
           description:
-            '**Tom Hardy** on **Team Alessi** replied to a discussion on:',
+            '**Tom Hardy** on **Team Reminder** replied to a discussion on:',
           href: '/compliance/manuscripts/manuscript-id-1?tab=discussions',
           subtext: 'Contextual AI models for single-cell protein biology',
+        });
+      });
+
+      test('Should omit the association when the manuscript has no resolvable name (replied)', async () => {
+        const reminderDataObject =
+          getDiscussionRepliedToByOpenScienceMemberReminder();
+        reminderDataObject.data.manuscriptTeams = '';
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminderDataObject],
+        });
+
+        const { items } = await reminderController.fetch(options);
+        expect(items[0]).toMatchObject({
+          description: '**Tom Hardy** replied to a discussion on:',
+          href: '/compliance/manuscripts/manuscript-id-1?tab=discussions',
         });
       });
 

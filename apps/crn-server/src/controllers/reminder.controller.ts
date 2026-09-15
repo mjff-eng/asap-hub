@@ -24,6 +24,9 @@ export const formattedMaterialByEventType = (
   }
 };
 
+const discussionTeamPrefix = (teams: string): string =>
+  teams ? ` on **${teams}**` : '';
+
 export default class ReminderController {
   constructor(private reminderDataProvider: ReminderDataProvider) {}
 
@@ -184,61 +187,10 @@ export default class ReminderController {
           };
         }
 
-        if (
-          reminder.entity === 'Discussion' &&
-          reminder.type === 'Discussion Created by Grantee'
-        ) {
-          return {
-            id: reminder.id,
-            entity: reminder.entity,
-            href: `${
-              compliance({}).manuscript({
-                manuscriptId: reminder.data.manuscriptId,
-              }).$
-            }?tab=discussions`,
-            description: `**${reminder.data.createdBy}** on **${reminder.data.manuscriptTeams}** started a discussion on:`,
-            subtext: reminder.data.title,
-            date: reminder.data.publishedAt,
-          };
-        }
-
-        if (
-          reminder.entity === 'Discussion' &&
-          reminder.type === 'Discussion Created by Open Science Member'
-        ) {
-          return {
-            id: reminder.id,
-            entity: reminder.entity,
-            href: `${
-              compliance({}).manuscript({
-                manuscriptId: reminder.data.manuscriptId,
-              }).$
-            }?tab=discussions`,
-            description: `**${reminder.data.createdBy}** on **${reminder.data.userTeams}** started a discussion on:`,
-            subtext: reminder.data.title,
-            date: reminder.data.publishedAt,
-          };
-        }
-
-        if (
-          reminder.entity === 'Discussion' &&
-          reminder.type === 'Discussion Replied To by Grantee'
-        ) {
-          return {
-            id: reminder.id,
-            entity: reminder.entity,
-            href: `${
-              compliance({}).manuscript({
-                manuscriptId: reminder.data.manuscriptId,
-              }).$
-            }?tab=discussions`,
-            description: `**${reminder.data.createdBy}** on **${reminder.data.manuscriptTeams}** replied to a discussion on:`,
-            subtext: reminder.data.title,
-            date: reminder.data.publishedAt,
-          };
-        }
-
         if (reminder.entity === 'Discussion') {
+          const isCreated =
+            reminder.type === 'Discussion Created by Grantee' ||
+            reminder.type === 'Discussion Created by Open Science Member';
           return {
             id: reminder.id,
             entity: reminder.entity,
@@ -247,7 +199,13 @@ export default class ReminderController {
                 manuscriptId: reminder.data.manuscriptId,
               }).$
             }?tab=discussions`,
-            description: `**${reminder.data.createdBy}** on **${reminder.data.userTeams}** replied to a discussion on:`,
+            description: `**${reminder.data.createdBy}**${discussionTeamPrefix(
+              reminder.data.manuscriptTeams,
+            )} ${
+              isCreated
+                ? 'started a discussion on:'
+                : 'replied to a discussion on:'
+            }`,
             subtext: reminder.data.title,
             date: reminder.data.publishedAt,
           };
