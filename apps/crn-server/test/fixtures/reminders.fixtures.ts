@@ -9,6 +9,9 @@ import {
   ManuscriptCreatedReminder,
   ManuscriptResubmittedReminder,
   ManuscriptStatusUpdatedReminder,
+  MilestoneCreatedReminder,
+  MilestoneOutputsLinkedReminder,
+  MilestoneStatusUpdatedReminder,
   PresentationUpdatedReminder,
   PublishMaterialReminder,
   ReminderEventResponse,
@@ -25,6 +28,7 @@ import {
 import {
   FetchDiscussionRemindersQuery,
   FetchMessageRemindersQuery,
+  FetchMilestoneReminderProjectsQuery,
   FetchRemindersQuery,
   FetchTeamProjectManagerQuery,
 } from '@asap-hub/contentful';
@@ -888,5 +892,108 @@ export const getDiscussionRepliedToByOpenScienceMemberReminder =
       publishedAt: '2025-01-07T16:21:33.824Z',
       manuscriptTeams: 'Team Reminder',
       title: 'Contextual AI models for single-cell protein biology',
+    },
+  });
+
+export const getContentfulReminderMilestoneCollectionItem = (): NonNullable<
+  FetchRemindersQuery['milestonesCollection']
+>['items'][number] => ({
+  sys: {
+    id: 'milestone-id-1',
+    firstPublishedAt: '2025-01-07T16:21:33.824Z',
+    publishedAt: '2025-01-07T16:21:33.824Z',
+  },
+  description: 'Establish the mouse model',
+  status: 'Pending',
+  bulkImported: false,
+  statusUpdatedAt: '2025-01-07T16:21:32.000Z',
+  statusUpdatedBy: {
+    sys: { id: 'milestone-creator-user' },
+    firstName: 'Jane',
+    lastName: 'Doe',
+  },
+  outputsLinkedAt: null,
+  outputsLinkedBy: null,
+  relatedArticlesCollection: { total: 0 },
+  linkedFrom: {
+    aimsCollection: {
+      items: [
+        {
+          sys: { id: 'aim-id-2' },
+          linkedFrom: { supplementGrantCollection: { items: [] } },
+        },
+      ],
+    },
+  },
+});
+
+export const getContentfulReminderMilestoneProjectCollectionItem =
+  (): NonNullable<
+    FetchMilestoneReminderProjectsQuery['projectsCollection']
+  >['items'][number] => ({
+    sys: { id: 'project-id-1' },
+    title: 'Genetic Determinants of Progression',
+    projectType: 'Discovery Project',
+    originalGrantAimsCollection: {
+      items: [{ sys: { id: 'aim-id-1' } }, { sys: { id: 'aim-id-2' } }],
+    },
+    supplementGrant: null,
+    membersCollection: {
+      items: [
+        {
+          role: null,
+          projectMember: {
+            __typename: 'Teams',
+            sys: { id: 'reminder-team' },
+          },
+        },
+      ],
+    },
+    scientificFacilitatorCollection: {
+      items: [{ sys: { id: 'scientific-facilitator-user' } }],
+    },
+  });
+
+const milestoneReminderData = {
+  milestoneId: 'milestone-id-1',
+  projectId: 'project-id-1',
+  projectName: 'Genetic Determinants of Progression',
+  projectType: 'Discovery Project' as const,
+  grantType: 'original' as const,
+  aimNumbers: '2',
+};
+
+export const getMilestoneCreatedReminder = (): MilestoneCreatedReminder => ({
+  id: 'milestone-created-milestone-id-1',
+  entity: 'Milestone',
+  type: 'Milestone Created',
+  data: {
+    ...milestoneReminderData,
+    createdAt: '2025-01-07T16:21:33.824Z',
+  },
+});
+
+export const getMilestoneStatusUpdatedReminder =
+  (): MilestoneStatusUpdatedReminder => ({
+    id: 'milestone-status-updated-milestone-id-1',
+    entity: 'Milestone',
+    type: 'Milestone Status Updated',
+    data: {
+      ...milestoneReminderData,
+      status: 'Complete',
+      statusUpdatedAt: '2025-01-08T10:00:00.000Z',
+    },
+  });
+
+export const getMilestoneOutputsLinkedReminder =
+  (): MilestoneOutputsLinkedReminder => ({
+    id: 'milestone-outputs-linked-milestone-id-1',
+    entity: 'Milestone',
+    type: 'Milestone Outputs Linked',
+    data: {
+      ...milestoneReminderData,
+      milestoneName: 'Establish the mouse model',
+      outputsLinkedAt: '2025-01-08T10:00:00.000Z',
+      outputsLinkedBy: 'John Smith',
     },
   });
