@@ -150,7 +150,7 @@
     "@asap-hub/eslint-config-asap-hub": "workspace:*",
     "@asap-hub/flags": "workspace:*",
     "@babel/cli": "7.28.6",
-    "@babel/core": "7.28.6",
+    "@babel/core": "7.29.6",
     "@babel/eslint-parser": "7.28.6",
     "@babel/node": "7.28.6",
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.18.6",
