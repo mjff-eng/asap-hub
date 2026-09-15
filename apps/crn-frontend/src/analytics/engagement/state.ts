@@ -24,8 +24,8 @@ import {
   getTeamEngagementMetrics,
   MeetingRepAttendanceOptions,
   TeamEngagementMetrics,
-  TeamEngagementMetricsOptions,
 } from './api';
+import { TeamMetricsOptions } from '../utils/team-metrics';
 
 export const engagementQueryKeys = {
   all: ['analytics-engagement'] as const,
@@ -110,7 +110,7 @@ export const teamEngagementMetricsQueryKeys = {
 };
 
 export const useTeamEngagementMetrics = (
-  options: TeamEngagementMetricsOptions,
+  options: TeamMetricsOptions,
 ): TeamEngagementMetrics => {
   const presenterClient = useAnalyticsOpensearch<EngagementResponse>(
     'presenter-representation',
