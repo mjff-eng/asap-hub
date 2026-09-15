@@ -1,9 +1,17 @@
 import { DateTime } from 'luxon';
-import { compliance, events, network, sharedResearch } from '@asap-hub/routing';
+import {
+  compliance,
+  events,
+  network,
+  projectRouteByType,
+  sharedResearch,
+} from '@asap-hub/routing';
 import {
   EventReminderType,
   FetchRemindersOptions,
+  GrantType,
   ListReminderResponse,
+  ProjectType,
 } from '@asap-hub/model';
 import { capitalizeFirstLetter } from '@asap-hub/server-common';
 import { ReminderDataProvider } from '../data-providers/types';
@@ -26,6 +34,15 @@ export const formattedMaterialByEventType = (
 
 const discussionTeamPrefix = (teams: string): string =>
   teams ? ` on **${teams}**` : '';
+
+const getMilestonesTabHref = (
+  projectType: ProjectType,
+  projectId: string,
+  grantType: GrantType,
+): string =>
+  `${
+    projectRouteByType[projectType](projectId).milestones({}).$
+  }?grantType=${grantType}`;
 
 export default class ReminderController {
   constructor(private reminderDataProvider: ReminderDataProvider) {}
@@ -208,6 +225,43 @@ export default class ReminderController {
             }`,
             subtext: reminder.data.title,
             date: reminder.data.publishedAt,
+          };
+        }
+
+        if (reminder.entity === 'Milestone') {
+          const href = getMilestonesTabHref(
+            reminder.data.projectType,
+            reminder.data.projectId,
+            reminder.data.grantType,
+          );
+          const aims = `Aim(s) ${reminder.data.aimNumbers}`;
+
+          if (reminder.type === 'Milestone Created') {
+            return {
+              id: reminder.id,
+              entity: reminder.entity,
+              href,
+              description: `A new milestone has been added for **${reminder.data.projectName}**: Aim ${reminder.data.aimNumbers}. The milestone has been linked to their corresponding Aim(s) and is now available in the Milestones tab.`,
+              date: reminder.data.createdAt,
+            };
+          }
+
+          if (reminder.type === 'Milestone Status Updated') {
+            return {
+              id: reminder.id,
+              entity: reminder.entity,
+              href,
+              description: `A milestone for **${reminder.data.projectName}** was marked as ${reminder.data.status} (${aims}).`,
+              date: reminder.data.statusUpdatedAt,
+            };
+          }
+
+          return {
+            id: reminder.id,
+            entity: reminder.entity,
+            href,
+            description: `**${reminder.data.outputsLinkedBy}** linked outputs to a milestone on **${reminder.data.projectName}**: ${reminder.data.milestoneName} (${aims}).`,
+            date: reminder.data.outputsLinkedAt,
           };
         }
 
