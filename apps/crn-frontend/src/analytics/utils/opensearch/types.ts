@@ -133,7 +133,12 @@ export type ShouldClause =
     }
   | { match: Record<string, string> };
 
-type TermKey = 'timeRange' | 'documentCategory' | 'outputType' | 'id';
+type TermKey =
+  | 'timeRange'
+  | 'documentCategory'
+  | 'outputType'
+  | 'id'
+  | 'teamId';
 
 type ExclusiveRecord<K extends string, V> = {
   [P in K]: { [_ in P]: V } & { [O in Exclude<K, P>]?: never };
