@@ -88,7 +88,7 @@ const headerStyles = css({
 const titleStyles = css({
   fontSize: rem(26),
   fontWeight: 700,
-  lineHeight: rem(32),
+  lineHeight: 32 / 26,
   color: neutral1000.rgb,
 });
 
@@ -132,7 +132,7 @@ const sectionTitleStyles = css({
   margin: 0,
   fontSize: rem(17),
   fontWeight: 700,
-  lineHeight: rem(24),
+  lineHeight: 24 / 17,
   color: neutral1000.rgb,
 });
 
@@ -270,13 +270,13 @@ const attendanceGridStyles = css({
 const attendeesTableHeaderStyles = css({
   fontSize: rem(17),
   fontWeight: 'bold',
-  lineHeight: rem(24),
+  lineHeight: 24 / 17,
   letterSpacing: rem(0.1),
   color: neutral1000.rgb,
   paddingBottom: rem(12),
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     fontSize: rem(14),
-    lineHeight: rem(16),
+    lineHeight: 16 / 14,
     letterSpacing: 'normal',
   },
 });
@@ -307,10 +307,12 @@ const groupHeaderStyles = css({
   gap: rem(4),
 });
 
+// A ratio, not `rem`: line-height in `em` resolves against the element's own
+// font size, so `rem(16)` here would render 16/17 x 14px.
 const groupLineStyles = css({
   margin: 0,
   fontSize: rem(14),
-  lineHeight: rem(16),
+  lineHeight: 16 / 14,
 });
 
 const groupTitleStyles = css([
@@ -343,7 +345,7 @@ const teamCellStyles = css({
   gap: rem(8),
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     fontSize: rem(14),
-    lineHeight: rem(16),
+    lineHeight: 16 / 14,
     '> svg': {
       display: 'none',
     },
