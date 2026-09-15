@@ -54,6 +54,7 @@ const fullResult: UploadListResult = {
         teamId: 's1',
         teamName: 'Imaging',
         teamType: 'Discovery Team',
+        attended: true,
       },
     },
     { name: 'Data Scince' },

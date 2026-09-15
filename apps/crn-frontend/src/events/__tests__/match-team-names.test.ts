@@ -62,12 +62,94 @@ describe('matchTeamNames', () => {
     },
   );
 
-  it('Should list a name with no match, without a suggestion', () => {
-    const result = matchTeamNames([row(' Alessy ')], [team()]);
+  it('Should list a name with no close match, without a suggestion', () => {
+    const result = matchTeamNames([row('Nobody')], [team()]);
 
     expect(result.matched).toEqual([]);
-    expect(result.unmatched).toEqual([{ name: 'Alessy' }]);
+    expect(result.unmatched).toEqual([{ name: 'Nobody' }]);
     expect(result.unmatched[0]?.suggestion).toBeUndefined();
+  });
+
+  it.each([true, false])(
+    'Should suggest the closest team and carry attended=%s from the file',
+    (attended) => {
+      const result = matchTeamNames([row(' Alessy ', attended)], [team()]);
+
+      expect(result.matched).toEqual([]);
+      expect(result.unmatched).toEqual([
+        {
+          name: 'Alessy',
+          suggestion: {
+            teamId: 't-alessi',
+            teamName: 'Alessi',
+            teamType: 'Discovery Team',
+            attended,
+            isTeamInactive: false,
+          },
+        },
+      ]);
+    },
+  );
+
+  it('Should flag an inactive team in a suggestion', () => {
+    const result = matchTeamNames(
+      [row('Alessy')],
+      [team({ inactiveSince: '2024-01-01T00:00:00.000Z' })],
+    );
+
+    expect(result.unmatched[0]?.suggestion?.isTeamInactive).toEqual(true);
+  });
+
+  it('Should not suggest a team that is already matched', () => {
+    const result = matchTeamNames([row('Alessi'), row('Alessy')], [team()]);
+
+    expect(result.matched).toHaveLength(1);
+    expect(result.unmatched).toEqual([{ name: 'Alessy' }]);
+  });
+
+  it('Should not suggest the same team twice', () => {
+    const result = matchTeamNames([row('Alessy'), row('Alessii')], [team()]);
+
+    expect(result.unmatched[0]?.suggestion?.teamId).toEqual('t-alessi');
+    expect(result.unmatched[1]?.suggestion).toBeUndefined();
+  });
+
+  describe('normalized Levenshtein suggestion threshold', () => {
+    const corpus = [
+      team({ id: 't-alessi', displayName: 'Alessi' }),
+      team({ id: 't-antelope', displayName: 'Antelope' }),
+      team({ id: 't-gp2', displayName: 'GP2' }),
+      team({ id: 't-bruce', displayName: 'Bruce' }),
+    ];
+
+    it.each`
+      name          | expected
+      ${'Alissi'}   | ${'Alessi'}
+      ${'Alesi'}    | ${'Alessi'}
+      ${'antilope'} | ${'Antelope'}
+      ${'antelop'}  | ${'Antelope'}
+      ${'gpt'}      | ${undefined}
+      ${'GP5'}      | ${undefined}
+      ${'Bruck'}    | ${undefined}
+      ${'Nobody'}   | ${undefined}
+    `('Should suggest $expected for $name', ({ name, expected }) => {
+      const result = matchTeamNames([row(name)], corpus);
+
+      expect(result.matched).toEqual([]);
+      expect(result.unmatched[0]?.suggestion?.teamName).toEqual(expected);
+    });
+
+    it('Should pick the closest team when several are candidates', () => {
+      const result = matchTeamNames(
+        [row('Antelopa')],
+        [
+          team({ id: 't-antelope', displayName: 'Antelope' }),
+          team({ id: 't-antelopes', displayName: 'Antelopes' }),
+        ],
+      );
+
+      expect(result.unmatched[0]?.suggestion?.teamId).toEqual('t-antelope');
+    });
   });
 
   it('Should resolve every Hub team into matched regardless of the current table', () => {

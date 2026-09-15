@@ -331,7 +331,10 @@ const attendeesTableHeaderStyles = css({
 });
 
 const attendanceHeaderStyles = css({
-  paddingRight: rem(24),
+  display: 'inline-block',
+  width: rem(40),
+  marginRight: rem(48),
+  textAlign: 'center',
 });
 
 const attendeesRowsStyles = css({

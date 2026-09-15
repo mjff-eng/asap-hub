@@ -40,6 +40,8 @@ export type UploadListSuggestion = {
   teamId: string;
   teamName: string;
   teamType?: EventAttendanceTeamType;
+  attended: boolean;
+  isTeamInactive?: boolean;
 };
 
 export type UploadListUnmatchedTeam = {
@@ -375,9 +377,23 @@ const suggestionToTeam = (
 ): EventAttendanceTeam => ({
   teamId: suggestion.teamId,
   teamName: suggestion.teamName,
-  attended: true,
+  attended: suggestion.attended,
   teamType: suggestion.teamType,
+  isTeamInactive: suggestion.isTeamInactive,
 });
+
+const dedupeByTeamId = (
+  teams: EventAttendanceTeam[],
+): EventAttendanceTeam[] => {
+  const seen = new Set<string>();
+  return teams.filter((team) => {
+    if (seen.has(team.teamId)) {
+      return false;
+    }
+    seen.add(team.teamId);
+    return true;
+  });
+};
 
 const noTeamIds: ReadonlySet<string> = new Set();
 
@@ -490,6 +506,18 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
     : [];
   const newMatchedCount = result ? result.matched.length - alreadyIn.length : 0;
 
+  const promotedTeams: EventAttendanceTeam[] = result
+    ? result.unmatched
+        .filter(isPromoted)
+        .map((team) => suggestionToTeam(team.suggestion))
+    : [];
+  const promotedUpdates = promotedTeams.filter((team) =>
+    currentTeamIds.has(team.teamId),
+  );
+  const promotedNew = promotedTeams.filter(
+    (team) => !currentTeamIds.has(team.teamId),
+  );
+
   const matchedTeams: EventAttendanceTeam[] = result
     ? [
         ...result.matched.filter(
@@ -497,11 +525,14 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
             !currentTeamIds.has(team.teamId) &&
             !removedMatchedIds.has(team.teamId),
         ),
-        ...result.unmatched
-          .filter(isPromoted)
-          .map((team) => suggestionToTeam(team.suggestion)),
+        ...promotedNew,
       ]
     : [];
+
+  const alreadyInCount = new Set([
+    ...alreadyIn.map((team) => team.teamId),
+    ...promotedUpdates.map((team) => team.teamId),
+  ]).size;
 
   const remainingUnmatched = result
     ? result.unmatched.filter((team) => !isPromoted(team))
@@ -525,16 +556,19 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
   // Describes the file, not the current view: once the user deletes the rows
   // themselves there is nothing to explain, so no message is shown.
   const alreadyInMessage =
-    alreadyIn.length === 1
+    alreadyInCount === 1
       ? 'This team is already in the attendance table.'
       : `All ${pluralizeTeams(
-          alreadyIn.length,
+          alreadyInCount,
         )} in this list are already in the attendance table.`;
   const emptyResultMessage = newMatchedCount === 0 ? alreadyInMessage : null;
 
   const isDirty = files.length > 0 || matchedTeams.length > 0;
   const addEnabled =
-    (matchedTeams.length > 0 || alreadyIn.length > 0) && !isSaving;
+    (matchedTeams.length > 0 ||
+      alreadyIn.length > 0 ||
+      promotedUpdates.length > 0) &&
+    !isSaving;
 
   const requestClose = () => {
     if (isDirty) {
@@ -547,7 +581,10 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
   const handleAddAttendees = async () => {
     setIsSaving(true);
     try {
-      await onAddAttendees([...matchedTeams, ...alreadyIn], files);
+      await onAddAttendees(
+        dedupeByTeamId([...matchedTeams, ...promotedUpdates, ...alreadyIn]),
+        files,
+      );
     } catch {
       // The caller surfaces the error; the modal only needs to unlock so the
       // user can retry or cancel instead of staying stuck on "saving".
@@ -590,7 +627,8 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
         <Paragraph noMargin accent="lead">
           Add teams from a list. Matched teams are added and marked attended. If
           a team is already in your list, their attendance will be updated to
-          match the file. CSV or XLSX files only.
+          match the file. CSV or XLSX files only. What format does the file
+          need?
           <TooltipInfo
             openOnHover
             floating
@@ -665,7 +703,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
               <span css={summarySeparatorStyles}>•</span>
               <span>{newMatchedCount} matched</span>
               <span css={summarySeparatorStyles}>•</span>
-              <span>{alreadyIn.length} already in</span>
+              <span>{alreadyInCount} already in</span>
             </div>
 
             {!hasSections && emptyResultMessage && (
@@ -771,6 +809,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
                                     <span css={unmatchedMetaStyles}>
                                       • did you mean{' '}
                                       <Link
+                                        openInNewTab
                                         href={
                                           network({}).teams({}).team({
                                             teamId: suggestion.teamId,
@@ -799,8 +838,14 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
                                       promoteSuggestion(suggestion.teamId)
                                     }
                                   >
-                                    {plusIcon}
-                                    Add
+                                    {currentTeamIds.has(suggestion.teamId) ? (
+                                      'Update'
+                                    ) : (
+                                      <>
+                                        {plusIcon}
+                                        Add
+                                      </>
+                                    )}
                                   </Button>
                                 )}
                               </div>

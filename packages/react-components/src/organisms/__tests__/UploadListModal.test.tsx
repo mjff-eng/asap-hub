@@ -32,6 +32,7 @@ const uploadResult: UploadListResult = {
         teamId: 's1',
         teamName: 'Imaging Suggestion',
         teamType: 'Resource Team',
+        attended: true,
       },
     },
     { name: 'Data Scince' },
@@ -337,14 +338,16 @@ describe('UploadListModal', () => {
   it('Should explain an empty card when every team is already in', async () => {
     const { container } = renderModal({
       currentTeamIds: new Set(['a1', 'a2', 'a3']),
-      onUploadList: jest.fn(async () => ({
-        matched: [
-          { teamId: 'a1', teamName: 'A', attended: true },
-          { teamId: 'a2', teamName: 'B', attended: false },
-          { teamId: 'a3', teamName: 'C', attended: true },
-        ],
-        unmatched: [],
-      })),
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [
+            { teamId: 'a1', teamName: 'A', attended: true },
+            { teamId: 'a2', teamName: 'B', attended: false },
+            { teamId: 'a3', teamName: 'C', attended: true },
+          ],
+          unmatched: [],
+        }),
+      ),
     });
 
     await upload(makeFile('teams.csv'), container);
@@ -360,10 +363,12 @@ describe('UploadListModal', () => {
   it('Should name a single already-added team without counting it', async () => {
     const { container } = renderModal({
       currentTeamIds: new Set(['a1']),
-      onUploadList: jest.fn(async () => ({
-        matched: [{ teamId: 'a1', teamName: 'A', attended: true }],
-        unmatched: [],
-      })),
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [{ teamId: 'a1', teamName: 'A', attended: true }],
+          unmatched: [],
+        }),
+      ),
     });
 
     await upload(makeFile('teams.csv'), container);
@@ -375,10 +380,12 @@ describe('UploadListModal', () => {
 
   it('Should not claim teams were already in after the user deletes them', async () => {
     const { container } = renderModal({
-      onUploadList: jest.fn(async () => ({
-        matched: [{ teamId: 'm1', teamName: 'Imaging', attended: true }],
-        unmatched: [],
-      })),
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [{ teamId: 'm1', teamName: 'Imaging', attended: true }],
+          unmatched: [],
+        }),
+      ),
     });
 
     await upload(makeFile('teams.csv'), container);
@@ -398,17 +405,19 @@ describe('UploadListModal', () => {
 
   it('Should flag an inactive matched team and open its link in a new tab', async () => {
     const { container } = renderModal({
-      onUploadList: jest.fn(async () => ({
-        matched: [
-          {
-            teamId: 'm1',
-            teamName: 'Imaging',
-            attended: true,
-            isTeamInactive: true,
-          },
-        ],
-        unmatched: [],
-      })),
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [
+            {
+              teamId: 'm1',
+              teamName: 'Imaging',
+              attended: true,
+              isTeamInactive: true,
+            },
+          ],
+          unmatched: [],
+        }),
+      ),
       initialSectionsOpen: true,
     });
 
@@ -422,12 +431,26 @@ describe('UploadListModal', () => {
     ).toBeInTheDocument();
   });
 
+  it('Should open an unmatched suggestion link in a new tab', async () => {
+    const { container } = renderModal({ initialSectionsOpen: true });
+
+    await upload(makeFile('teams.csv'), container);
+
+    const link = await screen.findByRole('link', {
+      name: 'Imaging Suggestion',
+    });
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
+  });
+
   it('Should warn instead of showing zeroed counts when no names were found', async () => {
     const { container } = renderModal({
-      onUploadList: jest.fn(async () => ({
-        matched: [],
-        unmatched: [],
-      })),
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [],
+          unmatched: [],
+        }),
+      ),
     });
 
     await upload(makeFile('teams.csv'), container);
@@ -441,10 +464,12 @@ describe('UploadListModal', () => {
 
   it('Should keep the size warning ahead of the empty-file warning', async () => {
     const { container } = renderModal({
-      onUploadList: jest.fn(async () => ({
-        matched: [],
-        unmatched: [],
-      })),
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [],
+          unmatched: [],
+        }),
+      ),
     });
 
     const fileInput = container.querySelector(
@@ -537,12 +562,159 @@ describe('UploadListModal', () => {
     expect(screen.getByText('2 teams')).toBeInTheDocument();
   });
 
+  it('Should label a suggestion Update when its team is already in the list', async () => {
+    const { container } = renderModal({
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [
+            {
+              teamId: 'm1',
+              teamName: 'Imaging',
+              attended: true,
+              teamType: 'Discovery Team',
+            },
+          ],
+          unmatched: [
+            {
+              name: 'Genetcs',
+              suggestion: {
+                teamId: 'a1',
+                teamName: 'Genetics',
+                attended: false,
+              },
+            },
+          ],
+        }),
+      ),
+    });
+    await upload(makeFile('teams.csv'), container);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /not matched/ }),
+    );
+
+    const section = screen.getByText('1 not matched').closest('button')
+      ?.parentElement as HTMLElement;
+    expect(
+      within(section).getByRole('button', { name: /Update/ }),
+    ).toBeInTheDocument();
+    expect(
+      within(section).queryByRole('button', { name: /Add/ }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('Should count a promoted update as already in and send it on save', async () => {
+    const onAddAttendeesMock = jest.fn();
+    const { container } = renderModal({
+      onAddAttendees: onAddAttendeesMock,
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [
+            {
+              teamId: 'm1',
+              teamName: 'Imaging',
+              attended: true,
+              teamType: 'Discovery Team',
+            },
+          ],
+          unmatched: [
+            {
+              name: 'Genetcs',
+              suggestion: {
+                teamId: 'a1',
+                teamName: 'Genetics',
+                attended: false,
+              },
+            },
+          ],
+        }),
+      ),
+    });
+    await upload(makeFile('teams.csv'), container);
+
+    expect(screen.getByText('0 already in')).toBeInTheDocument();
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /not matched/ }),
+    );
+    const section = screen.getByText('1 not matched').closest('button')
+      ?.parentElement as HTMLElement;
+    await userEvent.click(
+      within(section).getByRole('button', { name: /Update/ }),
+    );
+
+    expect(screen.getByText('1 already in')).toBeInTheDocument();
+    expect(screen.queryByText(/not matched/)).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Add Attendees' }),
+    );
+    expect(onAddAttendeesMock).toHaveBeenCalledWith(
+      [
+        expect.objectContaining({ teamId: 'm1' }),
+        expect.objectContaining({ teamId: 'a1', attended: false }),
+      ],
+      [expect.objectContaining({ name: 'teams.csv' })],
+    );
+  });
+
+  it('Should give a promoted update precedence over the already-in file row', async () => {
+    const onAddAttendeesMock = jest.fn();
+    const { container } = renderModal({
+      onAddAttendees: onAddAttendeesMock,
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [
+            {
+              teamId: 'a1',
+              teamName: 'Genetics',
+              attended: true,
+              teamType: 'Discovery Team',
+            },
+          ],
+          unmatched: [
+            {
+              name: 'Genetcs',
+              suggestion: {
+                teamId: 'a1',
+                teamName: 'Genetics',
+                attended: false,
+              },
+            },
+          ],
+        }),
+      ),
+    });
+    await upload(makeFile('teams.csv'), container);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /not matched/ }),
+    );
+    const section = screen.getByText('1 not matched').closest('button')
+      ?.parentElement as HTMLElement;
+    await userEvent.click(
+      within(section).getByRole('button', { name: /Update/ }),
+    );
+
+    expect(screen.getByText('1 already in')).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Add Attendees' }),
+    );
+    expect(onAddAttendeesMock).toHaveBeenCalledWith(
+      [expect.objectContaining({ teamId: 'a1', attended: false })],
+      [expect.objectContaining({ name: 'teams.csv' })],
+    );
+  });
+
   it('Should hide the not-matched section when there are none', async () => {
     const { container } = renderModal({
-      onUploadList: jest.fn(async () => ({
-        matched: uploadResult.matched,
-        unmatched: [],
-      })),
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: uploadResult.matched,
+          unmatched: [],
+        }),
+      ),
     });
 
     await upload(makeFile('teams.csv'), container);
@@ -557,10 +729,12 @@ describe('UploadListModal', () => {
 
   it('Should hide the matched section when there are none', async () => {
     const { container } = renderModal({
-      onUploadList: jest.fn(async () => ({
-        matched: [],
-        unmatched: uploadResult.unmatched,
-      })),
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [],
+          unmatched: uploadResult.unmatched,
+        }),
+      ),
     });
 
     await upload(makeFile('teams.csv'), container);
@@ -591,10 +765,12 @@ describe('UploadListModal', () => {
 
   it('Should let the user apply status updates when every team is already in', async () => {
     const { container } = renderModal({
-      onUploadList: jest.fn(async () => ({
-        matched: [{ teamId: 'a1', teamName: 'Genetics', attended: false }],
-        unmatched: [],
-      })),
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [{ teamId: 'a1', teamName: 'Genetics', attended: false }],
+          unmatched: [],
+        }),
+      ),
     });
 
     await upload(makeFile('teams.csv'), container);
