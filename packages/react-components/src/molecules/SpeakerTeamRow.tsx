@@ -151,7 +151,7 @@ const SpeakerTeamRow: React.FC<SpeakerTeamRowProps> = ({
       <span css={labelStyles}>
         {variant === 'team' && teamIcon(teamType)}
         {variant === 'team' && teamId ? (
-          <Link href={network({}).teams({}).team({ teamId }).$}>
+          <Link href={network({}).teams({}).team({ teamId }).$} openInNewTab>
             <span css={teamNameStyles}>{label}</span>
           </Link>
         ) : (

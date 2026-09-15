@@ -109,11 +109,17 @@ it('renders each team member as a link to their profile and shows an alumni badg
       ]}
     />,
   );
-  expect(screen.getByRole('link', { name: 'Jane Doe' })).toHaveAttribute(
-    'href',
-    expect.stringContaining('u1'),
-  );
+  const userLink = screen.getByRole('link', { name: 'Jane Doe' });
+  expect(userLink).toHaveAttribute('href', expect.stringContaining('u1'));
+  expect(userLink).toHaveAttribute('target', '_blank');
   expect(screen.getByTitle('Alumni Member')).toBeInTheDocument();
+});
+
+it('opens the team profile in a new tab', () => {
+  render(<SpeakerTeamRow {...defaultProps} teamId="team-1" />);
+  const teamLink = screen.getByRole('link', { name: 'Team Alpha' });
+  expect(teamLink).toHaveAttribute('href', expect.stringContaining('team-1'));
+  expect(teamLink).toHaveAttribute('target', '_blank');
 });
 
 it('renders the external variant without a team icon and without role badges on nested rows', () => {

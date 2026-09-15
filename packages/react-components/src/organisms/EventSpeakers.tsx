@@ -446,6 +446,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
                         href={
                           network({}).teams({}).team({ teamId: group.id }).$
                         }
+                        openInNewTab
                       >
                         {group.teamName}
                       </Link>
