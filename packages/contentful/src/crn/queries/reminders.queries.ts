@@ -9,7 +9,61 @@ export const FETCH_REMINDERS = gql`
     $userId: String!
     $researchOutputVersionsFilter: ResearchOutputVersionsFilter
     $manuscriptFilter: ManuscriptsFilter
+    $milestoneFilter: MilestonesFilter
   ) {
+    milestonesCollection(
+      where: $milestoneFilter
+      limit: 100
+      order: [sys_publishedAt_DESC]
+    ) {
+      items {
+        sys {
+          id
+          firstPublishedAt
+          publishedAt
+        }
+        description
+        status
+        bulkImported
+        statusUpdatedAt
+        statusUpdatedBy {
+          sys {
+            id
+          }
+          firstName
+          lastName
+        }
+        outputsLinkedAt
+        outputsLinkedBy {
+          sys {
+            id
+          }
+          firstName
+          lastName
+        }
+        relatedArticlesCollection(limit: 1) {
+          total
+        }
+        linkedFrom {
+          aimsCollection(limit: 10) {
+            items {
+              sys {
+                id
+              }
+              linkedFrom {
+                supplementGrantCollection(limit: 1) {
+                  items {
+                    sys {
+                      id
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     manuscriptsCollection(where: $manuscriptFilter) {
       items {
         sys {
@@ -324,6 +378,64 @@ export const FETCH_REMINDERS = gql`
                 }
                 title
               }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const FETCH_MILESTONE_REMINDER_PROJECTS = gql`
+  query FetchMilestoneReminderProjects($projectFilter: ProjectsFilter) {
+    projectsCollection(where: $projectFilter, limit: 100) {
+      items {
+        sys {
+          id
+        }
+        title
+        projectType
+        originalGrantAimsCollection(limit: 50) {
+          items {
+            sys {
+              id
+            }
+          }
+        }
+        supplementGrant {
+          sys {
+            id
+          }
+          aimsCollection(limit: 50) {
+            items {
+              sys {
+                id
+              }
+            }
+          }
+        }
+        membersCollection(limit: 50) {
+          items {
+            role
+            projectMember {
+              __typename
+              ... on Users {
+                sys {
+                  id
+                }
+              }
+              ... on Teams {
+                sys {
+                  id
+                }
+              }
+            }
+          }
+        }
+        scientificFacilitatorCollection(limit: 10) {
+          items {
+            sys {
+              id
             }
           }
         }
