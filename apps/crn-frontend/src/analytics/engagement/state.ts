@@ -9,6 +9,7 @@ import {
   ListEngagementResponse,
   ListMeetingRepAttendanceResponse,
   MeetingRepAttendanceDataObject,
+  MeetingRepAttendanceResponse,
   SortEngagement,
 } from '@asap-hub/model';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -20,7 +21,10 @@ import {
   getEngagement,
   getEngagementPerformance,
   getMeetingRepAttendance,
+  getTeamEngagementMetrics,
   MeetingRepAttendanceOptions,
+  TeamEngagementMetrics,
+  TeamEngagementMetricsOptions,
 } from './api';
 
 export const engagementQueryKeys = {
@@ -97,4 +101,26 @@ export const useAnalyticsMeetingRepAttendance = (
       ),
   });
   return data as ListMeetingRepAttendanceResponse;
+};
+
+export const teamEngagementMetricsQueryKeys = {
+  all: ['analytics-team-engagement-metrics'] as const,
+  detail: (teamId: string) =>
+    [...teamEngagementMetricsQueryKeys.all, teamId] as const,
+};
+
+export const useTeamEngagementMetrics = (
+  options: TeamEngagementMetricsOptions,
+): TeamEngagementMetrics => {
+  const presenterClient = useAnalyticsOpensearch<EngagementResponse>(
+    'presenter-representation',
+  ).client;
+  const attendanceClient =
+    useAnalyticsOpensearch<MeetingRepAttendanceResponse>('attendance').client;
+
+  return useSuspenseQuery({
+    queryKey: teamEngagementMetricsQueryKeys.detail(options.teamId),
+    queryFn: (): Promise<TeamEngagementMetrics> =>
+      getTeamEngagementMetrics(presenterClient, attendanceClient, options),
+  }).data;
 };

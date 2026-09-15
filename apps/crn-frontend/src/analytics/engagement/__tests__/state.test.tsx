@@ -5,10 +5,15 @@ import { Component, ReactNode, Suspense } from 'react';
 
 import { Auth0Provider, WhenReady } from '../../../auth/test-utils';
 import { useAnalyticsOpensearch } from '../../../hooks/opensearch';
-import { getEngagement, getMeetingRepAttendance } from '../api';
+import {
+  getEngagement,
+  getMeetingRepAttendance,
+  getTeamEngagementMetrics,
+} from '../api';
 import {
   useAnalyticsEngagement,
   useAnalyticsMeetingRepAttendance,
+  useTeamEngagementMetrics,
 } from '../state';
 
 jest.mock('../api');
@@ -108,6 +113,39 @@ describe('useAnalyticsMeetingRepAttendance', () => {
 
     await waitFor(() => expect(getMeetingRepAttendance).toHaveBeenCalled());
     expect(result.current).toBeNull();
+  });
+});
+
+describe('useTeamEngagementMetrics', () => {
+  it('fetches the metrics for the team from the presenter and attendance indices', async () => {
+    const metrics = {
+      speakerDiversity: 67,
+      traineePresentations: 33,
+      meetingRepAttendance: { percentage: 75, limitedData: false },
+    };
+    (getTeamEngagementMetrics as jest.Mock).mockResolvedValue(metrics);
+    const presenterClient = { index: 'presenter-representation' };
+    const attendanceClient = { index: 'attendance' };
+    mockUseAnalyticsOpensearch.mockImplementation(
+      (index) =>
+        ({
+          client:
+            index === 'presenter-representation'
+              ? presenterClient
+              : attendanceClient,
+        }) as unknown as ReturnType<typeof useAnalyticsOpensearch>,
+    );
+
+    const { result } = renderStateHook(() =>
+      useTeamEngagementMetrics({ teamId: 'team-id-1' }),
+    );
+
+    await waitFor(() => expect(result.current).toEqual(metrics));
+    expect(getTeamEngagementMetrics).toHaveBeenCalledWith(
+      presenterClient,
+      attendanceClient,
+      { teamId: 'team-id-1' },
+    );
   });
 });
 
