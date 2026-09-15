@@ -1107,7 +1107,7 @@ __metadata:
     "@types/apr-intercept": "workspace:*"
     "@types/async": "npm:^3"
     "@types/async-retry": "npm:^1"
-    "@types/aws-lambda": "npm:8.10.159"
+    "@types/aws-lambda": "npm:8.10.162"
     "@types/babel__preset-env": "npm:7.10.0"
     "@types/chance": "npm:1.1.7"
     "@types/cors": "npm:2.8.19"
@@ -1555,7 +1555,7 @@ __metadata:
     "@serverless/typescript": "npm:3.38.0"
     "@types/apicache": "npm:^1"
     "@types/apr-intercept": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.159"
+    "@types/aws-lambda": "npm:8.10.162"
     "@types/cors": "npm:2.8.19"
     "@types/express": "npm:4.17.21"
     "@types/jest": "npm:29.5.14"
@@ -1842,7 +1842,7 @@ __metadata:
     "@sentry/serverless": "npm:6.19.7"
     "@types/apr-intercept": "workspace:*"
     "@types/async": "npm:^3"
-    "@types/aws-lambda": "npm:8.10.159"
+    "@types/aws-lambda": "npm:8.10.162"
     "@types/express": "npm:4.17.21"
     "@types/jest": "npm:29.5.14"
     "@types/jsonwebtoken": "npm:8.5.9"
@@ -1891,7 +1891,7 @@ __metadata:
     "@hapi/bourne": "npm:2.1.0"
     "@hapi/joi": "npm:17.1.1"
     "@types/apr-intercept": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.159"
+    "@types/aws-lambda": "npm:8.10.162"
     "@types/debug": "npm:4.1.12"
     "@types/hapi": "npm:18.0.15"
     "@types/hapi__boom": "npm:9.0.1"
@@ -15616,10 +15616,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.159":
-  version: 8.10.159
-  resolution: "@types/aws-lambda@npm:8.10.159"
-  checksum: 10/3fb4d2f5613e3526725676787770442df2cace0d4d4c528c17e791ccee3cc8626447529ed86d937aa709c82db53670835dcf6e0c704d6e3ae92832dcc886eac0
+"@types/aws-lambda@npm:8.10.162":
+  version: 8.10.162
+  resolution: "@types/aws-lambda@npm:8.10.162"
+  checksum: 10/f952247c4edc3cf0948022a21a80ea704bb5602b620f9d15535b3cb06aaf931ae1eb87fc0708b35b71fa3035bc73bb6a7424df5a7c5197268ee0ed28b9fc30c4
   languageName: node
   linkType: hard
 

@@ -3441,7 +3441,7 @@ const RAW_RUNTIME_STATE =
     ],\
     [\
       "@types/aws-lambda",\
-      "npm:8.10.159"\
+      "npm:8.10.162"\
     ],\
     [\
       "@types/babel__core",\
@@ -12847,7 +12847,7 @@ const RAW_RUNTIME_STATE =
           ["@types/apr-intercept", "workspace:@types/apr-intercept"],\
           ["@types/async", "npm:3.2.25"],\
           ["@types/async-retry", "npm:1.4.9"],\
-          ["@types/aws-lambda", "npm:8.10.159"],\
+          ["@types/aws-lambda", "npm:8.10.162"],\
           ["@types/babel__preset-env", "npm:7.10.0"],\
           ["@types/chance", "npm:1.1.7"],\
           ["@types/cors", "npm:2.8.19"],\
@@ -13596,7 +13596,7 @@ const RAW_RUNTIME_STATE =
           ["@serverless/typescript", "npm:3.38.0"],\
           ["@types/apicache", "npm:1.6.8"],\
           ["@types/apr-intercept", "workspace:@types/apr-intercept"],\
-          ["@types/aws-lambda", "npm:8.10.159"],\
+          ["@types/aws-lambda", "npm:8.10.162"],\
           ["@types/cors", "npm:2.8.19"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/jest", "npm:29.5.14"],\
@@ -14446,7 +14446,7 @@ const RAW_RUNTIME_STATE =
           ["@sentry/serverless", "npm:6.19.7"],\
           ["@types/apr-intercept", "workspace:@types/apr-intercept"],\
           ["@types/async", "npm:3.2.25"],\
-          ["@types/aws-lambda", "npm:8.10.159"],\
+          ["@types/aws-lambda", "npm:8.10.162"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/jest", "npm:29.5.14"],\
           ["@types/jsonwebtoken", "npm:8.5.9"],\
@@ -14497,7 +14497,7 @@ const RAW_RUNTIME_STATE =
           ["@hapi/bourne", "npm:2.1.0"],\
           ["@hapi/joi", "npm:17.1.1"],\
           ["@types/apr-intercept", "workspace:@types/apr-intercept"],\
-          ["@types/aws-lambda", "npm:8.10.159"],\
+          ["@types/aws-lambda", "npm:8.10.162"],\
           ["@types/debug", "npm:4.1.12"],\
           ["@types/hapi", "npm:18.0.15"],\
           ["@types/hapi__boom", "npm:9.0.1"],\
@@ -38047,10 +38047,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:8.10.159", {\
-        "packageLocation": "./.yarn/cache/@types-aws-lambda-npm-8.10.159-f62c888ff7-3fb4d2f561.zip/node_modules/@types/aws-lambda/",\
+      ["npm:8.10.162", {\
+        "packageLocation": "./.yarn/cache/@types-aws-lambda-npm-8.10.162-c1e4102b6e-f952247c4e.zip/node_modules/@types/aws-lambda/",\
         "packageDependencies": [\
-          ["@types/aws-lambda", "npm:8.10.159"]\
+          ["@types/aws-lambda", "npm:8.10.162"]\
         ],\
         "linkType": "HARD"\
       }]\
