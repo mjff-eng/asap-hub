@@ -120,7 +120,7 @@ export const metricConfig: Record<Metrics, OpensearchMetricConfig> = {
     indexAlias: 'attendance',
     mapping: {
       properties: {
-        teamId: { type: 'text' },
+        teamId: { type: 'keyword' },
         teamName: textWithNgramKeyword({
           normalizer: 'lowercase_normalizer',
           raw: true,
@@ -333,7 +333,7 @@ export const metricConfig: Record<Metrics, OpensearchMetricConfig> = {
     indexAlias: 'presenter-representation',
     mapping: {
       properties: {
-        id: { type: 'text' },
+        id: { type: 'keyword' },
         name: textWithNgramKeyword({
           normalizer: 'lowercase_normalizer',
           raw: true,
