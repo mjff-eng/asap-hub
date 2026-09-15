@@ -278,7 +278,7 @@ __metadata:
     "@asap-hub/model": "workspace:*"
     "@asap-hub/server-common": "workspace:*"
     "@asap-hub/services-common": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/plugin-transform-modules-commonjs": "npm:7.28.6"
     "@babel/plugin-transform-runtime": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
@@ -321,7 +321,7 @@ __metadata:
   resolution: "@asap-hub/auth-frontend-scripts@workspace:packages/auth-frontend-scripts"
   dependencies:
     "@asap-hub/eslint-config-asap-hub": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@types/jest": "npm:29.5.14"
     "@types/jsdom": "npm:16.2.15"
@@ -338,7 +338,7 @@ __metadata:
     "@asap-hub/dom-test-utils": "workspace:*"
     "@asap-hub/eslint-config-asap-hub": "workspace:*"
     "@asap-hub/model": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@types/auth0-js": "npm:9.21.6"
@@ -359,7 +359,7 @@ __metadata:
     "@asap-hub/auth": "workspace:*"
     "@asap-hub/eslint-config-asap-hub": "workspace:*"
     "@asap-hub/model": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-env": "npm:7.28.6"
     "@babel/preset-typescript": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
@@ -1043,7 +1043,7 @@ __metadata:
     "@asap-hub/message-templates": "workspace:*"
     "@asap-hub/messages-common": "workspace:*"
     "@asap-hub/react-components": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@emotion/cache": "npm:11.11.0"
@@ -1086,7 +1086,7 @@ __metadata:
     "@aws-sdk/client-ses": "npm:^3.306.0"
     "@aws-sdk/client-sqs": "npm:3.970.0"
     "@aws-sdk/credential-provider-node": "npm:^3.844.0"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-env": "npm:7.28.6"
     "@babel/preset-typescript": "npm:7.28.5"
     "@babel/register": "npm:7.28.6"
@@ -1292,7 +1292,7 @@ __metadata:
     "@asap-hub/flags": "workspace:*"
     "@asap-hub/model": "workspace:*"
     "@asap-hub/react-components": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@sentry/react": "npm:^8.0.0"
@@ -1382,7 +1382,7 @@ __metadata:
     "@asap-hub/react-context": "workspace:*"
     "@asap-hub/routing": "workspace:*"
     "@asap-hub/validation": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@emotion/babel-plugin": "npm:11.11.0"
@@ -1496,7 +1496,7 @@ __metadata:
     "@asap-hub/message-templates": "workspace:*"
     "@asap-hub/messages-common": "workspace:*"
     "@asap-hub/react-components": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@emotion/cache": "npm:11.11.0"
@@ -1629,7 +1629,7 @@ __metadata:
   dependencies:
     "@asap-hub/eslint-config-asap-hub": "workspace:*"
     "@aws-sdk/client-ses": "npm:^3.306.0"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@emotion/cache": "npm:11.11.0"
@@ -1665,7 +1665,7 @@ __metadata:
   dependencies:
     "@asap-hub/auth": "workspace:*"
     "@asap-hub/eslint-config-asap-hub": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-env": "npm:7.28.6"
     "@babel/preset-typescript": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
@@ -1696,7 +1696,7 @@ __metadata:
     "@asap-hub/routing": "workspace:*"
     "@asap-hub/validation": "workspace:*"
     "@auth0/auth0-spa-js": "npm:1.22.6"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@emotion/babel-plugin": "npm:11.11.0"
@@ -1774,7 +1774,7 @@ __metadata:
     "@asap-hub/model": "workspace:*"
     "@asap-hub/validation": "workspace:*"
     "@auth0/auth0-spa-js": "npm:1.22.6"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@testing-library/dom": "npm:10.4.1"
@@ -1832,7 +1832,7 @@ __metadata:
     "@aws-sdk/client-sqs": "npm:3.970.0"
     "@aws-sdk/credential-provider-node": "npm:^3.844.0"
     "@aws-sdk/s3-request-presigner": "npm:^3.758.0"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/parser": "npm:7.28.6"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@googleapis/calendar": "npm:^9.5.0"
@@ -1926,7 +1926,7 @@ __metadata:
     "@asap-hub/react-components": "workspace:*"
     "@asap-hub/react-context": "workspace:*"
     "@asap-hub/routing": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/preset-typescript": "npm:7.28.5"
     "@chromatic-com/storybook": "npm:^4.1.1"
@@ -1960,7 +1960,7 @@ __metadata:
   dependencies:
     "@asap-hub/eslint-config-asap-hub": "workspace:*"
     "@asap-hub/react-components": "workspace:*"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/preset-react": "npm:7.28.5"
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@types/node": "npm:20.10.5"
@@ -3932,6 +3932,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/code-frame@npm:^7.29.0, @babel/code-frame@npm:^7.29.7":
+  version: 7.29.7
+  resolution: "@babel/code-frame@npm:7.29.7"
+  dependencies:
+    "@babel/helper-validator-identifier": "npm:^7.29.7"
+    js-tokens: "npm:^4.0.0"
+    picocolors: "npm:^1.1.1"
+  checksum: 10/84da552e51a55795a50b3589116edb2f9e368a647d266380683775f18effd9acd4521b0246bebd0b049a7f32af1f87b1e8475d3bcb665f876bd04ade8da99697
+  languageName: node
+  linkType: hard
+
 "@babel/compat-data@npm:^7.20.5, @babel/compat-data@npm:^7.27.2, @babel/compat-data@npm:^7.27.7, @babel/compat-data@npm:^7.28.5":
   version: 7.28.5
   resolution: "@babel/compat-data@npm:7.28.5"
@@ -3946,26 +3957,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.28.6":
-  version: 7.28.6
-  resolution: "@babel/core@npm:7.28.6"
+"@babel/core@npm:7.29.6":
+  version: 7.29.6
+  resolution: "@babel/core@npm:7.29.6"
   dependencies:
-    "@babel/code-frame": "npm:^7.28.6"
-    "@babel/generator": "npm:^7.28.6"
+    "@babel/code-frame": "npm:^7.29.0"
+    "@babel/generator": "npm:^7.29.6"
     "@babel/helper-compilation-targets": "npm:^7.28.6"
     "@babel/helper-module-transforms": "npm:^7.28.6"
-    "@babel/helpers": "npm:^7.28.6"
-    "@babel/parser": "npm:^7.28.6"
+    "@babel/helpers": "npm:^7.29.2"
+    "@babel/parser": "npm:^7.29.3"
     "@babel/template": "npm:^7.28.6"
-    "@babel/traverse": "npm:^7.28.6"
-    "@babel/types": "npm:^7.28.6"
+    "@babel/traverse": "npm:^7.29.0"
+    "@babel/types": "npm:^7.29.0"
     "@jridgewell/remapping": "npm:^2.3.5"
     convert-source-map: "npm:^2.0.0"
     debug: "npm:^4.1.0"
     gensync: "npm:^1.0.0-beta.2"
     json5: "npm:^2.2.3"
     semver: "npm:^6.3.1"
-  checksum: 10/1a150a69c547daf13c457be1fdaf1a0935d02b94605e777e049537ec2f279b4bb442ffbe1c2d8ff62c688878b1d5530a5784daf72ece950d1917fb78717f51d2
+  checksum: 10/b81c3f35c1ab0b75634f4cf2bcfb1c28ed5a973cf926c5e864fd63b600024768392768f2b21befc68381f5182c0767342e247830046e8b160c01612314a3593d
   languageName: node
   linkType: hard
 
@@ -4043,6 +4054,19 @@ __metadata:
     "@jridgewell/trace-mapping": "npm:^0.3.28"
     jsesc: "npm:^3.0.2"
   checksum: 10/ef2af927e8e0985d02ec4321a242da761a934e927539147c59fdd544034dc7f0e9846f6bf86209aca7a28aee2243ed0fad668adccd48f96d7d6866215173f9af
+  languageName: node
+  linkType: hard
+
+"@babel/generator@npm:^7.29.6, @babel/generator@npm:^7.29.8":
+  version: 7.29.8
+  resolution: "@babel/generator@npm:7.29.8"
+  dependencies:
+    "@babel/parser": "npm:^7.29.8"
+    "@babel/types": "npm:^7.29.8"
+    "@jridgewell/gen-mapping": "npm:^0.3.12"
+    "@jridgewell/trace-mapping": "npm:^0.3.28"
+    jsesc: "npm:^3.0.2"
+  checksum: 10/679c3d1302936f391260acee4059e0c3cd5bff6341772f0b85bb142feab1a253d0e155aad0e9c8531e024d6239a2cc5169d1e294c6890901e7d4ab0f7c9eaaaa
   languageName: node
   linkType: hard
 
@@ -4147,6 +4171,13 @@ __metadata:
   version: 7.28.0
   resolution: "@babel/helper-globals@npm:7.28.0"
   checksum: 10/91445f7edfde9b65dcac47f4f858f68dc1661bf73332060ab67ad7cc7b313421099a2bfc4bda30c3db3842cfa1e86fffbb0d7b2c5205a177d91b22c8d7d9cb47
+  languageName: node
+  linkType: hard
+
+"@babel/helper-globals@npm:^7.29.7":
+  version: 7.29.7
+  resolution: "@babel/helper-globals@npm:7.29.7"
+  checksum: 10/e53203e87ae24a45f59639edea0c429bc3c63c6d74f1862fe60a35032d89478e7511d2f34855da0fcb65782668d72e59e93d1de5bc00121ba9bc1aa38f1f0ad3
   languageName: node
   linkType: hard
 
@@ -4285,10 +4316,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-string-parser@npm:^7.29.7":
+  version: 7.29.7
+  resolution: "@babel/helper-string-parser@npm:7.29.7"
+  checksum: 10/4d8ef0ef7105f3d9fe4361137c8f42e5b4c7a52b5380b962762f2a528a1ba89064e2c6236090716ce34b63707b886ae0ebf36b2c2fcc2851f27e652febfc3648
+  languageName: node
+  linkType: hard
+
 "@babel/helper-validator-identifier@npm:^7.27.1, @babel/helper-validator-identifier@npm:^7.28.5":
   version: 7.28.5
   resolution: "@babel/helper-validator-identifier@npm:7.28.5"
   checksum: 10/8e5d9b0133702cfacc7f368bf792f0f8ac0483794877c6dca5fcb73810ee138e27527701826fb58a40a004f3a5ec0a2f3c3dd5e326d262530b119918f3132ba7
+  languageName: node
+  linkType: hard
+
+"@babel/helper-validator-identifier@npm:^7.29.7":
+  version: 7.29.7
+  resolution: "@babel/helper-validator-identifier@npm:7.29.7"
+  checksum: 10/2efa42701eb05babf26dff3332109c9e5e1a3400a71fb9e68ee27af28235036a2a72c2494c04bdab3f909075f42a58b2e8271074372bc7f8e79ec02bd364d7a7
   languageName: node
   linkType: hard
 
@@ -4320,13 +4365,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helpers@npm:^7.28.6":
-  version: 7.28.6
-  resolution: "@babel/helpers@npm:7.28.6"
+"@babel/helpers@npm:^7.29.2":
+  version: 7.29.7
+  resolution: "@babel/helpers@npm:7.29.7"
   dependencies:
-    "@babel/template": "npm:^7.28.6"
-    "@babel/types": "npm:^7.28.6"
-  checksum: 10/213485cdfffc4deb81fc1bf2cefed61bc825049322590ef69690e223faa300a2a4d1e7d806c723bb1f1f538226b9b1b6c356ca94eb47fa7c6d9e9f251ee425e6
+    "@babel/template": "npm:^7.29.7"
+    "@babel/types": "npm:^7.29.7"
+  checksum: 10/b4d1ef12c19e896585c009ba29677839097ff04f8b11a2430d335c3fb6bd667b4f9e96a3b185a083fdde6b1137eabbbf2600c32425cb69cefc81d81d5cfe425d
   languageName: node
   linkType: hard
 
@@ -4367,6 +4412,17 @@ __metadata:
   bin:
     parser: ./bin/babel-parser.js
   checksum: 10/8d9bfb437af6c97a7f6351840b9ac06b4529ba79d6d3def24d6c2996ab38ff7f1f9d301e868ca84a93a3050fadb3d09dbc5105b24634cd281671ac11eebe8df7
+  languageName: node
+  linkType: hard
+
+"@babel/parser@npm:^7.29.3, @babel/parser@npm:^7.29.7, @babel/parser@npm:^7.29.8":
+  version: 7.29.8
+  resolution: "@babel/parser@npm:7.29.8"
+  dependencies:
+    "@babel/types": "npm:^7.29.8"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: 10/dbd14ebbba0fa3019acd2712b0db3ffd594d0850d4fc487667287b5702893f54a7911570ea842f0cff4dc492a2412e3287dfabfe00c6b78efa7becb1255f3f86
   languageName: node
   linkType: hard
 
@@ -6111,6 +6167,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/template@npm:^7.29.7":
+  version: 7.29.7
+  resolution: "@babel/template@npm:7.29.7"
+  dependencies:
+    "@babel/code-frame": "npm:^7.29.7"
+    "@babel/parser": "npm:^7.29.7"
+    "@babel/types": "npm:^7.29.7"
+  checksum: 10/da92f7a5b61e05d2fb3934a44f18cec6006ee3c595116c17a3b44cb9756ecd43205c7360dbfa326fa8f4d00aaeb9e777342a881070d11c2305e9c694bc3ca6ff
+  languageName: node
+  linkType: hard
+
 "@babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.27.1, @babel/traverse@npm:^7.28.0, @babel/traverse@npm:^7.28.3, @babel/traverse@npm:^7.28.4, @babel/traverse@npm:^7.28.5, @babel/traverse@npm:^7.7.2":
   version: 7.28.5
   resolution: "@babel/traverse@npm:7.28.5"
@@ -6141,6 +6208,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/traverse@npm:^7.29.0":
+  version: 7.29.8
+  resolution: "@babel/traverse@npm:7.29.8"
+  dependencies:
+    "@babel/code-frame": "npm:^7.29.7"
+    "@babel/generator": "npm:^7.29.8"
+    "@babel/helper-globals": "npm:^7.29.7"
+    "@babel/parser": "npm:^7.29.8"
+    "@babel/template": "npm:^7.29.7"
+    "@babel/types": "npm:^7.29.8"
+    debug: "npm:^4.3.1"
+  checksum: 10/91f0b4799d27b50ffd5c2ab4ba537065221196858e0899275d8474489c57dd0b53150508b2c0d9b308520e5985bde63049a401d32aa1ac4f1e10e466e2a3f447
+  languageName: node
+  linkType: hard
+
 "@babel/types@npm:^7.0.0, @babel/types@npm:^7.0.0-beta.49, @babel/types@npm:^7.12.6, @babel/types@npm:^7.16.8, @babel/types@npm:^7.18.13, @babel/types@npm:^7.20.7, @babel/types@npm:^7.27.1, @babel/types@npm:^7.27.3, @babel/types@npm:^7.28.2, @babel/types@npm:^7.28.4, @babel/types@npm:^7.28.5, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4, @babel/types@npm:^7.6.1, @babel/types@npm:^7.9.6":
   version: 7.28.5
   resolution: "@babel/types@npm:7.28.5"
@@ -6158,6 +6240,16 @@ __metadata:
     "@babel/helper-string-parser": "npm:^7.27.1"
     "@babel/helper-validator-identifier": "npm:^7.28.5"
   checksum: 10/f9c6e52b451065aae5654686ecfc7de2d27dd0fbbc204ee2bd912a71daa359521a32f378981b1cf333ace6c8f86928814452cb9f388a7da59ad468038deb6b5f
+  languageName: node
+  linkType: hard
+
+"@babel/types@npm:^7.29.0, @babel/types@npm:^7.29.7, @babel/types@npm:^7.29.8":
+  version: 7.29.8
+  resolution: "@babel/types@npm:7.29.8"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.29.7"
+    "@babel/helper-validator-identifier": "npm:^7.29.7"
+  checksum: 10/ff2becf0f8b432f0820f286fb9319d7f3819b2d0eb95bc26957fbc6250a3ca0ae3656feb98ecb5f171f9e04b34a4c08f5036447f17459ed7bfc32ff649d9b71e
   languageName: node
   linkType: hard
 
@@ -18573,7 +18665,7 @@ __metadata:
     "@asap-hub/eslint-config-asap-hub": "workspace:*"
     "@asap-hub/flags": "workspace:*"
     "@babel/cli": "npm:7.28.6"
-    "@babel/core": "npm:7.28.6"
+    "@babel/core": "npm:7.29.6"
     "@babel/eslint-parser": "npm:7.28.6"
     "@babel/node": "npm:7.28.6"
     "@babel/plugin-proposal-nullish-coalescing-operator": "npm:7.18.6"
