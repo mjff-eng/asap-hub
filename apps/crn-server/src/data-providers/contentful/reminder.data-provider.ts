@@ -1257,6 +1257,7 @@ const getManuscriptRemindersFromQuery = (
       }
 
       if (
+        !isStatusSupersededByResubmission(manuscriptItem) &&
         inLast7Days(manuscriptItem.statusUpdatedAt, timezone) &&
         isManuscriptStatusUpdatedByAnotherUser(manuscriptItem, userId) &&
         (isManuscriptAuthor(manuscriptFirstVersion, userId) ||
@@ -1576,6 +1577,10 @@ const createDiscussionRepliedToReminder = (
     },
   };
 };
+
+const isStatusSupersededByResubmission = (
+  manuscript: ManuscriptItem,
+): boolean => manuscript.status === 'Manuscript Resubmitted';
 
 const createManuscriptStatusUpdatedReminder = (
   manuscript: ValidManuscriptItem,
