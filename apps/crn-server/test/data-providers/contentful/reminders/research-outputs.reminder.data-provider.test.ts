@@ -24,11 +24,12 @@ const buildProjectMembershipItem = (
   projectId: string,
   projectTitle: string,
   role = 'Member',
+  projectType?: string,
 ) => ({
   role,
   linkedFrom: {
     projectsCollection: {
-      items: [{ sys: { id: projectId }, title: projectTitle }],
+      items: [{ sys: { id: projectId }, title: projectTitle, projectType }],
     },
   },
 });
@@ -453,7 +454,7 @@ describe('Reminders data provider', () => {
           });
         });
 
-        test('Should fetch the published reminder for a user-based project output when the user is a member of the project linked directly on the output', async () => {
+        test('Should fetch the published reminder for a user-based project output when the user is a member of the project', async () => {
           publishedResearchOutputItem!.workingGroup = null;
           publishedResearchOutputItem!.teamsCollection = { items: [] };
           publishedResearchOutputItem!.project = {
@@ -485,7 +486,7 @@ describe('Reminders data provider', () => {
           });
         });
 
-        test('Should not fetch the published reminder for a user-based project output when the user is not a member of the project linked directly on the output', async () => {
+        test('Should not fetch the published reminder for a user-based project output when the user is not a member of the project', async () => {
           publishedResearchOutputItem!.workingGroup = null;
           publishedResearchOutputItem!.teamsCollection = { items: [] };
           publishedResearchOutputItem!.project = {
@@ -642,7 +643,7 @@ describe('Reminders data provider', () => {
           });
         });
 
-        test('Should fetch the draft reminder for a user-based project output when the user is a member of the project linked directly on the output', async () => {
+        test('Should fetch the draft reminder for a user-based project output when the user is a member of the project', async () => {
           draftResearchOutputsItem!.workingGroup = null;
           draftResearchOutputsItem!.teamsCollection = { items: [] };
           draftResearchOutputsItem!.project = {
@@ -674,7 +675,7 @@ describe('Reminders data provider', () => {
           });
         });
 
-        test('Should not fetch the draft reminder for a user-based project output when the user is not a member of the project linked directly on the output', async () => {
+        test('Should not fetch the draft reminder for a user-based project output when the user is not a member of the project', async () => {
           draftResearchOutputsItem!.workingGroup = null;
           draftResearchOutputsItem!.teamsCollection = { items: [] };
           draftResearchOutputsItem!.project = {
@@ -693,7 +694,7 @@ describe('Reminders data provider', () => {
           expect(result).toEqual({ items: [], total: 0 });
         });
 
-        test('Should fetch the draft reminder for a user-based project output if the user is a Staff even if not a member of the project linked directly on the output', async () => {
+        test('Should fetch the draft reminder for a user-based project output if the user is a Staff even if not a member of the project', async () => {
           draftResearchOutputsItem!.workingGroup = null;
           draftResearchOutputsItem!.teamsCollection = { items: [] };
           draftResearchOutputsItem!.project = {
@@ -891,7 +892,7 @@ describe('Reminders data provider', () => {
           });
         });
 
-        test('Should fetch the switch to draft reminder for a user-based project output when the user is a member of the project linked directly on the output', async () => {
+        test('Should fetch the switch to draft reminder for a user-based project output when the user is a member of the project', async () => {
           switchToDraftResearchOutputItem!.workingGroup = null;
           switchToDraftResearchOutputItem!.teamsCollection = { items: [] };
           switchToDraftResearchOutputItem!.project = {
@@ -923,7 +924,7 @@ describe('Reminders data provider', () => {
           });
         });
 
-        test('Should not fetch the switch to draft reminder for a user-based project output when the user is not a member of the project linked directly on the output', async () => {
+        test('Should not fetch the switch to draft reminder for a user-based project output when the user is not a member of the project', async () => {
           switchToDraftResearchOutputItem!.workingGroup = null;
           switchToDraftResearchOutputItem!.teamsCollection = { items: [] };
           switchToDraftResearchOutputItem!.project = {
@@ -942,7 +943,7 @@ describe('Reminders data provider', () => {
           expect(result).toEqual({ items: [], total: 0 });
         });
 
-        test('Should fetch the switch to draft reminder for a user-based project output if the user is a Staff even if not a member of the project linked directly on the output', async () => {
+        test('Should fetch the switch to draft reminder for a user-based project output if the user is a Staff even if not a member of the project', async () => {
           switchToDraftResearchOutputItem!.workingGroup = null;
           switchToDraftResearchOutputItem!.teamsCollection = { items: [] };
           switchToDraftResearchOutputItem!.project = {
@@ -1083,7 +1084,7 @@ describe('Reminders data provider', () => {
       });
 
       describe('In Review Reminder', () => {
-        test('Should not fetch the reminder if the associated team is not linked to any project, even if the user is a PM of that team', async () => {
+        test('Should not fetch the reminder if the associated team is not linked to any project', async () => {
           inReviewResearchOutputItem!.workingGroup = null;
           inReviewResearchOutputItem!.teamsCollection!.items[0]!.linkedFrom =
             null;
@@ -1140,14 +1141,8 @@ describe('Reminders data provider', () => {
           });
         });
 
-        test.each([
-          'Lead PI',
-          'Co-PI',
-          'Project Manager',
-          'Data Manager',
-          'Independent Project - Lead',
-        ])(
-          'Should fetch the reminder for a directly project-linked output when the user has project role "%s" on the project',
+        test.each(['Lead PI', 'Co-PI', 'Project Manager', 'Data Manager'])(
+          'Should fetch the reminder for a user-based resource project output when the user has project membership role "%s"',
           async (role) => {
             inReviewResearchOutputItem!.workingGroup = null;
             inReviewResearchOutputItem!.teamsCollection = { items: [] };
@@ -1165,6 +1160,7 @@ describe('Reminders data provider', () => {
                   'direct-project-id',
                   'Direct Project',
                   role,
+                  'Resource Project',
                 ),
               ],
             };
@@ -1184,6 +1180,42 @@ describe('Reminders data provider', () => {
           },
         );
 
+        test('Should fetch the reminder for a trainee project output when the user has project membership role "Independent Project - Lead"', async () => {
+          inReviewResearchOutputItem!.workingGroup = null;
+          inReviewResearchOutputItem!.teamsCollection = { items: [] };
+          inReviewResearchOutputItem!.project = {
+            sys: { id: 'direct-project-id' },
+            title: 'Direct Project',
+          };
+          const researchOutputsCollection = {
+            items: [inReviewResearchOutputItem],
+          };
+          const usersResponse = getContentfulReminderUsersContent();
+          usersResponse!.linkedFrom!.projectMembershipCollection = {
+            items: [
+              buildProjectMembershipItem(
+                'direct-project-id',
+                'Direct Project',
+                'Independent Project - Lead',
+                'Trainee Project',
+              ),
+            ],
+          };
+
+          setContentfulMock(researchOutputsCollection, usersResponse);
+          const result = await remindersDataProvider.fetch(
+            fetchRemindersOptions,
+          );
+
+          const expectedReminder = getResearchOutputInReviewProjectReminder();
+          expectedReminder.data.associationName = 'Direct Project';
+
+          expect(result).toEqual({
+            total: 1,
+            items: [expectedReminder],
+          });
+        });
+
         test.each([
           'Collaborating PI',
           'Staff Scientist',
@@ -1191,7 +1223,7 @@ describe('Reminders data provider', () => {
           'Trainee',
           'Independent Project - Mentor',
         ])(
-          'Should not fetch the reminder for a directly project-linked output when the user has project role "%s" on the project',
+          'Should not fetch the reminder for a project output when the user has project membership role "%s"',
           async (role) => {
             inReviewResearchOutputItem!.workingGroup = null;
             inReviewResearchOutputItem!.teamsCollection = { items: [] };
@@ -1209,6 +1241,7 @@ describe('Reminders data provider', () => {
                   'direct-project-id',
                   'Direct Project',
                   role,
+                  'Resource Project',
                 ),
               ],
             };
@@ -1222,7 +1255,67 @@ describe('Reminders data provider', () => {
           },
         );
 
-        test('Should not fetch the reminder for a team-less, directly project-linked output if the user is not a member of that project at all', async () => {
+        test('Should not fetch the reminder when the role is a Resource Project lead role but the project is a Trainee Project', async () => {
+          inReviewResearchOutputItem!.workingGroup = null;
+          inReviewResearchOutputItem!.teamsCollection = { items: [] };
+          inReviewResearchOutputItem!.project = {
+            sys: { id: 'direct-project-id' },
+            title: 'Direct Project',
+          };
+          const researchOutputsCollection = {
+            items: [inReviewResearchOutputItem],
+          };
+          const usersResponse = getContentfulReminderUsersContent();
+          usersResponse!.linkedFrom!.projectMembershipCollection = {
+            items: [
+              buildProjectMembershipItem(
+                'direct-project-id',
+                'Direct Project',
+                'Data Manager',
+                'Trainee Project',
+              ),
+            ],
+          };
+
+          setContentfulMock(researchOutputsCollection, usersResponse);
+          const result = await remindersDataProvider.fetch(
+            fetchRemindersOptions,
+          );
+
+          expect(result).toEqual({ items: [], total: 0 });
+        });
+
+        test('Should not fetch the reminder when the role is a Trainee Project lead role but the project is a Resource Project', async () => {
+          inReviewResearchOutputItem!.workingGroup = null;
+          inReviewResearchOutputItem!.teamsCollection = { items: [] };
+          inReviewResearchOutputItem!.project = {
+            sys: { id: 'direct-project-id' },
+            title: 'Direct Project',
+          };
+          const researchOutputsCollection = {
+            items: [inReviewResearchOutputItem],
+          };
+          const usersResponse = getContentfulReminderUsersContent();
+          usersResponse!.linkedFrom!.projectMembershipCollection = {
+            items: [
+              buildProjectMembershipItem(
+                'direct-project-id',
+                'Direct Project',
+                'Independent Project - Lead',
+                'Resource Project',
+              ),
+            ],
+          };
+
+          setContentfulMock(researchOutputsCollection, usersResponse);
+          const result = await remindersDataProvider.fetch(
+            fetchRemindersOptions,
+          );
+
+          expect(result).toEqual({ items: [], total: 0 });
+        });
+
+        test('Should not fetch the reminder for a project output if the user is not a member of that project and not Staff', async () => {
           inReviewResearchOutputItem!.workingGroup = null;
           inReviewResearchOutputItem!.teamsCollection = { items: [] };
           inReviewResearchOutputItem!.project = {
@@ -1726,7 +1819,7 @@ describe('Reminders data provider', () => {
         });
       });
 
-      test('Should fetch the published reminder for a user-based project output when the user is a member of the project linked directly on the output', async () => {
+      test('Should fetch the published reminder for a project output when the user is a member of the project', async () => {
         const researchOutput =
           researchOutputVersionItem!.linkedFrom!.researchOutputsCollection!
             .items[0]!;
@@ -1759,7 +1852,7 @@ describe('Reminders data provider', () => {
         });
       });
 
-      test('Should not fetch the published reminder for a user-based project output when the user is not a member of the project linked directly on the output', async () => {
+      test('Should not fetch the published reminder for a project output when the user is not a member of the project', async () => {
         const researchOutput =
           researchOutputVersionItem!.linkedFrom!.researchOutputsCollection!
             .items[0]!;
