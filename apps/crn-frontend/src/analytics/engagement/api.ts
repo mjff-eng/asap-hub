@@ -117,3 +117,48 @@ export const getMeetingRepAttendance = async (
     searchScope: 'flat',
     sort: sort ? meetingRepAttendanceOpensearchSort[sort] : undefined,
   });
+
+export type TeamEngagementMetricsOptions = {
+  teamId: string;
+};
+
+export type TeamEngagementMetrics = {
+  speakerDiversity: number | null;
+  traineePresentations: number | null;
+  meetingRepAttendance: {
+    percentage: number | null;
+    limitedData: boolean;
+  };
+};
+
+export const getTeamEngagementMetrics = async (
+  presenterClient: OpensearchClient<EngagementResponse>,
+  attendanceClient: OpensearchClient<MeetingRepAttendanceResponse>,
+  { teamId }: TeamEngagementMetricsOptions,
+): Promise<TeamEngagementMetrics> => {
+  const searchOptions = {
+    searchTags: [],
+    searchScope: 'flat' as const,
+    sort: [],
+    currentPage: 0,
+    pageSize: 1,
+    timeRange: 'all' as const,
+    teamId,
+  };
+  const [presenters, attendance] = await Promise.all([
+    presenterClient.search(searchOptions),
+    attendanceClient.search(searchOptions),
+  ]);
+  const presenterItem = presenters.items[0];
+  const attendanceItem = attendance.items[0];
+
+  return {
+    speakerDiversity: presenterItem?.uniqueAllRolesCountPercentage ?? null,
+    traineePresentations:
+      presenterItem?.uniqueKeyPersonnelCountPercentage ?? null,
+    meetingRepAttendance: {
+      percentage: attendanceItem?.attendancePercentage ?? null,
+      limitedData: attendanceItem?.limitedData ?? true,
+    },
+  };
+};
