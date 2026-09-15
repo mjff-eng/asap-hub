@@ -134,7 +134,7 @@ jobs:
             apps/**/dist*
             packages/**/build*
           include-hidden-files: true
-          retention-days: 1
+          retention-days: 3
           overwrite: true
 
   definitions:
@@ -266,7 +266,7 @@ jobs:
             apps/**/dist*
             packages/**/build*
           include-hidden-files: true
-          retention-days: 1
+          retention-days: 3
           overwrite: true
       - name: CRN Auth frontend artifact
         uses: actions/upload-artifact@v4
