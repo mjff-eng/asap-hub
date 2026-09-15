@@ -872,7 +872,7 @@ const getInReviewResearchOutputRemindersFromQuery = (
   const userProjectManagerTeamIds = getUserProjectManagerTeamIds(user);
   const userProjectManagerWorkingGroupIds =
     getUserProjectManagerWorkingGroupIds(user);
-  const userProjectManagerProjectIds = getUserProjectManagerProjectIds(user);
+  const userProjectLeadProjectIds = getUserProjectLeadProjectIds(user);
   const isAsapStaff = user.role === 'Staff';
 
   return researchOutputsCollectionItems.reduce<
@@ -907,15 +907,15 @@ const getInReviewResearchOutputRemindersFromQuery = (
       ? userProjectManagerWorkingGroupIds.includes(researchOutputWorkingGroupId)
       : false;
 
-    const isProjectManagerInProject = researchOutputProjectId
-      ? userProjectManagerProjectIds.includes(researchOutputProjectId)
+    const isProjectLeadInProject = researchOutputProjectId
+      ? userProjectLeadProjectIds.includes(researchOutputProjectId)
       : false;
 
     if (
       associationName &&
       associationType &&
       ((associationType === 'team' && isProjectManagerInTeam) ||
-        (associationType === 'project' && isProjectManagerInProject) ||
+        (associationType === 'project' && isProjectLeadInProject) ||
         (associationType === 'working group' &&
           isProjectManagerInWorkingGroup) ||
         isAsapStaff)
@@ -1741,22 +1741,25 @@ const getUserProjectManagerWorkingGroupIds = (user: User): string[] => {
 
 type ProjectMembershipCollection =
   UserLinkedFrom['projectMembershipCollection'];
+type ProjectMembershipItem = NonNullable<
+  NonNullable<ProjectMembershipCollection>['items'][number]
+>;
 
 const getIdsFromProjectMembershipCollection = (
   collection: ProjectMembershipCollection,
-  roles?: ReadonlyArray<string>,
+  predicate: (item: ProjectMembershipItem) => boolean = () => true,
 ): string[] =>
   collection?.items
     ? collection.items
-        .filter((item) => (roles ? roles.includes(item?.role || '') : true))
+        .filter((item): item is ProjectMembershipItem => !!item)
+        .filter(predicate)
         .filter(
           (item) =>
-            item?.linkedFrom?.projectsCollection?.items[0]?.sys.id !==
-            undefined,
+            item.linkedFrom?.projectsCollection?.items[0]?.sys.id !== undefined,
         )
         .map(
           (item) =>
-            item?.linkedFrom?.projectsCollection?.items[0]?.sys.id as string,
+            item.linkedFrom?.projectsCollection?.items[0]?.sys.id as string,
         )
     : [];
 
@@ -1768,17 +1771,28 @@ const getUserProjectIds = (user: User): string[] => {
   );
 };
 
-const projectManagerReminderRoles = [
-  ...projectLeadMemberRoles,
-  ...traineeProjectLeadRoles,
-];
+const isProjectLeadMembership = (item: ProjectMembershipItem): boolean => {
+  const projectType =
+    item.linkedFrom?.projectsCollection?.items[0]?.projectType;
+  const role = item.role || '';
 
-const getUserProjectManagerProjectIds = (user: User): string[] => {
+  if (projectType === 'Resource Project') {
+    return (projectLeadMemberRoles as readonly string[]).includes(role);
+  }
+
+  if (projectType === 'Trainee Project') {
+    return (traineeProjectLeadRoles as readonly string[]).includes(role);
+  }
+
+  return false;
+};
+
+const getUserProjectLeadProjectIds = (user: User): string[] => {
   if (!user || !user.linkedFrom) return [];
 
   return getIdsFromProjectMembershipCollection(
     user.linkedFrom.projectMembershipCollection,
-    projectManagerReminderRoles,
+    isProjectLeadMembership,
   );
 };
 

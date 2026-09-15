@@ -321,6 +321,7 @@ export const FETCH_REMINDERS_USER = gql`
                     id
                   }
                   title
+                  projectType
                 }
               }
             }

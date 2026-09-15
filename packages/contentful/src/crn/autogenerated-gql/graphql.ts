@@ -36988,7 +36988,11 @@ export type FetchRemindersUserQuery = {
                 linkedFrom?: Maybe<{
                   projectsCollection?: Maybe<{
                     items: Array<
-                      Maybe<Pick<Projects, 'title'> & { sys: Pick<Sys, 'id'> }>
+                      Maybe<
+                        Pick<Projects, 'title' | 'projectType'> & {
+                          sys: Pick<Sys, 'id'>;
+                        }
+                      >
                     >;
                   }>;
                 }>;
@@ -69554,6 +69558,13 @@ export const FetchRemindersUserDocument = {
                                                       name: {
                                                         kind: 'Name',
                                                         value: 'title',
+                                                      },
+                                                    },
+                                                    {
+                                                      kind: 'Field',
+                                                      name: {
+                                                        kind: 'Name',
+                                                        value: 'projectType',
                                                       },
                                                     },
                                                   ],
