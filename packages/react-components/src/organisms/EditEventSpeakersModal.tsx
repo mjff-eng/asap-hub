@@ -26,6 +26,7 @@ import PendingSpeakerCard from '../molecules/PendingSpeakerCard';
 import SpeakerTeamRow from '../molecules/SpeakerTeamRow';
 import { avatar24Styles, flexRowGap8Styles } from '../molecules/SpeakerUserRow';
 import { mobileScreen, rem } from '../pixels';
+import { pluralize, pluralizeTeams } from '../utils';
 import { splitDisplayName } from '../utils/user';
 import { EventTeamType } from './shared-event-card';
 import { iconButtonStyles } from './shared-event-card-styles';
@@ -55,6 +56,7 @@ export type SpeakerSearchOption = MultiSelectOptionsType & {
 
 type EditEventSpeakersModalProps = {
   readonly groups?: SpeakerGroup[];
+  readonly isPastEvent?: boolean;
   readonly loadSearchOptions: (
     inputValue: string,
   ) => Promise<SpeakerSearchOption[]>;
@@ -243,6 +245,7 @@ const findUserGroup = (
 
 const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   groups = [],
+  isPastEvent = false,
   loadSearchOptions,
   onSave,
   onDismiss,
@@ -284,6 +287,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   ) => {
     const newUser: SpeakerGroupUser = {
       id: user.userId,
+      speakerIds: [],
       displayName: user.displayName,
       avatarUrl: user.avatarUrl,
       isAlumni: user.isAlumni,
@@ -329,6 +333,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       );
       const newUser: SpeakerGroupExternalUser = {
         id: `external-${totalUsers}-${name}`,
+        speakerIds: [],
         displayName: name,
       };
       if (!externalGroup) {
@@ -386,10 +391,25 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       ),
     );
 
-  const markAllShared = () =>
+  // Preliminary findings is per-team, so "Mark All" ignores the external group.
+  const visibleTeamGroups = visibleGroups.filter(
+    (group) => group.variant === 'team',
+  );
+  const allShared =
+    visibleTeamGroups.length > 0 &&
+    visibleTeamGroups.every((group) => group.preliminaryFindingsShared);
+
+  const toggleMarkAllShared = () => {
+    const nextShared = !allShared;
+    const teamIds = new Set(visibleTeamGroups.map((group) => group.id));
     setSpeakerGroups((current) =>
-      current.map((group) => ({ ...group, preliminaryFindingsShared: true })),
+      current.map((group) =>
+        teamIds.has(group.id)
+          ? { ...group, preliminaryFindingsShared: nextShared }
+          : group,
+      ),
     );
+  };
 
   const toggleExpanded = (groupId: string) =>
     setExpandedIds((current) => {
@@ -533,21 +553,23 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
               {visibleGroups.length > 0 && (
                 <span css={statsGroupStyles}>
                   <span css={[separatorStyles, hideOnMobileStyles]}>•</span>
-                  <span css={statStyles}>{teamCount} Teams</span>
+                  <span css={statStyles}>
+                    {pluralizeTeams(teamCount, true)}
+                  </span>
                   <span css={separatorStyles}>•</span>
-                  <span css={statStyles}>{userCount} Users</span>
+                  <span css={statStyles}>{pluralize(userCount, 'User')}</span>
                 </span>
               )}
             </div>
-            {visibleGroups.length > 0 && (
+            {isPastEvent && visibleTeamGroups.length > 0 && (
               <Button
                 small
                 noMargin
                 enabled={!isCancelling}
                 overrideStyles={markAllSharedButtonStyles}
-                onClick={markAllShared}
+                onClick={toggleMarkAllShared}
               >
-                Mark All Shared
+                {allShared ? 'Mark All Not Shared' : 'Mark All Shared'}
               </Button>
             )}
           </div>
@@ -558,17 +580,21 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
                 Add speakers to this event
               </Paragraph>
               <Paragraph noMargin accent="lead">
-                Search for a person to add them to this event.
+                Search for a person to add them to this event. Once the event
+                has taken place, you&apos;ll be able to mark whether each
+                speaker shared preliminary findings.
               </Paragraph>
             </div>
           ) : (
             <div css={groupsCardStyles(!isCancelling)}>
               <div css={groupsTableHeaderStyles}>
                 <span>Team</span>
-                <span>
-                  <span css={hideOnMobileStyles}>Preliminary Findings</span>
-                  <span css={hideOnDesktopStyles}>P. Findings</span>
-                </span>
+                {isPastEvent && (
+                  <span>
+                    <span css={hideOnMobileStyles}>Preliminary Findings</span>
+                    <span css={hideOnDesktopStyles}>P. Findings</span>
+                  </span>
+                )}
               </div>
               <div css={groupsRowsStyles} role="list">
                 {pendingSpeaker && (
@@ -611,6 +637,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
                       isAlumni: 'isAlumni' in user ? user.isAlumni : undefined,
                     }))}
                     preliminaryFindingsShared={group.preliminaryFindingsShared}
+                    showShared={isPastEvent && group.variant === 'team'}
                     expanded={expandedIds.has(group.id)}
                     onToggleExpanded={() => toggleExpanded(group.id)}
                     onToggleShared={() => toggleShared(group.id)}

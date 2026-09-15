@@ -606,7 +606,9 @@ describe('the NEW_EVENT_PAGE flag', () => {
       teamId: string,
       teamName: string,
       userId: string,
+      speakerId = `es-${teamId}-${userId}`,
     ): EventSpeaker => ({
+      id: speakerId,
       team: { id: teamId, displayName: teamName },
       user: { id: userId, displayName: `User ${userId}` },
       role: 'Chair',
@@ -676,25 +678,15 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(queryByText('Add Speakers')).not.toBeInTheDocument();
     });
 
-    it('shows the editor empty state with an add speakers button for a project manager', async () => {
+    it('shows the editor empty state with an add speakers button for a tech support user', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
-        interestGroup: { ...createInterestGroupResponse(), id: 'ig-pm' },
         speakers: [],
       });
-      const pmWrapper = createWrapper({
-        interestGroups: [
-          {
-            id: 'ig-pm',
-            name: 'Group',
-            active: true,
-            role: 'Project Manager',
-          },
-        ],
-      });
+      const techSupportWrapper = createWrapper({ techSupport: true });
       const { findByText, findByRole } = render(<Event />, {
-        wrapper: pmWrapper,
+        wrapper: techSupportWrapper,
       });
       expect(
         await findByText(/Marking who shared preliminary findings/),
@@ -704,30 +696,88 @@ describe('the NEW_EVENT_PAGE flag', () => {
       ).toBeVisible();
     });
 
-    it('hides the add speakers button for a project manager of an inactive group', async () => {
+    it('saves speaker changes for a tech support user', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
-        interestGroup: { ...createInterestGroupResponse(), id: 'ig-pm' },
-        speakers: [],
+        endDate: pastEndDate,
+        speakers: [teamSpeaker('t1', 'Team One', 'u1', 'es-1')],
+        preliminaryDataShared: [{ team: { id: 't1' }, shared: false }],
       });
-      const pmWrapper = createWrapper({
-        interestGroups: [
+      mockPatchEvent.mockResolvedValue({
+        ...createEventResponse(),
+        id,
+      });
+      const techSupportWrapper = createWrapper({ techSupport: true });
+      const { findByRole, getByRole } = render(<Event />, {
+        wrapper: techSupportWrapper,
+      });
+
+      await userEvent.click(
+        await findByRole('button', { name: 'Edit speakers' }),
+      );
+      await userEvent.click(
+        getByRole('checkbox', {
+          name: 'Team One preliminary findings shared',
+        }),
+      );
+      await userEvent.click(getByRole('button', { name: 'Save' }));
+
+      await waitFor(() =>
+        expect(mockPatchEvent).toHaveBeenCalledWith(
+          id,
           {
-            id: 'ig-pm',
-            name: 'Group',
-            active: false,
-            role: 'Project Manager',
+            speakersToRemove: [],
+            preliminaryDataShared: [{ teamId: 't1', shared: true }],
           },
-        ],
+          expect.anything(),
+        ),
+      );
+    });
+
+    it('runs the (empty) speaker search when typing in the modal', async () => {
+      mockGetEvent.mockResolvedValue({
+        ...createEventResponse(),
+        id,
+        endDate: pastEndDate,
+        speakers: [teamSpeaker('t1', 'Team One', 'u1')],
       });
-      const { findByText, queryByText } = render(<Event />, {
-        wrapper: pmWrapper,
+      const techSupportWrapper = createWrapper({ techSupport: true });
+      const { findByRole, getByRole, findByText } = render(<Event />, {
+        wrapper: techSupportWrapper,
       });
+
+      await userEvent.click(
+        await findByRole('button', { name: 'Edit speakers' }),
+      );
+      await userEvent.type(getByRole('combobox'), 'zzz');
+
+      // loadSearchOptions returns [], so only the creatable external option is
+      // offered — proving the search ran.
+      expect(await findByText('zzz')).toBeVisible();
+    });
+
+    it('closes the speakers modal without saving when dismissed', async () => {
+      mockGetEvent.mockResolvedValue({
+        ...createEventResponse(),
+        id,
+        endDate: pastEndDate,
+        speakers: [teamSpeaker('t1', 'Team One', 'u1')],
+      });
+      const techSupportWrapper = createWrapper({ techSupport: true });
+      const { findByRole, getByRole, queryByRole } = render(<Event />, {
+        wrapper: techSupportWrapper,
+      });
+
+      await userEvent.click(
+        await findByRole('button', { name: 'Edit speakers' }),
+      );
+      await userEvent.click(getByRole('button', { name: 'Cancel' }));
+
       expect(
-        await findByText('No speakers have been added for this event yet.'),
-      ).toBeVisible();
-      expect(queryByText('Add Speakers')).not.toBeInTheDocument();
+        queryByRole('heading', { name: 'Edit Speakers' }),
+      ).not.toBeInTheDocument();
+      expect(mockPatchEvent).not.toHaveBeenCalled();
     });
   });
 

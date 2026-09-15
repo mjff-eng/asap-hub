@@ -29,6 +29,8 @@ export type EventSpeakerTeam = {
 };
 
 export type EventSpeakerUser = {
+  // Contentful eventSpeakers entry id; optional as only the CRN read path sets it.
+  id?: string;
   team: Pick<TeamResponse, 'displayName' | 'id' | 'inactiveSince'>;
   user: EventSpeakerUserData;
   role: string;
@@ -39,6 +41,7 @@ export type EventSpeakerUserWithoutTeam = {
 };
 
 export type EventSpeakerExternalUser = {
+  id?: string;
   externalUser: EventSpeakerExternalUserData;
 };
 
@@ -145,8 +148,15 @@ export type EventAttendanceUpdateItem = {
   attended: boolean;
 };
 
+export type EventPreliminaryDataSharingUpdateItem = {
+  teamId: string;
+  shared: boolean;
+};
+
 export type EventUpdateDetailsRequest = {
-  attendance: EventAttendanceUpdateItem[];
+  attendance?: EventAttendanceUpdateItem[];
+  speakersToRemove?: string[];
+  preliminaryDataShared?: EventPreliminaryDataSharingUpdateItem[];
 };
 
 type BaseFilterOptions = {

@@ -61,8 +61,7 @@ it('Should disable the remove button and team pills when enabled is false', () =
 it('Should render a link to the user profile', () => {
   render(<PendingSpeakerCard {...defaultProps} />);
 
-  expect(screen.getByRole('link', { name: 'Jane Doe' })).toHaveAttribute(
-    'href',
-    expect.stringContaining('user-1'),
-  );
+  const userLink = screen.getByRole('link', { name: 'Jane Doe' });
+  expect(userLink).toHaveAttribute('href', expect.stringContaining('user-1'));
+  expect(userLink).toHaveAttribute('target', '_blank');
 });

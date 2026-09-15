@@ -6,6 +6,9 @@ import { EventTeamType } from './shared-event-card';
 
 export type SpeakerGroupUser = {
   readonly id: string;
+  // eventSpeakers entry ids backing this speaker (one user can map to several
+  // via merged roles), used to delete by exact id.
+  readonly speakerIds?: string[];
   readonly displayName: string;
   readonly avatarUrl?: string;
   readonly roles: string[];
@@ -14,6 +17,7 @@ export type SpeakerGroupUser = {
 
 export type SpeakerGroupExternalUser = {
   readonly id: string;
+  readonly speakerIds?: string[];
   readonly displayName: string;
 };
 
