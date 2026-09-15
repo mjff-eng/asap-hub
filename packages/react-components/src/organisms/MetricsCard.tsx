@@ -6,7 +6,11 @@ import { charcoal, lead, steel } from '../colors';
 import { minusRectIcon, plusRectIcon } from '../icons';
 import { ExpandableText, Info } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
-import { getPerformanceMoodIcon, getPerformanceMoodLabel } from '../utils';
+import {
+  getPerformanceMoodIcon,
+  getPerformanceMoodLabel,
+  PerformanceMoodThresholds,
+} from '../utils';
 
 const gridTemplateColumns = `${rem(24)} minmax(0, 1fr) ${rem(64)}`;
 
@@ -94,6 +98,12 @@ const fieldLabelStyles = css({
 const detailsContentStyles = css({
   display: 'flex',
   flexDirection: 'column',
+  gap: rem(16),
+});
+
+const detailsBlockStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
   gap: rem(4),
 });
 
@@ -103,7 +113,7 @@ const desktopDetailsStyles = css({
     display: 'block',
     gridColumn: 2,
     minWidth: 0,
-    marginTop: rem(16),
+    marginTop: rem(24),
   },
 });
 
@@ -112,13 +122,6 @@ const mobileDetailsStyles = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     display: 'none',
   },
-});
-
-const definitionStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: rem(4),
-  marginTop: rem(16),
 });
 
 export type Metric = {
@@ -144,13 +147,14 @@ const moodLabelStyles = css({
 export const MoodStatus: React.FC<{
   percentage: number | null;
   limitedData?: boolean;
-}> = ({ percentage, limitedData = false }) => {
-  const label = getPerformanceMoodLabel(percentage, limitedData);
+  thresholds?: PerformanceMoodThresholds;
+}> = ({ percentage, limitedData = false, thresholds }) => {
+  const label = getPerformanceMoodLabel(percentage, limitedData, thresholds);
   return (
     <Info
       label={label}
       width={180}
-      icon={getPerformanceMoodIcon(percentage, limitedData)}
+      icon={getPerformanceMoodIcon(percentage, limitedData, thresholds)}
     >
       <span css={moodLabelStyles}>{label}</span>
     </Info>
@@ -162,7 +166,7 @@ const MetricDetails: React.FC<Pick<Metric, 'philosophy' | 'definition'>> = ({
   definition,
 }) => (
   <div css={detailsContentStyles}>
-    <div>
+    <div css={detailsBlockStyles}>
       <Subtitle accent="lead" noMargin>
         ASAP Philosophy
       </Subtitle>
@@ -170,7 +174,7 @@ const MetricDetails: React.FC<Pick<Metric, 'philosophy' | 'definition'>> = ({
         {philosophy}
       </Paragraph>
     </div>
-    <div css={definitionStyles}>
+    <div css={detailsBlockStyles}>
       <Subtitle accent="lead" noMargin>
         Metric Definition
       </Subtitle>

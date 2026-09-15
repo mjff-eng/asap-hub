@@ -1,4 +1,11 @@
+import { PerformanceMoodThresholds } from '../utils';
 import MetricsCard, { Metric, MoodStatus } from './MetricsCard';
+
+// Above 80% is outstanding and 50 to 80% adequate; percentages are whole numbers.
+const engagementMoodThresholds: PerformanceMoodThresholds = {
+  outstanding: 81,
+  adequate: 50,
+};
 
 export type TeamEngagementMetricsProps = {
   speakerDiversity: number | null;
@@ -18,7 +25,12 @@ const TeamEngagementMetrics: React.FC<TeamEngagementMetricsProps> = ({
     {
       id: 'speakerDiversity',
       name: 'Speaker Diversity',
-      status: <MoodStatus percentage={speakerDiversity} />,
+      status: (
+        <MoodStatus
+          percentage={speakerDiversity}
+          thresholds={engagementMoodThresholds}
+        />
+      ),
       philosophy:
         'At ASAP, we want to ensure that diverse perspectives are being encouraged and that the entire team is engaged in the work.',
       definition:
@@ -27,7 +39,12 @@ const TeamEngagementMetrics: React.FC<TeamEngagementMetricsProps> = ({
     {
       id: 'traineePresentations',
       name: 'Trainee Presentations',
-      status: <MoodStatus percentage={traineePresentations} />,
+      status: (
+        <MoodStatus
+          percentage={traineePresentations}
+          thresholds={engagementMoodThresholds}
+        />
+      ),
       philosophy:
         'At ASAP, we believe in supporting the next generation of scientists. This includes giving trainees the opportunity to showcase their work in the research setting.',
       definition:
@@ -40,6 +57,7 @@ const TeamEngagementMetrics: React.FC<TeamEngagementMetricsProps> = ({
         <MoodStatus
           percentage={meetingRepAttendance.percentage}
           limitedData={meetingRepAttendance.limitedData}
+          thresholds={engagementMoodThresholds}
         />
       ),
       philosophy:
