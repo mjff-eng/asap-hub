@@ -324,18 +324,16 @@ jobs:
         uses: actions/checkout@v4
       - name: Cache build typecheck output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
       - name: Setup
         id: setup
         uses: ./.github/actions/setup-environment
         with:
           environment-name: ${{ inputs.environment-name }}
-      - name: Cache transpile output
-        uses: ./.github/actions/cache-build
+      - name: Download transpile output
+        uses: actions/download-artifact@v4
         with:
-          cache-prefix: ${{ steps.setup.outputs.cache-prefix-transpile }}
-          environment-name: ${{ inputs.environment-name }}
+          name: transpile-output-${{ inputs.environment-name }}
+          path: .
       - name: Get Algolia Keys
         id: algolia-keys
         uses: ./.github/actions/algolia-keys
@@ -367,18 +365,16 @@ jobs:
         uses: actions/checkout@v4
       - name: Cache build typecheck output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
       - name: Setup
         id: setup
         uses: ./.github/actions/setup-environment
         with:
           environment-name: ${{ inputs.environment-name }}
-      - name: Cache transpile output
-        uses: ./.github/actions/cache-build
+      - name: Download transpile output
+        uses: actions/download-artifact@v4
         with:
-          cache-prefix: ${{ steps.setup.outputs.cache-prefix-transpile }}
-          environment-name: ${{ inputs.environment-name }}
+          name: transpile-output-${{ inputs.environment-name }}
+          path: .
       - name: Get Algolia Keys
         id: algolia-keys
         uses: ./.github/actions/algolia-keys
@@ -527,15 +523,13 @@ jobs:
         uses: ./.github/actions/setup-environment
         with:
           environment-name: ${{ inputs.environment-name }}
-      - name: Cache build output
-        uses: ./.github/actions/cache-build
+      - name: Download build output
+        uses: actions/download-artifact@v4
         with:
-          cache-prefix: ${{ steps.setup.outputs.cache-prefix-frontend }}
-          environment-name: ${{ inputs.environment-name }}
+          name: frontend-output-${{ inputs.environment-name }}
+          path: .
       - name: Cache build typecheck output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
       - name: Deploy
         if: ${{ inputs.environment-name=='Development' || inputs.environment-name=='Production' }}
         run: |
@@ -564,15 +558,13 @@ jobs:
         uses: ./.github/actions/setup-environment
         with:
           environment-name: ${{ inputs.environment-name }}
-      - name: Cache build output
-        uses: ./.github/actions/cache-build
+      - name: Download build output
+        uses: actions/download-artifact@v4
         with:
-          cache-prefix: ${{ steps.setup.outputs.cache-prefix-frontend }}
-          environment-name: ${{ inputs.environment-name }}
+          name: frontend-output-${{ inputs.environment-name }}
+          path: .
       - name: Cache build typecheck output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
 
       - name: Deploy CRN PR
         if: ${{ inputs.environment-name == 'Branch' && steps.setup.outputs.auth0-label == 'true' }}

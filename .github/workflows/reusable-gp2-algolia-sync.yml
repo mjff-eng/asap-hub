@@ -54,8 +54,6 @@ jobs:
         uses: ./.github/actions/build-rebuild
       - name: Cache build typecheck output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: ${{ inputs.environment-name }}
       - name: Install Algolia CLI
         uses: algolia/setup-algolia-cli@master
         with:

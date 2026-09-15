@@ -19,8 +19,6 @@ jobs:
         uses: ./.github/actions/build-rebuild
       - name: Cache build typecheck output
         uses: ./.github/actions/cache-unplugged
-        with:
-          environment-name: Development
       - name: Setup
         id: setup
         uses: ./.github/actions/setup-environment

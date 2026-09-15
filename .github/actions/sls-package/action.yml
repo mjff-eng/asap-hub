@@ -108,8 +108,6 @@ runs:
         environment-name: ${{ inputs.environment-name }}
     - name: Cache build output
       uses: ./.github/actions/cache-unplugged
-      with:
-        environment-name: ${{ inputs.environment-name }}
     - name: Cache build definitions
       uses: ./.github/actions/cache-build
       with:
@@ -162,5 +160,5 @@ runs:
       with:
         name: ${{ inputs.app }}${{ inputs.package-suffix }}-sls-package-${{ inputs.environment-name }}
         path: '${{ inputs.app }}${{ inputs.package-suffix }}-sls-package'
-        retention-days: 1
+        retention-days: 3
         overwrite: true
