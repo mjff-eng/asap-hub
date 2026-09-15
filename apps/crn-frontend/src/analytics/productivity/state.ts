@@ -24,8 +24,8 @@ import {
   getUserProductivity,
   getUserProductivityPerformance,
   TeamHubResearchOutputs,
-  TeamHubResearchOutputsOptions,
 } from './api';
+import { TeamMetricsOptions } from '../utils/team-metrics';
 
 export const userProductivityQueryKeys = {
   all: ['analytics-user-productivity'] as const,
@@ -118,7 +118,7 @@ export const teamHubResearchOutputsQueryKeys = {
 };
 
 export const useTeamHubResearchOutputs = (
-  options: TeamHubResearchOutputsOptions,
+  options: TeamMetricsOptions,
 ): TeamHubResearchOutputs => {
   const opensearchClient =
     useAnalyticsOpensearch<TeamProductivityOpensearchDocument>(

@@ -1,5 +1,9 @@
 import { OpensearchSearchOptions } from './opensearch';
 
+export type TeamMetricsOptions = {
+  teamId: string;
+};
+
 export const teamMetricsSearchOptions = (
   teamId: string,
 ): OpensearchSearchOptions => ({

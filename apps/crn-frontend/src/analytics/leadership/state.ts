@@ -20,8 +20,8 @@ import {
   getAnalyticsOSChampion,
   getTeamLeadershipMetrics,
   TeamLeadershipMetrics,
-  TeamLeadershipMetricsOptions,
 } from './api';
+import { TeamMetricsOptions } from '../utils/team-metrics';
 import { OpensearchIndex } from '../utils/opensearch/types';
 import { useAnalyticsOpensearch } from '../../hooks';
 
@@ -121,7 +121,7 @@ export const teamLeadershipMetricsQueryKeys = {
 };
 
 export const useTeamLeadershipMetrics = (
-  options: TeamLeadershipMetricsOptions,
+  options: TeamMetricsOptions,
 ): TeamLeadershipMetrics => {
   const workingGroupClient =
     useAnalyticsOpensearch<AnalyticsTeamLeadershipResponse>(

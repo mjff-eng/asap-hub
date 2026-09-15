@@ -17,7 +17,10 @@ import {
 } from '../utils/analytics-options';
 import { OpensearchClient } from '../utils/opensearch';
 import { OpensearchSortMap } from '../utils/opensearch/types';
-import { teamMetricsSearchOptions } from '../utils/team-metrics';
+import {
+  TeamMetricsOptions,
+  teamMetricsSearchOptions,
+} from '../utils/team-metrics';
 
 export type EngagementListOptions = AnalyticsSearchOptions & {
   timeRange: TimeRangeOption;
@@ -120,16 +123,12 @@ export const getMeetingRepAttendance = async (
     sort: sort ? meetingRepAttendanceOpensearchSort[sort] : undefined,
   });
 
-export type TeamEngagementMetricsOptions = {
-  teamId: string;
-};
-
 export type TeamEngagementMetrics = TeamEngagementMetricsProps;
 
 export const getTeamEngagementMetrics = async (
   presenterClient: OpensearchClient<EngagementResponse>,
   attendanceClient: OpensearchClient<MeetingRepAttendanceResponse>,
-  { teamId }: TeamEngagementMetricsOptions,
+  { teamId }: TeamMetricsOptions,
 ): Promise<TeamEngagementMetrics> => {
   const searchOptions = teamMetricsSearchOptions(teamId);
   const [presenters, attendance] = await Promise.all([

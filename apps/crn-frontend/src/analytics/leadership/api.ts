@@ -10,7 +10,10 @@ import { MetricOption } from '@asap-hub/react-components';
 import { AnalyticsSearchOptionsWithFiltering } from '../utils/analytics-options';
 import { OpensearchClient } from '../utils/opensearch/client';
 import { OpensearchSort, OpensearchSortMap } from '../utils/opensearch/types';
-import { teamMetricsSearchOptions } from '../utils/team-metrics';
+import {
+  TeamMetricsOptions,
+  teamMetricsSearchOptions,
+} from '../utils/team-metrics';
 
 export type AnalyticsSearchOptions = {
   metric?: MetricOption;
@@ -90,10 +93,6 @@ export const getAnalyticsOSChampion = async (
     sort: sort ? osChampionOpensearchSort[sort] : undefined,
   });
 
-export type TeamLeadershipMetricsOptions = {
-  teamId: string;
-};
-
 export type TeamLeadershipMetrics = {
   workingGroupLead: boolean;
   interestGroupLead: boolean;
@@ -105,7 +104,7 @@ const hasLeadership = (currentCount = 0, previousCount = 0): boolean =>
 export const getTeamLeadershipMetrics = async (
   workingGroupClient: OpensearchClient<AnalyticsTeamLeadershipResponse>,
   interestGroupClient: OpensearchClient<AnalyticsTeamLeadershipResponse>,
-  { teamId }: TeamLeadershipMetricsOptions,
+  { teamId }: TeamMetricsOptions,
 ): Promise<TeamLeadershipMetrics> => {
   const searchOptions = teamMetricsSearchOptions(teamId);
   const [workingGroup, interestGroup] = await Promise.all([
