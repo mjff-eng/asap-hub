@@ -202,7 +202,8 @@ export enum AnnouncementsOrder {
 }
 
 /** Represents a binary file in a space. An asset can be any file type. */
-export type Asset = {
+export type Asset = _Node & {
+  _id: Scalars['ID'];
   contentType?: Maybe<Scalars['String']>;
   contentfulMetadata: ContentfulMetadata;
   description?: Maybe<Scalars['String']>;
@@ -15965,6 +15966,19 @@ export type FetchPagesQuery = {
   >;
 };
 
+export type ProjectMemberDataFragment = Pick<
+  ProjectMembership,
+  'role' | 'inactiveSinceDate'
+> & {
+  sys: Pick<Sys, 'id'>;
+  user?: Maybe<
+    Pick<
+      Users,
+      'firstName' | 'nickname' | 'lastName' | 'onboarded' | 'alumniSinceDate'
+    > & { sys: Pick<Sys, 'id'>; avatar?: Maybe<Pick<Asset, 'url'>> }
+  >;
+};
+
 export type ProjectsContentFieldsFragment = Pick<
   Projects,
   | 'title'
@@ -16335,6 +16349,38 @@ export type FetchProjectsByUserQuery = {
   >;
 };
 
+export type FetchProjectMembersQueryVariables = Exact<{
+  id: Scalars['String'];
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
+}>;
+
+export type FetchProjectMembersQuery = {
+  projects?: Maybe<{
+    membersCollection?: Maybe<
+      Pick<ProjectsMembersCollection, 'total'> & {
+        items: Array<
+          Maybe<
+            Pick<ProjectMembership, 'role' | 'inactiveSinceDate'> & {
+              sys: Pick<Sys, 'id'>;
+              user?: Maybe<
+                Pick<
+                  Users,
+                  | 'firstName'
+                  | 'nickname'
+                  | 'lastName'
+                  | 'onboarded'
+                  | 'alumniSinceDate'
+                > & { sys: Pick<Sys, 'id'>; avatar?: Maybe<Pick<Asset, 'url'>> }
+              >;
+            }
+          >
+        >;
+      }
+    >;
+  }>;
+};
+
 export type FetchRemindersQueryVariables = Exact<{
   outputFilter?: InputMaybe<OutputsFilter>;
   outputVersionFilter?: InputMaybe<OutputVersionFilter>;
@@ -16536,19 +16582,21 @@ export type UsersContentDataFragment = Pick<
                   Maybe<
                     Pick<Projects, 'title' | 'status'> & {
                       sys: Pick<Sys, 'id'>;
-                      membersCollection?: Maybe<{
-                        items: Array<
-                          Maybe<
-                            Pick<ProjectMembership, 'role'> & {
-                              user?: Maybe<
-                                Pick<Users, 'onboarded'> & {
-                                  sys: Pick<Sys, 'id'>;
-                                }
-                              >;
-                            }
-                          >
-                        >;
-                      }>;
+                      membersCollection?: Maybe<
+                        Pick<ProjectsMembersCollection, 'total'> & {
+                          items: Array<
+                            Maybe<
+                              Pick<ProjectMembership, 'role'> & {
+                                user?: Maybe<
+                                  Pick<Users, 'onboarded'> & {
+                                    sys: Pick<Sys, 'id'>;
+                                  }
+                                >;
+                              }
+                            >
+                          >;
+                        }
+                      >;
                     }
                   >
                 >;
@@ -16569,19 +16617,21 @@ export type UsersContentDataFragment = Pick<
                   Maybe<
                     Pick<WorkingGroups, 'title'> & {
                       sys: Pick<Sys, 'id'>;
-                      membersCollection?: Maybe<{
-                        items: Array<
-                          Maybe<
-                            Pick<WorkingGroupMembership, 'role'> & {
-                              user?: Maybe<
-                                Pick<Users, 'onboarded'> & {
-                                  sys: Pick<Sys, 'id'>;
-                                }
-                              >;
-                            }
-                          >
-                        >;
-                      }>;
+                      membersCollection?: Maybe<
+                        Pick<WorkingGroupsMembersCollection, 'total'> & {
+                          items: Array<
+                            Maybe<
+                              Pick<WorkingGroupMembership, 'role'> & {
+                                user?: Maybe<
+                                  Pick<Users, 'onboarded'> & {
+                                    sys: Pick<Sys, 'id'>;
+                                  }
+                                >;
+                              }
+                            >
+                          >;
+                        }
+                      >;
                     }
                   >
                 >;
@@ -16686,19 +16736,21 @@ export type FetchUserByIdQuery = {
                       Maybe<
                         Pick<Projects, 'title' | 'status'> & {
                           sys: Pick<Sys, 'id'>;
-                          membersCollection?: Maybe<{
-                            items: Array<
-                              Maybe<
-                                Pick<ProjectMembership, 'role'> & {
-                                  user?: Maybe<
-                                    Pick<Users, 'onboarded'> & {
-                                      sys: Pick<Sys, 'id'>;
-                                    }
-                                  >;
-                                }
-                              >
-                            >;
-                          }>;
+                          membersCollection?: Maybe<
+                            Pick<ProjectsMembersCollection, 'total'> & {
+                              items: Array<
+                                Maybe<
+                                  Pick<ProjectMembership, 'role'> & {
+                                    user?: Maybe<
+                                      Pick<Users, 'onboarded'> & {
+                                        sys: Pick<Sys, 'id'>;
+                                      }
+                                    >;
+                                  }
+                                >
+                              >;
+                            }
+                          >;
                         }
                       >
                     >;
@@ -16719,19 +16771,21 @@ export type FetchUserByIdQuery = {
                       Maybe<
                         Pick<WorkingGroups, 'title'> & {
                           sys: Pick<Sys, 'id'>;
-                          membersCollection?: Maybe<{
-                            items: Array<
-                              Maybe<
-                                Pick<WorkingGroupMembership, 'role'> & {
-                                  user?: Maybe<
-                                    Pick<Users, 'onboarded'> & {
-                                      sys: Pick<Sys, 'id'>;
-                                    }
-                                  >;
-                                }
-                              >
-                            >;
-                          }>;
+                          membersCollection?: Maybe<
+                            Pick<WorkingGroupsMembersCollection, 'total'> & {
+                              items: Array<
+                                Maybe<
+                                  Pick<WorkingGroupMembership, 'role'> & {
+                                    user?: Maybe<
+                                      Pick<Users, 'onboarded'> & {
+                                        sys: Pick<Sys, 'id'>;
+                                      }
+                                    >;
+                                  }
+                                >
+                              >;
+                            }
+                          >;
                         }
                       >
                     >;
@@ -16846,19 +16900,21 @@ export type FetchUsersQuery = {
                             Maybe<
                               Pick<Projects, 'title' | 'status'> & {
                                 sys: Pick<Sys, 'id'>;
-                                membersCollection?: Maybe<{
-                                  items: Array<
-                                    Maybe<
-                                      Pick<ProjectMembership, 'role'> & {
-                                        user?: Maybe<
-                                          Pick<Users, 'onboarded'> & {
-                                            sys: Pick<Sys, 'id'>;
-                                          }
-                                        >;
-                                      }
-                                    >
-                                  >;
-                                }>;
+                                membersCollection?: Maybe<
+                                  Pick<ProjectsMembersCollection, 'total'> & {
+                                    items: Array<
+                                      Maybe<
+                                        Pick<ProjectMembership, 'role'> & {
+                                          user?: Maybe<
+                                            Pick<Users, 'onboarded'> & {
+                                              sys: Pick<Sys, 'id'>;
+                                            }
+                                          >;
+                                        }
+                                      >
+                                    >;
+                                  }
+                                >;
                               }
                             >
                           >;
@@ -16879,19 +16935,24 @@ export type FetchUsersQuery = {
                             Maybe<
                               Pick<WorkingGroups, 'title'> & {
                                 sys: Pick<Sys, 'id'>;
-                                membersCollection?: Maybe<{
-                                  items: Array<
-                                    Maybe<
-                                      Pick<WorkingGroupMembership, 'role'> & {
-                                        user?: Maybe<
-                                          Pick<Users, 'onboarded'> & {
-                                            sys: Pick<Sys, 'id'>;
-                                          }
-                                        >;
-                                      }
-                                    >
-                                  >;
-                                }>;
+                                membersCollection?: Maybe<
+                                  Pick<
+                                    WorkingGroupsMembersCollection,
+                                    'total'
+                                  > & {
+                                    items: Array<
+                                      Maybe<
+                                        Pick<WorkingGroupMembership, 'role'> & {
+                                          user?: Maybe<
+                                            Pick<Users, 'onboarded'> & {
+                                              sys: Pick<Sys, 'id'>;
+                                            }
+                                          >;
+                                        }
+                                      >
+                                    >;
+                                  }
+                                >;
                               }
                             >
                           >;
@@ -16931,6 +16992,7 @@ export type FetchUsersByProjectIdsQuery = {
     Pick<ProjectsCollection, 'total'> & {
       items: Array<
         Maybe<{
+          sys: Pick<Sys, 'id'>;
           membersCollection?: Maybe<
             Pick<ProjectsMembersCollection, 'total'> & {
               items: Array<Maybe<{ user?: Maybe<{ sys: Pick<Sys, 'id'> }> }>>;
@@ -16951,6 +17013,7 @@ export type FetchUsersByWorkingGroupIdsQuery = {
     Pick<WorkingGroupsCollection, 'total'> & {
       items: Array<
         Maybe<{
+          sys: Pick<Sys, 'id'>;
           membersCollection?: Maybe<
             Pick<WorkingGroupsMembersCollection, 'total'> & {
               items: Array<Maybe<{ user?: Maybe<{ sys: Pick<Sys, 'id'> }> }>>;
@@ -17697,6 +17760,19 @@ export type FetchWorkingGroupNetworkQuery = {
   >;
 };
 
+export type WorkingGroupMemberDataFragment = Pick<
+  WorkingGroupMembership,
+  'role' | 'inactiveSinceDate'
+> & {
+  sys: Pick<Sys, 'id'>;
+  user?: Maybe<
+    Pick<
+      Users,
+      'firstName' | 'nickname' | 'lastName' | 'onboarded' | 'alumniSinceDate'
+    > & { sys: Pick<Sys, 'id'>; avatar?: Maybe<Pick<Asset, 'url'>> }
+  >;
+};
+
 export type WorkingGroupsContentDataFragment = Pick<
   WorkingGroups,
   | 'title'
@@ -17925,6 +18001,38 @@ export type FetchWorkingGroupsQuery = {
       >;
     }
   >;
+};
+
+export type FetchWorkingGroupMembersQueryVariables = Exact<{
+  id: Scalars['String'];
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
+}>;
+
+export type FetchWorkingGroupMembersQuery = {
+  workingGroups?: Maybe<{
+    membersCollection?: Maybe<
+      Pick<WorkingGroupsMembersCollection, 'total'> & {
+        items: Array<
+          Maybe<
+            Pick<WorkingGroupMembership, 'role' | 'inactiveSinceDate'> & {
+              sys: Pick<Sys, 'id'>;
+              user?: Maybe<
+                Pick<
+                  Users,
+                  | 'firstName'
+                  | 'nickname'
+                  | 'lastName'
+                  | 'onboarded'
+                  | 'alumniSinceDate'
+                > & { sys: Pick<Sys, 'id'>; avatar?: Maybe<Pick<Asset, 'url'>> }
+              >;
+            }
+          >
+        >;
+      }
+    >;
+  }>;
 };
 
 export const AnnouncementsContentDataFragmentDoc = {
@@ -19823,6 +19931,73 @@ export const PageContentDataFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<PageContentDataFragment, unknown>;
+export const ProjectMemberDataFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProjectMemberData' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'ProjectMembership' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'sys' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'role' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'inactiveSinceDate' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'sys' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'nickname' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'onboarded' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'alumniSinceDate' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'avatar' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ProjectMemberDataFragment, unknown>;
 export const ProjectsContentFieldsFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -19924,7 +20099,7 @@ export const ProjectsContentFieldsFragmentDoc = {
               {
                 kind: 'Argument',
                 name: { kind: 'Name', value: 'limit' },
-                value: { kind: 'IntValue', value: '50' },
+                value: { kind: 'IntValue', value: '100' },
               },
             ],
             selectionSet: {
@@ -19938,77 +20113,8 @@ export const ProjectsContentFieldsFragmentDoc = {
                     kind: 'SelectionSet',
                     selections: [
                       {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'sys' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                          ],
-                        },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'role' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'inactiveSinceDate' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'user' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'sys' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'id' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'firstName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'nickname' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'lastName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'onboarded' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'alumniSinceDate' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'avatar' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'url' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'ProjectMemberData' },
                       },
                     ],
                   },
@@ -20140,6 +20246,7 @@ export const ProjectsContentFieldsFragmentDoc = {
         ],
       },
     },
+    ...ProjectMemberDataFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<ProjectsContentFieldsFragment, unknown>;
 export const LatestStatsContentDataFragmentDoc = {
@@ -20516,6 +20623,13 @@ export const UsersContentDataFragmentDoc = {
                                                       kind: 'Field',
                                                       name: {
                                                         kind: 'Name',
+                                                        value: 'total',
+                                                      },
+                                                    },
+                                                    {
+                                                      kind: 'Field',
+                                                      name: {
+                                                        kind: 'Name',
                                                         value: 'items',
                                                       },
                                                       selectionSet: {
@@ -20723,6 +20837,13 @@ export const UsersContentDataFragmentDoc = {
                                                       kind: 'Field',
                                                       name: {
                                                         kind: 'Name',
+                                                        value: 'total',
+                                                      },
+                                                    },
+                                                    {
+                                                      kind: 'Field',
+                                                      name: {
+                                                        kind: 'Name',
                                                         value: 'items',
                                                       },
                                                       selectionSet: {
@@ -20861,6 +20982,73 @@ export const UsersContentDataFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<UsersContentDataFragment, unknown>;
+export const WorkingGroupMemberDataFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'WorkingGroupMemberData' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'WorkingGroupMembership' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'sys' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'role' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'inactiveSinceDate' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'sys' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'nickname' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'onboarded' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'alumniSinceDate' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'avatar' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<WorkingGroupMemberDataFragment, unknown>;
 export const WorkingGroupsContentDataFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -20915,7 +21103,7 @@ export const WorkingGroupsContentDataFragmentDoc = {
               {
                 kind: 'Argument',
                 name: { kind: 'Name', value: 'limit' },
-                value: { kind: 'IntValue', value: '50' },
+                value: { kind: 'IntValue', value: '100' },
               },
             ],
             selectionSet: {
@@ -20929,77 +21117,8 @@ export const WorkingGroupsContentDataFragmentDoc = {
                     kind: 'SelectionSet',
                     selections: [
                       {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'sys' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                          ],
-                        },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'role' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'inactiveSinceDate' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'user' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'sys' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'id' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'firstName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'nickname' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'lastName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'onboarded' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'alumniSinceDate' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'avatar' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'url' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'WorkingGroupMemberData' },
                       },
                     ],
                   },
@@ -21171,6 +21290,7 @@ export const WorkingGroupsContentDataFragmentDoc = {
         ],
       },
     },
+    ...WorkingGroupMemberDataFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<WorkingGroupsContentDataFragment, unknown>;
 export const WorkingGroupNetworkContentDataFragmentDoc = {
@@ -24140,6 +24260,120 @@ export const FetchProjectsByUserDocument = {
   FetchProjectsByUserQuery,
   FetchProjectsByUserQueryVariables
 >;
+export const FetchProjectMembersDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchProjectMembers' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'projects' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'membersCollection' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'limit' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'limit' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'skip' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'skip' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'items' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: {
+                                kind: 'Name',
+                                value: 'ProjectMemberData',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...ProjectMemberDataFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<
+  FetchProjectMembersQuery,
+  FetchProjectMembersQueryVariables
+>;
 export const FetchRemindersDocument = {
   kind: 'Document',
   definitions: [
@@ -25213,6 +25447,19 @@ export const FetchUsersByProjectIdsDocument = {
                     selections: [
                       {
                         kind: 'Field',
+                        name: { kind: 'Name', value: 'sys' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
                         name: { kind: 'Name', value: 'membersCollection' },
                         arguments: [
                           {
@@ -25353,12 +25600,25 @@ export const FetchUsersByWorkingGroupIdsDocument = {
                     selections: [
                       {
                         kind: 'Field',
+                        name: { kind: 'Name', value: 'sys' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
                         name: { kind: 'Name', value: 'membersCollection' },
                         arguments: [
                           {
                             kind: 'Argument',
                             name: { kind: 'Name', value: 'limit' },
-                            value: { kind: 'IntValue', value: '25' },
+                            value: { kind: 'IntValue', value: '50' },
                           },
                         ],
                         selectionSet: {
@@ -25806,4 +26066,118 @@ export const FetchWorkingGroupsDocument = {
 } as unknown as DocumentNode<
   FetchWorkingGroupsQuery,
   FetchWorkingGroupsQueryVariables
+>;
+export const FetchWorkingGroupMembersDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchWorkingGroupMembers' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'workingGroups' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'membersCollection' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'limit' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'limit' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'skip' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'skip' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'items' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: {
+                                kind: 'Name',
+                                value: 'WorkingGroupMemberData',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...WorkingGroupMemberDataFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<
+  FetchWorkingGroupMembersQuery,
+  FetchWorkingGroupMembersQueryVariables
 >;

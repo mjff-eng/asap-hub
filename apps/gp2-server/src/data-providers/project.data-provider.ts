@@ -10,12 +10,14 @@ import { gp2 as gp2Model } from '@asap-hub/model';
 import { TagItem, parseTag } from './tag.data-provider';
 import {
   deleteEntries,
+  fetchProjectMembersPage,
   parseCalendar,
   parseMembers,
   parseMilestones,
   parseResources,
   processMembers,
   processResources,
+  withAllMembers,
 } from './transformers';
 import { ProjectDataProvider } from './types';
 
@@ -63,9 +65,23 @@ export class ProjectContentfulDataProvider implements ProjectDataProvider {
     return projectMembershipCollection;
   }
 
+  private withAllMembers(project: GraphQLProject) {
+    return withAllMembers(project, fetchProjectMembersPage(this.graphQLClient));
+  }
+
+  private parseProjects(projects: GraphQLProject[]) {
+    return Promise.all(
+      projects.map(async (project) =>
+        parseProjectToDataObject(await this.withAllMembers(project)),
+      ),
+    );
+  }
+
   async fetchById(id: string): Promise<gp2Model.ProjectDataObject | null> {
     const { projects } = await this.fetchProjectById(id);
-    return projects ? parseProjectToDataObject(projects) : null;
+    return projects
+      ? parseProjectToDataObject(await this.withAllMembers(projects))
+      : null;
   }
 
   async fetch(
@@ -80,9 +96,11 @@ export class ProjectContentfulDataProvider implements ProjectDataProvider {
     return projectsCollection
       ? {
           total: projectsCollection.total,
-          items: projectsCollection.items
-            .filter((project): project is GraphQLProject => project !== null)
-            .map(parseProjectToDataObject),
+          items: await this.parseProjects(
+            projectsCollection.items.filter(
+              (project): project is GraphQLProject => project !== null,
+            ),
+          ),
         }
       : noRecords;
   }
@@ -108,7 +126,7 @@ export class ProjectContentfulDataProvider implements ProjectDataProvider {
     return projectMembershipCollection && items && items.length
       ? {
           total: projectMembershipCollection.total,
-          items: items.map(parseProjectToDataObject),
+          items: await this.parseProjects(items),
         }
       : noRecords;
   }

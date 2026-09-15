@@ -91,6 +91,7 @@ export const usersContentQueryFragment = gql`
                 title
                 status
                 membersCollection(limit: 25) {
+                  total
                   items {
                     role
                     user {
@@ -122,6 +123,7 @@ export const usersContentQueryFragment = gql`
                 }
                 title
                 membersCollection(limit: 50) {
+                  total
                   items {
                     role
                     user {
@@ -183,6 +185,9 @@ export const FETCH_USERS_BY_PROJECT_IDS = gql`
     projectsCollection(limit: 20, where: { sys: { id_in: $ids } }) {
       total
       items {
+        sys {
+          id
+        }
         membersCollection(limit: 25) {
           total
           items {
@@ -203,7 +208,10 @@ export const FETCH_USERS_BY_WORKING_GROUP_IDS = gql`
     workingGroupsCollection(limit: 20, where: { sys: { id_in: $ids } }) {
       total
       items {
-        membersCollection(limit: 25) {
+        sys {
+          id
+        }
+        membersCollection(limit: 50) {
           total
           items {
             user {
