@@ -29,6 +29,7 @@ import {
   FetchDiscussionRemindersQuery,
   FetchMessageRemindersQuery,
   FetchMilestoneReminderProjectsQuery,
+  FetchMilestoneRemindersQuery,
   FetchRemindersQuery,
   FetchTeamProjectManagerQuery,
 } from '@asap-hub/contentful';
@@ -896,7 +897,7 @@ export const getDiscussionRepliedToByOpenScienceMemberReminder =
   });
 
 export const getContentfulReminderMilestoneCollectionItem = (): NonNullable<
-  FetchRemindersQuery['milestonesCollection']
+  FetchMilestoneRemindersQuery['milestonesCollection']
 >['items'][number] => ({
   sys: {
     id: 'milestone-id-1',

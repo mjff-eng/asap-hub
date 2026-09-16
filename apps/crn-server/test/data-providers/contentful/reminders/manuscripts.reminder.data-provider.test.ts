@@ -72,6 +72,11 @@ describe('Reminders data provider', () => {
           items: [],
         },
       });
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        milestonesCollection: {
+          items: [],
+        },
+      });
     };
     const mockContentfulGraphqlResponse = (
       manuscript: ManuscriptItem | null = getContentfulReminderManuscriptCollectionItem(),

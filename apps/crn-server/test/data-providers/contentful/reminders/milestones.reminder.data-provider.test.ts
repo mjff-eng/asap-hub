@@ -1,6 +1,7 @@
 import { FetchRemindersOptions } from '@asap-hub/model';
 import {
   FETCH_MILESTONE_REMINDER_PROJECTS,
+  FETCH_MILESTONE_REMINDERS,
   FetchRemindersQuery,
 } from '@asap-hub/contentful';
 import { getReferenceDates } from '@asap-hub/server-common';
@@ -77,7 +78,6 @@ describe('Reminders data provider', () => {
       user?: FetchRemindersQuery['users'];
     } = {}) => {
       contentfulGraphqlClientMock.request.mockResolvedValueOnce({
-        milestonesCollection: { items: milestones },
         users: user,
       });
       contentfulGraphqlClientMock.request.mockResolvedValueOnce({
@@ -85,6 +85,9 @@ describe('Reminders data provider', () => {
       });
       contentfulGraphqlClientMock.request.mockResolvedValueOnce({
         messagesCollection: { items: [] },
+      });
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        milestonesCollection: { items: milestones },
       });
       contentfulGraphqlClientMock.request.mockResolvedValueOnce({
         projectsCollection: { items: projects },
@@ -121,7 +124,7 @@ describe('Reminders data provider', () => {
     });
 
     describe('Querying', () => {
-      test('passes the last 7 days milestone filter to the reminders query', async () => {
+      test('fetches milestones from the last 7 days with a dedicated query', async () => {
         mockGraphqlResponse();
 
         await remindersDataProvider.fetch(fetchOptions('user-id'));
@@ -142,11 +145,9 @@ describe('Reminders data provider', () => {
           ],
         });
         expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
-          1,
-          expect.anything(),
-          expect.objectContaining({
-            milestoneFilter: getMilestoneFilter(timezone),
-          }),
+          4,
+          FETCH_MILESTONE_REMINDERS,
+          { milestoneFilter: getMilestoneFilter(timezone) },
         );
       });
 
@@ -165,7 +166,7 @@ describe('Reminders data provider', () => {
         await remindersDataProvider.fetch(fetchOptions('user-id'));
 
         expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
-          4,
+          5,
           FETCH_MILESTONE_REMINDER_PROJECTS,
           {
             projectFilter: {
@@ -192,7 +193,7 @@ describe('Reminders data provider', () => {
         );
 
         expect(result.items).toEqual([]);
-        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(3);
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(4);
       });
 
       test('returns no project filter for milestones without aims', () => {

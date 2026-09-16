@@ -3,6 +3,7 @@ import {
   EventsFilter,
   FETCH_DISCUSSION_REMINDERS,
   FETCH_MESSAGE_REMINDERS,
+  FETCH_MILESTONE_REMINDERS,
   FETCH_MILESTONE_REMINDER_PROJECTS,
   FETCH_REMINDERS,
   FETCH_TEAM_PROJECT_MANAGER,
@@ -12,6 +13,8 @@ import {
   FetchMessageRemindersQueryVariables,
   FetchMilestoneReminderProjectsQuery,
   FetchMilestoneReminderProjectsQueryVariables,
+  FetchMilestoneRemindersQuery,
+  FetchMilestoneRemindersQueryVariables,
   FetchRemindersQuery,
   FetchRemindersQueryVariables,
   FetchTeamProjectManagerQuery,
@@ -96,7 +99,7 @@ type ResearchOutputVersionItem = NonNullable<
 
 type User = FetchRemindersQuery['users'];
 
-type MilestoneCollection = FetchRemindersQuery['milestonesCollection'];
+type MilestoneCollection = FetchMilestoneRemindersQuery['milestonesCollection'];
 export type MilestoneItem = NonNullable<
   NonNullable<MilestoneCollection>['items'][number]
 >;
@@ -158,7 +161,6 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       users: user,
       researchOutputVersionsCollection,
       manuscriptsCollection,
-      milestonesCollection,
     } = await this.contentfulClient.request<
       FetchRemindersQuery,
       FetchRemindersQueryVariables
@@ -168,15 +170,12 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       researchOutputFilter,
       researchOutputVersionsFilter,
       manuscriptFilter,
-      milestoneFilter,
     });
-
-    const milestonesCollectionItems = cleanArray(milestonesCollection?.items);
 
     const [
       { discussionsCollection },
       { messagesCollection },
-      milestoneProjects,
+      { milestones: milestonesCollectionItems, projects: milestoneProjects },
     ] = await Promise.all([
       this.contentfulClient.request<
         FetchDiscussionRemindersQuery,
@@ -190,7 +189,7 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       >(FETCH_MESSAGE_REMINDERS, {
         messageFilter,
       }),
-      this.fetchMilestoneProjects(milestonesCollectionItems),
+      this.fetchMilestones(milestoneFilter),
     ]);
 
     const fetchTeamProjectManager = async (
@@ -346,18 +345,27 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
     };
   }
 
-  private async fetchMilestoneProjects(
-    milestones: MilestoneItem[],
-  ): Promise<MilestoneProjectItem[]> {
+  private async fetchMilestones(
+    milestoneFilter: MilestonesFilter,
+  ): Promise<{
+    milestones: MilestoneItem[];
+    projects: MilestoneProjectItem[];
+  }> {
+    const { milestonesCollection } = await this.contentfulClient.request<
+      FetchMilestoneRemindersQuery,
+      FetchMilestoneRemindersQueryVariables
+    >(FETCH_MILESTONE_REMINDERS, { milestoneFilter });
+    const milestones = cleanArray(milestonesCollection?.items);
+
     const projectFilter = getMilestoneProjectFilter(milestones);
-    if (!projectFilter) return [];
+    if (!projectFilter) return { milestones, projects: [] };
 
     const { projectsCollection } = await this.contentfulClient.request<
       FetchMilestoneReminderProjectsQuery,
       FetchMilestoneReminderProjectsQueryVariables
     >(FETCH_MILESTONE_REMINDER_PROJECTS, { projectFilter });
 
-    return cleanArray(projectsCollection?.items);
+    return { milestones, projects: cleanArray(projectsCollection?.items) };
   }
 }
 
