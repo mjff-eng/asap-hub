@@ -124,7 +124,7 @@ const socialIconStyles = css({
   gridArea: 'social',
 });
 
-const avatarSize = 90;
+const avatarSize = 128;
 
 const avatarContainer = css({
   gridArea: 'avatar',
