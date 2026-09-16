@@ -2188,10 +2188,6 @@ const RAW_RUNTIME_STATE =
       "npm:7.0.1"\
     ],\
     [\
-      "@hapi/joi",\
-      "npm:17.1.1"\
-    ],\
-    [\
       "@hapi/mimos",\
       "npm:7.0.1"\
     ],\
@@ -7623,7 +7619,7 @@ const RAW_RUNTIME_STATE =
     ],\
     [\
       "joi",\
-      "npm:17.13.3"\
+      "npm:17.1.1"\
     ],\
     [\
       "jose",\
@@ -12838,7 +12834,6 @@ const RAW_RUNTIME_STATE =
           ["@graphql-typed-document-node/core", "virtual:b09dff234a8d41526156a9c113e5b12bcc69471aba634580b1e50808d22ba1c050b6af429d6e7530dd1e40599673c5e0bf8115d5c53448ebd1875cdefe5030cf#npm:3.2.0"],\
           ["@hapi/boom", "npm:9.1.4"],\
           ["@hapi/bourne", "npm:2.1.0"],\
-          ["@hapi/joi", "npm:17.1.1"],\
           ["@opensearch-project/opensearch", "npm:3.5.1"],\
           ["@sentry/serverless", "npm:6.19.7"],\
           ["@serverless/typescript", "npm:3.38.0"],\
@@ -12907,6 +12902,7 @@ const RAW_RUNTIME_STATE =
           ["graphql-typescript-integration", "npm:1.2.1"],\
           ["html-to-text", "npm:9.0.5"],\
           ["jest-when", "virtual:9d902e8fa3d0aec40e001519f3af8204bbaacbb7348be367280bb310f9537e3019252456410d2b71e7b1075fd4a7eb26825f777fb5c7d4d6219fc027ca539fa7#npm:3.5.2"],\
+          ["joi", "npm:17.1.1"],\
           ["jsonwebtoken", "npm:9.0.1"],\
           ["jwt-decode", "npm:2.2.0"],\
           ["jwt-encode", "npm:1.0.1"],\
@@ -14495,7 +14491,6 @@ const RAW_RUNTIME_STATE =
           ["@babel/runtime-corejs3", "npm:7.28.6"],\
           ["@hapi/boom", "npm:9.1.4"],\
           ["@hapi/bourne", "npm:2.1.0"],\
-          ["@hapi/joi", "npm:17.1.1"],\
           ["@types/apr-intercept", "workspace:@types/apr-intercept"],\
           ["@types/aws-lambda", "npm:8.10.159"],\
           ["@types/debug", "npm:4.1.12"],\
@@ -14514,6 +14509,7 @@ const RAW_RUNTIME_STATE =
           ["got", "npm:11.8.6"],\
           ["graphql", "npm:15.8.0"],\
           ["graphql-request", "virtual:190ef0160ba946cf7e73459640ba1e0562856a9e57af12873e04856ddb4d0a78826458a3c4484c2dd9a1b3579fe82cb5668480512120173800bfd772f135d982#npm:6.1.0"],\
+          ["joi", "npm:17.1.1"],\
           ["jwt-decode", "npm:2.2.0"],\
           ["jwt-encode", "npm:1.0.1"],\
           ["nock", "npm:13.4.0"]\
@@ -32148,20 +32144,6 @@ const RAW_RUNTIME_STATE =
           ["@hapi/cryptiles", "npm:6.0.3"],\
           ["@hapi/hoek", "npm:11.0.7"],\
           ["@hapi/iron", "npm:7.0.1"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@hapi/joi", [\
-      ["npm:17.1.1", {\
-        "packageLocation": "./.yarn/cache/@hapi-joi-npm-17.1.1-b9347a858d-ee454f653f.zip/node_modules/@hapi/joi/",\
-        "packageDependencies": [\
-          ["@hapi/address", "npm:4.1.0"],\
-          ["@hapi/formula", "npm:2.0.0"],\
-          ["@hapi/hoek", "npm:9.3.0"],\
-          ["@hapi/joi", "npm:17.1.1"],\
-          ["@hapi/pinpoint", "npm:2.0.1"],\
-          ["@hapi/topo", "npm:5.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -56318,6 +56300,18 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["joi", [\
+      ["npm:17.1.1", {\
+        "packageLocation": "./.yarn/cache/joi-npm-17.1.1-d91dd06f05-12efa61e0c.zip/node_modules/joi/",\
+        "packageDependencies": [\
+          ["@hapi/address", "npm:4.1.0"],\
+          ["@hapi/formula", "npm:2.0.0"],\
+          ["@hapi/hoek", "npm:9.3.0"],\
+          ["@hapi/pinpoint", "npm:2.0.1"],\
+          ["@hapi/topo", "npm:5.1.0"],\
+          ["joi", "npm:17.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:17.13.3", {\
         "packageLocation": "./.yarn/cache/joi-npm-17.13.3-866dad5bc8-4c150db0c8.zip/node_modules/joi/",\
         "packageDependencies": [\
