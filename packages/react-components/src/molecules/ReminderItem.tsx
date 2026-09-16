@@ -7,7 +7,7 @@ import {
   EventIcon,
   infoCircleIcon,
   LibraryIcon,
-  ProjectIcon,
+  MilestoneIcon,
   article,
 } from '../icons';
 import { Anchor, Markdown } from '../atoms';
@@ -64,7 +64,7 @@ const iconMap: Record<ReminderEntity, React.ReactElement> = {
   Event: <EventIcon />,
   Manuscript: <LibraryIcon />,
   Discussion: <LibraryIcon />,
-  Milestone: <ProjectIcon />,
+  Milestone: <MilestoneIcon />,
 };
 
 type ReminderProps = Pick<
