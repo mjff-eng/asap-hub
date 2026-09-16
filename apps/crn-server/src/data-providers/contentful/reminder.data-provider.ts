@@ -345,9 +345,7 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
     };
   }
 
-  private async fetchMilestones(
-    milestoneFilter: MilestonesFilter,
-  ): Promise<{
+  private async fetchMilestones(milestoneFilter: MilestonesFilter): Promise<{
     milestones: MilestoneItem[];
     projects: MilestoneProjectItem[];
   }> {
