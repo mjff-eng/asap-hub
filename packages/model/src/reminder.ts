@@ -221,7 +221,7 @@ type MilestoneReminderData = {
   projectName: string;
   projectType: ProjectType;
   grantType: GrantType;
-  aimNumbers: string;
+  aimNumbers: number[];
 };
 
 export interface MilestoneCreatedReminder extends Reminder {

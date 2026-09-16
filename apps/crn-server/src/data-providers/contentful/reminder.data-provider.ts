@@ -1623,17 +1623,15 @@ const isMilestoneReminderStatus = (
 // Audit fields written during creation are stamped before the first publish
 const isCreationAudit = (
   auditedAt: Maybe<string> | undefined,
-  { firstPublishedAt, publishedAt }: MilestoneItem['sys'],
+  {
+    firstPublishedAt,
+    publishedAt,
+  }: { firstPublishedAt?: Maybe<string>; publishedAt?: Maybe<string> },
 ): boolean =>
   !!auditedAt &&
+  !!firstPublishedAt &&
   (publishedAt === firstPublishedAt ||
     DateTime.fromISO(auditedAt) <= DateTime.fromISO(firstPublishedAt));
-
-const getFullName = (
-  user:
-    | Maybe<{ firstName?: Maybe<string>; lastName?: Maybe<string> }>
-    | undefined,
-): string => `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim();
 
 const getMilestoneRemindersFromQuery = (
   milestones: MilestoneItem[],
@@ -1663,7 +1661,7 @@ const getMilestoneRemindersFromQuery = (
       projectName: match.project.title ?? '',
       projectType: match.project.projectType,
       grantType: match.grantType,
-      aimNumbers: match.aimNumbers.join(', '),
+      aimNumbers: match.aimNumbers,
     };
 
     const statusSetOnCreation = isCreationAudit(
@@ -1711,6 +1709,7 @@ const getMilestoneRemindersFromQuery = (
     if (
       canSeeChanges &&
       milestone.outputsLinkedAt &&
+      milestone.outputsLinkedBy &&
       !isCreationAudit(milestone.outputsLinkedAt, milestone.sys) &&
       !!milestone.relatedArticlesCollection?.total &&
       inLast7Days(milestone.outputsLinkedAt, timezone) &&
@@ -1724,7 +1723,7 @@ const getMilestoneRemindersFromQuery = (
           ...data,
           milestoneName: milestone.description ?? '',
           outputsLinkedAt: milestone.outputsLinkedAt,
-          outputsLinkedBy: getFullName(milestone.outputsLinkedBy),
+          outputsLinkedBy: `${milestone.outputsLinkedBy.firstName} ${milestone.outputsLinkedBy.lastName}`,
         },
       } satisfies MilestoneOutputsLinkedReminder);
     }

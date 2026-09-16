@@ -961,7 +961,7 @@ const milestoneReminderData = {
   projectName: 'Genetic Determinants of Progression',
   projectType: 'Discovery Project' as const,
   grantType: 'original' as const,
-  aimNumbers: '2',
+  aimNumbers: [2],
 };
 
 export const getMilestoneCreatedReminder = (): MilestoneCreatedReminder => ({

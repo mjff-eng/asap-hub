@@ -558,6 +558,24 @@ describe('Reminder Controller', () => {
         });
       });
 
+      test('Should describe a terminated milestone', async () => {
+        const reminder = getMilestoneStatusUpdatedReminder();
+        reminder.data.status = 'Terminated';
+        reminder.data.aimNumbers = [1, 3];
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminder],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            'A milestone for **Genetic Determinants of Progression** was marked as Terminated (Aim(s) 1, 3).',
+        });
+      });
+
       test('Should return the correct description, href and date for the milestone outputs linked reminder', async () => {
         const reminder = getMilestoneOutputsLinkedReminder();
         reminder.data.projectType = 'Trainee Project';

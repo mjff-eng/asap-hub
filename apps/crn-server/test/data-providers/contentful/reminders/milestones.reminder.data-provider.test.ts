@@ -196,6 +196,25 @@ describe('Reminders data provider', () => {
         expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(4);
       });
 
+      test('surfaces milestone query failures', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          users: getUserInTeam('Project Manager'),
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          discussionsCollection: { items: [] },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          messagesCollection: { items: [] },
+        });
+        contentfulGraphqlClientMock.request.mockRejectedValueOnce(
+          new Error('Query cannot be executed'),
+        );
+
+        await expect(
+          remindersDataProvider.fetch(fetchOptions('user-id')),
+        ).rejects.toThrow('Query cannot be executed');
+      });
+
       test('returns no project filter for milestones without aims', () => {
         const milestone = getContentfulReminderMilestoneCollectionItem()!;
         milestone.linkedFrom = { aimsCollection: { items: [] } };
@@ -276,8 +295,10 @@ describe('Reminders data provider', () => {
         },
       );
 
-      test('the scientific facilitator sees the reminder', async () => {
-        mockGraphqlResponse({ user: getUserInTeam('Project Manager') });
+      test('the scientific facilitator sees the reminder without being in the team', async () => {
+        const user = getContentfulReminderUsersContent();
+        user!.teamsCollection = { items: [] };
+        mockGraphqlResponse({ user });
 
         const result = await remindersDataProvider.fetch(
           fetchOptions('scientific-facilitator-user'),
@@ -351,7 +372,7 @@ describe('Reminders data provider', () => {
           fetchOptions('user-id'),
         );
 
-        expect(result.items[0]!.data).toMatchObject({ aimNumbers: '1, 2' });
+        expect(result.items[0]!.data).toMatchObject({ aimNumbers: [1, 2] });
       });
 
       test('numbers supplement grant aims by their position in the supplement grant', async () => {
@@ -387,7 +408,7 @@ describe('Reminders data provider', () => {
         );
 
         expect(result.items[0]!.data).toMatchObject({
-          aimNumbers: '2',
+          aimNumbers: [2],
           grantType: 'supplement',
         });
       });
@@ -512,6 +533,26 @@ describe('Reminders data provider', () => {
         );
 
         expect(result.items).toEqual([getMilestoneCreatedReminder()]);
+      });
+
+      test('returns the reminder when the milestone is terminated', async () => {
+        mockGraphqlResponse({
+          milestones: [
+            { ...getStatusUpdatedMilestone(), status: 'Terminated' },
+          ],
+        });
+
+        const result = await remindersDataProvider.fetch(
+          fetchOptions('user-id'),
+        );
+
+        expect(result.items).toContainEqual({
+          ...getMilestoneStatusUpdatedReminder(),
+          data: {
+            ...getMilestoneStatusUpdatedReminder().data,
+            status: 'Terminated',
+          },
+        });
       });
 
       test('returns both reminders when the milestone was created and completed in the same week', async () => {
@@ -646,6 +687,20 @@ describe('Reminders data provider', () => {
               ...getOutputsLinkedMilestone(),
               relatedArticlesCollection: { total: 0 },
             },
+          ],
+        });
+
+        const result = await remindersDataProvider.fetch(
+          fetchOptions('user-id'),
+        );
+
+        expect(result.items).toEqual([getMilestoneCreatedReminder()]);
+      });
+
+      test('does not return the reminder when the linking user is unknown', async () => {
+        mockGraphqlResponse({
+          milestones: [
+            { ...getOutputsLinkedMilestone(), outputsLinkedBy: null },
           ],
         });
 
