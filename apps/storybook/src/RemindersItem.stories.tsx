@@ -7,7 +7,7 @@ const meta: Meta<typeof ReminderItem> = {
   component: ReminderItem,
   argTypes: {
     entity: {
-      options: ['Manuscript', 'Research Output', 'Event'],
+      options: ['Manuscript', 'Research Output', 'Event', 'Milestone'],
       control: { type: 'select' },
     },
     description: {

@@ -1,6 +1,7 @@
 import { ListResponse } from './common';
 import { EventResponse } from './event';
 import { ManuscriptDataObject } from './manuscript';
+import { GrantType, MilestoneStatus, ProjectType } from './project';
 import {
   ResearchOutputDataObject,
   ResearchOutputDraftDataObject,
@@ -12,7 +13,8 @@ type ReminderEntity =
   | 'Event'
   | 'Research Output Version'
   | 'Manuscript'
-  | 'Discussion';
+  | 'Discussion'
+  | 'Milestone';
 
 type ResearchOutputReminderType =
   | 'Published'
@@ -41,11 +43,17 @@ type DiscussionReminderType =
   | 'Discussion Replied To by Grantee'
   | 'Discussion Replied To by Open Science Member';
 
+type MilestoneReminderType =
+  | 'Milestone Created'
+  | 'Milestone Status Updated'
+  | 'Milestone Outputs Linked';
+
 type ReminderType =
   | ResearchOutputReminderType
   | EventReminderType
   | ManuscriptReminderType
-  | DiscussionReminderType;
+  | DiscussionReminderType
+  | MilestoneReminderType;
 
 interface Reminder {
   id: string;
@@ -207,6 +215,50 @@ export interface DiscussionRepliedToReminder extends Reminder {
   };
 }
 
+type MilestoneReminderData = {
+  milestoneId: string;
+  projectId: string;
+  projectName: string;
+  projectType: ProjectType;
+  grantType: GrantType;
+  aimNumbers: string;
+};
+
+export interface MilestoneCreatedReminder extends Reminder {
+  entity: 'Milestone';
+  type: 'Milestone Created';
+  data: MilestoneReminderData & {
+    createdAt: string;
+  };
+}
+
+export const milestoneReminderStatuses = [
+  'Complete',
+  'Terminated',
+] as const satisfies readonly MilestoneStatus[];
+
+export type MilestoneReminderStatus =
+  (typeof milestoneReminderStatuses)[number];
+
+export interface MilestoneStatusUpdatedReminder extends Reminder {
+  entity: 'Milestone';
+  type: 'Milestone Status Updated';
+  data: MilestoneReminderData & {
+    status: MilestoneReminderStatus;
+    statusUpdatedAt: string;
+  };
+}
+
+export interface MilestoneOutputsLinkedReminder extends Reminder {
+  entity: 'Milestone';
+  type: 'Milestone Outputs Linked';
+  data: MilestoneReminderData & {
+    milestoneName: string;
+    outputsLinkedAt: string;
+    outputsLinkedBy: string;
+  };
+}
+
 export interface EventHappeningTodayReminder extends EventReminder {
   entity: 'Event';
   type: 'Happening Today';
@@ -298,6 +350,11 @@ export type DiscussionReminder =
   | DiscussionCreatedReminder
   | DiscussionRepliedToReminder;
 
+export type MilestoneReminder =
+  | MilestoneCreatedReminder
+  | MilestoneStatusUpdatedReminder
+  | MilestoneOutputsLinkedReminder;
+
 export type ReminderDataObject =
   | ResearchOutputPublishedReminder
   | ResearchOutputDraftReminder
@@ -313,7 +370,8 @@ export type ReminderDataObject =
   | PublishMaterialReminder
   | UploadPresentationReminder
   | ManuscriptReminder
-  | DiscussionReminder;
+  | DiscussionReminder
+  | MilestoneReminder;
 
 export type ListReminderDataObject = ListResponse<ReminderDataObject>;
 

@@ -3,12 +3,18 @@ import {
   EventsFilter,
   FETCH_DISCUSSION_REMINDERS,
   FETCH_MESSAGE_REMINDERS,
+  FETCH_MILESTONE_REMINDERS,
+  FETCH_MILESTONE_REMINDER_PROJECTS,
   FETCH_REMINDERS,
   FETCH_TEAM_PROJECT_MANAGER,
   FetchDiscussionRemindersQuery,
   FetchDiscussionRemindersQueryVariables,
   FetchMessageRemindersQuery,
   FetchMessageRemindersQueryVariables,
+  FetchMilestoneReminderProjectsQuery,
+  FetchMilestoneReminderProjectsQueryVariables,
+  FetchMilestoneRemindersQuery,
+  FetchMilestoneRemindersQueryVariables,
   FetchRemindersQuery,
   FetchRemindersQueryVariables,
   FetchTeamProjectManagerQuery,
@@ -19,6 +25,8 @@ import {
   ManuscriptsFilter,
   Maybe,
   MessagesFilter,
+  MilestonesFilter,
+  ProjectsFilter,
 } from '@asap-hub/contentful';
 import {
   DiscussionCreatedReminder,
@@ -28,6 +36,8 @@ import {
   EventHappeningTodayReminder,
   EventNotesReminder,
   FetchRemindersOptions,
+  GrantType,
+  isProjectType,
   isResearchOutputDocumentType,
   ListReminderDataObject,
   ManuscriptCreatedReminder,
@@ -35,7 +45,15 @@ import {
   ManuscriptResubmittedReminder,
   ManuscriptStatus,
   ManuscriptStatusUpdatedReminder,
+  MilestoneCreatedReminder,
+  MilestoneOutputsLinkedReminder,
+  MilestoneReminder,
+  milestoneReminderStatuses,
+  MilestoneReminderStatus,
+  MilestoneStatusUpdatedReminder,
   PresentationUpdatedReminder,
+  projectLeadMemberRoles,
+  projectLeadTeamRoles,
   PublishMaterialReminder,
   ReminderDataObject,
   ResearchOutputDraftReminder,
@@ -46,6 +64,8 @@ import {
   Role,
   SharePresentationReminder,
   TeamRole,
+  traineeProjectLeadRoles,
+  traineeProjectMentorRoles,
   UploadPresentationReminder,
   VideoEventReminder,
 } from '@asap-hub/model';
@@ -78,6 +98,16 @@ type ResearchOutputVersionItem = NonNullable<
 >;
 
 type User = FetchRemindersQuery['users'];
+
+type MilestoneCollection = FetchMilestoneRemindersQuery['milestonesCollection'];
+export type MilestoneItem = NonNullable<
+  NonNullable<MilestoneCollection>['items'][number]
+>;
+type MilestoneProjectCollection =
+  FetchMilestoneReminderProjectsQuery['projectsCollection'];
+export type MilestoneProjectItem = NonNullable<
+  NonNullable<MilestoneProjectCollection>['items'][number]
+>;
 
 type DiscussionCollection =
   FetchDiscussionRemindersQuery['discussionsCollection'];
@@ -123,6 +153,7 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       getResearchOutputVersionsFilter(timezone);
     const discussionFilter = getDiscussionFilter(timezone);
     const messageFilter = getMessageFilter(timezone);
+    const milestoneFilter = getMilestoneFilter(timezone);
 
     const {
       eventsCollection,
@@ -141,19 +172,25 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       manuscriptFilter,
     });
 
-    const { discussionsCollection } = await this.contentfulClient.request<
-      FetchDiscussionRemindersQuery,
-      FetchDiscussionRemindersQueryVariables
-    >(FETCH_DISCUSSION_REMINDERS, {
-      discussionFilter,
-    });
-
-    const { messagesCollection } = await this.contentfulClient.request<
-      FetchMessageRemindersQuery,
-      FetchMessageRemindersQueryVariables
-    >(FETCH_MESSAGE_REMINDERS, {
-      messageFilter,
-    });
+    const [
+      { discussionsCollection },
+      { messagesCollection },
+      { milestones: milestonesCollectionItems, projects: milestoneProjects },
+    ] = await Promise.all([
+      this.contentfulClient.request<
+        FetchDiscussionRemindersQuery,
+        FetchDiscussionRemindersQueryVariables
+      >(FETCH_DISCUSSION_REMINDERS, {
+        discussionFilter,
+      }),
+      this.contentfulClient.request<
+        FetchMessageRemindersQuery,
+        FetchMessageRemindersQueryVariables
+      >(FETCH_MESSAGE_REMINDERS, {
+        messageFilter,
+      }),
+      this.fetchMilestones(milestoneFilter),
+    ]);
 
     const fetchTeamProjectManager = async (
       teamId: string,
@@ -267,6 +304,14 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       userId,
     );
 
+    const milestoneReminders = getMilestoneRemindersFromQuery(
+      milestonesCollectionItems,
+      milestoneProjects,
+      user,
+      userId,
+      timezone,
+    );
+
     const reminders = [
       ...publishedResearchOutputReminders.filter(
         (reminder) =>
@@ -284,6 +329,7 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       ...manuscriptReminders,
       ...discussionReminders,
       ...repliesReminders,
+      ...milestoneReminders,
     ];
 
     const sortedReminders = reminders.sort((reminderA, reminderB) => {
@@ -297,6 +343,29 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       total: sortedReminders.length,
       items: sortedReminders,
     };
+  }
+
+  private async fetchMilestones(
+    milestoneFilter: MilestonesFilter,
+  ): Promise<{
+    milestones: MilestoneItem[];
+    projects: MilestoneProjectItem[];
+  }> {
+    const { milestonesCollection } = await this.contentfulClient.request<
+      FetchMilestoneRemindersQuery,
+      FetchMilestoneRemindersQueryVariables
+    >(FETCH_MILESTONE_REMINDERS, { milestoneFilter });
+    const milestones = cleanArray(milestonesCollection?.items);
+
+    const projectFilter = getMilestoneProjectFilter(milestones);
+    if (!projectFilter) return { milestones, projects: [] };
+
+    const { projectsCollection } = await this.contentfulClient.request<
+      FetchMilestoneReminderProjectsQuery,
+      FetchMilestoneReminderProjectsQueryVariables
+    >(FETCH_MILESTONE_REMINDER_PROJECTS, { projectFilter });
+
+    return { milestones, projects: cleanArray(projectsCollection?.items) };
   }
 }
 
@@ -324,6 +393,11 @@ export const getSortDate = (reminder: ReminderDataObject): DateTime => {
       'Discussion Created by Open Science Member': 'publishedAt',
       'Discussion Replied To by Grantee': 'publishedAt',
       'Discussion Replied To by Open Science Member': 'publishedAt',
+    },
+    Milestone: {
+      'Milestone Created': 'createdAt',
+      'Milestone Status Updated': 'statusUpdatedAt',
+      'Milestone Outputs Linked': 'outputsLinkedAt',
     },
     Event: {
       'Happening Today': 'startDate',
@@ -353,6 +427,52 @@ export const getManuscriptFilter = (zone: string): ManuscriptsFilter => {
       { statusUpdatedAt_gte: last7DaysISO },
     ],
   };
+};
+
+export const getMilestoneFilter = (zone: string): MilestonesFilter => {
+  const { last7DaysISO } = getReferenceDates(zone);
+  return {
+    OR: [
+      {
+        AND: [
+          { sys: { firstPublishedAt_gte: last7DaysISO } },
+          { OR: [{ bulkImported: false }, { bulkImported_exists: false }] },
+        ],
+      },
+      { statusUpdatedAt_gte: last7DaysISO },
+      { outputsLinkedAt_gte: last7DaysISO },
+    ],
+  };
+};
+
+export const getMilestoneProjectFilter = (
+  milestones: MilestoneItem[],
+): ProjectsFilter | null => {
+  const aims = milestones.flatMap((milestone) =>
+    cleanArray(milestone.linkedFrom?.aimsCollection?.items),
+  );
+  const aimIds = [...new Set(aims.map((aim) => aim.sys.id))];
+  const supplementGrantIds = [
+    ...new Set(
+      aims.flatMap((aim) =>
+        cleanArray(aim.linkedFrom?.supplementGrantCollection?.items).map(
+          (grant) => grant.sys.id,
+        ),
+      ),
+    ),
+  ];
+
+  const conditions: ProjectsFilter[] = [];
+  if (aimIds.length) {
+    conditions.push({ originalGrantAims: { sys: { id_in: aimIds } } });
+  }
+  if (supplementGrantIds.length) {
+    conditions.push({
+      supplementGrant: { sys: { id_in: supplementGrantIds } },
+    });
+  }
+
+  return conditions.length ? { OR: conditions } : null;
 };
 
 export const getDiscussionFilter = (zone: string): DiscussionsFilter => {
@@ -1398,6 +1518,222 @@ const isReminderForDifferentUser = (
   actorId: string | undefined,
   userId: string,
 ): boolean => actorId !== userId;
+
+type MilestoneProjectAudience = {
+  isLead: boolean;
+  isMember: boolean;
+  isScientificFacilitator: boolean;
+};
+
+type MilestoneProjectMatch = {
+  project: MilestoneProjectItem;
+  grantType: GrantType;
+  aimNumbers: number[];
+};
+
+const getAimIds = (
+  collection: Maybe<{ items: Maybe<{ sys: { id: string } }>[] }> | undefined,
+): string[] => cleanArray(collection?.items).map((aim) => aim.sys.id);
+
+const findMilestoneProject = (
+  milestone: MilestoneItem,
+  projects: MilestoneProjectItem[],
+): MilestoneProjectMatch | null => {
+  const milestoneAimIds = getAimIds(milestone.linkedFrom?.aimsCollection);
+
+  for (const project of projects) {
+    const grantAims: [GrantType, string[]][] = [
+      ['original', getAimIds(project.originalGrantAimsCollection)],
+      ['supplement', getAimIds(project.supplementGrant?.aimsCollection)],
+    ];
+
+    for (const [grantType, aimIds] of grantAims) {
+      const aimNumbers = aimIds.flatMap((aimId, index) =>
+        milestoneAimIds.includes(aimId) ? [index + 1] : [],
+      );
+
+      if (aimNumbers.length) {
+        return { project, grantType, aimNumbers };
+      }
+    }
+  }
+
+  return null;
+};
+
+const getMilestoneProjectAudience = (
+  project: MilestoneProjectItem,
+  user: NonNullable<User>,
+  userId: string,
+): MilestoneProjectAudience => {
+  const members = cleanArray(project.membersCollection?.items);
+  const isScientificFacilitator = cleanArray(
+    project.scientificFacilitatorCollection?.items,
+  ).some((facilitator) => facilitator.sys.id === userId);
+
+  const fundedTeam = members.find(
+    (member) => member.projectMember?.__typename === 'Teams',
+  )?.projectMember;
+
+  if (fundedTeam) {
+    const userTeam = user.teamsCollection?.items.find(
+      (teamItem) => teamItem?.team?.sys.id === fundedTeam.sys.id,
+    );
+    return {
+      isMember: !!userTeam,
+      isLead: (projectLeadTeamRoles as readonly string[]).includes(
+        userTeam?.role ?? '',
+      ),
+      isScientificFacilitator,
+    };
+  }
+
+  const userMember = members.find(
+    (member) =>
+      member.projectMember?.__typename === 'Users' &&
+      member.projectMember.sys.id === userId,
+  );
+  const hasRoleIn = (roles: readonly string[]) =>
+    roles.includes(userMember?.role ?? '');
+
+  switch (project.projectType) {
+    case 'Trainee Project':
+      return {
+        isMember: hasRoleIn([
+          ...traineeProjectLeadRoles,
+          ...traineeProjectMentorRoles,
+        ]),
+        isLead: hasRoleIn(traineeProjectLeadRoles),
+        isScientificFacilitator,
+      };
+    case 'Resource Project':
+      return {
+        isMember: !!userMember,
+        isLead: hasRoleIn(projectLeadMemberRoles),
+        isScientificFacilitator,
+      };
+    default:
+      return { isMember: false, isLead: false, isScientificFacilitator };
+  }
+};
+
+const isMilestoneReminderStatus = (
+  status: Maybe<string> | undefined,
+): status is MilestoneReminderStatus =>
+  (milestoneReminderStatuses as readonly string[]).includes(status ?? '');
+
+// Audit fields written during creation are stamped before the first publish
+const isCreationAudit = (
+  auditedAt: Maybe<string> | undefined,
+  { firstPublishedAt, publishedAt }: MilestoneItem['sys'],
+): boolean =>
+  !!auditedAt &&
+  (publishedAt === firstPublishedAt ||
+    DateTime.fromISO(auditedAt) <= DateTime.fromISO(firstPublishedAt));
+
+const getFullName = (
+  user:
+    | Maybe<{ firstName?: Maybe<string>; lastName?: Maybe<string> }>
+    | undefined,
+): string => `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim();
+
+const getMilestoneRemindersFromQuery = (
+  milestones: MilestoneItem[],
+  projects: MilestoneProjectItem[],
+  user: User,
+  userId: string,
+  timezone: string,
+): MilestoneReminder[] => {
+  if (!user || !milestones.length) return [];
+
+  return milestones.reduce<MilestoneReminder[]>((reminders, milestone) => {
+    const { firstPublishedAt } = milestone.sys;
+    const match = findMilestoneProject(milestone, projects);
+    if (
+      !firstPublishedAt ||
+      !match ||
+      !isProjectType(match.project.projectType)
+    )
+      return reminders;
+
+    const { isLead, isMember, isScientificFacilitator } =
+      getMilestoneProjectAudience(match.project, user, userId);
+    const canSeeChanges = isLead || isScientificFacilitator;
+    const data = {
+      milestoneId: milestone.sys.id,
+      projectId: match.project.sys.id,
+      projectName: match.project.title ?? '',
+      projectType: match.project.projectType,
+      grantType: match.grantType,
+      aimNumbers: match.aimNumbers.join(', '),
+    };
+
+    const statusSetOnCreation = isCreationAudit(
+      milestone.statusUpdatedAt,
+      milestone.sys,
+    );
+    const creatorId = statusSetOnCreation
+      ? milestone.statusUpdatedBy?.sys.id
+      : undefined;
+
+    if (
+      !milestone.bulkImported &&
+      inLast7Days(firstPublishedAt, timezone) &&
+      isReminderForDifferentUser(creatorId, userId) &&
+      (canSeeChanges || isMember)
+    ) {
+      reminders.push({
+        id: `milestone-created-${milestone.sys.id}`,
+        entity: 'Milestone',
+        type: 'Milestone Created',
+        data: { ...data, createdAt: firstPublishedAt },
+      } satisfies MilestoneCreatedReminder);
+    }
+
+    if (
+      canSeeChanges &&
+      milestone.statusUpdatedAt &&
+      !statusSetOnCreation &&
+      isMilestoneReminderStatus(milestone.status) &&
+      inLast7Days(milestone.statusUpdatedAt, timezone) &&
+      isReminderForDifferentUser(milestone.statusUpdatedBy?.sys.id, userId)
+    ) {
+      reminders.push({
+        id: `milestone-status-updated-${milestone.sys.id}`,
+        entity: 'Milestone',
+        type: 'Milestone Status Updated',
+        data: {
+          ...data,
+          status: milestone.status,
+          statusUpdatedAt: milestone.statusUpdatedAt,
+        },
+      } satisfies MilestoneStatusUpdatedReminder);
+    }
+
+    if (
+      canSeeChanges &&
+      milestone.outputsLinkedAt &&
+      !isCreationAudit(milestone.outputsLinkedAt, milestone.sys) &&
+      !!milestone.relatedArticlesCollection?.total &&
+      inLast7Days(milestone.outputsLinkedAt, timezone) &&
+      isReminderForDifferentUser(milestone.outputsLinkedBy?.sys.id, userId)
+    ) {
+      reminders.push({
+        id: `milestone-outputs-linked-${milestone.sys.id}`,
+        entity: 'Milestone',
+        type: 'Milestone Outputs Linked',
+        data: {
+          ...data,
+          milestoneName: milestone.description ?? '',
+          outputsLinkedAt: milestone.outputsLinkedAt,
+          outputsLinkedBy: getFullName(milestone.outputsLinkedBy),
+        },
+      } satisfies MilestoneOutputsLinkedReminder);
+    }
+
+    return reminders;
+  }, []);
+};
 
 const isManuscriptStatusUpdatedByAnotherUser = (
   manuscript: ManuscriptItem,
