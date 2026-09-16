@@ -67,6 +67,7 @@ const renderModal = (
       onSave={onSave}
       onDismiss={onDismiss}
       groups={groups}
+      isPastEvent
       {...overrides}
     />,
   );
@@ -80,7 +81,9 @@ describe('EditEventSpeakersModal', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Add speakers to this event')).toBeInTheDocument();
     expect(
-      screen.getByText('Search for a person to add them to this event.'),
+      screen.getByText(
+        "Search for a person to add them to this event. Once the event has taken place, you'll be able to mark whether each speaker shared preliminary findings.",
+      ),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Mark All Shared' }),
@@ -104,8 +107,8 @@ describe('EditEventSpeakersModal', () => {
     expect(
       screen.getByRole('heading', { name: 'Edit Speakers' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('1 Teams')).toBeInTheDocument();
-    expect(screen.getByText('1 Users')).toBeInTheDocument();
+    expect(screen.getByText('1 Team')).toBeInTheDocument();
+    expect(screen.getByText('1 User')).toBeInTheDocument();
   });
 
   it('Should add a searched CRN user with exactly one team directly, without a pending card', async () => {
@@ -220,6 +223,80 @@ describe('EditEventSpeakersModal', () => {
     ).toBeChecked();
   });
 
+  it('Should switch to "Mark All Not Shared" when all teams are shared, ignoring the external group, and unshare them all', async () => {
+    renderModal({
+      groups: [
+        {
+          id: 'team-1',
+          variant: 'team',
+          teamName: 'Team Alpha',
+          preliminaryFindingsShared: true,
+          users: [
+            { id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] },
+          ],
+        },
+        {
+          id: 'external',
+          variant: 'external',
+          preliminaryFindingsShared: false,
+          users: [{ id: 'ext-0', displayName: 'Guest Speaker' }],
+        },
+      ],
+    });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Mark All Not Shared' }),
+    );
+
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Team Alpha preliminary findings shared',
+      }),
+    ).not.toBeChecked();
+    expect(
+      screen.getByRole('button', { name: 'Mark All Shared' }),
+    ).toBeVisible();
+  });
+
+  it('Should not offer a preliminary findings switch for the external group', () => {
+    renderModal({
+      groups: [
+        ...groups,
+        {
+          id: 'external',
+          variant: 'external',
+          preliminaryFindingsShared: false,
+          users: [{ id: 'ext-0', displayName: 'Guest Speaker' }],
+        },
+      ],
+    });
+
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Team Alpha preliminary findings shared',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', {
+        name: 'External Users preliminary findings shared',
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('Should hide preliminary findings controls on an upcoming event', () => {
+    renderModal({ isPastEvent: false });
+
+    expect(screen.queryByText('Preliminary Findings')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /Mark All/ }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', {
+        name: 'Team Alpha preliminary findings shared',
+      }),
+    ).not.toBeInTheDocument();
+  });
+
   it('Should remove the team row entirely once its last member is removed', async () => {
     renderModal();
 
@@ -251,7 +328,7 @@ describe('EditEventSpeakersModal', () => {
 
     expect(screen.getByText('Team Alpha')).toBeInTheDocument();
     expect(screen.queryByText('Team Beta')).not.toBeInTheDocument();
-    expect(screen.getByText('1 Teams')).toBeInTheDocument();
+    expect(screen.getByText('1 Team')).toBeInTheDocument();
   });
 
   it('Should remove a user from one group without affecting another team or the External Users group', async () => {
@@ -313,7 +390,7 @@ describe('EditEventSpeakersModal', () => {
       throw new Error('Expected a nested user list to be rendered');
     }
     expect(within(nestedUserList).getAllByRole('listitem')).toHaveLength(1);
-    expect(screen.getByText('1 Users')).toBeInTheDocument();
+    expect(screen.getByText('1 User')).toBeInTheDocument();
   });
 
   it('Should collapse an already-expanded team when the chevron is clicked again', async () => {

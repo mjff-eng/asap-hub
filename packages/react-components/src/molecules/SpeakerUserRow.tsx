@@ -120,7 +120,7 @@ const SpeakerUserRow: React.FC<SpeakerUserRowProps> = ({
             />
           )}
           {userId ? (
-            <Link href={network({}).users({}).user({ userId }).$}>
+            <Link href={network({}).users({}).user({ userId }).$} openInNewTab>
               <span css={nameStyles}>{displayName}</span>
             </Link>
           ) : (

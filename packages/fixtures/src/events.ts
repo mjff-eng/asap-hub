@@ -29,6 +29,7 @@ export const createSpeakerTeamResponse = (
 });
 
 export const createSpeakersResponse = (itemIndex = 0): EventSpeakerUser => ({
+  id: `event-speaker-id-${itemIndex}`,
   team: createSpeakerTeamResponse(itemIndex),
   user: createSpeakerUserResponse(itemIndex),
   role: `Genetics ${itemIndex}`,
@@ -37,6 +38,7 @@ export const createSpeakersResponse = (itemIndex = 0): EventSpeakerUser => ({
 export const createExternalSpeakerResponse = (
   itemIndex = 0,
 ): EventSpeakerExternalUser => ({
+  id: `event-external-speaker-id-${itemIndex}`,
   externalUser: {
     name: `External user ${itemIndex}`,
   },

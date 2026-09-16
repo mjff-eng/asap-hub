@@ -165,7 +165,7 @@ const PendingSpeakerCard: React.FC<PendingSpeakerCardProps> = ({
           />
         </span>
         <span css={nameSlotStyles}>
-          <Link href={network({}).users({}).user({ userId }).$}>
+          <Link href={network({}).users({}).user({ userId }).$} openInNewTab>
             <span css={nameStyles}>{displayName}</span>
           </Link>
         </span>

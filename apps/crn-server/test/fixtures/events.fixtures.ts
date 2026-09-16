@@ -309,6 +309,9 @@ export const getContentfulGraphqlEvent = (
   speakersCollection: {
     items: [
       {
+        sys: {
+          id: 'event-speaker-id-3',
+        },
         team: {
           sys: {
             id: 'team-id-3',
@@ -428,6 +431,7 @@ export const getInterestGroupCalendarResponse =
   });
 
 export const getEventSpeakerUser = (): EventSpeakerUser => ({
+  id: 'event-speaker-id-3',
   team: {
     id: 'team-id-3',
     displayName: 'The team three',

@@ -123,6 +123,7 @@ type SpeakerTeamRowProps = {
   readonly label: string;
   readonly users: ReadonlyArray<SpeakerTeamRowUser>;
   readonly preliminaryFindingsShared: boolean;
+  readonly showShared?: boolean;
   readonly expanded: boolean;
   readonly onToggleExpanded: () => void;
   readonly onToggleShared: () => void;
@@ -138,6 +139,7 @@ const SpeakerTeamRow: React.FC<SpeakerTeamRowProps> = ({
   label,
   users,
   preliminaryFindingsShared,
+  showShared = true,
   expanded,
   onToggleExpanded,
   onToggleShared,
@@ -149,7 +151,7 @@ const SpeakerTeamRow: React.FC<SpeakerTeamRowProps> = ({
       <span css={labelStyles}>
         {variant === 'team' && teamIcon(teamType)}
         {variant === 'team' && teamId ? (
-          <Link href={network({}).teams({}).team({ teamId }).$}>
+          <Link href={network({}).teams({}).team({ teamId }).$} openInNewTab>
             <span css={teamNameStyles}>{label}</span>
           </Link>
         ) : (
@@ -165,13 +167,15 @@ const SpeakerTeamRow: React.FC<SpeakerTeamRowProps> = ({
         <span css={countStyles}>({users.length})</span>
       </span>
       <span css={actionsStyles}>
-        <Switch
-          checked={preliminaryFindingsShared}
-          enabled={enabled}
-          uncheckedColor="error"
-          ariaLabel={`${label} preliminary findings shared`}
-          onClick={onToggleShared}
-        />
+        {showShared && (
+          <Switch
+            checked={preliminaryFindingsShared}
+            enabled={enabled}
+            uncheckedColor="error"
+            ariaLabel={`${label} preliminary findings shared`}
+            onClick={onToggleShared}
+          />
+        )}
         <button
           type="button"
           aria-label={expanded ? `Collapse ${label}` : `Expand ${label}`}

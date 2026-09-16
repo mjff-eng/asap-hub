@@ -127,6 +127,23 @@ describe('Event controller', () => {
       );
       expect(result).toEqual(getEventResponse());
     });
+
+    test('Should update speakers and preliminary data sharing and return the refreshed event', async () => {
+      const event = getEventDataObject();
+      eventDataProviderMock.fetchById.mockResolvedValue(event);
+
+      const payload = {
+        speakersToRemove: ['speaker-1'],
+        preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+      };
+      const result = await eventController.updateEventDetails('7', payload);
+
+      expect(eventDataProviderMock.updateEventDetails).toHaveBeenCalledWith(
+        '7',
+        payload,
+      );
+      expect(result).toEqual(getEventResponse());
+    });
   });
 
   describe('fetchByGoogleId method', () => {

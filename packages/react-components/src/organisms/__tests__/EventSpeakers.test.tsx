@@ -197,15 +197,16 @@ describe('EventSpeakers', () => {
     it('Should render team links, counts, inactive badge and findings status', () => {
       const { getByRole, getByText, getByLabelText, getAllByLabelText } =
         renderCard();
-      expect(getByRole('link', { name: 'Team Alpha' })).toHaveAttribute(
+      const teamLink = getByRole('link', { name: 'Team Alpha' });
+      expect(teamLink).toHaveAttribute(
         'href',
         expect.stringContaining('team-0'),
       );
+      expect(teamLink).toHaveAttribute('target', '_blank');
       expect(getByText('(2)')).toBeVisible();
       expect(getByText('Inactive Team')).toBeInTheDocument();
       expect(getByLabelText('Shared preliminary findings')).toBeInTheDocument();
-      // Team Beta + External Users both show the cross.
-      expect(getAllByLabelText('No preliminary findings')).toHaveLength(2);
+      expect(getAllByLabelText('No preliminary findings')).toHaveLength(1);
     });
 
     it('Should expand a team to reveal its members with roles', async () => {
@@ -214,10 +215,12 @@ describe('EventSpeakers', () => {
         queryByRole('link', { name: 'John Doe 0-0' }),
       ).not.toBeInTheDocument();
       await userEvent.click(getByRole('button', { name: 'Expand Team Alpha' }));
-      expect(getByRole('link', { name: 'John Doe 0-0' })).toHaveAttribute(
+      const userLink = getByRole('link', { name: 'John Doe 0-0' });
+      expect(userLink).toHaveAttribute(
         'href',
         expect.stringContaining('user-0-0'),
       );
+      expect(userLink).toHaveAttribute('target', '_blank');
       expect(getAllByText('Data Manager')[0]).toBeVisible();
     });
 
