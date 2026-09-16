@@ -234,14 +234,12 @@ export default class ReminderController {
             reminder.data.projectId,
             reminder.data.grantType,
           );
-          const aims = `Aim(s) ${reminder.data.aimNumbers}`;
-
           if (reminder.type === 'Milestone Created') {
             return {
               id: reminder.id,
               entity: reminder.entity,
               href,
-              description: `A new milestone has been added for **${reminder.data.projectName}**: Aim ${reminder.data.aimNumbers}. The milestone has been linked to their corresponding Aim(s) and is now available in the Milestones tab.`,
+              description: `A new milestone has been added for **${reminder.data.projectName}**: Aim ${reminder.data.aimNumbers}. These milestones have been linked to their corresponding Aims and are now available in the Milestones tab.`,
               date: reminder.data.createdAt,
             };
           }
@@ -251,7 +249,7 @@ export default class ReminderController {
               id: reminder.id,
               entity: reminder.entity,
               href,
-              description: `A milestone for **${reminder.data.projectName}** was marked as ${reminder.data.status} (${aims}).`,
+              description: `A milestone for **${reminder.data.projectName}** was marked as ${reminder.data.status} (Aim(s) ${reminder.data.aimNumbers}).`,
               date: reminder.data.statusUpdatedAt,
             };
           }
@@ -260,7 +258,7 @@ export default class ReminderController {
             id: reminder.id,
             entity: reminder.entity,
             href,
-            description: `**${reminder.data.outputsLinkedBy}** linked outputs to a milestone on **${reminder.data.projectName}**: ${reminder.data.milestoneName} (${aims}).`,
+            description: `**${reminder.data.outputsLinkedBy}** linked outputs to a milestone on **${reminder.data.projectName}**: ${reminder.data.milestoneName} (Aim ${reminder.data.aimNumbers}).`,
             date: reminder.data.outputsLinkedAt,
           };
         }

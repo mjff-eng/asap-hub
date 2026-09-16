@@ -534,7 +534,7 @@ describe('Reminder Controller', () => {
           id: 'milestone-created-milestone-id-1',
           entity: 'Milestone',
           description:
-            'A new milestone has been added for **Genetic Determinants of Progression**: Aim 2. The milestone has been linked to their corresponding Aim(s) and is now available in the Milestones tab.',
+            'A new milestone has been added for **Genetic Determinants of Progression**: Aim 2. These milestones have been linked to their corresponding Aims and are now available in the Milestones tab.',
           href: '/projects/discovery/project-id-1/milestones?grantType=original',
           date: '2025-01-07T16:21:33.824Z',
         });
@@ -574,7 +574,7 @@ describe('Reminder Controller', () => {
           id: 'milestone-outputs-linked-milestone-id-1',
           entity: 'Milestone',
           description:
-            '**John Smith** linked outputs to a milestone on **Genetic Determinants of Progression**: Establish the mouse model (Aim(s) 2).',
+            '**John Smith** linked outputs to a milestone on **Genetic Determinants of Progression**: Establish the mouse model (Aim 2).',
           href: '/projects/trainee/project-id-1/milestones?grantType=supplement',
           date: '2025-01-08T10:00:00.000Z',
         });
