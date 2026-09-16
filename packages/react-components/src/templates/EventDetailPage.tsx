@@ -44,8 +44,8 @@ const backLinkContainerStyles = css({
   marginBottom: rem(56),
 });
 
-const tabNavStyles = css({
-  marginTop: rem(40),
+const eventCardContainerStyles = css({
+  marginBottom: rem(40),
 });
 
 export type EventDetailTab = 'about' | 'meeting-materials';
@@ -111,14 +111,14 @@ const EventDetailPage = ({
               <BackLink href={backHref} noPadding />
             </div>
           )}
-          <EventCard {...props} titleLimit={null} />
+          <div css={eventCardContainerStyles}>
+            <EventCard {...props} titleLimit={null} />
+          </div>
           {finished && (
-            <div css={tabNavStyles}>
-              <TabNav>
-                <TabLink href={aboutHref}>About</TabLink>
-                <TabLink href={meetingMaterialsHref}>Meeting Materials</TabLink>
-              </TabNav>
-            </div>
+            <TabNav>
+              <TabLink href={aboutHref}>About</TabLink>
+              <TabLink href={meetingMaterialsHref}>Meeting Materials</TabLink>
+            </TabNav>
           )}
         </div>
       </PageConstraints>
