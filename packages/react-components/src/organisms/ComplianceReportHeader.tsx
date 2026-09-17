@@ -1,10 +1,12 @@
 import React from 'react';
 import { css } from '@emotion/react';
+import { dashboard } from '@asap-hub/routing';
 
 import { Display, Paragraph } from '../atoms';
 import { rem } from '../pixels';
 import { paper, steel } from '../colors';
 import { contentSidePaddingWithNavigation } from '../layout';
+import { Breadcrumbs, BreadcrumbItem } from '../molecules';
 
 const headerStyles = css({
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(60)} `,
@@ -23,10 +25,28 @@ const contentStyles = css({
   justifyContent: 'center',
 });
 
-const ComplianceReportHeader: React.FC = () => (
+const breadcrumbsStyles = css({
+  marginBottom: rem(24),
+});
+
+const title = 'Share a Compliance Report';
+
+type ComplianceReportHeaderProps = {
+  breadcrumbs?: ReadonlyArray<BreadcrumbItem>;
+};
+
+const ComplianceReportHeader: React.FC<ComplianceReportHeaderProps> = ({
+  breadcrumbs = [],
+}) => (
   <header css={headerStyles}>
     <div css={contentStyles}>
-      <Display styleAsHeading={2}>Share a Compliance Report</Display>
+      <div css={breadcrumbsStyles}>
+        <Breadcrumbs
+          homeHref={dashboard({}).$}
+          items={[...breadcrumbs, { label: title }]}
+        />
+      </div>
+      <Display styleAsHeading={2}>{title}</Display>
       <div>
         <Paragraph noMargin accent="lead">
           Share the compliance report associated with this manuscript.

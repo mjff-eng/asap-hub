@@ -7,7 +7,7 @@ import {
 } from '@asap-hub/model';
 import { useCurrentUserCRN } from '@asap-hub/react-context';
 import { ManuscriptHeader, usePushFromHere } from '@asap-hub/react-components';
-import { projects } from '@asap-hub/routing';
+import { projectRouteByType, projects } from '@asap-hub/routing';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import {
@@ -222,12 +222,32 @@ const ProjectManuscript: React.FC<ProjectManuscriptProps> = ({
       value: author.id,
     })) as (AuthorResponse & AuthorSelectOption)[];
 
+  const breadcrumbs = projectDetail
+    ? [
+        {
+          label: `${projectDetail.projectType}s`,
+          href: {
+            'Discovery Project': projects({}).discoveryProjects({}).$,
+            'Resource Project': projects({}).resourceProjects({}).$,
+            'Trainee Project': projects({}).traineeProjects({}).$,
+          }[projectDetail.projectType],
+        },
+        {
+          label: projectDetail.title,
+          href: projectRouteByType[projectDetail.projectType](projectId).about(
+            {},
+          ).$,
+        },
+      ]
+    : [];
+
   return (
     <FormProvider {...form}>
       <Frame title="Create Manuscript">
         <ManuscriptHeader
           resubmitManuscript={resubmitManuscript}
           isEditMode={!!manuscriptId && !resubmitManuscript}
+          breadcrumbs={breadcrumbs}
         />
         <ManuscriptForm
           getShortDescriptionFromDescription={
