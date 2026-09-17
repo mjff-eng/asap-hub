@@ -133,7 +133,9 @@ describe('ResourceProjectDetail', () => {
   it('renders Resource Project detail page when project type matches', async () => {
     await renderResourceProjectDetail('resource-1');
     expect(await screen.findByText('Overview')).toBeVisible();
-    expect(screen.getByText('Resource Project 1')).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: 'Resource Project 1' }),
+    ).toBeVisible();
   });
 
   it('renders NotFoundPage when project type is not Resource Project', async () => {

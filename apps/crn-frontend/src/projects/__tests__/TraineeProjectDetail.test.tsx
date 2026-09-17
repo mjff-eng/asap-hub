@@ -112,7 +112,9 @@ describe('TraineeProjectDetail', () => {
   it('renders Trainee Project detail page when project type matches', async () => {
     await renderTraineeProjectDetail('trainee-1');
     expect(await screen.findByText('Overview')).toBeVisible();
-    expect(screen.getByText('Trainee Project 1')).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: 'Trainee Project 1' }),
+    ).toBeVisible();
   });
 
   it('renders NotFoundPage when project type is not Trainee Project', async () => {

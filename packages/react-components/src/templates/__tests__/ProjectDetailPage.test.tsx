@@ -42,7 +42,9 @@ describe('ProjectDetailPage', () => {
       </ProjectDetailPage>,
     );
 
-    expect(screen.getByText('Test Project')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Test Project' }),
+    ).toBeInTheDocument();
   });
 
   it('renders children content in main section', () => {

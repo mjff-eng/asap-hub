@@ -176,7 +176,9 @@ describe('DiscoveryProjectDetail', () => {
   it('renders Discovery Project detail page when project type matches', async () => {
     await renderDiscoveryProjectDetail('discovery-1');
     expect(await screen.findByText('Overview')).toBeVisible();
-    expect(screen.getByText('Discovery Project 1')).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: 'Discovery Project 1' }),
+    ).toBeVisible();
   });
 
   it('renders NotFoundPage when project type is not Discovery Project', async () => {
