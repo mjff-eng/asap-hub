@@ -183,6 +183,7 @@ export {
   EventMaterials,
   EventSearch,
   EventSpeakers,
+  EventSupport,
   ExportAnalyticsModal,
   Filter,
   GoogleCalendar,

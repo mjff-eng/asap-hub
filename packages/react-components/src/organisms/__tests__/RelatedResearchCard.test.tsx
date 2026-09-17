@@ -12,6 +12,20 @@ const props: ComponentProps<typeof RelatedResearchCard> = {
   getIconForDocumentType: jest.fn(),
 };
 
+it('displays an empty state message when there is no related research', () => {
+  const { getByText, getByRole, queryByRole } = render(
+    <RelatedResearchCard
+      {...props}
+      relatedResearch={[]}
+      description="Find all related research."
+    />,
+  );
+  expect(getByRole('heading', { name: 'Related Research' })).toBeVisible();
+  expect(getByText('Find all related research.')).toBeVisible();
+  expect(getByText('No related research available.')).toBeVisible();
+  expect(queryByRole('link')).not.toBeInTheDocument();
+});
+
 it('displays the related research card header and description', () => {
   const { getByText, getByRole, queryByText } = render(
     <RelatedResearchCard

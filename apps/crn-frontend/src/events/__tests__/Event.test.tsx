@@ -1,7 +1,7 @@
 import { createTestQueryClient } from '@asap-hub/frontend-utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Suspense } from 'react';
-import { Route, Routes, StaticRouter } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
@@ -54,23 +54,30 @@ beforeEach(() => {
   });
 });
 
+const eventPath = events({}).event({ eventId: id }).$;
+const eventAboutPath = events({}).event({ eventId: id }).about({}).$;
+const eventMeetingMaterialsPath = events({})
+  .event({ eventId: id })
+  .meetingMaterials({}).$;
+
 const createWrapper =
   (
     user: Parameters<typeof Auth0Provider>[0]['user'] = {},
+    initialEntry = eventPath,
   ): React.FC<{ children: React.ReactNode }> =>
   ({ children }) => (
     <QueryClientProvider client={createTestQueryClient()}>
       <Auth0Provider user={user}>
         <WhenReady>
           <Suspense fallback="Loading...">
-            <StaticRouter location={events({}).event({ eventId: id }).$}>
+            <MemoryRouter initialEntries={[initialEntry]}>
               <Routes>
                 <Route
-                  path={events.template + events({}).event.template}
+                  path={`${events.template}${events({}).event.template}/*`}
                   element={children}
                 />
               </Routes>
-            </StaticRouter>
+            </MemoryRouter>
           </Suspense>
         </WhenReady>
       </Auth0Provider>
@@ -230,6 +237,45 @@ describe('the NEW_EVENT_PAGE flag', () => {
     expect(
       queryByText('The event has been cancelled.'),
     ).not.toBeInTheDocument();
+  });
+
+  it('shows About and Meeting Materials tabs and hides materials on About', async () => {
+    enable('NEW_EVENT_PAGE');
+    mockGetEvent.mockResolvedValue({
+      ...createEventResponse(),
+      id,
+      endDate: subDays(new Date(), 3).toISOString(),
+      notes: 'My Notes',
+    });
+    const { findByRole, queryByRole } = render(<Event />, { wrapper });
+
+    expect(await findByRole('link', { name: 'About' })).toHaveAttribute(
+      'href',
+      eventAboutPath,
+    );
+    expect(
+      await findByRole('link', { name: 'Meeting Materials' }),
+    ).toHaveAttribute('href', eventMeetingMaterialsPath);
+    expect(
+      queryByRole('heading', { name: 'Notes', level: 2 }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows meeting materials on the Meeting Materials tab', async () => {
+    enable('NEW_EVENT_PAGE');
+    mockGetEvent.mockResolvedValue({
+      ...createEventResponse(),
+      id,
+      endDate: subDays(new Date(), 3).toISOString(),
+      notes: 'My Notes',
+    });
+    const { findByRole } = render(<Event />, {
+      wrapper: createWrapper({}, eventMeetingMaterialsPath),
+    });
+
+    expect(
+      await findByRole('heading', { name: 'Notes', level: 2 }),
+    ).toBeVisible();
   });
 
   describe('attendance', () => {

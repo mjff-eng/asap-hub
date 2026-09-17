@@ -9,6 +9,9 @@ import {
 
 import EventDetailPage from '../EventDetailPage';
 
+const aboutHref = '/events/1/about';
+const meetingMaterialsHref = '/events/1/meeting-materials';
+
 const props: ComponentProps<typeof EventDetailPage> = {
   ...createEventResponse(),
   hasFinished: false,
@@ -19,10 +22,13 @@ const props: ComponentProps<typeof EventDetailPage> = {
   displayCalendar: false,
   backHref: '/prev',
   getIconForDocumentType: jest.fn(),
+  aboutHref,
+  meetingMaterialsHref,
+  selectedTab: 'about',
 };
 
-const renderPage = (ui: React.ReactElement) =>
-  render(<MemoryRouter>{ui}</MemoryRouter>);
+const renderPage = (ui: React.ReactElement, path = aboutHref) =>
+  render(<MemoryRouter initialEntries={[path]}>{ui}</MemoryRouter>);
 
 it('renders the event title', () => {
   renderPage(<EventDetailPage {...props} title="My Event" />);
@@ -81,7 +87,6 @@ it('falls back to the event dates when hasFinished is not provided', () => {
     />,
   );
   expect(screen.queryByText(/join this event/i)).not.toBeInTheDocument();
-  expect(screen.queryByText('Contact tech support')).not.toBeInTheDocument();
 });
 
 it('omits the speakers and join card when there is nothing to show', () => {
@@ -147,7 +152,7 @@ it("renders the join event button, when 'hideMeetingLink' is set to false", () =
   expect(screen.getAllByText(/join the meeting/i)).not.toHaveLength(0);
 
   rerender(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={[aboutHref]}>
       <EventDetailPage
         {...props}
         endDate={endDate}
@@ -159,7 +164,26 @@ it("renders the join event button, when 'hideMeetingLink' is set to false", () =
   expect(screen.queryAllByText(/join the meeting/i)).toHaveLength(0);
 });
 
-it('renders the event materials once the event has ended', () => {
+it('renders About and Meeting Materials tabs for a finished event', () => {
+  renderPage(<EventDetailPage {...props} hasFinished />);
+  expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute(
+    'href',
+    aboutHref,
+  );
+  expect(
+    screen.getByRole('link', { name: 'Meeting Materials' }),
+  ).toHaveAttribute('href', meetingMaterialsHref);
+});
+
+it('does not render the tab navigation for an upcoming event', () => {
+  renderPage(<EventDetailPage {...props} hasFinished={false} />);
+  expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole('link', { name: 'Meeting Materials' }),
+  ).not.toBeInTheDocument();
+});
+
+it('hides meeting materials on the About tab', () => {
   renderPage(
     <EventDetailPage
       {...props}
@@ -168,6 +192,23 @@ it('renders the event materials once the event has ended', () => {
       videoRecording="My Video"
       presentation="My Presentation"
     />,
+  );
+  expect(
+    screen.queryByRole('heading', { name: 'Notes', level: 2 }),
+  ).not.toBeInTheDocument();
+});
+
+it('renders the event materials once the event has ended on the Meeting Materials tab', () => {
+  renderPage(
+    <EventDetailPage
+      {...props}
+      selectedTab="meeting-materials"
+      endDate={subDays(new Date(), 100).toISOString()}
+      notes="My Notes"
+      videoRecording="My Video"
+      presentation="My Presentation"
+    />,
+    meetingMaterialsHref,
   );
   expect(
     screen.getByRole('heading', { name: 'Notes', level: 2 }),
@@ -180,13 +221,29 @@ it('renders additional meeting materials once the event has ended', () => {
   renderPage(
     <EventDetailPage
       {...props}
+      selectedTab="meeting-materials"
       endDate={subDays(new Date(), 100).toISOString()}
       meetingMaterials={[
         { title: 'Extra Material', url: 'http://example.com' },
       ]}
     />,
+    meetingMaterialsHref,
   );
   expect(screen.getByText('Extra Material')).toBeVisible();
+});
+
+it('hides the about content on the Meeting Materials tab', () => {
+  renderPage(
+    <EventDetailPage
+      {...props}
+      selectedTab="meeting-materials"
+      description="My Desc"
+      eventSpeakers={<div>Speakers Card</div>}
+    />,
+    meetingMaterialsHref,
+  );
+  expect(screen.queryByText('About this event')).not.toBeInTheDocument();
+  expect(screen.queryByText('Speakers Card')).not.toBeInTheDocument();
 });
 
 it('renders calendar list when displayCalendar is true', () => {
@@ -236,6 +293,16 @@ it('renders related tutorials when there are items to display', () => {
   expect(screen.getByText(/Tutorial1/i)).toBeVisible();
 });
 
+it('renders the related research and tutorials cards with empty states when there are no items', () => {
+  renderPage(
+    <EventDetailPage {...props} relatedResearch={[]} relatedTutorials={[]} />,
+  );
+  expect(screen.getByText('Related Research')).toBeVisible();
+  expect(screen.getByText('No related research available.')).toBeVisible();
+  expect(screen.getByText('Related Tutorials')).toBeVisible();
+  expect(screen.getByText('No related tutorials available.')).toBeVisible();
+});
+
 it('renders the children', () => {
   renderPage(<EventDetailPage {...props}>Children</EventDetailPage>);
   expect(screen.getByText('Children')).toBeVisible();
@@ -258,18 +325,4 @@ it('renders the speakers node when passed', () => {
     <EventDetailPage {...props} eventSpeakers={<div>Speakers Card</div>} />,
   );
   expect(screen.getByText('Speakers Card')).toBeVisible();
-});
-
-it('renders the footer cta only when the event has not finished', () => {
-  const { rerender } = renderPage(
-    <EventDetailPage {...props} hasFinished={false} />,
-  );
-  expect(screen.getByText('Contact tech support')).toBeVisible();
-
-  rerender(
-    <MemoryRouter>
-      <EventDetailPage {...props} hasFinished />
-    </MemoryRouter>,
-  );
-  expect(screen.queryByText('Contact tech support')).not.toBeInTheDocument();
 });

@@ -1,8 +1,16 @@
-import { Fragment } from 'react';
+import { ReactNode } from 'react';
 
+import { css } from '@emotion/react';
 import { Card, Headline2 } from '../atoms';
 import RichText from './RichText';
-import { Collapsible } from '../molecules';
+import { ExpandableText } from '../molecules';
+import { rem } from '../pixels';
+
+const staticContentStyles = css({ marginTop: rem(24) });
+
+const StaticContent: React.FC<{ children: ReactNode }> = ({ children }) => (
+  <div css={staticContentStyles}>{children}</div>
+);
 
 type RichTextCardProps = {
   readonly title: string;
@@ -13,16 +21,21 @@ const RichTextCard: React.FC<RichTextCardProps> = ({
   title,
   text,
   collapsible = false,
-}) => {
-  const Wrapper = collapsible ? Collapsible : Fragment;
-  return (
-    <Card>
-      <Headline2 styleAsHeading={3}>{title}</Headline2>
-      <Wrapper>
+}) => (
+  <Card>
+    <Headline2 noMargin styleAsHeading={3}>
+      {title}
+    </Headline2>
+    {collapsible ? (
+      <ExpandableText toggleMarginTop={12} variant="arrow">
         <RichText text={text} />
-      </Wrapper>
-    </Card>
-  );
-};
+      </ExpandableText>
+    ) : (
+      <StaticContent>
+        <RichText text={text} />
+      </StaticContent>
+    )}
+  </Card>
+);
 
 export default RichTextCard;
