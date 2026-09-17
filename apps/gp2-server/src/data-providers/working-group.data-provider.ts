@@ -12,12 +12,14 @@ import { gp2 as gp2Model } from '@asap-hub/model';
 import { parseTag, TagItem } from './tag.data-provider';
 import {
   deleteEntries,
+  fetchWorkingGroupMembersPage,
   parseCalendar,
   parseMembers,
   parseMilestones,
   parseResources,
   processMembers,
   processResources,
+  withAllMembers,
 } from './transformers';
 import { WorkingGroupDataProvider } from './types';
 
@@ -42,14 +44,18 @@ export class WorkingGroupContentfulDataProvider
       };
     }
 
-    return {
-      total: workingGroupsCollection.total,
-      items: workingGroupsCollection.items
+    const workingGroups = await Promise.all(
+      workingGroupsCollection.items
         .filter(
           (workingGroup): workingGroup is GraphQLWorkingGroup =>
             workingGroup !== null,
         )
-        .map(parseWorkingGroupToDataObject),
+        .map((workingGroup) => this.withAllMembers(workingGroup)),
+    );
+
+    return {
+      total: workingGroupsCollection.total,
+      items: workingGroups.map(parseWorkingGroupToDataObject),
     };
   }
   async update(
@@ -109,7 +115,16 @@ export class WorkingGroupContentfulDataProvider
   async fetchById(id: string) {
     const { workingGroups } = await this.fetchWorkingGroupById(id);
 
-    return workingGroups ? parseWorkingGroupToDataObject(workingGroups) : null;
+    return workingGroups
+      ? parseWorkingGroupToDataObject(await this.withAllMembers(workingGroups))
+      : null;
+  }
+
+  private withAllMembers(workingGroup: GraphQLWorkingGroup) {
+    return withAllMembers(
+      workingGroup,
+      fetchWorkingGroupMembersPage(this.graphQLClient),
+    );
   }
 }
 export type GraphQLWorkingGroup = NonNullable<

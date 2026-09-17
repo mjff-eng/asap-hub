@@ -122,7 +122,8 @@ enum AnnouncementsOrder {
 }
 
 """Represents a binary file in a space. An asset can be any file type."""
-type Asset {
+type Asset implements _Node {
+  _id: ID!
   contentType(locale: String, useFallbackLocale: Boolean): String
   contentfulMetadata: ContentfulMetadata!
   description(locale: String, useFallbackLocale: Boolean): String

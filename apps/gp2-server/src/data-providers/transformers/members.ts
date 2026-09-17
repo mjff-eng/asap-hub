@@ -3,13 +3,82 @@ import {
   Environment,
   getLinkEntities,
   getLinkEntity,
+  gp2 as gp2Contentful,
+  GraphQLClient,
   patchAndPublish,
 } from '@asap-hub/contentful';
 import { gp2 as gp2Model } from '@asap-hub/model';
 import { parseUserDisplayName } from '@asap-hub/server-common';
+import { fetchAllCollectionItems } from '../../utils/fetch-all-collection-items';
 import { GraphQLProject } from '../project.data-provider';
 import { GraphQLWorkingGroup } from '../working-group.data-provider';
 import { getIdsToDelete } from './common';
+
+export const MEMBERS_PAGE_SIZE = 100;
+
+type MembersCollection = { total: number; items: unknown[] };
+type EntityWithMembers = {
+  sys: { id: string };
+  membersCollection?: MembersCollection | null;
+};
+type FetchMembersPage<E extends EntityWithMembers> = (
+  id: string,
+  limit: number,
+  skip: number,
+) => Promise<
+  Pick<NonNullable<E['membersCollection']>, 'items'> | null | undefined
+>;
+
+export const withAllMembers = async <E extends EntityWithMembers>(
+  entity: E,
+  fetchMembersPage: FetchMembersPage<E>,
+): Promise<E> => ({
+  ...entity,
+  membersCollection: await fetchAllCollectionItems(
+    entity.membersCollection,
+    MEMBERS_PAGE_SIZE,
+    (limit, skip) => fetchMembersPage(entity.sys.id, limit, skip),
+  ),
+});
+
+type PageFetcher = (
+  id: string,
+  limit: number,
+  skip: number,
+) => Promise<unknown>;
+
+export const memoizeMembersPage = <F extends PageFetcher>(
+  fetchMembersPage: F,
+): F => {
+  const pages = new Map<string, ReturnType<F>>();
+  return ((id: string, limit: number, skip: number) => {
+    const key = `${id}:${limit}:${skip}`;
+    const page =
+      pages.get(key) ?? (fetchMembersPage(id, limit, skip) as ReturnType<F>);
+    pages.set(key, page);
+    return page;
+  }) as unknown as F;
+};
+
+export const fetchWorkingGroupMembersPage =
+  (graphQLClient: GraphQLClient) =>
+  async (id: string, limit: number, skip: number) => {
+    const { workingGroups } = await graphQLClient.request<
+      gp2Contentful.FetchWorkingGroupMembersQuery,
+      gp2Contentful.FetchWorkingGroupMembersQueryVariables
+    >(gp2Contentful.FETCH_WORKING_GROUP_MEMBERS, { id, limit, skip });
+    return workingGroups?.membersCollection;
+  };
+
+export const fetchProjectMembersPage =
+  (graphQLClient: GraphQLClient) =>
+  async (id: string, limit: number, skip: number) => {
+    const { projects } = await graphQLClient.request<
+      gp2Contentful.FetchProjectMembersQuery,
+      gp2Contentful.FetchProjectMembersQueryVariables
+    >(gp2Contentful.FETCH_PROJECT_MEMBERS, { id, limit, skip });
+    return projects?.membersCollection;
+  };
 
 type MembersItem =
   | GraphQLWorkingGroup['membersCollection']

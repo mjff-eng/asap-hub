@@ -2,6 +2,7 @@ import {
   Entry,
   Environment,
   getGP2ContentfulGraphqlClientMockServer,
+  gp2 as gp2Contentful,
   patchAndPublish,
 } from '@asap-hub/contentful';
 import { gp2 as gp2Model } from '@asap-hub/model';
@@ -9,6 +10,7 @@ import { WorkingGroupContentfulDataProvider } from '../../src/data-providers/wor
 import { getEntry } from '../fixtures/contentful.fixtures';
 import {
   getContentfulGraphqlWorkingGroup,
+  getContentfulGraphqlWorkingGroupMembers,
   getContentfulGraphqlWorkingGroupsResponse,
   getListWorkingGroupDataObject,
   getWorkingGroupDataObject,
@@ -58,6 +60,42 @@ describe('Working Group Data Provider', () => {
       });
 
       expect(await workingGroupDataProvider.fetchById('not-found')).toBeNull();
+    });
+    test('Should fetch the remaining members when the collection is truncated', async () => {
+      const [member] = getContentfulGraphqlWorkingGroupMembers().items;
+      const memberWithUser = (userId: string) => ({
+        ...member,
+        sys: { id: `membership-${userId}` },
+        user: { ...member!.user, sys: { id: userId } },
+      });
+      contentfulGraphqlClientMock.request
+        .mockResolvedValueOnce({
+          workingGroups: {
+            ...getContentfulGraphqlWorkingGroup(),
+            membersCollection: { total: 3, items: [memberWithUser('1')] },
+          },
+        })
+        .mockResolvedValueOnce({
+          workingGroups: {
+            membersCollection: {
+              total: 3,
+              items: [memberWithUser('2'), memberWithUser('3')],
+            },
+          },
+        });
+
+      const result = await workingGroupDataProvider.fetchById('id');
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(2);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenLastCalledWith(
+        gp2Contentful.FETCH_WORKING_GROUP_MEMBERS,
+        { id: '11', limit: 100, skip: 1 },
+      );
+      expect(result?.members.map(({ userId }) => userId)).toEqual([
+        '1',
+        '2',
+        '3',
+      ]);
     });
     test('the working group is parsed', async () => {
       const workingGroup = getContentfulGraphqlWorkingGroup();
@@ -414,6 +452,50 @@ describe('Working Group Data Provider', () => {
     });
   });
   describe('Fetch method', () => {
+    test('Should fetch remaining member pages for each truncated working group', async () => {
+      const [member] = getContentfulGraphqlWorkingGroupMembers().items;
+      const response = getContentfulGraphqlWorkingGroupsResponse();
+      const workingGroup = response.workingGroupsCollection!.items[0]!;
+      contentfulGraphqlClientMock.request
+        .mockResolvedValueOnce({
+          workingGroupsCollection: {
+            ...response.workingGroupsCollection,
+            items: [
+              {
+                ...workingGroup,
+                sys: { ...workingGroup.sys, id: 'wg-1' },
+                membersCollection: { total: 2, items: [member] },
+              },
+            ],
+          },
+        })
+        .mockResolvedValueOnce({
+          workingGroups: {
+            membersCollection: {
+              total: 2,
+              items: [
+                {
+                  ...member,
+                  sys: { id: '33' },
+                  user: { ...member!.user, sys: { id: '12' } },
+                },
+              ],
+            },
+          },
+        });
+
+      const result = await workingGroupDataProvider.fetch();
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(2);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenLastCalledWith(
+        gp2Contentful.FETCH_WORKING_GROUP_MEMBERS,
+        { id: 'wg-1', limit: 100, skip: 1 },
+      );
+      expect(result.items[0]?.members.map(({ userId }) => userId)).toEqual([
+        '11',
+        '12',
+      ]);
+    });
     test('Should fetch the working group from graphql', async () => {
       const result = await workinGroupDataProviderWithMockServer.fetch();
 
