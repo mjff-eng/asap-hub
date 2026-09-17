@@ -172,6 +172,13 @@ describe('teamCollaborationWithinTeamToCSV', () => {
       'Lab Material': 3,
       Protocol: 3,
     },
+    totalOutputs: {
+      Article: 3,
+      Bioinformatics: 3,
+      Dataset: 3,
+      'Lab Material': 3,
+      Protocol: 3,
+    },
     outputsCoProducedAcross: {
       byDocumentType: {
         Article: 5,
