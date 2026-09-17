@@ -274,6 +274,11 @@ export const metricConfig: Record<Metrics, OpensearchMetricConfig> = {
         DatasetAcross: { type: 'integer' },
         'Lab Material Across': { type: 'integer' },
         ProtocolAcross: { type: 'integer' },
+        ArticleTotal: { type: 'integer' },
+        BioinformaticsTotal: { type: 'integer' },
+        DatasetTotal: { type: 'integer' },
+        'Lab Material Total': { type: 'integer' },
+        ProtocolTotal: { type: 'integer' },
         collaboratingTeams: {
           type: 'nested',
           properties: {

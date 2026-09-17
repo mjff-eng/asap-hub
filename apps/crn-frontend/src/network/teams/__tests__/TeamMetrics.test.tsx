@@ -53,7 +53,10 @@ beforeEach(() => {
     interestGroupLead: false,
   });
   mockGetTeamAwardMetrics.mockResolvedValue({ total: 0, items: [] });
-  mockGetTeamCoProduction.mockResolvedValue({ coProducedArticles: undefined });
+  mockGetTeamCoProduction.mockResolvedValue({
+    coProducedArticles: undefined,
+    totalArticles: undefined,
+  });
 });
 
 afterEach(jest.clearAllMocks);
@@ -210,10 +213,11 @@ describe('collaboration section', () => {
   });
 
   it('Should show the band the percentage falls into', async () => {
-    mockGetTeamHubResearchOutputs.mockResolvedValue({
-      all: createDocument({ Article: 10 }),
+    mockGetTeamHubResearchOutputs.mockResolvedValue({});
+    mockGetTeamCoProduction.mockResolvedValue({
+      coProducedArticles: 9,
+      totalArticles: 10,
     });
-    mockGetTeamCoProduction.mockResolvedValue({ coProducedArticles: 9 });
 
     await renderTab();
 
@@ -224,11 +228,10 @@ describe('collaboration section', () => {
   });
 
   it('Should show limited data when no co-production figure is available', async () => {
-    mockGetTeamHubResearchOutputs.mockResolvedValue({
-      all: createDocument({ Article: 10 }),
-    });
+    mockGetTeamHubResearchOutputs.mockResolvedValue({});
     mockGetTeamCoProduction.mockResolvedValue({
       coProducedArticles: undefined,
+      totalArticles: 10,
     });
 
     await renderTab();

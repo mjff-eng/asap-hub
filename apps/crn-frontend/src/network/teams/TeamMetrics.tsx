@@ -19,10 +19,7 @@ const TeamMetrics: FC<TeamMetricsProps> = ({ teamId }) => {
   const teamCoProduction = useTeamCoProduction({ teamId });
 
   const hubResearchOutputRows = getHubResearchOutputRows(all, publicOutputs);
-  const withinTeamCoProduction = getWithinTeamCoProduction(
-    teamCoProduction,
-    all,
-  );
+  const withinTeamCoProduction = getWithinTeamCoProduction(teamCoProduction);
   const awards: TeamAward[] = awardMetrics.map(
     ({ id, name, asapPhilosophy, metricDefinition, received }) => ({
       id,

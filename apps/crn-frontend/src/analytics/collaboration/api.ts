@@ -314,6 +314,7 @@ export type TeamCoProductionOptions = {
 
 export type TeamCoProduction = {
   coProducedArticles?: number;
+  totalArticles?: number;
 };
 
 const TEAM_CO_PRODUCTION_TIME_RANGE: TimeRangeOption = 'all';
@@ -336,7 +337,10 @@ export const getTeamCoProduction = async (
 
   const document = items[0];
 
-  return { coProducedArticles: document?.Article };
+  return {
+    coProducedArticles: document?.Article,
+    totalArticles: document?.ArticleTotal,
+  };
 };
 
 export const getTeamCollaborationPerformance = async (

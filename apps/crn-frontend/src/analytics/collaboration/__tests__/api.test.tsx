@@ -435,12 +435,12 @@ describe('getTeamCoProduction', () => {
     });
   });
 
-  it('Should map a returned document to its co-produced article count', async () => {
-    const { client } = buildClient([{ Article: 7 }]);
+  it('Should take both sides of the ratio from the same document', async () => {
+    const { client } = buildClient([{ Article: 7, ArticleTotal: 12 }]);
 
     await expect(
       getTeamCoProduction(client, { teamId: 'team-id-1' }),
-    ).resolves.toEqual({ coProducedArticles: 7 });
+    ).resolves.toEqual({ coProducedArticles: 7, totalArticles: 12 });
   });
 
   it('Should report no figure when the index holds no document for the team', async () => {
@@ -448,14 +448,17 @@ describe('getTeamCoProduction', () => {
 
     await expect(
       getTeamCoProduction(client, { teamId: 'team-id-1' }),
-    ).resolves.toEqual({ coProducedArticles: undefined });
+    ).resolves.toEqual({
+      coProducedArticles: undefined,
+      totalArticles: undefined,
+    });
   });
 
   it('Should distinguish a document counting zero from an absent document', async () => {
-    const { client } = buildClient([{ Article: 0 }]);
+    const { client } = buildClient([{ Article: 0, ArticleTotal: 5 }]);
 
     await expect(
       getTeamCoProduction(client, { teamId: 'team-id-1' }),
-    ).resolves.toEqual({ coProducedArticles: 0 });
+    ).resolves.toEqual({ coProducedArticles: 0, totalArticles: 5 });
   });
 });

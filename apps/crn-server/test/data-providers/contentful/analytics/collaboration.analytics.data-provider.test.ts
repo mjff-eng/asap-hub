@@ -393,6 +393,43 @@ describe('team collaboration', () => {
     });
   });
 
+  test('Should count every qualifying output in totalOutputs, not only the co-produced ones', async () => {
+    const graphqlResponse = getTeamCollaborationQuery();
+    graphqlResponse.teamsCollection!.items[0]!.linkedFrom!.researchOutputsCollection!.items =
+      [
+        {
+          addedDate: '2023-09-05T03:00:00.000Z',
+          documentType: 'Article',
+          asapFunded: 'Yes',
+          labsCollection: {
+            total: 3,
+          },
+        },
+        {
+          addedDate: '2023-09-05T03:00:00.000Z',
+          documentType: 'Article',
+          asapFunded: 'Yes',
+          labsCollection: {
+            total: 1,
+          },
+        },
+      ];
+    contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+
+    const result = await analyticsDataProvider.fetchTeamCollaboration({
+      take: 1,
+    });
+
+    // Both articles count toward the total; only the multi-lab one is
+    // co-produced, so a ratio taken from this one document reads 1 of 2.
+    expect(result.items[0]).toEqual(
+      expect.objectContaining({
+        outputsCoProducedWithin: expect.objectContaining({ Article: 1 }),
+        totalOutputs: expect.objectContaining({ Article: 2 }),
+      }),
+    );
+  });
+
   test('Should only count asap funded research outputs', async () => {
     const graphqlResponse = getTeamCollaborationQuery();
     graphqlResponse.teamsCollection!.items[0]!.linkedFrom!.researchOutputsCollection!.items =

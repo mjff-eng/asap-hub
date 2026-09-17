@@ -430,6 +430,7 @@ export type TeamCollaborationDataObject = {
   inactiveSince?: string;
   outputsCoProducedWithin: TeamCollaborationWithinOutputData;
   outputsCoProducedAcross: TeamCollaborationAcrossOutputData;
+  totalOutputs: TeamCollaborationWithinOutputData;
 };
 export type TeamCollaborationOpensearchDocument =
   TeamCollaborationWithinOutputData & {
@@ -444,6 +445,11 @@ export type TeamCollaborationOpensearchDocument =
     DatasetAcross: number;
     'Lab Material Across': number;
     ProtocolAcross: number;
+    ArticleTotal: number;
+    BioinformaticsTotal: number;
+    DatasetTotal: number;
+    'Lab Material Total': number;
+    ProtocolTotal: number;
   };
 
 export type ListTeamCollaborationDataObject =
