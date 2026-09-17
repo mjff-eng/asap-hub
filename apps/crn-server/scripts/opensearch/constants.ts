@@ -256,7 +256,8 @@ export const metricConfig: Record<Metrics, OpensearchMetricConfig> = {
     indexAlias: 'team-collaboration',
     mapping: {
       properties: {
-        id: { type: 'text' },
+        // Must stay keyword: a `term` filter never matches an analyzed id.
+        id: { type: 'keyword' },
         name: textWithNgramKeyword({
           normalizer: 'lowercase_normalizer',
           raw: true,

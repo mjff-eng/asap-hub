@@ -431,6 +431,21 @@ export type TeamCollaborationDataObject = {
   outputsCoProducedWithin: TeamCollaborationWithinOutputData;
   outputsCoProducedAcross: TeamCollaborationAcrossOutputData;
 };
+export type TeamCollaborationOpensearchDocument =
+  TeamCollaborationWithinOutputData & {
+    id: string;
+    name: string;
+    isInactive: boolean;
+    inactiveSince?: string;
+    timeRange: TimeRangeOption;
+    outputType: OutputTypeOption;
+    ArticleAcross: number;
+    BioinformaticsAcross: number;
+    DatasetAcross: number;
+    'Lab Material Across': number;
+    ProtocolAcross: number;
+  };
+
 export type ListTeamCollaborationDataObject =
   ListResponse<TeamCollaborationDataObject>;
 export type TeamCollaborationResponse = TeamCollaborationDataObject;
