@@ -6,7 +6,8 @@ export type TeamCollaborationMetricsProps = {
 };
 
 // 81, not 80: the helper compares with >=, so this is what reads exactly 80 as
-// Adequate. Correct only while the percentage reaches it already rounded.
+// Adequate. The percentage is rounded at the call below so the cutoff holds for
+// any caller, not only ones that round first.
 const withinTeamCoProductionBands: MoodBands = {
   outstandingMin: 81,
   adequateMin: 50,
@@ -21,7 +22,11 @@ const TeamCollaborationMetrics: React.FC<TeamCollaborationMetricsProps> = ({
       name: 'Within Team Co-Production of Research Outputs',
       status: (
         <MoodStatus
-          percentage={withinTeamCoProduction}
+          percentage={
+            withinTeamCoProduction === null
+              ? null
+              : Math.round(withinTeamCoProduction)
+          }
           bands={withinTeamCoProductionBands}
         />
       ),

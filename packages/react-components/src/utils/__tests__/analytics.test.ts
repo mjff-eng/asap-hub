@@ -125,6 +125,23 @@ describe('caller-supplied mood bands', () => {
     expect(getPerformanceMoodIcon(49, false, ticketBands)).toBe(sadFaceIcon);
   });
 
+  it('moves the label across the same boundaries as the icon', () => {
+    // The two helpers duplicate their comparisons, so a change to one can
+    // desync the tooltip from the face it sits next to.
+    expect(getPerformanceMoodLabel(80, false, ticketBands)).toBe(
+      'Your team is doing an adequate job for this metric.',
+    );
+    expect(getPerformanceMoodLabel(81, false, ticketBands)).toBe(
+      'Your team is doing an outstanding job! Keep up the good work!',
+    );
+    expect(getPerformanceMoodLabel(50, false, ticketBands)).toBe(
+      'Your team is doing an adequate job for this metric.',
+    );
+    expect(getPerformanceMoodLabel(49, false, ticketBands)).toBe(
+      'We encourage your team to work to improve.',
+    );
+  });
+
   it('agrees between icon and label at 85 under the ticket bands', () => {
     expect(getPerformanceMoodIcon(85, false, ticketBands)).toBe(happyFaceIcon);
     expect(getPerformanceMoodLabel(85, false, ticketBands)).toBe(
