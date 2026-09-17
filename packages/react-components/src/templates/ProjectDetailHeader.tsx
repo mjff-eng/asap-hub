@@ -3,7 +3,7 @@ import {
   ProjectDetail,
   ProjectMember,
 } from '@asap-hub/model';
-import { projectRouteByType } from '@asap-hub/routing';
+import { dashboard, projectRouteByType, projects } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { Display, Pill, Link, CopyButton, TabLink } from '../atoms';
 import { lead } from '../colors';
@@ -24,6 +24,7 @@ import {
 } from '../icons';
 import { createMailTo } from '../mail';
 import {
+  Breadcrumbs,
   UsersList,
   TabNav,
   ProjectDuration,
@@ -189,6 +190,12 @@ const ProjectDetailHeader = (project: ProjectDetailHeaderProps) => {
 
   const route = projectRouteByType[project.projectType](project.id);
 
+  const projectListHref = {
+    'Discovery Project': projects({}).discoveryProjects({}).$,
+    'Resource Project': projects({}).resourceProjects({}).$,
+    'Trainee Project': projects({}).traineeProjects({}).$,
+  }[project.projectType];
+
   const membersWithHref =
     'members' in project ? project.members?.map(withMemberHref) : undefined;
 
@@ -205,6 +212,15 @@ const ProjectDetailHeader = (project: ProjectDetailHeaderProps) => {
       )}
       <header>
         <PageInfoContainer
+          breadcrumbs={
+            <Breadcrumbs
+              homeHref={dashboard({}).$}
+              items={[
+                { label: `${project.projectType}s`, href: projectListHref },
+                { label: project.title },
+              ]}
+            />
+          }
           nav={
             <TabNav>
               <TabLink href={aboutHref}>About</TabLink>

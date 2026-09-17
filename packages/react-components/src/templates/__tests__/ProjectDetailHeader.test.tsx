@@ -6,6 +6,7 @@ import {
   within,
 } from '@testing-library/react';
 import { ProjectDetail, ProjectType } from '@asap-hub/model';
+import { dashboard, projects } from '@asap-hub/routing';
 import ProjectDetailHeader, { getTeamIcon } from '../ProjectDetailHeader';
 
 const baseProject = {
@@ -213,7 +214,9 @@ describe('ProjectDetailHeader', () => {
           milestonesHref="/projects/discovery/1/milestones"
         />,
       );
-      expect(screen.getByText('Test Project')).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { name: 'Test Project' }),
+      ).toBeInTheDocument();
     });
 
     it('renders status pill', () => {
@@ -347,6 +350,38 @@ describe('ProjectDetailHeader', () => {
         ),
       ).toBeInTheDocument();
     });
+  });
+
+  describe('Breadcrumbs', () => {
+    it.each`
+      project                    | listLabel               | listHref
+      ${mockDiscoveryProject}    | ${'Discovery Projects'} | ${projects({}).discoveryProjects({}).$}
+      ${mockResourceTeamProject} | ${'Resource Projects'}  | ${projects({}).resourceProjects({}).$}
+      ${mockTraineeProject}      | ${'Trainee Projects'}   | ${projects({}).traineeProjects({}).$}
+    `(
+      'renders breadcrumbs to the $listLabel list',
+      ({ project, listLabel, listHref }) => {
+        render(
+          <ProjectDetailHeader
+            {...project}
+            aboutHref="/projects/1/about"
+            milestonesHref="/projects/1/milestones"
+          />,
+        );
+
+        const breadcrumbs = within(
+          screen.getByRole('navigation', { name: 'breadcrumbs' }),
+        );
+        expect(breadcrumbs.getByRole('link', { name: 'Home' })).toHaveAttribute(
+          'href',
+          dashboard({}).$,
+        );
+        expect(
+          breadcrumbs.getByRole('link', { name: listLabel }),
+        ).toHaveAttribute('href', listHref);
+        expect(breadcrumbs.getByText(project.title)).toBeVisible();
+      },
+    );
   });
 
   describe('Discovery projects', () => {

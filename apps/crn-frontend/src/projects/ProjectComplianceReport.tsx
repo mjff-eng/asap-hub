@@ -6,7 +6,7 @@ import {
   NotFoundPage,
   usePushFromHere,
 } from '@asap-hub/react-components';
-import { projects } from '@asap-hub/routing';
+import { projectRouteByType, projects } from '@asap-hub/routing';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams, useLocation } from 'react-router';
 import { useManuscriptToast } from '../network/teams/useManuscriptToast';
@@ -14,6 +14,7 @@ import {
   useInvalidateWorkspaceManuscripts,
   useManuscriptById,
   usePostComplianceReport,
+  useProjectById,
 } from './state';
 
 type ProjectComplianceReportProps = {
@@ -52,6 +53,7 @@ const ProjectComplianceReport: React.FC<ProjectComplianceReportProps> = ({
 }) => {
   const { manuscriptId } = useParams<{ manuscriptId: string }>();
   const [manuscript, setManuscript] = useManuscriptById(manuscriptId ?? '');
+  const projectDetail = useProjectById(projectId);
   const { setFormType } = useManuscriptToast();
 
   const pushFromHere = usePushFromHere();
@@ -82,10 +84,29 @@ const ProjectComplianceReport: React.FC<ProjectComplianceReportProps> = ({
       void pushFromHere(projectWorkspacePath, { replace: true });
     };
 
+    const breadcrumbs = projectDetail
+      ? [
+          {
+            label: `${projectDetail.projectType}s`,
+            href: {
+              'Discovery Project': projects({}).discoveryProjects({}).$,
+              'Resource Project': projects({}).resourceProjects({}).$,
+              'Trainee Project': projects({}).traineeProjects({}).$,
+            }[projectDetail.projectType],
+          },
+          {
+            label: projectDetail.title,
+            href: projectRouteByType[projectDetail.projectType](
+              projectId,
+            ).about({}).$,
+          },
+        ]
+      : [];
+
     return (
       <FormProvider {...form}>
         <Frame title="Create Compliance Report">
-          <ComplianceReportHeader />
+          <ComplianceReportHeader breadcrumbs={breadcrumbs} />
           <ComplianceReportForm
             onSuccess={onSuccess}
             onSave={createComplianceReport}
