@@ -3,7 +3,13 @@ import { css } from '@emotion/react';
 import { ReminderResponse, gp2 as gp2Model } from '@asap-hub/model';
 
 import { rem } from '../pixels';
-import { EventIcon, infoCircleIcon, LibraryIcon, article } from '../icons';
+import {
+  EventIcon,
+  infoCircleIcon,
+  LibraryIcon,
+  MilestoneIcon,
+  article,
+} from '../icons';
 import { Anchor, Markdown } from '../atoms';
 import { neutral200, cerulean } from '../colors';
 
@@ -58,6 +64,7 @@ const iconMap: Record<ReminderEntity, React.ReactElement> = {
   Event: <EventIcon />,
   Manuscript: <LibraryIcon />,
   Discussion: <LibraryIcon />,
+  Milestone: <MilestoneIcon />,
 };
 
 type ReminderProps = Pick<

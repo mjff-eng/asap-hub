@@ -24,6 +24,9 @@ import {
   getManuscriptCreatedReminder,
   getManuscriptResubmittedReminder,
   getManuscriptStatusUpdatedReminder,
+  getMilestoneCreatedReminder,
+  getMilestoneOutputsLinkedReminder,
+  getMilestoneStatusUpdatedReminder,
   getNotesUpdatedReminder,
   getPresentationUpdatedReminder,
   getPublishMaterialReminder,
@@ -516,6 +519,82 @@ describe('Reminder Controller', () => {
             '**Jannet Doe** on **Team ASAP** changed a compliance status from Waiting for Report to Review Compliance Report:',
           href: '/compliance/manuscripts/manuscript-id-1',
           subtext: 'Contextual AI models for single-cell protein biology',
+        });
+      });
+
+      test('Should return the correct description, href and date for the milestone created reminder', async () => {
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [getMilestoneCreatedReminder()],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toEqual({
+          id: 'milestone-created-milestone-id-1',
+          entity: 'Milestone',
+          description:
+            'A new milestone has been added for **Genetic Determinants of Progression**: Aim 2. These milestones have been linked to their corresponding Aims and are now available in the Milestones tab.',
+          href: '/projects/discovery/project-id-1/milestones?grantType=original',
+          date: '2025-01-07T16:21:33.824Z',
+        });
+      });
+
+      test('Should return the correct description, href and date for the milestone status updated reminder', async () => {
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [getMilestoneStatusUpdatedReminder()],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toEqual({
+          id: 'milestone-status-updated-milestone-id-1',
+          entity: 'Milestone',
+          description:
+            'A milestone for **Genetic Determinants of Progression** was marked as Complete (Aim(s) 2).',
+          href: '/projects/discovery/project-id-1/milestones?grantType=original',
+          date: '2025-01-08T10:00:00.000Z',
+        });
+      });
+
+      test('Should describe a terminated milestone', async () => {
+        const reminder = getMilestoneStatusUpdatedReminder();
+        reminder.data.status = 'Terminated';
+        reminder.data.aimNumbers = [1, 3];
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminder],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            'A milestone for **Genetic Determinants of Progression** was marked as Terminated (Aim(s) 1, 3).',
+        });
+      });
+
+      test('Should return the correct description, href and date for the milestone outputs linked reminder', async () => {
+        const reminder = getMilestoneOutputsLinkedReminder();
+        reminder.data.projectType = 'Trainee Project';
+        reminder.data.grantType = 'supplement';
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminder],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toEqual({
+          id: 'milestone-outputs-linked-milestone-id-1',
+          entity: 'Milestone',
+          description:
+            '**John Smith** linked outputs to a milestone on **Genetic Determinants of Progression**: Establish the mouse model (Aim 2).',
+          href: '/projects/trainee/project-id-1/milestones?grantType=supplement',
+          date: '2025-01-08T10:00:00.000Z',
         });
       });
 

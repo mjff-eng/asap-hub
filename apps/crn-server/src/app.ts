@@ -7,6 +7,7 @@ import {
   decodeTokenFactory,
   errorHandlerFactory,
   getHttpLogger,
+  AlertsSentry,
   HttpLogger,
   Logger,
   MemoryCacheClient,
@@ -227,7 +228,10 @@ export const appFactory = (libs: Libs = {}): Express => {
 
   const reminderDataProvider =
     libs.reminderDataProvider ||
-    new ReminderContentfulDataProvider(contentfulPreviewGraphQLClient);
+    new ReminderContentfulDataProvider(
+      contentfulPreviewGraphQLClient,
+      new AlertsSentry(Sentry.captureException.bind(Sentry)),
+    );
 
   const externalAuthorDataProvider =
     libs.externalAuthorDataProvider ||

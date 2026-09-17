@@ -55,6 +55,20 @@ it('renders the subtext correctly', () => {
   expect(getByText('subtext')).toBeInTheDocument();
 });
 
+it('renders the milestone icon and the time elapsed when a date is given', () => {
+  const twoHoursAgo = new Date(Date.now() - 2 * 3600 * 1000).toISOString();
+  render(
+    <ReminderItem
+      entity="Milestone"
+      description="description"
+      date={twoHoursAgo}
+    />,
+  );
+
+  expect(screen.getByTitle('Milestone')).toBeInTheDocument();
+  expect(screen.getByText('2h')).toBeVisible();
+});
+
 describe('getTimeElapsed', () => {
   const MINUTES_IN_MILLISECONDS = 60 * 1000;
   const HOURS_IN_MILLISECONDS = 3600 * 1000;

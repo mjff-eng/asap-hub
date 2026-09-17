@@ -61,6 +61,7 @@ export const Live = () => components.liveIcon;
 export const Location = () => components.locationIcon;
 export const Logout = () => components.logoutIcon;
 export const Menu = () => components.menuIcon;
+export const Milestone = () => <components.MilestoneIcon />;
 export const Money = () => components.MoneyIcon;
 export const Network = () => components.networkIcon;
 export const News = () => components.newsIcon;

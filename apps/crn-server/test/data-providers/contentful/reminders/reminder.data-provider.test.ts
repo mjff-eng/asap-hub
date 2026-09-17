@@ -67,6 +67,11 @@ describe('Reminders data provider', () => {
           items: [],
         },
       });
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        milestonesCollection: {
+          items: [],
+        },
+      });
     };
 
     test('Should fetch the reminders from contentful graphql', async () => {

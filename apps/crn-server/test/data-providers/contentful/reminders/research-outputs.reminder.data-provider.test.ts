@@ -91,6 +91,11 @@ describe('Reminders data provider', () => {
             items: [],
           },
         });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          milestonesCollection: {
+            items: [],
+          },
+        });
       };
 
       beforeEach(() => {
@@ -1211,6 +1216,11 @@ describe('Reminders data provider', () => {
 
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           messagesCollection: {
+            items: [],
+          },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          milestonesCollection: {
             items: [],
           },
         });
