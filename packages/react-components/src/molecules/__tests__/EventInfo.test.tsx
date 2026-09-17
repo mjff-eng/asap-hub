@@ -100,6 +100,18 @@ it('only links to events that are not cancelled', () => {
   expect(screen.getByText(/My Event/).closest('a')).toBeNull();
 });
 
+it('does not link the title when titleAsLink is false', () => {
+  render(
+    <EventInfo
+      {...props}
+      title="My Event"
+      status="Tentative"
+      titleAsLink={false}
+    />,
+  );
+  expect(screen.getByText(/My Event/).closest('a')).toBeNull();
+});
+
 it('displays the tags', () => {
   render(<EventInfo {...props} tags={['one tag']} />);
 

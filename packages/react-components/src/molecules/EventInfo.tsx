@@ -59,6 +59,7 @@ type EventInfoProps = ComponentProps<typeof EventTime> &
     eventOwner: React.ReactNode;
     tags: string[];
     titleLimit?: number | null;
+    titleAsLink?: boolean;
     eventSpeakers?: React.ReactNode;
     eventTeams?: React.ReactNode;
   };
@@ -70,13 +71,15 @@ const EventInfo: React.FC<EventInfoProps> = ({
   eventOwner,
   status,
   titleLimit = TITLE_LIMIT,
+  titleAsLink = true,
   eventSpeakers,
   eventTeams,
   tags,
   ...props
 }) => {
   const cancelled = status === 'Cancelled';
-  const link = cancelled ? undefined : events({}).event({ eventId: id }).$;
+  const link =
+    cancelled || !titleAsLink ? undefined : events({}).event({ eventId: id }).$;
 
   const displayTitle = (
     <span css={cancelled && cancelledTitleStyles}>

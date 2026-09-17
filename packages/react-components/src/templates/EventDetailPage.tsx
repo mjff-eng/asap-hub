@@ -112,7 +112,7 @@ const EventDetailPage = ({
             </div>
           )}
           <div css={eventCardContainerStyles}>
-            <EventCard {...props} titleLimit={null} />
+            <EventCard {...props} titleLimit={null} titleAsLink={false} />
           </div>
           {finished && (
             <TabNav>
