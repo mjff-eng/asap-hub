@@ -25,6 +25,19 @@ contentful-app-partial-last-updated=v97H7wgmtstfxNheYWy0G
 contentful-app-project-membership-role=3NyvjuxsjXSK0dEGyPiqSD
 contentful-environment=Production
 contentful-organization-id=6Hlb5Pl67A3nWMEyzxnHNZ
+demo-app-url=https://demos.hub.asap.science
+demo-auth0-audience=https://demos.hub.asap.science
+demo-auth0-client-id=EGQU77IyDEsWBTLoSiozOzZ0xpogh5Gg
+demo-auth0-domain=dev-asap-hub.us.auth0.com
+demo-aws-acm-certificate-arn=arn:aws:acm:us-east-1:249832953260:certificate/91e951dd-8819-4459-b69a-b9413760c4d6
+# base64 of the PEM public key, one line: base64 -w0 public_key.pem
+demo-cloudfront-public-key-b64=LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFzdmdHTzVQcWpqbTlmRjdZd0gyNwo5UkRqd3JSQzFmVlpDamJOVHVxcldpZlNnNDh1OElJTnNuWTlESzBlcStDcGRTQi9Gb1JBb2M0MWtlWWxKNm5xCmlDK1pVVkJiYmhadGRjWjBTeXB4MEZTMzRtVUlwTkNCanJkY1R0Tmdva3F4LzhpeFRyYmZJSzBBRmxNYW5pcHgKL3cxSitzdkZqZjlESlJaQUhaYVcxR2VXL0Q4ZzNlbk9iUCtTQThoeVVvVWhadWYzWDErU3hRbVRLM0tJVm1TegpRSkhhQzRuclpwU0JFRDIxdEx2dFowQnVkbllFM09OUWRTc3o3VWUrYytqcTJEbW04VW9oTTMzeUI3Tm5vUllkCmtqTEZZSnhweGVFRGtCbzQ0RXJ0aWFsd3poMmNWNGtBSE50eXp4M0Q0WG0vQVJ4REtsOXNXRXZHcGJSUjd0T0YKendJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==
+demo-email-sender=no-reply@hub.asap.science
+demo-hosted-zone-name=hub.asap.science
+demo-hostname=demos.hub.asap.science
+demo-ses-region=us-east-1
+demo-subnet-ids=subnet-360fc969,subnet-e0925786
+demo-vpc-id=vpc-a94253d3
 crn-auth0-additional-claim-domain=https://dev.hub.asap.science
 crn-aws-acm-certificate-arn=arn:aws:acm:us-east-1:249832953260:certificate/91e951dd-8819-4459-b69a-b9413760c4d6
 crn-base-pr-app-domain=hub.asap.science
