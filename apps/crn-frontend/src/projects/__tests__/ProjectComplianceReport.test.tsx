@@ -136,6 +136,13 @@ const renderPage = async (
   // project can be observed.
   queryClient.setQueryData(projectQueryKeys.detail(projectId), {
     id: projectId,
+    title: 'The Project',
+    projectType:
+      projectType === 'resource'
+        ? 'Resource Project'
+        : projectType === 'trainee'
+          ? 'Trainee Project'
+          : 'Discovery Project',
   } as ProjectDetail);
 
   const result = render(

@@ -507,7 +507,9 @@ describe.each(variants)(
     it('renders project detail page when project type matches', async () => {
       await renderProjectDetail(Component, routeKeyword, mainProjectId);
       expect(await screen.findByText('Overview')).toBeVisible();
-      expect(screen.getByText(mainProjectTitle)).toBeVisible();
+      expect(
+        screen.getByRole('heading', { name: mainProjectTitle }),
+      ).toBeVisible();
     });
 
     it('renders NotFoundPage when project type does not match', async () => {
