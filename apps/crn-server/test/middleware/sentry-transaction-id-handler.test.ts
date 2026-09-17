@@ -7,6 +7,7 @@ import { loggerMock } from '../mocks/logger.mock';
 
 const mockSetTag = jest.fn();
 jest.mock('@sentry/serverless', () => ({
+  captureException: jest.fn(),
   configureScope: jest.fn((callback) => callback({ setTag: mockSetTag })),
 }));
 

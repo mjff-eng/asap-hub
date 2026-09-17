@@ -908,16 +908,13 @@ export const getContentfulReminderMilestoneCollectionItem = (): NonNullable<
   status: 'Pending',
   bulkImported: false,
   statusUpdatedAt: '2025-01-07T16:21:32.000Z',
-  statusUpdatedBy: {
-    sys: { id: 'milestone-creator-user' },
-    firstName: 'Jane',
-    lastName: 'Doe',
-  },
+  statusUpdatedBy: { sys: { id: 'milestone-creator-user' } },
   outputsLinkedAt: null,
   outputsLinkedBy: null,
   relatedArticlesCollection: { total: 0 },
   linkedFrom: {
     aimsCollection: {
+      total: 1,
       items: [
         {
           sys: { id: 'aim-id-2' },
@@ -936,10 +933,12 @@ export const getContentfulReminderMilestoneProjectCollectionItem =
     title: 'Genetic Determinants of Progression',
     projectType: 'Discovery Project',
     originalGrantAimsCollection: {
+      total: 2,
       items: [{ sys: { id: 'aim-id-1' } }, { sys: { id: 'aim-id-2' } }],
     },
     supplementGrant: null,
     membersCollection: {
+      total: 1,
       items: [
         {
           role: null,
@@ -951,6 +950,7 @@ export const getContentfulReminderMilestoneProjectCollectionItem =
       ],
     },
     scientificFacilitatorCollection: {
+      total: 1,
       items: [{ sys: { id: 'scientific-facilitator-user' } }],
     },
   });

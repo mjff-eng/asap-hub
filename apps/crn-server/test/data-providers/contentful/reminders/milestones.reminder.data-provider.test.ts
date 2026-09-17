@@ -8,13 +8,13 @@ import { getReferenceDates } from '@asap-hub/server-common';
 import { DateTime } from 'luxon';
 
 import {
-  getMilestoneFilter,
   getMilestoneProjectFilter,
   MilestoneItem,
   MilestoneProjectItem,
   ReminderContentfulDataProvider,
 } from '../../../../src/data-providers/contentful/reminder.data-provider';
 import { getContentfulGraphqlClientMock } from '../../../mocks/contentful-graphql-client.mock';
+import logger from '../../../../src/utils/logger';
 import {
   getContentfulReminderMilestoneCollectionItem,
   getContentfulReminderMilestoneProjectCollectionItem,
@@ -104,11 +104,7 @@ describe('Reminders data provider', () => {
       sys: republishedSys,
       status: 'Complete',
       statusUpdatedAt: '2025-01-08T10:00:00.000Z',
-      statusUpdatedBy: {
-        sys: { id: 'status-updater-user' },
-        firstName: 'John',
-        lastName: 'Smith',
-      },
+      statusUpdatedBy: { sys: { id: 'status-updater-user' } },
     });
 
     const getOutputsLinkedMilestone = (): MilestoneItem => ({
@@ -130,24 +126,30 @@ describe('Reminders data provider', () => {
         await remindersDataProvider.fetch(fetchOptions('user-id'));
 
         const { last7DaysISO } = getReferenceDates(timezone);
-        expect(getMilestoneFilter(timezone)).toEqual({
-          OR: [
-            {
-              AND: [
-                { sys: { firstPublishedAt_gte: last7DaysISO } },
-                {
-                  OR: [{ bulkImported: false }, { bulkImported_exists: false }],
-                },
-              ],
-            },
-            { statusUpdatedAt_gte: last7DaysISO },
-            { outputsLinkedAt_gte: last7DaysISO },
-          ],
-        });
         expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
           4,
           FETCH_MILESTONE_REMINDERS,
-          { milestoneFilter: getMilestoneFilter(timezone) },
+          {
+            milestoneFilter: {
+              OR: [
+                {
+                  AND: [
+                    { sys: { firstPublishedAt_gte: last7DaysISO } },
+                    {
+                      OR: [
+                        { bulkImported: false },
+                        { bulkImported_exists: false },
+                      ],
+                    },
+                  ],
+                },
+                { statusUpdatedAt_gte: last7DaysISO },
+                { outputsLinkedAt_gte: last7DaysISO },
+              ],
+            },
+            limit: 100,
+            skip: 0,
+          },
         );
       });
 
@@ -169,6 +171,8 @@ describe('Reminders data provider', () => {
           5,
           FETCH_MILESTONE_REMINDER_PROJECTS,
           {
+            limit: 100,
+            skip: 0,
             projectFilter: {
               OR: [
                 {
@@ -183,6 +187,55 @@ describe('Reminders data provider', () => {
             },
           },
         );
+      });
+
+      test('pages through milestones and projects until every item is fetched', async () => {
+        const secondMilestone = {
+          ...getContentfulReminderMilestoneCollectionItem()!,
+          sys: {
+            ...getContentfulReminderMilestoneCollectionItem()!.sys,
+            id: 'milestone-id-2',
+          },
+        };
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          users: getUserInTeam('Project Manager'),
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          discussionsCollection: { items: [] },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          messagesCollection: { items: [] },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          milestonesCollection: {
+            total: 2,
+            items: [getContentfulReminderMilestoneCollectionItem()],
+          },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          milestonesCollection: { total: 2, items: [secondMilestone] },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          projectsCollection: {
+            total: 1,
+            items: [getContentfulReminderMilestoneProjectCollectionItem()],
+          },
+        });
+
+        const result = await remindersDataProvider.fetch(
+          fetchOptions('user-id'),
+        );
+
+        expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
+          5,
+          FETCH_MILESTONE_REMINDERS,
+          expect.objectContaining({ limit: 100, skip: 1 }),
+        );
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(6);
+        expect(result.items.map((reminder) => reminder.id)).toEqual([
+          'milestone-created-milestone-id-1',
+          'milestone-created-milestone-id-2',
+        ]);
       });
 
       test('does not fetch projects when there are no milestones', async () => {
@@ -216,10 +269,7 @@ describe('Reminders data provider', () => {
       });
 
       test('returns no project filter for milestones without aims', () => {
-        const milestone = getContentfulReminderMilestoneCollectionItem()!;
-        milestone.linkedFrom = { aimsCollection: { items: [] } };
-
-        expect(getMilestoneProjectFilter([milestone])).toBeNull();
+        expect(getMilestoneProjectFilter([])).toBeNull();
       });
     });
 
@@ -228,7 +278,7 @@ describe('Reminders data provider', () => {
         description                                       | milestone
         ${'the milestone is null'}                        | ${null}
         ${'the milestone is not published'}               | ${{ ...getContentfulReminderMilestoneCollectionItem(), sys: { id: 'milestone-id-1', firstPublishedAt: null } }}
-        ${'the milestone is not linked to a project aim'} | ${{ ...getContentfulReminderMilestoneCollectionItem(), linkedFrom: { aimsCollection: { items: [{ sys: { id: 'unknown-aim' }, linkedFrom: null }] } } }}
+        ${'the milestone is not linked to a project aim'} | ${{ ...getContentfulReminderMilestoneCollectionItem(), linkedFrom: { aimsCollection: { total: 1, items: [{ sys: { id: 'unknown-aim' }, linkedFrom: null }] } } }}
       `(
         'does not return a reminder when $description',
         async ({ milestone }) => {
@@ -245,6 +295,7 @@ describe('Reminders data provider', () => {
       test('does not return a reminder for a discovery project without a funded team', async () => {
         const project = getContentfulReminderMilestoneProjectCollectionItem()!;
         project.membersCollection = {
+          total: 1,
           items: [
             {
               role: 'Project Manager',
@@ -379,6 +430,7 @@ describe('Reminders data provider', () => {
         const milestone = getContentfulReminderMilestoneCollectionItem()!;
         milestone.linkedFrom = {
           aimsCollection: {
+            total: 1,
             items: [
               {
                 sys: { id: 'supplement-aim-id' },
@@ -393,8 +445,8 @@ describe('Reminders data provider', () => {
         };
         const project = getContentfulReminderMilestoneProjectCollectionItem()!;
         project.supplementGrant = {
-          sys: { id: 'supplement-grant-id' },
           aimsCollection: {
+            total: 2,
             items: [
               { sys: { id: 'other-supplement-aim' } },
               { sys: { id: 'supplement-aim-id' } },
@@ -421,6 +473,7 @@ describe('Reminders data provider', () => {
           ...getContentfulReminderMilestoneProjectCollectionItem()!,
           projectType,
           membersCollection: {
+            total: 1,
             items: [
               {
                 role,
@@ -726,6 +779,67 @@ describe('Reminders data provider', () => {
         );
 
         expect(result.items).toEqual([getMilestoneCreatedReminder()]);
+      });
+    });
+
+    describe('Truncated nested collections', () => {
+      const alerts = { error: jest.fn() };
+      const alertingDataProvider = new ReminderContentfulDataProvider(
+        contentfulGraphqlClientMock,
+        alerts,
+      );
+
+      test('logs, alerts and still returns reminders when a project collection is truncated', async () => {
+        const loggerErrorSpy = jest.spyOn(logger, 'error');
+        const project = getContentfulReminderMilestoneProjectCollectionItem()!;
+        project.membersCollection!.total = 101;
+        mockGraphqlResponse({ projects: [project] });
+
+        const result = await alertingDataProvider.fetch(
+          fetchOptions('user-id'),
+        );
+
+        expect(result.items).toEqual([getMilestoneCreatedReminder()]);
+        const details = {
+          entryId: 'project-id-1',
+          collection: 'members',
+          total: 101,
+          fetched: 1,
+        };
+        expect(loggerErrorSpy).toHaveBeenCalledWith(
+          'Reminder query returned a truncated collection',
+          details,
+        );
+        expect(alerts.error).toHaveBeenCalledWith(
+          new Error(
+            `Reminder query returned a truncated collection: ${JSON.stringify(
+              details,
+            )}`,
+          ),
+        );
+      });
+
+      test('reports truncated aim links of a milestone', async () => {
+        const milestone = getContentfulReminderMilestoneCollectionItem()!;
+        milestone.linkedFrom!.aimsCollection!.total = 11;
+        mockGraphqlResponse({ milestones: [milestone] });
+
+        await alertingDataProvider.fetch(fetchOptions('user-id'));
+
+        expect(alerts.error).toHaveBeenCalledTimes(1);
+        expect(alerts.error.mock.calls[0]![0].message).toEqual(
+          expect.stringContaining(
+            '"entryId":"milestone-id-1","collection":"aims"',
+          ),
+        );
+      });
+
+      test('does not report complete collections', async () => {
+        mockGraphqlResponse();
+
+        await alertingDataProvider.fetch(fetchOptions('user-id'));
+
+        expect(alerts.error).not.toHaveBeenCalled();
       });
     });
   });

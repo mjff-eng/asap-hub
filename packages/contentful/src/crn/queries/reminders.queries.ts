@@ -333,12 +333,18 @@ export const FETCH_REMINDERS = gql`
 `;
 
 export const FETCH_MILESTONE_REMINDERS = gql`
-  query FetchMilestoneReminders($milestoneFilter: MilestonesFilter) {
+  query FetchMilestoneReminders(
+    $milestoneFilter: MilestonesFilter
+    $limit: Int!
+    $skip: Int!
+  ) {
     milestonesCollection(
       where: $milestoneFilter
-      limit: 100
+      limit: $limit
+      skip: $skip
       order: [sys_publishedAt_DESC]
     ) {
+      total
       items {
         sys {
           id
@@ -353,8 +359,6 @@ export const FETCH_MILESTONE_REMINDERS = gql`
           sys {
             id
           }
-          firstName
-          lastName
         }
         outputsLinkedAt
         outputsLinkedBy {
@@ -369,6 +373,7 @@ export const FETCH_MILESTONE_REMINDERS = gql`
         }
         linkedFrom {
           aimsCollection(limit: 10) {
+            total
             items {
               sys {
                 id
@@ -391,8 +396,13 @@ export const FETCH_MILESTONE_REMINDERS = gql`
 `;
 
 export const FETCH_MILESTONE_REMINDER_PROJECTS = gql`
-  query FetchMilestoneReminderProjects($projectFilter: ProjectsFilter) {
-    projectsCollection(where: $projectFilter, limit: 100) {
+  query FetchMilestoneReminderProjects(
+    $projectFilter: ProjectsFilter
+    $limit: Int!
+    $skip: Int!
+  ) {
+    projectsCollection(where: $projectFilter, limit: $limit, skip: $skip) {
+      total
       items {
         sys {
           id
@@ -400,6 +410,7 @@ export const FETCH_MILESTONE_REMINDER_PROJECTS = gql`
         title
         projectType
         originalGrantAimsCollection(limit: 50) {
+          total
           items {
             sys {
               id
@@ -407,10 +418,8 @@ export const FETCH_MILESTONE_REMINDER_PROJECTS = gql`
           }
         }
         supplementGrant {
-          sys {
-            id
-          }
           aimsCollection(limit: 50) {
+            total
             items {
               sys {
                 id
@@ -418,7 +427,8 @@ export const FETCH_MILESTONE_REMINDER_PROJECTS = gql`
             }
           }
         }
-        membersCollection(limit: 50) {
+        membersCollection(limit: 100) {
+          total
           items {
             role
             projectMember {
@@ -437,6 +447,7 @@ export const FETCH_MILESTONE_REMINDER_PROJECTS = gql`
           }
         }
         scientificFacilitatorCollection(limit: 10) {
+          total
           items {
             sys {
               id

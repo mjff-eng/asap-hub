@@ -70,6 +70,7 @@ import {
   VideoEventReminder,
 } from '@asap-hub/model';
 import {
+  Alerts,
   cleanArray,
   getReferenceDates,
   inLast24Hours,
@@ -79,6 +80,7 @@ import {
 import { DateTime } from 'luxon';
 import { isCMSAdministrator } from '@asap-hub/validation';
 import { ReminderDataProvider } from '../types';
+import logger from '../../utils/logger';
 
 type EventCollection = FetchRemindersQuery['eventsCollection'];
 type EventItem = NonNullable<NonNullable<EventCollection>['items'][number]>;
@@ -98,6 +100,31 @@ type ResearchOutputVersionItem = NonNullable<
 >;
 
 type User = FetchRemindersQuery['users'];
+
+type TruncatableCollection = { total: number; items: unknown[] };
+
+type Page<T> = Maybe<{ total: number; items: Maybe<T>[] }> | undefined;
+
+const reminderPageSize = 100;
+
+const fetchAllPages = async <T>(
+  fetchPage: (pagination: { limit: number; skip: number }) => Promise<Page<T>>,
+): Promise<T[]> => {
+  const items: T[] = [];
+  let fetched = 0;
+  let total = 0;
+
+  do {
+    const page = await fetchPage({ limit: reminderPageSize, skip: fetched });
+    if (!page?.items.length) break;
+
+    items.push(...cleanArray(page.items));
+    fetched += page.items.length;
+    total = page.total;
+  } while (fetched < total);
+
+  return items;
+};
 
 type MilestoneCollection = FetchMilestoneRemindersQuery['milestonesCollection'];
 export type MilestoneItem = NonNullable<
@@ -138,7 +165,10 @@ type ManuscriptVersion = NonNullable<
 };
 
 export class ReminderContentfulDataProvider implements ReminderDataProvider {
-  constructor(private contentfulClient: GraphQLClient) {}
+  constructor(
+    private contentfulClient: GraphQLClient,
+    private alerts?: Alerts,
+  ) {}
 
   async fetchById(): Promise<null> {
     throw new Error('Method not implemented.');
@@ -304,9 +334,11 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       userId,
     );
 
+    const projectAims = indexProjectAims(milestoneProjects);
+
     const milestoneReminders = getMilestoneRemindersFromQuery(
       milestonesCollectionItems,
-      milestoneProjects,
+      projectAims,
       user,
       userId,
       timezone,
@@ -349,21 +381,69 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
     milestones: MilestoneItem[];
     projects: MilestoneProjectItem[];
   }> {
-    const { milestonesCollection } = await this.contentfulClient.request<
-      FetchMilestoneRemindersQuery,
-      FetchMilestoneRemindersQueryVariables
-    >(FETCH_MILESTONE_REMINDERS, { milestoneFilter });
-    const milestones = cleanArray(milestonesCollection?.items);
+    const milestones = await fetchAllPages<MilestoneItem>((pagination) =>
+      this.contentfulClient
+        .request<
+          FetchMilestoneRemindersQuery,
+          FetchMilestoneRemindersQueryVariables
+        >(FETCH_MILESTONE_REMINDERS, { milestoneFilter, ...pagination })
+        .then(({ milestonesCollection }) => milestonesCollection),
+    );
 
-    const projectFilter = getMilestoneProjectFilter(milestones);
+    const projectFilter = getMilestoneProjectFilter(
+      getMilestonesAims(milestones),
+    );
     if (!projectFilter) return { milestones, projects: [] };
 
-    const { projectsCollection } = await this.contentfulClient.request<
-      FetchMilestoneReminderProjectsQuery,
-      FetchMilestoneReminderProjectsQueryVariables
-    >(FETCH_MILESTONE_REMINDER_PROJECTS, { projectFilter });
+    const projects = await fetchAllPages<MilestoneProjectItem>((pagination) =>
+      this.contentfulClient
+        .request<
+          FetchMilestoneReminderProjectsQuery,
+          FetchMilestoneReminderProjectsQueryVariables
+        >(FETCH_MILESTONE_REMINDER_PROJECTS, { projectFilter, ...pagination })
+        .then(({ projectsCollection }) => projectsCollection),
+    );
 
-    return { milestones, projects: cleanArray(projectsCollection?.items) };
+    milestones.forEach((milestone) =>
+      this.reportTruncated(milestone.sys.id, {
+        aims: milestone.linkedFrom?.aimsCollection,
+      }),
+    );
+    projects.forEach((project) =>
+      this.reportTruncated(project.sys.id, {
+        members: project.membersCollection,
+        originalGrantAims: project.originalGrantAimsCollection,
+        supplementGrantAims: project.supplementGrant?.aimsCollection,
+        scientificFacilitators: project.scientificFacilitatorCollection,
+      }),
+    );
+    return { milestones, projects };
+  }
+
+  // A nested collection cannot be paged, so a total above the fetched items
+  // means reminders may be missing for that entry: alert instead of failing
+  private reportTruncated(
+    entryId: string,
+    collections: Record<string, Maybe<TruncatableCollection> | undefined>,
+  ): void {
+    Object.entries(collections).forEach(([name, collection]) => {
+      if (!collection || collection.total <= collection.items.length) return;
+
+      const details = {
+        entryId,
+        collection: name,
+        total: collection.total,
+        fetched: collection.items.length,
+      };
+      logger.error('Reminder query returned a truncated collection', details);
+      void this.alerts?.error(
+        new Error(
+          `Reminder query returned a truncated collection: ${JSON.stringify(
+            details,
+          )}`,
+        ),
+      );
+    });
   }
 }
 
@@ -427,7 +507,7 @@ export const getManuscriptFilter = (zone: string): ManuscriptsFilter => {
   };
 };
 
-export const getMilestoneFilter = (zone: string): MilestonesFilter => {
+const getMilestoneFilter = (zone: string): MilestonesFilter => {
   const { last7DaysISO } = getReferenceDates(zone);
   return {
     OR: [
@@ -443,12 +523,20 @@ export const getMilestoneFilter = (zone: string): MilestonesFilter => {
   };
 };
 
-export const getMilestoneProjectFilter = (
-  milestones: MilestoneItem[],
-): ProjectsFilter | null => {
-  const aims = milestones.flatMap((milestone) =>
+type MilestoneAimLink = NonNullable<
+  NonNullable<
+    NonNullable<MilestoneItem['linkedFrom']>['aimsCollection']
+  >['items'][number]
+>;
+
+const getMilestonesAims = (milestones: MilestoneItem[]): MilestoneAimLink[] =>
+  milestones.flatMap((milestone) =>
     cleanArray(milestone.linkedFrom?.aimsCollection?.items),
   );
+
+export const getMilestoneProjectFilter = (
+  aims: MilestoneAimLink[],
+): ProjectsFilter | null => {
   const aimIds = [...new Set(aims.map((aim) => aim.sys.id))];
   const supplementGrantIds = [
     ...new Set(
@@ -1523,6 +1611,14 @@ type MilestoneProjectAudience = {
   isScientificFacilitator: boolean;
 };
 
+type ProjectAim = {
+  project: MilestoneProjectItem;
+  grantType: GrantType;
+  aimNumber: number;
+};
+
+type ProjectAims = Map<string, ProjectAim>;
+
 type MilestoneProjectMatch = {
   project: MilestoneProjectItem;
   grantType: GrantType;
@@ -1533,30 +1629,45 @@ const getAimIds = (
   collection: Maybe<{ items: Maybe<{ sys: { id: string } }>[] }> | undefined,
 ): string[] => cleanArray(collection?.items).map((aim) => aim.sys.id);
 
-const findMilestoneProject = (
-  milestone: MilestoneItem,
-  projects: MilestoneProjectItem[],
-): MilestoneProjectMatch | null => {
-  const milestoneAimIds = getAimIds(milestone.linkedFrom?.aimsCollection);
+const indexProjectAims = (projects: MilestoneProjectItem[]): ProjectAims => {
+  const projectAims: ProjectAims = new Map();
 
-  for (const project of projects) {
+  projects.forEach((project) => {
     const grantAims: [GrantType, string[]][] = [
       ['original', getAimIds(project.originalGrantAimsCollection)],
       ['supplement', getAimIds(project.supplementGrant?.aimsCollection)],
     ];
+    grantAims.forEach(([grantType, aimIds]) =>
+      aimIds.forEach((aimId, index) => {
+        if (!projectAims.has(aimId)) {
+          projectAims.set(aimId, { project, grantType, aimNumber: index + 1 });
+        }
+      }),
+    );
+  });
 
-    for (const [grantType, aimIds] of grantAims) {
-      const aimNumbers = aimIds.flatMap((aimId, index) =>
-        milestoneAimIds.includes(aimId) ? [index + 1] : [],
-      );
+  return projectAims;
+};
 
-      if (aimNumbers.length) {
-        return { project, grantType, aimNumbers };
-      }
-    }
-  }
+const findMilestoneProject = (
+  milestone: MilestoneItem,
+  projectAims: ProjectAims,
+): MilestoneProjectMatch | null => {
+  const [first, ...rest] = getAimIds(milestone.linkedFrom?.aimsCollection)
+    .map((aimId) => projectAims.get(aimId))
+    .filter((projectAim): projectAim is ProjectAim => !!projectAim);
+  if (!first) return null;
 
-  return null;
+  const aimNumbers = [first, ...rest]
+    .filter(
+      ({ project, grantType }) =>
+        project.sys.id === first.project.sys.id &&
+        grantType === first.grantType,
+    )
+    .map(({ aimNumber }) => aimNumber)
+    .sort((a, b) => a - b);
+
+  return { project: first.project, grantType: first.grantType, aimNumbers };
 };
 
 const getMilestoneProjectAudience = (
@@ -1635,7 +1746,7 @@ const isCreationAudit = (
 
 const getMilestoneRemindersFromQuery = (
   milestones: MilestoneItem[],
-  projects: MilestoneProjectItem[],
+  projectAims: ProjectAims,
   user: User,
   userId: string,
   timezone: string,
@@ -1644,7 +1755,7 @@ const getMilestoneRemindersFromQuery = (
 
   return milestones.reduce<MilestoneReminder[]>((reminders, milestone) => {
     const { firstPublishedAt } = milestone.sys;
-    const match = findMilestoneProject(milestone, projects);
+    const match = findMilestoneProject(milestone, projectAims);
     if (
       !firstPublishedAt ||
       !match ||

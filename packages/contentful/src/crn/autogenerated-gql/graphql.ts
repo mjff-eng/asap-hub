@@ -37000,88 +37000,103 @@ export type FetchRemindersQuery = {
 
 export type FetchMilestoneRemindersQueryVariables = Exact<{
   milestoneFilter?: InputMaybe<MilestonesFilter>;
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
 }>;
 
 export type FetchMilestoneRemindersQuery = {
-  milestonesCollection?: Maybe<{
-    items: Array<
-      Maybe<
-        Pick<
-          Milestones,
-          | 'description'
-          | 'status'
-          | 'bulkImported'
-          | 'statusUpdatedAt'
-          | 'outputsLinkedAt'
-        > & {
-          sys: Pick<Sys, 'id' | 'firstPublishedAt' | 'publishedAt'>;
-          statusUpdatedBy?: Maybe<
-            Pick<Users, 'firstName' | 'lastName'> & { sys: Pick<Sys, 'id'> }
-          >;
-          outputsLinkedBy?: Maybe<
-            Pick<Users, 'firstName' | 'lastName'> & { sys: Pick<Sys, 'id'> }
-          >;
-          relatedArticlesCollection?: Maybe<
-            Pick<MilestonesRelatedArticlesCollection, 'total'>
-          >;
-          linkedFrom?: Maybe<{
-            aimsCollection?: Maybe<{
-              items: Array<
-                Maybe<{
-                  sys: Pick<Sys, 'id'>;
-                  linkedFrom?: Maybe<{
-                    supplementGrantCollection?: Maybe<{
-                      items: Array<Maybe<{ sys: Pick<Sys, 'id'> }>>;
-                    }>;
-                  }>;
-                }>
+  milestonesCollection?: Maybe<
+    Pick<MilestonesCollection, 'total'> & {
+      items: Array<
+        Maybe<
+          Pick<
+            Milestones,
+            | 'description'
+            | 'status'
+            | 'bulkImported'
+            | 'statusUpdatedAt'
+            | 'outputsLinkedAt'
+          > & {
+            sys: Pick<Sys, 'id' | 'firstPublishedAt' | 'publishedAt'>;
+            statusUpdatedBy?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+            outputsLinkedBy?: Maybe<
+              Pick<Users, 'firstName' | 'lastName'> & { sys: Pick<Sys, 'id'> }
+            >;
+            relatedArticlesCollection?: Maybe<
+              Pick<MilestonesRelatedArticlesCollection, 'total'>
+            >;
+            linkedFrom?: Maybe<{
+              aimsCollection?: Maybe<
+                Pick<AimsCollection, 'total'> & {
+                  items: Array<
+                    Maybe<{
+                      sys: Pick<Sys, 'id'>;
+                      linkedFrom?: Maybe<{
+                        supplementGrantCollection?: Maybe<{
+                          items: Array<Maybe<{ sys: Pick<Sys, 'id'> }>>;
+                        }>;
+                      }>;
+                    }>
+                  >;
+                }
               >;
             }>;
-          }>;
-        }
-      >
-    >;
-  }>;
+          }
+        >
+      >;
+    }
+  >;
 };
 
 export type FetchMilestoneReminderProjectsQueryVariables = Exact<{
   projectFilter?: InputMaybe<ProjectsFilter>;
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
 }>;
 
 export type FetchMilestoneReminderProjectsQuery = {
-  projectsCollection?: Maybe<{
-    items: Array<
-      Maybe<
-        Pick<Projects, 'title' | 'projectType'> & {
-          sys: Pick<Sys, 'id'>;
-          originalGrantAimsCollection?: Maybe<{
-            items: Array<Maybe<{ sys: Pick<Sys, 'id'> }>>;
-          }>;
-          supplementGrant?: Maybe<{
+  projectsCollection?: Maybe<
+    Pick<ProjectsCollection, 'total'> & {
+      items: Array<
+        Maybe<
+          Pick<Projects, 'title' | 'projectType'> & {
             sys: Pick<Sys, 'id'>;
-            aimsCollection?: Maybe<{
-              items: Array<Maybe<{ sys: Pick<Sys, 'id'> }>>;
-            }>;
-          }>;
-          membersCollection?: Maybe<{
-            items: Array<
-              Maybe<
-                Pick<ProjectMembership, 'role'> & {
-                  projectMember?: Maybe<
-                    | ({ __typename: 'Teams' } & { sys: Pick<Sys, 'id'> })
-                    | ({ __typename: 'Users' } & { sys: Pick<Sys, 'id'> })
-                  >;
-                }
-              >
+            originalGrantAimsCollection?: Maybe<
+              Pick<ProjectsOriginalGrantAimsCollection, 'total'> & {
+                items: Array<Maybe<{ sys: Pick<Sys, 'id'> }>>;
+              }
             >;
-          }>;
-          scientificFacilitatorCollection?: Maybe<{
-            items: Array<Maybe<{ sys: Pick<Sys, 'id'> }>>;
-          }>;
-        }
-      >
-    >;
-  }>;
+            supplementGrant?: Maybe<{
+              aimsCollection?: Maybe<
+                Pick<SupplementGrantAimsCollection, 'total'> & {
+                  items: Array<Maybe<{ sys: Pick<Sys, 'id'> }>>;
+                }
+              >;
+            }>;
+            membersCollection?: Maybe<
+              Pick<ProjectsMembersCollection, 'total'> & {
+                items: Array<
+                  Maybe<
+                    Pick<ProjectMembership, 'role'> & {
+                      projectMember?: Maybe<
+                        | ({ __typename: 'Teams' } & { sys: Pick<Sys, 'id'> })
+                        | ({ __typename: 'Users' } & { sys: Pick<Sys, 'id'> })
+                      >;
+                    }
+                  >
+                >;
+              }
+            >;
+            scientificFacilitatorCollection?: Maybe<
+              Pick<ProjectsScientificFacilitatorCollection, 'total'> & {
+                items: Array<Maybe<{ sys: Pick<Sys, 'id'> }>>;
+              }
+            >;
+          }
+        >
+      >;
+    }
+  >;
 };
 
 export type FetchTeamProjectManagerQueryVariables = Exact<{
@@ -69677,6 +69692,25 @@ export const FetchMilestoneRemindersDocument = {
             name: { kind: 'Name', value: 'MilestonesFilter' },
           },
         },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
       ],
       selectionSet: {
         kind: 'SelectionSet',
@@ -69696,7 +69730,18 @@ export const FetchMilestoneRemindersDocument = {
               {
                 kind: 'Argument',
                 name: { kind: 'Name', value: 'limit' },
-                value: { kind: 'IntValue', value: '100' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'limit' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
               },
               {
                 kind: 'Argument',
@@ -69712,6 +69757,7 @@ export const FetchMilestoneRemindersDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'items' },
@@ -69773,14 +69819,6 @@ export const FetchMilestoneRemindersDocument = {
                                   },
                                 ],
                               },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'firstName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'lastName' },
                             },
                           ],
                         },
@@ -69861,6 +69899,10 @@ export const FetchMilestoneRemindersDocument = {
                               selectionSet: {
                                 kind: 'SelectionSet',
                                 selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'total' },
+                                  },
                                   {
                                     kind: 'Field',
                                     name: { kind: 'Name', value: 'items' },
@@ -69994,6 +70036,25 @@ export const FetchMilestoneReminderProjectsDocument = {
             name: { kind: 'Name', value: 'ProjectsFilter' },
           },
         },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
       ],
       selectionSet: {
         kind: 'SelectionSet',
@@ -70013,12 +70074,24 @@ export const FetchMilestoneReminderProjectsDocument = {
               {
                 kind: 'Argument',
                 name: { kind: 'Name', value: 'limit' },
-                value: { kind: 'IntValue', value: '100' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'limit' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
               },
             ],
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'items' },
@@ -70061,6 +70134,10 @@ export const FetchMilestoneReminderProjectsDocument = {
                           selections: [
                             {
                               kind: 'Field',
+                              name: { kind: 'Name', value: 'total' },
+                            },
+                            {
+                              kind: 'Field',
                               name: { kind: 'Name', value: 'items' },
                               selectionSet: {
                                 kind: 'SelectionSet',
@@ -70092,19 +70169,6 @@ export const FetchMilestoneReminderProjectsDocument = {
                           selections: [
                             {
                               kind: 'Field',
-                              name: { kind: 'Name', value: 'sys' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'id' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
                               name: { kind: 'Name', value: 'aimsCollection' },
                               arguments: [
                                 {
@@ -70116,6 +70180,10 @@ export const FetchMilestoneReminderProjectsDocument = {
                               selectionSet: {
                                 kind: 'SelectionSet',
                                 selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'total' },
+                                  },
                                   {
                                     kind: 'Field',
                                     name: { kind: 'Name', value: 'items' },
@@ -70154,12 +70222,16 @@ export const FetchMilestoneReminderProjectsDocument = {
                           {
                             kind: 'Argument',
                             name: { kind: 'Name', value: 'limit' },
-                            value: { kind: 'IntValue', value: '50' },
+                            value: { kind: 'IntValue', value: '100' },
                           },
                         ],
                         selectionSet: {
                           kind: 'SelectionSet',
                           selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'total' },
+                            },
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'items' },
@@ -70279,6 +70351,10 @@ export const FetchMilestoneReminderProjectsDocument = {
                         selectionSet: {
                           kind: 'SelectionSet',
                           selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'total' },
+                            },
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'items' },
