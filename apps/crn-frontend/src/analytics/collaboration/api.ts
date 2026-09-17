@@ -8,6 +8,7 @@ import {
   SortSharingPrelimFindings,
   SortTeamCollaboration,
   SortUserCollaboration,
+  TeamCollaborationOpensearchDocument,
   TeamCollaborationPerformance,
   TeamCollaborationResponse,
   TimeRangeOption,
@@ -305,6 +306,37 @@ export const getTeamCollaboration = (
     outputType,
     sort: teamCollaborationOpensearchSort[sort],
   });
+};
+
+export type TeamCoProductionOptions = {
+  teamId: string;
+};
+
+export type TeamCoProduction = {
+  coProducedArticles?: number;
+};
+
+const TEAM_CO_PRODUCTION_TIME_RANGE: TimeRangeOption = 'all';
+const TEAM_CO_PRODUCTION_OUTPUT_TYPE: OutputTypeOption = 'all';
+
+export const getTeamCoProduction = async (
+  client: OpensearchClient<TeamCollaborationOpensearchDocument>,
+  { teamId }: TeamCoProductionOptions,
+): Promise<TeamCoProduction> => {
+  const { items } = await client.search({
+    searchTags: [],
+    searchScope: 'flat',
+    sort: [],
+    currentPage: 0,
+    pageSize: 1,
+    timeRange: TEAM_CO_PRODUCTION_TIME_RANGE,
+    outputType: TEAM_CO_PRODUCTION_OUTPUT_TYPE,
+    teamId,
+  });
+
+  const document = items[0];
+
+  return { coProducedArticles: document?.Article };
 };
 
 export const getTeamCollaborationPerformance = async (

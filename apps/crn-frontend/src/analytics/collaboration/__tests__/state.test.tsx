@@ -8,6 +8,7 @@ import { useAnalyticsOpensearch } from '../../../hooks/opensearch';
 import {
   getPreliminaryDataSharing,
   getTeamCollaboration,
+  getTeamCoProduction,
   getUserCollaboration,
 } from '../api';
 import {
@@ -15,6 +16,7 @@ import {
   useAnalyticsSharingPrelimFindings,
   useAnalyticsTeamCollaboration,
   useAnalyticsUserCollaboration,
+  useTeamCoProduction,
 } from '../state';
 
 jest.mock('../api');
@@ -192,6 +194,56 @@ describe('Error rejections propagate to the error boundary', () => {
     );
 
     await waitFor(() => expect(getByText('errored')).toBeInTheDocument());
+    consoleErrorSpy.mockRestore();
+  });
+});
+
+describe('useTeamCoProduction', () => {
+  const mockGetTeamCoProduction = getTeamCoProduction as jest.MockedFunction<
+    typeof getTeamCoProduction
+  >;
+
+  it('Should return the team co-production figure', async () => {
+    mockGetTeamCoProduction.mockResolvedValue({ coProducedArticles: 4 });
+
+    const { result } = renderStateHook(() =>
+      useTeamCoProduction({ teamId: 'team-id-1' }),
+    );
+
+    await waitFor(() =>
+      expect(result.current).toEqual({ coProducedArticles: 4 }),
+    );
+    expect(mockGetTeamCoProduction).toHaveBeenCalledWith(expect.anything(), {
+      teamId: 'team-id-1',
+    });
+  });
+
+  it('Should surface a fetch failure to an error boundary', async () => {
+    const consoleErrorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    mockGetTeamCoProduction.mockRejectedValue(new Error('opensearch down'));
+
+    const queryClient = createTestQueryClient();
+    const Hook = () => {
+      useTeamCoProduction({ teamId: 'team-id-1' });
+      return null;
+    };
+    render(
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <Suspense fallback="loading">
+            <Auth0Provider user={{ id: 'user-id' }}>
+              <WhenReady>
+                <Hook />
+              </WhenReady>
+            </Auth0Provider>
+          </Suspense>
+        </QueryClientProvider>
+      </ErrorBoundary>,
+    );
+
+    await waitFor(() => expect(document.body).toHaveTextContent('errored'));
     consoleErrorSpy.mockRestore();
   });
 });
