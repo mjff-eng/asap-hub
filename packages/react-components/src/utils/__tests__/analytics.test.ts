@@ -104,3 +104,48 @@ describe('getPerformanceMoodLabel', () => {
     );
   });
 });
+
+describe('caller-supplied mood bands', () => {
+  const ticketBands = { outstandingMin: 81, adequateMin: 50 };
+
+  it('puts exactly 80 in the middle band, not the top one', () => {
+    expect(getPerformanceMoodIcon(80, false, ticketBands)).toBe(
+      neutralFaceIcon,
+    );
+  });
+
+  it('puts exactly 50 in the middle band, not the bottom one', () => {
+    expect(getPerformanceMoodIcon(50, false, ticketBands)).toBe(
+      neutralFaceIcon,
+    );
+  });
+
+  it('puts 81 in the top band and 49 in the bottom band', () => {
+    expect(getPerformanceMoodIcon(81, false, ticketBands)).toBe(happyFaceIcon);
+    expect(getPerformanceMoodIcon(49, false, ticketBands)).toBe(sadFaceIcon);
+  });
+
+  it('agrees between icon and label at 85 under the ticket bands', () => {
+    expect(getPerformanceMoodIcon(85, false, ticketBands)).toBe(happyFaceIcon);
+    expect(getPerformanceMoodLabel(85, false, ticketBands)).toBe(
+      'Your team is doing an outstanding job! Keep up the good work!',
+    );
+  });
+
+  it('leaves the default cutoffs untouched at their exact boundaries', () => {
+    // 90 and 80 are the current cutoffs — an operator change would move these
+    // while every interior value still passed.
+    expect(getPerformanceMoodIcon(95)).toBe(happyFaceIcon);
+    expect(getPerformanceMoodIcon(90)).toBe(happyFaceIcon);
+    expect(getPerformanceMoodIcon(85)).toBe(neutralFaceIcon);
+    expect(getPerformanceMoodIcon(80)).toBe(neutralFaceIcon);
+    expect(getPerformanceMoodIcon(50)).toBe(sadFaceIcon);
+
+    expect(getPerformanceMoodLabel(90)).toBe(
+      'Your team is doing an outstanding job! Keep up the good work!',
+    );
+    expect(getPerformanceMoodLabel(80)).toBe(
+      'Your team is doing an adequate job for this metric.',
+    );
+  });
+});

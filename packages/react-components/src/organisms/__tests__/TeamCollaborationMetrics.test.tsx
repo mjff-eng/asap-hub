@@ -16,7 +16,12 @@ describe('TeamCollaborationMetrics', () => {
     expect(
       screen.getByText('Within Team Co-Production of Research Outputs'),
     ).toBeInTheDocument();
-    expect(getPerformanceMoodIcon).toHaveBeenCalledWith(62, false);
-    expect(getPerformanceMoodLabel).toHaveBeenCalledWith(62, false);
+    const ticketBands = { outstandingMin: 81, adequateMin: 50 };
+    expect(getPerformanceMoodIcon).toHaveBeenCalledWith(62, false, ticketBands);
+    expect(getPerformanceMoodLabel).toHaveBeenCalledWith(
+      62,
+      false,
+      ticketBands,
+    );
   });
 });

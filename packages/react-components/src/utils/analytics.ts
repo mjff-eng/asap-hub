@@ -45,17 +45,28 @@ export const getPerformanceText = (
   return 'Above';
 };
 
+export type MoodBands = {
+  outstandingMin: number;
+  adequateMin: number;
+};
+
+export const defaultMoodBands: MoodBands = {
+  outstandingMin: 90,
+  adequateMin: 80,
+};
+
 export const getPerformanceMoodIcon = (
   percentage: number | null,
   isLimitedData: boolean = false,
+  { outstandingMin, adequateMin }: MoodBands = defaultMoodBands,
 ) => {
   if (isLimitedData || percentage === null) {
     return informationInverseIcon;
   }
-  if (percentage >= 90) {
+  if (percentage >= outstandingMin) {
     return happyFaceIcon;
   }
-  if (percentage >= 80) {
+  if (percentage >= adequateMin) {
     return neutralFaceIcon;
   }
   return sadFaceIcon;
@@ -64,14 +75,15 @@ export const getPerformanceMoodIcon = (
 export const getPerformanceMoodLabel = (
   percentage: number | null,
   isLimitedData: boolean = false,
+  { outstandingMin, adequateMin }: MoodBands = defaultMoodBands,
 ) => {
   if (isLimitedData || percentage === null) {
     return 'There is limited available data to calculate this metric at this time.';
   }
-  if (percentage >= 90) {
+  if (percentage >= outstandingMin) {
     return 'Your team is doing an outstanding job! Keep up the good work!';
   }
-  if (percentage >= 80) {
+  if (percentage >= adequateMin) {
     return 'Your team is doing an adequate job for this metric.';
   }
   return 'We encourage your team to work to improve.';

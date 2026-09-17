@@ -23,13 +23,43 @@ describe('TeamEngagementMetrics', () => {
     expect(screen.getByText('Trainee Presentations')).toBeInTheDocument();
     expect(screen.getByText('Meeting Rep Attendance')).toBeInTheDocument();
 
-    expect(getPerformanceMoodIcon).toHaveBeenNthCalledWith(1, 95, false);
-    expect(getPerformanceMoodIcon).toHaveBeenNthCalledWith(2, 84, false);
-    expect(getPerformanceMoodIcon).toHaveBeenNthCalledWith(3, null, true);
+    expect(getPerformanceMoodIcon).toHaveBeenNthCalledWith(
+      1,
+      95,
+      false,
+      undefined,
+    );
+    expect(getPerformanceMoodIcon).toHaveBeenNthCalledWith(
+      2,
+      84,
+      false,
+      undefined,
+    );
+    expect(getPerformanceMoodIcon).toHaveBeenNthCalledWith(
+      3,
+      null,
+      true,
+      undefined,
+    );
 
-    expect(getPerformanceMoodLabel).toHaveBeenNthCalledWith(1, 95, false);
-    expect(getPerformanceMoodLabel).toHaveBeenNthCalledWith(2, 84, false);
-    expect(getPerformanceMoodLabel).toHaveBeenNthCalledWith(3, null, true);
+    expect(getPerformanceMoodLabel).toHaveBeenNthCalledWith(
+      1,
+      95,
+      false,
+      undefined,
+    );
+    expect(getPerformanceMoodLabel).toHaveBeenNthCalledWith(
+      2,
+      84,
+      false,
+      undefined,
+    );
+    expect(getPerformanceMoodLabel).toHaveBeenNthCalledWith(
+      3,
+      null,
+      true,
+      undefined,
+    );
   });
 
   it('handles limited data values', () => {
@@ -41,7 +71,15 @@ describe('TeamEngagementMetrics', () => {
       />,
     );
 
-    expect(getPerformanceMoodIcon).toHaveBeenLastCalledWith(null, true);
-    expect(getPerformanceMoodLabel).toHaveBeenLastCalledWith(null, true);
+    expect(getPerformanceMoodIcon).toHaveBeenLastCalledWith(
+      null,
+      true,
+      undefined,
+    );
+    expect(getPerformanceMoodLabel).toHaveBeenLastCalledWith(
+      null,
+      true,
+      undefined,
+    );
   });
 });
