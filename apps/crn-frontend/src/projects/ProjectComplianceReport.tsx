@@ -6,7 +6,11 @@ import {
   NotFoundPage,
   usePushFromHere,
 } from '@asap-hub/react-components';
-import { projectRouteByType, projects } from '@asap-hub/routing';
+import {
+  projectListRouteByType,
+  projectRouteByType,
+  projects,
+} from '@asap-hub/routing';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams, useLocation } from 'react-router';
 import { useManuscriptToast } from '../network/teams/useManuscriptToast';
@@ -88,11 +92,7 @@ const ProjectComplianceReport: React.FC<ProjectComplianceReportProps> = ({
       ? [
           {
             label: `${projectDetail.projectType}s`,
-            href: {
-              'Discovery Project': projects({}).discoveryProjects({}).$,
-              'Resource Project': projects({}).resourceProjects({}).$,
-              'Trainee Project': projects({}).traineeProjects({}).$,
-            }[projectDetail.projectType],
+            href: projectListRouteByType[projectDetail.projectType]().$,
           },
           {
             label: projectDetail.title,
