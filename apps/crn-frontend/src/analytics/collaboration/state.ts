@@ -18,6 +18,7 @@ import {
   LimitedTimeRangeOption,
   UserCollaborationResponse,
   TeamCollaborationResponse,
+  TeamCollaborationOpensearchDocument,
 } from '@asap-hub/model';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { AnalyticsSearchOptionsWithFiltering } from '../utils/analytics-options';
@@ -29,7 +30,10 @@ import {
   getTeamCollaborationPerformance,
   getUserCollaborationPerformance,
   getPreliminaryDataSharing,
+  getTeamCoProduction,
   PreliminaryDataSharingSearchOptions,
+  TeamCoProduction,
+  TeamCoProductionOptions,
 } from './api';
 
 export const userCollaborationQueryKeys = {
@@ -50,6 +54,12 @@ export const teamCollaborationQueryKeys = {
       ...teamCollaborationQueryKeys.lists(),
       normalizeListOptions(options),
     ] as const,
+};
+
+export const teamCoProductionQueryKeys = {
+  all: ['analytics-team-co-production'] as const,
+  detail: (teamId: string) =>
+    [...teamCoProductionQueryKeys.all, teamId] as const,
 };
 
 export const prelimDataSharingQueryKeys = {
@@ -95,6 +105,21 @@ export const useAnalyticsTeamCollaboration = (
         () => getTeamCollaboration(opensearchClient, options),
         { total: 0, items: [] },
       ),
+  }).data;
+};
+
+export const useTeamCoProduction = (
+  options: TeamCoProductionOptions,
+): TeamCoProduction => {
+  const opensearchClient =
+    useAnalyticsOpensearch<TeamCollaborationOpensearchDocument>(
+      'team-collaboration',
+    ).client;
+
+  return useSuspenseQuery({
+    queryKey: teamCoProductionQueryKeys.detail(options.teamId),
+    queryFn: (): Promise<TeamCoProduction> =>
+      getTeamCoProduction(opensearchClient, options),
   }).data;
 };
 

@@ -236,7 +236,7 @@ const getTeamCollaborationAcrossData = (
   );
 };
 
-const getTeamCollaborationWithinData = (
+const countOutputsByDocumentType = (
   outputs: {
     documentType: TeamOutputDocumentType;
   }[],
@@ -293,9 +293,12 @@ export const getTeamCollaborationItems = (
       cleanArray(outputsData?.filter((output) => output.hasMultipleTeams)),
     );
     outputsCoProducedAcross.byTeam.sort((a, b) => a.name.localeCompare(b.name));
-    const outputsCoProducedWithin = getTeamCollaborationWithinData(
+    const outputsCoProducedWithin = countOutputsByDocumentType(
       cleanArray(outputsData?.filter((output) => output.hasMultipleLabs)),
     );
+    // Counted from the same filtered set as the co-produced numbers above, so a
+    // consumer can take a ratio from one document instead of joining indices.
+    const totalOutputs = countOutputsByDocumentType(cleanArray(outputsData));
 
     return {
       id: team.sys.id,
@@ -303,6 +306,7 @@ export const getTeamCollaborationItems = (
       inactiveSince: team.inactiveSince ?? undefined,
       outputsCoProducedAcross,
       outputsCoProducedWithin,
+      totalOutputs,
     };
   });
 
