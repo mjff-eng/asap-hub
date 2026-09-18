@@ -8,6 +8,7 @@ import {
   HubResearchOutputsCard,
   TeamAward,
   TeamAwardMetrics,
+  TeamEngagementMetrics,
   TeamLeadershipMetrics,
 } from '../organisms';
 
@@ -36,12 +37,14 @@ type TeamMetricsPageProps = {
   readonly hubResearchOutputRows: HubResearchOutputRow[];
   readonly leadershipMetrics: ComponentProps<typeof TeamLeadershipMetrics>;
   readonly awards: TeamAward[];
+  readonly engagementMetrics: ComponentProps<typeof TeamEngagementMetrics>;
 };
 
 const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
   hubResearchOutputRows,
   leadershipMetrics,
   awards,
+  engagementMetrics,
 }) => (
   <div css={containerStyles}>
     <Headline3 noMargin>Metrics</Headline3>
@@ -58,6 +61,9 @@ const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
 
     <MetricsSubtitle>Awards</MetricsSubtitle>
     <TeamAwardMetrics awards={awards} />
+
+    <MetricsSubtitle>Engagement</MetricsSubtitle>
+    <TeamEngagementMetrics {...engagementMetrics} />
   </div>
 );
 

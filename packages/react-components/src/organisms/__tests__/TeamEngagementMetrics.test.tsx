@@ -1,47 +1,68 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 
 import TeamEngagementMetrics from '../TeamEngagementMetrics';
-import { getPerformanceMoodIcon, getPerformanceMoodLabel } from '../../utils';
 
-jest.mock('../../utils', () => ({
-  ...jest.requireActual('../../utils'),
-  getPerformanceMoodIcon: jest.fn(() => 'mood-icon'),
-  getPerformanceMoodLabel: jest.fn(() => 'mood-label'),
-}));
+const outstanding = /doing an outstanding job/i;
+const adequate = /doing an adequate job/i;
+const improve = /encourage your team to work to improve/i;
+const limited = /limited available data/i;
+
+const renderCard = (
+  props: Partial<React.ComponentProps<typeof TeamEngagementMetrics>> = {},
+) =>
+  render(
+    <TeamEngagementMetrics
+      speakerDiversity={95}
+      traineePresentations={84}
+      meetingRepAttendance={{ percentage: 75, limitedData: false }}
+      {...props}
+    />,
+  );
+
+const statusOf = (metric: string) =>
+  within(screen.getByText(metric).closest('article')!).getByRole('button', {
+    name: (name) => name !== `Expand ${metric}`,
+  });
 
 describe('TeamEngagementMetrics', () => {
-  it('derives the mood icon and label from each metric percentage', () => {
-    render(
-      <TeamEngagementMetrics
-        speakerDiversity={95}
-        traineePresentations={84}
-        meetingRepAttendance={{ percentage: null, limitedData: true }}
-      />,
-    );
+  it('renders the three engagement metrics', () => {
+    renderCard();
 
     expect(screen.getByText('Speaker Diversity')).toBeInTheDocument();
     expect(screen.getByText('Trainee Presentations')).toBeInTheDocument();
     expect(screen.getByText('Meeting Rep Attendance')).toBeInTheDocument();
-
-    expect(getPerformanceMoodIcon).toHaveBeenNthCalledWith(1, 95, false);
-    expect(getPerformanceMoodIcon).toHaveBeenNthCalledWith(2, 84, false);
-    expect(getPerformanceMoodIcon).toHaveBeenNthCalledWith(3, null, true);
-
-    expect(getPerformanceMoodLabel).toHaveBeenNthCalledWith(1, 95, false);
-    expect(getPerformanceMoodLabel).toHaveBeenNthCalledWith(2, 84, false);
-    expect(getPerformanceMoodLabel).toHaveBeenNthCalledWith(3, null, true);
   });
 
-  it('handles limited data values', () => {
-    render(
-      <TeamEngagementMetrics
-        speakerDiversity={95}
-        traineePresentations={84}
-        meetingRepAttendance={{ percentage: null, limitedData: true }}
-      />,
-    );
+  it.each`
+    percentage | status
+    ${95}      | ${outstanding}
+    ${90}      | ${outstanding}
+    ${89}      | ${adequate}
+    ${80}      | ${adequate}
+    ${79}      | ${improve}
+    ${0}       | ${improve}
+  `('grades $percentage% as $status', ({ percentage, status }) => {
+    renderCard({
+      speakerDiversity: percentage,
+      traineePresentations: percentage,
+      meetingRepAttendance: { percentage, limitedData: false },
+    });
 
-    expect(getPerformanceMoodIcon).toHaveBeenLastCalledWith(null, true);
-    expect(getPerformanceMoodLabel).toHaveBeenLastCalledWith(null, true);
+    expect(statusOf('Speaker Diversity')).toHaveAccessibleName(status);
+    expect(statusOf('Trainee Presentations')).toHaveAccessibleName(status);
+    expect(statusOf('Meeting Rep Attendance')).toHaveAccessibleName(status);
+  });
+
+  it('shows limited data when a speaker percentage is missing', () => {
+    renderCard({ speakerDiversity: null, traineePresentations: null });
+
+    expect(statusOf('Speaker Diversity')).toHaveAccessibleName(limited);
+    expect(statusOf('Trainee Presentations')).toHaveAccessibleName(limited);
+  });
+
+  it('shows limited data when the attendance record says so', () => {
+    renderCard({ meetingRepAttendance: { percentage: 90, limitedData: true } });
+
+    expect(statusOf('Meeting Rep Attendance')).toHaveAccessibleName(limited);
   });
 });

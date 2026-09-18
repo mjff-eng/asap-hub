@@ -25,6 +25,11 @@ describe('TeamMetricsPage', () => {
         metricDefinition: 'Recognition for Network Spotlight awards.',
       },
     ],
+    engagementMetrics: {
+      speakerDiversity: 95,
+      traineePresentations: 84,
+      meetingRepAttendance: { percentage: null, limitedData: true },
+    },
   };
 
   it('renders the heading and the introduction', () => {
@@ -91,5 +96,27 @@ describe('TeamMetricsPage', () => {
       .getByText('Network Spotlight')
       .closest('article');
     expect(within(spotlightRow!).getByText('N')).toBeVisible();
+  });
+
+  it('renders the engagement section with a status per metric', () => {
+    render(<TeamMetricsPage {...props} />);
+
+    expect(screen.getByText('Engagement')).toBeVisible();
+    const speakerRow = screen.getByText('Speaker Diversity').closest('article');
+    expect(
+      within(speakerRow!).getByLabelText(/doing an outstanding job/i),
+    ).toBeVisible();
+    const traineeRow = screen
+      .getByText('Trainee Presentations')
+      .closest('article');
+    expect(
+      within(traineeRow!).getByLabelText(/doing an adequate job/i),
+    ).toBeVisible();
+    const attendanceRow = screen
+      .getByText('Meeting Rep Attendance')
+      .closest('article');
+    expect(
+      within(attendanceRow!).getByLabelText(/limited available data/i),
+    ).toBeVisible();
   });
 });
