@@ -22,7 +22,10 @@ import {
   getUploadPresentationReminder,
   getVideoEventUpdatedReminder,
 } from '../../../fixtures/reminders.fixtures';
-import { FetchRemindersQuery } from '@asap-hub/contentful';
+import {
+  FetchRemindersQuery,
+  FetchRemindersUserQuery,
+} from '@asap-hub/contentful';
 
 describe('Reminders data provider', () => {
   const contentfulGraphqlClientMock = getContentfulGraphqlClientMock();
@@ -61,7 +64,7 @@ describe('Reminders data provider', () => {
     const setContentfulMock = (
       systemTime: string,
       users:
-        | FetchRemindersQuery['users']
+        | FetchRemindersUserQuery['users']
         | null = getContentfulReminderUsersContent(),
       startDate: string = '2023-01-01T08:00:00Z',
       endDate: string = '2023-01-01T10:00:00Z',
@@ -80,6 +83,9 @@ describe('Reminders data provider', () => {
         eventsCollection: {
           items: [eventMockResponse],
         },
+      });
+
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
         users,
       });
 
