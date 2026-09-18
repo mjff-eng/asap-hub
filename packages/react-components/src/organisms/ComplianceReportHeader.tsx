@@ -40,12 +40,14 @@ const ComplianceReportHeader: React.FC<ComplianceReportHeaderProps> = ({
 }) => (
   <header css={headerStyles}>
     <div css={contentStyles}>
-      <div css={breadcrumbsStyles}>
-        <Breadcrumbs
-          homeHref={dashboard({}).$}
-          items={[...breadcrumbs, { label: title }]}
-        />
-      </div>
+      {breadcrumbs.length > 0 && (
+        <div css={breadcrumbsStyles}>
+          <Breadcrumbs
+            homeHref={dashboard({}).$}
+            items={[...breadcrumbs, { label: title }]}
+          />
+        </div>
+      )}
       <Display styleAsHeading={2}>{title}</Display>
       <div>
         <Paragraph noMargin accent="lead">

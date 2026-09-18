@@ -3,7 +3,11 @@ import {
   ProjectDetail,
   ProjectMember,
 } from '@asap-hub/model';
-import { dashboard, projectRouteByType, projects } from '@asap-hub/routing';
+import {
+  dashboard,
+  projectListRouteByType,
+  projectRouteByType,
+} from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { Display, Pill, Link, CopyButton, TabLink } from '../atoms';
 import { lead } from '../colors';
@@ -190,11 +194,7 @@ const ProjectDetailHeader = (project: ProjectDetailHeaderProps) => {
 
   const route = projectRouteByType[project.projectType](project.id);
 
-  const projectListHref = {
-    'Discovery Project': projects({}).discoveryProjects({}).$,
-    'Resource Project': projects({}).resourceProjects({}).$,
-    'Trainee Project': projects({}).traineeProjects({}).$,
-  }[project.projectType];
+  const projectListHref = projectListRouteByType[project.projectType]().$;
 
   const membersWithHref =
     'members' in project ? project.members?.map(withMemberHref) : undefined;

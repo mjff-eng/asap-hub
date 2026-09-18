@@ -124,6 +124,7 @@ const renderPage = async (
   user: ComponentProps<typeof Auth0Provider>['user'] = {},
   state?: unknown,
   projectType: 'discovery' | 'resource' | 'trainee' = 'discovery',
+  withProjectDetail = true,
 ) => {
   const workspaceRoutes = getRoutes(projectType);
   const createCompliancePath = workspaceRoutes.createComplianceReport({
@@ -134,16 +135,21 @@ const renderPage = async (
   const queryClient = createTestQueryClient();
   // Seed the project detail cache so the success flow's invalidation of the
   // project can be observed.
-  queryClient.setQueryData(projectQueryKeys.detail(projectId), {
-    id: projectId,
-    title: 'The Project',
-    projectType:
-      projectType === 'resource'
-        ? 'Resource Project'
-        : projectType === 'trainee'
-          ? 'Trainee Project'
-          : 'Discovery Project',
-  } as ProjectDetail);
+  queryClient.setQueryData(
+    projectQueryKeys.detail(projectId),
+    withProjectDetail
+      ? ({
+          id: projectId,
+          title: 'The Project',
+          projectType:
+            projectType === 'resource'
+              ? 'Resource Project'
+              : projectType === 'trainee'
+                ? 'Trainee Project'
+                : 'Discovery Project',
+        } as ProjectDetail)
+      : null,
+  );
 
   const result = render(
     <QueryClientProvider client={queryClient}>
@@ -195,6 +201,14 @@ it('renders the compliance report form page for the manuscript', async () => {
     'Share the compliance report associated with this manuscript.',
   );
   expect(container).toHaveTextContent('Title of Manuscript');
+});
+
+it('renders without breadcrumbs when the project detail is unavailable', async () => {
+  await renderPage({}, undefined, 'discovery', false);
+
+  expect(
+    screen.queryByRole('navigation', { name: 'breadcrumbs' }),
+  ).not.toBeInTheDocument();
 });
 
 it('redirects back to the project workspace when state.fromButton is missing', async () => {

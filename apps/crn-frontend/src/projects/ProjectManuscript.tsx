@@ -7,7 +7,11 @@ import {
 } from '@asap-hub/model';
 import { useCurrentUserCRN } from '@asap-hub/react-context';
 import { ManuscriptHeader, usePushFromHere } from '@asap-hub/react-components';
-import { projectRouteByType, projects } from '@asap-hub/routing';
+import {
+  projectListRouteByType,
+  projectRouteByType,
+  projects,
+} from '@asap-hub/routing';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import {
@@ -226,11 +230,7 @@ const ProjectManuscript: React.FC<ProjectManuscriptProps> = ({
     ? [
         {
           label: `${projectDetail.projectType}s`,
-          href: {
-            'Discovery Project': projects({}).discoveryProjects({}).$,
-            'Resource Project': projects({}).resourceProjects({}).$,
-            'Trainee Project': projects({}).traineeProjects({}).$,
-          }[projectDetail.projectType],
+          href: projectListRouteByType[projectDetail.projectType]().$,
         },
         {
           label: projectDetail.title,
