@@ -69,6 +69,7 @@ const options = {
   tags: [],
   timeRange: 'all',
   sort: 'team_asc',
+  teamId: 'team-id-1',
 } as unknown as Parameters<typeof useAnalyticsUserCollaboration>[0];
 
 beforeEach(() => {
@@ -169,6 +170,7 @@ describe('Error rejections propagate to the error boundary', () => {
     ['user', getUserCollaboration, useAnalyticsUserCollaboration],
     ['team', getTeamCollaboration, useAnalyticsTeamCollaboration],
     ['prelim', getPreliminaryDataSharing, useAnalyticsSharingPrelimFindings],
+    ['co-production', getTeamCoProduction, useTeamCoProduction],
   ])('re-throws Error rejections for %s', async (_name, getter, hook) => {
     const consoleErrorSpy = jest
       .spyOn(console, 'error')
@@ -216,34 +218,5 @@ describe('useTeamCoProduction', () => {
     expect(mockGetTeamCoProduction).toHaveBeenCalledWith(expect.anything(), {
       teamId: 'team-id-1',
     });
-  });
-
-  it('Should surface a fetch failure to an error boundary', async () => {
-    const consoleErrorSpy = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    mockGetTeamCoProduction.mockRejectedValue(new Error('opensearch down'));
-
-    const queryClient = createTestQueryClient();
-    const Hook = () => {
-      useTeamCoProduction({ teamId: 'team-id-1' });
-      return null;
-    };
-    render(
-      <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
-          <Suspense fallback="loading">
-            <Auth0Provider user={{ id: 'user-id' }}>
-              <WhenReady>
-                <Hook />
-              </WhenReady>
-            </Auth0Provider>
-          </Suspense>
-        </QueryClientProvider>
-      </ErrorBoundary>,
-    );
-
-    await waitFor(() => expect(document.body).toHaveTextContent('errored'));
-    consoleErrorSpy.mockRestore();
   });
 });
