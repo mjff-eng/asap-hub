@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import { dashboard } from '@asap-hub/routing';
 
 import ManuscriptHeader from '../ManuscriptHeader';
 
@@ -37,3 +38,38 @@ it('renders the manuscript header content when editing a manuscript', () => {
     ),
   ).toBeInTheDocument();
 });
+
+it.each`
+  props                           | pageTitle
+  ${{}}                           | ${'Submit New Manuscript'}
+  ${{ resubmitManuscript: true }} | ${'Submit Revised Manuscript'}
+  ${{ isEditMode: true }}         | ${'Edit Manuscript'}
+`(
+  'renders breadcrumbs ending with the current page for "$pageTitle"',
+  ({ props, pageTitle }) => {
+    render(
+      <ManuscriptHeader
+        {...props}
+        breadcrumbs={[
+          { label: 'Discovery Projects', href: '/projects/discovery' },
+          { label: 'Alpha-Synuclein Origins', href: '/projects/discovery/1' },
+        ]}
+      />,
+    );
+
+    const breadcrumbs = within(
+      screen.getByRole('navigation', { name: 'breadcrumbs' }),
+    );
+    expect(breadcrumbs.getByRole('link', { name: 'Home' })).toHaveAttribute(
+      'href',
+      dashboard({}).$,
+    );
+    expect(
+      breadcrumbs.getByRole('link', { name: 'Discovery Projects' }),
+    ).toHaveAttribute('href', '/projects/discovery');
+    expect(
+      breadcrumbs.getByRole('link', { name: 'Alpha-Synuclein Origins' }),
+    ).toHaveAttribute('href', '/projects/discovery/1');
+    expect(breadcrumbs.getByText(pageTitle)).toBeVisible();
+  },
+);

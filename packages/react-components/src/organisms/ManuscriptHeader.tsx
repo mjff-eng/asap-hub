@@ -1,10 +1,12 @@
 import React from 'react';
 import { css } from '@emotion/react';
+import { dashboard } from '@asap-hub/routing';
 
 import { Display, Paragraph } from '../atoms';
 import { rem } from '../pixels';
 import { paper, steel } from '../colors';
 import { contentSidePaddingWithNavigation } from '../layout';
+import { Breadcrumbs, BreadcrumbItem } from '../molecules';
 
 const headerStyles = css({
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(60)}`,
@@ -23,14 +25,20 @@ const contentStyles = css({
   justifyContent: 'center',
 });
 
+const breadcrumbsStyles = css({
+  marginBottom: rem(24),
+});
+
 type ManuscriptHeaderProps = {
   resubmitManuscript?: boolean;
   isEditMode?: boolean;
+  breadcrumbs?: ReadonlyArray<BreadcrumbItem>;
 };
 
 const ManuscriptHeader: React.FC<ManuscriptHeaderProps> = ({
   resubmitManuscript = false,
   isEditMode = false,
+  breadcrumbs = [],
 }) => {
   const title = isEditMode
     ? 'Edit Manuscript'
@@ -49,6 +57,14 @@ const ManuscriptHeader: React.FC<ManuscriptHeaderProps> = ({
   return (
     <header css={headerStyles}>
       <div css={contentStyles}>
+        {breadcrumbs.length > 0 && (
+          <div css={breadcrumbsStyles}>
+            <Breadcrumbs
+              homeHref={dashboard({}).$}
+              items={[...breadcrumbs, { label: title }]}
+            />
+          </div>
+        )}
         <Display styleAsHeading={2}>{title}</Display>
         <div>
           <Paragraph noMargin accent="lead">
