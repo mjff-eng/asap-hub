@@ -9454,7 +9454,7 @@ const RAW_RUNTIME_STATE =
     ],\
     [\
       "qs",\
-      "npm:6.14.2"\
+      "npm:6.16.0"\
     ],\
     [\
       "querystring",\
@@ -12748,7 +12748,7 @@ const RAW_RUNTIME_STATE =
             "npm:1.0.1"\
           ]],\
           ["pirates", "npm:4.0.7"],\
-          ["qs", "npm:6.14.2"],\
+          ["qs", "npm:6.16.0"],\
           ["react", "npm:18.3.1"],\
           ["react-app-polyfill", "npm:3.0.0"],\
           ["react-dom", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:18.3.1"],\
@@ -14348,7 +14348,7 @@ const RAW_RUNTIME_STATE =
           ["@babel/runtime-corejs3", "npm:7.28.6"],\
           ["@types/qs", "npm:6.14.0"],\
           ["@types/react-router", null],\
-          ["qs", "npm:6.14.2"],\
+          ["qs", "npm:6.16.0"],\
           ["react-router", "virtual:3016480270f08d8eae4681cf19c46f958ad5ec604547263cfa73ce1c2d986d52bbb3c77ab8b499f742827046a7fed09dd2f1a3d66e70b4f6c98f3e8d7f130005#npm:7.13.0"],\
           ["typesafe-routes", "virtual:0551f2edc662ec587badaa52ce19b9a1abad4213b341cfec5b3dfd13fa88f736714a50118e682d218ce99204fd998fc955d728379e550bb39cd489f7b7b7375c#npm:10.0.6"],\
           ["typescript", "patch:typescript@npm%3A4.9.5#optional!builtin<compat/typescript>::version=4.9.5&hash=289587"]\
@@ -14367,7 +14367,7 @@ const RAW_RUNTIME_STATE =
           ["@babel/runtime-corejs3", "npm:7.28.6"],\
           ["@types/qs", "npm:6.14.0"],\
           ["@types/react-router", null],\
-          ["qs", "npm:6.14.2"],\
+          ["qs", "npm:6.16.0"],\
           ["react-router", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:7.13.0"],\
           ["typesafe-routes", "virtual:0551f2edc662ec587badaa52ce19b9a1abad4213b341cfec5b3dfd13fa88f736714a50118e682d218ce99204fd998fc955d728379e550bb39cd489f7b7b7375c#npm:10.0.6"],\
           ["typescript", "patch:typescript@npm%3A4.9.5#optional!builtin<compat/typescript>::version=4.9.5&hash=289587"]\
@@ -14386,7 +14386,7 @@ const RAW_RUNTIME_STATE =
           ["@babel/runtime-corejs3", "npm:7.28.6"],\
           ["@types/qs", "npm:6.14.0"],\
           ["@types/react-router", null],\
-          ["qs", "npm:6.14.2"],\
+          ["qs", "npm:6.16.0"],\
           ["react-router", "virtual:b09dff234a8d41526156a9c113e5b12bcc69471aba634580b1e50808d22ba1c050b6af429d6e7530dd1e40599673c5e0bf8115d5c53448ebd1875cdefe5030cf#npm:7.13.0"],\
           ["typesafe-routes", "virtual:0551f2edc662ec587badaa52ce19b9a1abad4213b341cfec5b3dfd13fa88f736714a50118e682d218ce99204fd998fc955d728379e550bb39cd489f7b7b7375c#npm:10.0.6"],\
           ["typescript", "patch:typescript@npm%3A4.9.5#optional!builtin<compat/typescript>::version=4.9.5&hash=289587"]\
@@ -14404,7 +14404,7 @@ const RAW_RUNTIME_STATE =
           ["@asap-hub/routing", "workspace:packages/routing"],\
           ["@babel/runtime-corejs3", "npm:7.28.6"],\
           ["@types/qs", "npm:6.14.0"],\
-          ["qs", "npm:6.14.2"],\
+          ["qs", "npm:6.16.0"],\
           ["react-router", "virtual:b09dff234a8d41526156a9c113e5b12bcc69471aba634580b1e50808d22ba1c050b6af429d6e7530dd1e40599673c5e0bf8115d5c53448ebd1875cdefe5030cf#npm:7.13.0"],\
           ["typesafe-routes", "virtual:0551f2edc662ec587badaa52ce19b9a1abad4213b341cfec5b3dfd13fa88f736714a50118e682d218ce99204fd998fc955d728379e550bb39cd489f7b7b7375c#npm:10.0.6"],\
           ["typescript", "patch:typescript@npm%3A4.9.5#optional!builtin<compat/typescript>::version=4.9.5&hash=289587"]\
@@ -63430,14 +63430,6 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:6.14.2", {\
-        "packageLocation": "./.yarn/cache/qs-npm-6.14.2-dc981e3564-682933a85b.zip/node_modules/qs/",\
-        "packageDependencies": [\
-          ["qs", "npm:6.14.2"],\
-          ["side-channel", "npm:1.1.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:6.15.2", {\
         "packageLocation": "./.yarn/cache/qs-npm-6.15.2-4fbd3d7cd4-7a934b2dba.zip/node_modules/qs/",\
         "packageDependencies": [\
@@ -63451,6 +63443,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["es-define-property", "npm:1.0.1"],\
           ["qs", "npm:6.15.3"],\
+          ["side-channel", "npm:1.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:6.16.0", {\
+        "packageLocation": "./.yarn/cache/qs-npm-6.16.0-160b61647c-7fbf9c2eb9.zip/node_modules/qs/",\
+        "packageDependencies": [\
+          ["es-define-property", "npm:1.0.1"],\
+          ["qs", "npm:6.16.0"],\
           ["side-channel", "npm:1.1.1"]\
         ],\
         "linkType": "HARD"\
