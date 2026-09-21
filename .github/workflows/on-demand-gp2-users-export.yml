@@ -1,0 +1,87 @@
+name: Export GP2 Users
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment-name:
+        required: true
+        type: choice
+        description: Choose which environment to export from
+        default: Production
+        options:
+          - Branch
+          - Development
+          - Production
+      contentful-environment-id:
+        required: true
+        type: string
+        description: The Contentful environment ID (e.g., master, development, or branch name)
+        default: master
+      format:
+        required: true
+        type: choice
+        description: Output format
+        default: csv
+        options:
+          - csv
+          - json
+      include-hidden:
+        required: true
+        type: boolean
+        description: Include users with the Hidden role
+        default: true
+      include-not-onboarded:
+        required: true
+        type: boolean
+        description: Include users who have not completed onboarding
+        default: true
+
+jobs:
+  export-users:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: ghcr.io/mjff-eng/asap-hub/node-python-sq:d3833b1f3c7b1ab66ac2446cc61175fddedcee9e
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup-environment
+        with:
+          environment-name: ${{ inputs.environment-name }}
+          pr-number: '0'
+      - name: Build
+        run: |
+          yarn install --immutable
+          yarn exec "yarn workspaces foreach -vptR --from '{@asap-hub/model,@asap-hub/server-common,@asap-hub/gp2-server}' run build:babel"
+          yarn build:typecheck
+      - name: Export users
+        run: |
+          yarn workspace @asap-hub/gp2-server export:entity user \
+            --format ${{ inputs.format }} \
+            --filename gp2-users.${{ inputs.format }} \
+            --includeHidden=${{ inputs.include-hidden }} \
+            --includeNotOnboarded=${{ inputs.include-not-onboarded }}
+        env:
+          CONTENTFUL_SPACE_ID: ${{ steps.setup.outputs.gp2-contentful-space-id }}
+          CONTENTFUL_ACCESS_TOKEN: ${{ secrets.GP2_CONTENTFUL_ACCESS_TOKEN }}
+          CONTENTFUL_ENV_ID: ${{ inputs.contentful-environment-id }}
+      - name: Upload export
+        uses: actions/upload-artifact@v4
+        with:
+          name: gp2-users-export-${{ github.run_number }}
+          path: apps/gp2-server/gp2-users.${{ inputs.format }}
+          retention-days: 3
+      - name: Summary
+        run: |
+          echo "## GP2 Users Export Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Download:** artifact \`gp2-users-export-${{ github.run_number }}\` on this run (kept for 3 days, contains personal data)" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ inputs.environment-name }} / ${{ inputs.contentful-environment-id }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Format:** ${{ inputs.format }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Hidden included:** ${{ inputs.include-hidden }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Not onboarded included:** ${{ inputs.include-not-onboarded }}" >> $GITHUB_STEP_SUMMARY
