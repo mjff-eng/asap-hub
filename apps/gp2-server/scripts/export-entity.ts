@@ -21,6 +21,16 @@ import {
   getContentfulRestClientFactory,
 } from '../src/dependencies/clients.dependency';
 
+export type ExportFormat = 'json' | 'csv';
+export const exportFormats: ExportFormat[] = ['json', 'csv'];
+
+export type ExportOptions = {
+  filename?: string;
+  format?: ExportFormat;
+  includeHidden?: boolean;
+  includeNotOnboarded?: boolean;
+};
+
 const isWorkingGroupController = (
   controller:
     | Events
@@ -32,25 +42,56 @@ const isWorkingGroupController = (
     | WorkingGroups,
 ): controller is WorkingGroups => controller instanceof WorkingGroups;
 
+const isUserController = (
+  controller:
+    | Events
+    | ExternalUsers
+    | News
+    | Outputs
+    | Projects
+    | Users
+    | WorkingGroups,
+): controller is Users => controller instanceof Users;
+
 type EntityResponsesGP2 = EntityResponses['gp2'];
+type EntityRecord = EntityResponsesGP2[keyof EntityResponsesGP2];
+
 export const exportEntity = async (
   entity: keyof EntityResponsesGP2,
-  filename?: string,
+  {
+    filename,
+    format = 'json',
+    includeHidden = false,
+    includeNotOnboarded = false,
+  }: ExportOptions = {},
 ): Promise<void> => {
   const controller = getController(entity);
-  const file = await fs.open(filename || `${entity}.json`, 'w');
+  const outputFile = filename || `${entity}.${format}`;
+  const file = await fs.open(outputFile, 'w');
 
   let recordCount = 0;
   let total: number;
-  let records: ListResponse<EntityResponsesGP2[keyof EntityResponsesGP2]>;
+  let records: ListResponse<EntityRecord>;
   let page = 1;
+  const flatRecords: Record<string, unknown>[] = [];
 
-  await file.write('[\n');
+  if (format === 'json') {
+    await file.write('[\n');
+  }
 
   const take = 10;
   do {
     if (isWorkingGroupController(controller)) {
       records = await controller.fetch();
+    } else if (isUserController(controller)) {
+      records = await controller.fetch({
+        take,
+        skip: (page - 1) * take,
+        filter: {
+          onlyOnboarded: !includeNotOnboarded,
+          hidden: !includeHidden,
+        },
+      });
     } else {
       records = await controller.fetch({
         take,
@@ -60,25 +101,121 @@ export const exportEntity = async (
 
     total = records.total;
 
-    if (page != 1 && records.items.length) {
-      await file.write(',\n');
-    }
+    if (format === 'json') {
+      if (page != 1 && records.items.length) {
+        await file.write(',\n');
+      }
 
-    await file.write(
-      JSON.stringify(
-        records.items.map((record) => transformRecords(record, entity)),
-        null,
-        2,
-      ).slice(1, -1),
-    );
+      await file.write(
+        JSON.stringify(
+          records.items.map((record) => transformRecords(record, entity)),
+          null,
+          2,
+        ).slice(1, -1),
+      );
+    } else {
+      records.items.forEach((record) => {
+        flatRecords.push(flattenRecord(transformRecords(record, entity)));
+      });
+    }
 
     page++;
     recordCount += records.items.length;
   } while (total > recordCount);
 
-  await file.write(']');
+  if (format === 'json') {
+    await file.write(']');
+  } else {
+    await file.write(toCsv(flatRecords, entity));
+  }
 
-  console.log(`Finished exporting ${recordCount} records`);
+  await file.close();
+
+  console.log(`Finished exporting ${recordCount} records to ${outputFile}`);
+};
+
+const userColumns: (keyof gp2Model.UserResponse | 'membershipStatus')[] = [
+  'id',
+  'firstName',
+  'middleName',
+  'lastName',
+  'nickname',
+  'email',
+  'alternativeEmail',
+  'orcid',
+  'role',
+  'onboarded',
+  'membershipStatus',
+  'alumniSinceDate',
+  'region',
+  'country',
+  'stateOrProvince',
+  'city',
+  'degrees',
+  'positions',
+  'projects',
+  'workingGroups',
+  'contributingCohorts',
+  'tags',
+  'createdDate',
+  'lastModifiedDate',
+  'activatedDate',
+];
+
+const toCell = (value: unknown): string | number => {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'boolean') return String(value);
+  if (typeof value !== 'object') return value as string | number;
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => {
+        if (item && typeof item === 'object') {
+          const named = item as {
+            name?: string;
+            title?: string;
+            role?: string;
+          };
+          const label = named.name ?? named.title;
+          if (label) return named.role ? `${label} (${named.role})` : label;
+          return Object.values(item)
+            .filter(
+              (v) => v !== null && v !== undefined && typeof v !== 'object',
+            )
+            .join(', ');
+        }
+        return toCell(item);
+      })
+      .join('; ');
+  }
+  return JSON.stringify(value);
+};
+
+const flattenRecord = (record: object): Record<string, unknown> =>
+  Object.fromEntries(
+    Object.entries(record)
+      .filter(([key]) => !['objectID', '__meta', '_tags'].includes(key))
+      .map(([key, value]) => [key, toCell(value)]),
+  );
+
+const toCsv = (
+  rows: Record<string, unknown>[],
+  entity: keyof EntityResponsesGP2,
+): string => {
+  const columns =
+    entity === 'user'
+      ? userColumns
+      : Array.from(new Set(rows.flatMap((row) => Object.keys(row))));
+
+  const escape = (value: unknown): string => {
+    const text = String(value ?? '');
+    return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  };
+  const toLine = (values: unknown[]) => values.map(escape).join(',');
+
+  return [
+    toLine(columns),
+    ...rows.map((row) => toLine(columns.map((column) => row[column]))),
+  ].join('\n');
 };
 
 const getController = (entity: keyof EntityResponsesGP2) => {
