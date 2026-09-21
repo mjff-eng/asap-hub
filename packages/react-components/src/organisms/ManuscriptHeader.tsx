@@ -26,7 +26,7 @@ const contentStyles = css({
 });
 
 const breadcrumbsStyles = css({
-  marginBottom: rem(24),
+  marginBottom: rem(36),
 });
 
 type ManuscriptHeaderProps = {
