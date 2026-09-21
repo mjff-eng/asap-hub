@@ -1,5 +1,6 @@
 import { ComponentProps } from 'react';
 import { createEventResponse } from '@asap-hub/fixtures';
+import { disable, enable } from '@asap-hub/flags';
 import { EventResponse } from '@asap-hub/model';
 import { render } from '@testing-library/react';
 import { subDays } from 'date-fns';
@@ -103,5 +104,61 @@ it('anchors each material section with a stable id', () => {
     'event-additional-materials',
   ].forEach((id) => {
     expect(container.querySelector(`#${id}`)).not.toBeEmptyDOMElement();
+  });
+});
+
+describe('the NEW_EVENT_PAGE flag', () => {
+  const comingSoonText =
+    'Meeting Materials for this event will be coming soon - usually within a week after the event. Please check back later.';
+  const noMaterials = {
+    notes: undefined,
+    presentation: undefined,
+    videoRecording: undefined,
+    meetingMaterials: [],
+  };
+
+  afterEach(() => {
+    disable('NEW_EVENT_PAGE');
+  });
+
+  it('renders a coming soon placeholder when no material has been added yet', () => {
+    enable('NEW_EVENT_PAGE');
+    const { getByText } = render(
+      <EventMaterials {...props} {...noMaterials} />,
+    );
+    expect(getByText(comingSoonText)).toBeVisible();
+  });
+
+  it('renders the individual material cards when disabled', () => {
+    disable('NEW_EVENT_PAGE');
+    const { queryByText, container } = render(
+      <EventMaterials {...props} {...noMaterials} />,
+    );
+    expect(queryByText(comingSoonText)).not.toBeInTheDocument();
+    expect(container.querySelector('#event-notes')).not.toBeEmptyDOMElement();
+  });
+
+  it('renders the individual material cards when at least one material is present', () => {
+    enable('NEW_EVENT_PAGE');
+    const { getByText, queryByText } = render(
+      <EventMaterials {...props} {...noMaterials} notes="My Notes" />,
+    );
+    expect(queryByText(comingSoonText)).not.toBeInTheDocument();
+    expect(getByText('My Notes')).toBeVisible();
+  });
+
+  it('still renders the unavailable placeholder when all materials are permanently unavailable', () => {
+    enable('NEW_EVENT_PAGE');
+    const { getByText, queryByText } = render(
+      <EventMaterials
+        {...props}
+        notes={null}
+        presentation={null}
+        videoRecording={null}
+        meetingMaterials={null}
+      />,
+    );
+    expect(queryByText(comingSoonText)).not.toBeInTheDocument();
+    expect(getByText(/no .* material/i)).toBeVisible();
   });
 });
