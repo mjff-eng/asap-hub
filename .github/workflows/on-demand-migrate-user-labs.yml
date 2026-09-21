@@ -1,22 +1,43 @@
-name: Migrate user labs
+name: Export GP2 Users
+
 on:
   workflow_dispatch:
     inputs:
       environment-name:
         required: true
-        description: The environment name
         type: choice
+        description: Choose which environment to export from
+        default: Production
         options:
           - Branch
           - Development
           - Production
-      contentful-env:
+      contentful-environment-id:
         required: true
         type: string
-        description: Choose the Contentful environment to migrate user labs
+        description: The Contentful environment ID (e.g., master, development, or branch name)
+        default: master
+      format:
+        required: true
+        type: choice
+        description: Output format
+        default: csv
+        options:
+          - csv
+          - json
+      include-hidden:
+        required: true
+        type: boolean
+        description: Include users with the Hidden role
+        default: true
+      include-not-onboarded:
+        required: true
+        type: boolean
+        description: Include users who have not completed onboarding
+        default: true
 
 jobs:
-  migrate_user_labs:
+  export-users:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment-name }}
     container:
@@ -32,23 +53,35 @@ jobs:
         uses: ./.github/actions/setup-environment
         with:
           environment-name: ${{ inputs.environment-name }}
-      - name: Run User Labs Migration
+          pr-number: '0'
+      - name: Build
         run: |
-          yarn workspace @asap-hub/contentful migrate-user-labs
+          yarn install --immutable
+          yarn exec "yarn workspaces foreach -vptR --from '{@asap-hub/model,@asap-hub/server-common,@asap-hub/gp2-server}' run build:babel"
+          yarn build:typecheck
+      - name: Export users
+        run: |
+          yarn workspace @asap-hub/gp2-server export:entity user \
+            --format ${{ inputs.format }} \
+            --filename gp2-users.${{ inputs.format }} \
+            --includeHidden=${{ inputs.include-hidden }} \
+            --includeNotOnboarded=${{ inputs.include-not-onboarded }}
         env:
-          CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_MANAGEMENT_TOKEN }}
-          CONTENTFUL_SPACE_ID: ${{ steps.setup.outputs.crn-contentful-space-id }}
-          CONTENTFUL_ENV_ID: ${{ inputs.contentful-env }}
-
-  notify_failure:
-    runs-on: ubuntu-latest
-    needs: [migrate_user_labs]
-    if: ${{ failure() && inputs.environment-name=='Production' }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: ./.github/actions/slack/
+          CONTENTFUL_SPACE_ID: ${{ steps.setup.outputs.gp2-contentful-space-id }}
+          CONTENTFUL_ACCESS_TOKEN: ${{ secrets.GP2_CONTENTFUL_ACCESS_TOKEN }}
+          CONTENTFUL_ENV_ID: ${{ inputs.contentful-environment-id }}
+      - name: Upload export
+        uses: actions/upload-artifact@v4
         with:
-          message: Migrate user labs failed
-          webhook: ${{ secrets.SLACK_WEBHOOK }}
-          status: failure
+          name: gp2-users-export-${{ github.run_number }}
+          path: apps/gp2-server/gp2-users.${{ inputs.format }}
+          retention-days: 3
+      - name: Summary
+        run: |
+          echo "## GP2 Users Export Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Download:** artifact \`gp2-users-export-${{ github.run_number }}\` on this run (kept for 3 days, contains personal data)" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ inputs.environment-name }} / ${{ inputs.contentful-environment-id }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Format:** ${{ inputs.format }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Hidden included:** ${{ inputs.include-hidden }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Not onboarded included:** ${{ inputs.include-not-onboarded }}" >> $GITHUB_STEP_SUMMARY
