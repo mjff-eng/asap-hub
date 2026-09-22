@@ -35,6 +35,30 @@ const externalGroup = (users: SpeakerGroupExternalUser[]): SpeakerGroup => ({
 });
 
 describe('mapGroupsToSpeakersUpdate', () => {
+  test('Should ignore a session guest when folding team findings', () => {
+    // The guest never reaches the backend, so their toggle must not set the
+    // team flag — which on the next read seeds every real member as shared.
+    const groups = [
+      teamGroup({
+        users: [
+          speaker({ preliminaryFindingsShared: false }),
+          speaker({
+            id: 'external-1-Guest',
+            speakerIds: [],
+            displayName: 'Guest',
+            roles: [],
+            isExternal: true,
+            preliminaryFindingsShared: true,
+          }),
+        ],
+      }),
+    ];
+
+    expect(
+      mapGroupsToSpeakersUpdate(groups, groups, true).preliminaryDataShared,
+    ).toEqual([{ teamId: 'team-1', shared: false }]);
+  });
+
   test('Should mark removed CRN speaker entry ids in speakersToRemove', () => {
     const original = [teamGroup()];
     const saved = [teamGroup({ users: [] })];
