@@ -129,6 +129,22 @@ describe('the NEW_EVENT_PAGE flag', () => {
     expect(getByText(comingSoonText)).toBeVisible();
   });
 
+  it('renders the legacy unavailable placeholder when disabled and all materials are permanently unavailable', () => {
+    disable('NEW_EVENT_PAGE');
+    const { getByText } = render(
+      <EventMaterials
+        {...props}
+        notes={null}
+        presentation={null}
+        videoRecording={null}
+        meetingMaterials={null}
+      />,
+    );
+    expect(
+      getByText('No additional meeting materials available for this event'),
+    ).toBeVisible();
+  });
+
   it('renders the individual material cards when disabled', () => {
     disable('NEW_EVENT_PAGE');
     const { queryByText, container } = render(
