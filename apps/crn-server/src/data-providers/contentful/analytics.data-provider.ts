@@ -7,6 +7,8 @@ import {
   FetchEngagementQueryVariables,
   FetchOsChampionQuery,
   FetchOsChampionQueryVariables,
+  FetchPreliminaryDataSharingByTeamQuery,
+  FetchPreliminaryDataSharingByTeamQueryVariables,
   FetchPreliminaryDataSharingQuery,
   FetchPreliminaryDataSharingQueryVariables,
   FetchTeamCollaborationQuery,
@@ -24,6 +26,7 @@ import {
   FETCH_ENGAGEMENT,
   FETCH_OS_CHAMPION,
   FETCH_PRELIMINARY_DATA_SHARING,
+  FETCH_PRELIMINARY_DATA_SHARING_BY_TEAM,
   FETCH_TEAM_COLLABORATION,
   FETCH_TEAM_PRODUCTIVITY,
   FETCH_USER_PRODUCTIVITY,
@@ -51,6 +54,7 @@ import {
   UserProductivityTeam,
 } from '@asap-hub/model';
 import { cleanArray, parseUserDisplayName } from '@asap-hub/server-common';
+import { mapLimit } from 'async';
 import {
   getTeamCollaborationItems,
   getUserCollaborationItems,
@@ -67,6 +71,10 @@ import {
 import { getEngagementItems } from '../../utils/analytics/engagement';
 import { getTeamLeadershipItems } from '../../utils/analytics/leadership';
 import { AnalyticsDataProvider } from '../types/analytics.data-provider.types';
+
+const PRELIMINARY_DATA_SHARING_SPEAKERS_PAGE_SIZE = 1000;
+const PRELIMINARY_DATA_SHARING_MAX_SPEAKER_PAGES = 20;
+const PRELIMINARY_DATA_SHARING_MAX_CONCURRENT_REQUESTS = 5;
 
 type UserTotalResearchOutputsItems = NonNullable<
   FetchUserTotalResearchOutputsQuery['usersCollection']
@@ -139,6 +147,66 @@ export class AnalyticsContentfulDataProvider implements AnalyticsDataProvider {
     };
   }
 
+  private async completeEventSpeakersCollections(
+    teamsCollection: FetchPreliminaryDataSharingQuery['teamsCollection'],
+  ): Promise<Map<string, PreliminaryDataSharingSpeakerItems>> {
+    const itemsByTeam = new Map<string, PreliminaryDataSharingSpeakerItems>();
+
+    const overflowingTeams = (teamsCollection?.items ?? []).flatMap((team) => {
+      const speakers = team?.linkedFrom?.eventSpeakersCollection;
+      if (!team || !speakers) {
+        return [];
+      }
+
+      const total = speakers.total ?? 0;
+      return total > speakers.items.length
+        ? [{ teamId: team.sys.id, total }]
+        : [];
+    });
+
+    if (overflowingTeams.length === 0) {
+      return itemsByTeam;
+    }
+
+    const requests = overflowingTeams.flatMap(({ teamId, total }) =>
+      Array.from(
+        {
+          length: Math.min(
+            Math.ceil(total / PRELIMINARY_DATA_SHARING_SPEAKERS_PAGE_SIZE),
+            PRELIMINARY_DATA_SHARING_MAX_SPEAKER_PAGES,
+          ),
+        },
+        (_, page) => ({ teamId, page }),
+      ),
+    );
+
+    const responses = await mapLimit(
+      requests,
+      PRELIMINARY_DATA_SHARING_MAX_CONCURRENT_REQUESTS,
+      async ({ teamId, page }: { teamId: string; page: number }) => {
+        const { eventSpeakersCollection } = await this.contentfulClient.request<
+          FetchPreliminaryDataSharingByTeamQuery,
+          FetchPreliminaryDataSharingByTeamQueryVariables
+        >(FETCH_PRELIMINARY_DATA_SHARING_BY_TEAM, {
+          teamId,
+          limit: PRELIMINARY_DATA_SHARING_SPEAKERS_PAGE_SIZE,
+          skip: page * PRELIMINARY_DATA_SHARING_SPEAKERS_PAGE_SIZE,
+        });
+
+        return { teamId, items: eventSpeakersCollection?.items ?? [] };
+      },
+    );
+
+    responses.forEach((response) => {
+      itemsByTeam.set(response.teamId, [
+        ...(itemsByTeam.get(response.teamId) ?? []),
+        ...response.items,
+      ]);
+    });
+
+    return itemsByTeam;
+  }
+
   async fetchPreliminaryDataSharing(options: FetchAnalyticsOptions) {
     const { take = 10, skip = 0, filter } = options;
     const { teamsCollection } = await this.contentfulClient.request<
@@ -146,10 +214,14 @@ export class AnalyticsContentfulDataProvider implements AnalyticsDataProvider {
       FetchPreliminaryDataSharingQueryVariables
     >(FETCH_PRELIMINARY_DATA_SHARING, { limit: take, skip });
 
+    const speakerItemsByTeam =
+      await this.completeEventSpeakersCollections(teamsCollection);
+
     return {
       total: teamsCollection?.total || 0,
       items: getPreliminaryDataSharingItems(
         teamsCollection,
+        speakerItemsByTeam,
         filter?.timeRange as Extract<TimeRangeOption, 'all' | 'last-year'>,
       ),
     };
@@ -500,8 +572,13 @@ const getOsChampionItems = (
     };
   });
 
+type PreliminaryDataSharingSpeakerItems = NonNullable<
+  FetchPreliminaryDataSharingByTeamQuery['eventSpeakersCollection']
+>['items'];
+
 const getPreliminaryDataSharingItems = (
   teamsCollection: FetchPreliminaryDataSharingQuery['teamsCollection'],
+  speakerItemsByTeam: Map<string, PreliminaryDataSharingSpeakerItems>,
   rangeKey?: Extract<TimeRangeOption, 'all' | 'last-year'>,
 ): PreliminaryDataSharingDataObject[] => {
   const filter = getRangeFilterParams(rangeKey);
@@ -510,27 +587,42 @@ const getPreliminaryDataSharingItems = (
     let preliminaryDataSharedTotalCount = 0;
     let preliminaryDataSharedYesCount = 0;
 
-    if (teamItem.linkedFrom?.preliminaryDataSharingCollection?.items.length) {
-      const preliminaryDataSharingItems =
-        teamItem.linkedFrom?.preliminaryDataSharingCollection?.items;
+    const eventSpeakersItems =
+      speakerItemsByTeam.get(teamItem.sys.id) ??
+      teamItem.linkedFrom?.eventSpeakersCollection?.items;
 
-      preliminaryDataSharingItems.forEach((item) => {
-        const eventStartDate =
-          item?.linkedFrom?.eventsCollection?.items[0]?.startDate;
+    if (eventSpeakersItems?.length) {
+      const byEvent = new Map<
+        string,
+        { anyShared: boolean; startDate?: string }
+      >();
 
-        if (
-          rangeKey === 'last-year' &&
-          eventStartDate &&
-          filter &&
-          eventStartDate <= filter
-        ) {
+      eventSpeakersItems.forEach((speaker) => {
+        if (!speaker || speaker.preliminaryDataShared === null) {
+          return;
+        }
+        const event = speaker.linkedFrom?.eventsCollection?.items[0];
+        const eventId = event?.sys.id;
+        if (!eventId) {
           return;
         }
 
-        if (item?.preliminaryDataShared === true) {
-          preliminaryDataSharedYesCount += 1;
+        const prev = byEvent.get(eventId);
+        byEvent.set(eventId, {
+          anyShared:
+            (prev?.anyShared ?? false) ||
+            speaker.preliminaryDataShared === true,
+          startDate: event?.startDate ?? prev?.startDate,
+        });
+      });
+
+      Array.from(byEvent.values()).forEach(({ anyShared, startDate }) => {
+        if (rangeKey === 'last-year' && filter) {
+          if (!startDate || startDate <= filter) return;
         }
+
         preliminaryDataSharedTotalCount += 1;
+        if (anyShared) preliminaryDataSharedYesCount += 1;
       });
 
       return {
@@ -538,10 +630,14 @@ const getPreliminaryDataSharingItems = (
         teamId: teamItem.sys.id,
         teamName: teamItem.displayName || '',
         isTeamInactive: !!teamItem.inactiveSince,
-        percentShared: Math.round(
-          (preliminaryDataSharedYesCount / preliminaryDataSharedTotalCount) *
-            100,
-        ),
+        percentShared:
+          preliminaryDataSharedTotalCount === 0
+            ? 0
+            : Math.round(
+                (preliminaryDataSharedYesCount /
+                  preliminaryDataSharedTotalCount) *
+                  100,
+              ),
         limitedData: preliminaryDataSharedTotalCount === 0,
       };
     }

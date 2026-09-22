@@ -2384,6 +2384,8 @@ type EventSpeakers implements Entry & _Node {
   _id: ID!
   contentfulMetadata: ContentfulMetadata!
   linkedFrom(allowedLocales: [String]): EventSpeakersLinkingCollections
+  preliminaryDataShared(locale: String, useFallbackLocale: Boolean): Boolean
+  project(locale: String, preview: Boolean, useFallbackLocale: Boolean, where: ProjectsFilter): Projects
   sys: Sys!
   team(locale: String, preview: Boolean, useFallbackLocale: Boolean, where: TeamsFilter): Teams
   user(locale: String, preview: Boolean, useFallbackLocale: Boolean, where: EventSpeakersUserFilter): EventSpeakersUser
@@ -2406,6 +2408,11 @@ input EventSpeakersFilter {
   AND: [EventSpeakersFilter]
   OR: [EventSpeakersFilter]
   contentfulMetadata: ContentfulMetadataFilter
+  preliminaryDataShared: Boolean
+  preliminaryDataShared_exists: Boolean
+  preliminaryDataShared_not: Boolean
+  project: cfProjectsNestedFilter
+  project_exists: Boolean
   sys: SysFilter
   team: cfTeamsNestedFilter
   team_exists: Boolean
@@ -2523,6 +2530,8 @@ enum EventSpeakersLinkingCollectionsEventsCursorCollectionOrder {
 }
 
 enum EventSpeakersOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -3192,6 +3201,8 @@ type EventsSpeakersCollection {
 }
 
 enum EventsSpeakersCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -3209,6 +3220,8 @@ type EventsSpeakersCursorCollection {
 }
 
 enum EventsSpeakersCursorCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -3325,6 +3338,8 @@ type ExternalAuthorsLinkingCollections {
 }
 
 enum ExternalAuthorsLinkingCollectionsEventSpeakersCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -3336,6 +3351,8 @@ enum ExternalAuthorsLinkingCollectionsEventSpeakersCollectionOrder {
 }
 
 enum ExternalAuthorsLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -8323,10 +8340,38 @@ input ProjectsFilter {
 type ProjectsLinkingCollections {
   entryCollection(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): EntryCollection
   entryCursorCollection(limit: Int = 100, locale: String, pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): EntryCursorCollection
+  eventSpeakersCollection(limit: Int = 100, locale: String, order: [ProjectsLinkingCollectionsEventSpeakersCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): EventSpeakersCollection
+  eventSpeakersCursorCollection(limit: Int = 100, locale: String, order: [ProjectsLinkingCollectionsEventSpeakersCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): EventSpeakersCursorCollection
   manuscriptsCollection(limit: Int = 100, locale: String, order: [ProjectsLinkingCollectionsManuscriptsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): ManuscriptsCollection
   manuscriptsCursorCollection(limit: Int = 100, locale: String, order: [ProjectsLinkingCollectionsManuscriptsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): ManuscriptsCursorCollection
   researchOutputsCollection(limit: Int = 100, locale: String, order: [ProjectsLinkingCollectionsResearchOutputsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): ResearchOutputsCollection
   researchOutputsCursorCollection(limit: Int = 100, locale: String, order: [ProjectsLinkingCollectionsResearchOutputsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): ResearchOutputsCursorCollection
+}
+
+enum ProjectsLinkingCollectionsEventSpeakersCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+enum ProjectsLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
 }
 
 enum ProjectsLinkingCollectionsManuscriptsCollectionOrder {
@@ -12371,6 +12416,8 @@ enum TeamsLinkingCollectionsDiscoverCursorCollectionOrder {
 }
 
 enum TeamsLinkingCollectionsEventSpeakersCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -12382,6 +12429,8 @@ enum TeamsLinkingCollectionsEventSpeakersCollectionOrder {
 }
 
 enum TeamsLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -14018,6 +14067,8 @@ enum UsersLinkingCollectionsDiscussionsCursorCollectionOrder {
 }
 
 enum UsersLinkingCollectionsEventSpeakersCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -14029,6 +14080,8 @@ enum UsersLinkingCollectionsEventSpeakersCollectionOrder {
 }
 
 enum UsersLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  preliminaryDataShared_ASC
+  preliminaryDataShared_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -15686,6 +15739,10 @@ input cfEventSpeakersNestedFilter {
   AND: [cfEventSpeakersNestedFilter]
   OR: [cfEventSpeakersNestedFilter]
   contentfulMetadata: ContentfulMetadataFilter
+  preliminaryDataShared: Boolean
+  preliminaryDataShared_exists: Boolean
+  preliminaryDataShared_not: Boolean
+  project_exists: Boolean
   sys: SysFilter
   team_exists: Boolean
   user_exists: Boolean
