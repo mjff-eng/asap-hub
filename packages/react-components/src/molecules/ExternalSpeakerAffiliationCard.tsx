@@ -27,8 +27,6 @@ const cardStyles = css({
   backgroundColor: warning100.rgb,
 });
 
-// Figma drops the warning glyph on a narrow screen: the amber ground already
-// carries the state, and 24px of icon column is a quarter of the width.
 const iconStyles = css({
   flexShrink: 0,
   [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
@@ -48,8 +46,6 @@ const headerStyles = css({
   gap: rem(8),
 });
 
-// Name beside the avatar, with the "Non CRN" pill alongside on desktop and
-// under them on mobile, where the bin stays pinned to the top right.
 const identityStyles = css([
   flexRowGap8Styles,
   {
@@ -94,7 +90,6 @@ const actionsStyles = css({
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     flexDirection: 'column',
     alignItems: 'stretch',
-    // "or" owns its own line once the controls stack.
     textAlign: 'center',
   },
 });

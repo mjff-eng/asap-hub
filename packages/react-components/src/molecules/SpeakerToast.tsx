@@ -9,8 +9,7 @@ import {
 } from '../icons';
 import { mobileScreen, rem } from '../pixels';
 
-// Figma's toast draws these three detached from the palette, so they have no
-// token to import. Promote them to colors.ts once design names them.
+// Not in the palette: the toast is drawn with detached values.
 const toastText = '#1C1F21';
 const toastRule = '#A6AEB4';
 
@@ -28,10 +27,8 @@ const toastStyles = (accent: 'success' | 'error', hasUndo: boolean) =>
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       fontSize: rem(14),
       lineHeight: 16 / 14,
-      // Undo needs a row of its own on a narrow screen, and a two-row grid
-      // rather than flex-wrap keeps the icon on the message's first line
-      // however far the message wraps. Without Undo the close button fits
-      // beside the message, so the row stands.
+      // A grid, not flex-wrap: the icon has to stay on the message's first
+      // line however far the message wraps.
       ...(hasUndo
         ? {
             display: 'grid',
@@ -43,7 +40,6 @@ const toastStyles = (accent: 'success' | 'error', hasUndo: boolean) =>
     },
   });
 
-// The 22px glyph sits in the 24px slot every other row icon uses.
 const iconStyles = css({
   display: 'inline-flex',
   alignItems: 'center',

@@ -22,9 +22,6 @@ import {
 } from '../pixels';
 import { splitDisplayName } from '../utils/user';
 
-// Fixed at Figma's State Tag width in the column header, on group rows and on
-// speaker rows alike, so the three read from one left edge. The chevron only
-// exists on group rows; the others reserve its width instead.
 const findingsColumnWidth = 152;
 const chevronColumnWidth = 24;
 
@@ -40,9 +37,8 @@ export const findingsColumnStyles = css({
   display: 'flex',
   alignItems: 'center',
   flexShrink: 0,
-  // A flex item's default `min-width: auto` keeps it from shrinking below its
-  // content, which let the wider column header ignore this width and sit out of
-  // line with the pills. The header label overflows to the right instead.
+  // Without this a flex item never shrinks below its content, and the wider
+  // column header would ignore the width below.
   minWidth: 0,
   width: rem(findingsColumnWidth),
   whiteSpace: 'nowrap',
@@ -62,8 +58,7 @@ export const trailingColumnsStyles = css({
   gap: actionsGap,
 });
 
-// getButtonStyles grows every button to `min-width: 100%` under the mobile
-// breakpoint; these stay the 24px box they are on desktop.
+// getButtonStyles grows every button to `min-width: 100%` on mobile.
 export const squareIconButtonStyles = (enabled: boolean) =>
   css([
     deleteButtonStyles(enabled),
@@ -78,8 +73,7 @@ export const squareIconButtonStyles = (enabled: boolean) =>
     },
   ]);
 
-// Figma's State Tag: no border, 4px inline padding either side of the icon and
-// the label. Pill would bring a border and its own <small> type scale.
+// Not the Pill atom: it brings a border and its own <small> type scale.
 export const findingsPillStyles = (shared: boolean) =>
   css({
     boxSizing: 'border-box',
@@ -96,8 +90,7 @@ export const findingsPillStyles = (shared: boolean) =>
     fontSize: rem(14),
     lineHeight: 16 / 14,
     whiteSpace: 'nowrap',
-    // Figma draws the glyph at 14x14 centred in its 24x24 slot; the icons ship
-    // at 20x20, which is the size they keep outside the pill.
+    // The icons ship at 20x20, which is the size they keep outside the pill.
     '> span > svg': { width: rem(14), height: rem(14) },
   });
 
@@ -107,10 +100,6 @@ export const flexRowGap8Styles = css({
   gap: rem(8),
 });
 
-// [user info block, flex-grow] + [findings control] + [optional delete button].
-// On mobile the row becomes a two-row grid: the user info block spans both rows
-// and stacks internally, so the controls land in the second row beside the
-// badge instead of on a third line of their own.
 const rowStyles = css([
   flexRowGap8Styles,
   {
@@ -123,9 +112,6 @@ const rowStyles = css([
   },
 ]);
 
-// Desktop: a plain row, so the name line and the badges sit inline. Mobile: stacks
-// into two lines — avatar+name on top, the "Non CRN" or role badge below —
-// matching Figma's "User Name" column layout.
 const userInfoStyles = css([
   flexRowGap8Styles,
   {
@@ -145,14 +131,10 @@ export const avatar24Styles = css({
   height: rem(24),
 });
 
-// No truncation, matching the team name policy — a name wider than the card
-// just scrolls (overflowX: auto on groupsCardStyles). Color comes from
-// Link's default (fern) for team members.
 const nameStyles = css({
   display: 'block',
   whiteSpace: 'nowrap',
   [`@media (max-width: ${mobileScreen.max}px)`]: {
-    // Figma's "Caption/C1" mobile type scale, matching the team name.
     fontSize: rem(14),
     lineHeight: rem(16),
     fontWeight: 400,
@@ -272,8 +254,7 @@ const SpeakerUserRow: React.FC<SpeakerUserRowProps> = ({
               {binIcon}
             </Button>
           ) : (
-            // Holds the chevron's column on the group row above, so the switch
-            // or icon lands in the same place with or without a bin.
+            // Holds the chevron's column on the group row above.
             <span css={chevronSpacerStyles} />
           )}
         </span>

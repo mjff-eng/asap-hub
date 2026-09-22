@@ -140,13 +140,10 @@ const pillStyles = css({
   fontWeight: 400,
   lineHeight: rem(24),
   color: neutral1000.rgb,
-  // The affiliation icon is wrapped, so it needs its own sizing rule; the bare
-  // plus is already covered by PillSelector.
+  // PillSelector only sizes its direct svg children.
   '> span > svg': { width: rem(24), height: rem(24) },
 });
 
-// Figma drops the team or project icon on a narrow screen, where the pill goes
-// full width and the name has room to speak for itself.
 const affiliationIconStyles = css({
   display: 'inline-flex',
   flexShrink: 0,

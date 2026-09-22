@@ -15,8 +15,7 @@ export type SpeakerGroupUser = {
   readonly avatarUrl?: string;
   readonly roles: string[];
   readonly isAlumni?: boolean;
-  // A guest who matched no CRN user but was still attached to a team or
-  // project: no profile to link to, and "Non CRN" in place of a role.
+  // Matched no CRN user, so no profile to link to and no role to show.
   readonly isExternal?: boolean;
   readonly preliminaryFindingsShared: boolean;
 };
