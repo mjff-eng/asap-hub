@@ -5,12 +5,9 @@ import {
   ComplianceReportHeader,
   NotFoundPage,
   usePushFromHere,
+  utils,
 } from '@asap-hub/react-components';
-import {
-  projectListRouteByType,
-  projectRouteByType,
-  projects,
-} from '@asap-hub/routing';
+import { projects } from '@asap-hub/routing';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams, useLocation } from 'react-router';
 import { useManuscriptToast } from '../network/teams/useManuscriptToast';
@@ -88,20 +85,7 @@ const ProjectComplianceReport: React.FC<ProjectComplianceReportProps> = ({
       void pushFromHere(projectWorkspacePath, { replace: true });
     };
 
-    const breadcrumbs = projectDetail
-      ? [
-          {
-            label: `${projectDetail.projectType}s`,
-            href: projectListRouteByType[projectDetail.projectType]().$,
-          },
-          {
-            label: projectDetail.title,
-            href: projectRouteByType[projectDetail.projectType](
-              projectId,
-            ).about({}).$,
-          },
-        ]
-      : [];
+    const breadcrumbs = utils.getProjectBreadcrumbs(projectDetail, projectId);
 
     return (
       <FormProvider {...form}>

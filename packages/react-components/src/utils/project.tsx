@@ -1,5 +1,15 @@
-import { BaseProject, ProjectMember, ProjectType } from '@asap-hub/model';
-import { network, projects } from '@asap-hub/routing';
+import {
+  BaseProject,
+  ProjectDetail,
+  ProjectMember,
+  ProjectType,
+} from '@asap-hub/model';
+import {
+  network,
+  projectListRouteByType,
+  projectRouteByType,
+  projects,
+} from '@asap-hub/routing';
 import {
   DiscoveryProjectIcon,
   ResourceProjectIcon,
@@ -60,3 +70,22 @@ export const getProjectConfig = ({
   href: getProjectRoute({ projectId, projectType }),
   icon: getProjectIcon(projectType),
 });
+
+export const getProjectBreadcrumbs = (
+  projectDetail: ProjectDetail | undefined,
+  projectId: BaseProject['id'],
+) =>
+  projectDetail
+    ? [
+        {
+          label: `${projectDetail.projectType}s`,
+          href: projectListRouteByType[projectDetail.projectType]().$,
+        },
+        {
+          label: projectDetail.title,
+          href: projectRouteByType[projectDetail.projectType](projectId).about(
+            {},
+          ).$,
+        },
+      ]
+    : [];

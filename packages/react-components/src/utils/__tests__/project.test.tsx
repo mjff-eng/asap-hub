@@ -1,5 +1,11 @@
 import { render, screen } from '@testing-library/react';
-import { getProjectConfig, getProjectIcon, getProjectRoute } from '../project';
+import type { ProjectDetail } from '@asap-hub/model';
+import {
+  getProjectBreadcrumbs,
+  getProjectConfig,
+  getProjectIcon,
+  getProjectRoute,
+} from '../project';
 
 describe('project utils', () => {
   it('returns the correct route for each project type', () => {
@@ -59,5 +65,38 @@ describe('project utils', () => {
 
     expect(config.href).toEqual('/projects/discovery/project-id');
     expect(screen.getByTitle('Discovery Project')).toBeInTheDocument();
+  });
+
+  describe('getProjectBreadcrumbs', () => {
+    it('returns an empty array when projectDetail is undefined', () => {
+      expect(getProjectBreadcrumbs(undefined, 'project-id')).toEqual([]);
+    });
+
+    it.each`
+      projectType            | listSegment
+      ${'Discovery Project'} | ${'discovery'}
+      ${'Resource Project'}  | ${'resource'}
+      ${'Trainee Project'}   | ${'trainee'}
+    `(
+      'returns the list and project items for a $projectType',
+      ({ projectType, listSegment }) => {
+        const projectDetail = {
+          id: 'project-id',
+          title: 'Test Project',
+          projectType,
+        } as ProjectDetail;
+
+        expect(getProjectBreadcrumbs(projectDetail, 'project-id')).toEqual([
+          {
+            label: `${projectType}s`,
+            href: `/projects/${listSegment}`,
+          },
+          {
+            label: 'Test Project',
+            href: `/projects/${listSegment}/project-id/about`,
+          },
+        ]);
+      },
+    );
   });
 });
