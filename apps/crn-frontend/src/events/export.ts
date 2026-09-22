@@ -7,8 +7,11 @@ import {
 } from '@asap-hub/frontend-utils';
 import { EventResponse } from '@asap-hub/model';
 import {
+  groupFindings,
+  groupLabel,
   SpeakerExternalGroup,
   SpeakerGroup,
+  SpeakerProjectGroup,
   SpeakerTeamGroup,
 } from '@asap-hub/react-components';
 import { format } from 'date-fns';
@@ -41,6 +44,11 @@ const isTeamGroup = (group: SpeakerGroup): group is SpeakerTeamGroup =>
 const isExternalGroup = (group: SpeakerGroup): group is SpeakerExternalGroup =>
   group.variant === 'external';
 
+const isCrnGroup = (
+  group: SpeakerGroup,
+): group is SpeakerTeamGroup | SpeakerProjectGroup =>
+  group.variant === 'team' || group.variant === 'project';
+
 export const eventSpeakersToCSV = (
   event: EventResponse,
   groups: SpeakerGroup[],
@@ -48,16 +56,20 @@ export const eventSpeakersToCSV = (
   const teamGroups = groups.filter(isTeamGroup);
 
   const teamsWithFindings = teamGroups
-    .filter(({ preliminaryFindingsShared }) => preliminaryFindingsShared)
+    .filter((group) => groupFindings(group).hasAnyShared)
     .map(({ teamName }) => teamName);
 
   const teamsWithoutFindings = teamGroups
-    .filter(({ preliminaryFindingsShared }) => !preliminaryFindingsShared)
+    .filter((group) => !groupFindings(group).hasAnyShared)
     .map(({ teamName }) => teamName);
 
-  const crnSpeakers = teamGroups.flatMap(({ teamName, users }) =>
-    users.map(({ displayName }) => `${teamName}-${displayName}`),
-  );
+  const crnSpeakers = groups
+    .filter(isCrnGroup)
+    .flatMap((group) =>
+      group.users.map(
+        ({ displayName }) => `${groupLabel(group)}-${displayName}`,
+      ),
+    );
 
   const externalSpeakers = groups
     .filter(isExternalGroup)
