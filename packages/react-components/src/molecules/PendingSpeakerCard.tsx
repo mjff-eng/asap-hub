@@ -2,11 +2,22 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Avatar, Button, Link, Paragraph, PillSelector } from '../atoms';
-import { fern, neutral1000, warning100, warning900 } from '../colors';
-import { binIcon, plusIcon, WarningIcon } from '../icons';
-import { deleteButtonStyles } from '../organisms/shared-event-card-styles';
+import {
+  fern,
+  neutral700,
+  neutral1000,
+  warning100,
+  warning900,
+} from '../colors';
+import { crossIcon, plusIcon, WarningIcon } from '../icons';
+import { projectIcon, teamIcon } from '../organisms/shared-event-card';
+import { squareIconButtonStyles } from './SpeakerUserRow';
 import { mobileScreen, rem } from '../pixels';
 import { splitDisplayName } from '../utils/user';
+import {
+  affiliationKey,
+  AffiliationOption,
+} from './ExternalSpeakerAffiliationCard';
 import { avatar24Styles } from './SpeakerUserRow';
 
 const hideOnMobileStyles = css({
@@ -101,7 +112,7 @@ const nameStyles = css({
 
 const dismissStyles = (enabled: boolean) =>
   css([
-    deleteButtonStyles(enabled),
+    squareIconButtonStyles(enabled),
     {
       marginLeft: 'auto',
       [`@media (max-width: ${mobileScreen.max}px)`]: {
@@ -122,18 +133,33 @@ const warningTextStyles = css({
 });
 
 const pillStyles = css({
+  height: rem(40),
+  padding: `0 ${rem(16)}`,
+  gap: rem(8),
+  borderColor: neutral700.rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
   color: neutral1000.rgb,
+  // The affiliation icon is wrapped, so it needs its own sizing rule; the bare
+  // plus is already covered by PillSelector.
+  '> span > svg': { width: rem(24), height: rem(24) },
+});
+
+// Figma drops the team or project icon on a narrow screen, where the pill goes
+// full width and the name has room to speak for itself.
+const affiliationIconStyles = css({
+  display: 'inline-flex',
+  flexShrink: 0,
+  [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
 });
 
 type PendingSpeakerCardProps = {
   readonly displayName: string;
   readonly avatarUrl?: string;
   readonly userId: string;
-  readonly teams: ReadonlyArray<{ teamId: string; teamName: string }>;
-  readonly onPickTeam: (teamId: string) => void;
+  readonly affiliations: ReadonlyArray<AffiliationOption>;
+  readonly onPickAffiliation: (affiliation: AffiliationOption) => void;
   readonly onDismiss: () => void;
   readonly enabled?: boolean;
 };
@@ -142,8 +168,8 @@ const PendingSpeakerCard: React.FC<PendingSpeakerCardProps> = ({
   displayName,
   avatarUrl,
   userId,
-  teams,
-  onPickTeam,
+  affiliations,
+  onPickAffiliation,
   onDismiss,
   enabled = true,
 }) => (
@@ -177,23 +203,41 @@ const PendingSpeakerCard: React.FC<PendingSpeakerCardProps> = ({
           onClick={onDismiss}
           overrideStyles={dismissStyles(enabled)}
         >
-          {binIcon}
+          {crossIcon}
         </Button>
       </div>
       <Paragraph noMargin styles={warningTextStyles}>
-        Pick a team to finish adding them.
+        Pick a team or project to finish adding them.
       </Paragraph>
       <PillSelector<string>
         fullWidthOnMobile
         enabled={enabled}
         overrideStyles={pillStyles}
-        options={teams.map((team) => ({
-          value: team.teamId,
-          label: team.teamName,
-          icon: plusIcon,
+        options={affiliations.map((affiliation) => ({
+          value: affiliationKey(affiliation),
+          label: affiliation.name,
+          icon: (
+            <>
+              {plusIcon}
+              {/* Decorative: the pill's own label already names the team or
+                  project, so the icon title would only double it up. */}
+              <span css={affiliationIconStyles} aria-hidden>
+                {affiliation.variant === 'team'
+                  ? teamIcon(affiliation.teamType)
+                  : projectIcon(affiliation.projectType)}
+              </span>
+            </>
+          ),
         }))}
         value={[]}
-        onChange={(values) => values.forEach(onPickTeam)}
+        onChange={([picked]) => {
+          const affiliation = affiliations.find(
+            (option) => affiliationKey(option) === picked,
+          );
+          if (affiliation) {
+            onPickAffiliation(affiliation);
+          }
+        }}
       />
     </div>
   </div>
