@@ -765,8 +765,8 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
                 <strong>Add teams to track attendance</strong>
               </Paragraph>
               <Paragraph noMargin accent="lead">
-                Pick an interest group above, search for a team, copy a past
-                event, or upload a list.
+                This event has no hosting group, so nothing was added
+                automatically. Search for a team above or upload a list.
               </Paragraph>
             </div>
           ) : (

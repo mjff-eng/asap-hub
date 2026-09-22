@@ -88,6 +88,26 @@ describe('EditEventAttendanceModal', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('Should say why the attendees list is empty', () => {
+    renderModal({ teams: [] });
+
+    expect(
+      screen.getByText(/no hosting group, so nothing was added automatically/),
+    ).toBeInTheDocument();
+  });
+
+  it('Should save an untouched list, so the hosting rows get recorded', async () => {
+    const hostingRows = [
+      { teamId: 't1', teamName: 'Team Alpha', attended: false },
+      { teamId: 't2', teamName: 'Team Beta', attended: false },
+    ].map((row) => ({ ...row, isFromInterestGroup: true }));
+    renderModal({ teams: hostingRows });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(onSave).toHaveBeenCalledWith(hostingRows));
+  });
+
   it('Should flag an inactive team in the attendees table', () => {
     renderModal({
       teams: [
