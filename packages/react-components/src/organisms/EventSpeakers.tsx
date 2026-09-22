@@ -47,10 +47,6 @@ import {
 
 const mobileQuery = `@media (max-width: ${tabletScreen.min}px)`;
 
-// A long team or project name scrolls the card rather than wrapping, matching
-// the edit modal.
-const cardHeaderStyles = css({ gap: rem(12) });
-
 const rowsWrapperStyles = css({
   marginTop: rem(32),
   overflowX: 'auto',
@@ -258,7 +254,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
   return (
     <Card padding={false}>
       <div css={contentStyles}>
-        <div css={[headerStyles, cardHeaderStyles]}>
+        <div css={headerStyles}>
           <Headline3 noMargin>Speakers</Headline3>
           <div css={actionsStyles}>
             {onExport && (

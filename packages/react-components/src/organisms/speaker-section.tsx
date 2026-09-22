@@ -33,7 +33,6 @@ const headingStyles = css({
 // Show less comes from here; 16px either side of the button makes the 32.
 const showMoreStyles = css({
   display: 'flex',
-  alignItems: 'center',
   padding: `${rem(16)} 0`,
   borderTop: `1px solid ${steel.rgb}`,
 });

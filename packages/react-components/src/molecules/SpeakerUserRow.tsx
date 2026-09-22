@@ -117,15 +117,13 @@ const rowStyles = css([
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       display: 'grid',
       gridTemplateColumns: '1fr auto',
-      alignItems: 'center',
-      columnGap: rem(8),
       '> :first-child': { gridRow: '1 / 3', gridColumn: 1 },
       '> :not(:first-child)': { gridRow: 2, gridColumn: 2 },
     },
   },
 ]);
 
-// Desktop: a plain row, so topRowStyles + the badges sit inline. Mobile: stacks
+// Desktop: a plain row, so the name line and the badges sit inline. Mobile: stacks
 // into two lines — avatar+name on top, the "Non CRN" or role badge below —
 // matching Figma's "User Name" column layout.
 const userInfoStyles = css([
@@ -139,8 +137,6 @@ const userInfoStyles = css([
     },
   },
 ]);
-
-const topRowStyles = flexRowGap8Styles;
 
 export const avatar24Styles = css({
   margin: 0,
@@ -222,7 +218,7 @@ const SpeakerUserRow: React.FC<SpeakerUserRowProps> = ({
   return (
     <div css={rowStyles} role="listitem">
       <div css={userInfoStyles}>
-        <span css={topRowStyles}>
+        <span css={flexRowGap8Styles}>
           {isExternal ? (
             <span css={placeholderAvatarStyles}>{userPlaceholderIcon}</span>
           ) : (
