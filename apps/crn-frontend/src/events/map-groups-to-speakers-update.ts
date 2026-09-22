@@ -1,5 +1,5 @@
 import { EventUpdateDetailsRequest } from '@asap-hub/model';
-import { SpeakerGroup } from '@asap-hub/react-components';
+import { groupFindings, SpeakerGroup } from '@asap-hub/react-components';
 
 const collectSpeakerIds = (groups: SpeakerGroup[]): Set<string> =>
   new Set(
@@ -28,7 +28,7 @@ export const mapGroupsToSpeakersUpdate = (
     .filter((group) => group.variant === 'team')
     .map((group) => ({
       teamId: group.id,
-      shared: group.preliminaryFindingsShared,
+      shared: groupFindings(group).hasAnyShared,
     }));
 
   return { speakersToRemove, preliminaryDataShared };
