@@ -135,7 +135,6 @@ const warningTextStyles = css({
 const pillStyles = css({
   height: rem(40),
   padding: `0 ${rem(16)}`,
-  gap: rem(8),
   borderColor: neutral700.rgb,
   fontSize: rem(17),
   fontWeight: 400,

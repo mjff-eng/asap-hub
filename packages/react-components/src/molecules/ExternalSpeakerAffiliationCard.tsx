@@ -53,7 +53,6 @@ const headerStyles = css({
 const identityStyles = css([
   flexRowGap8Styles,
   {
-    alignItems: 'center',
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       flexDirection: 'column',
       alignItems: 'flex-start',
