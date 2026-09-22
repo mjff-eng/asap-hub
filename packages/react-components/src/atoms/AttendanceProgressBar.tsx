@@ -1,12 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { fern, info500, iris, steel } from '../colors';
+import { steel } from '../colors';
 import { rem } from '../pixels';
 import { clampPercentage } from '../utils';
 
-// Self-contained so the attendance surface can be removed by deleting its own
-// files: the ramp, unlike findingsGradient, maps onto the filled portion, so the
-// bar runs purple → blue → green at every value.
-const attendanceGradient = `linear-gradient(90deg, ${iris.hex} 0%, ${info500.hex} 48.44%, ${fern.hex} 100%)`;
+import { findingsGradient } from './findingsGradient';
 
 type AttendanceProgressBarProps = {
   percentage: number;
@@ -37,7 +34,12 @@ const AttendanceProgressBar: React.FC<AttendanceProgressBarProps> = ({
         css={{
           height: '100%',
           borderRadius: rem(999),
-          background: attendanceGradient,
+          background: findingsGradient,
+          // The ramp spans the whole track and the fill reveals only the
+          // 0→value slice, so the tip colour tracks attendance: purple low,
+          // blue mid, green once most of the group turned up.
+          backgroundSize: `${value > 0 ? 10000 / value : 100}% 100%`,
+          backgroundRepeat: 'no-repeat',
         }}
         style={{ width: `${value}%` }}
       />

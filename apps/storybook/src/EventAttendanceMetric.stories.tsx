@@ -12,7 +12,7 @@ const meta: Meta<typeof EventAttendanceMetric> = {
     value: {
       control: { type: 'range', min: 0, max: 100, step: 1 },
       description:
-        'Fills the bar and prints the headline number. The gradient maps onto the filled portion, so it runs purple → blue → green whatever the value.',
+        'Fills the bar and prints the headline number. The tip colour tracks the value: purple low, blue around half, green only once most of the group attended.',
     },
     caption: { control: 'text' },
     captionDetail: { control: 'text' },

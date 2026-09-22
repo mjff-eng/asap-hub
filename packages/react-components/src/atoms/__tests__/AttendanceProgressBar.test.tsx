@@ -30,6 +30,20 @@ describe('AttendanceProgressBar', () => {
     expect(getByRole('progressbar').firstElementChild).toHaveStyle('width: 0%');
   });
 
+  it('reveals only the 0-to-value slice of the ramp, so the tip tracks the value', () => {
+    const { getByRole, rerender } = render(
+      <AttendanceProgressBar percentage={50} />,
+    );
+    expect(getByRole('progressbar').firstElementChild).toHaveStyle(
+      'background-size: 200% 100%',
+    );
+
+    rerender(<AttendanceProgressBar percentage={0} />);
+    expect(getByRole('progressbar').firstElementChild).toHaveStyle(
+      'background-size: 100% 100%',
+    );
+  });
+
   it('exposes the label as an accessible name', () => {
     const { getByRole } = render(
       <AttendanceProgressBar percentage={65} label="This event" />,
