@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Card, Paragraph, Subtitle } from '../atoms';
-import { charcoal, lead, steel } from '../colors';
+import { charcoal, neutral500, neutral900 } from '../colors';
 import { ExpandableText, Info, TooltipInfo } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
 import { getPerformanceMoodIcon, getPerformanceMoodLabel } from '../utils';
@@ -24,7 +24,7 @@ const tableStyles = css({
   width: '100%',
   borderCollapse: 'collapse',
   'tbody tr:not(:last-child) td': {
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${neutral500.rgb}`,
   },
   [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
     display: 'none !important',
@@ -48,7 +48,7 @@ const headerWithInfoStyles = css({
 const cellStyles = css({
   padding: `${rem(20)} 0`,
   verticalAlign: 'middle',
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -102,7 +102,7 @@ const mobileItemStyles = css({
     paddingTop: 0,
   },
   '&:not(:last-child)': {
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${neutral500.rgb}`,
   },
 });
 
@@ -110,7 +110,7 @@ const mobileFieldStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(8),
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontSize: rem(17),
   lineHeight: rem(24),
 });
@@ -232,19 +232,19 @@ const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
     <ExpandableText variant="arrow" expandOnce>
       <div css={detailsStyles}>
         <div css={detailsBlockStyles}>
-          <Subtitle accent="lead" noMargin>
+          <Subtitle accent="neutral900" noMargin>
             ASAP Philosophy:
           </Subtitle>
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="neutral900">
             ASAP's goal is for all ASAP-generated CRN outputs to be well-curated
             and shared within the ASAP research community through the CRN Hub.
           </Paragraph>
         </div>
         <div css={detailsBlockStyles}>
-          <Subtitle accent="lead" noMargin>
+          <Subtitle accent="neutral900" noMargin>
             Metric Definition:
           </Subtitle>
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="neutral900">
             The Hub Research Outputs Metric provides a high-level overview of
             ASAP-funded outputs that are listed on the Hub, along with their
             public sharing status. Please note that this metric reflects only
@@ -253,7 +253,7 @@ const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
             Science compliance review.
           </Paragraph>
         </div>
-        <Paragraph noMargin accent="lead">
+        <Paragraph noMargin accent="neutral900">
           As a reminder, ASAP requires that all ASAP-funded outputs be included
           on the Hub by the time of final publication. While it is possible for
           the values to differ between the Hub Research Outputs metrics and Open

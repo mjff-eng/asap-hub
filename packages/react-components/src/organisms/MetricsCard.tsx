@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
 
 import { Button, Card, Paragraph, Subtitle } from '../atoms';
-import { charcoal, lead, steel } from '../colors';
+import { charcoal, neutral500, neutral900 } from '../colors';
 import { minusRectIcon, plusRectIcon } from '../icons';
 import { ExpandableText, Info } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
@@ -41,7 +41,7 @@ const rowStyles = css({
     paddingBottom: 0,
   },
   '&:not(:last-of-type)': {
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${neutral500.rgb}`,
   },
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     display: 'grid',
@@ -75,7 +75,7 @@ const fieldStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(8),
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontSize: rem(17),
   lineHeight: rem(24),
   [`@media (min-width: ${tabletScreen.min}px)`]: {
@@ -163,18 +163,18 @@ const MetricDetails: React.FC<Pick<Metric, 'philosophy' | 'definition'>> = ({
 }) => (
   <div css={detailsContentStyles}>
     <div>
-      <Subtitle accent="lead" noMargin>
+      <Subtitle accent="neutral900" noMargin>
         ASAP Philosophy
       </Subtitle>
-      <Paragraph noMargin accent="lead">
+      <Paragraph noMargin accent="neutral900">
         {philosophy}
       </Paragraph>
     </div>
     <div css={definitionStyles}>
-      <Subtitle accent="lead" noMargin>
+      <Subtitle accent="neutral900" noMargin>
         Metric Definition
       </Subtitle>
-      <Paragraph noMargin accent="lead">
+      <Paragraph noMargin accent="neutral900">
         {definition}
       </Paragraph>
     </div>
