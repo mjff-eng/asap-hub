@@ -9,6 +9,18 @@ describe('projectIcon', () => {
     expect(screen.getByTitle('Discovery Project')).toBeInTheDocument();
   });
 
+  test('Should return the resource icon for a Resource Project', () => {
+    render(projectIcon('Resource Project'));
+
+    expect(screen.getByTitle('Resource Project')).toBeInTheDocument();
+  });
+
+  test('Should return the trainee icon for a Trainee Project', () => {
+    render(projectIcon('Trainee Project'));
+
+    expect(screen.getByTitle('Trainee Project')).toBeInTheDocument();
+  });
+
   test('Should fall back to the generic icon for an unknown type', () => {
     const { container } = render(projectIcon());
 

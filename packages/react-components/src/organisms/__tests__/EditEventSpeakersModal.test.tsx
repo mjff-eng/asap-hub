@@ -521,6 +521,119 @@ describe('EditEventSpeakersModal', () => {
     expect(screen.queryByText('Speaker 6')).not.toBeInTheDocument();
   });
 
+  it('Should toggle one speaker without touching the others or the other group', async () => {
+    renderModal({
+      groups: [
+        getTeamGroup({
+          users: [
+            getUser({ id: 'user-a', displayName: 'Ana Reis' }),
+            getUser({ id: 'user-b', displayName: 'Bruno Sa' }),
+          ],
+        }),
+        getTeamGroup({ id: 'team-2', teamName: 'Team Beta' }),
+      ],
+    });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    await userEvent.click(
+      screen.getByRole('checkbox', {
+        name: 'Ana Reis preliminary findings shared',
+      }),
+    );
+
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Ana Reis preliminary findings shared',
+      }),
+    ).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Bruno Sa preliminary findings shared',
+      }),
+    ).not.toBeChecked();
+    expect(screen.getByText('1 of 2 shared')).toBeVisible();
+    expect(screen.getByText('0 of 1 shared')).toBeVisible();
+  });
+
+  it('Should add into the matching group and leave the other groups alone', async () => {
+    renderModal({
+      groups: [
+        getTeamGroup({
+          id: 'team-2',
+          teamName: 'Team Beta',
+          users: [getUser({ id: 'user-c', displayName: 'Carla Mota' })],
+        }),
+        getTeamGroup(),
+      ],
+    });
+
+    await search('John', 'John Smith');
+
+    expect(screen.getByText('Added John Smith to Team Beta')).toBeVisible();
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+    expect(screen.queryAllByText('John Smith')).toHaveLength(1);
+  });
+
+  it('Should toggle one external speaker without touching the other', async () => {
+    renderModal({
+      groups: [
+        getExternalGroup({
+          users: [
+            getExternalUser({ id: 'ext-1', displayName: 'Guest One' }),
+            getExternalUser({ id: 'ext-2', displayName: 'Guest Two' }),
+          ],
+        }),
+      ],
+    });
+
+    await userEvent.click(
+      screen.getByRole('checkbox', {
+        name: 'Guest One preliminary findings shared',
+      }),
+    );
+
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Guest One preliminary findings shared',
+      }),
+    ).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Guest Two preliminary findings shared',
+      }),
+    ).not.toBeChecked();
+  });
+
+  it('Should reveal and re-hide the capped rows of the External section', async () => {
+    renderModal({
+      groups: [
+        getExternalGroup({
+          users: Array.from({ length: 7 }, (_row, index) =>
+            getExternalUser({
+              id: `ext-${index}`,
+              displayName: `Guest ${index}`,
+            }),
+          ),
+        }),
+      ],
+    });
+
+    expect(screen.queryByText('Guest 6')).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Show 2 more speakers' }),
+    );
+    expect(screen.getByText('Guest 6')).toBeVisible();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Show less' }));
+    expect(screen.queryByText('Guest 6')).not.toBeInTheDocument();
+  });
+
   it('Should show a Show more control on a section with more than five group rows', async () => {
     renderModal({
       groups: Array.from({ length: 7 }, (_row, index) =>
