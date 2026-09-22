@@ -208,7 +208,9 @@ const TeamRows: React.FC<{
 );
 
 const AttendanceSection: React.FC<{
-  title: string;
+  // Dropped when the event has no hosting group: with a single section there is
+  // nothing to tell apart, so the count stands on its own.
+  title?: string;
   teams: EventAttendanceTeam[];
   helperText?: string;
 }> = ({ title, teams, helperText }) => {
@@ -224,8 +226,12 @@ const AttendanceSection: React.FC<{
     <tbody>
       <tr>
         <th css={sectionHeaderCellStyles} colSpan={2} scope="rowgroup">
-          <span css={sectionTitleStyles}>{title}</span>
-          <span css={sectionSeparatorStyles}>•</span>
+          {title && (
+            <>
+              <span css={sectionTitleStyles}>{title}</span>
+              <span css={sectionSeparatorStyles}>•</span>
+            </>
+          )}
           <span css={sectionCountStyles}>
             {attendedCount(teams)} of {teams.length} attended
           </span>
@@ -267,6 +273,7 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
       team,
     ),
   );
+  const hasInterestGroupRows = interestGroupTeams.length > 0;
   const interestGroupAttended = attendedCount(interestGroupTeams);
   const attendancePercentage =
     interestGroupTeams.length > 0
@@ -323,7 +330,7 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
       <div css={contentStyles}>
         {header}
 
-        {interestGroupTeams.length > 0 && (
+        {hasInterestGroupRows && (
           <div css={metricStyles}>
             <EventAttendanceMetric
               label="This event"
@@ -355,7 +362,7 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
                 </th>
               </tr>
             </thead>
-            {interestGroupTeams.length > 0 && (
+            {hasInterestGroupRows && (
               <AttendanceSection
                 title={
                   interestGroupName
@@ -367,9 +374,13 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
             )}
             {additionalTeams.length > 0 && (
               <AttendanceSection
-                title="Additional teams"
+                title={hasInterestGroupRows ? 'Additional teams' : undefined}
                 teams={additionalTeams}
-                helperText="Teams from outside the interest group."
+                helperText={
+                  hasInterestGroupRows
+                    ? 'Teams from outside the interest group.'
+                    : undefined
+                }
               />
             )}
           </table>

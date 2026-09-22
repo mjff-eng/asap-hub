@@ -715,8 +715,11 @@ describe('the NEW_EVENT_PAGE flag', () => {
           wrapper: createWrapper({ techSupport: true }),
         });
 
-        expect(await findByText('Additional teams')).toBeVisible();
+        // Nothing comes from the group any more, so the card drops the
+        // headings and shows the row on its own.
+        expect(await findByText('Interest Group Team')).toBeVisible();
         expect(queryByText('From Group 1')).not.toBeInTheDocument();
+        expect(queryByText('Additional teams')).not.toBeInTheDocument();
       });
 
       it('keeps a hub-inactive team in the interest group section', async () => {

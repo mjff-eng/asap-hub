@@ -117,14 +117,20 @@ describe('EventAttendance', () => {
     expect(queryByText('60%')).not.toBeInTheDocument();
   });
 
-  it('hides the metric tile and the interest-group section with no interest-group rows', () => {
+  it('hides the metric tile and every section heading with no interest-group rows', () => {
     const { queryByRole, queryByText, getByText } = renderCard({
       teams: [{ teamId: 't3', teamName: 'Team Gamma', attended: true }],
       interestGroupName: undefined,
     });
     expect(queryByRole('progressbar')).not.toBeInTheDocument();
     expect(queryByText(/^From /)).not.toBeInTheDocument();
-    expect(getByText('Additional teams')).toBeVisible();
+    // With a single section there is nothing to tell apart: the count stands
+    // on its own, with no heading and no helper line.
+    expect(getByText('1 of 1 attended')).toBeVisible();
+    expect(queryByText('Additional teams')).not.toBeInTheDocument();
+    expect(
+      queryByText('Teams from outside the interest group.'),
+    ).not.toBeInTheDocument();
   });
 
   it('names the interest-group section after the group', () => {

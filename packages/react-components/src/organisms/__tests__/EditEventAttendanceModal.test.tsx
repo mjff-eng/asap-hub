@@ -239,13 +239,14 @@ describe('EditEventAttendanceModal', () => {
     expect(screen.getByText('From interest group (1)')).toBeInTheDocument();
   });
 
-  it('Should render only the additional section when no row came from the group', () => {
+  it('Should drop every group heading when no row came from the group', () => {
     renderModal({
       teams: [{ teamId: 't2', teamName: 'Team Beta', attended: false }],
     });
 
     expect(screen.queryByText(/^From /)).not.toBeInTheDocument();
-    expect(screen.getByText('Additional teams (1)')).toBeInTheDocument();
+    expect(screen.queryByText(/Additional teams/)).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Team Beta' })).toBeInTheDocument();
   });
 
   it('Should lock interest-group rows while keeping their toggle usable', async () => {

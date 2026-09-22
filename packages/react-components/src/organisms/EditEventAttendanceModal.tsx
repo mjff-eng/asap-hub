@@ -429,7 +429,9 @@ const noSearchMatchesMessage = ({ inputValue }: { inputValue: string }) =>
   `Sorry, no matches for ${inputValue}.`;
 
 const AttendeeGroup: React.FC<{
-  title: string;
+  // Dropped when the event has no hosting group: with a single group there is
+  // nothing to tell apart, so the rows start straight under the column header.
+  title?: string;
   helperText?: string;
   teams: EventAttendanceTeam[];
   locked?: boolean;
@@ -455,12 +457,14 @@ const AttendeeGroup: React.FC<{
 
   return (
     <div css={attendeesGroupStyles}>
-      <div css={groupHeaderStyles}>
-        <p css={groupTitleStyles}>
-          {title} ({teams.length})
-        </p>
-        {helperText && <p css={groupHelperStyles}>{helperText}</p>}
-      </div>
+      {title && (
+        <div css={groupHeaderStyles}>
+          <p css={groupTitleStyles}>
+            {title} ({teams.length})
+          </p>
+          {helperText && <p css={groupHelperStyles}>{helperText}</p>}
+        </div>
+      )}
       <div css={attendeesRowsStyles} role="list">
         {visibleTeams.map((team, index) => (
           <div
@@ -793,7 +797,11 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
                 )}
                 {additionalRows.length > 0 && (
                   <AttendeeGroup
-                    title="Additional teams"
+                    title={
+                      interestGroupRows.length > 0
+                        ? 'Additional teams'
+                        : undefined
+                    }
                     teams={additionalRows}
                     enabled={!isCancelling}
                     onToggleAttended={toggleAttended}
