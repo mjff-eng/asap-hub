@@ -17,9 +17,8 @@ const sectionStyles = css({
   flexDirection: 'column',
 });
 
-// Matches EventAttendance's section header: 16 above the title, and the 16 the
-// first row carries below it. A ratio, not `rem`: line-height in `em` resolves
-// against the element's own font size.
+// A ratio, not `rem`: line-height in `em` resolves against the element's own
+// font size.
 const headingStyles = css({
   margin: 0,
   padding: `${rem(16)} 0 0`,
@@ -29,16 +28,13 @@ const headingStyles = css({
   lineHeight: 16 / 14,
 });
 
-// The last visible row drops its own divider, so the line above Show more /
-// Show less comes from here; 16px either side of the button makes the 32.
+// The last visible row drops its own divider, so the line comes from here.
 const showMoreStyles = css({
   display: 'flex',
   padding: `${rem(16)} 0`,
   borderTop: `1px solid ${steel.rgb}`,
 });
 
-// Flat rows carry no padding or divider of their own, so the section gives them
-// the same rhythm SpeakerTeamRow gives a grouped row.
 const externalRowsStyles = css({
   display: 'flex',
   flexDirection: 'column',
@@ -55,8 +51,6 @@ type SpeakerSectionProps = {
   readonly rows: ReadonlyArray<ReactElement>;
   readonly expanded: boolean;
   readonly onToggle: () => void;
-  // External speakers are flat rows and need their own gap; grouped rows carry
-  // their spacing on the group itself, so the card passes nothing here.
   readonly groupedRowsStyles?: ReturnType<typeof css>;
 };
 

@@ -28,16 +28,12 @@ const wrapperStyles = css({
   paddingTop: rem(16),
   paddingBottom: rem(16),
   borderBottom: `1px solid ${steel.rgb}`,
-  // The padding stays on the last row: that 16 plus the next section's heading
-  // is the 32 between sections.
+  // Padding stays: it is half of the 32 between sections.
   '&:last-of-type': {
     borderBottom: 'none',
   },
 });
 
-// [name+counter] and [switch+chevron], per Figma's auto-layout. `gap` is a
-// floor — space-between still pushes the switch/chevron group flush right
-// whenever there's room.
 const headerStyles = css({
   display: 'flex',
   alignItems: 'center',
@@ -50,8 +46,6 @@ const headerStyles = css({
   },
 });
 
-// Stacked under the name on mobile, so the pill and the chevron share a line
-// and the chevron still sits at the right edge.
 const groupTrailingStyles = css([
   trailingColumnsStyles,
   {
@@ -62,12 +56,8 @@ const groupTrailingStyles = css([
   },
 ]);
 
-// No `overflow`/`minWidth: 0` — team names never truncate. A name wider than
-// the card just scrolls (overflowX: auto on groupsCardStyles), matching
-// EditEventAttendanceModal. Spacing between icon/name/badge/count comes from
-// `gap`, not a literal space character — a flex container drops anonymous
-// all-whitespace text nodes (see EventSpeakers.tsx's teamInfoStyles, the
-// same fix applied there).
+// Team names never truncate; a name wider than the card scrolls it. Spacing
+// comes from `gap`, not spaces — a flex container drops whitespace text nodes.
 const labelStyles = css({
   display: 'flex',
   alignItems: 'center',
@@ -75,7 +65,6 @@ const labelStyles = css({
   gap: rem(8),
   fontSize: rem(17),
   [`@media (max-width: ${mobileScreen.max}px)`]: {
-    // Figma's "Caption/C1" mobile type scale for the team name + counter.
     fontSize: rem(14),
     lineHeight: rem(16),
     '> svg': { display: 'none' },
@@ -100,8 +89,6 @@ const inactiveBadgeStyles = css({
 
 const countStyles = css([leadTextStyles, { flexShrink: 0 }]);
 
-// Scales with the viewport instead of jumping at a breakpoint, bottoming
-// out at 12px (Figma's own spacing annotation for this gap).
 const nestedListStyles = css({
   display: 'flex',
   flexDirection: 'column',
@@ -172,8 +159,7 @@ const SpeakerTeamRow: React.FC<SpeakerTeamRowProps> = ({
     ? users
     : users.slice(0, defaultVisibleSpeakers);
   const hiddenUsers = users.length - visibleUsers.length;
-  // A project only routes once its type is known — the route tree is split by
-  // Discovery / Resource / Trainee, so without it there is no path to build.
+  // The project route tree is split by type, so there is no path without one.
   const href =
     variant === 'project'
       ? projectId && projectType && projectRouteByType[projectType](projectId).$

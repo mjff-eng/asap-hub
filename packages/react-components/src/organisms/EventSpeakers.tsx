@@ -124,8 +124,6 @@ const FindingsMetric: React.FC<{
 );
 
 type EventSpeakersProps = {
-  // Shared with EditEventSpeakersModal: the same SpeakerGroup[] can feed both
-  // this card and the modal, and the modal's onSave writes straight back.
   groups?: SpeakerGroup[];
   hasFinished?: boolean;
   onExport?: () => void;

@@ -122,9 +122,6 @@ const searchExternalTextStyles = css({
   lineHeight: rem(24),
 });
 
-// The gap only ever separates a notification — the toast or one of the pending
-// speaker banners — from the speakers table below it, since only one of the two
-// is ever on screen.
 const speakersSectionStyles = css({
   display: 'flex',
   flexDirection: 'column',
@@ -142,9 +139,6 @@ const cardSurfaceStyles = (enabled: boolean) =>
 const groupsCardStyles = (enabled: boolean) =>
   css([cardSurfaceStyles(enabled), { padding: rem(24), overflowX: 'auto' }]);
 
-// "Name" and "Preliminary Findings", mirroring SpeakerTeamRow's row layout
-// below it. `gap` is a floor — space-between still pushes them apart when
-// there's room.
 const groupsTableHeaderStyles = css({
   display: 'flex',
   alignItems: 'center',
@@ -178,9 +172,8 @@ const emptyStateStyles = (enabled: boolean) =>
 
 const emptyStateTitleStyles = css({ fontWeight: 700 });
 
-// The two spreads are identical on purpose: TS only narrows `users`'s element
-// type when the `external` discriminant is checked on both sides, so a single
-// unconditional branch fails to typecheck against the union.
+// Both branches are identical: TS only narrows the union when the discriminant
+// is checked on both sides.
 const removeGroupUser = (group: SpeakerGroup, userId: string): SpeakerGroup =>
   group.variant === 'external'
     ? { ...group, users: group.users.filter((user) => user.id !== userId) }
@@ -209,9 +202,6 @@ const setGroupUserShared = (
         ),
       };
 
-// A group the modal opened with must survive losing its last speaker — save
-// still has to report it as emptied. One that only exists because of an add in
-// this session must not: saved, it creates a real affiliation for nobody.
 const withoutGroupsAddedThisSession = (
   nextGroups: SpeakerGroup[],
   originalGroupIds: ReadonlySet<string>,
@@ -259,21 +249,18 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   const [addedSpeaker, setAddedSpeaker] = useState<AddedSpeaker | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
-  // Only ever increments: deriving external ids from the current speaker count
-  // reuses an id after a removal, and two rows sharing an id delete together.
+  // Never decremented: reusing a number after a removal makes two rows share an
+  // id, and they then delete together.
   const externalUserCount = useRef(0);
-  // What the modal opened with. The `groups` prop keeps changing while the modal
-  // is open (the event page polls for a refresh), so comparing against it would
-  // let another admin's edit enable Save with no local change and turn their
-  // additions into removals on save. A useState initializer, not useRef, so the
-  // Set is built once rather than on every render.
+  // Never compare against the live `groups` prop: a refresh under the open modal
+  // would enable Save with no local change and turn another admin's additions
+  // into removals on save.
   const [original] = useState(() => ({
     groups,
     groupIds: new Set(groups.map((group) => group.id)) as ReadonlySet<string>,
   }));
-  // Mirrors speakerGroups so two adds dispatched in the same batch (react-select
-  // resolving one option twice, a double click) see each other: the second add's
-  // dedup has to read the first one's result, which setState has not committed.
+  // Two adds dispatched in the same batch have to see each other, and setState
+  // has not committed the first one when the second reads it.
   const latestGroups = useRef(speakerGroups);
 
   const updateGroups = (
@@ -287,8 +274,6 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
 
   const isEditMode = speakerGroups.some((group) => group.users.length > 0);
   const title = isEditMode ? 'Edit Speakers' : 'Add Speakers';
-  // A group with no members left (every speaker removed) is dropped from the
-  // visible table, but kept in speakerGroups so onSave still reports it.
   const visibleGroups = speakerGroups.filter((group) => group.users.length > 0);
   const teamGroups = visibleGroups.filter(
     (group): group is SpeakerTeamGroup => group.variant === 'team',
@@ -358,13 +343,8 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       );
     });
     setExpandedIds((current) => new Set(current).add(affiliation.id));
-    // A row appended past the section cap is invisible until the section is
-    // expanded, so the toast would announce an add with nothing on screen.
     expandSection(affiliation.variant);
     setPendingSpeaker(null);
-    // The updater returns `current` untouched for a speaker who is already in
-    // the group. Toasting that no-op would offer an Undo that deletes the
-    // incumbent.
     setAddedSpeaker(
       after === before
         ? null
@@ -382,9 +362,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     return `external-${externalUserCount.current}-${name}`;
   };
 
-  // A guest who matched no CRN user has no userId, so they carry a generated
-  // one. Until the backend can create the user record, the id only has to be
-  // unique within this edit session.
+  // Only unique within this edit session, until the backend can mint a real one.
   const addGuestToAffiliation = (
     name: string,
     affiliation: SpeakerTeamOption,
@@ -446,8 +424,6 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       ),
     );
 
-  // Adding a speaker only ever reveals its section; the Show more / Show less
-  // button is the one place that can collapse it again.
   const expandSection = (variant: SpeakerGroup['variant']) =>
     setExpandedSections((current) => new Set(current).add(variant));
 
@@ -498,8 +474,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     try {
       await onSave(speakerGroups);
     } catch {
-      // The caller surfaces the error; the modal only needs to unlock so the
-      // user can retry or cancel instead of staying stuck on "saving".
+      // The caller surfaces the error; the modal only has to unlock.
     } finally {
       setIsSaving(false);
     }
@@ -533,8 +508,6 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   );
 
   const renderBanner = ({ displayName, user }: PendingSpeaker) => {
-    // A CRN user with no team or project cannot present at all; only a name
-    // that matches no CRN user becomes an external guest.
     if (user && user.affiliationOptions.length === 0) {
       return (
         <SpeakerToast
@@ -560,8 +533,6 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     ) : (
       <ExternalSpeakerAffiliationCard
         displayName={displayName}
-        // Candidates are the teams and projects already on this event; the
-        // search across every CRN team and project is not wired up yet.
         affiliationOptions={[...teamGroups, ...projectGroups].map((group) => ({
           variant: group.variant,
           id: group.id,

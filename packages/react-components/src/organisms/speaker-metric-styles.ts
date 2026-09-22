@@ -18,8 +18,7 @@ export const tileStyles = css({
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'column',
-  // The grid stretches both tiles to the taller one, so the shorter tile's
-  // content centres in the leftover height instead of hugging the top.
+  // The grid stretches both tiles to the taller one.
   justifyContent: 'center',
   gap: rem(12),
   width: '100%',
@@ -40,7 +39,7 @@ export const tileValueStyles = css({
   fontWeight: 'bold',
   fontSize: rem(30),
   // A ratio, not `rem`: line-height in `em` resolves against the element's own
-  // font size, so `rem(40)` here would render 40/17 x 30px.
+  // font size.
   lineHeight: 40 / 30,
   color: neutral1000.rgb,
   [`@media (max-width: ${mobileScreen.max}px)`]: {
@@ -77,8 +76,7 @@ export const tileDividerStyles = css({
   backgroundColor: steel.rgb,
 });
 
-// Label and value alternate in DOM order so each number stays announced with
-// its own row; the grid is what right-aligns the numbers.
+// Alternating in DOM order keeps each number announced with its own label.
 export const tileBreakdownStyles = css({
   display: 'grid',
   gridTemplateColumns: '1fr auto',
