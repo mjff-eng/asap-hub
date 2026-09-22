@@ -1,156 +1,130 @@
-import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import {
-  Button,
-  Card,
-  GradientProgressBar,
-  GradientProgressWheel,
-  Headline3,
-  Link,
-  Paragraph,
-} from '../atoms';
-import { lead, neutral1000, steel } from '../colors';
-import {
-  chevronDownIcon,
-  chevronUpIcon,
-  ExportIcon,
-  InactiveBadgeIcon,
-  invalidTickIcon,
-  PencilIcon,
-  plusIcon,
-  tickInCircleIcon,
-} from '../icons';
-import {
-  metricBarStyles,
-  metricContainerStyles,
-  metricLabelStyles,
-  metricProgressRowStyles,
-  metricValueStyles,
-  metricWheelStyles,
-} from '../molecules/shared-metric-card-styles';
-import SpeakerUserRow from '../molecules/SpeakerUserRow';
+import { Button, Card, Headline3, Paragraph } from '../atoms';
+import { neutral1000 } from '../colors';
+import { ExportIcon, PencilIcon, plusIcon } from '../icons';
+import SpeakerTeamRow from '../molecules/SpeakerTeamRow';
+import SpeakerUserRow, {
+  chevronSpacerStyles,
+  findingsColumnStyles,
+  trailingColumnsStyles,
+} from '../molecules/SpeakerUserRow';
 import { rem, tabletScreen } from '../pixels';
-import { pluralizeTeams } from '../utils';
+import { pluralize } from '../utils';
 
-import { defaultVisibleTeams, teamIcon } from './shared-event-card';
 import {
   actionsStyles,
-  cellStyles,
-  chevronButtonStyles,
   contentStyles,
-  contentWithFooterStyles,
   editIconButtonStyles,
   emptyStateStyles,
-  headerCellStyles,
   headerStyles,
-  horizontalScrollGutter,
   iconButtonStyles,
   metricsStyles,
-  statusCellStyles,
-  statusIconStyles,
-  tableWrapperStyles,
-  teamInfoNoWrapStyles,
-  teamInfoStyles,
-  viewMoreStyles,
 } from './shared-event-card-styles';
 import {
-  SpeakerExternalGroup,
+  groupFindings,
+  groupLabel,
   SpeakerGroup,
+  SpeakerGroupExternalUser,
+  SpeakerProjectGroup,
   SpeakerTeamGroup,
 } from './speaker-group';
+import SpeakerSection from './speaker-section';
+import {
+  tileBarFillStyles,
+  tileBarTrackStyles,
+  tileBreakdownStyles,
+  tileBreakdownValueStyles,
+  tileCaptionCountStyles,
+  tileCaptionStyles,
+  tileDividerStyles,
+  tileHeaderStyles,
+  tileRuleStyles,
+  tileStyles,
+  tileValueStyles,
+} from './speaker-metric-styles';
 
 const mobileQuery = `@media (max-width: ${tabletScreen.min}px)`;
 
-const speakerTableStyles = css({
-  width: '100%',
-  borderCollapse: 'collapse',
+// A long team or project name scrolls the card rather than wrapping, matching
+// the edit modal.
+const cardHeaderStyles = css({ gap: rem(12) });
+
+const rowsWrapperStyles = css({
+  marginTop: rem(32),
+  overflowX: 'auto',
 });
 
-// width:1% shrinks the column to its header so the tick sits under the label.
-const findingsColStyles = css({ width: '1%' });
-const findingsHeaderCellStyles = css({ whiteSpace: 'nowrap' });
-const chevronColStyles = css({ width: rem(40) });
+const columnHeaderStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: rem(24),
+  fontSize: rem(17),
+  fontWeight: 'bold',
+  lineHeight: rem(24),
+  letterSpacing: rem(0.1),
+  color: neutral1000.rgb,
+});
 
-// The compact "P. Findings" is only used on mobile while the table fits;
-// horizontal overflow forces the full label at any width (handled in JS).
 const fullFindingsLabel = css({ [mobileQuery]: { display: 'none' } });
 const shortFindingsLabel = css({
   display: 'none',
   [mobileQuery]: { display: 'inline' },
 });
 
-const teamCellStyles = css({ paddingRight: rem(24) });
-
-const teamGroupStyles = css({
-  borderBottom: `1px solid ${steel.rgb}`,
-  '&:last-of-type': {
-    borderBottom: 'none',
-  },
-});
-
-const chevronCellStyles = css({
-  textAlign: 'right',
-});
-
-const membersCellStyles = css({
-  padding: 0,
-});
-
-const leadTextStyles = css({
-  color: lead.rgb,
-});
-
-const membersListStyles = css({
-  listStyle: 'none',
-  margin: 0,
-  padding: `0 0 ${rem(12 + 16)} ${rem(32)}`,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: rem(16),
-  [mobileQuery]: {
-    gap: rem(24),
-    paddingLeft: rem(12),
-  },
-});
-
-const MetricCard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div css={metricContainerStyles}>{children}</div>
-);
-
 const SpeakerCountMetric: React.FC<{
   label: string;
   value: number;
-  caption: string;
-}> = ({ label, value, caption }) => (
-  <MetricCard>
-    <p css={metricLabelStyles}>{label}</p>
-    <p css={metricValueStyles}>{value}</p>
-    <p css={metricLabelStyles}>{caption}</p>
-  </MetricCard>
+  breakdown: ReadonlyArray<{ label: string; value: number }>;
+}> = ({ label, value, breakdown }) => (
+  <div css={tileStyles}>
+    <div css={tileHeaderStyles}>
+      <p css={tileValueStyles}>{value}</p>
+      <p css={tileCaptionCountStyles}>{label}</p>
+    </div>
+    <hr css={tileDividerStyles} />
+    <div css={tileBreakdownStyles}>
+      {breakdown.flatMap((row) => [
+        <p key={`${row.label}-label`}>{row.label}</p>,
+        <p key={`${row.label}-value`} css={tileBreakdownValueStyles}>
+          {row.value}
+        </p>,
+      ])}
+    </div>
+  </div>
 );
 
 const FindingsMetric: React.FC<{
   label: string;
   value: number;
-  caption: string;
-}> = ({ label, value, caption }) => (
-  <MetricCard>
-    <div css={metricProgressRowStyles}>
-      <span css={metricWheelStyles}>
-        <GradientProgressWheel percentage={value} label={label} />
-      </span>
+  shared: number;
+  total: number;
+}> = ({ label, value, shared, total }) => (
+  <div css={tileStyles}>
+    <div css={tileHeaderStyles}>
+      <p css={tileValueStyles}>{value}%</p>
+      <span css={tileRuleStyles} />
       <div>
-        <p css={metricLabelStyles}>{label}</p>
-        <p css={metricValueStyles}>{value}%</p>
-        <p css={metricLabelStyles}>{caption}</p>
+        <p css={tileCaptionCountStyles}>{`${shared} of ${pluralize(
+          total,
+          'speaker',
+        )}`}</p>
+        <p css={tileCaptionStyles}>shared preliminary findings</p>
       </div>
     </div>
-    <div css={metricBarStyles}>
-      <GradientProgressBar percentage={value} label={label} />
+    <div
+      css={tileBarTrackStyles}
+      role="progressbar"
+      aria-label={label}
+      aria-valuenow={value}
+      aria-valuemin={0}
+      aria-valuemax={100}
+    >
+      <div css={tileBarFillStyles} style={{ width: `${value}%` }} />
     </div>
-  </MetricCard>
+  </div>
 );
 
 type EventSpeakersProps = {
@@ -161,94 +135,6 @@ type EventSpeakersProps = {
   onExport?: () => void;
   onEdit?: () => void;
   onAddSpeaker?: () => void;
-};
-
-const findingsIcon = (shared: boolean) => (
-  <span
-    css={statusIconStyles}
-    role="img"
-    aria-label={
-      shared ? 'Shared preliminary findings' : 'No preliminary findings'
-    }
-  >
-    {shared ? tickInCircleIcon : invalidTickIcon}
-  </span>
-);
-
-const SpeakerRow: React.FC<{
-  info: React.ReactNode;
-  sharedPreliminaryFindings: boolean;
-  showFindings: boolean;
-  hasFindings?: boolean;
-  expanded: boolean;
-  onToggle: () => void;
-  label: string;
-  collapsedBottomPadding?: string | number;
-  children?: React.ReactNode;
-}> = ({
-  info,
-  sharedPreliminaryFindings,
-  showFindings,
-  hasFindings = true,
-  expanded,
-  onToggle,
-  label,
-  collapsedBottomPadding,
-  children,
-}) => {
-  const collapsedBottom =
-    !expanded && collapsedBottomPadding !== undefined
-      ? { paddingBottom: collapsedBottomPadding }
-      : undefined;
-  return (
-    <tbody css={teamGroupStyles}>
-      <tr>
-        <td css={[cellStyles, teamCellStyles, collapsedBottom]}>
-          <span css={[teamInfoStyles, teamInfoNoWrapStyles]}>{info}</span>
-        </td>
-        {showFindings && (
-          <td css={[statusCellStyles, collapsedBottom]}>
-            {hasFindings ? findingsIcon(sharedPreliminaryFindings) : null}
-          </td>
-        )}
-        <td css={[statusCellStyles, chevronCellStyles, collapsedBottom]}>
-          <button
-            type="button"
-            css={chevronButtonStyles}
-            onClick={onToggle}
-            aria-expanded={expanded}
-            aria-label={expanded ? `Collapse ${label}` : `Expand ${label}`}
-          >
-            {expanded ? chevronUpIcon : chevronDownIcon}
-          </button>
-        </td>
-      </tr>
-      {expanded && (
-        <tr>
-          <td colSpan={showFindings ? 3 : 2} css={membersCellStyles}>
-            {children}
-          </td>
-        </tr>
-      )}
-    </tbody>
-  );
-};
-
-const useHorizontalOverflow = () => {
-  const [element, setElement] = useState<HTMLElement | null>(null);
-  const [overflowing, setOverflowing] = useState(false);
-  useEffect(() => {
-    if (!element) {
-      return undefined;
-    }
-    const measure = () =>
-      setOverflowing(element.scrollWidth > element.clientWidth);
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [element]);
-  return [setElement, overflowing] as const;
 };
 
 const editorEmptyMessage = (hasFinished: boolean): string =>
@@ -263,27 +149,44 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
   onEdit,
   onAddSpeaker,
 }) => {
-  const [expandedRows, setExpandedRows] = useState<ReadonlySet<string>>(
-    () => new Set(),
-  );
-  const [showAll, setShowAll] = useState(false);
-  const [tableRef, findingsOverflowing] = useHorizontalOverflow();
-
-  const showFindings = hasFinished;
-
   const teamGroups = groups.filter(
     (group): group is SpeakerTeamGroup =>
       group.variant === 'team' && group.users.length > 0,
   );
-  const externalGroup = groups.find(
-    (group): group is SpeakerExternalGroup =>
-      group.variant === 'external' && group.users.length > 0,
+  const projectGroups = groups.filter(
+    (group): group is SpeakerProjectGroup =>
+      group.variant === 'project' && group.users.length > 0,
+  );
+  const externalUsers = groups.reduce<SpeakerGroupExternalUser[]>(
+    (users, group) =>
+      group.variant === 'external' ? [...users, ...group.users] : users,
+    [],
   );
 
-  const externalCount = externalGroup?.users.length ?? 0;
-  const hasExternal = externalCount > 0;
+  const firstGroupId = [...teamGroups, ...projectGroups][0]?.id;
+  const [expandedGroups, setExpandedGroups] = useState<ReadonlySet<string>>(
+    () =>
+      new Set(hasFinished || firstGroupId === undefined ? [] : [firstGroupId]),
+  );
+  const [expandedSections, setExpandedSections] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  );
+  const toggleSection = (variant: string) =>
+    setExpandedSections((current) => {
+      const next = new Set(current);
+      if (!next.delete(variant)) {
+        next.add(variant);
+      }
+      return next;
+    });
 
-  if (teamGroups.length === 0 && !hasExternal) {
+  const showFindings = hasFinished;
+
+  if (
+    teamGroups.length === 0 &&
+    projectGroups.length === 0 &&
+    externalUsers.length === 0
+  ) {
     return (
       <Card>
         <div css={emptyStateStyles}>
@@ -307,44 +210,55 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
     );
   }
 
-  const toggleRow = (key: string) =>
-    setExpandedRows((current) => {
+  const toggleGroup = (id: string) =>
+    setExpandedGroups((current) => {
       const next = new Set(current);
-      if (next.has(key)) {
-        next.delete(key);
-      } else {
-        next.add(key);
+      if (!next.delete(id)) {
+        next.add(id);
       }
       return next;
     });
 
-  const teamMemberCount = teamGroups.reduce(
+  const teamSpeakers = teamGroups.reduce(
     (total, group) => total + group.users.length,
     0,
   );
-  const teamsShared = teamGroups.filter(
-    (group) => group.preliminaryFindingsShared,
-  ).length;
-  const totalSpeakers = teamMemberCount + externalCount;
-  const teamsTotal = teamGroups.length;
+  const projectSpeakers = projectGroups.reduce(
+    (total, group) => total + group.users.length,
+    0,
+  );
+  const totalSpeakers = teamSpeakers + projectSpeakers + externalUsers.length;
+  const sharedSpeakers = [
+    ...teamGroups,
+    ...projectGroups,
+    { users: externalUsers },
+  ].reduce((total, group) => total + groupFindings(group).shared, 0);
   const findingsPercentage =
-    teamsTotal > 0 ? Math.round((teamsShared / teamsTotal) * 100) : 0;
+    totalSpeakers > 0 ? Math.round((sharedSpeakers / totalSpeakers) * 100) : 0;
 
-  const totalRows = teamsTotal + (hasExternal ? 1 : 0);
-  const hasMoreRows = totalRows > defaultVisibleTeams;
-  const visibleTeams = showAll
-    ? teamGroups
-    : teamGroups.slice(0, defaultVisibleTeams - (hasExternal ? 1 : 0));
-  const showExternalRow = hasExternal && (showAll || !hasMoreRows);
-
-  const lastRowBottomPadding = hasMoreRows ? rem(32) : 0;
-  const lastRowPadding = (isLastTeam: boolean): string | number | undefined =>
-    isLastTeam && !showExternalRow ? lastRowBottomPadding : undefined;
+  const renderGroupRow = (group: SpeakerTeamGroup | SpeakerProjectGroup) => (
+    <SpeakerTeamRow
+      key={group.id}
+      variant={group.variant}
+      teamId={group.variant === 'team' ? group.id : undefined}
+      teamType={group.variant === 'team' ? group.teamType : undefined}
+      isTeamInactive={
+        group.variant === 'team' ? group.isTeamInactive : undefined
+      }
+      projectId={group.variant === 'project' ? group.id : undefined}
+      projectType={group.variant === 'project' ? group.projectType : undefined}
+      label={groupLabel(group)}
+      users={group.users}
+      showShared={showFindings}
+      expanded={expandedGroups.has(group.id)}
+      onToggleExpanded={() => toggleGroup(group.id)}
+    />
+  );
 
   return (
     <Card padding={false}>
-      <div css={[contentStyles, hasMoreRows && contentWithFooterStyles]}>
-        <div css={headerStyles}>
+      <div css={contentStyles}>
+        <div css={[headerStyles, cardHeaderStyles]}>
           <Headline3 noMargin>Speakers</Headline3>
           <div css={actionsStyles}>
             {onExport && (
@@ -374,157 +288,64 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
 
         <div css={metricsStyles}>
           <SpeakerCountMetric
-            label="Speakers"
+            label="total speakers"
             value={totalSpeakers}
-            caption={`${teamMemberCount} from teams • ${externalCount} non-CRN`}
+            breakdown={[
+              { label: 'From Teams', value: teamSpeakers },
+              { label: 'From Individual Projects', value: projectSpeakers },
+              { label: 'External', value: externalUsers.length },
+            ]}
           />
           {showFindings && (
             <FindingsMetric
               label="Preliminary findings"
               value={findingsPercentage}
-              caption={`${teamsShared} of ${pluralizeTeams(teamsTotal)}`}
+              shared={sharedSpeakers}
+              total={totalSpeakers}
             />
           )}
         </div>
 
-        <div
-          css={[
-            tableWrapperStyles,
-            findingsOverflowing && horizontalScrollGutter,
-          ]}
-          ref={tableRef}
-        >
-          <table css={speakerTableStyles}>
-            <colgroup>
-              <col />
-              {showFindings && <col css={findingsColStyles} />}
-              <col css={chevronColStyles} />
-            </colgroup>
+        <div css={rowsWrapperStyles}>
+          <div css={columnHeaderStyles}>
+            <span>Speakers</span>
             {showFindings && (
-              <thead>
-                <tr>
-                  <th css={headerCellStyles} scope="col">
-                    Speakers
-                  </th>
-                  <th
-                    css={[headerCellStyles, findingsHeaderCellStyles]}
-                    scope="col"
-                  >
-                    {findingsOverflowing ? (
-                      'Preliminary Findings'
-                    ) : (
-                      <>
-                        <span css={fullFindingsLabel}>
-                          Preliminary Findings
-                        </span>
-                        <span css={shortFindingsLabel}>P. Findings</span>
-                      </>
-                    )}
-                  </th>
-                  <th css={headerCellStyles} />
-                </tr>
-              </thead>
+              <span css={trailingColumnsStyles}>
+                <span css={findingsColumnStyles}>
+                  <span css={fullFindingsLabel}>Preliminary Findings</span>
+                  <span css={shortFindingsLabel}>P. Findings</span>
+                </span>
+                <span css={chevronSpacerStyles} />
+              </span>
             )}
-
-            {visibleTeams.map((group, index) => {
-              const bottomOverride = lastRowPadding(
-                index === visibleTeams.length - 1,
-              );
-              return (
-                <SpeakerRow
-                  key={group.id}
-                  label={group.teamName}
-                  sharedPreliminaryFindings={group.preliminaryFindingsShared}
-                  showFindings={showFindings}
-                  expanded={expandedRows.has(group.id)}
-                  onToggle={() => toggleRow(group.id)}
-                  collapsedBottomPadding={bottomOverride}
-                  info={
-                    <>
-                      {teamIcon(group.teamType)}
-                      <Link
-                        href={
-                          network({}).teams({}).team({ teamId: group.id }).$
-                        }
-                        openInNewTab
-                      >
-                        {group.teamName}
-                      </Link>
-                      {group.isTeamInactive && <InactiveBadgeIcon />}
-                      <span css={leadTextStyles}>({group.users.length})</span>
-                    </>
-                  }
-                >
-                  <div
-                    role="list"
-                    css={[
-                      membersListStyles,
-                      bottomOverride !== undefined && {
-                        paddingBottom: bottomOverride,
-                      },
-                    ]}
-                  >
-                    {group.users.map((member) => (
-                      <SpeakerUserRow
-                        key={member.id}
-                        displayName={member.displayName}
-                        avatarUrl={member.avatarUrl}
-                        userId={member.id}
-                        roles={member.roles}
-                        isAlumni={member.isAlumni}
-                      />
-                    ))}
-                  </div>
-                </SpeakerRow>
-              );
-            })}
-
-            {showExternalRow && externalGroup && (
-              <SpeakerRow
-                label="External Users"
-                sharedPreliminaryFindings={
-                  externalGroup.preliminaryFindingsShared
-                }
-                showFindings={showFindings}
-                hasFindings={false}
-                expanded={expandedRows.has('external')}
-                onToggle={() => toggleRow('external')}
-                collapsedBottomPadding={lastRowBottomPadding}
-                info={
-                  <>
-                    <span css={leadTextStyles}>External Users</span>
-                    <span css={leadTextStyles}>({externalCount})</span>
-                  </>
-                }
-              >
-                <div
-                  role="list"
-                  css={[
-                    membersListStyles,
-                    { paddingBottom: lastRowBottomPadding },
-                  ]}
-                >
-                  {externalGroup.users.map((member) => (
-                    <SpeakerUserRow
-                      key={member.id}
-                      displayName={member.displayName}
-                      isExternal
-                    />
-                  ))}
-                </div>
-              </SpeakerRow>
-            )}
-          </table>
+          </div>
+          {(['team', 'project'] as const).map((variant) => (
+            <SpeakerSection
+              key={variant}
+              variant={variant}
+              rows={(variant === 'team' ? teamGroups : projectGroups).map(
+                renderGroupRow,
+              )}
+              expanded={expandedSections.has(variant)}
+              onToggle={() => toggleSection(variant)}
+            />
+          ))}
+          <SpeakerSection
+            variant="external"
+            rows={externalUsers.map((user) => (
+              <SpeakerUserRow
+                key={user.id}
+                displayName={user.displayName}
+                isExternal
+                preliminaryFindingsShared={user.preliminaryFindingsShared}
+                showShared={showFindings}
+              />
+            ))}
+            expanded={expandedSections.has('external')}
+            onToggle={() => toggleSection('external')}
+          />
         </div>
       </div>
-
-      {hasMoreRows && (
-        <div css={viewMoreStyles}>
-          <Button linkStyle onClick={() => setShowAll((current) => !current)}>
-            {showAll ? 'View Less Speakers' : 'View More Speakers'}
-          </Button>
-        </div>
-      )}
     </Card>
   );
 };
