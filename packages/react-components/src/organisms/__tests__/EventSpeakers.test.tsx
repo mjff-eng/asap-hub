@@ -430,12 +430,15 @@ describe('EventSpeakers', () => {
         const { queryByRole } = renderCard({ hasFinished });
         // An upcoming event auto-expands its first group, so only the still
         // collapsed rows have an expand control to click.
-        for (const label of ['Team Alpha', 'Project Gamma']) {
+        const expandIfCollapsed = async (label: string) => {
           const expand = queryByRole('button', { name: `Expand ${label}` });
           if (expand) {
             await userEvent.click(expand);
           }
-        }
+        };
+
+        await expandIfCollapsed('Team Alpha');
+        await expandIfCollapsed('Project Gamma');
         expect(
           queryByRole('button', { name: /^Remove / }),
         ).not.toBeInTheDocument();

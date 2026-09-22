@@ -11,14 +11,13 @@ import {
 } from '../colors';
 import { crossIcon, plusIcon, WarningIcon } from '../icons';
 import { projectIcon, teamIcon } from '../organisms/shared-event-card';
-import { squareIconButtonStyles } from './SpeakerUserRow';
 import { mobileScreen, rem } from '../pixels';
 import { splitDisplayName } from '../utils/user';
 import {
   affiliationKey,
   AffiliationOption,
 } from './ExternalSpeakerAffiliationCard';
-import { avatar24Styles } from './SpeakerUserRow';
+import { avatar24Styles, squareIconButtonStyles } from './SpeakerUserRow';
 
 const hideOnMobileStyles = css({
   [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
