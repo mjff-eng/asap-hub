@@ -3525,6 +3525,8 @@ export type EventSpeakers = Entry &
     _id: Scalars['ID'];
     contentfulMetadata: ContentfulMetadata;
     linkedFrom?: Maybe<EventSpeakersLinkingCollections>;
+    preliminaryDataShared?: Maybe<Scalars['Boolean']>;
+    project?: Maybe<Projects>;
     sys: Sys;
     team?: Maybe<Teams>;
     user?: Maybe<EventSpeakersUser>;
@@ -3533,6 +3535,20 @@ export type EventSpeakers = Entry &
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/eventSpeakers) */
 export type EventSpeakersLinkedFromArgs = {
   allowedLocales?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/eventSpeakers) */
+export type EventSpeakersPreliminaryDataSharedArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/eventSpeakers) */
+export type EventSpeakersProjectArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<ProjectsFilter>;
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/eventSpeakers) */
@@ -3568,6 +3584,11 @@ export type EventSpeakersFilter = {
   AND?: InputMaybe<Array<InputMaybe<EventSpeakersFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<EventSpeakersFilter>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  preliminaryDataShared?: InputMaybe<Scalars['Boolean']>;
+  preliminaryDataShared_exists?: InputMaybe<Scalars['Boolean']>;
+  preliminaryDataShared_not?: InputMaybe<Scalars['Boolean']>;
+  project?: InputMaybe<CfProjectsNestedFilter>;
+  project_exists?: InputMaybe<Scalars['Boolean']>;
   sys?: InputMaybe<SysFilter>;
   team?: InputMaybe<CfTeamsNestedFilter>;
   team_exists?: InputMaybe<Scalars['Boolean']>;
@@ -3727,6 +3748,8 @@ export enum EventSpeakersLinkingCollectionsEventsCursorCollectionOrder {
 }
 
 export enum EventSpeakersOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -4738,6 +4761,8 @@ export type EventsSpeakersCollection = {
 };
 
 export enum EventsSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -4755,6 +4780,8 @@ export type EventsSpeakersCursorCollection = {
 };
 
 export enum EventsSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -5022,6 +5049,8 @@ export type ExternalAuthorsLinkingCollectionsTutorialsCursorCollectionArgs = {
 };
 
 export enum ExternalAuthorsLinkingCollectionsEventSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -5033,6 +5062,8 @@ export enum ExternalAuthorsLinkingCollectionsEventSpeakersCollectionOrder {
 }
 
 export enum ExternalAuthorsLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -12537,6 +12568,8 @@ export type ProjectsFilter = {
 export type ProjectsLinkingCollections = {
   entryCollection?: Maybe<EntryCollection>;
   entryCursorCollection?: Maybe<EntryCursorCollection>;
+  eventSpeakersCollection?: Maybe<EventSpeakersCollection>;
+  eventSpeakersCursorCollection?: Maybe<EventSpeakersCursorCollection>;
   manuscriptsCollection?: Maybe<ManuscriptsCollection>;
   manuscriptsCursorCollection?: Maybe<ManuscriptsCursorCollection>;
   researchOutputsCollection?: Maybe<ResearchOutputsCollection>;
@@ -12554,6 +12587,31 @@ export type ProjectsLinkingCollectionsEntryCollectionArgs = {
 export type ProjectsLinkingCollectionsEntryCursorCollectionArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   locale?: InputMaybe<Scalars['String']>;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ProjectsLinkingCollectionsEventSpeakersCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<ProjectsLinkingCollectionsEventSpeakersCollectionOrder>>
+  >;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ProjectsLinkingCollectionsEventSpeakersCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<
+      InputMaybe<ProjectsLinkingCollectionsEventSpeakersCursorCollectionOrder>
+    >
+  >;
   pageNext?: InputMaybe<Scalars['String']>;
   pagePrev?: InputMaybe<Scalars['String']>;
   preview?: InputMaybe<Scalars['Boolean']>;
@@ -12609,6 +12667,32 @@ export type ProjectsLinkingCollectionsResearchOutputsCursorCollectionArgs = {
   preview?: InputMaybe<Scalars['Boolean']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
+
+export enum ProjectsLinkingCollectionsEventSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export enum ProjectsLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
 
 export enum ProjectsLinkingCollectionsManuscriptsCollectionOrder {
   ApcAmountPaidAsc = 'apcAmountPaid_ASC',
@@ -19940,6 +20024,8 @@ export enum TeamsLinkingCollectionsDiscoverCursorCollectionOrder {
 }
 
 export enum TeamsLinkingCollectionsEventSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -19951,6 +20037,8 @@ export enum TeamsLinkingCollectionsEventSpeakersCollectionOrder {
 }
 
 export enum TeamsLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -22571,6 +22659,8 @@ export enum UsersLinkingCollectionsDiscussionsCursorCollectionOrder {
 }
 
 export enum UsersLinkingCollectionsEventSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -22582,6 +22672,8 @@ export enum UsersLinkingCollectionsEventSpeakersCollectionOrder {
 }
 
 export enum UsersLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -24614,6 +24706,10 @@ export type CfEventSpeakersNestedFilter = {
   AND?: InputMaybe<Array<InputMaybe<CfEventSpeakersNestedFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<CfEventSpeakersNestedFilter>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  preliminaryDataShared?: InputMaybe<Scalars['Boolean']>;
+  preliminaryDataShared_exists?: InputMaybe<Scalars['Boolean']>;
+  preliminaryDataShared_not?: InputMaybe<Scalars['Boolean']>;
+  project_exists?: InputMaybe<Scalars['Boolean']>;
   sys?: InputMaybe<SysFilter>;
   team_exists?: InputMaybe<Scalars['Boolean']>;
   user_exists?: InputMaybe<Scalars['Boolean']>;
@@ -27436,6 +27532,17 @@ export type FetchOsChampionQuery = {
   >;
 };
 
+export type PreliminaryDataSharingSpeakerFragment = Pick<
+  EventSpeakers,
+  'preliminaryDataShared'
+> & {
+  linkedFrom?: Maybe<{
+    eventsCollection?: Maybe<{
+      items: Array<Maybe<Pick<Events, 'startDate'> & { sys: Pick<Sys, 'id'> }>>;
+    }>;
+  }>;
+};
+
 export type FetchPreliminaryDataSharingQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -27449,14 +27556,20 @@ export type FetchPreliminaryDataSharingQuery = {
           Pick<Teams, 'displayName' | 'inactiveSince'> & {
             sys: Pick<Sys, 'id'>;
             linkedFrom?: Maybe<{
-              preliminaryDataSharingCollection?: Maybe<
-                Pick<PreliminaryDataSharingCollection, 'total'> & {
+              eventSpeakersCollection?: Maybe<
+                Pick<EventSpeakersCollection, 'total'> & {
                   items: Array<
                     Maybe<
-                      Pick<PreliminaryDataSharing, 'preliminaryDataShared'> & {
+                      Pick<EventSpeakers, 'preliminaryDataShared'> & {
                         linkedFrom?: Maybe<{
                           eventsCollection?: Maybe<{
-                            items: Array<Maybe<Pick<Events, 'startDate'>>>;
+                            items: Array<
+                              Maybe<
+                                Pick<Events, 'startDate'> & {
+                                  sys: Pick<Sys, 'id'>;
+                                }
+                              >
+                            >;
                           }>;
                         }>;
                       }
@@ -27464,6 +27577,32 @@ export type FetchPreliminaryDataSharingQuery = {
                   >;
                 }
               >;
+            }>;
+          }
+        >
+      >;
+    }
+  >;
+};
+
+export type FetchPreliminaryDataSharingByTeamQueryVariables = Exact<{
+  teamId: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type FetchPreliminaryDataSharingByTeamQuery = {
+  eventSpeakersCollection?: Maybe<
+    Pick<EventSpeakersCollection, 'total'> & {
+      items: Array<
+        Maybe<
+          Pick<EventSpeakers, 'preliminaryDataShared'> & {
+            linkedFrom?: Maybe<{
+              eventsCollection?: Maybe<{
+                items: Array<
+                  Maybe<Pick<Events, 'startDate'> & { sys: Pick<Sys, 'id'> }>
+                >;
+              }>;
             }>;
           }
         >
@@ -41320,6 +41459,79 @@ export type FetchWorkingGroupsQuery = {
   >;
 };
 
+export const PreliminaryDataSharingSpeakerFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'PreliminaryDataSharingSpeaker' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EventSpeakers' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'preliminaryDataShared' },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'linkedFrom' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'eventsCollection' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'limit' },
+                      value: { kind: 'IntValue', value: '1' },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'items' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'sys' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'id' },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'startDate' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<PreliminaryDataSharingSpeakerFragment, unknown>;
 export const CalendarsContentFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -57926,7 +58138,7 @@ export const FetchPreliminaryDataSharingDocument = {
                               kind: 'Field',
                               name: {
                                 kind: 'Name',
-                                value: 'preliminaryDataSharingCollection',
+                                value: 'eventSpeakersCollection',
                               },
                               arguments: [
                                 {
@@ -57949,67 +58161,11 @@ export const FetchPreliminaryDataSharingDocument = {
                                       kind: 'SelectionSet',
                                       selections: [
                                         {
-                                          kind: 'Field',
+                                          kind: 'FragmentSpread',
                                           name: {
                                             kind: 'Name',
-                                            value: 'linkedFrom',
-                                          },
-                                          selectionSet: {
-                                            kind: 'SelectionSet',
-                                            selections: [
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'eventsCollection',
-                                                },
-                                                arguments: [
-                                                  {
-                                                    kind: 'Argument',
-                                                    name: {
-                                                      kind: 'Name',
-                                                      value: 'limit',
-                                                    },
-                                                    value: {
-                                                      kind: 'IntValue',
-                                                      value: '1',
-                                                    },
-                                                  },
-                                                ],
-                                                selectionSet: {
-                                                  kind: 'SelectionSet',
-                                                  selections: [
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'items',
-                                                      },
-                                                      selectionSet: {
-                                                        kind: 'SelectionSet',
-                                                        selections: [
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value:
-                                                                'startDate',
-                                                            },
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  ],
-                                                },
-                                              },
-                                            ],
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'preliminaryDataShared',
+                                            value:
+                                              'PreliminaryDataSharingSpeaker',
                                           },
                                         },
                                       ],
@@ -58030,10 +58186,143 @@ export const FetchPreliminaryDataSharingDocument = {
         ],
       },
     },
+    ...PreliminaryDataSharingSpeakerFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<
   FetchPreliminaryDataSharingQuery,
   FetchPreliminaryDataSharingQueryVariables
+>;
+export const FetchPreliminaryDataSharingByTeamDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchPreliminaryDataSharingByTeam' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'teamId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'eventSpeakersCollection' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'team' },
+                      value: {
+                        kind: 'ObjectValue',
+                        fields: [
+                          {
+                            kind: 'ObjectField',
+                            name: { kind: 'Name', value: 'sys' },
+                            value: {
+                              kind: 'ObjectValue',
+                              fields: [
+                                {
+                                  kind: 'ObjectField',
+                                  name: { kind: 'Name', value: 'id' },
+                                  value: {
+                                    kind: 'Variable',
+                                    name: { kind: 'Name', value: 'teamId' },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'order' },
+                value: { kind: 'EnumValue', value: 'sys_id_ASC' },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'limit' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: {
+                          kind: 'Name',
+                          value: 'PreliminaryDataSharingSpeaker',
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...PreliminaryDataSharingSpeakerFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<
+  FetchPreliminaryDataSharingByTeamQuery,
+  FetchPreliminaryDataSharingByTeamQueryVariables
 >;
 export const FetchAttendanceDocument = {
   kind: 'Document',

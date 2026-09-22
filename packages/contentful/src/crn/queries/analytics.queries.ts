@@ -397,6 +397,22 @@ export const FETCH_OS_CHAMPION = gql`
   }
 `;
 
+export const preliminaryDataSharingSpeakerFragment = gql`
+  fragment PreliminaryDataSharingSpeaker on EventSpeakers {
+    preliminaryDataShared
+    linkedFrom {
+      eventsCollection(limit: 1) {
+        items {
+          sys {
+            id
+          }
+          startDate
+        }
+      }
+    }
+  }
+`;
+
 export const FETCH_PRELIMINARY_DATA_SHARING = gql`
   query FetchPreliminaryDataSharing($limit: Int, $skip: Int) {
     teamsCollection(order: sys_id_ASC, limit: $limit, skip: $skip) {
@@ -408,23 +424,38 @@ export const FETCH_PRELIMINARY_DATA_SHARING = gql`
         displayName
         inactiveSince
         linkedFrom {
-          preliminaryDataSharingCollection(limit: 100) {
+          eventSpeakersCollection(limit: 100) {
             total
             items {
-              linkedFrom {
-                eventsCollection(limit: 1) {
-                  items {
-                    startDate
-                  }
-                }
-              }
-              preliminaryDataShared
+              ...PreliminaryDataSharingSpeaker
             }
           }
         }
       }
     }
   }
+  ${preliminaryDataSharingSpeakerFragment}
+`;
+
+export const FETCH_PRELIMINARY_DATA_SHARING_BY_TEAM = gql`
+  query FetchPreliminaryDataSharingByTeam(
+    $teamId: String!
+    $limit: Int
+    $skip: Int
+  ) {
+    eventSpeakersCollection(
+      where: { team: { sys: { id: $teamId } } }
+      order: sys_id_ASC
+      limit: $limit
+      skip: $skip
+    ) {
+      total
+      items {
+        ...PreliminaryDataSharingSpeaker
+      }
+    }
+  }
+  ${preliminaryDataSharingSpeakerFragment}
 `;
 
 export const FETCH_ATTENDANCE = gql`
