@@ -539,9 +539,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
           name: groupLabel(group),
         }))}
         onSelectAffiliation={(affiliation) =>
-          user
-            ? addUserToAffiliation(user, affiliation)
-            : addGuestToAffiliation(displayName, affiliation)
+          addGuestToAffiliation(displayName, affiliation)
         }
         onKeepAsExternalGuest={() => addExternalUser(displayName)}
         onDismiss={() => setPendingSpeaker(null)}
