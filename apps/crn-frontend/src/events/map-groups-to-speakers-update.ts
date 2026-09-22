@@ -1,5 +1,9 @@
 import { EventUpdateDetailsRequest } from '@asap-hub/model';
-import { groupFindings, SpeakerGroup } from '@asap-hub/react-components';
+import {
+  groupFindings,
+  SpeakerGroup,
+  SpeakerTeamGroup,
+} from '@asap-hub/react-components';
 
 const collectSpeakerIds = (groups: SpeakerGroup[]): Set<string> =>
   new Set(
@@ -25,10 +29,15 @@ export const mapGroupsToSpeakersUpdate = (
   }
 
   const preliminaryDataShared = saved
-    .filter((group) => group.variant === 'team')
+    .filter((group): group is SpeakerTeamGroup => group.variant === 'team')
     .map((group) => ({
       teamId: group.id,
-      shared: groupFindings(group).hasAnyShared,
+      // A guest added in this session is never persisted, so their toggle must
+      // not flip the team's stored flag. It would be worse than lost: on the
+      // next read that flag re-seeds onto every real member of the team.
+      shared: groupFindings({
+        users: group.users.filter((user) => !user.isExternal),
+      }).hasAnyShared,
     }));
 
   return { speakersToRemove, preliminaryDataShared };
