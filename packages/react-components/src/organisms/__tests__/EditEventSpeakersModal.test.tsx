@@ -6,46 +6,127 @@ import { silver } from '../../colors';
 import EditEventSpeakersModal, {
   SpeakerSearchOption,
 } from '../EditEventSpeakersModal';
-import { SpeakerGroup } from '../speaker-group';
+import {
+  SpeakerExternalGroup,
+  SpeakerGroup,
+  SpeakerGroupExternalUser,
+  SpeakerGroupUser,
+  SpeakerProjectGroup,
+  SpeakerTeamGroup,
+} from '../speaker-group';
 
-const groups: SpeakerGroup[] = [
-  {
-    id: 'team-1',
-    variant: 'team',
-    teamName: 'Team Alpha',
-    preliminaryFindingsShared: true,
-    users: [{ id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] }],
-  },
-];
+const getUser = (
+  overrides: Partial<SpeakerGroupUser> = {},
+): SpeakerGroupUser => ({
+  id: 'user-1',
+  displayName: 'Jane Doe',
+  roles: ['Lead PI'],
+  preliminaryFindingsShared: false,
+  ...overrides,
+});
 
-const singleTeamOption: SpeakerSearchOption = {
+const getExternalUser = (
+  overrides: Partial<SpeakerGroupExternalUser> = {},
+): SpeakerGroupExternalUser => ({
+  id: 'ext-1',
+  displayName: 'Guest One',
+  preliminaryFindingsShared: false,
+  ...overrides,
+});
+
+const getTeamGroup = (
+  overrides: Partial<SpeakerTeamGroup> = {},
+): SpeakerTeamGroup => ({
+  id: 'team-1',
+  variant: 'team',
+  teamName: 'Team Alpha',
+  users: [getUser()],
+  ...overrides,
+});
+
+const getProjectGroup = (
+  overrides: Partial<SpeakerProjectGroup> = {},
+): SpeakerProjectGroup => ({
+  id: 'project-1',
+  variant: 'project',
+  projectName: 'Project One',
+  projectType: 'Discovery Project',
+  users: [getUser({ id: 'user-9', displayName: 'Robin Vale' })],
+  ...overrides,
+});
+
+const getExternalGroup = (
+  overrides: Partial<SpeakerExternalGroup> = {},
+): SpeakerExternalGroup => ({
+  id: 'external',
+  variant: 'external',
+  users: [getExternalUser()],
+  ...overrides,
+});
+
+const groups: SpeakerGroup[] = [getTeamGroup()];
+
+const singleAffiliationOption: SpeakerSearchOption = {
   value: 'user-2',
   label: 'John Smith',
   user: {
     userId: 'user-2',
     displayName: 'John Smith',
-    teamOptions: [
-      { teamId: 'team-2', teamName: 'Team Beta', role: 'Data Manager' },
+    affiliationOptions: [
+      {
+        variant: 'team',
+        id: 'team-2',
+        name: 'Team Beta',
+        role: 'Data Manager',
+      },
     ],
   },
 };
 
-const multiTeamOption: SpeakerSearchOption = {
+const multiAffiliationOption: SpeakerSearchOption = {
   value: 'user-3',
   label: 'Alex Kim',
   user: {
     userId: 'user-3',
     displayName: 'Alex Kim',
-    teamOptions: [
-      { teamId: 'team-1', teamName: 'Team Alpha', role: 'Project Manager' },
-      { teamId: 'team-3', teamName: 'Team Gamma', role: 'Trainee' },
+    affiliationOptions: [
+      {
+        variant: 'team',
+        id: 'team-1',
+        name: 'Team Alpha',
+        role: 'Project Manager',
+      },
+      {
+        variant: 'team',
+        id: 'team-3',
+        name: 'Team Gamma',
+        role: 'Trainee',
+      },
+      {
+        variant: 'project',
+        id: 'project-7',
+        name: 'Project Seven',
+        projectType: 'Discovery Project',
+        role: 'Contributor',
+      },
     ],
   },
 };
 
+const noAffiliationOption: SpeakerSearchOption = {
+  value: 'user-4',
+  label: 'Casey Fox',
+  user: {
+    userId: 'user-4',
+    displayName: 'Casey Fox',
+    affiliationOptions: [],
+  },
+};
+
 const loadSearchOptions = jest.fn(async () => [
-  singleTeamOption,
-  multiTeamOption,
+  singleAffiliationOption,
+  multiAffiliationOption,
+  noAffiliationOption,
 ]);
 const onSave = jest.fn();
 const onDismiss = jest.fn();
@@ -53,8 +134,9 @@ const onDismiss = jest.fn();
 beforeEach(() => {
   jest.clearAllMocks();
   loadSearchOptions.mockImplementation(async () => [
-    singleTeamOption,
-    multiTeamOption,
+    singleAffiliationOption,
+    multiAffiliationOption,
+    noAffiliationOption,
   ]);
 });
 
@@ -72,6 +154,29 @@ const renderModal = (
     />,
   );
 
+const search = async (term: string, optionName: string) => {
+  await userEvent.type(screen.getByRole('combobox'), term);
+  await userEvent.click(await screen.findByText(optionName));
+};
+
+// Only the "create" search option bolds the typed name, so this keeps picking
+// the menu entry once a speaker row already shows that same name.
+const searchNonCrn = async (term: string) => {
+  await userEvent.type(screen.getByRole('combobox'), term);
+  await userEvent.click(await screen.findByText(term, { selector: 'strong' }));
+};
+
+const markJaneShared = async () => {
+  await userEvent.click(
+    screen.getByRole('button', { name: 'Expand Team Alpha' }),
+  );
+  await userEvent.click(
+    screen.getByRole('checkbox', {
+      name: 'Jane Doe preliminary findings shared',
+    }),
+  );
+};
+
 describe('EditEventSpeakersModal', () => {
   it('Should render the "Add Speakers" title and empty state with no speakers', () => {
     renderModal({ groups: [] });
@@ -80,224 +185,108 @@ describe('EditEventSpeakersModal', () => {
       screen.getByRole('heading', { name: 'Add Speakers' }),
     ).toBeInTheDocument();
     expect(screen.getByText('Add speakers to this event')).toBeInTheDocument();
+  });
+
+  it('Should never render a Mark All Shared button on a past event', () => {
+    renderModal();
+
     expect(
-      screen.getByText(
-        "Search for a person to add them to this event. Once the event has taken place, you'll be able to mark whether each speaker shared preliminary findings.",
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: 'Mark All Shared' }),
+      screen.queryByRole('button', { name: /Mark All/ }),
     ).not.toBeInTheDocument();
   });
 
-  it('Should disable Save until at least one speaker has been added', async () => {
-    renderModal({ groups: [] });
-
-    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
-
-    await userEvent.type(screen.getByRole('combobox'), 'John');
-    await userEvent.click(await screen.findByText('John Smith'));
-
-    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
-  });
-
-  it('Should render the "Edit Speakers" title and stats when speakers exist', () => {
+  it('Should render the "Edit Speakers" title and the group names', () => {
     renderModal();
 
     expect(
       screen.getByRole('heading', { name: 'Edit Speakers' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('1 Team')).toBeInTheDocument();
-    expect(screen.getByText('1 User')).toBeInTheDocument();
+    expect(screen.getByText('Team Alpha')).toBeInTheDocument();
   });
 
-  it('Should add a searched CRN user with exactly one team directly, without a pending card', async () => {
+  it('Should not render a member counter next to the group name', () => {
     renderModal();
 
-    await userEvent.type(screen.getByRole('combobox'), 'John');
-    await userEvent.click(await screen.findByText('John Smith'));
-
-    // Newly added teams auto-expand, so the row is already showing its member.
-    expect(
-      await screen.findByRole('button', { name: 'Collapse Team Beta' }),
-    ).toBeInTheDocument();
-    expect(screen.getByText('John Smith')).toBeInTheDocument();
-    expect(
-      screen.queryByText('Pick a team to finish adding them.'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('(1)')).not.toBeInTheDocument();
   });
 
-  it('Should show a pending team-assignment card for a user with multiple teams, and resolve it on pill click', async () => {
+  it('Should not render a speaker summary line', () => {
     renderModal();
 
-    await userEvent.type(screen.getByRole('combobox'), 'Alex');
-    await userEvent.click(await screen.findByText('Alex Kim'));
-
-    expect(
-      screen.getByText('Pick a team to finish adding them.'),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Alex Kim' })).toHaveAttribute(
-      'href',
-      expect.stringContaining('user-3'),
-    );
-
-    await userEvent.click(screen.getByRole('button', { name: /Team Gamma/ }));
-
-    expect(
-      screen.queryByText('Pick a team to finish adding them.'),
-    ).not.toBeInTheDocument();
-    // Resolving into a team auto-expands it.
-    expect(
-      screen.getByRole('button', { name: 'Collapse Team Gamma' }),
-    ).toBeInTheDocument();
-    expect(screen.getByText('Alex Kim')).toBeInTheDocument();
+    expect(screen.queryByText('1 Team')).not.toBeInTheDocument();
+    expect(screen.queryByText('1 User')).not.toBeInTheDocument();
   });
 
-  it('Should add a creatable external name directly into the External Users group with no team-assignment step', async () => {
-    renderModal();
+  it('Should label the table columns on a past event', () => {
+    renderModal({ isPastEvent: true });
 
-    await userEvent.type(screen.getByRole('combobox'), 'Guest Speaker');
-    await userEvent.click(await screen.findByText('Guest Speaker'));
-
-    expect(
-      screen.queryByText('Pick a team to finish adding them.'),
-    ).not.toBeInTheDocument();
-    // Newly added groups auto-expand, so the new external user is already visible.
-    expect(
-      screen.getByRole('button', { name: 'Collapse External Users' }),
-    ).toBeInTheDocument();
-    expect(screen.getByText('Guest Speaker')).toBeInTheDocument();
+    expect(screen.getByText('Speakers')).toBeInTheDocument();
+    expect(screen.getByText('Preliminary Findings')).toBeInTheDocument();
+    expect(screen.queryByText('Name')).not.toBeInTheDocument();
   });
 
-  it('Should toggle a group’s Preliminary Findings switch independently of other groups', async () => {
-    renderModal({
-      groups: [
-        ...groups,
-        {
-          id: 'team-2',
-          variant: 'team',
-          teamName: 'Team Beta',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'user-2', displayName: 'John Smith', roles: [] }],
-        },
-      ],
-    });
-
-    const alphaSwitch = screen.getByRole('checkbox', {
-      name: 'Team Alpha preliminary findings shared',
-    });
-    const betaSwitch = screen.getByRole('checkbox', {
-      name: 'Team Beta preliminary findings shared',
-    });
-    expect(alphaSwitch).toBeChecked();
-    expect(betaSwitch).not.toBeChecked();
-
-    await userEvent.click(betaSwitch);
-
-    expect(betaSwitch).toBeChecked();
-    expect(alphaSwitch).toBeChecked();
-  });
-
-  it('Should mark every group as shared', async () => {
-    renderModal({
-      groups: [
-        ...groups,
-        {
-          id: 'team-2',
-          variant: 'team',
-          teamName: 'Team Beta',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'user-2', displayName: 'John Smith', roles: [] }],
-        },
-      ],
-    });
-
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Mark All Shared' }),
-    );
-
-    expect(
-      screen.getByRole('checkbox', {
-        name: 'Team Beta preliminary findings shared',
-      }),
-    ).toBeChecked();
-  });
-
-  it('Should switch to "Mark All Not Shared" when all teams are shared, ignoring the external group, and unshare them all', async () => {
-    renderModal({
-      groups: [
-        {
-          id: 'team-1',
-          variant: 'team',
-          teamName: 'Team Alpha',
-          preliminaryFindingsShared: true,
-          users: [
-            { id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] },
-          ],
-        },
-        {
-          id: 'external',
-          variant: 'external',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'ext-0', displayName: 'Guest Speaker' }],
-        },
-      ],
-    });
-
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Mark All Not Shared' }),
-    );
-
-    expect(
-      screen.getByRole('checkbox', {
-        name: 'Team Alpha preliminary findings shared',
-      }),
-    ).not.toBeChecked();
-    expect(
-      screen.getByRole('button', { name: 'Mark All Shared' }),
-    ).toBeVisible();
-  });
-
-  it('Should not offer a preliminary findings switch for the external group', () => {
-    renderModal({
-      groups: [
-        ...groups,
-        {
-          id: 'external',
-          variant: 'external',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'ext-0', displayName: 'Guest Speaker' }],
-        },
-      ],
-    });
-
-    expect(
-      screen.getByRole('checkbox', {
-        name: 'Team Alpha preliminary findings shared',
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('checkbox', {
-        name: 'External Users preliminary findings shared',
-      }),
-    ).not.toBeInTheDocument();
-  });
-
-  it('Should hide preliminary findings controls on an upcoming event', () => {
+  it('Should not label the table columns on an upcoming event', () => {
     renderModal({ isPastEvent: false });
 
+    expect(screen.queryByText('Speakers')).not.toBeInTheDocument();
     expect(screen.queryByText('Preliminary Findings')).not.toBeInTheDocument();
+  });
+
+  it('Should render only the sections that have speakers, in order', () => {
+    renderModal({ groups: [getTeamGroup(), getExternalGroup()] });
+
+    const headings = screen
+      .getAllByRole('heading')
+      .map((heading) => heading.textContent);
+    expect(headings).toEqual(
+      expect.arrayContaining(['From Team Projects', 'External']),
+    );
+    expect(headings).not.toContain('From Individual Projects');
+    expect(headings.indexOf('From Team Projects')).toBeLessThan(
+      headings.indexOf('External'),
+    );
+  });
+
+  it('Should render external speakers as flat rows with no group wrapper', () => {
+    renderModal({ groups: [getExternalGroup()] });
+
+    expect(screen.getByText('Guest One')).toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: /Mark All/ }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('checkbox', {
-        name: 'Team Alpha preliminary findings shared',
-      }),
+      screen.queryByRole('button', { name: /External Users/ }),
     ).not.toBeInTheDocument();
   });
 
-  it('Should remove the team row entirely once its last member is removed', async () => {
+  it('Should move the group pill from grey to green when one speaker toggle is turned on, without saving', async () => {
+    renderModal({
+      groups: [
+        getTeamGroup({
+          users: [
+            getUser(),
+            getUser({ id: 'user-2', displayName: 'John Smith' }),
+          ],
+        }),
+      ],
+    });
+
+    expect(screen.getByText('0 of 2 shared')).toBeVisible();
+    expect(screen.getByTitle('Cross')).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    await userEvent.click(
+      screen.getByRole('checkbox', {
+        name: 'Jane Doe preliminary findings shared',
+      }),
+    );
+
+    expect(screen.getByText('1 of 2 shared')).toBeVisible();
+    expect(screen.getByTitle('Tick')).toBeInTheDocument();
+    expect(screen.queryByTitle('Cross')).not.toBeInTheDocument();
+    expect(onSave).not.toHaveBeenCalled();
+  });
+
+  it('Should remove the group row once its last speaker is deleted', async () => {
     renderModal();
 
     await userEvent.click(
@@ -309,223 +298,266 @@ describe('EditEventSpeakersModal', () => {
 
     expect(screen.queryByText('Jane Doe')).not.toBeInTheDocument();
     expect(screen.queryByText('Team Alpha')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'From Team Projects' }),
+    ).not.toBeInTheDocument();
     expect(screen.getByText('Add speakers to this event')).toBeInTheDocument();
   });
 
-  it('Should never render a team with zero members, even when passed in via groups', () => {
-    renderModal({
-      groups: [
-        ...groups,
-        {
-          id: 'team-2',
-          variant: 'team',
-          teamName: 'Team Beta',
-          preliminaryFindingsShared: false,
-          users: [],
-        },
-      ],
-    });
-
-    expect(screen.getByText('Team Alpha')).toBeInTheDocument();
-    expect(screen.queryByText('Team Beta')).not.toBeInTheDocument();
-    expect(screen.getByText('1 Team')).toBeInTheDocument();
-  });
-
-  it('Should remove a user from one group without affecting another team or the External Users group', async () => {
-    renderModal({
-      groups: [
-        ...groups,
-        {
-          id: 'team-2',
-          variant: 'team',
-          teamName: 'Team Beta',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'user-2', displayName: 'John Smith', roles: [] }],
-        },
-        {
-          id: 'external',
-          variant: 'external',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'ext-1', displayName: 'Guest One' }],
-        },
-      ],
-    });
-
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Expand External Users' }),
-    );
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Remove Guest One' }),
-    );
-
-    expect(screen.queryByText('Guest One')).not.toBeInTheDocument();
-    expect(screen.getByText('2 Users')).toBeInTheDocument();
-
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Expand Team Beta' }),
-    );
-    expect(screen.getByText('John Smith')).toBeInTheDocument();
-  });
-
-  it('Should not duplicate a speaker who is searched and selected twice for the same team', async () => {
+  it('Should disable Save while a multiple-affiliation banner is unresolved and enable it once an affiliation is picked', async () => {
     renderModal({ groups: [] });
 
-    await userEvent.type(screen.getByRole('combobox'), 'John');
-    await userEvent.click(await screen.findByText('John Smith'));
-    // Collapse the row so the roster's "John Smith" doesn't collide with the
-    // dropdown option of the same name on the second search.
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Collapse Team Beta' }),
-    );
-    await userEvent.type(screen.getByRole('combobox'), 'John');
-    await userEvent.click(await screen.findByText('John Smith'));
+    await search('Alex', 'Alex Kim');
 
-    // Re-adding the same speaker auto-(re)expands their team.
     expect(
-      screen.getByRole('button', { name: 'Collapse Team Beta' }),
+      screen.getByText('Pick a team or project to finish adding them.'),
     ).toBeInTheDocument();
-    const nestedLists = screen.getAllByRole('list');
-    const nestedUserList = nestedLists[nestedLists.length - 1];
-    if (!nestedUserList) {
-      throw new Error('Expected a nested user list to be rendered');
-    }
-    expect(within(nestedUserList).getAllByRole('listitem')).toHaveLength(1);
-    expect(screen.getByText('1 User')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+
+    await userEvent.click(screen.getByRole('button', { name: /Team Gamma/ }));
+
+    expect(
+      screen.queryByText('Pick a team or project to finish adding them.'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
+    expect(screen.getByText('Alex Kim')).toBeInTheDocument();
   });
 
-  it('Should collapse an already-expanded team when the chevron is clicked again', async () => {
+  it('Should cancel the pending addition and re-enable Save when the banner is dismissed', async () => {
     renderModal();
 
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Expand Team Alpha' }),
-    );
-    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
-
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Collapse Team Alpha' }),
-    );
-    expect(screen.queryByText('Jane Doe')).not.toBeInTheDocument();
-  });
-
-  it('Should add a second user to an already-existing team group, keeping both members and leaving other groups untouched', async () => {
-    renderModal({
-      groups: [
-        ...groups,
-        {
-          id: 'team-2',
-          variant: 'team',
-          teamName: 'Team Beta',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'user-2', displayName: 'John Smith', roles: [] }],
-        },
-      ],
-    });
-
-    loadSearchOptions.mockImplementationOnce(async () => [
-      {
-        value: 'user-4',
-        label: 'Casey Fox',
-        user: {
-          userId: 'user-4',
-          displayName: 'Casey Fox',
-          teamOptions: [
-            { teamId: 'team-1', teamName: 'Team Alpha', role: 'Trainee' },
-          ],
-        },
-      },
-    ]);
-
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Expand Team Alpha' }),
-    );
-    await userEvent.type(screen.getByRole('combobox'), 'Casey');
-    await userEvent.click(await screen.findByText('Casey Fox'));
-
-    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
-    expect(screen.getByText('Casey Fox')).toBeInTheDocument();
-    // Team Beta (the untouched other group) still contributes its member.
-    expect(screen.getByText('3 Users')).toBeInTheDocument();
-  });
-
-  it('Should add a second external user into the existing External Users group', async () => {
-    renderModal({
-      groups: [
-        ...groups,
-        {
-          id: 'external',
-          variant: 'external',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'ext-1', displayName: 'Guest One' }],
-        },
-      ],
-    });
-
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Expand External Users' }),
-    );
-    await userEvent.type(screen.getByRole('combobox'), 'Guest Two');
-    await userEvent.click(await screen.findByText('Guest Two'));
-
-    expect(screen.getByText('Guest One')).toBeInTheDocument();
-    expect(screen.getByText('Guest Two')).toBeInTheDocument();
-  });
-
-  it('Should insert a newly added team before an existing External Users group', async () => {
-    renderModal({
-      groups: [
-        {
-          id: 'external',
-          variant: 'external',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'ext-1', displayName: 'Guest One' }],
-        },
-      ],
-    });
-
-    await userEvent.type(screen.getByRole('combobox'), 'John');
-    await userEvent.click(await screen.findByText('John Smith'));
-
-    const headings = screen
-      .getAllByRole('button')
-      .map((button) => button.getAttribute('aria-label') ?? '')
-      .filter(
-        (label) =>
-          label.includes('Team Beta') || label.includes('External Users'),
-      );
-    expect(headings[0]).toContain('Team Beta');
-    expect(headings[1]).toContain('External Users');
-  });
-
-  it('Should dismiss the pending speaker card without adding them anywhere', async () => {
-    renderModal();
-
-    await userEvent.type(screen.getByRole('combobox'), 'Alex');
-    await userEvent.click(await screen.findByText('Alex Kim'));
-    expect(
-      screen.getByText('Pick a team to finish adding them.'),
-    ).toBeInTheDocument();
+    await markJaneShared();
+    await search('Alex', 'Alex Kim');
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
 
     await userEvent.click(
       screen.getByRole('button', { name: 'Remove Alex Kim' }),
     );
 
-    expect(
-      screen.queryByText('Pick a team to finish adding them.'),
-    ).not.toBeInTheDocument();
     expect(screen.queryByText('Alex Kim')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
   });
 
-  it('Should expand two different teams independently', async () => {
+  it('Should list an individual project alongside teams and place the speaker in the Individual Projects section', async () => {
+    renderModal();
+
+    await search('Alex', 'Alex Kim');
+
+    expect(
+      screen.getByRole('button', { name: /Project Seven/ }),
+    ).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /Project Seven/ }),
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'From Individual Projects' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Project Seven')).toBeInTheDocument();
+    expect(screen.getByText('Alex Kim')).toBeInTheDocument();
+  });
+
+  it('Should disable the person search while a banner is pending and re-enable it once dismissed', async () => {
+    renderModal();
+
+    await search('Alex', 'Alex Kim');
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Alex Kim' }),
+    );
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
+  });
+
+  it('Should add a speaker with exactly one affiliation directly and confirm it with a toast', async () => {
+    renderModal();
+
+    await search('John', 'John Smith');
+
+    expect(screen.getByText('Added John Smith to Team Beta')).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: 'Collapse Team Beta' }),
+    ).toBeInTheDocument();
+  });
+
+  it('Should remove the just-added speaker and leave no banner open when Undo is clicked', async () => {
+    renderModal();
+
+    await search('John', 'John Smith');
+    await userEvent.click(screen.getByRole('button', { name: 'Undo' }));
+
+    expect(screen.queryByText('John Smith')).not.toBeInTheDocument();
+    expect(screen.queryByText('Team Beta')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Added John Smith to Team Beta'),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Pick a team or project to finish adding them.'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
+  });
+
+  it('Should keep the toast until it is dismissed', async () => {
+    renderModal();
+
+    await search('John', 'John Smith');
+    await userEvent.click(
+      within(screen.getByRole('status')).getByRole('button', {
+        name: 'Dismiss message',
+      }),
+    );
+
+    expect(
+      screen.queryByText('Added John Smith to Team Beta'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('John Smith')).toBeInTheDocument();
+  });
+
+  it('Should block a CRN user who belongs to no team or project', async () => {
+    renderModal();
+
+    await search('Casey', 'Casey Fox');
+
+    expect(
+      screen.getByText(
+        'This speaker is not a member on any CRN team or individual project. They cannot be added as a speaker until they belong to one.',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Keep as External Guest' }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+  });
+
+  it('Should dismiss the blocked speaker message and free the search again', async () => {
+    renderModal();
+
+    await search('Casey', 'Casey Fox');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Dismiss message' }),
+    );
+
+    expect(screen.queryByText('Casey Fox')).not.toBeInTheDocument();
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
+  });
+
+  it('Should keep a name that is not a CRN user as an external guest', async () => {
+    renderModal();
+
+    await search('Guest Speaker', 'Guest Speaker');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'External' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Guest Speaker')).toBeInTheDocument();
+    expect(
+      screen.getByText('Added Guest Speaker as an External Guest'),
+    ).toBeVisible();
+  });
+
+  it('Should add a second external speaker into the existing External section', async () => {
+    renderModal({ groups: [getExternalGroup()] });
+
+    await search('Guest Two', 'Guest Two');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+
+    expect(screen.getByText('Guest One')).toBeInTheDocument();
+    expect(screen.getByText('Guest Two')).toBeInTheDocument();
+  });
+
+  it('Should cancel the pending addition when the external banner is dismissed', async () => {
+    renderModal();
+
+    await markJaneShared();
+    await search('Guest Speaker', 'Guest Speaker');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Guest Speaker' }),
+    );
+
+    expect(screen.queryByText('Guest Speaker')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
+  });
+
+  it('Should show a Show more control inside a group with more than five speakers and reset it on collapse', async () => {
     renderModal({
       groups: [
-        ...groups,
-        {
-          id: 'team-2',
-          variant: 'team',
-          teamName: 'Team Beta',
-          preliminaryFindingsShared: false,
-          users: [{ id: 'user-2', displayName: 'John Smith', roles: [] }],
-        },
+        getTeamGroup({
+          users: Array.from({ length: 7 }, (_row, index) =>
+            getUser({
+              id: `user-${index}`,
+              displayName: `Speaker ${index}`,
+            }),
+          ),
+        }),
+      ],
+    });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    expect(screen.queryByText('Speaker 6')).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: 'Show 2 more speakers in Team Alpha',
+      }),
+    );
+    expect(screen.getByText('Speaker 6')).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Collapse Team Alpha' }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+
+    expect(screen.queryByText('Speaker 6')).not.toBeInTheDocument();
+  });
+
+  it('Should show a Show more control on a section with more than five group rows', async () => {
+    renderModal({
+      groups: Array.from({ length: 7 }, (_row, index) =>
+        getTeamGroup({
+          id: `team-${index}`,
+          teamName: `Team ${index}`,
+          users: [getUser({ id: `user-${index}` })],
+        }),
+      ),
+    });
+
+    expect(screen.queryByText('Team 6')).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Show 2 more teams' }),
+    );
+
+    expect(screen.getByText('Team 6')).toBeInTheDocument();
+  });
+
+  it('Should hide preliminary findings controls on an upcoming event', () => {
+    renderModal({ isPastEvent: false, groups: [getTeamGroup()] });
+
+    expect(screen.queryByText('Preliminary Findings')).not.toBeInTheDocument();
+    expect(screen.queryByText('0 of 1 shared')).not.toBeInTheDocument();
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+  });
+
+  it('Should save groups carrying per-speaker findings', async () => {
+    renderModal({
+      groups: [
+        getTeamGroup({
+          users: [
+            getUser(),
+            getUser({ id: 'user-2', displayName: 'John Smith' }),
+          ],
+        }),
       ],
     });
 
@@ -533,11 +565,100 @@ describe('EditEventSpeakersModal', () => {
       screen.getByRole('button', { name: 'Expand Team Alpha' }),
     );
     await userEvent.click(
-      screen.getByRole('button', { name: 'Expand Team Beta' }),
+      screen.getByRole('checkbox', {
+        name: 'John Smith preliminary findings shared',
+      }),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSave).toHaveBeenCalledWith([
+        {
+          id: 'team-1',
+          variant: 'team',
+          teamName: 'Team Alpha',
+          users: [
+            expect.objectContaining({
+              id: 'user-1',
+              preliminaryFindingsShared: false,
+            }),
+            expect.objectContaining({
+              id: 'user-2',
+              preliminaryFindingsShared: true,
+            }),
+          ],
+        },
+      ]),
+    );
+  });
+
+  it('Should never render a group with zero members, even when passed in via groups', () => {
+    renderModal({
+      groups: [
+        getTeamGroup(),
+        getTeamGroup({ id: 'team-2', teamName: 'Team Beta', users: [] }),
+      ],
+    });
+
+    expect(screen.getByText('Team Alpha')).toBeInTheDocument();
+    expect(screen.queryByText('Team Beta')).not.toBeInTheDocument();
+  });
+
+  it('Should remove a speaker from one group without affecting another group or the external speakers', async () => {
+    renderModal({
+      groups: [
+        getTeamGroup(),
+        getTeamGroup({
+          id: 'team-2',
+          teamName: 'Team Beta',
+          users: [getUser({ id: 'user-2', displayName: 'John Smith' })],
+        }),
+        getExternalGroup(),
+      ],
+    });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Guest One' }),
     );
 
-    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+    expect(screen.queryByText('Guest One')).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Beta' }),
+    );
     expect(screen.getByText('John Smith')).toBeInTheDocument();
+  });
+
+  it('Should toggle an external speaker’s findings independently', async () => {
+    renderModal({ groups: [getExternalGroup()] });
+
+    const toggle = screen.getByRole('checkbox', {
+      name: 'Guest One preliminary findings shared',
+    });
+    expect(toggle).not.toBeChecked();
+
+    await userEvent.click(toggle);
+
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Guest One preliminary findings shared',
+      }),
+    ).toBeChecked();
+  });
+
+  it('Should not duplicate a speaker who is searched and selected twice for the same team', async () => {
+    renderModal({ groups: [] });
+
+    await search('John', 'John Smith');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Collapse Team Beta' }),
+    );
+    await search('John', 'John Smith');
+
+    expect(
+      screen.getByRole('button', { name: 'Collapse Team Beta' }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText('John Smith')).toHaveLength(1);
   });
 
   it('Should close immediately on cancel when nothing has changed', async () => {
@@ -555,8 +676,11 @@ describe('EditEventSpeakersModal', () => {
     renderModal();
 
     await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    await userEvent.click(
       screen.getByRole('checkbox', {
-        name: 'Team Alpha preliminary findings shared',
+        name: 'Jane Doe preliminary findings shared',
       }),
     );
     await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
@@ -576,8 +700,11 @@ describe('EditEventSpeakersModal', () => {
     renderModal();
 
     await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    await userEvent.click(
       screen.getByRole('checkbox', {
-        name: 'Team Alpha preliminary findings shared',
+        name: 'Jane Doe preliminary findings shared',
       }),
     );
     await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
@@ -590,17 +717,246 @@ describe('EditEventSpeakersModal', () => {
     expect(onDismiss).not.toHaveBeenCalled();
   });
 
-  it('Should call onSave with the current groups', async () => {
+  it('Should disable Save when nothing has changed', () => {
     renderModal();
+
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+  });
+
+  it('Should enable Save once every speaker has been removed and report the emptied group', async () => {
+    renderModal();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Jane Doe' }),
+    );
+
+    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
 
     await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-    await waitFor(() => expect(onSave).toHaveBeenCalledWith(groups));
+    await waitFor(() =>
+      expect(onSave).toHaveBeenCalledWith([
+        expect.objectContaining({ id: 'team-1', users: [] }),
+      ]),
+    );
+  });
+
+  it('Should not toast or duplicate a speaker who is already in the group', async () => {
+    renderModal({ groups: [] });
+
+    await search('John', 'John Smith');
+    expect(screen.getByText('Added John Smith to Team Beta')).toBeVisible();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Collapse Team Beta' }),
+    );
+    await search('John', 'John Smith');
+
+    expect(
+      screen.queryByText('Added John Smith to Team Beta'),
+    ).not.toBeInTheDocument();
+    expect(screen.getAllByText('John Smith')).toHaveLength(1);
+  });
+
+  it('Should keep external speaker ids distinct when a speaker is removed between two additions', async () => {
+    renderModal();
+
+    await searchNonCrn('Bob');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Jane Doe' }),
+    );
+    await searchNonCrn('Bob');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+
+    const removeButtons = screen.getAllByRole('button', { name: 'Remove Bob' });
+    expect(removeButtons).toHaveLength(2);
+
+    await userEvent.click(removeButtons[0] as HTMLElement);
+
+    expect(screen.getAllByRole('button', { name: 'Remove Bob' })).toHaveLength(
+      1,
+    );
+  });
+
+  it('Should drop a group created by an addition that is then undone', async () => {
+    renderModal();
+
+    await search('John', 'John Smith');
+    await userEvent.click(screen.getByRole('button', { name: 'Undo' }));
+    await markJaneShared();
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSave).toHaveBeenCalledWith([
+        expect.objectContaining({ id: 'team-1' }),
+      ]),
+    );
+  });
+
+  it('Should still report a pre-existing group that an undo leaves empty', async () => {
+    renderModal();
+
+    await search('Alex', 'Alex Kim');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'plus Team Alpha' }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Jane Doe' }),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Undo' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSave).toHaveBeenCalledWith([
+        expect.objectContaining({ id: 'team-1', users: [] }),
+      ]),
+    );
+  });
+
+  it('Should keep Save disabled when the groups prop changes under an open modal', async () => {
+    const { rerender } = renderModal();
+
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+
+    rerender(
+      <EditEventSpeakersModal
+        loadSearchOptions={loadSearchOptions}
+        onSave={onSave}
+        onDismiss={onDismiss}
+        isPastEvent
+        groups={[
+          getTeamGroup(),
+          getTeamGroup({
+            id: 'team-2',
+            teamName: 'Team Beta',
+            users: [getUser({ id: 'user-2', displayName: 'John Smith' })],
+          }),
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should drop the external group again when its only speaker is removed with the bin', async () => {
+    renderModal();
+
+    await searchNonCrn('Bob');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Remove Bob' }));
+
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+
+    await markJaneShared();
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSave).toHaveBeenCalledWith([
+        expect.objectContaining({ id: 'team-1' }),
+      ]),
+    );
+  });
+
+  it('Should drop the toast when the speaker it announced is removed with the bin', async () => {
+    renderModal();
+
+    await searchNonCrn('Bob');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+    expect(screen.getByText('Added Bob as an External Guest')).toBeVisible();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Remove Bob' }));
+
+    expect(
+      screen.queryByText('Added Bob as an External Guest'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('Should show a newly added row that would otherwise sit behind the section cap', async () => {
+    renderModal({
+      groups: [
+        getExternalGroup({
+          users: Array.from({ length: 5 }, (_row, index) =>
+            getExternalUser({
+              id: `ext-${index}`,
+              displayName: `Guest ${index}`,
+            }),
+          ),
+        }),
+      ],
+    });
+
+    await searchNonCrn('Bob');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+
+    expect(screen.getByText('Bob')).toBeVisible();
+  });
+
+  it('Should offer the event teams and projects on the external banner for a name that is not a CRN user', async () => {
+    renderModal();
+
+    await searchNonCrn('Bob');
+
+    expect(
+      screen.getByText(/Select the team or project they represented/),
+    ).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    ).toBeVisible();
+  });
+
+  it('Should place an external guest into the team picked on the banner', async () => {
+    renderModal();
+
+    await searchNonCrn('Bob');
+    await userEvent.click(screen.getByRole('combobox'));
+    await userEvent.click(
+      await screen.findByRole('option', { name: 'Team Alpha' }),
+    );
+
+    expect(screen.getByText('Added Bob to Team Alpha')).toBeVisible();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+  });
+
+  it('Should render a guest inside a team as an external speaker', async () => {
+    renderModal();
+
+    await searchNonCrn('Bob');
+    await userEvent.click(screen.getByRole('combobox'));
+    await userEvent.click(
+      await screen.findByRole('option', { name: 'Team Alpha' }),
+    );
+
+    // No CRN profile to link to, and "Non CRN" rather than the "No role" a
+    // team member with an empty role list would get.
+    expect(screen.queryByRole('link', { name: 'Bob' })).not.toBeInTheDocument();
+    expect(screen.getByText('Non CRN')).toBeInTheDocument();
+    expect(screen.queryByText('No role')).not.toBeInTheDocument();
   });
 
   it('Should stay usable when saving fails', async () => {
     renderModal({ onSave: jest.fn().mockRejectedValue(new Error('nope')) });
 
+    await markJaneShared();
     await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() =>
@@ -637,38 +993,41 @@ describe('EditEventSpeakersModal', () => {
     ).toBeInTheDocument();
   });
 
+  it('Should render a project group with a link to the project', () => {
+    renderModal({ groups: [getProjectGroup()] });
+
+    expect(screen.getByRole('link', { name: 'Project One' })).toHaveAttribute(
+      'href',
+      expect.stringContaining('project-1'),
+    );
+  });
+
   describe('disabled state during cancel confirmation', () => {
     const enterCancelConfirmation = async () => {
       renderModal();
-      const teamRow = screen.getByRole('listitem');
       await userEvent.click(
-        within(teamRow).getByRole('checkbox', {
-          name: 'Team Alpha preliminary findings shared',
+        screen.getByRole('button', { name: 'Expand Team Alpha' }),
+      );
+      await userEvent.click(
+        screen.getByRole('checkbox', {
+          name: 'Jane Doe preliminary findings shared',
         }),
       );
       await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
     };
 
-    it('Should disable the Mark All Shared button', async () => {
-      await enterCancelConfirmation();
-      expect(
-        screen.getByRole('button', { name: 'Mark All Shared' }),
-      ).toBeDisabled();
-    });
-
     it('Should disable the preliminary findings switch', async () => {
       await enterCancelConfirmation();
       expect(
         screen.getByRole('checkbox', {
-          name: 'Team Alpha preliminary findings shared',
+          name: 'Jane Doe preliminary findings shared',
         }),
       ).toBeDisabled();
     });
 
     it('Should change speakers card background', async () => {
       await enterCancelConfirmation();
-      const list = screen.getByRole('list');
-      expect(list.parentElement).toHaveStyle({
+      expect(screen.getByRole('group', { name: 'Speakers' })).toHaveStyle({
         backgroundColor: silver.rgb,
       });
     });
@@ -680,9 +1039,6 @@ describe('EditEventSpeakersModal', () => {
 
     it('Should disable delete buttons on speaker rows', async () => {
       await enterCancelConfirmation();
-      await userEvent.click(
-        screen.getByRole('button', { name: 'Expand Team Alpha' }),
-      );
       expect(
         screen.getByRole('button', { name: 'Remove Jane Doe' }),
       ).toBeDisabled();
@@ -690,21 +1046,47 @@ describe('EditEventSpeakersModal', () => {
 
     it('Should disable pending speaker card controls', async () => {
       renderModal();
-      await userEvent.type(screen.getByRole('combobox'), 'Alex');
-      await userEvent.click(await screen.findByText('Alex Kim'));
-      expect(
-        screen.getByText('Pick a team to finish adding them.'),
-      ).toBeInTheDocument();
-
       await userEvent.click(
-        within(screen.getByRole('listitem')).getByRole('checkbox', {
-          name: 'Team Alpha preliminary findings shared',
+        screen.getByRole('button', { name: 'Expand Team Alpha' }),
+      );
+      await userEvent.click(
+        screen.getByRole('checkbox', {
+          name: 'Jane Doe preliminary findings shared',
         }),
       );
+      await search('Alex', 'Alex Kim');
       await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
 
       expect(
         screen.getByRole('button', { name: 'Remove Alex Kim' }),
+      ).toBeDisabled();
+    });
+
+    it('Should disable external banner controls', async () => {
+      renderModal();
+      await markJaneShared();
+      await search('Guest Speaker', 'Guest Speaker');
+      await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+      expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Keep as External Guest' }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Remove Guest Speaker' }),
+      ).toBeDisabled();
+    });
+
+    it('Should disable the toast actions', async () => {
+      renderModal();
+      await search('John', 'John Smith');
+      await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+      expect(screen.getByRole('button', { name: 'Undo' })).toBeDisabled();
+      expect(
+        within(screen.getByRole('status')).getByRole('button', {
+          name: 'Dismiss message',
+        }),
       ).toBeDisabled();
     });
 
@@ -714,11 +1096,8 @@ describe('EditEventSpeakersModal', () => {
         screen.getByRole('button', { name: 'Keep Editing' }),
       );
       expect(
-        screen.getByRole('button', { name: 'Mark All Shared' }),
-      ).toBeEnabled();
-      expect(
         screen.getByRole('checkbox', {
-          name: 'Team Alpha preliminary findings shared',
+          name: 'Jane Doe preliminary findings shared',
         }),
       ).toBeEnabled();
     });

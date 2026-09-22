@@ -1,5 +1,6 @@
+import { ProjectType } from '@asap-hub/model';
 import { css } from '@emotion/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { components } from 'react-select';
 
 import {
@@ -10,38 +11,41 @@ import {
   MultiSelectOptionsType,
   Paragraph,
 } from '../atoms';
-import {
-  charcoal,
-  lead,
-  neutral1000,
-  pearl,
-  pine,
-  silver,
-  steel,
-  tin,
-} from '../colors';
+import { lead, neutral1000, pearl, pine, silver, steel, tin } from '../colors';
 import { crossIcon, plusIcon, searchIcon } from '../icons';
 import { ConfirmableModalFooter, Modal } from '../molecules';
+import ExternalSpeakerAffiliationCard, {
+  AffiliationOption,
+} from '../molecules/ExternalSpeakerAffiliationCard';
 import PendingSpeakerCard from '../molecules/PendingSpeakerCard';
 import SpeakerTeamRow from '../molecules/SpeakerTeamRow';
-import { avatar24Styles, flexRowGap8Styles } from '../molecules/SpeakerUserRow';
+import SpeakerToast from '../molecules/SpeakerToast';
+import SpeakerUserRow, {
+  avatar24Styles,
+  chevronSpacerStyles,
+  findingsColumnStyles,
+  flexRowGap8Styles,
+  trailingColumnsStyles,
+} from '../molecules/SpeakerUserRow';
 import { mobileScreen, rem } from '../pixels';
-import { pluralize, pluralizeTeams } from '../utils';
 import { splitDisplayName } from '../utils/user';
 import { EventTeamType } from './shared-event-card';
 import { iconButtonStyles } from './shared-event-card-styles';
 import {
+  groupLabel,
   SpeakerGroup,
   SpeakerGroupExternalUser,
   SpeakerGroupUser,
+  SpeakerProjectGroup,
+  SpeakerTeamGroup,
 } from './speaker-group';
+import SpeakerSection from './speaker-section';
 
-export type SpeakerTeamOption = {
-  readonly teamId: string;
-  readonly teamName: string;
+export type SpeakerTeamOption = AffiliationOption & {
   readonly teamType?: EventTeamType;
+  readonly projectType?: ProjectType;
   readonly isTeamInactive?: boolean;
-  readonly role: string;
+  readonly role?: string;
 };
 
 export type SpeakerSearchOption = MultiSelectOptionsType & {
@@ -50,7 +54,7 @@ export type SpeakerSearchOption = MultiSelectOptionsType & {
     readonly displayName: string;
     readonly avatarUrl?: string;
     readonly isAlumni?: boolean;
-    readonly teamOptions: ReadonlyArray<SpeakerTeamOption>;
+    readonly affiliationOptions: ReadonlyArray<SpeakerTeamOption>;
   };
 };
 
@@ -118,74 +122,14 @@ const searchExternalTextStyles = css({
   lineHeight: rem(24),
 });
 
+// The gap only ever separates a notification — the toast or one of the pending
+// speaker banners — from the speakers table below it, since only one of the two
+// is ever on screen.
 const speakersSectionStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  gap: rem(16),
-  marginTop: rem(48),
-  [`@media (max-width: ${mobileScreen.max}px)`]: { gap: rem(24) },
-});
-
-const speakersHeaderStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  flexWrap: 'wrap',
-  gap: rem(12),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    gap: rem(24),
-  },
-});
-
-const sectionTitleStyles = css({
-  margin: 0,
-  fontSize: rem(17),
-  fontWeight: 700,
-  lineHeight: rem(24),
-  color: neutral1000.rgb,
-});
-
-// Wraps the "Speakers" heading and the stat span — always stacked on
-// mobile (not just when it doesn't fit), matching
-// EditEventAttendanceModal's attendeesStatsStyles.
-const statsHeaderStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  flexWrap: 'wrap',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    gap: rem(4),
-  },
-});
-
-const statsGroupStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  flexWrap: 'wrap',
-});
-
-const statStyles = css({
-  fontSize: rem(17),
-  fontWeight: 400,
-  color: lead.rgb,
-});
-
-const separatorStyles = css({
-  fontSize: rem(17),
-  fontWeight: 400,
-  color: lead.rgb,
-  padding: `0 ${rem(8)}`,
-});
-
-const markAllSharedButtonStyles = css({
-  flexGrow: 0,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
-    flexGrow: 1,
-    minWidth: '100%',
-  },
+  gap: rem(32),
+  marginTop: rem(32),
 });
 
 const cardSurfaceStyles = (enabled: boolean) =>
@@ -198,7 +142,7 @@ const cardSurfaceStyles = (enabled: boolean) =>
 const groupsCardStyles = (enabled: boolean) =>
   css([cardSurfaceStyles(enabled), { padding: rem(24), overflowX: 'auto' }]);
 
-// "Team" and "Preliminary Findings", mirroring SpeakerTeamRow's row layout
+// "Name" and "Preliminary Findings", mirroring SpeakerTeamRow's row layout
 // below it. `gap` is a floor — space-between still pushes them apart when
 // there's room.
 const groupsTableHeaderStyles = css({
@@ -210,7 +154,7 @@ const groupsTableHeaderStyles = css({
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),
-  color: charcoal.rgb,
+  color: neutral1000.rgb,
   paddingBottom: rem(16),
 });
 
@@ -234,14 +178,64 @@ const emptyStateStyles = (enabled: boolean) =>
 
 const emptyStateTitleStyles = css({ fontWeight: 700 });
 
-const findUserGroup = (
-  groups: SpeakerGroup[],
-  teamId: string,
-): Extract<SpeakerGroup, { variant: 'team' }> | undefined =>
-  groups.find(
-    (group): group is Extract<SpeakerGroup, { variant: 'team' }> =>
-      group.variant === 'team' && group.id === teamId,
+// The two spreads are identical on purpose: TS only narrows `users`'s element
+// type when the `external` discriminant is checked on both sides, so a single
+// unconditional branch fails to typecheck against the union.
+const removeGroupUser = (group: SpeakerGroup, userId: string): SpeakerGroup =>
+  group.variant === 'external'
+    ? { ...group, users: group.users.filter((user) => user.id !== userId) }
+    : { ...group, users: group.users.filter((user) => user.id !== userId) };
+
+const setGroupUserShared = (
+  group: SpeakerGroup,
+  userId: string,
+  shared: boolean,
+): SpeakerGroup =>
+  group.variant === 'external'
+    ? {
+        ...group,
+        users: group.users.map((user) =>
+          user.id === userId
+            ? { ...user, preliminaryFindingsShared: shared }
+            : user,
+        ),
+      }
+    : {
+        ...group,
+        users: group.users.map((user) =>
+          user.id === userId
+            ? { ...user, preliminaryFindingsShared: shared }
+            : user,
+        ),
+      };
+
+// A group the modal opened with must survive losing its last speaker — save
+// still has to report it as emptied. One that only exists because of an add in
+// this session must not: saved, it creates a real affiliation for nobody.
+const withoutGroupsAddedThisSession = (
+  nextGroups: SpeakerGroup[],
+  originalGroupIds: ReadonlySet<string>,
+) =>
+  nextGroups.filter(
+    (group) => group.users.length > 0 || originalGroupIds.has(group.id),
   );
+
+const withExternalGroupLast = (nextGroups: SpeakerGroup[]) => [
+  ...nextGroups.filter((group) => group.variant !== 'external'),
+  ...nextGroups.filter((group) => group.variant === 'external'),
+];
+
+type PendingSpeaker = {
+  readonly displayName: string;
+  readonly user?: NonNullable<SpeakerSearchOption['user']>;
+};
+
+type AddedSpeaker = {
+  readonly speakerName: string;
+  readonly destination?: string;
+  readonly groupId: string;
+  readonly userId: string;
+};
 
 const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   groups = [],
@@ -256,34 +250,63 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   const [expandedIds, setExpandedIds] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
-  const [pendingSpeaker, setPendingSpeaker] = useState<
-    SpeakerSearchOption['user'] | null
-  >(null);
+  const [expandedSections, setExpandedSections] = useState<
+    ReadonlySet<SpeakerGroup['variant']>
+  >(() => new Set());
+  const [pendingSpeaker, setPendingSpeaker] = useState<PendingSpeaker | null>(
+    null,
+  );
+  const [addedSpeaker, setAddedSpeaker] = useState<AddedSpeaker | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  // Only ever increments: deriving external ids from the current speaker count
+  // reuses an id after a removal, and two rows sharing an id delete together.
+  const externalUserCount = useRef(0);
+  // What the modal opened with. The `groups` prop keeps changing while the modal
+  // is open (the event page polls for a refresh), so comparing against it would
+  // let another admin's edit enable Save with no local change and turn their
+  // additions into removals on save. A useState initializer, not useRef, so the
+  // Set is built once rather than on every render.
+  const [original] = useState(() => ({
+    groups,
+    groupIds: new Set(groups.map((group) => group.id)) as ReadonlySet<string>,
+  }));
+  // Mirrors speakerGroups so two adds dispatched in the same batch (react-select
+  // resolving one option twice, a double click) see each other: the second add's
+  // dedup has to read the first one's result, which setState has not committed.
+  const latestGroups = useRef(speakerGroups);
+
+  const updateGroups = (
+    update: (current: SpeakerGroup[]) => SpeakerGroup[],
+  ): SpeakerGroup[] => {
+    const next = update(latestGroups.current);
+    latestGroups.current = next;
+    setSpeakerGroups(next);
+    return next;
+  };
 
   const isEditMode = speakerGroups.some((group) => group.users.length > 0);
   const title = isEditMode ? 'Edit Speakers' : 'Add Speakers';
   // A group with no members left (every speaker removed) is dropped from the
   // visible table, but kept in speakerGroups so onSave still reports it.
   const visibleGroups = speakerGroups.filter((group) => group.users.length > 0);
-  const teamCount = visibleGroups.filter(
-    (group) => group.variant === 'team',
-  ).length;
-  const userCount = speakerGroups.reduce(
-    (total, group) => total + group.users.length,
-    0,
+  const teamGroups = visibleGroups.filter(
+    (group): group is SpeakerTeamGroup => group.variant === 'team',
   );
-  const saveEnabled = !isSaving && isEditMode;
+  const projectGroups = visibleGroups.filter(
+    (group): group is SpeakerProjectGroup => group.variant === 'project',
+  );
+  const externalUsers = visibleGroups.flatMap((group) =>
+    group.variant === 'external' ? group.users : [],
+  );
+  const isDirty =
+    JSON.stringify(speakerGroups) !== JSON.stringify(original.groups);
+  const saveEnabled = !isSaving && isDirty && !pendingSpeaker;
 
-  const withExternalGroupLast = (nextGroups: SpeakerGroup[]) => [
-    ...nextGroups.filter((group) => group.variant !== 'external'),
-    ...nextGroups.filter((group) => group.variant === 'external'),
-  ];
-
-  const addUserToTeam = (
+  const addUserToAffiliation = (
     user: NonNullable<SpeakerSearchOption['user']>,
-    team: SpeakerTeamOption,
+    affiliation: SpeakerTeamOption,
+    { isExternal = false }: { isExternal?: boolean } = {},
   ) => {
     const newUser: SpeakerGroupUser = {
       id: user.userId,
@@ -291,23 +314,39 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       displayName: user.displayName,
       avatarUrl: user.avatarUrl,
       isAlumni: user.isAlumni,
-      roles: [team.role],
+      isExternal,
+      roles: affiliation.role ? [affiliation.role] : [],
+      preliminaryFindingsShared: false,
     };
-    setSpeakerGroups((current) => {
-      const existingGroup = findUserGroup(current, team.teamId);
+    const before = latestGroups.current;
+    const after = updateGroups((current) => {
+      const existingGroup = current.find(
+        (group) => group.id === affiliation.id && group.variant !== 'external',
+      );
       if (!existingGroup) {
-        const newGroup: SpeakerGroup = {
-          id: team.teamId,
-          variant: 'team',
-          teamName: team.teamName,
-          teamType: team.teamType,
-          isTeamInactive: team.isTeamInactive,
-          preliminaryFindingsShared: false,
-          users: [newUser],
-        };
+        const newGroup: SpeakerGroup =
+          affiliation.variant === 'team'
+            ? {
+                id: affiliation.id,
+                variant: 'team',
+                teamName: affiliation.name,
+                teamType: affiliation.teamType,
+                isTeamInactive: affiliation.isTeamInactive,
+                users: [newUser],
+              }
+            : {
+                id: affiliation.id,
+                variant: 'project',
+                projectName: affiliation.name,
+                projectType: affiliation.projectType,
+                users: [newUser],
+              };
         return withExternalGroupLast([...current, newGroup]);
       }
-      if (existingGroup.users.some((row) => row.id === user.userId)) {
+      if (
+        existingGroup.variant === 'external' ||
+        existingGroup.users.some((row) => row.id === user.userId)
+      ) {
         return current;
       }
       const updatedGroup: SpeakerGroup = {
@@ -318,98 +357,108 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
         group.id === existingGroup.id ? updatedGroup : group,
       );
     });
-    setExpandedIds((current) => new Set(current).add(team.teamId));
+    setExpandedIds((current) => new Set(current).add(affiliation.id));
+    // A row appended past the section cap is invisible until the section is
+    // expanded, so the toast would announce an add with nothing on screen.
+    expandSection(affiliation.variant);
+    setPendingSpeaker(null);
+    // The updater returns `current` untouched for a speaker who is already in
+    // the group. Toasting that no-op would offer an Undo that deletes the
+    // incumbent.
+    setAddedSpeaker(
+      after === before
+        ? null
+        : {
+            speakerName: user.displayName,
+            destination: affiliation.name,
+            groupId: affiliation.id,
+            userId: user.userId,
+          },
+    );
   };
 
+  const nextGuestId = (name: string) => {
+    externalUserCount.current += 1;
+    return `external-${externalUserCount.current}-${name}`;
+  };
+
+  // A guest who matched no CRN user has no userId, so they carry a generated
+  // one. Until the backend can create the user record, the id only has to be
+  // unique within this edit session.
+  const addGuestToAffiliation = (
+    name: string,
+    affiliation: SpeakerTeamOption,
+  ) =>
+    addUserToAffiliation(
+      { userId: nextGuestId(name), displayName: name, affiliationOptions: [] },
+      affiliation,
+      { isExternal: true },
+    );
+
   const addExternalUser = (name: string) => {
-    setSpeakerGroups((current) => {
-      const externalGroup = current.find(
-        (group): group is Extract<SpeakerGroup, { variant: 'external' }> =>
-          group.variant === 'external',
-      );
-      const totalUsers = current.reduce(
-        (total, group) => total + group.users.length,
-        0,
-      );
-      const newUser: SpeakerGroupExternalUser = {
-        id: `external-${totalUsers}-${name}`,
-        speakerIds: [],
-        displayName: name,
-      };
-      if (!externalGroup) {
-        return [
-          ...current,
-          {
-            id: 'external',
-            variant: 'external',
-            preliminaryFindingsShared: false,
-            users: [newUser],
-          },
-        ];
-      }
-      return current.map((group) =>
-        group.variant === 'external'
-          ? { ...group, users: [...group.users, newUser] }
-          : group,
-      );
+    const newUser: SpeakerGroupExternalUser = {
+      id: nextGuestId(name),
+      speakerIds: [],
+      displayName: name,
+      preliminaryFindingsShared: false,
+    };
+    updateGroups((current) =>
+      current.some((group) => group.variant === 'external')
+        ? current.map((group) =>
+            group.variant === 'external'
+              ? { ...group, users: [...group.users, newUser] }
+              : group,
+          )
+        : [
+            ...current,
+            { id: 'external', variant: 'external', users: [newUser] },
+          ],
+    );
+    expandSection('external');
+    setPendingSpeaker(null);
+    setAddedSpeaker({
+      speakerName: name,
+      groupId: 'external',
+      userId: newUser.id,
     });
-    setExpandedIds((current) => new Set(current).add('external'));
   };
 
   const handleSelectSearchOption = (option: SpeakerSearchOption) => {
-    if (!option.user) {
-      addExternalUser(option.label);
+    const affiliations = option.user?.affiliationOptions ?? [];
+    const [onlyAffiliation] = affiliations;
+    if (option.user && onlyAffiliation && affiliations.length === 1) {
+      addUserToAffiliation(option.user, onlyAffiliation);
       return;
     }
-    const [onlyTeam] = option.user.teamOptions;
-    if (option.user.teamOptions.length === 1 && onlyTeam) {
-      addUserToTeam(option.user, onlyTeam);
-    } else {
-      setPendingSpeaker(option.user);
-    }
+    setAddedSpeaker(null);
+    setPendingSpeaker({
+      displayName: option.user?.displayName ?? option.label,
+      user: option.user,
+    });
   };
 
-  const resolvePendingSpeaker = (
-    speaker: NonNullable<SpeakerSearchOption['user']>,
-    teamId: string,
-  ) => {
-    speaker.teamOptions
-      .filter((option) => option.teamId === teamId)
-      .forEach((team) => addUserToTeam(speaker, team));
-    setPendingSpeaker(null);
-  };
-
-  const toggleShared = (groupId: string) =>
-    setSpeakerGroups((current) =>
+  const toggleUserShared = (groupId: string, userId: string, shared: boolean) =>
+    updateGroups((current) =>
       current.map((group) =>
         group.id === groupId
-          ? {
-              ...group,
-              preliminaryFindingsShared: !group.preliminaryFindingsShared,
-            }
+          ? setGroupUserShared(group, userId, shared)
           : group,
       ),
     );
 
-  // Preliminary findings is per-team, so "Mark All" ignores the external group.
-  const visibleTeamGroups = visibleGroups.filter(
-    (group) => group.variant === 'team',
-  );
-  const allShared =
-    visibleTeamGroups.length > 0 &&
-    visibleTeamGroups.every((group) => group.preliminaryFindingsShared);
+  // Adding a speaker only ever reveals its section; the Show more / Show less
+  // button is the one place that can collapse it again.
+  const expandSection = (variant: SpeakerGroup['variant']) =>
+    setExpandedSections((current) => new Set(current).add(variant));
 
-  const toggleMarkAllShared = () => {
-    const nextShared = !allShared;
-    const teamIds = new Set(visibleTeamGroups.map((group) => group.id));
-    setSpeakerGroups((current) =>
-      current.map((group) =>
-        teamIds.has(group.id)
-          ? { ...group, preliminaryFindingsShared: nextShared }
-          : group,
-      ),
-    );
-  };
+  const toggleSection = (variant: SpeakerGroup['variant']) =>
+    setExpandedSections((current) => {
+      const next = new Set(current);
+      if (!next.delete(variant)) {
+        next.add(variant);
+      }
+      return next;
+    });
 
   const toggleExpanded = (groupId: string) =>
     setExpandedIds((current) => {
@@ -422,27 +471,27 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       return next;
     });
 
-  const removeUser = (groupId: string, userId: string) =>
-    setSpeakerGroups((current) =>
-      current.map((group) => {
-        if (group.id !== groupId) {
-          return group;
-        }
-        // Duplicated on purpose: with a union return type, TS only narrows
-        // `users`'s element type per-branch when the discriminant check
-        // (variant === 'team') is explicit on both sides of the spread —
-        // collapsing this into one unconditional branch fails to typecheck.
-        return group.variant === 'team'
-          ? {
-              ...group,
-              users: group.users.filter((user) => user.id !== userId),
-            }
-          : {
-              ...group,
-              users: group.users.filter((user) => user.id !== userId),
-            };
-      }),
+  const removeSpeaker = (groupId: string, userId: string) =>
+    updateGroups((current) =>
+      withoutGroupsAddedThisSession(
+        current.map((group) =>
+          group.id === groupId ? removeGroupUser(group, userId) : group,
+        ),
+        original.groupIds,
+      ),
     );
+
+  const removeUser = (groupId: string, userId: string) => {
+    removeSpeaker(groupId, userId);
+    if (addedSpeaker?.groupId === groupId && addedSpeaker.userId === userId) {
+      setAddedSpeaker(null);
+    }
+  };
+
+  const undoAddedSpeaker = ({ groupId, userId }: AddedSpeaker) => {
+    removeSpeaker(groupId, userId);
+    setAddedSpeaker(null);
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -456,9 +505,78 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     }
   };
 
-  const handleCancel = () => {
-    const isDirty = JSON.stringify(speakerGroups) !== JSON.stringify(groups);
-    return isDirty ? setIsCancelling(true) : onDismiss();
+  const handleCancel = () => (isDirty ? setIsCancelling(true) : onDismiss());
+
+  const renderGroupRow = (group: SpeakerTeamGroup | SpeakerProjectGroup) => (
+    <SpeakerTeamRow
+      key={group.id}
+      variant={group.variant}
+      teamId={group.variant === 'team' ? group.id : undefined}
+      teamType={group.variant === 'team' ? group.teamType : undefined}
+      isTeamInactive={
+        group.variant === 'team' ? group.isTeamInactive : undefined
+      }
+      projectId={group.variant === 'project' ? group.id : undefined}
+      projectType={group.variant === 'project' ? group.projectType : undefined}
+      label={groupLabel(group)}
+      users={group.users}
+      showShared={isPastEvent}
+      showCount={false}
+      expanded={expandedIds.has(group.id)}
+      onToggleExpanded={() => toggleExpanded(group.id)}
+      onToggleUserShared={(userId, shared) =>
+        toggleUserShared(group.id, userId, shared)
+      }
+      onRemoveUser={(userId) => removeUser(group.id, userId)}
+      enabled={!isCancelling}
+    />
+  );
+
+  const renderBanner = ({ displayName, user }: PendingSpeaker) => {
+    // A CRN user with no team or project cannot present at all; only a name
+    // that matches no CRN user becomes an external guest.
+    if (user && user.affiliationOptions.length === 0) {
+      return (
+        <SpeakerToast
+          accent="error"
+          message="This speaker is not a member on any CRN team or individual project. They cannot be added as a speaker until they belong to one."
+          onDismiss={() => setPendingSpeaker(null)}
+          enabled={!isCancelling}
+        />
+      );
+    }
+    return user && user.affiliationOptions.length > 1 ? (
+      <PendingSpeakerCard
+        displayName={user.displayName}
+        avatarUrl={user.avatarUrl}
+        userId={user.userId}
+        affiliations={user.affiliationOptions}
+        onPickAffiliation={(affiliation) =>
+          addUserToAffiliation(user, affiliation)
+        }
+        onDismiss={() => setPendingSpeaker(null)}
+        enabled={!isCancelling}
+      />
+    ) : (
+      <ExternalSpeakerAffiliationCard
+        displayName={displayName}
+        // Candidates are the teams and projects already on this event; the
+        // search across every CRN team and project is not wired up yet.
+        affiliationOptions={[...teamGroups, ...projectGroups].map((group) => ({
+          variant: group.variant,
+          id: group.id,
+          name: groupLabel(group),
+        }))}
+        onSelectAffiliation={(affiliation) =>
+          user
+            ? addUserToAffiliation(user, affiliation)
+            : addGuestToAffiliation(displayName, affiliation)
+        }
+        onKeepAsExternalGuest={() => addExternalUser(displayName)}
+        onDismiss={() => setPendingSpeaker(null)}
+        enabled={!isCancelling}
+      />
+    );
   };
 
   return (
@@ -485,7 +603,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
             isMulti={false}
             values={null}
             noMargin
-            enabled={!isCancelling}
+            enabled={!isCancelling && !pendingSpeaker}
             creatable
             defaultOptions={false}
             leftIndicator={searchIcon}
@@ -547,32 +665,20 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
         </div>
 
         <section css={speakersSectionStyles}>
-          <div css={speakersHeaderStyles}>
-            <div css={statsHeaderStyles}>
-              <h3 css={sectionTitleStyles}>Speakers</h3>
-              {visibleGroups.length > 0 && (
-                <span css={statsGroupStyles}>
-                  <span css={[separatorStyles, hideOnMobileStyles]}>•</span>
-                  <span css={statStyles}>
-                    {pluralizeTeams(teamCount, true)}
-                  </span>
-                  <span css={separatorStyles}>•</span>
-                  <span css={statStyles}>{pluralize(userCount, 'User')}</span>
-                </span>
-              )}
-            </div>
-            {isPastEvent && visibleTeamGroups.length > 0 && (
-              <Button
-                small
-                noMargin
-                enabled={!isCancelling}
-                overrideStyles={markAllSharedButtonStyles}
-                onClick={toggleMarkAllShared}
-              >
-                {allShared ? 'Mark All Not Shared' : 'Mark All Shared'}
-              </Button>
-            )}
-          </div>
+          {addedSpeaker && (
+            <SpeakerToast
+              message={
+                addedSpeaker.destination
+                  ? `Added ${addedSpeaker.speakerName} to ${addedSpeaker.destination}`
+                  : `Added ${addedSpeaker.speakerName} as an External Guest`
+              }
+              onUndo={() => undoAddedSpeaker(addedSpeaker)}
+              onDismiss={() => setAddedSpeaker(null)}
+              enabled={!isCancelling}
+            />
+          )}
+
+          {pendingSpeaker && renderBanner(pendingSpeaker)}
 
           {visibleGroups.length === 0 && !pendingSpeaker ? (
             <div css={emptyStateStyles(!isCancelling)} role="status">
@@ -586,67 +692,60 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
               </Paragraph>
             </div>
           ) : (
-            <div css={groupsCardStyles(!isCancelling)}>
-              <div css={groupsTableHeaderStyles}>
-                <span>Team</span>
+            visibleGroups.length > 0 && (
+              <div
+                css={groupsCardStyles(!isCancelling)}
+                role="group"
+                aria-label="Speakers"
+              >
                 {isPastEvent && (
-                  <span>
-                    <span css={hideOnMobileStyles}>Preliminary Findings</span>
-                    <span css={hideOnDesktopStyles}>P. Findings</span>
-                  </span>
+                  <div css={groupsTableHeaderStyles}>
+                    <span>Speakers</span>
+                    <span css={trailingColumnsStyles}>
+                      <span css={findingsColumnStyles}>
+                        <span css={hideOnMobileStyles}>
+                          Preliminary Findings
+                        </span>
+                        <span css={hideOnDesktopStyles}>P. Findings</span>
+                      </span>
+                      <span css={chevronSpacerStyles} />
+                    </span>
+                  </div>
                 )}
-              </div>
-              <div css={groupsRowsStyles} role="list">
-                {pendingSpeaker && (
-                  <PendingSpeakerCard
-                    displayName={pendingSpeaker.displayName}
-                    avatarUrl={pendingSpeaker.avatarUrl}
-                    userId={pendingSpeaker.userId}
-                    teams={pendingSpeaker.teamOptions}
-                    onPickTeam={(teamId) =>
-                      resolvePendingSpeaker(pendingSpeaker, teamId)
-                    }
-                    onDismiss={() => setPendingSpeaker(null)}
-                    enabled={!isCancelling}
-                  />
-                )}
-                {visibleGroups.map((group) => (
-                  <SpeakerTeamRow
-                    key={group.id}
-                    variant={group.variant}
-                    teamId={group.variant === 'team' ? group.id : undefined}
-                    teamType={
-                      group.variant === 'team' ? group.teamType : undefined
-                    }
-                    isTeamInactive={
-                      group.variant === 'team'
-                        ? group.isTeamInactive
-                        : undefined
-                    }
-                    label={
-                      group.variant === 'team'
-                        ? group.teamName
-                        : 'External Users'
-                    }
-                    users={group.users.map((user) => ({
-                      id: user.id,
-                      displayName: user.displayName,
-                      avatarUrl:
-                        'avatarUrl' in user ? user.avatarUrl : undefined,
-                      roles: 'roles' in user ? user.roles : [],
-                      isAlumni: 'isAlumni' in user ? user.isAlumni : undefined,
-                    }))}
-                    preliminaryFindingsShared={group.preliminaryFindingsShared}
-                    showShared={isPastEvent && group.variant === 'team'}
-                    expanded={expandedIds.has(group.id)}
-                    onToggleExpanded={() => toggleExpanded(group.id)}
-                    onToggleShared={() => toggleShared(group.id)}
-                    onRemoveUser={(userId) => removeUser(group.id, userId)}
-                    enabled={!isCancelling}
+                {(['team', 'project'] as const).map((variant) => (
+                  <SpeakerSection
+                    key={variant}
+                    variant={variant}
+                    rows={(variant === 'team' ? teamGroups : projectGroups).map(
+                      renderGroupRow,
+                    )}
+                    expanded={expandedSections.has(variant)}
+                    onToggle={() => toggleSection(variant)}
+                    groupedRowsStyles={groupsRowsStyles}
                   />
                 ))}
+                <SpeakerSection
+                  variant="external"
+                  rows={externalUsers.map((user) => (
+                    <SpeakerUserRow
+                      key={user.id}
+                      displayName={user.displayName}
+                      isExternal
+                      preliminaryFindingsShared={user.preliminaryFindingsShared}
+                      showShared={isPastEvent}
+                      onToggleShared={(shared) =>
+                        toggleUserShared('external', user.id, shared)
+                      }
+                      onRemove={() => removeUser('external', user.id)}
+                      enabled={!isCancelling}
+                    />
+                  ))}
+                  expanded={expandedSections.has('external')}
+                  onToggle={() => toggleSection('external')}
+                  groupedRowsStyles={groupsRowsStyles}
+                />
               </div>
-            </div>
+            )
           )}
         </section>
       </div>
