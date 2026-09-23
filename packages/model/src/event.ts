@@ -34,6 +34,7 @@ export type EventSpeakerUser = {
   team: Pick<TeamResponse, 'displayName' | 'id' | 'inactiveSince'>;
   user: EventSpeakerUserData;
   role: string;
+  preliminaryDataShared?: boolean;
 };
 
 export type EventSpeakerUserWithoutTeam = {
@@ -67,11 +68,6 @@ export type EventPreviousAttendance = {
   teamsTotal: number;
 };
 
-export type EventPreliminaryDataSharing = {
-  team: { id: string };
-  shared: boolean;
-};
-
 export interface EventDataObject extends BasicEvent {
   calendar: CalendarResponse;
   interestGroup?: Pick<
@@ -101,7 +97,6 @@ export interface EventDataObject extends BasicEvent {
   })[];
   attendance?: EventTeamAttendance[];
   previousEventAttendance?: EventPreviousAttendance;
-  preliminaryDataShared?: EventPreliminaryDataSharing[];
 }
 
 export type ListEventDataObject = ListResponse<EventDataObject>;

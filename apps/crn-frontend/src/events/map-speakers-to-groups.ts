@@ -31,13 +31,6 @@ type MutableTeamGroup = {
 };
 
 export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
-  const sharedByTeamId = new Map(
-    (event.preliminaryDataShared ?? []).map(({ team, shared }) => [
-      team.id,
-      shared,
-    ]),
-  );
-
   const teamGroups = new Map<string, MutableTeamGroup>();
   const externalUsers: SpeakerGroupExternalUser[] = [];
 
@@ -72,6 +65,9 @@ export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
       if (speaker.id && !existing.speakerIds.includes(speaker.id)) {
         existing.speakerIds.push(speaker.id);
       }
+      if (speaker.preliminaryDataShared) {
+        existing.preliminaryFindingsShared = true;
+      }
     } else {
       group.users.set(user.id, {
         id: user.id,
@@ -80,7 +76,7 @@ export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
         avatarUrl: user.avatarUrl,
         isAlumni: !!user.alumniSinceDate,
         roles: role ? [role] : [],
-        preliminaryFindingsShared: sharedByTeamId.get(team.id) ?? false,
+        preliminaryFindingsShared: !!speaker.preliminaryDataShared,
       });
     }
 
