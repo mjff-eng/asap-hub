@@ -5,16 +5,19 @@ import { Component, ReactNode, Suspense } from 'react';
 
 import {
   createEventResponse,
+  createInterestGroupResponse,
   createTeamListItemResponse,
 } from '@asap-hub/fixtures';
 
 import { Auth0Provider, WhenReady } from '../../auth/test-utils';
+import { getInterestGroup } from '../../network/interest-groups/api';
 import { getEvent, getEvents, getTeamsForMatching } from '../api';
 import {
   eventQueryKeys,
   useEventById,
   useEvents,
   useEventSpeakerGroups,
+  useInterestGroupTeams,
   useQuietRefreshEventById,
   useTeamsForMatching,
 } from '../state';
@@ -24,6 +27,10 @@ jest.mock('../api', () => ({
   getEvents: jest.fn(),
   getTeamsForMatching: jest.fn(),
   patchEvent: jest.fn(),
+}));
+
+jest.mock('../../network/interest-groups/api', () => ({
+  getInterestGroup: jest.fn(),
 }));
 
 jest.mock('../../hooks/algolia', () => ({
@@ -129,6 +136,66 @@ describe('useEventSpeakerGroups', () => {
 
     await waitFor(() => expect(getEvent).toHaveBeenCalled());
     expect(result.current).toEqual([]);
+  });
+});
+
+describe('useInterestGroupTeams', () => {
+  const mockGetInterestGroup = getInterestGroup as jest.MockedFunction<
+    typeof getInterestGroup
+  >;
+
+  it('returns the teams of the given interest group', async () => {
+    const groupTeams = [createTeamListItemResponse()];
+    mockGetInterestGroup.mockResolvedValue({
+      ...createInterestGroupResponse(),
+      teams: groupTeams,
+    });
+
+    const { result } = renderStateHook(() => useInterestGroupTeams('g-0'));
+
+    await waitFor(() =>
+      expect(result.current).toEqual({ teams: groupTeams, resolved: true }),
+    );
+    expect(mockGetInterestGroup).toHaveBeenCalledWith('g-0', mockAuthorization);
+  });
+
+  it('resolves a group that no longer exists to no teams', async () => {
+    mockGetInterestGroup.mockResolvedValue(undefined);
+
+    const { result } = renderStateHook(() => useInterestGroupTeams('missing'));
+
+    await waitFor(() =>
+      expect(result.current).toEqual({ teams: [], resolved: true }),
+    );
+  });
+
+  it('reports a request still in flight as unresolved', async () => {
+    mockGetInterestGroup.mockReturnValue(new Promise(() => {}));
+
+    const { result } = renderStateHook(() => useInterestGroupTeams('g-0'));
+
+    await waitFor(() => expect(mockGetInterestGroup).toHaveBeenCalled());
+    expect(result.current).toEqual({ teams: [], resolved: false });
+  });
+
+  it('reports a failed request as unresolved', async () => {
+    mockGetInterestGroup.mockRejectedValue(new Error('nope'));
+
+    const { result } = renderStateHook(() => useInterestGroupTeams('g-0'));
+
+    await waitFor(() =>
+      expect(result.current).toEqual({ teams: [], resolved: false }),
+    );
+    expect(mockGetInterestGroup).toHaveBeenCalled();
+  });
+
+  it('skips the fetch when the event has no interest group', async () => {
+    const { result } = renderStateHook(() => useInterestGroupTeams(undefined));
+
+    await waitFor(() =>
+      expect(result.current).toEqual({ teams: [], resolved: true }),
+    );
+    expect(mockGetInterestGroup).not.toHaveBeenCalled();
   });
 });
 

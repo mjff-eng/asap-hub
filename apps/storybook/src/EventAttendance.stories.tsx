@@ -2,19 +2,29 @@ import {
   EditEventAttendanceModal,
   EventAttendance,
 } from '@asap-hub/react-components';
-import type {
-  AttendanceSearchOption,
-  EventAttendanceTeam,
-} from '@asap-hub/react-components';
+import type { EventAttendanceTeam } from '@asap-hub/react-components';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { StaticRouter } from 'react-router';
 
+import {
+  AttendanceCounts,
+  buildAttendanceTeams,
+  countArgTypes,
+  fixedState,
+  loadAttendanceSearchOptions,
+} from './attendance-fixtures';
 import { CenterDecorator } from './layout';
 
-const meta: Meta<typeof EventAttendance> = {
+const noop = () => undefined;
+
+type ControlArgs = AttendanceCounts & {
+  interestGroupName: string;
+  isEditor: boolean;
+};
+
+const meta: Meta<ControlArgs> = {
   title: 'Organisms / Events / Attendance',
-  component: EventAttendance,
   decorators: [
     (Story) => (
       <StaticRouter location="/">
@@ -23,207 +33,184 @@ const meta: Meta<typeof EventAttendance> = {
     ),
     CenterDecorator,
   ],
-};
-
-type Story = StoryObj<typeof EventAttendance>;
-
-const teams = [
-  {
-    teamId: 't1',
-    teamName: 'Barbieri',
-    attended: true,
-    teamType: 'Discovery Team' as const,
-  },
-  {
-    teamId: 't2',
-    teamName: 'De Camilli',
-    attended: true,
-    teamType: 'Discovery Team' as const,
-  },
-  {
-    teamId: 't3',
-    teamName: 'Edwards',
-    attended: true,
-    teamType: 'Resource Team' as const,
-  },
-  {
-    teamId: 't4',
-    teamName: 'Ferguson',
-    attended: true,
-    teamType: 'Resource Team' as const,
-  },
-  {
-    teamId: 't5',
-    teamName: 'Herzog',
-    attended: true,
-    teamType: 'Resource Team' as const,
-  },
-  {
-    teamId: 't6',
-    teamName: 'Lippincott-Schwartz',
-    attended: false,
-    teamType: 'Discovery Team' as const,
-  },
-];
-
-export const Increase: Story = {
-  args: {
-    teamsAttended: 5,
-    teamsTotal: 6,
-    sinceLastEvent: {
-      count: 2,
-      teamsAttended: 4,
-      teamsTotal: 6,
+  argTypes: {
+    interestGroupName: {
+      control: 'text',
+      description:
+        'Names the locked section ("From <name>"). Cleared, it falls back to "From interest group".',
     },
-    teams,
-    onExport: () => undefined,
-    onEdit: () => undefined,
-  },
-};
-
-export const Decrease: Story = {
-  args: {
-    ...Increase.args,
-    sinceLastEvent: {
-      count: -1,
-      teamsAttended: 6,
-      teamsTotal: 6,
+    interestGroupTeams: {
+      ...countArgTypes,
+      description:
+        'Teams the hosting interest group contributes. At 0 the metric tile and the whole section disappear.',
+    },
+    interestGroupAttended: {
+      ...countArgTypes,
+      description:
+        'How many of those attended — this alone drives the progress bar.',
+    },
+    additionalTeams: {
+      ...countArgTypes,
+      description:
+        'Teams added by hand or uploaded. They never move the metric tile.',
+    },
+    additionalTeamsAttended: {
+      ...countArgTypes,
+      description: 'Only changes the "Additional teams" section count.',
+    },
+    hasInactiveTeam: {
+      control: 'boolean',
+      description: 'Mark the third row inactive (shows the inactive badge)',
+    },
+    isEditor: {
+      control: 'boolean',
+      description: 'Tech Support — shows the Download & Edit actions',
     },
   },
+  render: ({ interestGroupName, isEditor, ...counts }) => (
+    <EventAttendance
+      teams={buildAttendanceTeams(counts)}
+      interestGroupName={interestGroupName || undefined}
+      onExport={isEditor ? noop : undefined}
+      onEdit={isEditor ? noop : undefined}
+    />
+  ),
 };
 
-export const NoComparison: Story = {
+export default meta;
+
+type Story = StoryObj<ControlArgs>;
+
+const baseArgs: ControlArgs = {
+  interestGroupName: 'Alpha Synuclein',
+  interestGroupTeams: 5,
+  interestGroupAttended: 3,
+  additionalTeams: 2,
+  additionalTeamsAttended: 1,
+  hasInactiveTeam: false,
+  isEditor: true,
+};
+
+const Editable: React.FC<ControlArgs> = ({
+  interestGroupName,
+  isEditor,
+  ...counts
+}) => {
+  const [teams, setTeams] = useState<EventAttendanceTeam[]>(() =>
+    buildAttendanceTeams(counts),
+  );
+  const [isEditing, setIsEditing] = useState(false);
+
+  return (
+    <>
+      <EventAttendance
+        teams={teams}
+        interestGroupName={interestGroupName || undefined}
+        onExport={isEditor ? noop : undefined}
+        onEdit={isEditor ? () => setIsEditing(true) : undefined}
+      />
+      {isEditing && (
+        <EditEventAttendanceModal
+          teams={teams}
+          interestGroupName={interestGroupName || undefined}
+          loadSearchOptions={loadAttendanceSearchOptions}
+          onUploadList={async () => ({
+            matched: [
+              {
+                teamId: 'uploaded-1',
+                teamName: 'Aguzzi',
+                attended: true,
+                teamType: 'Discovery Team',
+              },
+            ],
+            unmatched: [{ name: 'Data Scince' }],
+          })}
+          onSave={(updated) => {
+            setTeams(updated);
+            setIsEditing(false);
+          }}
+          onDismiss={() => setIsEditing(false)}
+        />
+      )}
+    </>
+  );
+};
+
+export const EditAndSave: Story = {
+  args: baseArgs,
+  // The rows are snapshotted on mount, so the story remounts when a control
+  // moves; without the key the counts would only apply on first render.
+  render: (args) => <Editable key={JSON.stringify(args)} {...args} />,
+};
+
+export const ReadOnly: Story = {
+  args: { ...baseArgs, isEditor: false },
+  ...fixedState,
+};
+
+export const FullAttendance: Story = {
   args: {
-    teamsAttended: 5,
-    teamsTotal: 6,
-    teams,
-    onExport: () => undefined,
-    onEdit: () => undefined,
+    ...baseArgs,
+    interestGroupAttended: 5,
+    additionalTeamsAttended: 2,
   },
+  ...fixedState,
 };
 
-const teamTypes = ['Discovery Team', 'Resource Team'] as const;
-const manyTeams = Array.from({ length: 14 }, (_, index) => ({
-  teamId: `team-${index + 1}`,
-  teamName: `Team ${index + 1}`,
-  attended: index < 11,
-  teamType: teamTypes[index % 2],
-}));
+export const NoAttendance: Story = {
+  args: { ...baseArgs, interestGroupAttended: 0, additionalTeamsAttended: 0 },
+  ...fixedState,
+};
+
+export const NoAdditionalTeams: Story = {
+  args: { ...baseArgs, additionalTeams: 0, additionalTeamsAttended: 0 },
+  ...fixedState,
+};
+
+export const AdditionalTeamsOnly: Story = {
+  args: {
+    ...baseArgs,
+    interestGroupTeams: 0,
+    interestGroupAttended: 0,
+    additionalTeams: 6,
+    additionalTeamsAttended: 4,
+  },
+  ...fixedState,
+};
+
+export const UnnamedInterestGroup: Story = {
+  args: { ...baseArgs, interestGroupName: '' },
+  ...fixedState,
+};
+
+export const WithInactiveTeam: Story = {
+  args: { ...baseArgs, hasInactiveTeam: true },
+  ...fixedState,
+};
 
 export const ManyTeams: Story = {
   args: {
-    teamsAttended: 11,
-    teamsTotal: 14,
-    sinceLastEvent: {
-      count: 3,
-      teamsAttended: 10,
-      teamsTotal: 14,
-    },
-    teams: manyTeams,
-    onExport: () => undefined,
-    onEdit: () => undefined,
+    ...baseArgs,
+    interestGroupTeams: 12,
+    interestGroupAttended: 8,
+    additionalTeams: 9,
+    additionalTeamsAttended: 5,
   },
+  ...fixedState,
 };
 
 export const Empty: Story = {
   args: {
-    teamsAttended: 0,
-    teamsTotal: 0,
-    teams: [],
-    onAddAttendance: () => undefined,
+    ...baseArgs,
+    interestGroupTeams: 0,
+    interestGroupAttended: 0,
+    additionalTeams: 0,
+    additionalTeamsAttended: 0,
   },
+  ...fixedState,
 };
 
 export const EmptyReadOnly: Story = {
-  args: {
-    teamsAttended: 0,
-    teamsTotal: 0,
-    teams: [],
-  },
+  args: { ...Empty.args, isEditor: false } as ControlArgs,
+  ...fixedState,
 };
-
-const editInterestGroups = [
-  { id: 'ig1', name: 'Alpha Synuclein' },
-  { id: 'ig2', name: 'Mitochondria' },
-];
-
-const loadSearchOptions = async (
-  inputValue: string,
-): Promise<AttendanceSearchOption[]> =>
-  [
-    {
-      value: 'searched-1',
-      label: 'Searched Team',
-      optionType: 'team' as const,
-      teamType: 'Discovery Team' as const,
-    },
-    {
-      value: 'searched-group-1',
-      label: 'Searched Group',
-      optionType: 'interestGroup' as const,
-      teams: [
-        { teamId: 'sgt-1', teamName: 'Group Search Team', attended: true },
-      ],
-    },
-  ].filter((option) =>
-    option.label.toLowerCase().includes(inputValue.toLowerCase()),
-  );
-
-const onSelectInterestGroup = async (
-  interestGroupId: string,
-): Promise<EventAttendanceTeam[]> => [
-  {
-    teamId: `${interestGroupId}-team-1`,
-    teamName: `${interestGroupId} Team A`,
-    attended: true,
-    teamType: 'Discovery Team',
-  },
-];
-
-// Composes the read-only card with the edit modal so Save updates the card —
-// open the pencil, change attendance, and Save to see the card refresh.
-export const EditAndSave: Story = {
-  render: () => {
-    const [attendanceTeams, setAttendanceTeams] =
-      useState<EventAttendanceTeam[]>(teams);
-    const [isEditing, setIsEditing] = useState(false);
-
-    return (
-      <>
-        <EventAttendance
-          teamsAttended={attendanceTeams.filter((team) => team.attended).length}
-          teamsTotal={attendanceTeams.length}
-          teams={attendanceTeams}
-          onExport={() => undefined}
-          onEdit={() => setIsEditing(true)}
-        />
-        {isEditing && (
-          <EditEventAttendanceModal
-            teams={attendanceTeams}
-            interestGroups={editInterestGroups}
-            loadSearchOptions={loadSearchOptions}
-            onSelectInterestGroup={onSelectInterestGroup}
-            onUploadList={async () => ({
-              matched: [
-                {
-                  teamId: 'uploaded-1',
-                  teamName: 'Aguzzi',
-                  attended: true,
-                  teamType: 'Discovery Team',
-                },
-              ],
-              unmatched: [{ name: 'Data Scince' }],
-            })}
-            onSave={(updated) => {
-              setAttendanceTeams(updated);
-              setIsEditing(false);
-            }}
-            onDismiss={() => setIsEditing(false)}
-          />
-        )}
-      </>
-    );
-  },
-};
-
-export default meta;

@@ -1,7 +1,12 @@
 import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
-import { useState } from 'react';
-import { components } from 'react-select';
+import { useMemo, useState } from 'react';
+import {
+  components,
+  type MenuProps,
+  type OptionProps,
+  type PlaceholderProps,
+} from 'react-select';
 
 import {
   Button,
@@ -13,13 +18,11 @@ import {
   Switch,
 } from '../atoms';
 import {
-  charcoal,
   lead,
+  neutral200,
   neutral800,
   neutral1000,
-  paper,
   pearl,
-  silver,
   steel,
   tin,
 } from '../colors';
@@ -28,15 +31,15 @@ import {
   InactiveBadgeIcon,
   crossIcon,
   InterestGroupsIcon,
-  plusIcon,
+  lockSmallIcon,
   searchIcon,
   TeamIcon,
-  tickSmallIcon,
   uploadIcon,
 } from '../icons';
+import { useSectionExpansion } from '../hooks';
 import { ConfirmableModalFooter, Modal } from '../molecules';
 import { mobileScreen, rem } from '../pixels';
-import { noop, pluralizeTeams } from '../utils';
+import { pluralizeTeams } from '../utils';
 import { EventAttendanceTeam } from './EventAttendance';
 import { teamIcon } from './shared-event-card';
 import {
@@ -62,18 +65,13 @@ export type AttendanceSearchOption = MultiSelectOptionsType &
 
 type EditEventAttendanceModalProps = {
   teams?: EventAttendanceTeam[];
-  interestGroups?: ReadonlyArray<{ id: string; name: string }>;
+  interestGroupName?: string;
   loadSearchOptions: (inputValue: string) => Promise<AttendanceSearchOption[]>;
-  onSelectInterestGroup?: (
-    interestGroupId: string,
-  ) => Promise<EventAttendanceTeam[]>;
   onUploadList?: (files: File[]) => Promise<UploadListResult>;
   sourceLists?: UploadListSourceFile[];
   onSave: (teams: EventAttendanceTeam[]) => void | Promise<void>;
   onDismiss: () => void;
 };
-
-const defaultVisibleTeams = 10;
 
 const modalStyles = css({
   width: '100%',
@@ -90,7 +88,7 @@ const headerStyles = css({
 const titleStyles = css({
   fontSize: rem(26),
   fontWeight: 700,
-  lineHeight: rem(32),
+  lineHeight: 32 / 26,
   color: neutral1000.rgb,
 });
 
@@ -100,7 +98,6 @@ const bodyStyles = css({
   padding: `0 ${rem(24)}`,
 });
 
-const spacingMedium = css({ marginTop: rem(32) });
 const spacingLarge = css({ marginTop: rem(48) });
 
 // The upload section is hidden on mobile, so the search field needs its own
@@ -119,12 +116,6 @@ const attendeesSpacingStyles = css({
   },
 });
 
-const sectionStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: rem(16),
-});
-
 const uploadSectionStyles = css({
   display: 'flex',
   flexDirection: 'column',
@@ -141,7 +132,7 @@ const sectionTitleStyles = css({
   margin: 0,
   fontSize: rem(17),
   fontWeight: 700,
-  lineHeight: rem(24),
+  lineHeight: 24 / 17,
   color: neutral1000.rgb,
 });
 
@@ -181,57 +172,6 @@ const uploadButtonStyles = (enabled: boolean) =>
     ...buttonIconGapReset,
   });
 
-const pillRowStyles = (columnCount: number, rowCount: number) =>
-  css({
-    display: 'grid',
-    gap: rem(8),
-    gridAutoFlow: 'column',
-    gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
-    gridTemplateRows: `repeat(${rowCount}, auto)`,
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
-      gridAutoFlow: 'row',
-      gridTemplateColumns: '1fr',
-      gridTemplateRows: 'none',
-    },
-  });
-
-const pillStyles = (enabled: boolean) =>
-  css({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    justifySelf: 'start',
-    maxWidth: 'none',
-    gap: rem(8),
-    padding: `${rem(6)} ${rem(16)}`,
-    border: `1px solid ${steel.rgb}`,
-    borderRadius: rem(24),
-    backgroundColor: enabled ? paper.rgb : silver.rgb,
-    color: neutral1000.rgb,
-    fontWeight: 'normal',
-    '> svg': {
-      width: rem(24),
-      height: rem(24),
-      ...(enabled
-        ? {}
-        : { fill: neutral1000.rgb, filter: 'none', stroke: 'none' }),
-    },
-    ...buttonIconGapReset,
-  });
-
-const addedPillStyles = (enabled: boolean) =>
-  css(
-    enabled
-      ? {
-          color: neutral800.rgb,
-          backgroundColor: pearl.rgb,
-          '> svg:first-of-type': {
-            fill: neutral800.rgb,
-          },
-        }
-      : {},
-  );
-
 const attendeesHeaderStyles = css({
   display: 'flex',
   alignItems: 'center',
@@ -267,13 +207,7 @@ const attendeesStatStyles = css({
   color: lead.rgb,
 });
 
-const separatorStyles = css({
-  fontSize: rem(17),
-  fontWeight: 400,
-  color: lead.rgb,
-  paddingLeft: rem(8),
-  paddingRight: rem(8),
-});
+const separatorStyles = css([attendeesStatStyles, { padding: `0 ${rem(8)}` }]);
 
 const hideOnMobileStyles = css({
   [`@media (max-width: ${mobileScreen.max}px)`]: {
@@ -316,26 +250,38 @@ const attendeesCardStyles = (enabled: boolean) =>
   css({
     border: `1px solid ${steel.rgb}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? pearl.rgb : silver.rgb,
+    backgroundColor: enabled ? pearl.rgb : neutral200.rgb,
     padding: rem(24),
     overflowX: 'auto',
   });
 
-const attendeesTableHeaderStyles = css({
-  display: 'flex',
-  justifyContent: 'space-between',
-  fontSize: rem(17),
-  fontWeight: 'bold',
-  color: charcoal.rgb,
-  paddingBottom: rem(16),
+// Widths in pixels because `rem` here emits `em`, which would resolve against
+// each element's own font size: the header's 14px against the rows' 17px.
+const attendanceGridStyles = css({
+  display: 'grid',
+  gridTemplateColumns: '1fr 40px 24px',
+  columnGap: '32px',
+  alignItems: 'center',
+  [`@media (max-width: ${mobileScreen.max}px)`]: {
+    columnGap: '16px',
+  },
 });
 
-const attendanceHeaderStyles = css({
-  display: 'inline-block',
-  width: rem(40),
-  marginRight: rem(48),
-  textAlign: 'center',
+const attendeesTableHeaderStyles = css({
+  fontSize: rem(17),
+  fontWeight: 'bold',
+  lineHeight: 24 / 17,
+  letterSpacing: rem(0.1),
+  color: neutral1000.rgb,
+  paddingBottom: rem(12),
+  [`@media (max-width: ${mobileScreen.max}px)`]: {
+    fontSize: rem(14),
+    lineHeight: 16 / 14,
+    letterSpacing: 'normal',
+  },
 });
+
+const attendanceHeaderStyles = css({ gridColumn: '2 / -1' });
 
 const attendeesRowsStyles = css({
   display: 'flex',
@@ -343,15 +289,54 @@ const attendeesRowsStyles = css({
   gap: rem(16),
 });
 
-const showMoreStyles = css({
-  marginTop: rem(16),
+const attendeesGroupsStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: rem(40),
 });
 
-const attendeeRowStyles = css({
+const attendeesGroupStyles = css({
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
+  flexDirection: 'column',
   gap: rem(16),
+});
+
+const groupHeaderStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: rem(4),
+});
+
+// A ratio, not `rem`: line-height in `em` resolves against the element's own
+// font size, so `rem(16)` here would render 16/17 x 14px.
+const groupLineStyles = css({
+  margin: 0,
+  fontSize: rem(14),
+  lineHeight: 16 / 14,
+});
+
+const groupTitleStyles = css([
+  groupLineStyles,
+  { fontWeight: 700, color: neutral1000.rgb },
+]);
+
+const groupHelperStyles = css([
+  groupLineStyles,
+  { fontWeight: 400, color: neutral800.rgb },
+]);
+
+const lockStyles = css({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: rem(24),
+  height: rem(24),
+  flexShrink: 0,
+});
+
+const rowDividerStyles = css({
+  paddingBottom: rem(16),
+  borderBottom: `1px solid ${steel.rgb}`,
 });
 
 const teamCellStyles = css({
@@ -359,21 +344,12 @@ const teamCellStyles = css({
   alignItems: 'center',
   gap: rem(8),
   [`@media (max-width: ${mobileScreen.max}px)`]: {
+    fontSize: rem(14),
+    lineHeight: 16 / 14,
     '> svg': {
       display: 'none',
     },
   },
-});
-
-const attendanceCellStyles = css({
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-});
-
-const attendanceSwitchStyles = css({
-  display: 'inline-flex',
-  paddingRight: rem(24),
 });
 
 const searchOptionStyles = css({
@@ -395,11 +371,160 @@ const placeholderStyles = css({
   color: tin.rgb,
 });
 
+// react-select remounts a custom component whose identity changes, so the
+// stateless ones are declared here; Option still takes a new identity whenever
+// the added ids change. They take the multi variant because `MultiSelectProps`
+// picks `components` from `Props<T, true>` whatever `isMulti` is.
+const SearchPlaceholder = (
+  placeholderProps: PlaceholderProps<AttendanceSearchOption, true>,
+) => (
+  <components.Placeholder {...placeholderProps}>
+    <span css={[placeholderStyles, hideOnMobileStyles]}>
+      Search for a team or interest group to add…
+    </span>
+    <span css={[placeholderStyles, hideOnDesktopStyles]}>
+      Search team or group…
+    </span>
+  </components.Placeholder>
+);
+
+const SearchMenu = (menuProps: MenuProps<AttendanceSearchOption, true>) =>
+  menuProps.selectProps.inputValue ? <components.Menu {...menuProps} /> : null;
+
+const SearchOption = ({
+  addedTeamIds,
+  ...optionProps
+}: OptionProps<AttendanceSearchOption, true> & {
+  addedTeamIds: ReadonlySet<string>;
+}) => {
+  const option = optionProps.data;
+  // What selecting the group would actually add, so the count does not promise
+  // rows that are already in the list.
+  const toAdd =
+    option.optionType === 'interestGroup'
+      ? option.teams.filter((team) => !addedTeamIds.has(team.teamId)).length
+      : 0;
+  return (
+    <components.Option {...optionProps}>
+      <span css={searchOptionStyles}>
+        {option.optionType === 'interestGroup' ? (
+          <InterestGroupsIcon />
+        ) : (
+          <TeamIcon />
+        )}
+        <span>{option.label}</span>
+        {option.optionType === 'interestGroup' && (
+          <span css={searchOptionMetaStyles}>
+            {toAdd === 0
+              ? '• all teams already added'
+              : `• adds ${pluralizeTeams(toAdd)}`}
+          </span>
+        )}
+      </span>
+    </components.Option>
+  );
+};
+
+const noSearchMatchesMessage = ({ inputValue }: { inputValue: string }) =>
+  `Sorry, no matches for ${inputValue}.`;
+
+const AttendeeGroup: React.FC<{
+  // Dropped when the event has no hosting group: with a single group there is
+  // nothing to tell apart, so the rows start straight under the column header.
+  title?: string;
+  helperText?: string;
+  teams: EventAttendanceTeam[];
+  locked?: boolean;
+  enabled: boolean;
+  onToggleAttended: (teamId: string) => void;
+  onRemove: (teamId: string) => void;
+}> = ({
+  title,
+  helperText,
+  teams,
+  locked = false,
+  enabled,
+  onToggleAttended,
+  onRemove,
+}) => {
+  const {
+    canExpand,
+    showingAll,
+    visibleRows: visibleTeams,
+    hiddenCount,
+    toggle,
+  } = useSectionExpansion(teams);
+
+  return (
+    <div css={attendeesGroupStyles}>
+      {title && (
+        <div css={groupHeaderStyles}>
+          <p css={groupTitleStyles}>
+            {title} ({teams.length})
+          </p>
+          {helperText && <p css={groupHelperStyles}>{helperText}</p>}
+        </div>
+      )}
+      <div css={attendeesRowsStyles} role="list">
+        {visibleTeams.map((team, index) => (
+          <div
+            key={team.teamId}
+            css={[
+              attendanceGridStyles,
+              (index < visibleTeams.length - 1 || canExpand) &&
+                rowDividerStyles,
+            ]}
+            role="listitem"
+          >
+            <span css={teamCellStyles}>
+              {teamIcon(team.teamType)}
+              <Link
+                openInNewTab
+                href={network({}).teams({}).team({ teamId: team.teamId }).$}
+              >
+                {team.teamName}
+              </Link>
+              {team.isTeamInactive && <InactiveBadgeIcon />}
+            </span>
+            <Switch
+              checked={team.attended}
+              enabled={enabled}
+              ariaLabel={`${team.teamName} attendance`}
+              onClick={() => onToggleAttended(team.teamId)}
+            />
+            {locked ? (
+              <span css={lockStyles} role="img" aria-label="Locked">
+                {lockSmallIcon}
+              </span>
+            ) : (
+              <Button
+                noMargin
+                enabled={enabled}
+                aria-label={`Remove ${team.teamName}`}
+                onClick={() => onRemove(team.teamId)}
+                overrideStyles={deleteButtonStyles(enabled, 'light')}
+              >
+                {binIcon}
+              </Button>
+            )}
+          </div>
+        ))}
+      </div>
+      {canExpand && (
+        <div>
+          <Button linkStyle onClick={toggle}>
+            {showingAll ? 'Show less' : `Show ${hiddenCount} more`}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   teams = [],
-  interestGroups = [],
+  interestGroupName,
   loadSearchOptions,
-  onSelectInterestGroup,
   onUploadList,
   sourceLists = [],
   onSave,
@@ -409,34 +534,34 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   const [showUploadList, setShowUploadList] = useState(false);
   const [sourceFiles, setSourceFiles] =
     useState<UploadListSourceFile[]>(sourceLists);
-  // Each active interest group maps to the team ids it contributed, so toggling
-  // a group off can drop only the teams no other group (or manual add) still owns.
-  const [addedGroups, setAddedGroups] = useState<
-    ReadonlyMap<string, ReadonlyArray<string>>
-  >(() => new Map());
-  const [manualTeamIds, setManualTeamIds] = useState<ReadonlySet<string>>(
-    () => new Set(teams.map((team) => team.teamId)),
-  );
   const [isSaving, setIsSaving] = useState(false);
   const [hasSaveError, setHasSaveError] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
-  const [expanded, setExpanded] = useState(false);
 
   const isEditMode = teams.length > 0;
   const title = isEditMode ? 'Edit Attendance' : 'Add Attendance';
 
   const attendedCount = rows.filter((team) => team.attended).length;
-  const allAttended = rows.length > 0 && attendedCount === rows.length;
-  const saveEnabled = rows.length > 0 && !isSaving;
-  const addedTeamIds = new Set(rows.map((team) => team.teamId));
-
-  const visibleRows = expanded ? rows : rows.slice(0, defaultVisibleTeams);
-  const hiddenCount = rows.length - visibleRows.length;
-
-  const interestGroupColumns = interestGroups.length > 3 ? 2 : 1;
-  const interestGroupRows = Math.ceil(
-    interestGroups.length / interestGroupColumns,
+  const hasRows = rows.length > 0;
+  const allAttended = hasRows && attendedCount === rows.length;
+  const saveEnabled = hasRows && !isSaving;
+  const addedTeamIds = useMemo(
+    () => new Set(rows.map((team) => team.teamId)),
+    [rows],
   );
+  const searchComponents = useMemo(
+    () => ({
+      Placeholder: SearchPlaceholder,
+      Menu: SearchMenu,
+      Option: (optionProps: OptionProps<AttendanceSearchOption, true>) => (
+        <SearchOption {...optionProps} addedTeamIds={addedTeamIds} />
+      ),
+    }),
+    [addedTeamIds],
+  );
+
+  const interestGroupRows = rows.filter((team) => team.isFromInterestGroup);
+  const additionalRows = rows.filter((team) => !team.isFromInterestGroup);
 
   const addTeams = (teamsToAdd: EventAttendanceTeam[]) =>
     setRows((current) => {
@@ -447,10 +572,10 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
       return [...current, ...additions];
     });
 
-  // Upsert kept separate from addTeams so the search and interest-group paths
-  // stay append-only: an existing row keeps its attendanceId and takes the
-  // uploaded status; a new team is appended.
-  const applyUploadedTeams = (teamsToApply: EventAttendanceTeam[]) => {
+  // Upsert kept separate from addTeams so the search path stays append-only: an
+  // existing row keeps its attendanceId (and its interest-group provenance) and
+  // takes the uploaded status; a new team is appended.
+  const applyUploadedTeams = (teamsToApply: EventAttendanceTeam[]) =>
     setRows((current) => {
       const byId = new Map(current.map((team) => [team.teamId, team]));
       teamsToApply.forEach((team) =>
@@ -458,34 +583,6 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
       );
       return [...byId.values()];
     });
-    setManualTeamIds((prev) => {
-      const next = new Set(prev);
-      teamsToApply.forEach((team) => next.add(team.teamId));
-      return next;
-    });
-  };
-
-  const addManualTeams = (teamsToAdd: EventAttendanceTeam[]) => {
-    addTeams(teamsToAdd);
-    setManualTeamIds((prev) => {
-      const next = new Set(prev);
-      teamsToAdd.forEach((team) => next.add(team.teamId));
-      return next;
-    });
-  };
-
-  const addInterestGroup = (
-    groupId: string,
-    groupTeams: EventAttendanceTeam[],
-  ) => {
-    addTeams(groupTeams);
-    setAddedGroups((prev) =>
-      new Map(prev).set(
-        groupId,
-        groupTeams.map((team) => team.teamId),
-      ),
-    );
-  };
 
   const handleUploadAddAttendees = (
     uploadedTeams: EventAttendanceTeam[],
@@ -514,27 +611,11 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
     setShowUploadList(false);
   };
 
-  const removeInterestGroup = (groupId: string) => {
-    const remaining = new Map(addedGroups);
-    remaining.delete(groupId);
-    const ownedByRemaining = new Set<string>();
-    remaining.forEach((teamIds) =>
-      teamIds.forEach((teamId) => ownedByRemaining.add(teamId)),
-    );
-    setRows((current) =>
-      current.filter(
-        (team) =>
-          manualTeamIds.has(team.teamId) || ownedByRemaining.has(team.teamId),
-      ),
-    );
-    setAddedGroups(remaining);
-  };
-
   const handleSelectSearchOption = (option: AttendanceSearchOption) => {
     if (option.optionType === 'interestGroup') {
-      addInterestGroup(option.value, option.teams);
+      addTeams(option.teams);
     } else {
-      addManualTeams([
+      addTeams([
         {
           teamId: option.value,
           teamName: option.label,
@@ -553,29 +634,8 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
       ),
     );
 
-  const removeTeam = (teamId: string) => {
+  const removeTeam = (teamId: string) =>
     setRows((current) => current.filter((team) => team.teamId !== teamId));
-    setManualTeamIds((prev) => {
-      if (!prev.has(teamId)) {
-        return prev;
-      }
-      const next = new Set(prev);
-      next.delete(teamId);
-      return next;
-    });
-    // Drop the team from any interest group that contributed it, and stop
-    // treating a group as "added" once it has no teams left.
-    setAddedGroups((prev) => {
-      const next = new Map<string, ReadonlyArray<string>>();
-      prev.forEach((teamIds, groupId) => {
-        const remaining = teamIds.filter((id) => id !== teamId);
-        if (remaining.length > 0) {
-          next.set(groupId, remaining);
-        }
-      });
-      return next;
-    });
-  };
 
   const toggleMarkAllAttended = () =>
     setRows((current) =>
@@ -610,7 +670,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
         onUploadList={onUploadList}
         onAddAttendees={handleUploadAddAttendees}
         onBack={() => setShowUploadList(false)}
-        currentTeamIds={new Set(rows.map((team) => team.teamId))}
+        currentTeamIds={addedTeamIds}
       />
     );
   }
@@ -637,54 +697,6 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
         {hasSaveError && (
           <Toast>An error has occurred. Please try again later.</Toast>
         )}
-        {onSelectInterestGroup && interestGroups.length > 0 && (
-          <section css={[sectionStyles, spacingMedium]}>
-            <SectionTitle optional>
-              Add teams from this event&apos;s groups
-            </SectionTitle>
-            <div css={pillRowStyles(interestGroupColumns, interestGroupRows)}>
-              {interestGroups.map((group) => {
-                const added = addedGroups.has(group.id);
-                return (
-                  <Button
-                    key={group.id}
-                    noMargin
-                    enabled={!isCancelling}
-                    overrideStyles={css([
-                      pillStyles(!isCancelling),
-                      added && addedPillStyles(!isCancelling),
-                    ])}
-                    onClick={() => {
-                      if (added) {
-                        removeInterestGroup(group.id);
-                      } else {
-                        void onSelectInterestGroup(group.id)
-                          .then((groupTeams) =>
-                            addInterestGroup(group.id, groupTeams),
-                          )
-                          .catch(noop);
-                      }
-                    }}
-                  >
-                    {added ? tickSmallIcon : plusIcon}
-                    <InterestGroupsIcon
-                      color={
-                        isCancelling
-                          ? neutral1000.rgb
-                          : added
-                            ? neutral800.rgb
-                            : undefined
-                      }
-                      filled={isCancelling}
-                    />
-                    {group.name}
-                  </Button>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
         <div css={searchSpacingStyles}>
           <MultiSelect<AttendanceSearchOption, false>
             isMulti={false}
@@ -693,52 +705,10 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
             enabled={!isCancelling}
             defaultOptions={false}
             leftIndicator={searchIcon}
-            loadOptions={(inputValue) => loadSearchOptions(inputValue)}
+            loadOptions={loadSearchOptions}
             onChange={handleSelectSearchOption}
-            noOptionsMessage={({ inputValue }) =>
-              `Sorry, no matches for ${inputValue}.`
-            }
-            components={{
-              Placeholder: (placeholderProps) => (
-                <components.Placeholder {...placeholderProps}>
-                  <span css={[placeholderStyles, hideOnMobileStyles]}>
-                    Search for a team or interest group to add…
-                  </span>
-                  <span css={[placeholderStyles, hideOnDesktopStyles]}>
-                    Search team or group…
-                  </span>
-                </components.Placeholder>
-              ),
-              Menu: (menuProps) =>
-                menuProps.selectProps.inputValue ? (
-                  <components.Menu {...menuProps} />
-                ) : null,
-              Option: (optionProps) => {
-                const option = optionProps.data;
-                const allAdded =
-                  option.optionType === 'interestGroup' &&
-                  option.teams.every((team) => addedTeamIds.has(team.teamId));
-                return (
-                  <components.Option {...optionProps}>
-                    <span css={searchOptionStyles}>
-                      {option.optionType === 'interestGroup' ? (
-                        <InterestGroupsIcon />
-                      ) : (
-                        <TeamIcon />
-                      )}
-                      <span>{option.label}</span>
-                      {option.optionType === 'interestGroup' && (
-                        <span css={searchOptionMetaStyles}>
-                          {allAdded
-                            ? '• all teams already added'
-                            : `• adds ${pluralizeTeams(option.teams.length)}`}
-                        </span>
-                      )}
-                    </span>
-                  </components.Option>
-                );
-              },
-            }}
+            noOptionsMessage={noSearchMatchesMessage}
+            components={searchComponents}
           />
         </div>
 
@@ -769,7 +739,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
           <div css={attendeesHeaderStyles}>
             <div css={attendeesStatsStyles}>
               <SectionTitle>Attendees</SectionTitle>
-              {rows.length > 0 && (
+              {hasRows && (
                 <span css={statsGroupStyles}>
                   <span css={[separatorStyles, hideOnMobileStyles]}>•</span>
                   <span css={attendeesStatStyles}>{rows.length} Expected</span>
@@ -780,7 +750,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
                 </span>
               )}
             </div>
-            {rows.length > 0 && (
+            {hasRows && (
               <Button
                 small
                 noMargin
@@ -793,70 +763,52 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
             )}
           </div>
 
-          {rows.length === 0 ? (
+          {!hasRows ? (
             <div css={emptyAttendeesStyles} role="status">
               <Paragraph noMargin accent="lead">
                 <strong>Add teams to track attendance</strong>
               </Paragraph>
               <Paragraph noMargin accent="lead">
-                Pick an interest group above, search for a team, copy a past
-                event, or upload a list.
+                This event has no hosting group, so nothing was added
+                automatically. Search for a team above or upload a list.
               </Paragraph>
             </div>
           ) : (
             <div css={attendeesCardStyles(!isCancelling)}>
-              <div css={attendeesTableHeaderStyles}>
+              <div css={[attendanceGridStyles, attendeesTableHeaderStyles]}>
                 <span>Team</span>
                 <span css={attendanceHeaderStyles}>Attendance</span>
               </div>
-              <div css={attendeesRowsStyles} role="list">
-                {visibleRows.map((team) => (
-                  <div
-                    key={team.teamId}
-                    css={attendeeRowStyles}
-                    role="listitem"
-                  >
-                    <span css={teamCellStyles}>
-                      {teamIcon(team.teamType)}
-                      <Link
-                        href={
-                          network({}).teams({}).team({ teamId: team.teamId }).$
-                        }
-                      >
-                        {team.teamName}
-                      </Link>
-                      {team.isTeamInactive && <InactiveBadgeIcon />}
-                    </span>
-                    <span css={attendanceCellStyles}>
-                      <span css={attendanceSwitchStyles}>
-                        <Switch
-                          checked={team.attended}
-                          enabled={!isCancelling}
-                          uncheckedColor="error"
-                          ariaLabel={`${team.teamName} attendance`}
-                          onClick={() => toggleAttended(team.teamId)}
-                        />
-                      </span>
-                      <Button
-                        noMargin
-                        enabled={!isCancelling}
-                        aria-label={`Remove ${team.teamName}`}
-                        onClick={() => removeTeam(team.teamId)}
-                        overrideStyles={deleteButtonStyles(!isCancelling)}
-                      >
-                        {binIcon}
-                      </Button>
-                    </span>
-                  </div>
-                ))}
+              <div css={attendeesGroupsStyles}>
+                {interestGroupRows.length > 0 && (
+                  <AttendeeGroup
+                    title={
+                      interestGroupName
+                        ? `From ${interestGroupName}`
+                        : 'From interest group'
+                    }
+                    helperText="Added automatically because this group is hosting. These cannot be removed."
+                    teams={interestGroupRows}
+                    locked
+                    enabled={!isCancelling}
+                    onToggleAttended={toggleAttended}
+                    onRemove={removeTeam}
+                  />
+                )}
+                {additionalRows.length > 0 && (
+                  <AttendeeGroup
+                    title={
+                      interestGroupRows.length > 0
+                        ? 'Additional teams'
+                        : undefined
+                    }
+                    teams={additionalRows}
+                    enabled={!isCancelling}
+                    onToggleAttended={toggleAttended}
+                    onRemove={removeTeam}
+                  />
+                )}
               </div>
-              {hiddenCount > 0 && (
-                <div css={showMoreStyles}>
-                  <Button linkStyle onClick={() => setExpanded(true)}>
-                    Show {hiddenCount} more
-                  </Button>
-                </div>
-              )}
             </div>
           )}
         </section>
