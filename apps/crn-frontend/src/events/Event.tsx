@@ -20,6 +20,7 @@ import {
 import { useCurrentUserCRN, useFlags } from '@asap-hub/react-context';
 import { events, useRouteParams } from '@asap-hub/routing';
 import { Frame, useBackHref } from '@asap-hub/frontend-utils';
+import { isEventProjectManager } from '@asap-hub/validation';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 
@@ -63,6 +64,7 @@ const Event: React.FC = () => {
     const teams = composeAttendanceRows(event.attendance, interestGroupTeams);
     const isTechSupport = !!user?.techSupport;
     const canEditAttendance = isTechSupport && interestGroupResolved;
+    const isProjectManager = isEventProjectManager(user, event);
     const openAttendanceEditor = () => setIsEditingAttendance(true);
     const openSpeakersEditor = () => setIsEditingSpeakers(true);
     const attendance = hasFinished ? (
@@ -110,8 +112,8 @@ const Event: React.FC = () => {
               ? () => downloadEventSpeakers(event, speakerGroups)
               : undefined
           }
-          onAddSpeaker={isTechSupport ? openSpeakersEditor : undefined}
-          onEdit={isTechSupport ? openSpeakersEditor : undefined}
+          onAddSpeaker={isProjectManager ? openSpeakersEditor : undefined}
+          onEdit={isProjectManager ? openSpeakersEditor : undefined}
         />
         {isEditingSpeakers && (
           <EditEventSpeakersModal
