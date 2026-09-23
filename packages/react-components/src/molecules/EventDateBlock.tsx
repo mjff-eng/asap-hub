@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { formatDateToTimezone } from '../date';
-import { charcoal, mint, paper, steel } from '../colors';
+import { charcoal, mint, paper, silver, steel } from '../colors';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -35,6 +35,10 @@ const monthStyles = css({
   letterSpacing: rem(0.1),
 });
 
+const mutedMonthStyles = css({
+  backgroundColor: silver.rgb,
+});
+
 const dayStyles = css({
   flex: 1,
   display: 'flex',
@@ -50,11 +54,15 @@ const dayStyles = css({
 
 type EventDateBlockProps = {
   startDate: string;
+  muted?: boolean;
 };
 
-const EventDateBlock: React.FC<EventDateBlockProps> = ({ startDate }) => (
+const EventDateBlock: React.FC<EventDateBlockProps> = ({
+  startDate,
+  muted = false,
+}) => (
   <div css={containerStyles}>
-    <span css={monthStyles}>
+    <span css={[monthStyles, muted && mutedMonthStyles]}>
       {formatDateToTimezone(startDate, 'MMM').toUpperCase()}
     </span>
     <span css={dayStyles}>{formatDateToTimezone(startDate, 'd')}</span>
