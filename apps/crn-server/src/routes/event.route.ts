@@ -1,4 +1,5 @@
 import { EventResponse, ListEventResponse } from '@asap-hub/model';
+import { isEventProjectManager } from '@asap-hub/validation';
 import Boom from '@hapi/boom';
 import { Response, Router } from 'express';
 import {
@@ -36,8 +37,25 @@ export const eventRouteFactory = (eventController: EventController): Router => {
       const { eventId } = validateEventParameters(params);
       const payload = validateEventUpdateDetailsPayload(body);
 
-      if (!loggedInUser?.techSupport) {
+      const isAttendanceWrite = payload.attendance !== undefined;
+      const isSpeakerWrite =
+        payload.speakersToRemove !== undefined ||
+        payload.preliminaryDataShared !== undefined;
+
+      if (!isAttendanceWrite && !isSpeakerWrite) {
         throw Boom.forbidden();
+      }
+
+      if (isAttendanceWrite && !loggedInUser?.techSupport) {
+        throw Boom.forbidden();
+      }
+
+      if (isSpeakerWrite) {
+        const event = await eventController.fetchById(eventId);
+
+        if (!isEventProjectManager(loggedInUser, event)) {
+          throw Boom.forbidden();
+        }
       }
 
       const result = await eventController.updateEventDetails(eventId, payload);
