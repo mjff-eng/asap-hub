@@ -113,6 +113,15 @@ describe('User', () => {
         techSupport: undefined,
         orcid: '0000-0001-8203-6901',
         role: 'Grantee',
+        social: {
+          github: '',
+          googleScholar: '',
+          linkedIn: '',
+          orcid: '',
+          researchGate: '',
+          researcherId: '',
+          twitter: '',
+        },
         stateOrProvince: undefined,
         teams: [
           {

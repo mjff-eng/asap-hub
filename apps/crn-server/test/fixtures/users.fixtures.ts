@@ -191,6 +191,11 @@ export const getUserListItemDataObject = (): UserListItemDataObject => ({
   role: 'Grantee',
   openScienceTeamMember: false,
   techSupport: false,
+  social: {
+    website1: 'https://tomhardy.example.com',
+    github: 'tomhardy',
+    researcherId: 'R-1234-2020',
+  },
   _tags: [
     'expertise 1',
     'expertise 2',
@@ -664,6 +669,17 @@ export const getContentfulGraphqlUserListItem = (
   degree: 'MPH',
   role: 'Grantee',
   orcid: '0000-0001-8203-6901',
+  userSocials: {
+    website1: 'https://tomhardy.example.com',
+    website2: null,
+    linkedIn: null,
+    researcherId: 'R-1234-2020',
+    twitter: null,
+    blueSky: null,
+    github: 'tomhardy',
+    googleScholar: null,
+    researchGate: null,
+  },
   labsCollection: {
     items: [
       { sys: { id: 'cd7be4902' }, name: 'Brighton' },

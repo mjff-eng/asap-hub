@@ -40198,6 +40198,20 @@ export type UserListItemContentFragment = Pick<
 > & {
   avatar?: Maybe<Pick<Asset, 'url'>>;
   sys: Pick<Sys, 'id'>;
+  userSocials?: Maybe<
+    Pick<
+      Socials,
+      | 'github'
+      | 'googleScholar'
+      | 'linkedIn'
+      | 'researcherId'
+      | 'researchGate'
+      | 'twitter'
+      | 'blueSky'
+      | 'website1'
+      | 'website2'
+    >
+  >;
   labsCollection?: Maybe<{
     items: Array<
       Maybe<
@@ -40273,6 +40287,20 @@ export type FetchUsersQuery = {
           > & {
             avatar?: Maybe<Pick<Asset, 'url'>>;
             sys: Pick<Sys, 'id'>;
+            userSocials?: Maybe<
+              Pick<
+                Socials,
+                | 'github'
+                | 'googleScholar'
+                | 'linkedIn'
+                | 'researcherId'
+                | 'researchGate'
+                | 'twitter'
+                | 'blueSky'
+                | 'website1'
+                | 'website2'
+              >
+            >;
             labsCollection?: Maybe<{
               items: Array<
                 Maybe<
@@ -40360,6 +40388,20 @@ export type FetchUsersByTeamIdQuery = {
                   > & {
                     avatar?: Maybe<Pick<Asset, 'url'>>;
                     sys: Pick<Sys, 'id'>;
+                    userSocials?: Maybe<
+                      Pick<
+                        Socials,
+                        | 'github'
+                        | 'googleScholar'
+                        | 'linkedIn'
+                        | 'researcherId'
+                        | 'researchGate'
+                        | 'twitter'
+                        | 'blueSky'
+                        | 'website1'
+                        | 'website2'
+                      >
+                    >;
                     labsCollection?: Maybe<{
                       items: Array<
                         Maybe<
@@ -40455,6 +40497,20 @@ export type FetchUsersByTeamMembershipIdQuery = {
                   > & {
                     avatar?: Maybe<Pick<Asset, 'url'>>;
                     sys: Pick<Sys, 'id'>;
+                    userSocials?: Maybe<
+                      Pick<
+                        Socials,
+                        | 'github'
+                        | 'googleScholar'
+                        | 'linkedIn'
+                        | 'researcherId'
+                        | 'researchGate'
+                        | 'twitter'
+                        | 'blueSky'
+                        | 'website1'
+                        | 'website2'
+                      >
+                    >;
                     labsCollection?: Maybe<{
                       items: Array<
                         Maybe<
@@ -40552,6 +40608,20 @@ export type FetchUsersByLabIdQuery = {
                       > & {
                         avatar?: Maybe<Pick<Asset, 'url'>>;
                         sys: Pick<Sys, 'id'>;
+                        userSocials?: Maybe<
+                          Pick<
+                            Socials,
+                            | 'github'
+                            | 'googleScholar'
+                            | 'linkedIn'
+                            | 'researcherId'
+                            | 'researchGate'
+                            | 'twitter'
+                            | 'blueSky'
+                            | 'website1'
+                            | 'website2'
+                          >
+                        >;
                         labsCollection?: Maybe<{
                           items: Array<
                             Maybe<
@@ -40642,6 +40712,20 @@ export type FetchUserByIdForAlgoliaListQuery = {
     > & {
       sys: Pick<Sys, 'id'>;
       avatar?: Maybe<Pick<Asset, 'url'>>;
+      userSocials?: Maybe<
+        Pick<
+          Socials,
+          | 'github'
+          | 'googleScholar'
+          | 'linkedIn'
+          | 'researcherId'
+          | 'researchGate'
+          | 'twitter'
+          | 'blueSky'
+          | 'website1'
+          | 'website2'
+        >
+      >;
       teamsCollection?: Maybe<{
         items: Array<
           Maybe<
@@ -51627,6 +51711,33 @@ export const UserListItemContentFragmentDoc = {
           },
           { kind: 'Field', name: { kind: 'Name', value: 'techSupport' } },
           { kind: 'Field', name: { kind: 'Name', value: 'orcid' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'userSocials' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'github' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'googleScholar' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'linkedIn' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'researcherId' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'researchGate' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'twitter' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'blueSky' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'website1' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'website2' } },
+              ],
+            },
+          },
           {
             kind: 'Field',
             name: { kind: 'Name', value: 'researchTagsCollection' },
@@ -76744,6 +76855,51 @@ export const FetchUserByIdForAlgoliaListDocument = {
                 },
                 { kind: 'Field', name: { kind: 'Name', value: 'techSupport' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'orcid' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'userSocials' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'github' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'googleScholar' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'linkedIn' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'researcherId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'researchGate' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'twitter' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'blueSky' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'website1' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'website2' },
+                      },
+                    ],
+                  },
+                },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'avatar' },
