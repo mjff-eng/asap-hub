@@ -38,7 +38,6 @@ const Dashboard: FC<Record<string, never>> = () => {
             {...dashboard}
             reminders={reminders}
             date={date}
-            user={currentUser}
             dismissedGettingStarted={user?.dismissedGettingStarted}
             roles={roles}
             userId={id}
