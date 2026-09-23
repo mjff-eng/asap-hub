@@ -191,7 +191,7 @@ describe('eventSpeakersToCSV', () => {
         team: { id: 'team-1', displayName: 'Alessi' },
       },
     ] as unknown as EventResponse['speakers'];
-    const event = getEvent({ speakers, preliminaryDataShared: [] });
+    const event = getEvent({ speakers });
 
     const row = eventSpeakersToCSV(event, mapSpeakersToGroups(event));
 

@@ -3806,8 +3806,6 @@ export type Events = Entry &
     notes?: Maybe<EventsNotes>;
     notesPermanentlyUnavailable?: Maybe<Scalars['Boolean']>;
     notesUpdatedAt?: Maybe<Scalars['DateTime']>;
-    preliminaryDataSharedCollection?: Maybe<EventsPreliminaryDataSharedCollection>;
-    preliminaryDataSharedCursorCollection?: Maybe<EventsPreliminaryDataSharedCursorCollection>;
     presentation?: Maybe<EventsPresentation>;
     presentationPermanentlyUnavailable?: Maybe<Scalars['Boolean']>;
     presentationUpdatedAt?: Maybe<Scalars['DateTime']>;
@@ -3945,33 +3943,6 @@ export type EventsNotesPermanentlyUnavailableArgs = {
 export type EventsNotesUpdatedAtArgs = {
   locale?: InputMaybe<Scalars['String']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/events) */
-export type EventsPreliminaryDataSharedCollectionArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  locale?: InputMaybe<Scalars['String']>;
-  order?: InputMaybe<
-    Array<InputMaybe<EventsPreliminaryDataSharedCollectionOrder>>
-  >;
-  preview?: InputMaybe<Scalars['Boolean']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
-  where?: InputMaybe<PreliminaryDataSharingFilter>;
-};
-
-/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/events) */
-export type EventsPreliminaryDataSharedCursorCollectionArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  locale?: InputMaybe<Scalars['String']>;
-  order?: InputMaybe<
-    Array<InputMaybe<EventsPreliminaryDataSharedCursorCollectionOrder>>
-  >;
-  pageNext?: InputMaybe<Scalars['String']>;
-  pagePrev?: InputMaybe<Scalars['String']>;
-  preview?: InputMaybe<Scalars['Boolean']>;
-  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
-  where?: InputMaybe<PreliminaryDataSharingFilter>;
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/events) */
@@ -4235,8 +4206,6 @@ export type EventsFilter = {
   notes_contains?: InputMaybe<Scalars['String']>;
   notes_exists?: InputMaybe<Scalars['Boolean']>;
   notes_not_contains?: InputMaybe<Scalars['String']>;
-  preliminaryDataShared?: InputMaybe<CfPreliminaryDataSharingNestedFilter>;
-  preliminaryDataSharedCollection_exists?: InputMaybe<Scalars['Boolean']>;
   presentationPermanentlyUnavailable?: InputMaybe<Scalars['Boolean']>;
   presentationPermanentlyUnavailable_exists?: InputMaybe<Scalars['Boolean']>;
   presentationPermanentlyUnavailable_not?: InputMaybe<Scalars['Boolean']>;
@@ -4629,45 +4598,6 @@ export enum EventsOrder {
   VideoRecordingPermanentlyUnavailableDesc = 'videoRecordingPermanentlyUnavailable_DESC',
   VideoRecordingUpdatedAtAsc = 'videoRecordingUpdatedAt_ASC',
   VideoRecordingUpdatedAtDesc = 'videoRecordingUpdatedAt_DESC',
-}
-
-export type EventsPreliminaryDataSharedCollection = {
-  items: Array<Maybe<PreliminaryDataSharing>>;
-  limit: Scalars['Int'];
-  skip: Scalars['Int'];
-  total: Scalars['Int'];
-};
-
-export enum EventsPreliminaryDataSharedCollectionOrder {
-  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
-  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
-  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
-  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
-  SysIdAsc = 'sys_id_ASC',
-  SysIdDesc = 'sys_id_DESC',
-  SysPublishedAtAsc = 'sys_publishedAt_ASC',
-  SysPublishedAtDesc = 'sys_publishedAt_DESC',
-  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
-  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
-}
-
-export type EventsPreliminaryDataSharedCursorCollection = {
-  items: Array<Maybe<PreliminaryDataSharing>>;
-  limit: Scalars['Int'];
-  pages: CursorPages;
-};
-
-export enum EventsPreliminaryDataSharedCursorCollectionOrder {
-  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
-  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
-  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
-  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
-  SysIdAsc = 'sys_id_ASC',
-  SysIdDesc = 'sys_id_DESC',
-  SysPublishedAtAsc = 'sys_publishedAt_ASC',
-  SysPublishedAtDesc = 'sys_publishedAt_DESC',
-  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
-  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
 }
 
 export type EventsPresentation = {
@@ -11849,8 +11779,6 @@ export type PreliminaryDataSharingFilter = {
 export type PreliminaryDataSharingLinkingCollections = {
   entryCollection?: Maybe<EntryCollection>;
   entryCursorCollection?: Maybe<EntryCursorCollection>;
-  eventsCollection?: Maybe<EventsCollection>;
-  eventsCursorCollection?: Maybe<EventsCursorCollection>;
 };
 
 export type PreliminaryDataSharingLinkingCollectionsEntryCollectionArgs = {
@@ -11870,136 +11798,6 @@ export type PreliminaryDataSharingLinkingCollectionsEntryCursorCollectionArgs =
     preview?: InputMaybe<Scalars['Boolean']>;
     useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
   };
-
-export type PreliminaryDataSharingLinkingCollectionsEventsCollectionArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  locale?: InputMaybe<Scalars['String']>;
-  order?: InputMaybe<
-    Array<
-      InputMaybe<PreliminaryDataSharingLinkingCollectionsEventsCollectionOrder>
-    >
-  >;
-  preview?: InputMaybe<Scalars['Boolean']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type PreliminaryDataSharingLinkingCollectionsEventsCursorCollectionArgs =
-  {
-    limit?: InputMaybe<Scalars['Int']>;
-    locale?: InputMaybe<Scalars['String']>;
-    order?: InputMaybe<
-      Array<
-        InputMaybe<PreliminaryDataSharingLinkingCollectionsEventsCursorCollectionOrder>
-      >
-    >;
-    pageNext?: InputMaybe<Scalars['String']>;
-    pagePrev?: InputMaybe<Scalars['String']>;
-    preview?: InputMaybe<Scalars['Boolean']>;
-    useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
-  };
-
-export enum PreliminaryDataSharingLinkingCollectionsEventsCollectionOrder {
-  EndDateTimeZoneAsc = 'endDateTimeZone_ASC',
-  EndDateTimeZoneDesc = 'endDateTimeZone_DESC',
-  EndDateAsc = 'endDate_ASC',
-  EndDateDesc = 'endDate_DESC',
-  EventLinkAsc = 'eventLink_ASC',
-  EventLinkDesc = 'eventLink_DESC',
-  GoogleIdAsc = 'googleId_ASC',
-  GoogleIdDesc = 'googleId_DESC',
-  HiddenAsc = 'hidden_ASC',
-  HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
-  LastUpdatedAsc = 'lastUpdated_ASC',
-  LastUpdatedDesc = 'lastUpdated_DESC',
-  MeetingLinkAsc = 'meetingLink_ASC',
-  MeetingLinkDesc = 'meetingLink_DESC',
-  MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
-  MeetingMaterialsPermanentlyUnavailableDesc = 'meetingMaterialsPermanentlyUnavailable_DESC',
-  NotesPermanentlyUnavailableAsc = 'notesPermanentlyUnavailable_ASC',
-  NotesPermanentlyUnavailableDesc = 'notesPermanentlyUnavailable_DESC',
-  NotesUpdatedAtAsc = 'notesUpdatedAt_ASC',
-  NotesUpdatedAtDesc = 'notesUpdatedAt_DESC',
-  PresentationPermanentlyUnavailableAsc = 'presentationPermanentlyUnavailable_ASC',
-  PresentationPermanentlyUnavailableDesc = 'presentationPermanentlyUnavailable_DESC',
-  PresentationUpdatedAtAsc = 'presentationUpdatedAt_ASC',
-  PresentationUpdatedAtDesc = 'presentationUpdatedAt_DESC',
-  RecurringAsc = 'recurring_ASC',
-  RecurringDesc = 'recurring_DESC',
-  StartDateTimeZoneAsc = 'startDateTimeZone_ASC',
-  StartDateTimeZoneDesc = 'startDateTimeZone_DESC',
-  StartDateAsc = 'startDate_ASC',
-  StartDateDesc = 'startDate_DESC',
-  StatusAsc = 'status_ASC',
-  StatusDesc = 'status_DESC',
-  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
-  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
-  SysIdAsc = 'sys_id_ASC',
-  SysIdDesc = 'sys_id_DESC',
-  SysPublishedAtAsc = 'sys_publishedAt_ASC',
-  SysPublishedAtDesc = 'sys_publishedAt_DESC',
-  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
-  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
-  TitleAsc = 'title_ASC',
-  TitleDesc = 'title_DESC',
-  VideoRecordingPermanentlyUnavailableAsc = 'videoRecordingPermanentlyUnavailable_ASC',
-  VideoRecordingPermanentlyUnavailableDesc = 'videoRecordingPermanentlyUnavailable_DESC',
-  VideoRecordingUpdatedAtAsc = 'videoRecordingUpdatedAt_ASC',
-  VideoRecordingUpdatedAtDesc = 'videoRecordingUpdatedAt_DESC',
-}
-
-export enum PreliminaryDataSharingLinkingCollectionsEventsCursorCollectionOrder {
-  EndDateTimeZoneAsc = 'endDateTimeZone_ASC',
-  EndDateTimeZoneDesc = 'endDateTimeZone_DESC',
-  EndDateAsc = 'endDate_ASC',
-  EndDateDesc = 'endDate_DESC',
-  EventLinkAsc = 'eventLink_ASC',
-  EventLinkDesc = 'eventLink_DESC',
-  GoogleIdAsc = 'googleId_ASC',
-  GoogleIdDesc = 'googleId_DESC',
-  HiddenAsc = 'hidden_ASC',
-  HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
-  LastUpdatedAsc = 'lastUpdated_ASC',
-  LastUpdatedDesc = 'lastUpdated_DESC',
-  MeetingLinkAsc = 'meetingLink_ASC',
-  MeetingLinkDesc = 'meetingLink_DESC',
-  MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
-  MeetingMaterialsPermanentlyUnavailableDesc = 'meetingMaterialsPermanentlyUnavailable_DESC',
-  NotesPermanentlyUnavailableAsc = 'notesPermanentlyUnavailable_ASC',
-  NotesPermanentlyUnavailableDesc = 'notesPermanentlyUnavailable_DESC',
-  NotesUpdatedAtAsc = 'notesUpdatedAt_ASC',
-  NotesUpdatedAtDesc = 'notesUpdatedAt_DESC',
-  PresentationPermanentlyUnavailableAsc = 'presentationPermanentlyUnavailable_ASC',
-  PresentationPermanentlyUnavailableDesc = 'presentationPermanentlyUnavailable_DESC',
-  PresentationUpdatedAtAsc = 'presentationUpdatedAt_ASC',
-  PresentationUpdatedAtDesc = 'presentationUpdatedAt_DESC',
-  RecurringAsc = 'recurring_ASC',
-  RecurringDesc = 'recurring_DESC',
-  StartDateTimeZoneAsc = 'startDateTimeZone_ASC',
-  StartDateTimeZoneDesc = 'startDateTimeZone_DESC',
-  StartDateAsc = 'startDate_ASC',
-  StartDateDesc = 'startDate_DESC',
-  StatusAsc = 'status_ASC',
-  StatusDesc = 'status_DESC',
-  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
-  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
-  SysIdAsc = 'sys_id_ASC',
-  SysIdDesc = 'sys_id_DESC',
-  SysPublishedAtAsc = 'sys_publishedAt_ASC',
-  SysPublishedAtDesc = 'sys_publishedAt_DESC',
-  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
-  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
-  TitleAsc = 'title_ASC',
-  TitleDesc = 'title_DESC',
-  VideoRecordingPermanentlyUnavailableAsc = 'videoRecordingPermanentlyUnavailable_ASC',
-  VideoRecordingPermanentlyUnavailableDesc = 'videoRecordingPermanentlyUnavailable_DESC',
-  VideoRecordingUpdatedAtAsc = 'videoRecordingUpdatedAt_ASC',
-  VideoRecordingUpdatedAtDesc = 'videoRecordingUpdatedAt_DESC',
-}
 
 export enum PreliminaryDataSharingOrder {
   PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
@@ -24801,7 +24599,6 @@ export type CfEventsNestedFilter = {
   notes_contains?: InputMaybe<Scalars['String']>;
   notes_exists?: InputMaybe<Scalars['Boolean']>;
   notes_not_contains?: InputMaybe<Scalars['String']>;
-  preliminaryDataSharedCollection_exists?: InputMaybe<Scalars['Boolean']>;
   presentationPermanentlyUnavailable?: InputMaybe<Scalars['Boolean']>;
   presentationPermanentlyUnavailable_exists?: InputMaybe<Scalars['Boolean']>;
   presentationPermanentlyUnavailable_not?: InputMaybe<Scalars['Boolean']>;
@@ -25465,17 +25262,6 @@ export type CfPagesNestedFilter = {
   title_not?: InputMaybe<Scalars['String']>;
   title_not_contains?: InputMaybe<Scalars['String']>;
   title_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-export type CfPreliminaryDataSharingNestedFilter = {
-  AND?: InputMaybe<Array<InputMaybe<CfPreliminaryDataSharingNestedFilter>>>;
-  OR?: InputMaybe<Array<InputMaybe<CfPreliminaryDataSharingNestedFilter>>>;
-  contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
-  preliminaryDataShared?: InputMaybe<Scalars['Boolean']>;
-  preliminaryDataShared_exists?: InputMaybe<Scalars['Boolean']>;
-  preliminaryDataShared_not?: InputMaybe<Scalars['Boolean']>;
-  sys?: InputMaybe<SysFilter>;
-  team_exists?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CfProjectMembershipNestedFilter = {
@@ -28612,15 +28398,6 @@ export type EventsContentFragment = Pick<
       >;
     }
   >;
-  preliminaryDataSharedCollection?: Maybe<{
-    items: Array<
-      Maybe<
-        Pick<PreliminaryDataSharing, 'preliminaryDataShared'> & {
-          team?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-        }
-      >
-    >;
-  }>;
   notes?: Maybe<
     Pick<EventsNotes, 'json'> & {
       links: {
@@ -28948,38 +28725,43 @@ export type EventsContentFragment = Pick<
   thumbnail?: Maybe<Pick<Asset, 'url'>>;
   speakersCollection?: Maybe<{
     items: Array<
-      Maybe<{
-        sys: Pick<Sys, 'id'>;
-        team?: Maybe<
-          Pick<Teams, 'displayName' | 'inactiveSince'> & {
-            sys: Pick<Sys, 'id'>;
-          }
-        >;
-        user?: Maybe<
-          | ({ __typename: 'ExternalAuthors' } & Pick<ExternalAuthors, 'name'>)
-          | ({ __typename: 'Users' } & Pick<
-              Users,
-              | 'alumniSinceDate'
-              | 'alumniLocation'
-              | 'firstName'
-              | 'nickname'
-              | 'lastName'
-              | 'onboarded'
-            > & {
-                sys: Pick<Sys, 'id'>;
-                teamsCollection?: Maybe<{
-                  items: Array<
-                    Maybe<
-                      Pick<TeamMembership, 'role'> & {
-                        team?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-                      }
-                    >
-                  >;
-                }>;
-                avatar?: Maybe<Pick<Asset, 'url'>>;
-              })
-        >;
-      }>
+      Maybe<
+        Pick<EventSpeakers, 'preliminaryDataShared'> & {
+          sys: Pick<Sys, 'id'>;
+          team?: Maybe<
+            Pick<Teams, 'displayName' | 'inactiveSince'> & {
+              sys: Pick<Sys, 'id'>;
+            }
+          >;
+          user?: Maybe<
+            | ({ __typename: 'ExternalAuthors' } & Pick<
+                ExternalAuthors,
+                'name'
+              >)
+            | ({ __typename: 'Users' } & Pick<
+                Users,
+                | 'alumniSinceDate'
+                | 'alumniLocation'
+                | 'firstName'
+                | 'nickname'
+                | 'lastName'
+                | 'onboarded'
+              > & {
+                  sys: Pick<Sys, 'id'>;
+                  teamsCollection?: Maybe<{
+                    items: Array<
+                      Maybe<
+                        Pick<TeamMembership, 'role'> & {
+                          team?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+                        }
+                      >
+                    >;
+                  }>;
+                  avatar?: Maybe<Pick<Asset, 'url'>>;
+                })
+          >;
+        }
+      >
     >;
   }>;
 };
@@ -29033,15 +28815,6 @@ export type FetchEventByIdQuery = {
           >;
         }
       >;
-      preliminaryDataSharedCollection?: Maybe<{
-        items: Array<
-          Maybe<
-            Pick<PreliminaryDataSharing, 'preliminaryDataShared'> & {
-              team?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-            }
-          >
-        >;
-      }>;
       notes?: Maybe<
         Pick<EventsNotes, 'json'> & {
           links: {
@@ -29421,41 +29194,43 @@ export type FetchEventByIdQuery = {
       thumbnail?: Maybe<Pick<Asset, 'url'>>;
       speakersCollection?: Maybe<{
         items: Array<
-          Maybe<{
-            sys: Pick<Sys, 'id'>;
-            team?: Maybe<
-              Pick<Teams, 'displayName' | 'inactiveSince'> & {
-                sys: Pick<Sys, 'id'>;
-              }
-            >;
-            user?: Maybe<
-              | ({ __typename: 'ExternalAuthors' } & Pick<
-                  ExternalAuthors,
-                  'name'
-                >)
-              | ({ __typename: 'Users' } & Pick<
-                  Users,
-                  | 'alumniSinceDate'
-                  | 'alumniLocation'
-                  | 'firstName'
-                  | 'nickname'
-                  | 'lastName'
-                  | 'onboarded'
-                > & {
-                    sys: Pick<Sys, 'id'>;
-                    teamsCollection?: Maybe<{
-                      items: Array<
-                        Maybe<
-                          Pick<TeamMembership, 'role'> & {
-                            team?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-                          }
-                        >
-                      >;
-                    }>;
-                    avatar?: Maybe<Pick<Asset, 'url'>>;
-                  })
-            >;
-          }>
+          Maybe<
+            Pick<EventSpeakers, 'preliminaryDataShared'> & {
+              sys: Pick<Sys, 'id'>;
+              team?: Maybe<
+                Pick<Teams, 'displayName' | 'inactiveSince'> & {
+                  sys: Pick<Sys, 'id'>;
+                }
+              >;
+              user?: Maybe<
+                | ({ __typename: 'ExternalAuthors' } & Pick<
+                    ExternalAuthors,
+                    'name'
+                  >)
+                | ({ __typename: 'Users' } & Pick<
+                    Users,
+                    | 'alumniSinceDate'
+                    | 'alumniLocation'
+                    | 'firstName'
+                    | 'nickname'
+                    | 'lastName'
+                    | 'onboarded'
+                  > & {
+                      sys: Pick<Sys, 'id'>;
+                      teamsCollection?: Maybe<{
+                        items: Array<
+                          Maybe<
+                            Pick<TeamMembership, 'role'> & {
+                              team?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+                            }
+                          >
+                        >;
+                      }>;
+                      avatar?: Maybe<Pick<Asset, 'url'>>;
+                    })
+              >;
+            }
+          >
         >;
       }>;
     }
@@ -29518,15 +29293,6 @@ export type FetchEventsQuery = {
                 >;
               }
             >;
-            preliminaryDataSharedCollection?: Maybe<{
-              items: Array<
-                Maybe<
-                  Pick<PreliminaryDataSharing, 'preliminaryDataShared'> & {
-                    team?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-                  }
-                >
-              >;
-            }>;
             notes?: Maybe<
               Pick<EventsNotes, 'json'> & {
                 links: {
@@ -30058,41 +29824,43 @@ export type FetchEventsQuery = {
             thumbnail?: Maybe<Pick<Asset, 'url'>>;
             speakersCollection?: Maybe<{
               items: Array<
-                Maybe<{
-                  sys: Pick<Sys, 'id'>;
-                  team?: Maybe<
-                    Pick<Teams, 'displayName' | 'inactiveSince'> & {
-                      sys: Pick<Sys, 'id'>;
-                    }
-                  >;
-                  user?: Maybe<
-                    | ({ __typename: 'ExternalAuthors' } & Pick<
-                        ExternalAuthors,
-                        'name'
-                      >)
-                    | ({ __typename: 'Users' } & Pick<
-                        Users,
-                        | 'alumniSinceDate'
-                        | 'alumniLocation'
-                        | 'firstName'
-                        | 'nickname'
-                        | 'lastName'
-                        | 'onboarded'
-                      > & {
-                          sys: Pick<Sys, 'id'>;
-                          teamsCollection?: Maybe<{
-                            items: Array<
-                              Maybe<
-                                Pick<TeamMembership, 'role'> & {
-                                  team?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-                                }
-                              >
-                            >;
-                          }>;
-                          avatar?: Maybe<Pick<Asset, 'url'>>;
-                        })
-                  >;
-                }>
+                Maybe<
+                  Pick<EventSpeakers, 'preliminaryDataShared'> & {
+                    sys: Pick<Sys, 'id'>;
+                    team?: Maybe<
+                      Pick<Teams, 'displayName' | 'inactiveSince'> & {
+                        sys: Pick<Sys, 'id'>;
+                      }
+                    >;
+                    user?: Maybe<
+                      | ({ __typename: 'ExternalAuthors' } & Pick<
+                          ExternalAuthors,
+                          'name'
+                        >)
+                      | ({ __typename: 'Users' } & Pick<
+                          Users,
+                          | 'alumniSinceDate'
+                          | 'alumniLocation'
+                          | 'firstName'
+                          | 'nickname'
+                          | 'lastName'
+                          | 'onboarded'
+                        > & {
+                            sys: Pick<Sys, 'id'>;
+                            teamsCollection?: Maybe<{
+                              items: Array<
+                                Maybe<
+                                  Pick<TeamMembership, 'role'> & {
+                                    team?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+                                  }
+                                >
+                              >;
+                            }>;
+                            avatar?: Maybe<Pick<Asset, 'url'>>;
+                          })
+                    >;
+                  }
+                >
               >;
             }>;
           }
@@ -30168,16 +29936,6 @@ export type FetchEventsByUserIdQuery = {
                             >;
                           }
                         >;
-                        preliminaryDataSharedCollection?: Maybe<{
-                          items: Array<
-                            Maybe<
-                              Pick<
-                                PreliminaryDataSharing,
-                                'preliminaryDataShared'
-                              > & { team?: Maybe<{ sys: Pick<Sys, 'id'> }> }
-                            >
-                          >;
-                        }>;
                         notes?: Maybe<
                           Pick<EventsNotes, 'json'> & {
                             links: {
@@ -30801,43 +30559,46 @@ export type FetchEventsByUserIdQuery = {
                         thumbnail?: Maybe<Pick<Asset, 'url'>>;
                         speakersCollection?: Maybe<{
                           items: Array<
-                            Maybe<{
-                              sys: Pick<Sys, 'id'>;
-                              team?: Maybe<
-                                Pick<Teams, 'displayName' | 'inactiveSince'> & {
-                                  sys: Pick<Sys, 'id'>;
-                                }
-                              >;
-                              user?: Maybe<
-                                | ({ __typename: 'ExternalAuthors' } & Pick<
-                                    ExternalAuthors,
-                                    'name'
-                                  >)
-                                | ({ __typename: 'Users' } & Pick<
-                                    Users,
-                                    | 'alumniSinceDate'
-                                    | 'alumniLocation'
-                                    | 'firstName'
-                                    | 'nickname'
-                                    | 'lastName'
-                                    | 'onboarded'
-                                  > & {
-                                      sys: Pick<Sys, 'id'>;
-                                      teamsCollection?: Maybe<{
-                                        items: Array<
-                                          Maybe<
-                                            Pick<TeamMembership, 'role'> & {
-                                              team?: Maybe<{
-                                                sys: Pick<Sys, 'id'>;
-                                              }>;
-                                            }
-                                          >
-                                        >;
-                                      }>;
-                                      avatar?: Maybe<Pick<Asset, 'url'>>;
-                                    })
-                              >;
-                            }>
+                            Maybe<
+                              Pick<EventSpeakers, 'preliminaryDataShared'> & {
+                                sys: Pick<Sys, 'id'>;
+                                team?: Maybe<
+                                  Pick<
+                                    Teams,
+                                    'displayName' | 'inactiveSince'
+                                  > & { sys: Pick<Sys, 'id'> }
+                                >;
+                                user?: Maybe<
+                                  | ({ __typename: 'ExternalAuthors' } & Pick<
+                                      ExternalAuthors,
+                                      'name'
+                                    >)
+                                  | ({ __typename: 'Users' } & Pick<
+                                      Users,
+                                      | 'alumniSinceDate'
+                                      | 'alumniLocation'
+                                      | 'firstName'
+                                      | 'nickname'
+                                      | 'lastName'
+                                      | 'onboarded'
+                                    > & {
+                                        sys: Pick<Sys, 'id'>;
+                                        teamsCollection?: Maybe<{
+                                          items: Array<
+                                            Maybe<
+                                              Pick<TeamMembership, 'role'> & {
+                                                team?: Maybe<{
+                                                  sys: Pick<Sys, 'id'>;
+                                                }>;
+                                              }
+                                            >
+                                          >;
+                                        }>;
+                                        avatar?: Maybe<Pick<Asset, 'url'>>;
+                                      })
+                                >;
+                              }
+                            >
                           >;
                         }>;
                       }
@@ -30919,16 +30680,6 @@ export type FetchEventsByExternalAuthorIdQuery = {
                             >;
                           }
                         >;
-                        preliminaryDataSharedCollection?: Maybe<{
-                          items: Array<
-                            Maybe<
-                              Pick<
-                                PreliminaryDataSharing,
-                                'preliminaryDataShared'
-                              > & { team?: Maybe<{ sys: Pick<Sys, 'id'> }> }
-                            >
-                          >;
-                        }>;
                         notes?: Maybe<
                           Pick<EventsNotes, 'json'> & {
                             links: {
@@ -31552,43 +31303,46 @@ export type FetchEventsByExternalAuthorIdQuery = {
                         thumbnail?: Maybe<Pick<Asset, 'url'>>;
                         speakersCollection?: Maybe<{
                           items: Array<
-                            Maybe<{
-                              sys: Pick<Sys, 'id'>;
-                              team?: Maybe<
-                                Pick<Teams, 'displayName' | 'inactiveSince'> & {
-                                  sys: Pick<Sys, 'id'>;
-                                }
-                              >;
-                              user?: Maybe<
-                                | ({ __typename: 'ExternalAuthors' } & Pick<
-                                    ExternalAuthors,
-                                    'name'
-                                  >)
-                                | ({ __typename: 'Users' } & Pick<
-                                    Users,
-                                    | 'alumniSinceDate'
-                                    | 'alumniLocation'
-                                    | 'firstName'
-                                    | 'nickname'
-                                    | 'lastName'
-                                    | 'onboarded'
-                                  > & {
-                                      sys: Pick<Sys, 'id'>;
-                                      teamsCollection?: Maybe<{
-                                        items: Array<
-                                          Maybe<
-                                            Pick<TeamMembership, 'role'> & {
-                                              team?: Maybe<{
-                                                sys: Pick<Sys, 'id'>;
-                                              }>;
-                                            }
-                                          >
-                                        >;
-                                      }>;
-                                      avatar?: Maybe<Pick<Asset, 'url'>>;
-                                    })
-                              >;
-                            }>
+                            Maybe<
+                              Pick<EventSpeakers, 'preliminaryDataShared'> & {
+                                sys: Pick<Sys, 'id'>;
+                                team?: Maybe<
+                                  Pick<
+                                    Teams,
+                                    'displayName' | 'inactiveSince'
+                                  > & { sys: Pick<Sys, 'id'> }
+                                >;
+                                user?: Maybe<
+                                  | ({ __typename: 'ExternalAuthors' } & Pick<
+                                      ExternalAuthors,
+                                      'name'
+                                    >)
+                                  | ({ __typename: 'Users' } & Pick<
+                                      Users,
+                                      | 'alumniSinceDate'
+                                      | 'alumniLocation'
+                                      | 'firstName'
+                                      | 'nickname'
+                                      | 'lastName'
+                                      | 'onboarded'
+                                    > & {
+                                        sys: Pick<Sys, 'id'>;
+                                        teamsCollection?: Maybe<{
+                                          items: Array<
+                                            Maybe<
+                                              Pick<TeamMembership, 'role'> & {
+                                                team?: Maybe<{
+                                                  sys: Pick<Sys, 'id'>;
+                                                }>;
+                                              }
+                                            >
+                                          >;
+                                        }>;
+                                        avatar?: Maybe<Pick<Asset, 'url'>>;
+                                      })
+                                >;
+                              }
+                            >
                           >;
                         }>;
                       }
@@ -31670,16 +31424,6 @@ export type FetchEventsByTeamIdQuery = {
                             >;
                           }
                         >;
-                        preliminaryDataSharedCollection?: Maybe<{
-                          items: Array<
-                            Maybe<
-                              Pick<
-                                PreliminaryDataSharing,
-                                'preliminaryDataShared'
-                              > & { team?: Maybe<{ sys: Pick<Sys, 'id'> }> }
-                            >
-                          >;
-                        }>;
                         notes?: Maybe<
                           Pick<EventsNotes, 'json'> & {
                             links: {
@@ -32303,43 +32047,46 @@ export type FetchEventsByTeamIdQuery = {
                         thumbnail?: Maybe<Pick<Asset, 'url'>>;
                         speakersCollection?: Maybe<{
                           items: Array<
-                            Maybe<{
-                              sys: Pick<Sys, 'id'>;
-                              team?: Maybe<
-                                Pick<Teams, 'displayName' | 'inactiveSince'> & {
-                                  sys: Pick<Sys, 'id'>;
-                                }
-                              >;
-                              user?: Maybe<
-                                | ({ __typename: 'ExternalAuthors' } & Pick<
-                                    ExternalAuthors,
-                                    'name'
-                                  >)
-                                | ({ __typename: 'Users' } & Pick<
-                                    Users,
-                                    | 'alumniSinceDate'
-                                    | 'alumniLocation'
-                                    | 'firstName'
-                                    | 'nickname'
-                                    | 'lastName'
-                                    | 'onboarded'
-                                  > & {
-                                      sys: Pick<Sys, 'id'>;
-                                      teamsCollection?: Maybe<{
-                                        items: Array<
-                                          Maybe<
-                                            Pick<TeamMembership, 'role'> & {
-                                              team?: Maybe<{
-                                                sys: Pick<Sys, 'id'>;
-                                              }>;
-                                            }
-                                          >
-                                        >;
-                                      }>;
-                                      avatar?: Maybe<Pick<Asset, 'url'>>;
-                                    })
-                              >;
-                            }>
+                            Maybe<
+                              Pick<EventSpeakers, 'preliminaryDataShared'> & {
+                                sys: Pick<Sys, 'id'>;
+                                team?: Maybe<
+                                  Pick<
+                                    Teams,
+                                    'displayName' | 'inactiveSince'
+                                  > & { sys: Pick<Sys, 'id'> }
+                                >;
+                                user?: Maybe<
+                                  | ({ __typename: 'ExternalAuthors' } & Pick<
+                                      ExternalAuthors,
+                                      'name'
+                                    >)
+                                  | ({ __typename: 'Users' } & Pick<
+                                      Users,
+                                      | 'alumniSinceDate'
+                                      | 'alumniLocation'
+                                      | 'firstName'
+                                      | 'nickname'
+                                      | 'lastName'
+                                      | 'onboarded'
+                                    > & {
+                                        sys: Pick<Sys, 'id'>;
+                                        teamsCollection?: Maybe<{
+                                          items: Array<
+                                            Maybe<
+                                              Pick<TeamMembership, 'role'> & {
+                                                team?: Maybe<{
+                                                  sys: Pick<Sys, 'id'>;
+                                                }>;
+                                              }
+                                            >
+                                          >;
+                                        }>;
+                                        avatar?: Maybe<Pick<Asset, 'url'>>;
+                                      })
+                                >;
+                              }
+                            >
                           >;
                         }>;
                       }
@@ -41857,73 +41604,6 @@ export const EventsContentFragmentDoc = {
           },
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'preliminaryDataSharedCollection' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'limit' },
-                value: { kind: 'IntValue', value: '50' },
-              },
-            ],
-            directives: [
-              {
-                kind: 'Directive',
-                name: { kind: 'Name', value: 'include' },
-                arguments: [
-                  {
-                    kind: 'Argument',
-                    name: { kind: 'Name', value: 'if' },
-                    value: {
-                      kind: 'Variable',
-                      name: { kind: 'Name', value: 'singleEvent' },
-                    },
-                  },
-                ],
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'items' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'preliminaryDataShared' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'team' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'sys' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'id' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
             name: { kind: 'Name', value: 'notesPermanentlyUnavailable' },
           },
           {
@@ -42774,6 +42454,10 @@ export const EventsContentFragmentDoc = {
                             },
                           ],
                         },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'preliminaryDataShared' },
                       },
                       {
                         kind: 'Field',

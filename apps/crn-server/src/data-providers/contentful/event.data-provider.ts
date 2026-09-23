@@ -34,6 +34,7 @@ import {
   Link,
   patchAndPublish,
   pollContentfulGql,
+  pollContentfulGqlUntil,
   RichTextFromQuery,
 } from '@asap-hub/contentful';
 import {
@@ -42,7 +43,6 @@ import {
   EventSpeaker,
   EventSpeakerExternalUserData,
   EventSpeakerUserData,
-  EventPreliminaryDataSharing,
   EventTeamAttendance,
   EventUpdateDataObject,
   EventUpdateDetailsRequest,
@@ -354,27 +354,35 @@ export class EventContentfulDataProvider implements EventDataProvider {
       );
     }
 
+    let updatedSpeakers: SpeakerPreliminaryDataSharedUpdate[] = [];
     if (data.preliminaryDataShared && data.preliminaryDataShared.length > 0) {
-      patchFields.preliminaryDataShared =
-        await this.buildPreliminaryDataSharedLinks(
-          environment,
-          event,
-          data.preliminaryDataShared,
-        );
+      updatedSpeakers = await this.updateSpeakersPreliminaryDataShared(
+        environment,
+        event,
+        data.preliminaryDataShared,
+        data.speakersToRemove ?? [],
+      );
     }
-
-    if (Object.keys(patchFields).length === 0) {
-      return;
-    }
-
-    const result = await patchAndPublish(event, patchFields);
 
     const fetchEventById = () => this.fetchEventById(id);
-    await pollContentfulGql<FetchEventByIdQuery>(
-      result.sys.publishedVersion || Infinity,
-      fetchEventById,
-      'events',
-    );
+
+    if (Object.keys(patchFields).length > 0) {
+      const result = await patchAndPublish(event, patchFields);
+      await pollContentfulGql<FetchEventByIdQuery>(
+        result.sys.publishedVersion || Infinity,
+        fetchEventById,
+        'events',
+      );
+    }
+
+    if (updatedSpeakers.length > 0) {
+      await pollContentfulGqlUntil<FetchEventByIdQuery>(
+        fetchEventById,
+        (result) =>
+          areSpeakersPreliminaryDataSharedSynced(result, updatedSpeakers),
+        `Event ${id} speakers preliminary data shared`,
+      );
+    }
   }
 
   private async buildAttendanceLinks(
@@ -515,77 +523,80 @@ export class EventContentfulDataProvider implements EventDataProvider {
       .map((link) => createLink(link.sys.id));
   }
 
-  private async buildPreliminaryDataSharedLinks(
+  private async updateSpeakersPreliminaryDataShared(
     environment: Environment,
     event: Entry,
     preliminaryDataShared: NonNullable<
       EventUpdateDetailsRequest['preliminaryDataShared']
     >,
-  ) {
-    const existingLinks: Link<'Entry'>[] =
-      event.fields.preliminaryDataShared?.['en-US'] || [];
-
-    const existingByTeamId = new Map<string, Entry>();
-    await Promise.all(
-      existingLinks.map(async (link) => {
-        try {
-          const entry = await environment.getEntry(link.sys.id);
-          const teamId = entry.fields.team?.['en-US']?.sys?.id;
-          if (teamId) {
-            existingByTeamId.set(teamId, entry);
-          }
-        } catch (error) {
-          logger.warn(
-            { error, preliminaryDataSharedId: link.sys.id },
-            `Error fetching preliminary data sharing entry with id: ${link.sys.id}`,
-          );
-        }
-      }),
+    speakersToRemove: string[],
+  ): Promise<SpeakerPreliminaryDataSharedUpdate[]> {
+    const sharedByTeamId = new Map(
+      preliminaryDataShared.map(({ teamId, shared }) => [teamId, shared]),
     );
+    const removeSet = new Set(speakersToRemove);
+    const speakerLinks: Link<'Entry'>[] = (
+      event.fields.speakers?.['en-US'] || []
+    ).filter((link: Link<'Entry'>) => !removeSet.has(link.sys.id));
 
-    const createdLinks = await Promise.all(
-      preliminaryDataShared.map(async ({ teamId, shared }) => {
-        const existingEntry = existingByTeamId.get(teamId);
-        if (existingEntry) {
+    const updates = await Promise.all(
+      speakerLinks.map(
+        async (link): Promise<SpeakerPreliminaryDataSharedUpdate | null> => {
+          let speakerEntry: Entry;
+          try {
+            speakerEntry = await environment.getEntry(link.sys.id);
+          } catch (error) {
+            logger.warn(
+              { error, speakerId: link.sys.id },
+              `Error fetching speaker entry with id: ${link.sys.id}`,
+            );
+            return null;
+          }
+
+          const teamId = speakerEntry.fields.team?.['en-US']?.sys?.id;
+          const shared = teamId ? sharedByTeamId.get(teamId) : undefined;
           if (
-            existingEntry.fields.preliminaryDataShared?.['en-US'] !== shared
+            shared === undefined ||
+            speakerEntry.fields.preliminaryDataShared?.['en-US'] === shared
           ) {
-            existingEntry.fields = addLocaleToFields({
-              team: createLink(teamId),
-              preliminaryDataShared: shared,
-            });
-            const updatedEntry = await existingEntry.update();
-            await updatedEntry.publish();
+            return null;
           }
-          return null;
-        }
 
-        try {
-          const newEntry = await environment.createEntry(
-            'preliminaryDataSharing',
-            {
-              fields: addLocaleToFields({
-                team: createLink(teamId),
-                preliminaryDataShared: shared,
-              }),
-            },
-          );
-          const publishedEntry = await newEntry.publish();
-          return createLink(publishedEntry.sys.id);
-        } catch (e) {
-          throw new Error(
-            `Error creating preliminary data sharing entry: ${e}`,
-          );
-        }
-      }),
+          await patchAndPublish(speakerEntry, {
+            preliminaryDataShared: shared,
+          });
+          return { speakerId: link.sys.id, shared };
+        },
+      ),
     );
 
-    return [
-      ...existingLinks.map((link) => createLink(link.sys.id)),
-      ...createdLinks.flatMap((link) => (link ? [link] : [])),
-    ];
+    return updates.filter(
+      (update): update is SpeakerPreliminaryDataSharedUpdate => update !== null,
+    );
   }
 }
+
+type SpeakerPreliminaryDataSharedUpdate = {
+  speakerId: string;
+  shared: boolean;
+};
+
+export const areSpeakersPreliminaryDataSharedSynced = (
+  result: FetchEventByIdQuery,
+  updates: SpeakerPreliminaryDataSharedUpdate[],
+): boolean => {
+  const sharedBySpeakerId = new Map<string, boolean>();
+  (result.events?.speakersCollection?.items ?? []).forEach((item) => {
+    if (item) {
+      sharedBySpeakerId.set(item.sys.id, !!item.preliminaryDataShared);
+    }
+  });
+
+  return updates.every(({ speakerId, shared }) => {
+    const current = sharedBySpeakerId.get(speakerId);
+    return current === undefined || current === shared;
+  });
+};
 
 type SpeakerItem = NonNullable<
   NonNullable<EventItem['speakersCollection']>['items'][number]
@@ -679,6 +690,7 @@ export const parseGraphQLSpeakers = (speakers: SpeakerItem[]): EventSpeaker[] =>
         },
         user: parseEventSpeakerUser(user),
         role,
+        preliminaryDataShared: !!speaker.preliminaryDataShared,
       });
     }
     return speakerList;
@@ -708,28 +720,6 @@ export const parseGraphQLAttendance = (
     });
     return list;
   }, []);
-
-type PreliminaryDataSharedItem = NonNullable<
-  NonNullable<EventItem['preliminaryDataSharedCollection']>['items'][number]
->;
-
-export const parseGraphQLPreliminaryDataShared = (
-  items: PreliminaryDataSharedItem[],
-): EventPreliminaryDataSharing[] =>
-  items.reduce<EventPreliminaryDataSharing[]>(
-    (list, { preliminaryDataShared, team }) => {
-      if (!team) {
-        return list;
-      }
-
-      list.push({
-        team: { id: team.sys.id },
-        shared: !!preliminaryDataShared,
-      });
-      return list;
-    },
-    [],
-  );
 
 export const parseGraphQLEvent = (item: EventItem): EventDataObject => {
   if (!item.calendar) {
@@ -887,17 +877,6 @@ export const parseGraphQLEvent = (item: EventItem): EventDataObject => {
           attendance: parseGraphQLAttendance(
             item.attendanceCollection.items.filter(
               (x: AttendanceItem | null): x is AttendanceItem => x !== null,
-            ),
-          ),
-        }
-      : {}),
-    ...(item.preliminaryDataSharedCollection
-      ? {
-          preliminaryDataShared: parseGraphQLPreliminaryDataShared(
-            item.preliminaryDataSharedCollection.items.filter(
-              (
-                x: PreliminaryDataSharedItem | null,
-              ): x is PreliminaryDataSharedItem => x !== null,
             ),
           ),
         }

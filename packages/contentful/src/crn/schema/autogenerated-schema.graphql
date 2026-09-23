@@ -2587,8 +2587,6 @@ type Events implements Entry & _Node {
   notes(locale: String, useFallbackLocale: Boolean): EventsNotes
   notesPermanentlyUnavailable(locale: String, useFallbackLocale: Boolean): Boolean
   notesUpdatedAt(locale: String, useFallbackLocale: Boolean): DateTime
-  preliminaryDataSharedCollection(limit: Int = 100, locale: String, order: [EventsPreliminaryDataSharedCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: PreliminaryDataSharingFilter): EventsPreliminaryDataSharedCollection
-  preliminaryDataSharedCursorCollection(limit: Int = 100, locale: String, order: [EventsPreliminaryDataSharedCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: PreliminaryDataSharingFilter): EventsPreliminaryDataSharedCursorCollection
   presentation(locale: String, useFallbackLocale: Boolean): EventsPresentation
   presentationPermanentlyUnavailable(locale: String, useFallbackLocale: Boolean): Boolean
   presentationUpdatedAt(locale: String, useFallbackLocale: Boolean): DateTime
@@ -2746,8 +2744,6 @@ input EventsFilter {
   notes_contains: String
   notes_exists: Boolean
   notes_not_contains: String
-  preliminaryDataShared: cfPreliminaryDataSharingNestedFilter
-  preliminaryDataSharedCollection_exists: Boolean
   presentationPermanentlyUnavailable: Boolean
   presentationPermanentlyUnavailable_exists: Boolean
   presentationPermanentlyUnavailable_not: Boolean
@@ -3071,44 +3067,9 @@ enum EventsOrder {
   videoRecordingUpdatedAt_DESC
 }
 
-type EventsPreliminaryDataSharedCollection {
-  items: [PreliminaryDataSharing]!
-  limit: Int!
-  skip: Int!
-  total: Int!
-}
 
-enum EventsPreliminaryDataSharedCollectionOrder {
-  preliminaryDataShared_ASC
-  preliminaryDataShared_DESC
-  sys_firstPublishedAt_ASC
-  sys_firstPublishedAt_DESC
-  sys_id_ASC
-  sys_id_DESC
-  sys_publishedAt_ASC
-  sys_publishedAt_DESC
-  sys_publishedVersion_ASC
-  sys_publishedVersion_DESC
-}
 
-type EventsPreliminaryDataSharedCursorCollection {
-  items: [PreliminaryDataSharing]!
-  limit: Int!
-  pages: CursorPages!
-}
 
-enum EventsPreliminaryDataSharedCursorCollectionOrder {
-  preliminaryDataShared_ASC
-  preliminaryDataShared_DESC
-  sys_firstPublishedAt_ASC
-  sys_firstPublishedAt_DESC
-  sys_id_ASC
-  sys_id_DESC
-  sys_publishedAt_ASC
-  sys_publishedAt_DESC
-  sys_publishedVersion_ASC
-  sys_publishedVersion_DESC
-}
 
 type EventsPresentation {
   json: JSON!
@@ -7951,111 +7912,9 @@ input PreliminaryDataSharingFilter {
 type PreliminaryDataSharingLinkingCollections {
   entryCollection(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): EntryCollection
   entryCursorCollection(limit: Int = 100, locale: String, pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): EntryCursorCollection
-  eventsCollection(limit: Int = 100, locale: String, order: [PreliminaryDataSharingLinkingCollectionsEventsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): EventsCollection
-  eventsCursorCollection(limit: Int = 100, locale: String, order: [PreliminaryDataSharingLinkingCollectionsEventsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): EventsCursorCollection
 }
 
-enum PreliminaryDataSharingLinkingCollectionsEventsCollectionOrder {
-  endDateTimeZone_ASC
-  endDateTimeZone_DESC
-  endDate_ASC
-  endDate_DESC
-  eventLink_ASC
-  eventLink_DESC
-  googleId_ASC
-  googleId_DESC
-  hidden_ASC
-  hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
-  lastUpdated_ASC
-  lastUpdated_DESC
-  meetingLink_ASC
-  meetingLink_DESC
-  meetingMaterialsPermanentlyUnavailable_ASC
-  meetingMaterialsPermanentlyUnavailable_DESC
-  notesPermanentlyUnavailable_ASC
-  notesPermanentlyUnavailable_DESC
-  notesUpdatedAt_ASC
-  notesUpdatedAt_DESC
-  presentationPermanentlyUnavailable_ASC
-  presentationPermanentlyUnavailable_DESC
-  presentationUpdatedAt_ASC
-  presentationUpdatedAt_DESC
-  recurring_ASC
-  recurring_DESC
-  startDateTimeZone_ASC
-  startDateTimeZone_DESC
-  startDate_ASC
-  startDate_DESC
-  status_ASC
-  status_DESC
-  sys_firstPublishedAt_ASC
-  sys_firstPublishedAt_DESC
-  sys_id_ASC
-  sys_id_DESC
-  sys_publishedAt_ASC
-  sys_publishedAt_DESC
-  sys_publishedVersion_ASC
-  sys_publishedVersion_DESC
-  title_ASC
-  title_DESC
-  videoRecordingPermanentlyUnavailable_ASC
-  videoRecordingPermanentlyUnavailable_DESC
-  videoRecordingUpdatedAt_ASC
-  videoRecordingUpdatedAt_DESC
-}
 
-enum PreliminaryDataSharingLinkingCollectionsEventsCursorCollectionOrder {
-  endDateTimeZone_ASC
-  endDateTimeZone_DESC
-  endDate_ASC
-  endDate_DESC
-  eventLink_ASC
-  eventLink_DESC
-  googleId_ASC
-  googleId_DESC
-  hidden_ASC
-  hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
-  lastUpdated_ASC
-  lastUpdated_DESC
-  meetingLink_ASC
-  meetingLink_DESC
-  meetingMaterialsPermanentlyUnavailable_ASC
-  meetingMaterialsPermanentlyUnavailable_DESC
-  notesPermanentlyUnavailable_ASC
-  notesPermanentlyUnavailable_DESC
-  notesUpdatedAt_ASC
-  notesUpdatedAt_DESC
-  presentationPermanentlyUnavailable_ASC
-  presentationPermanentlyUnavailable_DESC
-  presentationUpdatedAt_ASC
-  presentationUpdatedAt_DESC
-  recurring_ASC
-  recurring_DESC
-  startDateTimeZone_ASC
-  startDateTimeZone_DESC
-  startDate_ASC
-  startDate_DESC
-  status_ASC
-  status_DESC
-  sys_firstPublishedAt_ASC
-  sys_firstPublishedAt_DESC
-  sys_id_ASC
-  sys_id_DESC
-  sys_publishedAt_ASC
-  sys_publishedAt_DESC
-  sys_publishedVersion_ASC
-  sys_publishedVersion_DESC
-  title_ASC
-  title_DESC
-  videoRecordingPermanentlyUnavailable_ASC
-  videoRecordingPermanentlyUnavailable_DESC
-  videoRecordingUpdatedAt_ASC
-  videoRecordingUpdatedAt_DESC
-}
 
 enum PreliminaryDataSharingOrder {
   preliminaryDataShared_ASC
@@ -15832,7 +15691,6 @@ input cfEventsNestedFilter {
   notes_contains: String
   notes_exists: Boolean
   notes_not_contains: String
-  preliminaryDataSharedCollection_exists: Boolean
   presentationPermanentlyUnavailable: Boolean
   presentationPermanentlyUnavailable_exists: Boolean
   presentationPermanentlyUnavailable_not: Boolean
@@ -16454,16 +16312,6 @@ input cfPagesNestedFilter {
   title_not_in: [String]
 }
 
-input cfPreliminaryDataSharingNestedFilter {
-  AND: [cfPreliminaryDataSharingNestedFilter]
-  OR: [cfPreliminaryDataSharingNestedFilter]
-  contentfulMetadata: ContentfulMetadataFilter
-  preliminaryDataShared: Boolean
-  preliminaryDataShared_exists: Boolean
-  preliminaryDataShared_not: Boolean
-  sys: SysFilter
-  team_exists: Boolean
-}
 
 input cfProjectMembershipNestedFilter {
   AND: [cfProjectMembershipNestedFilter]
