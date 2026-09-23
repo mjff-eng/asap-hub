@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { steel } from '../colors';
+import { neutral500 } from '../colors';
 import { rem } from '../pixels';
 import { clampPercentage } from '../utils';
 
@@ -21,7 +21,7 @@ const AttendanceProgressBar: React.FC<AttendanceProgressBarProps> = ({
         width: '100%',
         height: rem(24),
         borderRadius: rem(999),
-        backgroundColor: steel.rgb,
+        backgroundColor: neutral500.rgb,
         overflow: 'hidden',
       }}
       role="progressbar"
