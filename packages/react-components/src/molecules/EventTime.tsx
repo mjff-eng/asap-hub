@@ -1,8 +1,11 @@
 import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
+import { differenceInCalendarDays } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 import { formatDateToTimezone } from '../date';
-import { info100, info500, lead } from '../colors';
+import { getLocalTimezone } from '../localization';
+import { info100, info500, lead, silver } from '../colors';
 import { rem } from '../pixels';
 import { calendarIcon, clockIcon } from '../icons';
 
@@ -49,6 +52,42 @@ const recurringPillStyles = css({
   padding: `${rem(4)} ${rem(16)}`,
 });
 
+const dayCountPillStyles = css({
+  flexShrink: 0,
+
+  backgroundColor: silver.rgb,
+  color: lead.rgb,
+  fontWeight: 'bold',
+  borderRadius: rem(12),
+  padding: `${rem(4)} ${rem(8)}`,
+});
+
+const multiDayItemStyles = css({
+  flexWrap: 'wrap',
+  rowGap: rem(8),
+  columnGap: rem(8),
+});
+
+const multiDayDateGroupStyles = css({
+  display: 'flex',
+  alignItems: 'flex-start',
+  minWidth: 0,
+});
+
+const multiDayDateStyles = css({
+  whiteSpace: 'normal',
+});
+
+const multiDayPillsGroupStyles = css({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: rem(8),
+});
+
+const noMarginPillStyles = css({
+  marginLeft: 0,
+});
+
 type EventTimeProps = Pick<
   EventResponse,
   | 'startDate'
@@ -72,6 +111,7 @@ const EventTime: React.FC<EventTimeProps> = ({
     endDate,
     'E, d MMM y',
   ).toUpperCase();
+  const multiDay = formattedStartDay !== formattedEndDay;
 
   const formattedStartDateTimeZone = formatDateToTimezone(
     startDate,
@@ -84,6 +124,51 @@ const EventTime: React.FC<EventTimeProps> = ({
     endDateTimeZone,
   );
 
+  if (multiDay) {
+    const localTimezone = getLocalTimezone();
+    const dayCount =
+      differenceInCalendarDays(
+        utcToZonedTime(endDate, localTimezone),
+        utcToZonedTime(startDate, localTimezone),
+      ) + 1;
+
+    const startYear = formatDateToTimezone(startDate, 'yyyy');
+    const endYear = formatDateToTimezone(endDate, 'yyyy');
+    const startMonth = formatDateToTimezone(startDate, 'MMMM');
+    const endMonth = formatDateToTimezone(endDate, 'MMMM');
+
+    const startRangeFormat =
+      startYear !== endYear
+        ? 'EEEE d MMMM yyyy'
+        : startMonth !== endMonth
+          ? 'EEEE d MMMM'
+          : 'EEEE d';
+
+    const dateRange = `${formatDateToTimezone(
+      startDate,
+      startRangeFormat,
+    )} - ${formatDateToTimezone(endDate, 'EEEE d MMMM yyyy')}`;
+
+    return (
+      <ul css={listStyles}>
+        <li css={[listItemStyles, multiDayItemStyles]}>
+          <div css={multiDayDateGroupStyles}>
+            <div css={iconStyles}>{calendarIcon}</div>
+            <span css={multiDayDateStyles}>{dateRange}</span>
+          </div>
+          <div css={multiDayPillsGroupStyles}>
+            <span css={dayCountPillStyles}>{dayCount} days</span>
+            {recurring && (
+              <span css={[recurringPillStyles, noMarginPillStyles]}>
+                Recurring
+              </span>
+            )}
+          </div>
+        </li>
+      </ul>
+    );
+  }
+
   return (
     <ul css={listStyles}>
       <li css={listItemStyles}>
@@ -95,7 +180,6 @@ const EventTime: React.FC<EventTimeProps> = ({
         <div css={iconStyles}>{clockIcon}</div>
         {formatDateToTimezone(startDate, 'h:mm a')} -{' '}
         {formatDateToTimezone(endDate, 'h:mm a (z)').toUpperCase()}
-        {formattedEndDay !== formattedStartDay && ` - ${formattedEndDay} ∙ `}
         <div css={tzStyles}>
           <Info>
             The meeting is at{' '}
