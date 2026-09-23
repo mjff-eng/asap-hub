@@ -6,7 +6,7 @@ import RelatedTutorialsCard from '../RelatedTutorialsCard';
 
 it('renders the related tutorials card with no tutorials message', () => {
   render(<RelatedTutorialsCard relatedTutorials={[]} />);
-  expect(screen.getByRole('heading', { level: 2 }).textContent).toMatch(
+  expect(screen.getByRole('heading', { level: 3 }).textContent).toMatch(
     /Tutorials/i,
   );
   expect(screen.getByText(/No related/i)).toBeInTheDocument();

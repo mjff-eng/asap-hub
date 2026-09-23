@@ -6,9 +6,9 @@ it('renders text specific to the material type', () => {
   const { container, rerender } = render(
     <EventMaterialUnavailable materialType="Notes" />,
   );
-  expect(container).toHaveTextContent(/are no Notes/);
+  expect(container).toHaveTextContent(/No notes/);
 
   rerender(<EventMaterialUnavailable materialType="Presentation" />);
-  expect(container).not.toHaveTextContent(/Notes/);
-  expect(container).toHaveTextContent(/is no Presentation/);
+  expect(container).not.toHaveTextContent(/notes/);
+  expect(container).toHaveTextContent(/No presentation/);
 });

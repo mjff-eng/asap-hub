@@ -3,7 +3,7 @@ import { discover } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import React, { useState } from 'react';
 
-import { Button, Card, Headline2, Link, Paragraph } from '../atoms';
+import { Button, Card, Headline3, Link, Paragraph } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 import { charcoal, lead, steel } from '../colors';
 import { formatDateToTimezone } from '../date';
@@ -76,10 +76,12 @@ const showMoreStyles = css({
 const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
 
 type RelatedTutorialsCardProps = Pick<TutorialsResponse, 'relatedTutorials'> & {
+  description?: string;
   truncateFrom?: number;
 };
 
 const RelatedTutorialsCard: React.FC<RelatedTutorialsCardProps> = ({
+  description = ' Find all related tutorials.',
   relatedTutorials,
   truncateFrom = Number.POSITIVE_INFINITY,
 }) => {
@@ -93,10 +95,10 @@ const RelatedTutorialsCard: React.FC<RelatedTutorialsCardProps> = ({
           ...(displayShowMoreButton ? [{ paddingBottom: 0 }] : []),
         ]}
       >
-        <Headline2 noMargin>Related Tutorials</Headline2>
+        <Headline3 noMargin>Related Tutorials</Headline3>
         <div css={descriptionStyles}>
           <Paragraph noMargin accent="lead">
-            Find all related tutorials.
+            {description}
           </Paragraph>
         </div>
         {relatedTutorials.length === 0 ? (

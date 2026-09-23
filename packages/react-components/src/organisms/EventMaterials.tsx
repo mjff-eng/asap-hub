@@ -1,3 +1,4 @@
+import { isEnabled } from '@asap-hub/flags';
 import { css } from '@emotion/react';
 import {
   eventMaterialTypes,
@@ -12,12 +13,13 @@ import {
   EventMaterialComingSoon,
   EventMaterialUnavailable,
   EventMaterialsUnavailable,
+  EventMaterialsEmptyView,
 } from '../molecules';
 import { useDateHasPassed } from '../date';
 
 const cardsStyles = css({
   display: 'grid',
-  rowGap: rem(36),
+  rowGap: rem(33),
 });
 
 export const eventMaterialSectionIds: Record<
@@ -29,6 +31,11 @@ export const eventMaterialSectionIds: Record<
   presentation: 'event-presentation',
   meetingMaterials: 'event-additional-materials',
 };
+
+type EventMaterial = EventResponse[(typeof eventMaterialTypes)[number]];
+
+const isMaterialMissing = (material: EventMaterial): boolean =>
+  material === undefined || (Array.isArray(material) && material.length === 0);
 
 type EventMaterialsProps = Pick<
   EventResponse,
@@ -45,8 +52,21 @@ const EventMaterials: React.FC<EventMaterialsProps> = ({
     return null;
   }
 
+  if (
+    isEnabled('NEW_EVENT_PAGE') &&
+    eventMaterialTypes.every((material) =>
+      isMaterialMissing(materials[material]),
+    )
+  ) {
+    return <EventMaterialsEmptyView variant="coming-soon" />;
+  }
+
   if (eventMaterialTypes.every((material) => materials[material] === null)) {
-    return <EventMaterialsUnavailable />;
+    return isEnabled('NEW_EVENT_PAGE') ? (
+      <EventMaterialsEmptyView variant="stale" />
+    ) : (
+      <EventMaterialsUnavailable />
+    );
   }
 
   const { notes, videoRecording, presentation, meetingMaterials } = materials;

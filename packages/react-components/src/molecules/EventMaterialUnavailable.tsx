@@ -1,5 +1,6 @@
+import { css } from '@emotion/react';
 import { Card, Headline2, Paragraph } from '../atoms';
-import { charcoal } from '../colors';
+import { rem } from '../pixels';
 
 interface EventMaterialUnavailableProps {
   materialType:
@@ -9,22 +10,16 @@ interface EventMaterialUnavailableProps {
     | 'Additional meeting materials';
 }
 
-const plural: Record<EventMaterialUnavailableProps['materialType'], boolean> = {
-  Notes: true,
-  'Video recording': false,
-  Presentation: false,
-  'Additional meeting materials': true,
-};
-
 const EventMaterialUnavailable: React.FC<EventMaterialUnavailableProps> = ({
   materialType,
 }) => (
-  <Card accent="placeholder">
-    <Headline2 styleAsHeading={3}>{materialType}</Headline2>
-    <Paragraph accent="lead">
-      There {plural[materialType] ? 'are' : 'is'}{' '}
-      <strong css={{ color: charcoal.rgb }}>no {materialType} available</strong>{' '}
-      for this event.
+  <Card>
+    <Headline2 noMargin styleAsHeading={3}>
+      {materialType}
+    </Headline2>
+    <div css={css({ marginTop: rem(24) })} />
+    <Paragraph noMargin accent="lead">
+      No {materialType.toLowerCase()} was shared for this event.
     </Paragraph>
   </Card>
 );
