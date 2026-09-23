@@ -26,4 +26,13 @@ export const userToCSV = (user: UserListItemResponse) => ({
   'Alumni Since Date': user.alumniSinceDate || '',
   'Team Name': user.teams.map((t) => t.displayName).join(', '),
   Role: user.teams.map((t) => t.role).join(', '),
+  'Website 1': user.social?.website1 || '',
+  'Website 2': user.social?.website2 || '',
+  'Research ID': user.social?.researcherId || '',
+  LinkedIn: user.social?.linkedIn || '',
+  BlueSky: user.social?.blueSky || '',
+  Twitter: user.social?.twitter || '',
+  GitHub: user.social?.github || '',
+  'Google Scholar': user.social?.googleScholar || '',
+  'Research Gate': user.social?.researchGate || '',
 });
