@@ -20,7 +20,7 @@ const EventSupport: React.FC = () => (
       <strong>Having trouble accessing this event?</strong>
       <br /> The tech support team is here to help.
     </CtaCard>
-    <Paragraph noMargin accent="lead">
+    <Paragraph noMargin accent="neutral900">
       Having issues? Set up your calendar manually with these instructions for{' '}
       <Link href="https://support.apple.com/en-us/guide/calendar/icl1022/mac">
         Apple Calendar
