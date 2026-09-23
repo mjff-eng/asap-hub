@@ -866,6 +866,7 @@ export const parseContentfulGraphQlUserListItem = (
     role: item.role && isUserRole(item.role) ? item.role : 'Guest',
     openScienceTeamMember: !!item.openScienceTeamMember,
     techSupport: !!item.techSupport,
+    social: parseSocialLinks(item.userSocials),
     teams: userTeams,
     tags,
     _tags: tags.map((tag) => tag.name),
