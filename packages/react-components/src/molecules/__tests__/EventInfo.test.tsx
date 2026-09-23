@@ -85,6 +85,7 @@ it('shows the event time', () => {
       {...props}
       startDate="2021-01-01T08:00:00Z"
       startDateTimeZone="Europe/Tallinn"
+      endDate="2021-01-01T09:00:00Z"
     />,
   );
   expect(screen.getByText(/8:00/)).toBeVisible();
