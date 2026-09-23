@@ -17,7 +17,15 @@ import {
   Paragraph,
   Switch,
 } from '../atoms';
-import { neutral900, neutral200, neutral800, neutral1000, pearl, neutral500, neutral700, colour, neutral300 } from '../colors';
+import {
+  neutral900,
+  neutral200,
+  neutral800,
+  neutral1000,
+  pearl,
+  neutral500,
+  neutral700,
+} from '../colors';
 import {
   binIcon,
   InactiveBadgeIcon,

@@ -149,7 +149,8 @@ export const deleteButtonStyles = (
   disabledPalette: 'default' | 'light' = 'default',
 ) => {
   const disabledBorder = disabledPalette === 'light' ? neutral500 : neutral700;
-  const disabledBackground = disabledPalette === 'light' ? neutral300 : neutral500;
+  const disabledBackground =
+    disabledPalette === 'light' ? neutral300 : neutral500;
   return css({
     flexGrow: 0,
     flexShrink: 0,
