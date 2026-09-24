@@ -551,6 +551,18 @@ describe('User data provider', () => {
       expect(result.items).toEqual([getUserListItemDataObject()]);
     });
 
+    test('should return empty social links when userSocials is null', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        usersCollection: {
+          total: 1,
+          items: [getContentfulGraphqlUserListItem({ userSocials: null })],
+        },
+      });
+      const result = await userDataProvider.fetch({});
+
+      expect(result.items[0]?.social).toEqual({});
+    });
+
     test('should return an empty response if there is no result', async () => {
       contentfulGraphqlClientMock.request.mockResolvedValueOnce({
         usersCollection: null,
@@ -759,6 +771,7 @@ describe('User data provider', () => {
         userResponse.biography = 'some bio';
         userResponse.contactEmail = 'T@rdy.io';
         userResponse.orcid = '123-456-789';
+        userResponse.social = {};
         expect(result).toEqual({
           total: 1,
           items: [userResponse],
@@ -832,6 +845,7 @@ describe('User data provider', () => {
         userResponse.biography = 'some bio';
         userResponse.contactEmail = 'T@rdy.io';
         userResponse.orcid = '123-456-789';
+        userResponse.social = {};
         expect(result).toEqual({
           total: 1,
           items: [userResponse],
