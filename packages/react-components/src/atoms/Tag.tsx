@@ -31,12 +31,12 @@ const highlightStyles = css({
 });
 
 const hoverStyles = css({
-    ':hover': {
-      backgroundColor: colour.background['hover-brand'],
-      borderColor: colour.border.brand,
-      color: colour.foreground.brand,
-    },
-  });
+  ':hover': {
+    backgroundColor: colour.background['hover-brand'],
+    borderColor: colour.border.brand,
+    color: colour.foreground.brand,
+  },
+});
 
 const disabledStyles = css({
   backgroundColor: colour.background.disabled,

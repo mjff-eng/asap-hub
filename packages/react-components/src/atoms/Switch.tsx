@@ -2,9 +2,7 @@ import { css } from '@emotion/react';
 import { colour } from '../colors';
 import { noop } from '../utils';
 
-const toggleStyles = (
-  uncheckedColor: 'default' | 'error',
-) =>
+const toggleStyles = (uncheckedColor: 'default' | 'error') =>
   css({
     position: 'relative',
     width: '40px',

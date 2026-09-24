@@ -196,10 +196,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
           <ul css={listStyles}>
             {children.map(
               ({ item, type, href, onClick, closeOnClick = true }, index) => (
-                <li
-                  key={`drop-${index}`}
-                  css={itemStyles(type)}
-                >
+                <li key={`drop-${index}`} css={itemStyles(type)}>
                   {href ? (
                     <Anchor href={href} onClick={() => setMenuShown(false)}>
                       <span css={itemContentStyles}>{item}</span>
