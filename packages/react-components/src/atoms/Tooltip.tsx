@@ -33,7 +33,7 @@ const tooltipStyles = css({
     position: 'absolute',
     borderLeft: `${triangleHeight}px solid transparent`,
     borderRight: `${triangleHeight}px solid transparent`,
-    borderTop: `${triangleHeight}px solid ${colour.neutral[900]}`,
+    borderTop: `${triangleHeight}px solid ${colour.foreground.secondary}`,
     bottom: 0,
     right: '50%',
     // the triangle is 2 * triangleHeight wide, so pull it right by half
@@ -46,7 +46,7 @@ const tooltipStyles = css({
   },
 });
 const bubbleStyles = css({
-  backgroundColor: colour.neutral[900],
+  backgroundColor: colour.foreground.secondary,
   color: colour.neutral[0],
   display: 'block',
 

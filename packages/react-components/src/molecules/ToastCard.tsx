@@ -35,19 +35,19 @@ const mutedIconStyles = css({
 
 const alertStyles = css({
   backgroundColor: colour.background.warning,
-  color: colour.foreground.warning,
+  color: colour.foreground.primary,
   fill: colour.foreground.warning,
 });
 
 const infoStyles = css({
   backgroundColor: colour.background.info,
-  color: colour.foreground.info,
+  color: colour.foreground.primary,
   fill: colour.foreground.info,
 });
 
 const liveStyles = css({
   backgroundColor: colour.background.success,
-  color: colour.foreground.success,
+  color: colour.foreground.primary,
   fill: colour.foreground.success,
 });
 
