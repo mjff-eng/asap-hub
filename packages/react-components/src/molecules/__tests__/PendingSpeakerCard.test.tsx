@@ -31,7 +31,7 @@ it('Should render the warning message and one pill per affiliation', () => {
   render(<PendingSpeakerCard {...defaultProps} />);
 
   expect(
-    screen.getByText('Pick a team or project to finish adding them.'),
+    screen.getByText(/Multiple affiliations were found for this speaker/),
   ).toBeInTheDocument();
   expect(
     screen.getByRole('button', { name: /Team Alpha/ }),

@@ -119,7 +119,7 @@ const PillSelector = <V extends string>({
             onClick={() => toggle(option.value)}
           >
             {option.icon}
-            {option.label}
+            <span>{option.label}</span>
           </button>
         );
       })}
