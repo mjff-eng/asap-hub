@@ -560,12 +560,14 @@ const sourceStyles = {
   today: [colour.background.tertiary, colour.foreground.tertiary],
   cas: [colour.background.info, colour.foreground.info],
   option: [colour.background.warning, colour.foreground.warning],
+  next: [colour.background.brand, colour.foreground.brand],
 } as const;
 
 const sourceLabels = {
   today: 'Our Hub today',
   cas: 'CAS, from Figma',
   option: 'Option: darker CAS shade',
+  next: 'After this work, not live yet',
 };
 
 const Side = ({
@@ -692,7 +694,10 @@ export const DesignQuestions = () => (
         the colours below, design needs to choose what to use. Every example is
         labelled: <b>Our Hub today</b> is what users see on the live Hub now,{' '}
         <b>CAS, from Figma</b> is the colour defined in the CAS file, with its
-        Figma variable name.
+        Figma variable name. Where this work already moved a colour to its
+        nearest CAS colour before design decided,{' '}
+        <b>After this work, not live yet</b> shows what it will look like once
+        released.
       </>
     }
   >
@@ -706,6 +711,14 @@ export const DesignQuestions = () => (
           Updated 3 days ago
         </Sample>
         <Sample name="Hint text in empty fields" text="#92999E">
+          Search for a team…
+        </Sample>
+      </Side>
+      <Side source="next" columns={2}>
+        <Sample name="Grey text" text={legacyHex('neutral900')}>
+          Updated 3 days ago
+        </Sample>
+        <Sample name="Hint text in empty fields" text={legacyHex('neutral800')}>
           Search for a team…
         </Sample>
       </Side>
@@ -736,6 +749,15 @@ export const DesignQuestions = () => (
         </Sample>
         <Sample name="Info" text="#006A92" background="#E6F3F9">
           Reminders are sent every Monday.
+        </Sample>
+      </Side>
+      <Side source="next" columns={2}>
+        <Sample
+          name="Success"
+          text={colour.brand.crn[800]}
+          background={legacyHex('success100')}
+        >
+          Your changes were saved.
         </Sample>
       </Side>
       <Side source="cas" columns={2}>
@@ -783,6 +805,29 @@ export const DesignQuestions = () => (
           </Sample>
         ))}
       </Side>
+      <Side source="next" columns={6}>
+        {[
+          ['Light green / green', legacyHex('success100'), '#287953'],
+          [
+            'Light orange / orange',
+            legacyHex('warning100'),
+            legacyHex('warning500'),
+          ],
+          ['Light blue / blue', legacyHex('info100'), legacyHex('info900')],
+          ['Pale blue / dark blue', legacyHex('azure'), legacyHex('space')],
+          ['Light pink / berry', legacyHex('lilac'), legacyHex('berry')],
+          ['Light purple / purple', legacyHex('lavender'), legacyHex('mauve')],
+        ].map(([name, background, text]) => (
+          <Sample
+            key={name}
+            name={name as string}
+            text={text as string}
+            background={background}
+          >
+            <b style={{ fontSize: '20px' }}>AB</b>
+          </Sample>
+        ))}
+      </Side>
       <Side source="cas" columns={5}>
         {['yellow', 'brand', 'green', 'lavender', 'blue'].map((name) => (
           <Sample
@@ -813,6 +858,20 @@ export const DesignQuestions = () => (
         <GradientSample
           name="Event attendance bar"
           stops={['#8C4E9F', '#0C8DC3', '#1491B2', '#299C86', '#34A270']}
+        />
+      </Side>
+      <Side source="next" columns={2}>
+        <GradientSample
+          name="Bar at the top of the header"
+          stops={[legacyHex('cerulean'), '#34A270']}
+        />
+        <GradientSample
+          name="Dashboard banner"
+          stops={['#CF2FB3', legacyHex('cerulean')]}
+        />
+        <GradientSample
+          name="Onboarding footer"
+          stops={['#8C4E9F', legacyHex('cerulean')]}
         />
       </Side>
       <Side source="cas" columns={3}>
@@ -1010,6 +1069,15 @@ export const DesignQuestions = () => (
           name="Dropdown, hovered item"
           text={cas('foreground/primary')}
           background="#E4F5EE"
+        >
+          Not Requested
+        </Sample>
+      </Side>
+      <Side source="next" columns={2}>
+        <Sample
+          name="Dropdown, hovered item"
+          text={cas('foreground/primary')}
+          background={legacyHex('success100')}
         >
           Not Requested
         </Sample>
