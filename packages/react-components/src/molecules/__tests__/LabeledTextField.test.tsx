@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 
 import LabeledTextField from '../LabeledTextField';
-import { neutral900 } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders a labeled text field, passing through props', () => {
   const { getByLabelText } = render(
@@ -26,12 +26,18 @@ it('renders a greyed out description', () => {
   const { getByText } = render(
     <LabeledTextField title="Title" description="Description" value="" />,
   );
-  expect(getComputedStyle(getByText('Description')).color).toBe(neutral900.rgb);
+  expect(getByText('Description')).toHaveStyleRule(
+    'color',
+    colour.foreground.tertiary,
+  );
 });
 
 it('renders a greyed out hint', () => {
   const { getByText } = render(
     <LabeledTextField title="Title" hint="Hint" value="" />,
   );
-  expect(getComputedStyle(getByText('Hint')).color).toBe(neutral900.rgb);
+  expect(getByText('Hint')).toHaveStyleRule(
+    'color',
+    colour.foreground.tertiary,
+  );
 });

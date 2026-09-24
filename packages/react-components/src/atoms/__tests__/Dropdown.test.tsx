@@ -5,7 +5,7 @@ import { Theme } from '@emotion/react';
 import { matchers } from '@emotion/jest';
 import { GroupBase, SingleValueProps } from 'react-select';
 
-import { colour, neutral900, colorFromHex } from '../../colors';
+import { colour, colorFromHex } from '../../colors';
 import Dropdown from '../Dropdown';
 import { Option, reactSelectStyles } from '../../select';
 
@@ -31,7 +31,7 @@ it('shows a placeholder without a selection', () => {
   );
   expect(screen.getByText('Select')).toBeVisible();
   expect(getComputedStyle(screen.getByText('Select')).color).toBe(
-    neutral900.rgb,
+    colorFromHex(colour.neutral[600]).rgb,
   );
 
   rerender(
@@ -44,7 +44,7 @@ it('shows a placeholder without a selection', () => {
 
   expect(screen.getByText('Choose something')).toBeVisible();
   expect(getComputedStyle(screen.getByText('Choose something')).color).toBe(
-    neutral900.rgb,
+    colorFromHex(colour.neutral[600]).rgb,
   );
 });
 
@@ -172,8 +172,8 @@ it('gets greyed out when disabled', () => {
   );
 
   expect(
-    findParentWithStyle(screen.getByText('Heathrow'), 'color')?.color,
-  ).toBe(neutral900.rgb);
+    findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
+  ).toHaveStyleRule('color', colour.foreground.tertiary);
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
   ).toHaveStyleRule('background-color', colour.background.tertiary);
@@ -183,8 +183,8 @@ it('gets greyed out when disabled', () => {
     <Dropdown options={[{ value: 'LHR', label: 'Heathrow' }]} value="LHR" />,
   );
   expect(
-    findParentWithStyle(screen.getByText('Heathrow'), 'color')?.color,
-  ).not.toBe(neutral900.rgb);
+    findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
+  ).not.toHaveStyleRule('color', colour.foreground.tertiary);
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
   ).not.toHaveStyleRule('background-color', colour.background.tertiary);

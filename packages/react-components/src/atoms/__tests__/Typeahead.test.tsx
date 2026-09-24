@@ -3,7 +3,7 @@ import { waitFor } from '@testing-library/dom';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { colour, neutral900, colorFromHex } from '../../colors';
+import { colour, colorFromHex } from '../../colors';
 import Typeahead from '../Typeahead';
 
 it('shows the selected value', () => {
@@ -77,7 +77,7 @@ it('gets greyed out when disabled', () => {
   // In react-select v5, the control element has the color/background styles
   const disabledControl = container.querySelector('[aria-disabled="true"]');
   expect(disabledControl).not.toBeNull();
-  expect(getComputedStyle(disabledControl!).color).toBe(neutral900.rgb);
+  expect(disabledControl).toHaveStyleRule('color', colour.foreground.tertiary);
   expect(disabledControl).toHaveStyleRule(
     'background-color',
     colour.background.tertiary,
@@ -91,7 +91,10 @@ it('gets greyed out when disabled', () => {
     '[class*="-container"] > div:not([aria-disabled])',
   );
   expect(enabledControl).not.toBeNull();
-  expect(getComputedStyle(enabledControl!).color).not.toBe(neutral900.rgb);
+  expect(enabledControl).not.toHaveStyleRule(
+    'color',
+    colour.foreground.tertiary,
+  );
   expect(enabledControl).not.toHaveStyleRule(
     'background-color',
     colour.background.tertiary,
@@ -118,7 +121,7 @@ describe('invalidity', () => {
         customValidationMessage="Nope."
       />,
     );
-    // After rerender with validation message, control should have error500 color
+    // After rerender with validation message, control should have the error border
     const inputAfter = container.querySelector('input')!;
     expect(
       findParentWithStyle(inputAfter, 'borderStyle')?.element,

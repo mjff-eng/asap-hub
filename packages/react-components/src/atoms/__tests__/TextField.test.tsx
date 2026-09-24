@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { colour, neutral900 } from '../../colors';
+import { colour } from '../../colors';
 import { indicatorPadding } from '../../form';
 import { perRem } from '../../pixels';
 import TextField from '../TextField';
@@ -47,7 +47,7 @@ it('mutes the value colour of a disabled date field to match other disabled fiel
     'input[type="date"]',
   ) as HTMLInputElement;
   expect(dateInput.disabled).toBe(true);
-  expect(getComputedStyle(dateInput).color).toBe(neutral900.rgb);
+  expect(dateInput).toHaveStyleRule('color', colour.foreground.tertiary);
 });
 
 it('with the label indicator prop prop shows a react node', () => {

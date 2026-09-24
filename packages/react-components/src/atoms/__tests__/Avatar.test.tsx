@@ -40,15 +40,18 @@ it('shows a placeholder on white background', () => {
 });
 
 it("shows the initials 'JD' on colored background", () => {
-  const { getByText } = render(<Avatar firstName="John" lastName="Doe" />);
+  const { getByText, getByRole } = render(
+    <Avatar firstName="John" lastName="Doe" />,
+  );
 
   expect(getByText('JD')).toBeVisible();
 
-  const { backgroundColor } = findParentWithStyle(
-    getByText('JD'),
-    'backgroundColor',
-  )!;
-  expect(backgroundColor).not.toBe(colorFromHex(colour.neutral[0]).rgb);
+  expect(getByRole('img')).toHaveStyleRule(
+    'background-color',
+    expect.stringMatching(
+      /^var\(--colour-background-color-(yellow|green|lavender|blue|brand)\)$/,
+    ),
+  );
 });
 
 it('does not show the initials if there is an image', () => {

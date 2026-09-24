@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 
 import Paragraph from '../Paragraph';
-import { error500 } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders the text in a <p>', () => {
   const { getByText } = render(<Paragraph>text</Paragraph>);
@@ -16,6 +16,5 @@ it('applies the text margin', () => {
 
 it('renders a given accent color', () => {
   const { getByText } = render(<Paragraph accent="error">text</Paragraph>);
-  const { color } = getComputedStyle(getByText('text'));
-  expect(color).toBe(error500.rgb);
+  expect(getByText('text')).toHaveStyleRule('color', colour.foreground.error);
 });

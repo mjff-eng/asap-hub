@@ -1,9 +1,7 @@
 import { ReactNode, useEffect } from 'react';
-import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { ThemeProvider } from '@emotion/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, useLocation, StaticRouter } from 'react-router';
-import { activePrimaryBackgroundColorDefault } from '../../button';
 import { color, colour, colorFromHex } from '../../colors';
 import NavigationLink from '../NavigationLink';
 
@@ -57,7 +55,7 @@ describe.each`
     expect(screen.getByRole('link')).toHaveAttribute('href', '/');
   });
 
-  it('renders the current link with green background', () => {
+  it('renders the current link with the active background', () => {
     render(
       <>
         <NavigationLink href="/" icon={<svg />}>
@@ -69,14 +67,14 @@ describe.each`
       </>,
       { wrapper },
     );
-    expect(
-      findParentWithStyle(screen.getByText('Target'), 'backgroundColor')
-        ?.backgroundColor,
-    ).toMatch(/^rgba\(122/);
-    expect(
-      findParentWithStyle(screen.getByText('Other'), 'backgroundColor')
-        ?.backgroundColor,
-    ).toBeFalsy();
+    expect(screen.getByText('Target').parentElement).toHaveStyleRule(
+      'background-color',
+      colour.background.active,
+    );
+    expect(screen.getByText('Other').parentElement).not.toHaveStyleRule(
+      'background-color',
+      colour.background.active,
+    );
   });
 
   it('disables the current link when not enabled', () => {
@@ -139,18 +137,18 @@ describe('with a router', () => {
       </MemoryRouter>,
     );
     expect(currentPathname).toEqual('/location');
-    expect(
-      findParentWithStyle(screen.getByText('Target'), 'backgroundColor')
-        ?.backgroundColor,
-    ).toMatch(/^rgba\(122/);
-    expect(
-      findParentWithStyle(screen.getByText('Other'), 'backgroundColor')
-        ?.backgroundColor,
-    ).toBeFalsy();
-    expect(
-      findParentWithStyle(screen.getByText('Default'), 'backgroundColor')
-        ?.backgroundColor,
-    ).toBeFalsy();
+    expect(screen.getByText('Target').parentElement).toHaveStyleRule(
+      'background-color',
+      colour.background.active,
+    );
+    expect(screen.getByText('Other').parentElement).not.toHaveStyleRule(
+      'background-color',
+      colour.background.active,
+    );
+    expect(screen.getByText('Default').parentElement).not.toHaveStyleRule(
+      'background-color',
+      colour.background.active,
+    );
   });
 });
 
@@ -198,10 +196,10 @@ describe('without a router (external link with matching pathname)', () => {
     expect(link).toHaveClass('active');
 
     // Should have active styles applied
-    expect(
-      findParentWithStyle(screen.getByText('Active Link'), 'backgroundColor')
-        ?.backgroundColor,
-    ).toMatch(/^rgba\(122/);
+    expect(screen.getByText('Active Link').parentElement).toHaveStyleRule(
+      'background-color',
+      colour.background.active,
+    );
   });
 });
 
@@ -237,18 +235,17 @@ describe('with ThemeProvider', () => {
         </NavigationLink>
       </MemoryRouter>,
     );
-    const { color: primaryColor, backgroundColor } = getComputedStyle(
-      screen.getByRole('link'),
-    );
+    const { color: primaryColor } = getComputedStyle(screen.getByRole('link'));
     expect(primaryColor).toBe(colorFromHex(colour.brand.crn[800]).rgb);
-    expect(backgroundColor).toBe(activePrimaryBackgroundColorDefault.rgba);
+    expect(screen.getByRole('link')).toHaveStyleRule(
+      'background-color',
+      colour.background.active,
+    );
   });
-  it('uses ThemeProvider theme primaryColor', () => {
-    const activePrimaryBackgroundColor = color(230, 243, 249);
+  it('uses the theme text colour and the product background', () => {
     const activePrimaryColor = color(0, 106, 146);
     const theme = {
       colors: {
-        primary100: activePrimaryBackgroundColor,
         primary900: activePrimaryColor,
       },
     };
@@ -261,10 +258,11 @@ describe('with ThemeProvider', () => {
         </ThemeProvider>
       </MemoryRouter>,
     );
-    const { color: primaryColor, backgroundColor } = getComputedStyle(
-      screen.getByRole('link'),
-    );
+    const { color: primaryColor } = getComputedStyle(screen.getByRole('link'));
     expect(primaryColor).toBe(activePrimaryColor.rgb);
-    expect(backgroundColor).toBe(activePrimaryBackgroundColor.rgb);
+    expect(screen.getByRole('link')).toHaveStyleRule(
+      'background-color',
+      colour.background.active,
+    );
   });
 });
