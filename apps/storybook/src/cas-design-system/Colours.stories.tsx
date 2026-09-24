@@ -480,6 +480,113 @@ export const LegacyNames = () => (
   </Page>
 );
 
+const sourceStyles = {
+  today: [colour.background.tertiary, colour.foreground.tertiary],
+  cas: [colour.background.info, colour.foreground.info],
+  option: [colour.background.warning, colour.foreground.warning],
+} as const;
+
+const sourceLabels = {
+  today: 'Our Hub today',
+  cas: 'CAS, from Figma',
+  option: 'Option: darker CAS shade',
+};
+
+const Side = ({
+  source,
+  columns = 3,
+  children,
+}: {
+  source: keyof typeof sourceStyles;
+  columns?: number;
+  children: ReactNode;
+}) => (
+  <div style={{ margin: '12px 0' }}>
+    <span
+      style={{
+        display: 'inline-block',
+        marginBottom: '8px',
+        padding: '2px 10px',
+        borderRadius: '10px',
+        fontSize: '12px',
+        fontWeight: 500,
+        background: sourceStyles[source][0],
+        color: sourceStyles[source][1],
+      }}
+    >
+      {sourceLabels[source]}
+    </span>
+    <div style={grid(`repeat(${columns}, 1fr)`)}>{children}</div>
+  </div>
+);
+
+const Sample = ({
+  name,
+  text,
+  background = '#FFFFFF',
+  children,
+}: {
+  name: string;
+  text: string;
+  background?: string;
+  children: ReactNode;
+}) => (
+  <TextSample foreground={text} background={background}>
+    <div style={{ ...mono, fontSize: '11px' }}>{name}</div>
+    <div style={{ ...mono, fontSize: '11px', opacity: 0.8 }}>
+      {text}
+      {background !== '#FFFFFF' && ` on ${background}`}
+    </div>
+    <div style={{ marginTop: '4px' }}>{children}</div>
+  </TextSample>
+);
+
+const GradientSample = ({ name, stops }: { name: string; stops: string[] }) => (
+  <div>
+    <div
+      style={{
+        height: '28px',
+        borderRadius: '6px',
+        background: `linear-gradient(to right, ${stops.join(', ')})`,
+      }}
+    />
+    <div style={{ ...mono, fontSize: '11px', marginTop: '4px' }}>{name}</div>
+    <div style={muted}>{stops.join(' → ')}</div>
+  </div>
+);
+
+const ButtonSample = ({
+  name,
+  text,
+  background,
+  border,
+}: {
+  name: string;
+  text: string;
+  background: string;
+  border: string;
+}) => (
+  <div>
+    <div style={{ ...mono, fontSize: '11px', marginBottom: '4px' }}>{name}</div>
+    <span
+      style={{
+        display: 'inline-block',
+        padding: '8px 16px',
+        borderRadius: '4px',
+        color: text,
+        background,
+        border: `1px solid ${border}`,
+        fontWeight: 500,
+      }}
+    >
+      Save
+    </span>
+    <div style={{ ...muted, marginTop: '4px' }}>
+      text {text}, background {background}, border {border}
+    </div>
+  </div>
+);
+
 const Question = ({
   number,
   title,
@@ -492,223 +599,322 @@ const Question = ({
   children: ReactNode;
 }) => (
   <Section title={`${number}. ${title}`}>
-    <p style={{ marginTop: 0 }}>
-      <b>Question:</b> {ask}
-    </p>
+    <p style={{ marginTop: 0 }}>{ask}</p>
     {children}
   </Section>
 );
 
-const white = '#FFFFFF';
+const cas = (name: string, product: Product = 'crn') =>
+  themeHex(`colour/${name}`, product);
 
 export const DesignQuestions = () => (
   <Page
-    title="Design questions"
-    intro="Decisions engineers need from design before these colours can move to CAS tokens. Each question shows what the product uses today next to the CAS options."
+    title="Questions for design"
+    intro={
+      <>
+        We are switching the Hub colours to the CAS Design System in Figma. For
+        the colours below, design needs to choose what to use. Every example is
+        labelled: <b>Our Hub today</b> is what users see on the live Hub now,{' '}
+        <b>CAS, from Figma</b> is the colour defined in the CAS file, with its
+        Figma variable name.
+      </>
+    }
   >
     <Question
       number={1}
-      title="Secondary text"
-      ask="Our secondary text (neutral900, about 230 files) and caption or placeholder text (neutral800) use neutral 600 and 400, which no CAS theme token uses. Which foreground token should each become?"
+      title="Grey text"
+      ask="Our grey text (dates, captions, hints) and the hint text inside empty form fields don't exist in CAS. Which CAS grey should each become?"
     >
-      <div style={grid('repeat(4, 1fr)')}>
-        {[
-          ['Today: neutral900', '#566066'],
-          ['foreground/secondary', themeHex('colour/foreground/secondary')],
-          ['foreground/tertiary', themeHex('colour/foreground/tertiary')],
-          ['foreground/quaternary', themeHex('colour/foreground/quaternary')],
-          ['Today: neutral800', '#88939A'],
-        ].map(([label, hex]) => (
-          <TextSample key={label} foreground={hex as string} background={white}>
-            <div style={mono}>{label}</div>
-            The quick brown fox jumps over the lazy dog.
-          </TextSample>
-        ))}
-      </div>
+      <Side source="today" columns={2}>
+        <Sample name="Grey text" text="#4D646B">
+          Updated 3 days ago
+        </Sample>
+        <Sample name="Hint text in empty fields" text="#92999E">
+          Search for a team…
+        </Sample>
+      </Side>
+      <Side source="cas">
+        <Sample name="foreground/secondary" text={cas('foreground/secondary')}>
+          Updated 3 days ago
+        </Sample>
+        <Sample name="foreground/tertiary" text={cas('foreground/tertiary')}>
+          Updated 3 days ago
+        </Sample>
+        <Sample
+          name="foreground/quaternary"
+          text={cas('foreground/quaternary')}
+        >
+          Updated 3 days ago
+        </Sample>
+      </Side>
     </Question>
 
     <Question
       number={2}
-      title="Success and info colours"
-      ask="Today success uses the CRN brand green and info uses the GP2 brand blue. CAS defines success as utilitarian green and info as utilitarian blue, in both products. Should we switch? Note that the CAS pairs are below the 4.5:1 WCAG AA minimum for normal text."
+      title="Success and info messages"
+      ask="Success messages use the CRN green and info messages use the GP2 blue, in both Hubs. CAS has its own green and blue for these. Should we switch to the CAS ones?"
     >
-      <div style={grid('repeat(2, 1fr)')}>
-        {[
-          ['Success today (CRN green)', '#287953', '#E2EEED'],
-          [
-            'Success in CAS',
-            themeHex('colour/foreground/success'),
-            themeHex('colour/background/success'),
-          ],
-          ['Info today (GP2 blue)', '#006A92', '#E6F3F9'],
-          [
-            'Info in CAS',
-            themeHex('colour/foreground/info'),
-            themeHex('colour/background/info'),
-          ],
-        ].map(([label, fg, bg]) => (
-          <TextSample
-            key={label}
-            foreground={fg as string}
-            background={bg as string}
-          >
-            <b>{label}</b>
-            <div>Your changes were saved.</div>
-          </TextSample>
-        ))}
-      </div>
+      <Side source="today" columns={2}>
+        <Sample name="Success" text="#287953" background="#E4F5EE">
+          Your changes were saved.
+        </Sample>
+        <Sample name="Info" text="#006A92" background="#E6F3F9">
+          Reminders are sent every Monday.
+        </Sample>
+      </Side>
+      <Side source="cas" columns={2}>
+        <Sample
+          name="foreground/success on background/success"
+          text={cas('foreground/success')}
+          background={cas('background/success')}
+        >
+          Your changes were saved.
+        </Sample>
+        <Sample
+          name="foreground/info on background/info"
+          text={cas('foreground/info')}
+          background={cas('background/info')}
+        >
+          Reminders are sent every Monday.
+        </Sample>
+      </Side>
     </Question>
 
     <Question
       number={3}
-      title="Colours that are not in CAS"
-      ask="The avatar placeholders and a few accents use colours with no CAS equivalent (cerulean, space, azure, magenta, berry, lilac, iris, mauve, lavender). Which CAS colours should replace them? Note that CAS color-brand uses the ARIA green."
+      title="Colours missing from CAS"
+      ask="These colours have no CAS equivalent. What should replace them?"
     >
-      <p style={muted}>Avatar placeholder pairs today:</p>
-      <div style={grid('repeat(6, 1fr)')}>
+      <h3 style={{ fontSize: '14px', margin: '8px 0 0' }}>
+        Initials of users without a profile photo
+      </h3>
+      <Side source="today" columns={6}>
         {[
-          ['success100 / crn 800', '#287953', legacyHex('success100')],
-          [
-            'warning100 / warning500',
-            legacyHex('warning500'),
-            legacyHex('warning100'),
-          ],
-          ['info100 / info900', legacyHex('info900'), legacyHex('info100')],
-          ['azure / space', legacyHex('space'), legacyHex('azure')],
-          ['lilac / berry', legacyHex('berry'), legacyHex('lilac')],
-          ['lavender / mauve', legacyHex('mauve'), legacyHex('lavender')],
-        ].map(([label, fg, bg]) => (
-          <TextSample
-            key={label}
-            foreground={fg as string}
-            background={bg as string}
+          ['Light green / green', '#E4F5EE', '#287953'],
+          ['Light orange / orange', '#F8EDDE', '#CE801A'],
+          ['Light blue / blue', '#E6F3F9', '#006A92'],
+          ['Pale blue / dark blue', '#E7F7FE', '#004561'],
+          ['Light pink / berry', '#F8EAF7', '#9A2386'],
+          ['Light purple / purple', '#F2EDF5', '#693B77'],
+        ].map(([name, background, text]) => (
+          <Sample
+            key={name}
+            name={name as string}
+            text={text as string}
+            background={background}
           >
-            <div style={{ fontSize: '20px', fontWeight: 700 }}>AB</div>
-            <div style={{ ...mono, fontSize: '10px' }}>{label}</div>
-          </TextSample>
+            <b style={{ fontSize: '20px' }}>AB</b>
+          </Sample>
         ))}
-      </div>
-      <p style={muted}>CAS colour pairs available:</p>
-      <div style={grid('repeat(5, 1fr)')}>
+      </Side>
+      <Side source="cas" columns={5}>
         {['yellow', 'brand', 'green', 'lavender', 'blue'].map((name) => (
-          <TextSample
+          <Sample
             key={name}
-            foreground={themeHex(`colour/foreground/color-${name}`)}
-            background={themeHex(`colour/background/color-${name}`)}
+            name={`color-${name}${name === 'brand' ? ' (ARIA green)' : ''}`}
+            text={cas(`foreground/color-${name}`)}
+            background={cas(`background/color-${name}`)}
           >
-            <div style={{ fontSize: '20px', fontWeight: 700 }}>AB</div>
-            <div style={{ ...mono, fontSize: '10px' }}>color-{name}</div>
-          </TextSample>
+            <b style={{ fontSize: '20px' }}>AB</b>
+          </Sample>
         ))}
-      </div>
-      <p style={muted}>Other accents today:</p>
-      <div style={{ display: 'flex', gap: '12px' }}>
-        {['cerulean', 'magenta', 'iris'].map((name) => (
-          <span
+      </Side>
+
+      <h3 style={{ fontSize: '14px', margin: '24px 0 0' }}>Gradients</h3>
+      <Side source="today" columns={2}>
+        <GradientSample
+          name="Bar at the top of the header"
+          stops={['#008CC6', '#34A270']}
+        />
+        <GradientSample
+          name="Dashboard banner"
+          stops={['#CF2FB3', '#008CC6']}
+        />
+        <GradientSample
+          name="Onboarding footer"
+          stops={['#8C4E9F', '#008CC6']}
+        />
+        <GradientSample
+          name="Event attendance bar"
+          stops={['#8C4E9F', '#0C8DC3', '#1491B2', '#299C86', '#34A270']}
+        />
+      </Side>
+      <Side source="cas" columns={3}>
+        {Object.entries(colour.general.gradient).map(([name, stops]) => (
+          <GradientSample
             key={name}
-            style={{ display: 'inline-flex', gap: '6px', alignItems: 'center' }}
-          >
-            <Swatch background={legacyHex(name)} size={24} />
-            {code(name)}
-          </span>
+            name={`gradient/${name}`}
+            stops={Object.values(stops)}
+          />
         ))}
-      </div>
+      </Side>
+
+      <h3 style={{ fontSize: '14px', margin: '24px 0 0' }}>
+        Tooltip background
+      </h3>
+      <Side source="today" columns={3}>
+        <Sample name="Tooltip" text="#FFFFFF" background="#004561">
+          Copied to clipboard
+        </Sample>
+      </Side>
+      <Side source="cas" columns={3}>
+        <Sample
+          name="foreground/primary"
+          text="#FFFFFF"
+          background={cas('foreground/primary')}
+        >
+          Copied to clipboard
+        </Sample>
+        <Sample
+          name="brand/gp2/900"
+          text="#FFFFFF"
+          background={colour.brand.gp2[900]}
+        >
+          Copied to clipboard
+        </Sample>
+      </Side>
     </Question>
 
     <Question
       number={4}
-      title="Error text on the error background"
-      ask="CAS pairs foreground/error with background/error at 4.01:1, below the 4.5:1 WCAG AA minimum for normal text (used by error toasts and pills). Keep it, or use a darker red for text?"
+      title="Coloured text on light backgrounds is hard to read"
+      ask="In CAS, coloured text on a light background of the same colour is below the minimum for readable text. Both rows below are CAS colours: can we use the darker CAS shade for the text?"
     >
-      <div style={grid('repeat(2, 1fr)')}>
-        <TextSample
-          foreground={themeHex('colour/foreground/error')}
-          background={themeHex('colour/background/error')}
-        >
-          <b>CAS today:</b> foreground/error on background/error
-        </TextSample>
-        <TextSample
-          foreground="#B42318"
-          background={themeHex('colour/background/error')}
-        >
-          <b>Option:</b> red 700 on background/error
-        </TextSample>
-      </div>
+      <Side source="cas" columns={4}>
+        {(['error', 'warning', 'success', 'info'] as const).map((status) => (
+          <Sample
+            key={status}
+            name={`foreground/${status}`}
+            text={cas(`foreground/${status}`)}
+            background={cas(`background/${status}`)}
+          >
+            Something needs your attention.
+          </Sample>
+        ))}
+      </Side>
+      <Side source="option" columns={4}>
+        {(
+          [
+            ['utilitarian/red/700', colour.utilitarian.red[700], 'error'],
+            [
+              'utilitarian/orange/700',
+              colour.utilitarian.orange[700],
+              'warning',
+            ],
+            ['utilitarian/green/700', colour.utilitarian.green[700], 'success'],
+            ['utilitarian/blue/700', colour.utilitarian.blue[700], 'info'],
+          ] as const
+        ).map(([name, text, status]) => (
+          <Sample
+            key={name}
+            name={name}
+            text={text}
+            background={cas(`background/${status}`)}
+          >
+            Something needs your attention.
+          </Sample>
+        ))}
+      </Side>
     </Question>
 
     <Question
       number={5}
-      title="Disabled state"
-      ask="CAS now makes disabled controls neutral 300 text on a neutral 100 background with a neutral 500 border. It is much lighter than today. WCAG does not require contrast for disabled controls, but is this the intended look?"
+      title="Disabled buttons"
+      ask="In CAS a disabled button has pale grey text on grey with a dark grey border, which makes it stand out more than a normal button. Is that intended?"
     >
-      <div style={grid('repeat(2, 1fr)')}>
-        {[
-          ['Disabled today', '#566066', '#EEF3F6', '#E3E6E8'],
-          [
-            'Disabled in CAS',
-            themeHex('colour/foreground/disabled'),
-            themeHex('colour/background/disabled'),
-            themeHex('colour/border/disabled'),
-          ],
-        ].map(([label, fg, bg, border]) => (
-          <div key={label}>
-            <div style={muted}>{label}</div>
-            <span
-              style={{
-                display: 'inline-block',
-                padding: '8px 16px',
-                borderRadius: '4px',
-                color: fg,
-                background: bg,
-                border: `1px solid ${border}`,
-                fontWeight: 500,
-              }}
-            >
-              Save
-            </span>{' '}
-            <ContrastBadge
-              foreground={fg as string}
-              background={bg as string}
-            />
-          </div>
-        ))}
-      </div>
+      <Side source="today" columns={2}>
+        <ButtonSample
+          name="Disabled button"
+          text="#4D646B"
+          background="#EDF1F3"
+          border="#DFE5EA"
+        />
+      </Side>
+      <Side source="cas" columns={2}>
+        <ButtonSample
+          name="Disabled button"
+          text={cas('foreground/disabled')}
+          background={cas('background/disabled')}
+          border={cas('border/disabled')}
+        />
+        <ButtonSample
+          name="Normal button, for comparison"
+          text={cas('foreground/button/secondary/default')}
+          background={cas('background/button/secondary/default')}
+          border={cas('border/button/secondary/default')}
+        />
+      </Side>
     </Question>
 
     <Question
       number={6}
-      title="Brand-coloured text, links and primary buttons"
-      ask="Brand-coloured text and links, and white text on the primary button, stay below 4.5:1 (the WCAG AA minimum for normal text), today and with the CAS tokens. Is that acceptable, or should text use a darker brand step?"
+      title="Links and main buttons are hard to read"
+      ask="Brand-coloured links and the white text on the main button are below the minimum for readable text in both Hubs, today and in CAS. Keep them, or use a darker green or blue?"
     >
-      <div style={grid('repeat(3, 1fr)')}>
-        {[
-          ['CRN link today (crn 500)', '#34A270'],
-          ['CRN foreground/brand', themeHex('colour/foreground/brand', 'crn')],
-          ['GP2 foreground/brand', themeHex('colour/foreground/brand', 'gp2')],
-        ].map(([label, hex]) => (
-          <TextSample key={label} foreground={hex as string} background={white}>
-            <div style={mono}>{label}</div>
-            <u>Read the full guidelines</u>
-          </TextSample>
-        ))}
-      </div>
-      <div style={{ ...grid('repeat(2, 1fr)'), marginTop: '12px' }}>
-        {(['crn', 'gp2'] as const).map((product) => (
-          <TextSample
-            key={product}
-            foreground={themeHex(
-              'colour/foreground/button/primary/default',
-              product,
-            )}
-            background={themeHex(
-              'colour/background/button/primary/default',
-              product,
-            )}
-          >
-            <b>{product.toUpperCase()} primary button</b>
-          </TextSample>
-        ))}
-      </div>
+      <Side source="today" columns={4}>
+        <Sample name="CRN link" text="#34A270">
+          <u>Read the guidelines</u>
+        </Sample>
+        <Sample name="GP2 link" text="#0C8DC3">
+          <u>Read the guidelines</u>
+        </Sample>
+        <Sample name="CRN main button" text="#FFFFFF" background="#34A270">
+          <b>Save</b>
+        </Sample>
+        <Sample name="GP2 main button" text="#FFFFFF" background="#0C8DC3">
+          <b>Save</b>
+        </Sample>
+      </Side>
+      <Side source="cas" columns={4}>
+        <Sample
+          name="CRN foreground/brand"
+          text={cas('foreground/brand', 'crn')}
+        >
+          <u>Read the guidelines</u>
+        </Sample>
+        <Sample
+          name="GP2 foreground/brand"
+          text={cas('foreground/brand', 'gp2')}
+        >
+          <u>Read the guidelines</u>
+        </Sample>
+        <Sample
+          name="CRN background/button/primary/default"
+          text={cas('foreground/button/primary/default', 'crn')}
+          background={cas('background/button/primary/default', 'crn')}
+        >
+          <b>Save</b>
+        </Sample>
+        <Sample
+          name="GP2 background/button/primary/default"
+          text={cas('foreground/button/primary/default', 'gp2')}
+          background={cas('background/button/primary/default', 'gp2')}
+        >
+          <b>Save</b>
+        </Sample>
+      </Side>
+      <Side source="option" columns={4}>
+        <Sample name="brand/crn/800" text={colour.brand.crn[800]}>
+          <u>Read the guidelines</u>
+        </Sample>
+        <Sample name="brand/gp2/800" text={colour.brand.gp2[800]}>
+          <u>Read the guidelines</u>
+        </Sample>
+        <Sample
+          name="brand/crn/800 (the CAS hover colour)"
+          text="#FFFFFF"
+          background={colour.brand.crn[800]}
+        >
+          <b>Save</b>
+        </Sample>
+        <Sample
+          name="brand/gp2/800 (the CAS hover colour)"
+          text="#FFFFFF"
+          background={colour.brand.gp2[800]}
+        >
+          <b>Save</b>
+        </Sample>
+      </Side>
     </Question>
   </Page>
 );
