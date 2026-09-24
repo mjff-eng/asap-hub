@@ -2415,6 +2415,20 @@
           "com.figma.variableId": "VariableID:3006:4439"
         }
       },
+      "150": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8298816680908203, 0.8374753594398499, 0.8461538553237915
+          ],
+          "alpha": 1,
+          "hex": "#D4D6D8"
+        },
+        "$extensions": {
+          "com.figma.variableId": "VariableID:6406:5649"
+        }
+      },
       "200": {
         "$type": "color",
         "$value": {
