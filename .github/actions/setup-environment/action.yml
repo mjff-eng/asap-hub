@@ -170,6 +170,42 @@ outputs:
   crn-ses-region:
     description: 'CRN SES Region'
     value: ${{ steps.vars.outputs.crn-ses-region }}
+  demo-app-url:
+    description: 'Demo APP Url'
+    value: ${{ steps.vars.outputs.demo-app-url }}
+  demo-auth0-audience:
+    description: 'Demo Auth0 Audience'
+    value: ${{ steps.vars.outputs.demo-auth0-audience }}
+  demo-auth0-client-id:
+    description: 'Demo Auth0 Client ID'
+    value: ${{ steps.vars.outputs.demo-auth0-client-id }}
+  demo-auth0-domain:
+    description: 'Demo Auth0 Domain'
+    value: ${{ steps.vars.outputs.demo-auth0-domain }}
+  demo-aws-acm-certificate-arn:
+    description: 'Demo AWS ACM Certificate ARN'
+    value: ${{ steps.vars.outputs.demo-aws-acm-certificate-arn }}
+  demo-cloudfront-public-key-b64:
+    description: 'Demo CloudFront signing public key, base64 encoded PEM'
+    value: ${{ steps.vars.outputs.demo-cloudfront-public-key-b64 }}
+  demo-email-sender:
+    description: 'Demo SES sender address'
+    value: ${{ steps.vars.outputs.demo-email-sender }}
+  demo-hosted-zone-name:
+    description: 'Demo Route53 hosted zone name'
+    value: ${{ steps.vars.outputs.demo-hosted-zone-name }}
+  demo-hostname:
+    description: 'Demo Hostname'
+    value: ${{ steps.vars.outputs.demo-hostname }}
+  demo-ses-region:
+    description: 'Demo SES Region'
+    value: ${{ steps.vars.outputs.demo-ses-region }}
+  demo-subnet-ids:
+    description: 'Demo encoder subnet ids, comma separated'
+    value: ${{ steps.vars.outputs.demo-subnet-ids }}
+  demo-vpc-id:
+    description: 'Demo encoder VPC id'
+    value: ${{ steps.vars.outputs.demo-vpc-id }}
   gp2-algolia-api-key-name:
     description: 'GP2 Algolia Api key SSM Name'
     value: ${{ steps.vars.outputs.gp2-algolia-api-key-name }}

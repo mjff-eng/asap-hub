@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`titleCardSvg renders a centred heading 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect x="0" y="0" width="1920" height="1080" fill="#0b0b0f"/>
+  <text x="960" y="561" font-family="'Source Serif Pro', Georgia, 'Times New Roman', serif" font-size="97" font-weight="600" fill="#ffffff" text-anchor="middle">Attendance</text>
+</svg>"
+`;
+
+exports[`titleCardSvg renders a heading with a subtitle 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect x="0" y="0" width="1920" height="1080" fill="#0b0b0f"/>
+  <text x="960" y="519" font-family="'Source Serif Pro', Georgia, 'Times New Roman', serif" font-size="97" font-weight="600" fill="#ffffff" text-anchor="middle">Attendance</text>
+  <text x="960" y="626" font-family="Roboto, Inter, 'Helvetica Neue', Arial, sans-serif" font-size="39" font-weight="400" fill="#b9b9c4" text-anchor="middle">How the hub tracks who came to what</text>
+</svg>"
+`;
+
+exports[`titleCardSvg scales every dimension from the canvas 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect x="0" y="0" width="1280" height="720" fill="#0b0b0f"/>
+  <text x="640" y="374" font-family="'Source Serif Pro', Georgia, 'Times New Roman', serif" font-size="65" font-weight="600" fill="#ffffff" text-anchor="middle">Attendance</text>
+</svg>"
+`;
+
+exports[`titleCardSvg wraps a long heading onto at most three lines 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect x="0" y="0" width="1920" height="1080" fill="#0b0b0f"/>
+  <text x="960" y="445" font-family="'Source Serif Pro', Georgia, 'Times New Roman', serif" font-size="97" font-weight="600" fill="#ffffff" text-anchor="middle">A heading so long that it can</text>
+  <text x="960" y="561" font-family="'Source Serif Pro', Georgia, 'Times New Roman', serif" font-size="97" font-weight="600" fill="#ffffff" text-anchor="middle">never fit on a single line of</text>
+  <text x="960" y="678" font-family="'Source Serif Pro', Georgia, 'Times New Roman', serif" font-size="97" font-weight="600" fill="#ffffff" text-anchor="middle">this title card and then so...</text>
+</svg>"
+`;
