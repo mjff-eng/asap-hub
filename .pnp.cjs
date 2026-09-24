@@ -10345,11 +10345,11 @@ const RAW_RUNTIME_STATE =
     ],\
     [\
       "stream-chain",\
-      "npm:2.2.5"\
+      "npm:4.2.5"\
     ],\
     [\
       "stream-json",\
-      "npm:1.8.0"\
+      "npm:3.5.0"\
     ],\
     [\
       "stream-promise",\
@@ -12935,7 +12935,7 @@ const RAW_RUNTIME_STATE =
           ["serverless-offline-ssm", "npm:6.2.0"],\
           ["serverless-s3-sync", "virtual:b09dff234a8d41526156a9c113e5b12bcc69471aba634580b1e50808d22ba1c050b6af429d6e7530dd1e40599673c5e0bf8115d5c53448ebd1875cdefe5030cf#npm:3.2.0"],\
           ["source-map-support", "npm:0.5.21"],\
-          ["stream-json", "npm:1.8.0"],\
+          ["stream-json", "npm:3.5.0"],\
           ["supertest", "npm:6.3.3"],\
           ["ts-node", "virtual:190ef0160ba946cf7e73459640ba1e0562856a9e57af12873e04856ddb4d0a78826458a3c4484c2dd9a1b3579fe82cb5668480512120173800bfd772f135d982#npm:10.9.2"],\
           ["uuid", "npm:8.3.2"],\
@@ -67282,20 +67282,20 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["stream-chain", [\
-      ["npm:2.2.5", {\
-        "packageLocation": "./.yarn/cache/stream-chain-npm-2.2.5-ad363478fb-f9c65fe212.zip/node_modules/stream-chain/",\
+      ["npm:4.2.5", {\
+        "packageLocation": "./.yarn/cache/stream-chain-npm-4.2.5-1ad4eb5420-a61dfdab1d.zip/node_modules/stream-chain/",\
         "packageDependencies": [\
-          ["stream-chain", "npm:2.2.5"]\
+          ["stream-chain", "npm:4.2.5"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["stream-json", [\
-      ["npm:1.8.0", {\
-        "packageLocation": "./.yarn/cache/stream-json-npm-1.8.0-0293e830e8-a1cc448dd7.zip/node_modules/stream-json/",\
+      ["npm:3.5.0", {\
+        "packageLocation": "./.yarn/cache/stream-json-npm-3.5.0-2fb300f0b3-7c144ddb42.zip/node_modules/stream-json/",\
         "packageDependencies": [\
-          ["stream-chain", "npm:2.2.5"],\
-          ["stream-json", "npm:1.8.0"]\
+          ["stream-chain", "npm:4.2.5"],\
+          ["stream-json", "npm:3.5.0"]\
         ],\
         "linkType": "HARD"\
       }]\
