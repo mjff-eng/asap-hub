@@ -309,7 +309,7 @@ __metadata:
     prettier: "npm:3.1.1"
     pump: "npm:3.0.3"
     through2-concurrent: "npm:2.0.0"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
     yargs: "npm:17.3.1"
   bin:
     asap-cli: build-cjs/cli.js
@@ -917,7 +917,7 @@ __metadata:
     minimist: "npm:^1.2.8"
     prettier: "npm:3.1.1"
     ts-node: "npm:10.9.2"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
   languageName: unknown
   linkType: soft
 
@@ -1027,7 +1027,7 @@ __metadata:
     typescript: "npm:4.9.5"
     use-debounce: "npm:8.0.4"
     use-deep-compare-effect: "npm:1.6.1"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
     vite: "npm:5.4.21"
     vite-bundle-visualizer: "npm:^1.2.1"
     webpack: "npm:5.104.1"
@@ -1198,7 +1198,7 @@ __metadata:
     stream-json: "npm:1.8.0"
     supertest: "npm:6.3.3"
     ts-node: "npm:10.9.2"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
     xlsx: "npm:^0.18.5"
     yargs: "npm:17.3.1"
   dependenciesMeta:
@@ -1268,7 +1268,7 @@ __metadata:
     core-js: "npm:3.34.0"
     date-fns: "npm:2.30.0"
     jsonwebtoken: "npm:9.0.1"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
   languageName: unknown
   linkType: soft
 
@@ -1316,7 +1316,7 @@ __metadata:
     react-test-renderer: "npm:18.3.1"
     react-titled: "npm:1.1.1"
     streamsaver: "npm:2.0.6"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
     web-streams-polyfill: "npm:3.2.1"
   peerDependencies:
     "@asap-hub/model": "workspace:*"
@@ -1482,7 +1482,7 @@ __metadata:
     typescript: "npm:4.9.5"
     use-debounce: "npm:8.0.4"
     use-deep-compare-effect: "npm:1.6.1"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
     vite: "npm:5.4.21"
   languageName: unknown
   linkType: soft
@@ -1610,7 +1610,7 @@ __metadata:
     source-map-support: "npm:0.5.21"
     supertest: "npm:6.3.3"
     ts-node: "npm:10.9.2"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
     yargs: "npm:17.3.1"
   languageName: unknown
   linkType: soft
@@ -1754,7 +1754,7 @@ __metadata:
     unist-util-visit: "npm:2.0.3"
     use-debounce: "npm:8.0.4"
     util: "npm:0.12.5"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
   peerDependencies:
     "@asap-hub/react-context": "*"
     react: ^18.3.0
@@ -1876,7 +1876,7 @@ __metadata:
     source-map-support: "npm:0.5.21"
     supertest: "npm:6.3.3"
     through2-concurrent: "npm:2.0.0"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
   languageName: unknown
   linkType: soft
 
@@ -18617,7 +18617,7 @@ __metadata:
     ts-node: "npm:10.9.2"
     turbo: "npm:^1.11.3"
     typescript: "npm:4.9.5"
-    uuid: "npm:8.3.2"
+    uuid: "npm:11.1.1"
   dependenciesMeta:
     aws-sdk:
       built: false
@@ -42084,6 +42084,15 @@ __metadata:
   version: 1.1.0
   resolution: "uuid-parse@npm:1.1.0"
   checksum: 10/8a384d34c04a6bc5b33262f431026e2a923cfcfb72996e2daa2fc5de2f0738bac41c0182fdcf1a22d6391b725c625eca0bdbd9d36f1c01ce5d24b1d66601d2af
+  languageName: node
+  linkType: hard
+
+"uuid@npm:11.1.1":
+  version: 11.1.1
+  resolution: "uuid@npm:11.1.1"
+  bin:
+    uuid: dist/esm/bin/uuid
+  checksum: 10/16411d3dc12a08d6691616c09a75e66a7f900ba1beef6628a76fe0602f82fae2ee537b564d0b7bc95c24f58d059ca9b58c75a1e806118efb50e17822ff00ddd2
   languageName: node
   linkType: hard
 
