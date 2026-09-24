@@ -102,6 +102,7 @@ export { default as LockIcon } from './lock';
 export { default as lockSmallIcon } from './lock-small';
 export { default as menuIcon } from './menu';
 export { default as MemberIcon } from './member';
+export { default as MilestoneIcon } from './milestone';
 export { default as minusRectIcon } from './minus-rect';
 export { default as MoneyIcon } from './money';
 export { default as nestedRowIcon } from './nested-row';

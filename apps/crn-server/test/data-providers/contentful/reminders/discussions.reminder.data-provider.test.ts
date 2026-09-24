@@ -96,6 +96,11 @@ describe('Reminders data provider', () => {
             items: [message],
           },
         });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          milestonesCollection: {
+            items: [],
+          },
+        });
       };
 
       const expectEmptyResult = async () => {
@@ -146,6 +151,11 @@ describe('Reminders data provider', () => {
         });
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           messagesCollection: {
+            items: [],
+          },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          milestonesCollection: {
             items: [],
           },
         });
@@ -327,6 +337,11 @@ describe('Reminders data provider', () => {
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           messagesCollection: {
             items: [messageItem],
+          },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          milestonesCollection: {
+            items: [],
           },
         });
 
@@ -535,6 +550,11 @@ describe('Reminders data provider', () => {
             items: message ? [message] : [],
           },
         });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          milestonesCollection: {
+            items: [],
+          },
+        });
       };
 
       test('first author of the manuscript should see discussion started reminders with the project name', async () => {
@@ -652,6 +672,11 @@ describe('Reminders data provider', () => {
 
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           messagesCollection: {
+            items: [],
+          },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          milestonesCollection: {
             items: [],
           },
         });

@@ -332,6 +332,133 @@ export const FETCH_REMINDERS = gql`
   }
 `;
 
+export const FETCH_MILESTONE_REMINDERS = gql`
+  query FetchMilestoneReminders(
+    $milestoneFilter: MilestonesFilter
+    $limit: Int!
+    $skip: Int!
+  ) {
+    milestonesCollection(
+      where: $milestoneFilter
+      limit: $limit
+      skip: $skip
+      order: [sys_publishedAt_DESC]
+    ) {
+      total
+      items {
+        sys {
+          id
+          firstPublishedAt
+          publishedAt
+        }
+        description
+        status
+        bulkImported
+        statusUpdatedAt
+        statusUpdatedBy {
+          sys {
+            id
+          }
+        }
+        outputsLinkedAt
+        outputsLinkedBy {
+          sys {
+            id
+          }
+          firstName
+          lastName
+        }
+        relatedArticlesCollection(limit: 1) {
+          total
+        }
+        linkedFrom {
+          aimsCollection(limit: 10) {
+            total
+            items {
+              sys {
+                id
+              }
+              linkedFrom {
+                supplementGrantCollection(limit: 1) {
+                  items {
+                    sys {
+                      id
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const FETCH_MILESTONE_REMINDER_PROJECTS = gql`
+  query FetchMilestoneReminderProjects(
+    $projectFilter: ProjectsFilter
+    $limit: Int!
+    $skip: Int!
+  ) {
+    projectsCollection(where: $projectFilter, limit: $limit, skip: $skip) {
+      total
+      items {
+        sys {
+          id
+        }
+        title
+        projectType
+        originalGrantAimsCollection(limit: 50) {
+          total
+          items {
+            sys {
+              id
+            }
+          }
+        }
+        supplementGrant {
+          aimsCollection(limit: 50) {
+            total
+            items {
+              sys {
+                id
+              }
+            }
+          }
+        }
+        membersCollection(limit: 100) {
+          total
+          items {
+            role
+            projectMember {
+              __typename
+              ... on Users {
+                sys {
+                  id
+                }
+              }
+              ... on Teams {
+                sys {
+                  id
+                }
+              }
+            }
+          }
+        }
+        scientificFacilitatorCollection(limit: 10) {
+          total
+          items {
+            sys {
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const FETCH_TEAM_PROJECT_MANAGER = gql`
   query FetchTeamProjectManager($id: String!) {
     teamMembershipCollection(
