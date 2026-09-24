@@ -153,11 +153,7 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
               <div css={sectionStyles}>
                 <Headline3 noMargin>Privacy Preference Center</Headline3>
 
-                <Paragraph
-                  noMargin
-                  accent="tertiary"
-                  styles={paragraphStyles}
-                >
+                <Paragraph noMargin accent="tertiary" styles={paragraphStyles}>
                   When you visit our website, it may store or retrieve data in
                   your browser. This storage is often necessary for the basic
                   functionality of the website and also for analytics. Privacy
