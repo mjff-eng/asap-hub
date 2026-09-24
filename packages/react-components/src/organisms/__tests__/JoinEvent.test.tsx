@@ -53,7 +53,7 @@ it('renders a disabled link if the meeting link is missing', () => {
   );
   expect(getByText(/join.+meeting/i).closest('a')).not.toHaveStyleRule(
     'background-color',
-    colour.background.tertiary,
+    colour.background.disabled,
   );
 
   rerender(
@@ -65,7 +65,7 @@ it('renders a disabled link if the meeting link is missing', () => {
   );
   expect(getByText(/join.+meeting/i).closest('a')).toHaveStyleRule(
     'background-color',
-    colour.background.tertiary,
+    colour.background.disabled,
   );
 });
 it('renders a disabled link if the meeting starts more than 24h from current time', () => {
@@ -82,7 +82,7 @@ it('renders a disabled link if the meeting starts more than 24h from current tim
 
   expect(getByText(/join.+meeting/i).closest('a')).toHaveStyleRule(
     'background-color',
-    colour.background.tertiary,
+    colour.background.disabled,
   );
 });
 
