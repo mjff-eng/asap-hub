@@ -86,7 +86,7 @@ const activeTextStyles = ({
   });
 const disabledTextStyles = css({
   svg: {
-    stroke: colour.neutral[200],
+    stroke: colour.foreground.disabled,
   },
 });
 

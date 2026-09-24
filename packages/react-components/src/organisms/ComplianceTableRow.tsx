@@ -30,7 +30,7 @@ const rowStyles = css({
     borderBottom: 'none',
   },
   ':nth-of-type(even) td': {
-    background: colour.background.secondary,
+    background: colour.neutral[50],
   },
   ':nth-of-type(odd) td': {
     background: '#fff',

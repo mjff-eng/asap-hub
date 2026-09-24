@@ -64,7 +64,7 @@ const headerStyles = css({
 const rowStyles = css({
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':nth-of-type(even)': {
-    background: colour.background.secondary,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',

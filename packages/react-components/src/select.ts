@@ -24,11 +24,11 @@ export type OptionsType<T> = readonly T[];
 const { ...baseStyles } = styles;
 
 const disabledStyles = {
-  color: colour.foreground.tertiary,
+  color: colour.foreground.disabled,
   svg: {
-    fill: colour.foreground.tertiary,
+    fill: colour.foreground.disabled,
   },
-  backgroundColor: colour.background.tertiary,
+  backgroundColor: colour.background.disabled,
 };
 
 const baseSelectStyles = {
@@ -124,7 +124,7 @@ export const reactSelectStyles = <
       margin: 0,
       color: getValue()?.some((option) => option.value !== '')
         ? 'unset'
-        : colour.neutral[200],
+        : colour.foreground.tertiary,
     }),
     valueContainer: (provided) => ({
       ...provided,
@@ -133,7 +133,7 @@ export const reactSelectStyles = <
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: isInvalid ? colour.foreground.error : colour.neutral[600],
+      color: isInvalid ? colour.foreground.error : colour.foreground.tertiary,
       opacity: isInvalid ? 0.4 : provided.opacity,
     }),
     menu: (provided: CSSObject) => ({

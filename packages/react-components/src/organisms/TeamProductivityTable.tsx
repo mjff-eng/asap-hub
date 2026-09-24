@@ -49,7 +49,7 @@ const rowStyles = css({
     borderBottom: 'none',
   },
   ':nth-of-type(2n+3)': {
-    background: colour.background.secondary,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',

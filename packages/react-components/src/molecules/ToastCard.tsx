@@ -36,7 +36,7 @@ const iconStyles = css({
 
 const mutedIconStyles = css({
   'svg path[stroke]': {
-    stroke: colour.neutral[200],
+    stroke: colour.foreground.disabled,
   },
 });
 

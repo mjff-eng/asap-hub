@@ -80,8 +80,8 @@ const toBeAnnouncedStyle = css({
 const previewStyle = {
   maxHeight: rem(69),
   overflow: 'hidden',
-  background: `linear-gradient(180deg, ${colour.neutral[600]} 26.56%, ${
-    colorWithTransparency(colorFromHex(colour.neutral[600]), 0).rgba
+  background: `linear-gradient(180deg, ${colour.neutral[700]} 26.56%, ${
+    colorWithTransparency(colorFromHex(colour.neutral[700]), 0).rgba
   } 100%)`,
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',

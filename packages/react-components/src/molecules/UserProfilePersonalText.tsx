@@ -123,7 +123,7 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
             {institution}
           </>
         ) : isOwnProfile ? (
-          <span css={{ color: colour.neutral[200] }}>
+          <span css={{ color: colour.foreground.tertiary }}>
             Where do you work and what's your position?
           </span>
         ) : null}
@@ -228,7 +228,9 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
               {formatUserLocation(city, stateOrProvince, country)}
             </Ellipsis>
           ) : (
-            <span css={{ color: colour.neutral[200] }}>Add your location</span>
+            <span css={{ color: colour.foreground.tertiary }}>
+              Add your location
+            </span>
           )}
         </span>
       )}

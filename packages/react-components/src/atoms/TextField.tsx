@@ -26,10 +26,10 @@ type FieldType =
   | 'number';
 
 const disabledStyles = css({
-  color: colour.foreground.tertiary,
-  backgroundColor: colour.background.tertiary,
+  color: colour.foreground.disabled,
+  backgroundColor: colour.background.disabled,
   '&[type="date"]': {
-    color: colour.foreground.tertiary,
+    color: colour.foreground.disabled,
   },
 });
 
@@ -88,7 +88,7 @@ const textFieldStyles = (
     backgroundSize: `auto ${rem(indicatorSize)}`,
 
     '::placeholder': {
-      color: colour.neutral[200],
+      color: colour.foreground.tertiary,
     },
     '&[type="date"]': {
       color: hasValue ? '#000' : colour.neutral[400],
