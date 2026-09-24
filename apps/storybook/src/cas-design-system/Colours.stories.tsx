@@ -916,5 +916,51 @@ export const DesignQuestions = () => (
         </Sample>
       </Side>
     </Question>
+
+    <Section title="How to read the readability badges">
+      <p style={{ marginTop: 0 }}>
+        The number on each badge, for example 3.51:1, is the{' '}
+        <b>contrast ratio</b> between the text colour and its background. It
+        compares how bright the two colours are. It goes from 1:1 (text the same
+        colour as its background, invisible) to 21:1 (black on white). The
+        higher the number, the easier the text is to read.
+      </p>
+      <p>
+        The Web Content Accessibility Guidelines (WCAG) set the minimums most
+        websites follow (level AA):
+      </p>
+      <ul style={{ paddingLeft: '20px' }}>
+        <li>
+          <b>4.5:1 for normal text</b>, which covers most text on the Hub.
+        </li>
+        <li>
+          <b>3:1 for large text</b> (24px and above, or 19px and above in bold),
+          and for icons and borders that people need to see.
+        </li>
+        <li>
+          No minimum for disabled buttons and fields, since they can&apos;t be
+          used.
+        </li>
+      </ul>
+      <p>The badges follow those minimums:</p>
+      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+        <span>
+          <ContrastBadge foreground="#1C1F21" background="#FFFFFF" /> 4.5:1 or
+          more: fine for any text
+        </span>
+        <span>
+          <ContrastBadge foreground="#079455" background="#DCFAE6" /> 3:1 to
+          4.5:1: fine for large text and icons only
+        </span>
+        <span>
+          <ContrastBadge foreground="#92999E" background="#FFFFFF" /> below 3:1:
+          too faint for any text
+        </span>
+      </div>
+      <p style={muted}>
+        So a badge showing 3.51:1 means the colour pair is fine for a large
+        heading or an icon, but too faint for normal-sized text.
+      </p>
+    </Section>
   </Page>
 );
