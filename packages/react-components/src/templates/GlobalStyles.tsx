@@ -3,7 +3,7 @@ import { FC } from 'react';
 import emotionNormalize from 'emotion-normalize';
 
 import { fontStyles } from '../text';
-import { themes } from '../theme';
+import { Product, themes, themeVariables } from '../theme';
 import { rem } from '../pixels';
 import { neutral300, neutral700, neutral800 } from '../colors';
 
@@ -39,9 +39,18 @@ const styles = {
     background: neutral800.rgb,
   },
 } as const;
-const GlobalStyles: FC<Record<string, never>> = () => (
+type GlobalStylesProps = {
+  readonly product?: Product;
+};
+const GlobalStyles: FC<GlobalStylesProps> = ({ product = 'crn' }) => (
   <>
     <Global styles={emotionNormalize} />
+    <Global
+      styles={{
+        ':root': themeVariables(product),
+        '[data-app="gp2"]': themeVariables('gp2'),
+      }}
+    />
     <Global styles={styles} />
   </>
 );
