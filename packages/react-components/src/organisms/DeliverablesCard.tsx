@@ -67,7 +67,7 @@ const DeliverablesCard: React.FC<DeliverablesCardProps> = ({
     <Card padding={false}>
       <div css={paddingStyles}>
         <Headline3>Purpose</Headline3>
-        <Paragraph accent="neutral900">
+        <Paragraph accent="tertiary">
           The deliverables of this working group are:
         </Paragraph>
         <div css={[deliverablesRowStyles, desktopTitles]}>
@@ -84,7 +84,7 @@ const DeliverablesCard: React.FC<DeliverablesCardProps> = ({
               <div css={mobileTitle}>
                 <Headline5>Deliverables</Headline5>
               </div>
-              <Paragraph accent="neutral900">{description}</Paragraph>
+              <Paragraph accent="tertiary">{description}</Paragraph>
               <div css={mobileTitle}>
                 <Headline5>Status</Headline5>
               </div>

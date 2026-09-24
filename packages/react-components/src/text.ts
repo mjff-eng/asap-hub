@@ -143,14 +143,13 @@ export const headlineStyles = {
 } as const;
 
 export type AccentColorName =
-  | 'neutral900'
-  | 'charcoal'
-  | 'error500'
-  | 'warning500'
-  | 'success100'
-  | 'cerulean'
-  | 'space'
-  | 'berry'
-  | 'magenta'
-  | 'iris'
-  | 'mauve';
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'quaternary'
+  | 'brand'
+  | 'error'
+  | 'warning'
+  | 'success'
+  | 'info'
+  | 'disabled';

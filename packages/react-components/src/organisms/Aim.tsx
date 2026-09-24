@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { info100, info500, colour } from '../colors';
+import { colour } from '../colors';
 import { useTextTruncation } from '../hooks';
 import {
   descriptionContainerStyles,
@@ -52,8 +52,8 @@ const aimNumberBadgeStyles = css({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: info100.rgb,
-  color: info500.rgb,
+  backgroundColor: colour.background.info,
+  color: colour.foreground.info,
   fontSize: rem(14),
   borderRadius: rem(12),
   height: rem(24),

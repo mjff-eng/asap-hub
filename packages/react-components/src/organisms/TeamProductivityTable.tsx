@@ -12,7 +12,7 @@ import { PageControls, PerformanceCard } from '..';
 
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { neutral200, colour } from '../colors';
+import { colour } from '../colors';
 import {
   AlphabeticalSortingIcon,
   InactiveBadgeIcon,
@@ -49,7 +49,7 @@ const rowStyles = css({
     borderBottom: 'none',
   },
   ':nth-of-type(2n+3)': {
-    background: neutral200.rgb,
+    background: colour.background.secondary,
   },
   ':last-child': {
     borderBottom: 'none',

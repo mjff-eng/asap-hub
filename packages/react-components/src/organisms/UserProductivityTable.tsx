@@ -12,7 +12,7 @@ import { PageControls, PerformanceCard } from '..';
 
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { neutral200, neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import {
   AlphabeticalSortingIcon,
   alumniBadgeIcon,
@@ -50,7 +50,7 @@ const rowStyles = css({
     borderBottom: 'none',
   },
   ':nth-of-type(2n+3)': {
-    background: neutral200.rgb,
+    background: colour.background.secondary,
   },
   ':last-child': {
     borderBottom: 'none',
@@ -83,7 +83,7 @@ const rowValueStyles = css({
 
 const counterStyle = css({
   display: 'inline-flex',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   marginLeft: rem(9),
   textAlign: 'center',
   minWidth: rem(24),

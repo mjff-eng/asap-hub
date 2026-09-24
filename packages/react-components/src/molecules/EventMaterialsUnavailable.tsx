@@ -34,7 +34,7 @@ const EventMaterialUnavailable: React.FC<Record<string, never>> = () => {
       >
         {paperClipIcon}
         <Headline3>No meeting materials available.</Headline3>
-        <Paragraph accent="neutral900">
+        <Paragraph accent="tertiary">
           Nothing was shared for this event.{' '}
           <Link href={createMailTo('hub@asap.science')}>Contact ASAP</Link> if
           you have any questions.
@@ -48,7 +48,7 @@ const EventMaterialUnavailable: React.FC<Record<string, never>> = () => {
       <Headline2 styleAsHeading={3}>
         No additional meeting materials available for this event
       </Headline2>
-      <Paragraph accent="neutral900">
+      <Paragraph accent="tertiary">
         If you have any questions about this event,{' '}
         <Link href={createMailTo('hub@asap.science')}>contact ASAP</Link> to
         learn more.

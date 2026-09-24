@@ -13,7 +13,7 @@ const InterestGroupInformation: React.FC<InterestGroupInformationProps> = ({
 }) => (
   <Card>
     <Headline3>Interest Group Description</Headline3>
-    <Paragraph accent="neutral900">
+    <Paragraph accent="tertiary">
       <span css={{ whiteSpace: 'pre-line' }}>{description}</span>
     </Paragraph>
     <Divider />
@@ -24,7 +24,7 @@ const InterestGroupInformation: React.FC<InterestGroupInformationProps> = ({
         marginBottom: rem(24),
       }}
     >
-      <Paragraph noMargin accent="neutral900">
+      <Paragraph noMargin accent="tertiary">
         Explore keywords related to skills, techniques, resources, and tools.
       </Paragraph>
     </div>

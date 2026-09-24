@@ -1,7 +1,7 @@
 import { ResearchOutputResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
-import { RichText, TagList, neutral900 } from '..';
+import { RichText, TagList, colour } from '..';
 import {
   Card,
   Divider,
@@ -43,7 +43,7 @@ const SharedResearchDetailsTagsCard: React.FC<
         <div css={{ marginBottom: rem(16) }}>
           <Headline3 noMargin>Short Description</Headline3>
         </div>
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           {shortDescription}
         </Paragraph>
       </div>
@@ -63,7 +63,7 @@ const SharedResearchDetailsTagsCard: React.FC<
           editorStyles={css({
             fontSize: '17px',
             letterSpacing: '0.1px',
-            color: neutral900.rgb,
+            color: colour.foreground.tertiary,
             lineHeight: '24px',
           })}
         ></TextEditor>
@@ -78,7 +78,7 @@ const SharedResearchDetailsTagsCard: React.FC<
         <div css={{ marginBottom: rem(16) }}>
           <Headline3 noMargin>Changelog</Headline3>
         </div>
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           {changelog}
         </Paragraph>
       </div>
@@ -93,7 +93,7 @@ const SharedResearchDetailsTagsCard: React.FC<
             marginBottom: rem(24),
           }}
         >
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             Explore keywords related to skills, techniques, resources, and
             tools.
           </Paragraph>

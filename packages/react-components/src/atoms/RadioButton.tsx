@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { rem } from '../pixels';
-import { colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 import { noop } from '../utils';
 
 const styles = css({
@@ -30,7 +30,7 @@ const styles = css({
   },
 
   ':hover, :focus': {
-    borderColor: neutral900.rgb,
+    borderColor: colour.neutral[600],
   },
   ':checked': {
     borderColor: colour.brand.crn[500],

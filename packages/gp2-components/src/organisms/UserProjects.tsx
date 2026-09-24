@@ -64,7 +64,7 @@ const UserProjects: React.FC<UserProjectsProps> = ({
           })}
         </CardTable>
       ) : (
-        <Subtitle accent={'neutral900'}>
+        <Subtitle accent="tertiary">
           You are not associated to any projects.
         </Subtitle>
       )}

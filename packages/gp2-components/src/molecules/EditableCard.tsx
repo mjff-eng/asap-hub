@@ -58,7 +58,7 @@ const EditableCard: React.FC<EditableCardProps> = ({
         <Headline3 noMargin>{title}</Headline3>
         {subtitle && (
           <div css={css({ marginTop: rem(24) })}>
-            <Paragraph noMargin accent="neutral900">
+            <Paragraph noMargin accent="tertiary">
               {subtitle}
             </Paragraph>
           </div>

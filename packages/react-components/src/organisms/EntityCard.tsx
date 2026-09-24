@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Anchor, Card, Ellipsis, Link, Pill } from '../atoms';
-import { colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 import { googleDriveIcon } from '../icons';
 import { LinkHeadline, TagList } from '../molecules';
 import { mobileScreen, rem } from '../pixels';
@@ -38,7 +38,7 @@ const textStyles = css({
 });
 
 const plainTextStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const tagsContainerStyles = css({

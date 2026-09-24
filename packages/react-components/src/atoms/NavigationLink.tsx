@@ -3,7 +3,7 @@ import { css, keyframes, Theme } from '@emotion/react';
 import { PropsWithChildren } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import { activePrimaryStyles } from '../button';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { crossQuery } from '../layout';
 import { useBlockedClick } from '../navigation';
 import { lineHeight, rem } from '../pixels';
@@ -16,7 +16,7 @@ const styles = css({
   color: 'unset',
   cursor: 'pointer',
   padding: rem(16),
-  stroke: neutral900.rgb,
+  stroke: colour.foreground.tertiary,
   svg: {
     stroke: colour.foreground.primary,
   },

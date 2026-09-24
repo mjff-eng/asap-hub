@@ -2,14 +2,7 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { ManuscriptStatus } from '@asap-hub/model';
 import { rem } from '../pixels';
-import {
-  info100,
-  info500,
-  warning100,
-  success100,
-  success500,
-  colour,
-} from '../colors';
+import { colour } from '../colors';
 import { statusIcon, StatusType } from './StatusButton';
 import { getReviewerStatusType } from '../utils';
 
@@ -20,17 +13,17 @@ type StatusBadgeProps = {
 const getStatusBadgeStyles = (type: StatusType) => {
   const bgColor =
     type === 'warning'
-      ? warning100.rgba
+      ? colour.utilitarian.orange[50]
       : type === 'final'
-        ? success100.rgba
-        : info100.rgba;
+        ? colour.background.success
+        : colour.background.info;
 
   const textColor =
     type === 'warning'
       ? colour.utilitarian.orange[600]
       : type === 'final'
-        ? success500.rgba
-        : info500.rgba;
+        ? colour.foreground.success
+        : colour.foreground.info;
 
   const iconFill =
     type === 'warning' ? colour.utilitarian.orange[600] : undefined;

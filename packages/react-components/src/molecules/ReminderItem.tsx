@@ -5,7 +5,7 @@ import { ReminderResponse, gp2 as gp2Model } from '@asap-hub/model';
 import { rem } from '../pixels';
 import { EventIcon, infoCircleIcon, LibraryIcon, article } from '../icons';
 import { Anchor, Markdown } from '../atoms';
-import { neutral200, cerulean } from '../colors';
+import { colour } from '../colors';
 
 export type ReminderEntity =
   | ReminderResponse['entity']
@@ -29,7 +29,7 @@ const iconStyles = css({
 const linkStyles = css({
   ':hover': {
     borderRadius: rem(3),
-    background: neutral200.rgb,
+    background: colour.background.secondary,
   },
 });
 
@@ -47,7 +47,7 @@ const subtextStyles = css({
 });
 
 const timeElapsedStyles = css({
-  color: cerulean.rgb,
+  color: colour.brand.gp2[500],
 });
 
 const iconMap: Record<ReminderEntity, React.ReactElement> = {

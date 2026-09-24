@@ -10,6 +10,7 @@ import {
   StateTag,
   Toast,
   uploadIcon,
+  colour,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { addIcon, editIcon, locationIcon, roleIcon } from '../icons';
@@ -19,7 +20,6 @@ import { SocialIcons } from '../molecules';
 import CardWithBackground from '../molecules/CardWithBackground';
 import IconWithLabel from '../molecules/IconWithLabel';
 import UserRegion from '../molecules/UserRegion';
-import colors from '../templates/colors';
 
 const { rem } = pixels;
 
@@ -226,7 +226,7 @@ const UserDetailHeaderCard: React.FC<UserDetailHeaderCardProps> = ({
                         display: 'flex',
                         margin: `${rem(3)} 0`,
                         svg: {
-                          stroke: colors.neutral900.rgb,
+                          stroke: colour.foreground.tertiary,
                         },
                       })}
                     >

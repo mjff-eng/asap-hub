@@ -55,7 +55,7 @@ it('renders a given accent color', () => {
   const { getByText } = render(
     <figure>
       the figure
-      <Caption accent="error500">text</Caption>
+      <Caption accent="error">text</Caption>
     </figure>,
   );
   const { color } = getComputedStyle(getByText('text'));

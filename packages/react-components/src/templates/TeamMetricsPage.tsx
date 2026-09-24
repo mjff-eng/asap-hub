@@ -45,7 +45,7 @@ const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
 }) => (
   <div css={containerStyles}>
     <Headline3 noMargin>Metrics</Headline3>
-    <Paragraph accent="neutral900">
+    <Paragraph accent="tertiary">
       Explore a high-level overview of your team's activity within the
       Collaborative Research Network.
     </Paragraph>

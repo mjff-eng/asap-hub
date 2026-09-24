@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 
 import { Avatar } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { formatDate } from '../date';
 import { rem } from '../pixels';
 import { ImageLink } from '.';
@@ -33,12 +33,12 @@ const userInfoStyles = css({
 const separatorStyles = css({
   fontSize: rem(14),
   fontWeight: 400,
-  color: colors.neutral900.rgb,
+  color: colors.colour.foreground.tertiary,
 });
 
 const dateStyles = css({
   width: 'max-content',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(14),
   fontWeight: 400,
 });

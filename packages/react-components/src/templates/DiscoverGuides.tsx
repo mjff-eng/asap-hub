@@ -46,7 +46,7 @@ const DiscoverGuides: React.FC<DiscoverGuidesProps> = ({
       <div css={styles}>
         <div>
           <Headline2 styleAsHeading={3}>Guides</Headline2>
-          <Paragraph accent="neutral900">
+          <Paragraph accent="tertiary">
             Explore our guides, templates and forms to help you with your daily
             activities.
           </Paragraph>

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import React, { ComponentProps, Fragment } from 'react';
 import { Card } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import EventCard from './EventCard';
 import { calendarIcon } from '../icons';
@@ -19,7 +19,7 @@ const upcomingEventsWrapper = css({
 const noUpcomingEvents = css({
   display: 'flex',
   flexFlow: 'row',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   gap: rem(15),
 });
 

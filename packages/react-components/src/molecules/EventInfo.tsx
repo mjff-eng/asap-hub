@@ -5,7 +5,7 @@ import { ComponentProps } from 'react';
 
 import { EventDateBlock, EventTime, LinkHeadline, TagList } from '.';
 import { Headline3 } from '..';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { largeDesktopScreen, rem } from '../pixels';
 
 const TITLE_LIMIT = 55;
@@ -39,7 +39,7 @@ const contentStyles = css({
 
 const tagContainerStyles = css({
   marginTop: rem(8),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
 });
 

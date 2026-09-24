@@ -312,7 +312,7 @@ const AnalyticsControls: React.FC<AnalyticsControlsProps> = ({
         )}
       </div>
       <div css={containerStyles}>
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           Last Update: {getLastUpdate()}
         </Paragraph>
         <span css={controlsContainerStyles}>

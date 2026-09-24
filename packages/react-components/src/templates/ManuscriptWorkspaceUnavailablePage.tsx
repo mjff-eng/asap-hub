@@ -44,12 +44,12 @@ const ManuscriptWorkspaceUnavailablePage: React.FC<
     </span>
     <div>
       <Display styleAsHeading={2}>You can't access this manuscript.</Display>
-      <Paragraph accent="neutral900" noMargin>
+      <Paragraph accent="tertiary" noMargin>
         Access to a manuscript comes from being part of the project that owns
         it, or from a project of yours that is collaborating on it. Neither
         applies to you right now, so it is not available.
       </Paragraph>
-      <Paragraph accent="neutral900" noMargin>
+      <Paragraph accent="tertiary" noMargin>
         If you think this is wrong, contact your Project Manager.
       </Paragraph>
     </div>

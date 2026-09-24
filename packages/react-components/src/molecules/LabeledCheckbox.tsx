@@ -2,10 +2,10 @@ import { ComponentProps } from 'react';
 import { css } from '@emotion/react';
 
 import { Label, Paragraph, Checkbox } from '../atoms';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 
 const containerStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const disabledStyles = css({

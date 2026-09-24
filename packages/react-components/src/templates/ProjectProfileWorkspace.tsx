@@ -219,7 +219,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
                 Compliance area is only available on the desktop version.
               </span>
             </Headline3>
-            <Paragraph accent="neutral900">
+            <Paragraph accent="tertiary">
               To access all compliance features, please use the desktop version.
               We apologize for any inconvenience this may cause.
             </Paragraph>
@@ -244,7 +244,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
                 </div>
               )}
             </div>
-            <Paragraph noMargin accent="neutral900">
+            <Paragraph noMargin accent="tertiary">
               {manuscripts.length > 0 || !!collaborationManuscripts?.length
                 ? 'This directory contains all manuscripts with their compliance reports.'
                 : "Submit your manuscript to receive a report outlining where your work meets ASAP's Open Science Policy and where changes are needed for your work to be compliant."}
@@ -257,7 +257,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
                 <Subtitle noMargin>Team Submission</Subtitle>
                 {manuscripts.length ? (
                   <>
-                    <Paragraph noMargin accent="neutral900">
+                    <Paragraph noMargin accent="tertiary">
                       {manuscriptSubmissions}
                     </Paragraph>
                     <div>
@@ -291,7 +291,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
                     </div>
                   </>
                 ) : (
-                  <Paragraph noMargin accent="neutral900">
+                  <Paragraph noMargin accent="tertiary">
                     {noManuscriptSubmissions}
                   </Paragraph>
                 )}
@@ -303,7 +303,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
                 <Subtitle noMargin>Collaborator Submission</Subtitle>
                 {collaborationManuscripts?.length ? (
                   <>
-                    <Paragraph noMargin accent="neutral900">
+                    <Paragraph noMargin accent="tertiary">
                       {manuscriptCollaborations}
                     </Paragraph>
                     <div>
@@ -337,7 +337,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
                     </div>
                   </>
                 ) : (
-                  <Paragraph noMargin accent="neutral900">
+                  <Paragraph noMargin accent="tertiary">
                     {noManuscriptCollaborations}
                   </Paragraph>
                 )}
@@ -381,7 +381,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
             <Display styleAsHeading={3}>
               Collaboration Tools (Project Only)
             </Display>
-            <Paragraph accent="neutral900">
+            <Paragraph accent="tertiary">
               This directory contains the most important links for your
               project&apos;s internally shared resources and what each link is
               used for.
@@ -404,7 +404,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
                 <span>Add Collaboration Tools</span>
               </Link>
             </div>
-            <Caption accent="neutral900" asParagraph>
+            <Caption accent="tertiary" asParagraph>
               Last edited
               {lastModifiedBy && (
                 <>
@@ -425,7 +425,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
       {isProjectMember && contactEmail && (
         <Card>
           <Headline2 styleAsHeading={3}>Project Contact Email</Headline2>
-          <Paragraph accent="neutral900">
+          <Paragraph accent="tertiary">
             Members across the Hub can reach your project through the designated
             contact email,{' '}
             <Link href={createMailTo(contactEmail)}>

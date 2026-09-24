@@ -22,7 +22,7 @@ const buttonStyles = css({
 
 const copyButtonStyles = css({
   backgroundColor: 'inherit',
-  borderColor: colors.info200.rgb,
+  borderColor: colors.colour.brand.crn[100],
   ':hover, :focus': {
     borderColor: colors.colour.brand.crn[500],
   },

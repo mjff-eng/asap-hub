@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { belowAverageIcon, averageIcon, aboveAverageIcon } from '../icons';
 import { Subtitle } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -21,7 +21,7 @@ const dataTextStyles = css({
   fontWeight: 400,
   fontSize: rem(17),
   textWrap: 'nowrap',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 export type CaptionItemProps = {

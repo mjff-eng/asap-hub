@@ -28,7 +28,7 @@ const ComplianceReportHeader: React.FC = () => (
     <div css={contentStyles}>
       <Display styleAsHeading={2}>Share a Compliance Report</Display>
       <div>
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           Share the compliance report associated with this manuscript.
         </Paragraph>
       </div>

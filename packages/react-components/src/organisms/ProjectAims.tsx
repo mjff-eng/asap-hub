@@ -136,7 +136,7 @@ const ProjectAims: FC<ProjectAimsProps> = ({
         <Headline3 noMargin>Aims</Headline3>
         <Paragraph
           noMargin
-          accent="neutral900"
+          accent="tertiary"
           styles={css({
             marginTop: rem(24),
             marginBottom: rem(

@@ -89,7 +89,7 @@ const PeopleCard: React.FC<UserListItemResponse> = ({
           <div css={profileTextStyles}>
             <UserProfilePersonalText {...props} />
           </div>
-          <Caption accent={'neutral900'} asParagraph>
+          <Caption accent="tertiary" asParagraph>
             {alumniSinceDate
               ? `Alumni since: ${formatDate(new Date(alumniSinceDate))}`
               : `Joined: ${formatDate(new Date(createdDate))}`}
