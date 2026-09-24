@@ -31,7 +31,7 @@ const bubbleStyles = css({
   zIndex: 100,
   pointerEvents: 'none',
 
-  backgroundColor: colour.neutral[900],
+  backgroundColor: colour.foreground.secondary,
   color: colour.neutral[0],
   borderRadius: rem(4),
   padding: `${rem(6)} ${rem(12)}`,
@@ -46,7 +46,7 @@ const bubbleStyles = css({
     transform: 'translateY(-50%)',
     borderTop: `${rem(triangle)} solid transparent`,
     borderBottom: `${rem(triangle)} solid transparent`,
-    borderRight: `${rem(triangle)} solid ${colour.neutral[900]}`,
+    borderRight: `${rem(triangle)} solid ${colour.foreground.secondary}`,
   },
 });
 
