@@ -1,4 +1,4 @@
-import { casPrimitives } from './cas-tokens.generated';
+import { casPrimitives, casThemeVariables } from './cas-tokens.generated';
 
 export interface OpaqueColor {
   r: number;
@@ -73,7 +73,10 @@ const toColours = <T>(node: T): PrimitiveColours<T> =>
         ]),
       )) as PrimitiveColours<T>;
 
-export const colour = toColours(casPrimitives);
+export const colour = {
+  ...toColours(casPrimitives),
+  ...casThemeVariables,
+};
 
 // Monochrome
 export const pearl = colour.neutral[25];
