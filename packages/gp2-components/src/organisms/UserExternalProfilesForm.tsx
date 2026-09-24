@@ -156,7 +156,7 @@ const UserExternalProfilesForm: React.FC<UserExternalProfilesFormProps> = ({
               subtitle="(optional)"
               labelIndicator={
                 <span css={[iconStyles, iconCSS]}>
-                  <Icon color={colour.neutral[600]} />
+                  <Icon color={colour.neutral[700]} />
                 </span>
               }
               enabled={!isSaving}
@@ -177,7 +177,7 @@ const UserExternalProfilesForm: React.FC<UserExternalProfilesFormProps> = ({
             subtitle="(optional)"
             labelIndicator={
               <span css={[iconStyles, iconCSS]}>
-                <Icon color={colour.neutral[600]} />
+                <Icon color={colour.neutral[700]} />
               </span>
             }
             enabled={!isSaving}

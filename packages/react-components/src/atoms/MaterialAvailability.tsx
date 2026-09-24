@@ -20,10 +20,10 @@ const availableStyles = css({
 });
 
 const unavailableStyles = css({
-  color: colour.neutral[200],
+  color: colour.foreground.disabled,
   svg: {
-    fill: colour.neutral[200],
-    stroke: colour.neutral[200],
+    fill: colour.foreground.disabled,
+    stroke: colour.foreground.disabled,
   },
 });
 

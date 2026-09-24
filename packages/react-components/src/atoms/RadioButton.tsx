@@ -23,9 +23,10 @@ const styles = css({
   backgroundColor: colour.neutral[0],
 
   ':disabled': {
-    borderColor: colour.border.tertiary,
+    borderColor: colour.border.disabled,
+    backgroundColor: colour.background.disabled,
     ':hover, :focus': {
-      borderColor: colour.border.tertiary,
+      borderColor: colour.border.disabled,
     },
   },
 

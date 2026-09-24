@@ -9,7 +9,7 @@ const containerStyles = css({
 });
 
 const disabledStyles = css({
-  color: colour.neutral[200],
+  color: colour.foreground.disabled,
 });
 
 type LabeledCheckboxProps = {

@@ -186,7 +186,7 @@ const resultCardStyles = (enabled: boolean) =>
     borderRadius: rem(8),
     backgroundColor: enabled
       ? colour.background.secondary
-      : colour.general.blue.cerulean[25],
+      : colour.background.disabled,
     overflow: 'hidden',
   });
 

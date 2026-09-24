@@ -24,7 +24,10 @@ const iconStyles = css({
 });
 
 const inactiveStyles = css({
-  svg: { fill: colour.neutral[200], stroke: colour.neutral[200] },
+  svg: {
+    fill: colour.foreground.disabled,
+    stroke: colour.foreground.disabled,
+  },
 });
 
 type SocialIconsProps = gp2Model.UserSocial;
@@ -41,7 +44,7 @@ const SocialIcons: React.FC<SocialIconsProps> = ({
   researchGate,
   blog,
 }) => {
-  const iconProps = { color: colour.foreground.tertiary };
+  const iconProps = { color: colour.neutral[700] };
 
   const socialLinks = [
     { key: 'orcid', link: orcid, Icon: socialIconsMap.orcid },

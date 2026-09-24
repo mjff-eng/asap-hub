@@ -19,7 +19,7 @@ const rowStyles = css({
   padding: `${rem(20)} ${rem(24)} 0`,
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':nth-of-type(2n+3)': {
-    background: colour.background.secondary,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',
@@ -77,7 +77,7 @@ const rowContainerStyles = css({
     borderBottom: 'none',
   },
   ':nth-of-type(2n+3)': {
-    background: colour.background.secondary,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',
