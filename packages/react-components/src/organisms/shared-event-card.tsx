@@ -8,7 +8,6 @@ import {
 } from '../icons';
 import { getProjectIcon } from '../utils';
 
-export const defaultVisibleTeams = 10;
 export const defaultVisibleRows = 5;
 export const defaultVisibleSpeakers = 5;
 
