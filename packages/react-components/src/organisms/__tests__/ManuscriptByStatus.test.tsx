@@ -85,11 +85,17 @@ describe('ManuscriptByStatus', () => {
       .getByText('Review Compliance Report')
       .closest('button');
 
+    expect(selectedWarningButton).toHaveStyleRule(
+      'background-color',
+      colour.background.warning,
+    );
     expect(selectedWarningButton).toHaveStyle({
-      backgroundColor: colour.utilitarian.orange[50],
       borderColor: colour.utilitarian.orange[100],
-      color: colour.utilitarian.orange[600],
     });
+    expect(selectedWarningButton).toHaveStyleRule(
+      'color',
+      colour.foreground.warning,
+    );
     expect(selectedFinalButton).toHaveStyleRule(
       'background-color',
       colour.background.success,
@@ -108,17 +114,21 @@ describe('ManuscriptByStatus', () => {
     );
     expect(selectedDefaultButton).toHaveStyleRule(
       'border-color',
-      colour.foreground.info,
+      colour.border.info,
     );
     expect(selectedDefaultButton).toHaveStyleRule(
       'color',
       colour.foreground.info,
     );
-    expect(unselectedButton).toHaveStyle({
-      backgroundColor: 'white',
-      borderColor: colour.neutral[100],
-      color: colour.neutral[600],
-    });
+    expect(unselectedButton).toHaveStyle({ backgroundColor: 'white' });
+    expect(unselectedButton).toHaveStyleRule(
+      'border-color',
+      colour.border.tertiary,
+    );
+    expect(unselectedButton).toHaveStyleRule(
+      'color',
+      colour.foreground.tertiary,
+    );
   });
 
   it('shows icons for warning and final status types', () => {

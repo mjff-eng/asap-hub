@@ -23,8 +23,8 @@ const getExpectedStyleType = (status: ManuscriptStatus) => {
 
 const styleMap = {
   warning: {
-    backgroundColor: colour.utilitarian.orange[50],
-    textColor: colour.utilitarian.orange[600],
+    backgroundColor: colour.background.warning,
+    textColor: colour.foreground.warning,
   },
   final: {
     backgroundColor: colour.background.success,

@@ -168,9 +168,10 @@ describe('invalidity', () => {
     fireEvent.focusOut(input);
 
     expect(getByText('Nope.')).toBeDefined();
-    expect(
-      colorFromHex(findParentWithStyle(input, 'borderColor')!.borderColor).rgb,
-    ).toBe(colorFromHex(colour.utilitarian.red[600]).rgb);
+    expect(findParentWithStyle(input, 'borderStyle')!.element).toHaveStyleRule(
+      'border-color',
+      colour.border.error,
+    );
   });
 
   it('shows the default state when input is focused', () => {
