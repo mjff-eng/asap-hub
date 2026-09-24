@@ -65,10 +65,13 @@ colourTokens(read('Value')).forEach(({ path, token }) => {
   setIn(primitives, path.slice(1), alpha === 1 ? rgb : [...rgb, alpha]);
 });
 
-const modeLight = {};
+// ASAP only uses the Light mode, which maps every ramp step to the primitive
+// with the same name, so theme values resolve straight to primitives.
 colourTokens(read('Light')).forEach(({ path, token }) => {
   const alias = token.$extensions?.['com.figma.aliasData']?.targetVariableName;
-  if (alias) modeLight[path.join('/')] = alias;
+  if (alias !== path.join('/')) {
+    throw new Error(`Light mode no longer maps ${path.join('/')} to itself`);
+  }
 });
 
 const themeFor = (name) => {
@@ -115,9 +118,6 @@ writeFileSync(
 
 /** Figma collection "primitives", mode "Value" (ARIA ramps left out). */
 export const casPrimitives = ${literal(primitives)} as const;
-
-/** Figma collection "mode", mode "Light": ramp step to primitive. */
-export const casModeLight = ${literal(modeLight)} as const;
 
 /** Figma collection "theme", modes "CRN" and "GP2", resolved to values. */
 export const casTheme = ${literal(theme)} as const;
