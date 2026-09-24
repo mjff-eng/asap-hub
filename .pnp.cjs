@@ -4564,7 +4564,7 @@ const RAW_RUNTIME_STATE =
     ],\
     [\
       "auth0-js",\
-      "npm:9.30.0"\
+      "npm:10.0.0"\
     ],\
     [\
       "auto-bind",\
@@ -12038,7 +12038,7 @@ const RAW_RUNTIME_STATE =
           ["@types/jest", "npm:29.5.14"],\
           ["@types/node", "npm:20.10.5"],\
           ["@types/pify", "npm:5.0.4"],\
-          ["auth0-js", "npm:9.30.0"],\
+          ["auth0-js", "npm:10.0.0"],\
           ["camelcase", "npm:6.3.0"],\
           ["pify", "npm:5.0.0"],\
           ["util", "npm:0.12.5"]\
@@ -42064,10 +42064,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["auth0-js", [\
-      ["npm:9.30.0", {\
-        "packageLocation": "./.yarn/cache/auth0-js-npm-9.30.0-d5f80ca356-6aa3ccd96b.zip/node_modules/auth0-js/",\
+      ["npm:10.0.0", {\
+        "packageLocation": "./.yarn/cache/auth0-js-npm-10.0.0-fc3abacda8-5ac5c05cdd.zip/node_modules/auth0-js/",\
         "packageDependencies": [\
-          ["auth0-js", "npm:9.30.0"],\
+          ["auth0-js", "npm:10.0.0"],\
           ["base64-js", "npm:1.5.1"],\
           ["idtoken-verifier", "npm:2.2.4"],\
           ["js-cookie", "npm:2.2.1"],\
