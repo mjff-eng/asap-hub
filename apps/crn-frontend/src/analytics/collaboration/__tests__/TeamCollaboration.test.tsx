@@ -48,6 +48,13 @@ const data: ListTeamCollaborationResponse = {
         'Lab Material': 2,
         Protocol: 0,
       },
+      totalOutputs: {
+        Article: 4,
+        Bioinformatics: 5,
+        Dataset: 2,
+        'Lab Material': 2,
+        Protocol: 0,
+      },
       outputsCoProducedAcross: {
         byDocumentType: {
           Article: 0,
@@ -64,6 +71,13 @@ const data: ListTeamCollaborationResponse = {
       name: 'Team Two',
       inactiveSince: undefined,
       outputsCoProducedWithin: {
+        Article: 0,
+        Bioinformatics: 0,
+        Dataset: 0,
+        'Lab Material': 0,
+        Protocol: 0,
+      },
+      totalOutputs: {
         Article: 0,
         Bioinformatics: 0,
         Dataset: 0,

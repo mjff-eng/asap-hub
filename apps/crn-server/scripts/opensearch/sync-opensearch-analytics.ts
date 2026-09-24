@@ -413,6 +413,7 @@ export const exportAnalyticsData = async <T extends Metrics>(
               const within = teamCollabItem.outputsCoProducedWithin || {};
               const across =
                 teamCollabItem.outputsCoProducedAcross?.byDocumentType || {};
+              const total = teamCollabItem.totalOutputs || {};
               const collaboratingTeams =
                 teamCollabItem.outputsCoProducedAcross?.byTeam || [];
 
@@ -431,6 +432,12 @@ export const exportAnalyticsData = async <T extends Metrics>(
                 DatasetAcross: Number(across.Dataset) || 0,
                 'Lab Material Across': Number(across['Lab Material']) || 0,
                 ProtocolAcross: Number(across.Protocol) || 0,
+                // Flatten totalOutputs
+                ArticleTotal: Number(total.Article) || 0,
+                BioinformaticsTotal: Number(total.Bioinformatics) || 0,
+                DatasetTotal: Number(total.Dataset) || 0,
+                'Lab Material Total': Number(total['Lab Material']) || 0,
+                ProtocolTotal: Number(total.Protocol) || 0,
                 // Include collaborating teams array
                 collaboratingTeams: collaboratingTeams
                   .filter((team) => team != null)
