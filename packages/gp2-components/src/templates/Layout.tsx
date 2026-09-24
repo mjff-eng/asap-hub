@@ -1,4 +1,5 @@
 import {
+  colour,
   crossQuery,
   Loading,
   navigationGrey,
@@ -21,9 +22,6 @@ import {
 import { useLocation } from 'react-router';
 import UserMenu from '../molecules/UserMenu';
 import { NavigationHeader } from '../organisms';
-import colors from './colors';
-
-const { neutral000 } = colors;
 
 const MainNavigation = lazy(
   () =>
@@ -66,7 +64,7 @@ const overlayMenuShownStyles = css({
 });
 
 const menuStyles = css({
-  backgroundColor: neutral000.rgb,
+  backgroundColor: colour.neutral[0],
   gridColumnStart: '1',
   overflowY: 'auto',
   display: 'flex',
