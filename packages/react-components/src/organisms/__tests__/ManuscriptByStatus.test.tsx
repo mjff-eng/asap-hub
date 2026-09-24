@@ -89,9 +89,10 @@ describe('ManuscriptByStatus', () => {
       'background-color',
       colour.background.warning,
     );
-    expect(selectedWarningButton).toHaveStyle({
-      borderColor: colour.utilitarian.orange[100],
-    });
+    expect(selectedWarningButton).toHaveStyleRule(
+      'border-color',
+      colour.border.warning,
+    );
     expect(selectedWarningButton).toHaveStyleRule(
       'color',
       colour.foreground.warning,

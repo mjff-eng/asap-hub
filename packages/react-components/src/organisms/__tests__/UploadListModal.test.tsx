@@ -9,7 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { StaticRouter } from 'react-router';
 
-import { colorFromHex, colour } from '../../colors';
+import { colour } from '../../colors';
 
 import UploadListModal, { UploadListResult } from '../UploadListModal';
 
@@ -936,9 +936,10 @@ describe('UploadListModal', () => {
       const matchedHeader = screen.getByText(/will be added/);
       const resultCard = matchedHeader.closest('button')?.parentElement;
       expect(resultCard).not.toBeNull();
-      expect(resultCard).toHaveStyle({
-        backgroundColor: colorFromHex(colour.general.blue.cerulean[25]).rgb,
-      });
+      expect(resultCard).toHaveStyleRule(
+        'background-color',
+        colour.background.disabled,
+      );
     });
 
     it('Should re-enable controls when Keep Editing is clicked', async () => {
