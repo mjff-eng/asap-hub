@@ -15,14 +15,17 @@ export const themes: Record<
 
 export type Product = keyof typeof casTheme;
 
+export const cssColour = (hex: string, alpha = 1): string =>
+  alpha === 1
+    ? hex
+    : `rgba(${[1, 3, 5]
+        .map((start) => parseInt(hex.slice(start, start + 2), 16))
+        .join(', ')}, ${alpha})`;
+
 export const themeVariables = (product: Product): Record<string, string> =>
   Object.fromEntries(
     Object.entries(casTheme[product]).map(([name, { hex, alpha }]) => [
       `--${name.replace(/\//g, '-')}`,
-      alpha === 1
-        ? hex
-        : `rgba(${[1, 3, 5]
-            .map((start) => parseInt(hex.slice(start, start + 2), 16))
-            .join(', ')}, ${alpha})`,
+      cssColour(hex, alpha),
     ]),
   );

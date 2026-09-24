@@ -87,21 +87,26 @@ export const Swatch = ({
   />
 );
 
-export const Copy = ({ text }: { text: string }) => {
+export const useCopy = (text: string) => {
   const [copied, setCopied] = useState(false);
+  const copy = () =>
+    navigator.clipboard?.writeText(text).then(
+      () => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1200);
+      },
+      () => undefined,
+    );
+  return { copied, copy };
+};
+
+export const Copy = ({ text }: { text: string }) => {
+  const { copied, copy } = useCopy(text);
   return (
     <button
       type="button"
       title="Copy"
-      onClick={() => {
-        navigator.clipboard?.writeText(text).then(
-          () => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1200);
-          },
-          () => undefined,
-        );
-      }}
+      onClick={copy}
       style={{
         ...mono,
         cursor: 'pointer',
