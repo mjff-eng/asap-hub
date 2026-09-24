@@ -87,37 +87,21 @@ const accentIcons: Record<ToastAccents, EmotionJSX.Element> = {
   successLarge: successLargeIcon,
 };
 
+const statusStyles = (
+  status: 'error' | 'info' | 'warning' | 'success',
+): CSSObject => ({
+  backgroundColor: colour.background[status],
+  borderColor: colour.border[status],
+  color: colour.foreground.primary,
+  svg: { stroke: colour.foreground[status] },
+});
+
 const accentStyles: Record<ToastAccents, CSSObject> = {
-  error: {
-    backgroundColor: colour.background.error,
-    borderColor: colour.border.error,
-    color: colour.foreground.error,
-    svg: { stroke: colour.foreground.error },
-  },
-  info: {
-    backgroundColor: colour.background.info,
-    borderColor: colour.border.info,
-    color: colour.foreground.info,
-    svg: { stroke: colour.foreground.info },
-  },
-  warning: {
-    backgroundColor: colour.background.warning,
-    borderColor: colour.utilitarian.orange[700],
-    color: colour.utilitarian.orange[700],
-    svg: { stroke: colour.foreground.warning },
-  },
-  success: {
-    backgroundColor: colour.background.success,
-    borderColor: colour.border.success,
-    color: colour.foreground.success,
-    svg: { stroke: colour.foreground.success },
-  },
-  successLarge: {
-    backgroundColor: colour.background.success,
-    borderColor: colour.border.success,
-    color: colour.foreground.success,
-    svg: { stroke: colour.foreground.success },
-  },
+  error: statusStyles('error'),
+  info: statusStyles('info'),
+  warning: statusStyles('warning'),
+  success: statusStyles('success'),
+  successLarge: statusStyles('success'),
 };
 
 const roundedStyles = css({
