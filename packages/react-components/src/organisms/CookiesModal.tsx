@@ -97,7 +97,11 @@ const ThirdPartyCookieLink = ({ link, label }: ThirdPartyCookieLinkProps) => (
   <Link href={link}>
     <Pill>
       <span css={pillStyles}>
-        {label} <ExternalLinkIcon size={16} color={colors.neutral900} />
+        {label}{' '}
+        <ExternalLinkIcon
+          size={16}
+          color={colors.colorFromHex(colors.colour.neutral[600])}
+        />
       </span>
     </Pill>
   </Link>
@@ -151,7 +155,7 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
 
                 <Paragraph
                   noMargin
-                  accent="neutral900"
+                  accent="tertiary"
                   styles={paragraphStyles}
                 >
                   When you visit our website, it may store or retrieve data in
@@ -171,12 +175,16 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
                     <Paragraph noMargin>
                       <span css={essentialCategoryStyles}>
                         <strong>Essential</strong>
-                        <span css={css({ color: colors.neutral900.rgb })}>
+                        <span
+                          css={css({
+                            color: colors.colour.foreground.tertiary,
+                          })}
+                        >
                           <strong>Always Active</strong>
                         </span>
                       </span>
                     </Paragraph>
-                    <Paragraph accent="neutral900">
+                    <Paragraph accent="tertiary">
                       These items are required to enable basic website
                       functionality.
                     </Paragraph>
@@ -197,7 +205,7 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
                         />
                       </span>
                     </Paragraph>
-                    <Paragraph accent="neutral900">
+                    <Paragraph accent="tertiary">
                       These items help the website operator understand how its
                       website performs, how visitors interact with the site, and
                       whether there may be technical issues. This storage type

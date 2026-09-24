@@ -103,7 +103,7 @@ const CalendarList: FC<CalendarListProps> = ({
         </div>
         {description && (
           <div css={subheaderStyles}>
-            <Paragraph accent="neutral900" noMargin>
+            <Paragraph accent="tertiary" noMargin>
               {description}
             </Paragraph>
           </div>
@@ -121,7 +121,7 @@ const CalendarList: FC<CalendarListProps> = ({
                 <li key={id}>
                   <div css={dataGrid}>
                     <div css={gridText}>
-                      <Paragraph accent="charcoal">
+                      <Paragraph accent="primary">
                         <span css={{ display: 'flex' }}>
                           <span css={{ color, paddingRight: rem(14) }}>●</span>
                           <span css={{ fontWeight: 'bold' }}>{name}</span>
@@ -145,7 +145,7 @@ const CalendarList: FC<CalendarListProps> = ({
         )}
       </Card>
       {!hideSupportText && (
-        <Paragraph accent="neutral900">
+        <Paragraph accent="tertiary">
           Having issues? Set up your calendar manually with these instructions
           for{' '}
           <Link href="https://support.apple.com/en-us/guide/calendar/icl1022/mac">

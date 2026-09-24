@@ -3,7 +3,7 @@ import { UserProjectMembership, ProjectStatus } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
 import { Card, Paragraph, Button, Headline2, Anchor, Pill } from '../atoms';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { getProjectRoute } from '../utils';
 import { getStatusPillAccent } from './ProjectCard';
@@ -86,7 +86,7 @@ const projectNameStyles = css({
 });
 
 const typeLabelStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -155,7 +155,7 @@ const mobileFieldValue = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const mobileProjectNameValue = css({
@@ -185,7 +185,7 @@ const UserProjectsCard: React.FC<UserProjectsCardProps> = ({ projects }) => {
           <Headline2 styleAsHeading={3} noMargin>
             Projects
           </Headline2>
-          <Paragraph accent="neutral900" noMargin>
+          <Paragraph accent="tertiary" noMargin>
             This user is not currently assigned to any projects.
           </Paragraph>
         </div>
@@ -201,7 +201,7 @@ const UserProjectsCard: React.FC<UserProjectsCardProps> = ({ projects }) => {
         <Headline2 styleAsHeading={3} noMargin>
           Projects
         </Headline2>
-        <Paragraph accent="neutral900" noMargin>
+        <Paragraph accent="tertiary" noMargin>
           Explore all projects this user has contributed to.
         </Paragraph>
       </div>

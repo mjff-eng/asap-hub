@@ -1,7 +1,7 @@
 import { ReactText } from 'react';
 import { css } from '@emotion/react';
 
-import { colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -33,7 +33,7 @@ const textStyles = css({
   textAlign: 'center',
 
   backgroundColor: colour.neutral[0],
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   textTransform: 'uppercase',
   fontWeight: 'bold',
   fontSize: rem(13.6),

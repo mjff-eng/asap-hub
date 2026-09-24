@@ -10,7 +10,7 @@ import {
   MultiSelectOptionsType,
   Paragraph,
 } from '../atoms';
-import { colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 import { crossIcon, plusIcon, searchIcon } from '../icons';
 import { ConfirmableModalFooter, Modal } from '../molecules';
 import PendingSpeakerCard from '../molecules/PendingSpeakerCard';
@@ -103,7 +103,7 @@ const searchUserNameStyles = css({
 });
 
 const searchExternalTextStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -161,13 +161,13 @@ const statsGroupStyles = css({
 const statStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const separatorStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   padding: `0 ${rem(8)}`,
 });
 
@@ -571,12 +571,12 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
             <div css={emptyStateStyles(!isCancelling)} role="status">
               <Paragraph
                 noMargin
-                accent="neutral900"
+                accent="tertiary"
                 styles={emptyStateTitleStyles}
               >
                 Add speakers to this event
               </Paragraph>
-              <Paragraph noMargin accent="neutral900">
+              <Paragraph noMargin accent="tertiary">
                 Search for a person to add them to this event. Once the event
                 has taken place, you&apos;ll be able to mark whether each
                 speaker shared preliminary findings.

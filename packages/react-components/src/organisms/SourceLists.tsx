@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button, Paragraph } from '../atoms';
-import { neutral800, neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { ExportIcon, linkIcon } from '../icons';
 import { mobileScreen, rem } from '../pixels';
 import { UploadListSourceFile } from './UploadListModal';
@@ -32,7 +32,7 @@ const titleStyles = css({
 
 const countStyles = css({
   fontWeight: 400,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const listStyles = css({
@@ -87,7 +87,7 @@ const dateStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: neutral800.rgb,
+  color: colour.foreground.quaternary,
 });
 
 const downloadButtonStyles = css({
@@ -145,7 +145,7 @@ const SourceLists: React.FC<SourceListsProps> = ({ files }) => {
             • {files.length} {files.length === 1 ? 'File' : 'Files'}
           </span>
         </h3>
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           The lists you uploaded. The panel shows teams, so open a file to check
           an individual. These are the files as uploaded, not the current
           attendance.

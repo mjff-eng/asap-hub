@@ -346,7 +346,7 @@ const ExportAnalyticsModal: React.FC<ExportAnalyticsModalProps> = ({
                       ? {}
                       : {
                           path: {
-                            fill: colors.neutral900.rgb,
+                            fill: colors.colour.foreground.tertiary,
                           },
                         },
                 })}

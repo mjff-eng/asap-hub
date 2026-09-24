@@ -25,7 +25,7 @@ import {
   InactiveBadgeIcon,
   TraineeIcon,
 } from '../icons';
-import { colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 
 const cardStyles = css({
   padding: `${rem(32)} ${rem(24)}`,
@@ -61,7 +61,7 @@ const metadataRowStyles = css({
   alignItems: 'flex-start',
   gap: rem(8),
   fontSize: rem(17),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const iconStyles = css({

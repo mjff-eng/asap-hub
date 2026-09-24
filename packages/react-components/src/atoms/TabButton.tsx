@@ -2,14 +2,14 @@ import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { layoutStyles } from '../text';
 import { rem } from '../pixels';
-import { info500, colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 
 const styles = css({
   display: 'inline-block',
   paddingTop: rem(12),
   paddingBottom: rem(12),
 
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   cursor: 'pointer',
@@ -23,7 +23,7 @@ const activeStyles = css({
   cursor: 'default',
   fontWeight: 'bold',
   "[data-app='gp2'] &": {
-    borderBottomColor: info500.rgb,
+    borderBottomColor: colour.brand.gp2[500],
   },
 });
 

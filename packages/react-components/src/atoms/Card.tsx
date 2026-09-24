@@ -32,9 +32,9 @@ export const accents: Record<AccentVariant, CSSObject> = {
     borderColor: colors.colour.border.error,
   },
   green: {
-    backgroundColor: colors.success100.rgb,
-    color: colors.colour.brand.crn[800],
-    borderColor: colors.colour.brand.crn[800],
+    backgroundColor: colors.colour.background.success,
+    color: colors.colour.foreground.success,
+    borderColor: colors.colour.border.success,
   },
   placeholder: {
     backgroundColor: 'transparent',
@@ -43,19 +43,19 @@ export const accents: Record<AccentVariant, CSSObject> = {
     borderRadius: 0,
   },
   neutral200: {
-    backgroundColor: colors.neutral200.rgb,
+    backgroundColor: colors.colour.background.secondary,
     borderColor: colors.colour.border.card.default,
     boxShadow: `0px 2px 4px ${colors.colour.neutral[100]}`,
   },
   warning: {
-    backgroundColor: colors.warning100.rgb,
+    backgroundColor: colors.colour.background.warning,
     color: colors.colour.foreground.warning,
     borderColor: colors.colour.utilitarian.orange[700],
   },
   information: {
-    backgroundColor: colors.information100.rgb,
-    color: colors.information900.rgb,
-    borderColor: colors.information500.rgb,
+    backgroundColor: colors.colour.background.info,
+    color: colors.colour.foreground.info,
+    borderColor: colors.colour.border.info,
   },
 };
 
@@ -90,7 +90,7 @@ const Card: React.FC<CardProps> = ({
   padding = true,
   stroke = false,
   shadow = true,
-  strokeColor = colors.cerulean.rgb,
+  strokeColor = colors.colour.brand.gp2[500],
   strokeSize = borderRadius,
   overrideStyles,
   title,

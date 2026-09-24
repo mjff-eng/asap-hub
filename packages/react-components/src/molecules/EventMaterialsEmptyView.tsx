@@ -42,14 +42,14 @@ const EventMaterialsEmptyView: React.FC<EventMaterialsEmptyViewProps> = ({
     {paperClipIcon}
     <Headline3>No meeting materials available.</Headline3>
     {variant === 'stale' ? (
-      <Paragraph accent="neutral900">
+      <Paragraph accent="tertiary">
         Nothing was shared for this event.{' '}
         <Link href={createMailTo('hub@asap.science')}>Contact ASAP</Link> if you
         have any questions.
       </Paragraph>
     ) : (
       <div css={textContainerStyles}>
-        <Paragraph accent="neutral900">
+        <Paragraph accent="tertiary">
           Meeting Materials for this event will be coming soon - usually within
           a week after the event. Please check back later.
         </Paragraph>

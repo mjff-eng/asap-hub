@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { formatDateToTimezone } from '../date';
-import { colour, success100 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -26,7 +26,7 @@ const monthStyles = css({
   display: 'block',
   padding: `${rem(8)} 0`,
 
-  backgroundColor: success100.rgb,
+  backgroundColor: colour.background.brand,
   color: colour.foreground.primary,
 
   fontSize: rem(17),

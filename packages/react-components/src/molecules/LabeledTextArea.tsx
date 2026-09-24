@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 
 import { rem } from '../pixels';
 import { Label, Paragraph, TextArea } from '../atoms';
-import { colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 import { TooltipInfo } from '.';
 
 const tipStyles = css({
@@ -13,7 +13,7 @@ const tipStyles = css({
   },
   paddingTop: 0,
 
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const subtitleStyles = css({

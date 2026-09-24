@@ -22,7 +22,7 @@ import {
   plusRectIcon,
   Subtitle,
   colors,
-  neutral900,
+  colour,
 } from '..';
 import { paddingStyles } from '../card';
 import ManuscriptFileSection from '../molecules/ManuscriptFileSection';
@@ -115,7 +115,7 @@ const quickCheckStyles = css({
 });
 
 const quickCheckDetailsStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const additionalInformationListStyles = css({
@@ -134,7 +134,7 @@ const additionalInformationEntryStyles = css({
 });
 const additionalInformationValueStyles = css({
   textAlign: 'right',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   overflowWrap: 'anywhere',
 
   [`@media (max-width: ${mobileScreen.max}px)`]: {
@@ -273,7 +273,7 @@ const ManuscriptVersionCard: React.FC<ManuscriptVersionCardProps> = ({
               <Subtitle noMargin>Manuscript #{version.count}</Subtitle>
 
               <div css={updatedByAndEditContainerStyles}>
-                <Caption accent="neutral900" noMargin>
+                <Caption accent="tertiary" noMargin>
                   <div css={updatedByContainerStyles}>
                     <span css={updatedByTextStyles}>
                       Last Update:
@@ -491,7 +491,7 @@ const ManuscriptVersionCard: React.FC<ManuscriptVersionCardProps> = ({
                   </ol>
                 </div>
               )}
-              <Caption accent="neutral900" noMargin>
+              <Caption accent="tertiary" noMargin>
                 <div css={userContainerStyles}>
                   Date created:
                   <span>{formatDate(new Date(version.createdDate))}</span>

@@ -13,7 +13,7 @@ import { FunctionComponent, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { Link } from '../atoms';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import {
   BlueSkyIcon,
   GithubIcon,
@@ -47,7 +47,7 @@ const wrapIcon = (
   adjustBackground?: boolean,
 ) => (
   <span css={[iconStyles, adjustBackground ? iconCSS : {}]}>
-    <Icon color={neutral900.hex} />
+    <Icon color={colour.neutral[600]} />
   </span>
 );
 

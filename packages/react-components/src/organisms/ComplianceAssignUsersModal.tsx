@@ -83,7 +83,7 @@ const InformationRow: React.FC<{
   <div css={informationRowStyles}>
     <Subtitle noMargin>{title}</Subtitle>
     {value && (
-      <Paragraph noMargin accent="neutral900">
+      <Paragraph noMargin accent="tertiary">
         {value}
       </Paragraph>
     )}

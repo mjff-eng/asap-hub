@@ -1,11 +1,6 @@
 import { css } from '@emotion/react';
 
-import {
-  colorWithTransparency,
-  colour,
-  neutral900,
-  colorFromHex,
-} from '../colors';
+import { colorWithTransparency, colour, colorFromHex } from '../colors';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
 
 export const contentStyles = css({
@@ -173,14 +168,16 @@ export const deleteButtonStyles = (
       : `0 2px 4px ${
           colorWithTransparency(colorFromHex(colour.neutral[100]), 0.3).rgba
         }`,
-    color: enabled ? colour.foreground.primary : neutral900.rgb,
+    color: enabled ? colour.foreground.primary : colour.neutral[600],
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       minWidth: rem(24),
     },
     '> svg': {
       width: rem(14.4),
       height: rem(14.4),
-      ...(enabled ? {} : { filter: 'none', stroke: neutral900.rgb }),
+      ...(enabled
+        ? {}
+        : { filter: 'none', stroke: colour.foreground.tertiary }),
     },
   });
 };

@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-import { space, colour } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { canHover } from '../utils/common';
 import { Portal } from '../utils/portal';
@@ -31,7 +31,7 @@ const bubbleStyles = css({
   zIndex: 100,
   pointerEvents: 'none',
 
-  backgroundColor: space.rgb,
+  backgroundColor: colour.neutral[900],
   color: colour.neutral[0],
   borderRadius: rem(4),
   padding: `${rem(6)} ${rem(12)}`,
@@ -46,7 +46,7 @@ const bubbleStyles = css({
     transform: 'translateY(-50%)',
     borderTop: `${rem(triangle)} solid transparent`,
     borderBottom: `${rem(triangle)} solid transparent`,
-    borderRight: `${rem(triangle)} solid ${space.rgb}`,
+    borderRight: `${rem(triangle)} solid ${colour.neutral[900]}`,
   },
 });
 

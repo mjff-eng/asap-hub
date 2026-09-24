@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph } from '../atoms';
-import { neutral900, neutral800, colour } from '../colors';
+import { colour } from '../colors';
 import {
   ExportIcon,
   InactiveBadgeIcon,
@@ -99,7 +99,7 @@ const sectionTitleStyles = css([
 const sectionSeparatorStyles = css([
   sectionLineStyles,
   {
-    color: neutral900.rgb,
+    color: colour.foreground.tertiary,
     padding: `0 ${rem(8)}`,
     [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
   },
@@ -108,7 +108,7 @@ const sectionSeparatorStyles = css([
 const sectionCountStyles = css([
   sectionLineStyles,
   {
-    color: neutral900.rgb,
+    color: colour.foreground.tertiary,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       display: 'block',
       marginTop: rem(8),
@@ -118,7 +118,7 @@ const sectionCountStyles = css([
 
 const sectionHelperStyles = css([
   sectionLineStyles,
-  { margin: `${rem(8)} 0 0`, color: neutral800.rgb },
+  { margin: `${rem(8)} 0 0`, color: colour.foreground.quaternary },
 ]);
 
 const showMoreCellStyles = css({
@@ -320,7 +320,7 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
       <Card>
         <div css={emptyStateStyles}>
           {header}
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             No attendance recorded yet
           </Paragraph>
         </div>

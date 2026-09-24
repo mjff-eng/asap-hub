@@ -15,7 +15,7 @@ it('applies the text margin', () => {
 });
 
 it('renders a given accent color', () => {
-  const { getByText } = render(<Paragraph accent="error500">text</Paragraph>);
+  const { getByText } = render(<Paragraph accent="error">text</Paragraph>);
   const { color } = getComputedStyle(getByText('text'));
   expect(color).toBe(error500.rgb);
 });

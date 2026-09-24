@@ -39,27 +39,27 @@ export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
   default: {
     backgroundColor: 'transparent',
     borderColor: colors.colour.border.tertiary,
-    color: colors.neutral900.rgb,
+    color: colors.colour.foreground.tertiary,
   },
   green: {
-    backgroundColor: colors.success100.rgb,
-    color: colors.colour.brand.crn[800],
-    borderColor: colors.colour.brand.crn[800],
+    backgroundColor: colors.colour.background.success,
+    color: colors.colour.foreground.success,
+    borderColor: colors.colour.border.success,
   },
   warning: {
-    backgroundColor: colors.warning100.rgb,
+    backgroundColor: colors.colour.background.warning,
     color: colors.colour.foreground.warning,
     borderColor: colors.colour.border.warning,
   },
   info: {
-    backgroundColor: colors.info100.rgb,
-    color: colors.info500.rgb,
-    borderColor: colors.info500.rgb,
+    backgroundColor: colors.colour.background.info,
+    color: colors.colour.foreground.info,
+    borderColor: colors.colour.border.info,
   },
   neutral: {
     backgroundColor: colors.colour.background.tertiary,
-    color: colors.neutral800.rgb,
-    borderColor: colors.neutral800.rgb,
+    color: colors.colour.foreground.quaternary,
+    borderColor: colors.colour.neutral[400],
   },
   error: {
     backgroundColor: colors.colour.background.error,
@@ -67,23 +67,23 @@ export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
     borderColor: colors.colour.border.error,
   },
   success: {
-    backgroundColor: colors.success100.rgb,
-    color: colors.success500.rgb,
-    borderColor: colors.success500.rgb,
+    backgroundColor: colors.colour.background.success,
+    color: colors.colour.foreground.success,
+    borderColor: colors.colour.border.success,
   },
   gray: {
-    color: colors.neutral900.rgb,
+    color: colors.colour.foreground.tertiary,
     backgroundColor: colors.colour.background.tertiary,
     border: 'transparent',
   },
   blue: {
-    color: colors.info500.rgb,
-    backgroundColor: colors.info100.rgb,
+    color: colors.colour.foreground.info,
+    backgroundColor: colors.colour.background.info,
     border: 'transparent',
     ...(isLink
       ? {
           ':hover': {
-            color: colors.info900.rgb,
+            color: colors.colour.foreground.info,
             backgroundColor: 'rgba(207, 237, 251, 1)',
           },
         }

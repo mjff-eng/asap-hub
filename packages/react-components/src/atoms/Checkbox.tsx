@@ -2,7 +2,7 @@ import { css, Theme } from '@emotion/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import { rem } from '../pixels';
-import { colour, neutral900, colorFromHex } from '../colors';
+import { colour, colorFromHex } from '../colors';
 import { noop } from '../utils';
 import { tickIcon } from '../icons';
 
@@ -27,7 +27,7 @@ const checkboxStyles = ({
     borderColor: colour.border.tertiary,
 
     ':enabled:hover, :enabled:focus': {
-      borderColor: neutral900.rgb,
+      borderColor: colour.neutral[600],
     },
 
     ':checked': {

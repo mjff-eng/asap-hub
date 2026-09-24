@@ -12,7 +12,7 @@ import {
   rem,
 } from '../pixels';
 import { contentSidePaddingWithoutNavigation } from '../layout';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 
 const styles = css({
   width: 'max-content',
@@ -77,7 +77,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
         <Paragraph primary>
           <strong>We’ll send you a password reset link</strong>
           <br />
-          <span css={{ color: neutral900.rgb }}>
+          <span css={{ color: colour.foreground.tertiary }}>
             You might have set up your account with Google or Orcid. Please
             check if you are able to log in with any of those log in methods
             before resetting your password.

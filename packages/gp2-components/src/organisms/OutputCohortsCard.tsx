@@ -8,12 +8,10 @@ import {
   Headline2,
   Paragraph,
   pixels,
-  colors,
   colour,
 } from '@asap-hub/react-components';
 
 const { rem, tabletScreen } = pixels;
-const { neutral900 } = colors;
 
 const container = css({
   display: 'grid',
@@ -59,7 +57,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const titleStyles = css({
@@ -79,12 +77,12 @@ const OutputCohortsCard: React.FC<OutputCohortsCardProps> = ({
     <div css={[container]}>
       <Headline2 noMargin>Contributing Cohort Studies</Headline2>
       <div css={descriptionStyles}>
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           Find out all cohort studies that contributed to this output.
         </Paragraph>
       </div>
       {contributingCohorts.length === 0 ? (
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           <b>No contributing cohorts available.</b>
         </Paragraph>
       ) : (

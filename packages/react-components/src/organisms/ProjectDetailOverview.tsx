@@ -36,7 +36,7 @@ const ProjectDetailOverviewContent: React.FC<
 > = ({ title, description, proposalURL }) => (
   <>
     <Display styleAsHeading={4}>{title}</Display>
-    <Paragraph accent="neutral900">{description}</Paragraph>
+    <Paragraph accent="tertiary">{description}</Paragraph>
     {proposalURL ? (
       <div css={buttonContainerStyles}>
         <Link

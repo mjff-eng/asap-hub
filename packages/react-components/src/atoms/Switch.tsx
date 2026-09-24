@@ -1,5 +1,5 @@
 import { css, Theme } from '@emotion/react';
-import { neutral800, colour, colorFromHex } from '../colors';
+import { colour, colorFromHex } from '../colors';
 import { noop } from '../utils';
 
 const toggleStyles = (
@@ -41,7 +41,7 @@ const toggleStyles = (
     },
 
     ':disabled': {
-      backgroundColor: neutral800.rgb,
+      backgroundColor: colour.neutral[400],
       cursor: 'not-allowed',
       '::before': {
         backgroundColor: '#fff',

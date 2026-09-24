@@ -34,7 +34,7 @@ const EventConversation: React.FC<EventConversationProps> = ({
   id && slack ? (
     <Card>
       <Headline3>Continue the conversation</Headline3>
-      <Paragraph accent="neutral900">
+      <Paragraph accent="tertiary">
         You can join this group’s Slack channel to chat with other members or
         explore the group’s page.
       </Paragraph>

@@ -87,7 +87,7 @@ const TeamProjectsCard: React.FC<TeamProjectsCardProps> = ({
     <TabbedCard
       title="Projects"
       description={
-        <Paragraph accent="neutral900" noMargin styles={headerParagraphStyles}>
+        <Paragraph accent="tertiary" noMargin styles={headerParagraphStyles}>
           Explore projects where a team has received funding.
         </Paragraph>
       }
@@ -98,7 +98,7 @@ const TeamProjectsCard: React.FC<TeamProjectsCardProps> = ({
           truncateFrom: undefined,
           disabled: false,
           empty: (
-            <Paragraph accent="neutral900">
+            <Paragraph accent="tertiary">
               There are no funded projects.
             </Paragraph>
           ),
@@ -154,7 +154,7 @@ const TeamProjectsCard: React.FC<TeamProjectsCardProps> = ({
 
             {description && (
               <div css={descriptionStyles}>
-                <Paragraph noMargin accent="neutral900">
+                <Paragraph noMargin accent="tertiary">
                   {description}
                 </Paragraph>
               </div>

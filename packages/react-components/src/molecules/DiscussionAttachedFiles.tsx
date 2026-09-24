@@ -17,7 +17,7 @@ const containerStyles = css({
 });
 
 const titleStyles = css({
-  color: colors.neutral900.rgb,
+  color: colors.colour.foreground.tertiary,
   fontSize: rem(14),
   lineHeight: rem(16),
   fontWeight: '700',
@@ -71,7 +71,7 @@ const downloadIconStyles = css({
     height: rem(16),
   },
   '& > svg > path:first-of-type': {
-    fill: colors.neutral900.rgb,
+    fill: colors.colour.foreground.tertiary,
   },
 });
 

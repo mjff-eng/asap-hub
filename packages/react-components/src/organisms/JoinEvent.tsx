@@ -94,7 +94,7 @@ const JoinEvent: React.FC<JoinEventProps> = ({
           <div css={layoutStyles}>
             <WarningIcon color={colour.utilitarian.orange[600]} />
           </div>
-          <Paragraph accent="error500">
+          <Paragraph accent="error">
             We’re sorry but we couldn’t find the link to this event.{' '}
             <br
               css={{

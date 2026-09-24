@@ -1,11 +1,11 @@
 import { EventResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { speakerIcon } from '../icons';
 import { rem } from '../pixels';
 
 const listItemStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   whiteSpace: 'break-spaces',
   overflow: 'hidden',
   textOverflow: 'ellipsis',

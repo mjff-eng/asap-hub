@@ -10,7 +10,7 @@ import { ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { Card, Headline3, Paragraph } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 import Milestone from './Milestone';
-import { neutral200, colour } from '../colors';
+import { colour } from '../colors';
 import type { ResearchOutputOption } from '../utils';
 import { LabeledMultiSelect, PageControls } from '../molecules';
 import { NumericalSortingIcon, searchIcon } from '../icons';
@@ -94,7 +94,7 @@ const milestoneRowWrapperStyles = (index: number, isLast: boolean) =>
     display: 'grid',
     gridColumn: '1 / -1',
     gridTemplateColumns: 'subgrid',
-    backgroundColor: index % 2 === 0 ? '#FFFFFF' : neutral200.rgb,
+    backgroundColor: index % 2 === 0 ? '#FFFFFF' : colour.neutral[50],
     marginInline: rem(-24),
     paddingInline: rem(24),
     paddingTop: index === 0 ? 0 : rem(20),
@@ -207,7 +207,7 @@ const ProjectMilestonesTable: FC<ProjectMilestonesProps> = ({
   if (!milestones.length) {
     if (!hasAppliedSearch) {
       return (
-        <Paragraph accent="neutral900" noMargin styles={noMilestonesTextStyles}>
+        <Paragraph accent="tertiary" noMargin styles={noMilestonesTextStyles}>
           No milestones related to the {grantLabel} Grant have been added to
           this project yet.
         </Paragraph>
@@ -227,7 +227,7 @@ const ProjectMilestonesTable: FC<ProjectMilestonesProps> = ({
           <div>
             <Headline3 noMargin>No results found.</Headline3>
           </div>
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             Please double-check your search for any typos or try a different
             search term.
           </Paragraph>

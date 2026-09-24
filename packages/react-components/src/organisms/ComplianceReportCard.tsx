@@ -145,7 +145,7 @@ const ComplianceReportCard: React.FC<ComplianceReportCardProps> = ({
           <div css={titleContainerStyles}>
             <Subtitle noMargin>Compliance Report #{count}</Subtitle>
             <div css={addedByContainerStyles}>
-              <Caption accent="neutral900" noMargin>
+              <Caption accent="tertiary" noMargin>
                 <div css={addedByStyles}>
                   <span css={addedByTextStyles}>
                     Date added:

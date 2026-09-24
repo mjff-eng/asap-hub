@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 
 import { useValidation, styles, validationMessageStyles } from '../form';
 import { noop } from '../utils';
-import { colour, neutral900, colorFromHex } from '../colors';
+import { colour, colorFromHex } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const containerStyles = css({
@@ -30,7 +30,7 @@ const textareaStyles = css({
   },
 });
 const disabledStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   backgroundColor: colour.background.tertiary,
 });
 const invalidStyles = css({

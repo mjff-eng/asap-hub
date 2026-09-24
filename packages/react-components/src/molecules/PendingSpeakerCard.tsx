@@ -2,7 +2,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Avatar, Button, Link, Paragraph, PillSelector } from '../atoms';
-import { warning100, colour } from '../colors';
+import { colour } from '../colors';
 import { binIcon, plusIcon, WarningIcon } from '../icons';
 import { deleteButtonStyles } from '../organisms/shared-event-card-styles';
 import { mobileScreen, rem } from '../pixels';
@@ -29,7 +29,7 @@ const cardStyles = css({
   padding: rem(16),
   border: `1px solid ${colour.utilitarian.orange[700]}`,
   borderRadius: rem(8),
-  backgroundColor: warning100.rgb,
+  backgroundColor: colour.background.warning,
 });
 
 const iconDesktopStyles = css([hideOnMobileStyles, { flexShrink: 0 }]);

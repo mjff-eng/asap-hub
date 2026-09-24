@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
 
 import { Button, Card, Paragraph, Subtitle } from '../atoms';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { minusRectIcon, plusRectIcon } from '../icons';
 import { ExpandableText, Info } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
@@ -75,7 +75,7 @@ const fieldStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(8),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   lineHeight: rem(24),
   [`@media (min-width: ${tabletScreen.min}px)`]: {
@@ -163,18 +163,18 @@ const MetricDetails: React.FC<Pick<Metric, 'philosophy' | 'definition'>> = ({
 }) => (
   <div css={detailsContentStyles}>
     <div>
-      <Subtitle accent="neutral900" noMargin>
+      <Subtitle accent="tertiary" noMargin>
         ASAP Philosophy
       </Subtitle>
-      <Paragraph noMargin accent="neutral900">
+      <Paragraph noMargin accent="tertiary">
         {philosophy}
       </Paragraph>
     </div>
     <div css={definitionStyles}>
-      <Subtitle accent="neutral900" noMargin>
+      <Subtitle accent="tertiary" noMargin>
         Metric Definition
       </Subtitle>
-      <Paragraph noMargin accent="neutral900">
+      <Paragraph noMargin accent="tertiary">
         {definition}
       </Paragraph>
     </div>
