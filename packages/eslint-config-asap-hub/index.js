@@ -32,7 +32,7 @@ module.exports = {
   ],
   rules: {
     'import/prefer-default-export': 'off',
-    // run by `yarn lint:deprecated-colours`; lint fails on any warning
+    // run by `yarn colours:report`; lint fails on any warning
     'import/no-deprecated': 'off',
     'import/named': 'off',
     'import/export': 'off',
