@@ -1,13 +1,7 @@
 import { css, Theme } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 
-import {
-  colorWithTransparency,
-  neutral900,
-  colour,
-  success100,
-  colorFromHex,
-} from '../colors';
+import { colorWithTransparency, colour, colorFromHex } from '../colors';
 import { GeneralSortingIcon } from '../icons';
 import { rem } from '../pixels';
 
@@ -52,23 +46,22 @@ const optionStyles = css({
   gap: rem(8),
   padding: `${rem(8)} ${rem(16)}`,
 
-  color: neutral900.rgba,
+  color: colour.foreground.tertiary,
   border: 'none',
   backgroundColor: 'unset',
 
   ':hover': {
-    backgroundColor: success100.rgba,
+    backgroundColor: colour.background['hover-brand'],
     color: colour.brand.crn[800],
   },
 });
 
 const hoverStyles = ({
-  primary100 = success100,
   primary900 = colorFromHex(colour.brand.crn[800]),
 }: Theme['colors'] = {}) =>
   css({
     ':hover': {
-      backgroundColor: primary100.rgba,
+      backgroundColor: colour.background['hover-brand'],
       color: primary900.rgba,
     },
   });

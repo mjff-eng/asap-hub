@@ -1,10 +1,9 @@
 import { gp2 as gp2Model } from '@asap-hub/model';
 import { css } from '@emotion/react';
-import { Link, pixels, colors, colour } from '@asap-hub/react-components';
+import { Link, pixels, colour } from '@asap-hub/react-components';
 import { socialIconsMap } from '../utils';
 
 const { rem } = pixels;
-const { neutral900 } = colors;
 
 const ROW_GAP = 12;
 
@@ -42,7 +41,7 @@ const SocialIcons: React.FC<SocialIconsProps> = ({
   researchGate,
   blog,
 }) => {
-  const iconProps = { color: neutral900.hex };
+  const iconProps = { color: colour.foreground.tertiary };
 
   const socialLinks = [
     { key: 'orcid', link: orcid, Icon: socialIconsMap.orcid },

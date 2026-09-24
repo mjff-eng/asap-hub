@@ -95,7 +95,7 @@ const FormSection: React.FC<FormSectionProps> = ({
             hasHeaderWrap && descriptionWithTitleStyles,
           ])}
         >
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             {description}
           </Paragraph>
         </div>

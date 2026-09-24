@@ -19,18 +19,7 @@ import {
 import { rem, mobileScreen, formTargetWidth } from '../pixels';
 import { Portal } from '../utils/portal';
 
-import {
-  colorWithTransparency,
-  neutral200,
-  info100,
-  info500,
-  warning100,
-  success100,
-  success500,
-  colour,
-  neutral900,
-  colorFromHex,
-} from '../colors';
+import { colorWithTransparency, colour, colorFromHex } from '../colors';
 
 const containerStyles = css({
   display: 'flex',
@@ -92,17 +81,21 @@ export const itemContentStyles = (type: StatusType = 'default') =>
     fontWeight: 'normal',
     fontSize: '14px',
     margin: `${rem(8)} ${rem(16)} !important`,
-    backgroundColor: info100.rgba,
-    color: info500.rgba,
+    backgroundColor: colour.background.info,
+    color: colour.foreground.info,
     borderRadius: rem(24),
     alignSelf: 'initial',
     maxWidth: 'fit-content',
     ...(type === 'warning' || type === 'final'
       ? {
           color:
-            type === 'warning' ? colour.foreground.warning : success500.rgba,
+            type === 'warning'
+              ? colour.foreground.warning
+              : colour.foreground.success,
           backgroundColor:
-            type === 'warning' ? warning100.rgba : success100.rgba,
+            type === 'warning'
+              ? colour.background.warning
+              : colour.background.success,
           columnGap: rem(6),
           padding: `${rem(4)} ${rem(16)} ${rem(4)} ${rem(8)}`,
         }
@@ -123,6 +116,11 @@ const resetButtonStyles = css({
   },
 });
 
+const statusColours = (status: 'info' | 'warning' | 'success') => ({
+  background: colour.background[status],
+  color: colour.foreground[status],
+});
+
 export const statusButtonStyles = (
   type: StatusType,
   isComplianceReviewer: boolean,
@@ -132,21 +130,11 @@ export const statusButtonStyles = (
     borderRadius: rem(24),
     fontWeight: 400,
     border: 'none',
-    background: info100.rgba,
-    color: info500.rgba,
-    ...(type === 'warning'
-      ? {
-          background: warning100.rgba,
-          color: colour.foreground.warning,
-        }
-      : type === 'final'
-        ? {
-            background: success100.rgba,
-            color: success500.rgba,
-          }
-        : {}),
+    ...statusColours(
+      type === 'warning' ? 'warning' : type === 'final' ? 'success' : 'info',
+    ),
     'svg #Group-7': {
-      stroke: info500.rgba,
+      stroke: colour.foreground.info,
       ...([isComplianceReviewer ? 'warning' : 'default', 'final'].includes(type)
         ? {
             stroke: colour.foreground.warning,
@@ -167,19 +155,9 @@ export const statusTagStyles = (type: StatusType, noWrap: boolean = true) =>
     borderRadius: rem(24),
     fontWeight: 400,
     border: 'none',
-    background: info100.rgba,
-    color: info500.rgba,
-    ...(type === 'default'
-      ? {
-          background: warning100.rgba,
-          color: colour.foreground.warning,
-        }
-      : type === 'final'
-        ? {
-            background: success100.rgba,
-            color: success500.rgba,
-          }
-        : {}),
+    ...statusColours(
+      type === 'default' ? 'warning' : type === 'final' ? 'success' : 'info',
+    ),
     paddingLeft: rem(16),
     paddingRight: rem(16),
     ...(noWrap ? { textWrap: 'nowrap' } : {}),
@@ -190,10 +168,10 @@ export const statusTagStyles = (type: StatusType, noWrap: boolean = true) =>
   });
 
 const itemStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   backgroundColor: 'none',
   ':hover': {
-    backgroundColor: neutral200.rgba,
+    backgroundColor: colour.background.secondary,
   },
 });
 
@@ -216,11 +194,11 @@ export const iconStyles = (type: string, isComplianceReviewer: boolean) =>
           }
         : {}),
       '& > rect:first-of-type': {
-        ...(type === 'final' ? { fill: success500.rgba } : {}),
+        ...(type === 'final' ? { fill: colour.foreground.success } : {}),
       },
       '& > rect:last-of-type': {
-        stroke: info500.rgba,
-        ...(type === 'final' ? { stroke: success500.rgba } : {}),
+        stroke: colour.foreground.info,
+        ...(type === 'final' ? { stroke: colour.foreground.success } : {}),
       },
     },
   });

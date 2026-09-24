@@ -10,7 +10,7 @@ import {
   mobileScreen,
   largeDesktopScreen,
 } from '../pixels';
-import { colour, neutral900, success100, colorFromHex } from '../colors';
+import { colour, colorFromHex } from '../colors';
 import {
   firstPageIcon,
   nextPageIcon,
@@ -45,7 +45,7 @@ const itemStyles = css({
     justifySelf: 'center',
     alignSelf: 'center',
 
-    color: neutral900.rgb,
+    color: colour.foreground.tertiary,
   },
 
   '&.follows-gap::before': {
@@ -71,7 +71,7 @@ const textStyles = ({
     justifyContent: 'center',
     alignContent: 'center',
 
-    color: neutral900.rgb,
+    color: colour.foreground.tertiary,
     svg: {
       stroke: primary500.rgba,
       verticalAlign: 'middle',
@@ -79,10 +79,9 @@ const textStyles = ({
   });
 const activeTextStyles = ({
   primary500 = colorFromHex(colour.brand.crn[500]),
-  primary100 = success100,
 }: Theme['colors'] = {}) =>
   css({
-    backgroundColor: primary100.rgba,
+    backgroundColor: colour.background.brand,
     color: primary500.rgba,
   });
 const disabledTextStyles = css({

@@ -3,7 +3,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import React from 'react';
 import { Divider, Link, Paragraph } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { TabbedCard } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
 import { splitListBy } from '../utils';
@@ -27,7 +27,7 @@ const titleStyle = css({
 });
 
 const roleStyle = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const listItemStyle = css({
@@ -125,7 +125,7 @@ const UserInterestGroupCard: React.FC<UserInterestGroupCardProps> = ({
       description={
         <Paragraph
           noMargin
-          accent="neutral900"
+          accent="tertiary"
           styles={css({ margin: '0 0 8px' })}
         >
           Interest groups allow teams to share findings with other teams about
@@ -145,7 +145,7 @@ const UserInterestGroupCard: React.FC<UserInterestGroupCardProps> = ({
           truncateFrom: 5,
           disabled: activeMemberships.length === 0,
           empty: (
-            <Paragraph accent="neutral900">
+            <Paragraph accent="tertiary">
               There are no active collaborations.
             </Paragraph>
           ),
@@ -156,7 +156,7 @@ const UserInterestGroupCard: React.FC<UserInterestGroupCardProps> = ({
           truncateFrom: 5,
           disabled: inactiveMemberships.length === 0,
           empty: (
-            <Paragraph accent="neutral900">
+            <Paragraph accent="tertiary">
               There are no past collaborations.
             </Paragraph>
           ),

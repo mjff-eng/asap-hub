@@ -7,7 +7,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useState } from 'react';
 import { Button, Link } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { info100, info500, colour } from '../colors';
+import { colour } from '../colors';
 import { article as articleIcon, minusRectIcon, plusRectIcon } from '../icons';
 import { useTextTruncation } from '../hooks';
 import { noop, ResearchOutputOption } from '../utils';
@@ -78,8 +78,8 @@ const aimBadgeStyles = css({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: info100.rgb,
-  color: info500.rgb,
+  backgroundColor: colour.background.info,
+  color: colour.foreground.info,
   fontSize: rem(14),
   padding: `${rem(2)} ${rem(6)}`,
   lineHeight: rem(16),

@@ -12,11 +12,9 @@ import {
   addUserIcon,
   AssignedUsersAvatarList,
   AuthorSelect,
-  neutral200,
   PencilIcon,
   plusIcon,
   StatusButton,
-  neutral900,
   colour,
 } from '..';
 import { Anchor, Button, Link, Pill } from '../atoms';
@@ -32,7 +30,7 @@ const rowStyles = css({
     borderBottom: 'none',
   },
   ':nth-of-type(even) td': {
-    background: neutral200.rgb,
+    background: colour.background.secondary,
   },
   ':nth-of-type(odd) td': {
     background: '#fff',
@@ -55,7 +53,7 @@ const apcCoverageStyles = (italicize: boolean) =>
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: rem(14),
-    color: neutral900.rgb,
+    color: colour.foreground.tertiary,
     maxWidth: rem(72),
     ...(italicize ? { fontStyle: 'italic' } : {}),
   });
@@ -80,7 +78,7 @@ const noUsersStyles = css({
   display: 'flex',
   fontStyle: 'italic',
   fontSize: rem(14),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   width: '100%',
   whiteSpace: 'nowrap',
   alignItems: 'anchor-center',

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Paragraph, Subtitle } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import {
   happyFaceIcon,
   informationInverseIcon,
@@ -37,7 +37,7 @@ const dataTextStyles = css({
   fontWeight: 400,
   fontSize: rem(17),
   textWrap: 'nowrap',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const captionLegendStyles = css({
@@ -96,10 +96,13 @@ const StaticPerformanceCard = ({
     {legend && (
       <div css={captionLegendStyles}>
         <div css={iconContainerStyles}>
-          {PercentageIcon({ title: 'percentage', color: neutral900.rgb })}
+          {PercentageIcon({
+            title: 'percentage',
+            color: colour.foreground.tertiary,
+          })}
         </div>
         <Paragraph
-          accent="neutral900"
+          accent="tertiary"
           noMargin
           styles={css(paragraphContainerStyles)}
         >

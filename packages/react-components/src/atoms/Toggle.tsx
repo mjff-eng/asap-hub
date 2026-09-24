@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { lineHeight, rem } from '../pixels';
-import { colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 import { noop } from '../utils';
 
 const styles = css({
@@ -36,7 +36,7 @@ const activeStyles = css({
   border: `1px solid ${colour.border.tertiary}`,
   color: colour.foreground.primary,
   svg: {
-    stroke: neutral900.rgb,
+    stroke: colour.foreground.tertiary,
   },
 });
 const buttonRight = css({

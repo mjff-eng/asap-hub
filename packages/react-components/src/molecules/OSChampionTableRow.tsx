@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import { Button, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { neutral200, colour } from '../colors';
+import { colour } from '../colors';
 import {
   plusRectIcon,
   minusRectIcon,
@@ -23,7 +23,7 @@ const rowStyles = (isEvenRow: boolean) =>
       borderTop: 'none',
       borderBottom: 'none',
     },
-    background: isEvenRow ? '#fff' : neutral200.rgb,
+    background: isEvenRow ? '#fff' : colour.neutral[50],
     td: {
       borderBottom: `1px solid ${colour.border.tertiary}`,
     },
@@ -49,7 +49,7 @@ const collapsedRowStyles = (isEvenRow: boolean) =>
         borderBottom: 'none',
       },
     },
-    background: isEvenRow ? '#fff' : neutral200.rgb,
+    background: isEvenRow ? '#fff' : colour.neutral[50],
   });
 const teamLinkStyles = css({
   display: 'inline-block',

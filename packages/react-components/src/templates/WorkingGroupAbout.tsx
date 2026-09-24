@@ -64,7 +64,7 @@ const WorkingGroupAbout: React.FC<WorkingGroupAboutProps> = ({
       <Card>
         <Headline3>Tags</Headline3>
         <div css={tagListStyle}>
-          <Paragraph accent="neutral900">
+          <Paragraph accent="tertiary">
             Explore keywords related to skills, techniques, resources, and
             tools.
           </Paragraph>
@@ -79,7 +79,7 @@ const WorkingGroupAbout: React.FC<WorkingGroupAboutProps> = ({
             Would you like to collaborate with this Working Group?
           </span>
         </Headline3>
-        <Paragraph accent="neutral900">
+        <Paragraph accent="tertiary">
           We are always looking for new people to collaborate with our working
           group to find the best solutions for our goals.
         </Paragraph>

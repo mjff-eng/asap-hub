@@ -17,7 +17,7 @@ const EventMaterialComingSoon: React.FC<EventMaterialComingSoonProps> = ({
       {materialType}
     </Headline2>
     <div css={css({ marginTop: rem(24) })} />
-    <Paragraph noMargin accent="neutral900">
+    <Paragraph noMargin accent="tertiary">
       {materialType} for this event will be coming soon - usually within a week
       after the event. Please check back later.
     </Paragraph>

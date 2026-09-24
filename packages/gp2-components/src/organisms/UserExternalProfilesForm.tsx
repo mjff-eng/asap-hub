@@ -2,7 +2,7 @@ import { gp2 } from '@asap-hub/model';
 import {
   LabeledTextField,
   FormSection,
-  neutral900,
+  colour,
 } from '@asap-hub/react-components';
 import { urlExpression, USER_SOCIAL_NOT_URL } from '@asap-hub/validation';
 import { css, Interpolation, Theme } from '@emotion/react';
@@ -156,7 +156,7 @@ const UserExternalProfilesForm: React.FC<UserExternalProfilesFormProps> = ({
               subtitle="(optional)"
               labelIndicator={
                 <span css={[iconStyles, iconCSS]}>
-                  <Icon color={neutral900.hex} />
+                  <Icon color={colour.neutral[600]} />
                 </span>
               }
               enabled={!isSaving}
@@ -177,7 +177,7 @@ const UserExternalProfilesForm: React.FC<UserExternalProfilesFormProps> = ({
             subtitle="(optional)"
             labelIndicator={
               <span css={[iconStyles, iconCSS]}>
-                <Icon color={neutral900.hex} />
+                <Icon color={colour.neutral[600]} />
               </span>
             }
             enabled={!isSaving}

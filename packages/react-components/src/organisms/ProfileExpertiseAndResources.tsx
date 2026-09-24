@@ -49,7 +49,7 @@ const ProfileExpertiseAndResources: React.FC<
               marginBottom: rem(24),
             }}
           >
-            <Paragraph noMargin accent="neutral900">
+            <Paragraph noMargin accent="tertiary">
               Explore keywords related to skills, techniques, resources, and
               tools.
             </Paragraph>

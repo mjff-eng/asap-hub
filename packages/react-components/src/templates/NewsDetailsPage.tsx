@@ -57,7 +57,7 @@ const NewsDetailsPage: React.FC<NewsDetailsPageProps> = ({
     </div>
   ) : null;
   const publishDateComponent = (
-    <Caption accent={'neutral900'} asParagraph>
+    <Caption accent="tertiary" asParagraph>
       Posted: {formatDate(new Date(created))} by ASAP
     </Caption>
   );
@@ -79,7 +79,7 @@ const NewsDetailsPage: React.FC<NewsDetailsPageProps> = ({
           <Card>
             <Headline3 noMargin>Tags</Headline3>
             <div css={descriptionStyles}>
-              <Paragraph accent="neutral900">
+              <Paragraph accent="tertiary">
                 Explore keywords related to skills, techniques, resources, and
                 tools.
               </Paragraph>

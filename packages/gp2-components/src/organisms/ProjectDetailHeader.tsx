@@ -12,6 +12,7 @@ import {
   Subtitle,
   TabLink,
   TabNav,
+  colour,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 
@@ -25,7 +26,6 @@ import ShareOutputButton from '../molecules/ShareOutputButton';
 
 import ProjectSummaryFooter from './ProjectSummaryFooter';
 import ProjectSummaryHeader from './ProjectSummaryHeader';
-import colors from '../templates/colors';
 
 const { rem } = pixels;
 const { createMailTo } = mail;
@@ -79,12 +79,12 @@ const infoIconStyles = css({
 
 const copyButtonStyles = css({
   backgroundColor: 'inherit',
-  borderColor: colors.info150.rgb,
+  borderColor: colour.brand.gp2[100],
   ':hover, :focus': {
-    borderColor: colors.info500.rgb,
+    borderColor: colour.brand.gp2[500],
   },
   path: {
-    fill: colors.info500.rgb,
+    fill: colour.brand.gp2[500],
   },
 });
 

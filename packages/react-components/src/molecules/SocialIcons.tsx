@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { cloneElement } from 'react';
 
 import { Link } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import {
   BlueSkyIcon,
   LinkedInIcon,
@@ -17,7 +17,7 @@ import {
 } from '../icons';
 import { rem } from '../pixels';
 
-const SOCIAL_ICON_COLOR = neutral900.hex;
+const SOCIAL_ICON_COLOR = colour.neutral[600];
 const ROW_GAP = 12;
 const socialContainerStyles = css({
   display: 'flex',

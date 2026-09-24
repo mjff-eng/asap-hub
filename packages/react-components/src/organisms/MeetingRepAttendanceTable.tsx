@@ -10,7 +10,7 @@ import { PageControls } from '..';
 
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { neutral200, neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import {
   AlphabeticalSortingIcon,
   InactiveBadgeIcon,
@@ -70,7 +70,7 @@ const buttonStyles = css({
 const rowStyles = css({
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':nth-of-type(even)': {
-    background: neutral200.rgb,
+    background: colour.background.secondary,
   },
   ':last-child': {
     borderBottom: 'none',
@@ -89,7 +89,7 @@ const valueStyles = css({
   fontWeight: 400,
   fontSize: rem(17),
   textWrap: 'nowrap',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   width: rem(45),
 });
 

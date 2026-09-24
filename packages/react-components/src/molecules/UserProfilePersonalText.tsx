@@ -7,7 +7,7 @@ import { UserProfileContext } from '@asap-hub/react-context';
 import { Link, Ellipsis, Anchor, Subtitle, OverflowBadge } from '../atoms';
 import { alumniBadgeIcon, locationIcon } from '../icons';
 import { rem, lineHeight } from '../pixels';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import {
   formatUserLocation,
   groupUserTeamsByTeamId,
@@ -23,7 +23,7 @@ const locationStyles = css({
   padding: `${rem(6)} 0 ${rem(24)}`,
   display: 'flex',
   alignItems: 'center',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const iconStyles = css({
@@ -36,7 +36,7 @@ const iconStyles = css({
 const paragraphStyles = css({
   marginTop: 0,
   marginBottom: rem(18),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const badgeStyles = css({

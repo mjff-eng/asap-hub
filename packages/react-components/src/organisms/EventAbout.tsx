@@ -61,7 +61,7 @@ const EventAbout: React.FC<EventAboutProps> = ({
               Tags
             </Headline2>
             <div css={{ marginTop: rem(24), marginBottom: rem(32) }}>
-              <Paragraph noMargin accent="neutral900">
+              <Paragraph noMargin accent="tertiary">
                 {TAGS_COPY}
               </Paragraph>
             </div>
@@ -95,7 +95,7 @@ const EventAbout: React.FC<EventAboutProps> = ({
           marginBottom: rem(24),
         }}
       >
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           {TAGS_COPY}
         </Paragraph>
       </div>

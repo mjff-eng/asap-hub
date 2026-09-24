@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 import { Button, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { neutral200, colour } from '../colors';
+import { colour } from '../colors';
 import { plusRectIcon, minusRectIcon, InactiveBadgeIcon } from '../icons';
 import { TeamCollaborationMetric } from '../organisms';
 import { rem, tabletScreen } from '../pixels';
@@ -19,7 +19,7 @@ const rowStyles = css({
   padding: `${rem(20)} ${rem(24)} 0`,
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':nth-of-type(2n+3)': {
-    background: neutral200.rgb,
+    background: colour.background.secondary,
   },
   ':last-child': {
     borderBottom: 'none',
@@ -77,7 +77,7 @@ const rowContainerStyles = css({
     borderBottom: 'none',
   },
   ':nth-of-type(2n+3)': {
-    background: neutral200.rgb,
+    background: colour.background.secondary,
   },
   ':last-child': {
     borderBottom: 'none',

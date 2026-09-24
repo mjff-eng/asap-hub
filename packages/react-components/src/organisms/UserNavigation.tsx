@@ -133,7 +133,7 @@ const UserNavigation: React.FC<UserNavigationProps> = ({
       </li>
     </ul>
     <div css={bottomLinksStyles}>
-      <Caption accent="neutral900" asParagraph>
+      <Caption accent="tertiary" asParagraph>
         <Anchor href={staticPages({}).terms({}).$}>Terms of Use</Anchor>
         {'  ·  '}
         <Anchor href={staticPages({}).privacyPolicy({}).$}>

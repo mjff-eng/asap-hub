@@ -3,7 +3,7 @@ import { CSSObject } from '@emotion/serialize';
 import { GroupBase, InputProps, StylesConfig } from 'react-select';
 import { ellipsisStyles } from './atoms/Ellipsis';
 import { MultiSelectOptionsType } from './atoms/MultiSelect';
-import { colour, neutral900, success100, colorFromHex } from './colors';
+import { colour, colorFromHex } from './colors';
 import {
   borderWidth,
   indicatorPadding,
@@ -24,9 +24,9 @@ export type OptionsType<T> = readonly T[];
 const { ...baseStyles } = styles;
 
 const disabledStyles = {
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   svg: {
-    fill: neutral900.rgb,
+    fill: colour.foreground.tertiary,
   },
   backgroundColor: colour.background.tertiary,
 };
@@ -86,7 +86,6 @@ export const reactSelectStyles = <
 >(
   {
     colors: {
-      primary100 = success100,
       primary500 = colorFromHex(colour.brand.crn[500]),
       primary900 = colorFromHex(colour.brand.crn[800]),
     } = {},
@@ -100,7 +99,7 @@ export const reactSelectStyles = <
 
       padding: `${rem(12)} ${rem(paddingLeftRight)}`,
 
-      backgroundColor: isFocused ? primary100.rgba : 'unset',
+      backgroundColor: isFocused ? colour.background['hover-brand'] : 'unset',
       color: isFocused ? primary900.rgba : 'unset',
       ':active': undefined,
     }),
@@ -134,7 +133,7 @@ export const reactSelectStyles = <
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: isInvalid ? colour.foreground.error : neutral900.rgb,
+      color: isInvalid ? colour.foreground.error : colour.neutral[600],
       opacity: isInvalid ? 0.4 : provided.opacity,
     }),
     menu: (provided: CSSObject) => ({
@@ -150,7 +149,6 @@ export const reactMultiSelectStyles = <
 >(
   {
     colors: {
-      primary100 = success100,
       primary500 = colorFromHex(colour.brand.crn[500]),
       primary900 = colorFromHex(colour.brand.crn[800]),
     } = {},
@@ -165,7 +163,7 @@ export const reactMultiSelectStyles = <
 
       padding: `${rem(12)} ${rem(paddingLeftRight)}`,
 
-      backgroundColor: isFocused ? primary100.rgba : 'unset',
+      backgroundColor: isFocused ? colour.background['hover-brand'] : 'unset',
       color: isFocused ? primary900.rgba : 'unset',
       ':active': undefined,
     }),

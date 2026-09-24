@@ -13,7 +13,7 @@ import githubSanitizationSchema from 'hast-util-sanitize/lib/github';
 import { parseComponents, parseTagNames } from '../utils/parsing';
 import { Headline2 } from '../atoms';
 import { rem } from '../pixels';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 
 interface RichTextProps {
   readonly toc?: boolean;
@@ -28,7 +28,7 @@ interface PoorTextProps {
 }
 
 const styles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   '.toc-level': {
     listStyle: 'none',
   },

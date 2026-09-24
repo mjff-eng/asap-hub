@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const spin = keyframes({
@@ -23,7 +23,7 @@ export type SpinnerProps = {
 const Spinner: React.FC<SpinnerProps> = ({
   size = 24,
   thickness = 3,
-  color = neutral900.rgb,
+  color = colour.neutral[600],
   trackColor = 'transparent',
   arc = false,
   speed = '1s',

@@ -29,7 +29,7 @@ const NoEvents: React.FC<{
       <Display styleAsHeading={3}>
         This {type} doesn’t have any {lowerEventPeriod} events!
       </Display>
-      <Paragraph accent="neutral900">
+      <Paragraph accent="tertiary">
         In the meantime, try exploring other {lowerEventPeriod} events on the
         Hub.
       </Paragraph>

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, Theme } from '@emotion/react';
 import { InputHTMLAttributes } from 'react';
-import { neutral800, colour, neutral900, colorFromHex } from '../colors';
+import { colour, colorFromHex } from '../colors';
 import {
   indicatorPadding,
   indicatorSize,
@@ -26,10 +26,10 @@ type FieldType =
   | 'number';
 
 const disabledStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   backgroundColor: colour.background.tertiary,
   '&[type="date"]': {
-    color: neutral900.rgb,
+    color: colour.foreground.tertiary,
   },
 });
 
@@ -40,7 +40,7 @@ const labelIndicatorStyles = css({
   border: `1px solid ${colour.border.tertiary}`,
   borderRight: 0,
   display: 'flex',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   order: -1,
 });
 
@@ -91,7 +91,7 @@ const textFieldStyles = (
       color: colour.neutral[200],
     },
     '&[type="date"]': {
-      color: hasValue ? '#000' : neutral800.hex,
+      color: hasValue ? '#000' : colour.neutral[400],
     },
 
     // see invalid
@@ -99,7 +99,7 @@ const textFieldStyles = (
       display: 'none',
     },
     '~ div svg': {
-      stroke: neutral900.rgb,
+      stroke: colour.foreground.tertiary,
     },
     ':focus ~ div svg': {
       stroke: primary900.rgba,

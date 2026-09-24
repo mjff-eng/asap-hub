@@ -4,17 +4,7 @@ import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { Pill, Spinner } from '../atoms';
-import {
-  colorWithTransparency,
-  neutral200,
-  neutral800,
-  info100,
-  info500,
-  success100,
-  success500,
-  colour,
-  colorFromHex,
-} from '../colors';
+import { colorWithTransparency, colour, colorFromHex } from '../colors';
 import { chevronDownIcon, chevronUpIcon } from '../icons';
 import { rem } from '../pixels';
 import { Portal } from '../utils/portal';
@@ -34,15 +24,19 @@ const accentPalette: Record<
   { bg: string; fg: string; border: string }
 > = {
   success: {
-    bg: success100.rgb,
-    fg: success500.rgb,
-    border: success500.rgb,
+    bg: colour.background.success,
+    fg: colour.foreground.success,
+    border: colour.border.success,
   },
-  info: { bg: info100.rgb, fg: info500.rgb, border: info500.rgb },
+  info: {
+    bg: colour.background.info,
+    fg: colour.foreground.info,
+    border: colour.border.info,
+  },
   neutral: {
     bg: colour.general.blue.cerulean[25],
-    fg: neutral800.rgb,
-    border: neutral800.rgb,
+    fg: colour.neutral[400],
+    border: colour.neutral[400],
   },
   error: {
     bg: colour.utilitarian.red[100],
@@ -117,7 +111,7 @@ const menuItemStyles = css({
   textAlign: 'left',
   cursor: 'pointer',
   ':hover, :focus-visible': {
-    backgroundColor: neutral200.rgba,
+    backgroundColor: colour.background.secondary,
     outline: 'none',
   },
 });

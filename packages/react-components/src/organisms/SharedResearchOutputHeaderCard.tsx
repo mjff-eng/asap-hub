@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { network } from '@asap-hub/routing';
 
 import { Card, Display, StateTag } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { formatDate } from '../date';
 import { rem, mobileScreen } from '../pixels';
 import { captionStyles } from '../text';
@@ -11,7 +11,7 @@ import { AssociationList, UsersList } from '../molecules';
 import { SharedResearchMetadata } from '.';
 
 const timestampStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   display: 'flex',
   flexDirection: 'row',
   whiteSpace: 'pre',

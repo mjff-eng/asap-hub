@@ -83,7 +83,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({
           <TeamIcon />
         </span>
         <Headline3>No results found.</Headline3>
-        <Paragraph accent="neutral900">
+        <Paragraph accent="tertiary">
           Please double-check your search for any typos or try a different
           search term.
         </Paragraph>
@@ -92,7 +92,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({
       <main css={{ textAlign: 'center', paddingTop: rem(48) }}>
         <span css={iconStyles}>{article}</span>
         <Headline3>No manuscripts available.</Headline3>
-        <Paragraph accent="neutral900">
+        <Paragraph accent="tertiary">
           When a team shares a manuscript for a compliance review, it will be
           listed here.
         </Paragraph>

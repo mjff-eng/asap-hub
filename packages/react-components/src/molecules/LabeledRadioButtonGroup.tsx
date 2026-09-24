@@ -7,7 +7,7 @@ import { noop } from '../utils';
 import { LabeledRadioButton } from '.';
 import { mobileScreen, rem } from '../pixels';
 import { validationMessageStyles } from '../form';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 
 export type LabeledRadioButtonGroupProps<V extends string> = {
   readonly title?: string;
@@ -44,7 +44,7 @@ const subtitleStyles = css({
 });
 
 const descriptionStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 export default function LabeledRadioButtonGroup<V extends string>({

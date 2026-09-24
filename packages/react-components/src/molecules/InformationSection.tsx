@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { info100, info500 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { informationIcon } from '../icons';
 
@@ -10,9 +10,9 @@ const containerStyles = css({
   alignItems: 'flex-start',
   gap: rem(16),
   padding: rem(16),
-  backgroundColor: info100.rgb,
+  backgroundColor: colour.background.info,
   borderRadius: rem(8),
-  border: `1px solid ${info500.rgb}`,
+  border: `1px solid ${colour.border.info}`,
 });
 
 const iconContainerStyles = css({
@@ -23,7 +23,7 @@ const iconContainerStyles = css({
 });
 
 const textStyles = css({
-  color: info500.rgb,
+  color: colour.foreground.info,
   fontSize: rem(17),
   fontWeight: 400,
   verticalAlign: 'middle',

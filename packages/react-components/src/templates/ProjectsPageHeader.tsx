@@ -3,7 +3,7 @@ import { projects } from '@asap-hub/routing';
 
 import { Display, Paragraph, TabLink } from '../atoms';
 import { rem, smallDesktopScreen } from '../pixels';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { SearchAndFilter } from '../organisms';
 import { TabNav } from '../molecules';
 import {
@@ -67,7 +67,9 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
               Icon={() => (
                 <DiscoveryProjectIcon
                   color={
-                    isDiscoveryActive ? colour.neutral[900] : neutral900.rgb
+                    isDiscoveryActive
+                      ? colour.neutral[900]
+                      : colour.neutral[600]
                   }
                 />
               )}
@@ -79,7 +81,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
               Icon={() => (
                 <ResourceProjectIcon
                   color={
-                    isResourceActive ? colour.neutral[900] : neutral900.rgb
+                    isResourceActive ? colour.neutral[900] : colour.neutral[600]
                   }
                 />
               )}
@@ -90,7 +92,9 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
               href={projects.template + projects({}).traineeProjects.template}
               Icon={() => (
                 <TraineeProjectIcon
-                  color={isTraineeActive ? colour.neutral[900] : neutral900.rgb}
+                  color={
+                    isTraineeActive ? colour.neutral[900] : colour.neutral[600]
+                  }
                 />
               )}
             >
@@ -101,7 +105,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
       >
         <div>
           <Display styleAsHeading={2}>Projects</Display>
-          <Paragraph accent="neutral900" styles={descriptionStyles}>
+          <Paragraph accent="tertiary" styles={descriptionStyles}>
             Projects are targeted efforts that translate recommendations into
             action to advance the PD field. They address critical research
             needs, drive discovery, or produce shared resources, often with
@@ -111,7 +115,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
       </PageInfoContainer>
       {showSearch && (
         <PageConstraints noPaddingBottom>
-          <Paragraph accent="neutral900" styles={projectTypeDescriptionStyles}>
+          <Paragraph accent="tertiary" styles={projectTypeDescriptionStyles}>
             {projectDescriptions[page]}
           </Paragraph>
           <SearchAndFilter

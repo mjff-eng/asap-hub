@@ -5,7 +5,7 @@ import emotionNormalize from 'emotion-normalize';
 import { fontStyles } from '../text';
 import { Product, themes, themeVariables } from '../theme';
 import { rem } from '../pixels';
-import { neutral800, colour } from '../colors';
+import { colour } from '../colors';
 
 const styles = {
   html: {
@@ -36,7 +36,7 @@ const styles = {
     outerWidth: 8,
   },
   '*::-webkit-scrollbar-thumb:hover': {
-    background: neutral800.rgb,
+    background: colour.neutral[400],
   },
 } as const;
 type GlobalStylesProps = {

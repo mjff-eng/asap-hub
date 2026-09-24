@@ -14,7 +14,6 @@ import {
   Button,
   colors,
   complianceReportIcon,
-  neutral900,
   NotificationDotIcon,
   resubmitManuscriptIcon,
   Tooltip,
@@ -124,7 +123,7 @@ const tabButtonStyles = ({
     paddingLeft: rem(0),
     paddingRight: rem(0),
     paddingBottom: rem(20),
-    color: neutral900.rgb,
+    color: colour.foreground.tertiary,
     backgroundColor: 'transparent',
     border: 'none',
     '&.active': {

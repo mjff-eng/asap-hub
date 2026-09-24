@@ -5,13 +5,11 @@ import {
   LinkHeadline,
   pixels,
   TagList,
-  neutral900,
   colour,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
-import colors from '../templates/colors';
 import ProjectSummaryFooter from './ProjectSummaryFooter';
 import ProjectSummaryHeader from './ProjectSummaryHeader';
 
@@ -36,10 +34,10 @@ export const cardStyles: Record<
   { color: string }
 > = {
   Active: {
-    color: colors.info500.rgba,
+    color: colour.foreground.info,
   },
   Completed: {
-    color: colors.secondary500.rgba,
+    color: colour.foreground.success,
   },
   Paused: {
     color: colour.foreground.warning,
@@ -91,7 +89,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           [crossQuery]: {
             gap: rem(32),
           },
-          color: neutral900.rgb,
+          color: colour.foreground.tertiary,
         }),
       ]}
     >

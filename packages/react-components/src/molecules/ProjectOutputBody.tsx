@@ -16,7 +16,7 @@ import LinkHeadline from './LinkHeadline';
 import PillList from './PillList';
 import TagList from './TagList';
 import { formatDate } from '../date';
-import { neutral800 } from '../colors';
+import { colour } from '../colors';
 import { mobileScreen, rem } from '../pixels';
 import {
   alumniBadgeIcon,
@@ -194,7 +194,7 @@ const datesStyles = css({
   flexWrap: 'wrap',
   columnGap: rem(12),
   marginTop: rem(24),
-  color: neutral800.rgb,
+  color: colour.foreground.quaternary,
   '& > *, & p': {
     lineHeight: rem(16),
   },

@@ -134,7 +134,7 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
       </Display>
       <div>
         {subheaderRecord[documentType] && (
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             {subheaderRecord[documentType]}
           </Paragraph>
         )}

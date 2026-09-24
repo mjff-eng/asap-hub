@@ -5,7 +5,7 @@ import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph, Pill } from '../atoms';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const container = css({
@@ -69,7 +69,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const showMoreStyles = css({
@@ -138,12 +138,12 @@ const RelatedResearchCard = <
       >
         <Headline3 noMargin>{title}</Headline3>
         <div css={descriptionStyles}>
-          <Paragraph accent="neutral900" noMargin>
+          <Paragraph accent="tertiary" noMargin>
             {description}
           </Paragraph>
         </div>
         {relatedResearch.length === 0 ? (
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             <b>No related research available.</b>
           </Paragraph>
         ) : (

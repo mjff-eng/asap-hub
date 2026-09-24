@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { formatDateToTimezone } from '../date';
 
 const container = css({
@@ -61,7 +61,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const showMoreStyles = css({
@@ -105,12 +105,12 @@ const RelatedEventsCard: React.FC<RelatedEventsCardProps> = ({
       >
         <Headline3 noMargin>Related {hub} Hub Events</Headline3>
         <div css={descriptionStyles}>
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             {description}
           </Paragraph>
         </div>
         {relatedEvents.length === 0 ? (
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             <b>No related {hub} Hub events available.</b>
           </Paragraph>
         ) : (

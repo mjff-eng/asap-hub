@@ -26,7 +26,9 @@ const containerStyles = (isLast: boolean, unread: boolean) =>
     gap: rem(20),
     padding: `${rem(24)} ${rem(15)}`,
 
-    borderLeft: `8px solid ${unread ? colors.info500.rgb : 'transparent'}`,
+    borderLeft: `8px solid ${
+      unread ? colors.colour.border.info : 'transparent'
+    }`,
 
     borderTop: `1px solid ${colors.colour.border.tertiary}`,
     borderBottom: isLast ? `1px solid ${colors.colour.border.tertiary}` : 0,
@@ -67,7 +69,7 @@ const userInfoStyles = css({
   display: 'inline-flex',
   gap: rem(2),
   fontSize: rem(14),
-  color: colors.neutral900.rgb,
+  color: colors.colour.foreground.tertiary,
   fontWeight: 400,
 });
 
@@ -79,7 +81,7 @@ const lastUpdateStyles = (unread: boolean) =>
     marginTop: rem(16),
     fontSize: rem(14),
     fontWeight: unread ? 700 : 400,
-    color: colors.neutral900.rgb,
+    color: colors.colour.foreground.tertiary,
   });
 
 const expandedViewContainerStyles = css({
@@ -100,7 +102,7 @@ const userInfoWrapperStyles = css({
   flexWrap: 'wrap',
   fontSize: rem(14),
   gap: rem(8),
-  color: colors.neutral900.rgb,
+  color: colors.colour.foreground.tertiary,
   fontWeight: 400,
 });
 
@@ -108,11 +110,11 @@ const textEditorStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: colors.neutral900.rgb,
+  color: colors.colour.foreground.tertiary,
 });
 
 const discussionTextStyles = css({
-  color: colors.neutral900.rgb,
+  color: colors.colour.foreground.tertiary,
 });
 
 const replyButtonStyles = css({
@@ -154,7 +156,7 @@ const replyCountStyles = css({
   fontSize: rem(14),
   lineHeight: rem(16),
   fontWeight: 700,
-  color: colors.neutral900.rgb,
+  color: colors.colour.foreground.tertiary,
   marginRight: rem(8),
   flexShrink: 0,
 });

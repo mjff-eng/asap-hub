@@ -4,7 +4,7 @@ import { network } from '@asap-hub/routing';
 
 import { StateTag } from '../atoms';
 import { mobileScreen, rem } from '../pixels';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import {
   TeamIcon,
   LabIcon,
@@ -16,7 +16,7 @@ import { getCounterString, getProjectRoute } from '../utils';
 import { EntityCard } from '.';
 
 const footerStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 
   display: 'flex',
   flexDirection: 'column',

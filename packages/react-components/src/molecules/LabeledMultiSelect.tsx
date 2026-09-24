@@ -7,7 +7,7 @@ import {
   Paragraph,
   Label,
 } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const subtitleStyles = css({
@@ -15,7 +15,7 @@ const subtitleStyles = css({
 });
 
 const descriptionStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 export type LabeledMultiSelectProps<

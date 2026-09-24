@@ -14,7 +14,7 @@ import {
   AssociationList,
   TagList,
 } from '../molecules';
-import { neutral900 } from '..';
+import { colour } from '..';
 import { captionStyles } from '../text';
 
 const imageStyle = css({
@@ -62,7 +62,7 @@ const containerStyle = css({
 
 const footerStyles = css({
   ...captionStyles,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   justifySelf: 'flex-end',
 });
 
@@ -124,7 +124,7 @@ const TutorialCard: React.FC<TutorialCardProps> = ({
             {link ? <ExternalLink label={linkText} href={link} /> : null}
           </div>
           <div css={{ flex: 1 }}>
-            <Paragraph accent="neutral900">{shortText}</Paragraph>
+            <Paragraph accent="tertiary">{shortText}</Paragraph>
           </div>
           {!!authors.length && (
             <div css={associationsContainer}>

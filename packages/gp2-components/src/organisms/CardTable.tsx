@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { CollapsibleTable } from '../molecules';
 
 import { mobileQuery, nonMobileQuery } from '../layout';
-import colors from '../templates/colors';
 
 import { CollapsibleTableRow } from '../molecules/CollapsibleTable';
 
@@ -91,7 +90,9 @@ const CardTable = ({
                     <Subtitle noMargin>{headings[idx]}</Subtitle>
                   </div>
                   <span
-                    css={idx !== 0 ? { color: colors.greyscale1000.rgb } : null}
+                    css={
+                      idx !== 0 ? { color: colour.foreground.tertiary } : null
+                    }
                   >
                     {value}
                   </span>

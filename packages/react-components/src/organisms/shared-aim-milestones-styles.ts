@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { rem, tabletScreen } from '../pixels';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 
 export const descriptionContainerStyles = css({
   display: 'flex',
@@ -22,7 +22,7 @@ export const mobileLabelStyles = css({
 
 export const clampedDescriptionStyles = (isExpanded: boolean) =>
   css({
-    color: neutral900.rgb,
+    color: colour.foreground.tertiary,
     fontSize: rem(17),
     lineHeight: rem(24),
     margin: 0,
@@ -77,7 +77,7 @@ export const articlesHeaderStyles = css({
 });
 
 export const articlesSeparatorStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(14),
 });
 
@@ -95,7 +95,7 @@ export const articlesIconButtonStyles = css({
 
 export const articlesTitleStyles = css({
   fontSize: rem(17),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   lineHeight: rem(26),
 });
 
@@ -159,7 +159,7 @@ export const noArticlesTextStyles = css({
   fontStyle: 'italic',
   fontSize: rem(17),
   lineHeight: rem(26),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 export const editButtonStyles = css({

@@ -1,10 +1,9 @@
 import { gp2 as gp2Model } from '@asap-hub/model';
-import { utils } from '@asap-hub/react-components';
+import { utils, colour } from '@asap-hub/react-components';
 
 import { format, formatDistanceStrict as formatDistance } from 'date-fns';
 import { dateIcon, usersIcon } from '../icons';
 import IconWithLabel from '../molecules/IconWithLabel';
-import colors from '../templates/colors';
 
 const { getCounterString } = utils;
 
@@ -29,7 +28,7 @@ const ProjectSummaryFooter: React.FC<ProjectSummaryFooterProps> = ({
           <>
             {' - '}
             {format(new Date(endDate), 'MMM yyyy')} ·{' '}
-            <span css={{ color: colors.neutral800.rgba }}>
+            <span css={{ color: colour.foreground.quaternary }}>
               {`(${formatDistance(new Date(startDate), new Date(endDate), {
                 unit: 'month',
               })})`}

@@ -159,7 +159,7 @@ const SharedResearchCard: React.FC<SharedResearchCardProps> = ({
           <TagList max={3} tags={keywords} />
         </div>
       )}
-      <Caption accent={'neutral900'} asParagraph>
+      <Caption accent="tertiary" asParagraph>
         Date Added: {formatDate(new Date(addedDate || created))}
       </Caption>
     </Card>

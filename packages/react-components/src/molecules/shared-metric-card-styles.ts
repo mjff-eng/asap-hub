@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { headlineStyles } from '../text';
 
@@ -14,7 +14,7 @@ export const metricContainerStyles = css({
 
 export const metricLabelStyles = css({
   margin: 0,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   lineHeight: rem(24),
 });
