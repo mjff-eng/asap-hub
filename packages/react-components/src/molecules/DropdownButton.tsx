@@ -20,6 +20,7 @@ import {
   success100,
   neutral900,
   neutral300,
+  colorFromHex,
 } from '../colors';
 
 const containerStyles = css({
@@ -47,7 +48,7 @@ const menuContainerStyles = (customMenuWidth?: number) =>
     width: '100%',
     top: 0,
     right: 0,
-    backgroundColor: colour.neutral[0].rgb,
+    backgroundColor: colour.neutral[0],
     border: `1px solid ${neutral500.rgb}`,
     boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
 
@@ -109,7 +110,7 @@ export type ItemType = 'title' | 'inner' | 'default';
 
 const itemStyles = ({
   primary100 = success100,
-  primary900 = colour.brand.crn[800],
+  primary900 = colorFromHex(colour.brand.crn[800]),
   type = 'default',
 }: { type?: ItemType } & Theme['colors']) =>
   css({

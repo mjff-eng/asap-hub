@@ -10,6 +10,7 @@ import {
   neutral300,
   neutral500,
   neutral700,
+  colorFromHex,
 } from '../colors';
 import {
   indicatorPadding,
@@ -76,9 +77,9 @@ const invalidStyles = css({
     [`& ~ .${LABEL_INDICATOR_CLASS_NAME}`]: {
       backgroundColor: error500.rgb,
       borderColor: error500.rgb,
-      color: colour.neutral[0].rgb,
+      color: colour.neutral[0],
       svg: {
-        stroke: colour.neutral[0].rgb,
+        stroke: colour.neutral[0],
         fill: 'white',
       },
     },
@@ -87,7 +88,7 @@ const invalidStyles = css({
 
 const textFieldStyles = (
   hasValue: boolean,
-  { primary900 = colour.brand.crn[800] }: Theme['colors'] = {},
+  { primary900 = colorFromHex(colour.brand.crn[800]) }: Theme['colors'] = {},
 ) =>
   css({
     backgroundPosition: `right ${rem(paddingLeftRight)} top ${rem(

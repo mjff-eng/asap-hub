@@ -28,15 +28,15 @@ const pillContainerStyles = css({
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    stroke: colour.brand.crn[500].rgb,
+    stroke: colour.brand.crn[500],
   }),
   grey: css({
-    stroke: colour.brand.crn[500].rgb,
-    ':active': { stroke: colour.brand.crn[800].rgb },
+    stroke: colour.brand.crn[500],
+    ':active': { stroke: colour.brand.crn[800] },
   }),
   dark: css({
-    stroke: colour.neutral[0].rgb,
-    ':active': { stroke: colour.neutral[0].rgb },
+    stroke: colour.neutral[0],
+    ':active': { stroke: colour.neutral[0] },
   }),
 };
 const mainStyles = css({
@@ -61,7 +61,7 @@ const titleStyles = css({
 const linkStyles = css({
   textDecoration: 'underline solid transparent',
   transition: 'text-decoration 100ms ease-in-out, color 100ms ease-in-out',
-  color: colour.brand.crn[500].rgb,
+  color: colour.brand.crn[500],
 
   ':hover': {
     textDecoration: 'underline',

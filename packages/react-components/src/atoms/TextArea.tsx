@@ -11,6 +11,7 @@ import {
   neutral700,
   neutral900,
   neutral300,
+  colorFromHex,
 } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
@@ -146,7 +147,9 @@ const TextArea: React.FC<TextAreaProps> = ({
 
         {maxLength !== undefined && (
           <div
-            css={({ colors: { primary500 = colour.brand.crn[500] } = {} }) => [
+            css={({
+              colors: { primary500 = colorFromHex(colour.brand.crn[500]) } = {},
+            }) => [
               validationMessageStyles,
               limitStyles,
               { color: reachedMaxLength ? error500.rgb : primary500.rgba },

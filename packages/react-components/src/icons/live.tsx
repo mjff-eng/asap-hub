@@ -33,9 +33,9 @@ const live = (
       cx="12"
       cy="12"
       r="8"
-      fill={colour.brand.crn[500].hex}
+      fill={colour.brand.crn[500]}
     />
-    <circle cx="12" cy="12" r="4" fill={colour.brand.crn[500].hex} />
+    <circle cx="12" cy="12" r="4" fill={colour.brand.crn[500]} />
   </svg>
 );
 

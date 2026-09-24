@@ -35,11 +35,11 @@ const containerStyles = css({
 
 const titleStyles = css({
   gridArea: 'title / title / span 2',
-  color: colour.neutral[0].rgb,
+  color: colour.neutral[0],
 });
 
 const subtitleStyles = css({
-  color: colour.neutral[0].rgb,
+  color: colour.neutral[0],
   display: 'none',
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     gridArea: 'subtitle / subtitle / span 2',

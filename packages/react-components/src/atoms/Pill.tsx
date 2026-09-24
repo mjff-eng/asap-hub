@@ -43,8 +43,8 @@ export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
   },
   green: {
     backgroundColor: colors.success100.rgb,
-    color: colors.colour.brand.crn[800].rgb,
-    borderColor: colors.colour.brand.crn[800].rgb,
+    color: colors.colour.brand.crn[800],
+    borderColor: colors.colour.brand.crn[800],
   },
   warning: {
     backgroundColor: colors.warning100.rgb,

@@ -39,7 +39,7 @@ export const styles = {
   borderWidth: rem(borderWidth),
   borderColor: neutral500.rgb,
   ':focus': {
-    borderColor: colour.brand.crn[500].rgb,
+    borderColor: colour.brand.crn[500],
   },
 } as const;
 

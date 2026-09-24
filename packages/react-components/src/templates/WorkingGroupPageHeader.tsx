@@ -120,7 +120,7 @@ const dropdownButtonStyling = css({
   display: 'flex',
   columnGap: rem(9),
   svg: {
-    color: colour.brand.crn[800].rgb,
+    color: colour.brand.crn[800],
   },
 });
 

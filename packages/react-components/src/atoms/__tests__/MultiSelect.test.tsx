@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { waitFor } from '@testing-library/dom';
 
-import { colour, error500 } from '../../colors';
+import { colour, error500, colorFromHex } from '../../colors';
 
 import MultiSelect from '../MultiSelect';
 import { searchIcon } from '../../icons';
@@ -143,12 +143,12 @@ it('shows the focused suggestion in green', async () => {
   await userEvent.click(getByRole('combobox'));
   expect(
     findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).not.toBe(colour.brand.crn[800].rgb.replace(/ /g, ''));
+  ).not.toBe(colorFromHex(colour.brand.crn[800]).rgb.replace(/ /g, ''));
 
   fireEvent.mouseOver(getByText('LGW'));
   expect(
     findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).toBe(colour.brand.crn[800].rgb.replace(/ /g, ''));
+  ).toBe(colorFromHex(colour.brand.crn[800]).rgb.replace(/ /g, ''));
 });
 
 describe('invalidity', () => {
@@ -187,7 +187,7 @@ describe('invalidity', () => {
 
     expect(queryByText('Nope.')).toBeNull();
     expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-      colour.brand.crn[500].rgba,
+      colorFromHex(colour.brand.crn[500]).rgba,
     );
   });
 
@@ -205,7 +205,7 @@ describe('invalidity', () => {
 
     expect(queryByText('Nope.')).toBeNull();
     expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-      colour.brand.crn[500].rgba,
+      colorFromHex(colour.brand.crn[500]).rgba,
     );
 
     const parent = findParentWithStyle(input, 'flexBasis')?.element;

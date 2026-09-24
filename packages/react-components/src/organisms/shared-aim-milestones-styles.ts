@@ -39,7 +39,7 @@ export const clampedDescriptionStyles = (isExpanded: boolean) =>
 export const readMoreButtonStyles = css({
   background: 'none',
   border: 'none',
-  color: colour.brand.crn[500].rgb,
+  color: colour.brand.crn[500],
   cursor: 'pointer',
   padding: 0,
   fontSize: rem(17),

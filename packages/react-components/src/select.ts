@@ -13,6 +13,7 @@ import {
   neutral300,
   neutral500,
   neutral700,
+  colorFromHex,
 } from './colors';
 import {
   borderWidth,
@@ -97,8 +98,8 @@ export const reactSelectStyles = <
   {
     colors: {
       primary100 = success100,
-      primary500 = colour.brand.crn[500],
-      primary900 = colour.brand.crn[800],
+      primary500 = colorFromHex(colour.brand.crn[500]),
+      primary900 = colorFromHex(colour.brand.crn[800]),
     } = {},
   }: Theme,
   isInvalid: boolean,
@@ -161,8 +162,8 @@ export const reactMultiSelectStyles = <
   {
     colors: {
       primary100 = success100,
-      primary500 = colour.brand.crn[500],
-      primary900 = colour.brand.crn[800],
+      primary500 = colorFromHex(colour.brand.crn[500]),
+      primary900 = colorFromHex(colour.brand.crn[800]),
     } = {},
   }: Theme,
   isInvalid: boolean,
@@ -194,7 +195,7 @@ export const reactMultiSelectStyles = <
       ...(isInvalid
         ? {
             borderColor: isFocused ? primary900.rgba : error500.rgb,
-            backgroundColor: isFocused ? colour.neutral[0].rgb : error100.rgb,
+            backgroundColor: isFocused ? colour.neutral[0] : error100.rgb,
             svg: { fill: 'unset' },
           }
         : {}),
@@ -211,7 +212,7 @@ export const reactMultiSelectStyles = <
       borderWidth: `${borderWidth}px`,
       borderColor: isInvalid ? neutral700.rgba : neutral500.rgb,
       borderRadius: rem(18),
-      backgroundColor: colour.neutral[0].rgb,
+      backgroundColor: colour.neutral[0],
     }),
     multiValueLabel: (provided) => ({
       ...provided,

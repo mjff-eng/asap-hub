@@ -48,7 +48,7 @@ const pillStyles = (selected: boolean, error: boolean) =>
     borderRadius: rem(24),
     cursor: 'pointer',
     userSelect: 'none',
-    backgroundColor: selected ? colors.info100.rgba : colour.neutral[0].rgb,
+    backgroundColor: selected ? colors.info100.rgba : colour.neutral[0],
     color: selected ? colors.info500.rgba : neutral900.rgba,
     '> svg': {
       width: rem(24),

@@ -16,6 +16,7 @@ import {
   neutral700,
   neutral900,
   success100,
+  colorFromHex,
 } from '../colors';
 import {
   firstPageIcon,
@@ -41,7 +42,7 @@ const listStyles = css({
   gridAutoColumns: rem(30),
   gridGap: vminLinearCalc(mobileScreen, 6, largeDesktopScreen, 12, 'px'),
 
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
 });
 
 const itemStyles = css({
@@ -69,7 +70,7 @@ const itemStyles = css({
 });
 
 const textStyles = ({
-  primary500 = colour.brand.crn[500],
+  primary500 = colorFromHex(colour.brand.crn[500]),
 }: Theme['colors'] = {}) =>
   css({
     height: '100%',
@@ -84,7 +85,7 @@ const textStyles = ({
     },
   });
 const activeTextStyles = ({
-  primary500 = colour.brand.crn[500],
+  primary500 = colorFromHex(colour.brand.crn[500]),
   primary100 = success100,
 }: Theme['colors'] = {}) =>
   css({

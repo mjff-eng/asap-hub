@@ -8,6 +8,7 @@ import {
   neutral500,
   neutral700,
   success100,
+  colorFromHex,
 } from '../colors';
 import { GeneralSortingIcon } from '../icons';
 import { rem } from '../pixels';
@@ -28,7 +29,7 @@ const menuStyles = css({
   right: `-${rem(6)}`,
   top: `-${rem(6)}`,
 
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   border: `1px solid ${neutral500.rgb}`,
   boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
 
@@ -57,13 +58,13 @@ const optionStyles = css({
 
   ':hover': {
     backgroundColor: success100.rgba,
-    color: colour.brand.crn[800].rgba,
+    color: colour.brand.crn[800],
   },
 });
 
 const hoverStyles = ({
   primary100 = success100,
-  primary900 = colour.brand.crn[800],
+  primary900 = colorFromHex(colour.brand.crn[800]),
 }: Theme['colors'] = {}) =>
   css({
     ':hover': {
