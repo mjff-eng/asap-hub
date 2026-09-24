@@ -7659,7 +7659,7 @@ const RAW_RUNTIME_STATE =
     ],\
     [\
       "js-yaml",\
-      "npm:4.1.1"\
+      "npm:4.3.2"\
     ],\
     [\
       "jsbn",\
@@ -12064,7 +12064,7 @@ const RAW_RUNTIME_STATE =
           ["@vedicium/auth0-actions-sdk", "npm:0.1.3"],\
           ["auth0-deploy-cli", "npm:7.24.3"],\
           ["got", "npm:11.8.6"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["nock", "npm:13.4.0"],\
           ["ts-node", "virtual:190ef0160ba946cf7e73459640ba1e0562856a9e57af12873e04856ddb4d0a78826458a3c4484c2dd9a1b3579fe82cb5668480512120173800bfd772f135d982#npm:10.9.2"]\
         ],\
@@ -30293,7 +30293,7 @@ const RAW_RUNTIME_STATE =
           ["globals", "npm:13.24.0"],\
           ["ignore", "npm:5.3.2"],\
           ["import-fresh", "npm:3.3.1"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["minimatch", "npm:3.1.2"],\
           ["strip-json-comments", "npm:3.1.1"]\
         ],\
@@ -31626,7 +31626,7 @@ const RAW_RUNTIME_STATE =
           ["http-proxy-agent", "npm:6.1.1"],\
           ["https-proxy-agent", "npm:6.2.1"],\
           ["jose", "npm:4.15.9"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["json-stable-stringify", "npm:1.3.0"],\
           ["lodash", "npm:4.17.23"],\
           ["scuid", "npm:1.1.0"],\
@@ -32460,7 +32460,7 @@ const RAW_RUNTIME_STATE =
           ["camelcase", "npm:5.3.1"],\
           ["find-up", "npm:4.1.0"],\
           ["get-package-type", "npm:0.1.0"],\
-          ["js-yaml", "npm:3.14.1"],\
+          ["js-yaml", "npm:3.15.2"],\
           ["resolve-from", "npm:5.0.0"]\
         ],\
         "linkType": "HARD"\
@@ -35577,7 +35577,7 @@ const RAW_RUNTIME_STATE =
           ["chokidar", "npm:3.6.0"],\
           ["flat", "npm:5.0.2"],\
           ["fs-extra", "npm:9.1.0"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["jszip", "npm:3.10.1"],\
           ["lodash", "npm:4.17.23"],\
           ["memoizee", "npm:0.4.17"],\
@@ -35618,7 +35618,7 @@ const RAW_RUNTIME_STATE =
           ["https-proxy-agent", "npm:5.0.1"],\
           ["ignore", "npm:5.3.2"],\
           ["isomorphic-ws", "virtual:d8206ee8598cf6351954d17bdf09653ab0d10cfa7ad1ee474b997fdbc10ddb5c676323e31511ddc231ca77863003cfc771639048a69cc7a82507ea7bda7c3f24#npm:4.0.1"],\
-          ["js-yaml", "npm:3.14.1"],\
+          ["js-yaml", "npm:3.15.2"],\
           ["jwt-decode", "npm:2.2.0"],\
           ["minimatch", "npm:3.1.2"],\
           ["querystring", "npm:0.2.1"],\
@@ -35659,7 +35659,7 @@ const RAW_RUNTIME_STATE =
           ["get-stream", "npm:6.0.1"],\
           ["got", "npm:11.8.6"],\
           ["inquirer", "npm:8.2.7"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["jwt-decode", "npm:3.1.2"],\
           ["lodash", "npm:4.17.23"],\
           ["log", "npm:6.3.2"],\
@@ -40753,7 +40753,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@yarnpkg-parsers-npm-2.6.0-2e7019af9c-da2c22ce12.zip/node_modules/@yarnpkg/parsers/",\
         "packageDependencies": [\
           ["@yarnpkg/parsers", "npm:2.6.0"],\
-          ["js-yaml", "npm:3.14.1"],\
+          ["js-yaml", "npm:3.15.2"],\
           ["tslib", "npm:1.14.1"]\
         ],\
         "linkType": "HARD"\
@@ -42051,7 +42051,7 @@ const RAW_RUNTIME_STATE =
           ["dot-prop", "npm:5.3.0"],\
           ["fs-extra", "npm:10.1.0"],\
           ["global-agent", "npm:2.2.0"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["lodash", "npm:4.17.23"],\
           ["mkdirp", "npm:1.0.4"],\
           ["nconf", "npm:0.12.1"],\
@@ -42134,7 +42134,7 @@ const RAW_RUNTIME_STATE =
           ["aws-lambda", "npm:1.0.7"],\
           ["aws-sdk", "npm:2.1692.0"],\
           ["commander", "npm:3.0.2"],\
-          ["js-yaml", "npm:3.14.1"],\
+          ["js-yaml", "npm:3.15.2"],\
           ["watchpack", "npm:2.4.4"]\
         ],\
         "linkType": "HARD"\
@@ -45755,7 +45755,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["cosmiconfig", "npm:8.0.0"],\
           ["import-fresh", "npm:3.3.1"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["parse-json", "npm:5.2.0"],\
           ["path-type", "npm:4.0.0"]\
         ],\
@@ -48390,7 +48390,7 @@ const RAW_RUNTIME_STATE =
           ["imurmurhash", "npm:0.1.4"],\
           ["inquirer", "npm:7.3.3"],\
           ["is-glob", "npm:4.0.3"],\
-          ["js-yaml", "npm:3.14.1"],\
+          ["js-yaml", "npm:3.15.2"],\
           ["json-stable-stringify-without-jsonify", "npm:1.0.1"],\
           ["levn", "npm:0.3.0"],\
           ["lodash", "npm:4.17.23"],\
@@ -48442,7 +48442,7 @@ const RAW_RUNTIME_STATE =
           ["imurmurhash", "npm:0.1.4"],\
           ["is-glob", "npm:4.0.3"],\
           ["is-path-inside", "npm:3.0.3"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["json-stable-stringify-without-jsonify", "npm:1.0.1"],\
           ["levn", "npm:0.4.1"],\
           ["lodash.merge", "npm:4.6.2"],\
@@ -48487,7 +48487,7 @@ const RAW_RUNTIME_STATE =
           ["imurmurhash", "npm:0.1.4"],\
           ["is-glob", "npm:4.0.3"],\
           ["is-path-inside", "npm:3.0.3"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["json-stable-stringify-without-jsonify", "npm:1.0.1"],\
           ["levn", "npm:0.4.1"],\
           ["lodash.merge", "npm:4.6.2"],\
@@ -56418,20 +56418,20 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["js-yaml", [\
-      ["npm:3.14.1", {\
-        "packageLocation": "./.yarn/cache/js-yaml-npm-3.14.1-b968c6095e-9e22d80b4d.zip/node_modules/js-yaml/",\
+      ["npm:3.15.2", {\
+        "packageLocation": "./.yarn/cache/js-yaml-npm-3.15.2-ed3413b0f7-320b5471c1.zip/node_modules/js-yaml/",\
         "packageDependencies": [\
           ["argparse", "npm:1.0.10"],\
           ["esprima", "npm:4.0.1"],\
-          ["js-yaml", "npm:3.14.1"]\
+          ["js-yaml", "npm:3.15.2"]\
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:4.1.1", {\
-        "packageLocation": "./.yarn/cache/js-yaml-npm-4.1.1-86ec786790-a52d0519f0.zip/node_modules/js-yaml/",\
+      ["npm:4.3.2", {\
+        "packageLocation": "./.yarn/cache/js-yaml-npm-4.3.2-d3b0efff68-05c44b9c73.zip/node_modules/js-yaml/",\
         "packageDependencies": [\
           ["argparse", "npm:2.0.1"],\
-          ["js-yaml", "npm:4.1.1"]\
+          ["js-yaml", "npm:4.3.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -56646,7 +56646,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["commander", "npm:4.1.1"],\
           ["graphlib", "npm:2.1.8"],\
-          ["js-yaml", "npm:3.14.1"],\
+          ["js-yaml", "npm:3.15.2"],\
           ["json-refs", "npm:3.0.15"],\
           ["lodash", "npm:4.17.23"],\
           ["native-promise-only", "npm:0.8.1"],\
@@ -66091,7 +66091,7 @@ const RAW_RUNTIME_STATE =
           ["graceful-fs", "npm:4.2.11"],\
           ["https-proxy-agent", "npm:5.0.1"],\
           ["is-docker", "npm:2.2.1"],\
-          ["js-yaml", "npm:4.1.1"],\
+          ["js-yaml", "npm:4.3.2"],\
           ["json-colorizer", "npm:2.2.2"],\
           ["json-cycle", "npm:1.5.0"],\
           ["json-refs", "npm:3.0.15"],\
@@ -67995,7 +67995,7 @@ const RAW_RUNTIME_STATE =
           ["css-select-base-adapter", "npm:0.1.1"],\
           ["css-tree", "npm:1.0.0-alpha.37"],\
           ["csso", "npm:4.2.0"],\
-          ["js-yaml", "npm:3.14.1"],\
+          ["js-yaml", "npm:3.15.2"],\
           ["mkdirp", "npm:0.5.6"],\
           ["object.values", "npm:1.2.1"],\
           ["sax", "npm:1.2.4"],\
