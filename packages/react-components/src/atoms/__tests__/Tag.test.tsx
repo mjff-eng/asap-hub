@@ -2,14 +2,14 @@ import { render, screen } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import userEvent from '@testing-library/user-event';
 import Tag from '../Tag';
-import { colour, success100, colorFromHex } from '../../colors';
+import { colour, colorFromHex } from '../../colors';
 
 it('renders a tag with content', () => {
   const { container } = render(<Tag>Text</Tag>);
   expect(container.textContent).toEqual('Text');
 });
 
-it('renders a white tag with a success100 background when highlighted', () => {
+it('renders a white tag with the brand background when highlighted', () => {
   const { getByText, rerender } = render(<Tag>Text</Tag>);
   expect(
     findParentWithStyle(getByText('Text'), 'backgroundColor')?.backgroundColor,
@@ -17,8 +17,8 @@ it('renders a white tag with a success100 background when highlighted', () => {
 
   rerender(<Tag highlight>Text</Tag>);
   expect(
-    findParentWithStyle(getByText('Text'), 'backgroundColor')?.backgroundColor,
-  ).toBe(success100.rgb);
+    findParentWithStyle(getByText('Text'), 'borderStyle')?.element,
+  ).toHaveStyleRule('background-color', colour.background.brand);
 });
 
 it('renders a tag with disabled styles when disabled', () => {

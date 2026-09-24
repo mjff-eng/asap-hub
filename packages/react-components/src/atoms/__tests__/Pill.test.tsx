@@ -1,9 +1,7 @@
 import { render } from '@testing-library/react';
 
-import * as colors from '../../colors';
+import { colour } from '../../colors';
 import Pill from '../Pill';
-
-const { colour } = colors;
 
 it('renders a tag label with content', () => {
   const { container } = render(<Pill>Text</Pill>);
@@ -12,12 +10,12 @@ it('renders a tag label with content', () => {
 
 it.each`
   accent       | borderRule        | border                    | background                    | text
-  ${'default'} | ${'border-color'} | ${colour.border.tertiary} | ${'transparent'}              | ${colors.neutral900.rgb}
-  ${'green'}   | ${'border-color'} | ${colour.brand.crn[800]}  | ${colors.success100.rgb}      | ${colour.brand.crn[800]}
-  ${'warning'} | ${'border-color'} | ${colour.border.warning}  | ${colors.warning100.rgb}      | ${colour.foreground.warning}
-  ${'info'}    | ${'border-color'} | ${colors.info500.rgb}     | ${colors.info100.rgb}         | ${colors.info500.rgb}
-  ${'neutral'} | ${'border-color'} | ${colors.neutral800.rgb}  | ${colour.background.tertiary} | ${colors.neutral800.rgb}
-  ${'gray'}    | ${'border'}       | ${'transparent'}          | ${colour.background.tertiary} | ${colors.neutral900.rgb}
+  ${'default'} | ${'border-color'} | ${colour.border.tertiary} | ${'transparent'}              | ${colour.foreground.tertiary}
+  ${'green'}   | ${'border-color'} | ${colour.border.success}  | ${colour.background.success}  | ${colour.foreground.success}
+  ${'warning'} | ${'border-color'} | ${colour.border.warning}  | ${colour.background.warning}  | ${colour.foreground.warning}
+  ${'info'}    | ${'border-color'} | ${colour.border.info}     | ${colour.background.info}     | ${colour.foreground.info}
+  ${'neutral'} | ${'border-color'} | ${colour.neutral[400]}    | ${colour.background.tertiary} | ${colour.foreground.quaternary}
+  ${'gray'}    | ${'border'}       | ${'transparent'}          | ${colour.background.tertiary} | ${colour.foreground.tertiary}
 `(
   'sets text color border and background color for $accent',
   ({ accent, borderRule, border, text, background }) => {

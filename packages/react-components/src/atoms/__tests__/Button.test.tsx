@@ -1,9 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ThemeProvider } from '@emotion/react';
 
-import { charcoal, color, colour, colorFromHex } from '../../colors';
+import { color, colour, colorFromHex } from '../../colors';
 import { OrcidIcon } from '../../icons';
-import { activePrimaryBackgroundColorDefault } from '../../button';
 
 import Button from '../Button';
 
@@ -122,24 +121,26 @@ describe('primary button', () => {
 it('renders an active secondary button', () => {
   const { getByRole, rerender } = render(<Button />);
   expect(toRgb(getComputedStyle(getByRole('button')).borderColor)).not.toBe(
-    charcoal.rgb,
+    colorFromHex(colour.neutral[900]).rgb,
   );
 
   rerender(<Button active />);
   expect(toRgb(getComputedStyle(getByRole('button')).borderColor)).toBe(
-    charcoal.rgb,
+    colorFromHex(colour.neutral[900]).rgb,
   );
 });
 
 it('renders an active primary button', () => {
   const { getByRole, rerender } = render(<Button primary />);
-  expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
-    activePrimaryBackgroundColorDefault.rgba,
+  expect(getByRole('button')).not.toHaveStyleRule(
+    'background-color',
+    colour.background.active,
   );
 
   rerender(<Button primary active />);
-  expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
-    activePrimaryBackgroundColorDefault.rgba,
+  expect(getByRole('button')).toHaveStyleRule(
+    'background-color',
+    colour.background.active,
   );
 });
 
