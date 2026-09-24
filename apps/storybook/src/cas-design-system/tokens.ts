@@ -82,6 +82,19 @@ export const themeTokens: ThemeToken[] = Object.entries(casTheme.crn).map(
   },
 );
 
+export const themeTokensByPrimitive = themeTokens.reduce<Map<string, string[]>>(
+  (byPrimitive, token) => {
+    new Set([token.crn.alias, token.gp2.alias]).forEach((alias) => {
+      if (!alias) return;
+      const names = byPrimitive.get(alias) ?? [];
+      if (!names.includes(token.figmaName)) names.push(token.figmaName);
+      byPrimitive.set(alias, names);
+    });
+    return byPrimitive;
+  },
+  new Map(),
+);
+
 const luminance = (hex: string): number => {
   const [r, g, b] = [1, 3, 5].map((start) => {
     const channel = parseInt(hex.slice(start, start + 2), 16) / 255;

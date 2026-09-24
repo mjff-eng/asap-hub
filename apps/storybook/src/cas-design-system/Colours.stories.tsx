@@ -11,6 +11,7 @@ import {
   ThemeToken,
   themeHex,
   themeTokens,
+  themeTokensByPrimitive,
 } from './tokens';
 import {
   Chip,
@@ -326,10 +327,20 @@ const PrimitiveCard = ({ primitive }: { primitive: Primitive }) => {
   const { copied, copy } = useCopy(primitive.codeName);
   const legacy =
     primitive.alpha === 1 ? legacyNamesByHex.get(primitive.hex) : [];
+  const usedBy = themeTokensByPrimitive.get(primitive.figmaName);
   return (
     <button
       type="button"
-      title={`Click to copy ${primitive.codeName}`}
+      title={[
+        `Click to copy ${primitive.codeName}`,
+        ...(usedBy
+          ? [
+              '',
+              'Used by:',
+              ...usedBy.map((name) => name.replace('colour/', '')),
+            ]
+          : []),
+      ].join('\n')}
       onClick={copy}
       style={{
         width: '96px',
@@ -370,35 +381,93 @@ const PrimitiveCard = ({ primitive }: { primitive: Primitive }) => {
             old: {legacy.join(', ')}
           </div>
         )}
+        {usedBy && (
+          <div style={{ ...muted, fontSize: '10px' }}>
+            used by {usedBy.length} token{usedBy.length > 1 ? 's' : ''}
+          </div>
+        )}
       </div>
     </button>
   );
 };
 
-export const Primitives = () => (
-  <Page
-    title="Primitives"
-    intro={
-      <>
-        The raw palette (Figma collection primitives, ARIA ramps left out).
-        Prefer theme tokens; reach for a primitive only when no theme token
-        fits. Click a swatch to copy its code name, e.g.{' '}
-        {code('colour.neutral[100]')}. &quot;old&quot; lists deprecated names
-        that currently hold that exact value.
-      </>
-    }
-  >
-    {primitiveRamps.map(({ ramp, steps }) => (
-      <Section key={ramp} title={ramp}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-          {steps.map((primitive) => (
-            <PrimitiveCard key={primitive.figmaName} primitive={primitive} />
-          ))}
-        </div>
-      </Section>
-    ))}
-  </Page>
-);
+const primitiveMatches = (primitive: Primitive, query: string) => {
+  const needle = query.trim().toLowerCase().replace(/^#/, '');
+  if (!needle) return true;
+  return [
+    primitive.figmaName,
+    primitive.codeName,
+    primitive.hex.replace('#', ''),
+    ...(legacyNamesByHex.get(primitive.hex) ?? []),
+    ...(themeTokensByPrimitive.get(primitive.figmaName) ?? []),
+  ].some((text) => text.toLowerCase().includes(needle));
+};
+
+export const Primitives = () => {
+  const [query, setQuery] = useState('');
+  const [onlyUsed, setOnlyUsed] = useState(false);
+  const ramps = primitiveRamps
+    .map(({ ramp, steps }) => ({
+      ramp,
+      steps: steps.filter(
+        (primitive) =>
+          primitiveMatches(primitive, query) &&
+          (!onlyUsed || themeTokensByPrimitive.has(primitive.figmaName)),
+      ),
+    }))
+    .filter(({ steps }) => steps.length > 0);
+  return (
+    <Page
+      title="Primitives"
+      intro={
+        <>
+          The raw palette (Figma collection primitives, ARIA ramps left out).
+          Prefer theme tokens; reach for a primitive only when no theme token
+          fits. Click a swatch to copy its code name, e.g.{' '}
+          {code('colour.neutral[100]')}. &quot;old&quot; lists deprecated names
+          that currently hold that exact value, and &quot;used by&quot; lists
+          the theme tokens built on it.
+        </>
+      }
+    >
+      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+        <input
+          type="search"
+          placeholder="Search a name, hex, old name or token"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          style={{
+            ...mono,
+            padding: '6px 10px',
+            width: '320px',
+            border: `1px solid ${colour.border.secondary}`,
+            borderRadius: '6px',
+          }}
+        />
+        <label style={{ fontSize: '13px' }}>
+          <input
+            type="checkbox"
+            checked={onlyUsed}
+            onChange={(event) => setOnlyUsed(event.target.checked)}
+          />{' '}
+          Only colours used by a theme token
+        </label>
+      </div>
+      {ramps.length === 0 && (
+        <p style={muted}>No primitive matches &quot;{query}&quot;.</p>
+      )}
+      {ramps.map(({ ramp, steps }) => (
+        <Section key={ramp} title={ramp}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            {steps.map((primitive) => (
+              <PrimitiveCard key={primitive.figmaName} primitive={primitive} />
+            ))}
+          </div>
+        </Section>
+      ))}
+    </Page>
+  );
+};
 
 const statusChip = {
   ready: <Chip kind="green">replace now, same colour</Chip>,
