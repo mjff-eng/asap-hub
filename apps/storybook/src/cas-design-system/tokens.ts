@@ -1,4 +1,5 @@
-import { casPrimitives, casTheme, cssColour } from '@asap-hub/react-components';
+import { cssColour } from '@asap-hub/react-components';
+import { casPrimitives, casTheme } from '@asap-hub/react-components/cas-tokens';
 
 export { cssColour };
 
