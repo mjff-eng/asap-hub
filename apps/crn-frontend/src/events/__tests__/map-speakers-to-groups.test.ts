@@ -138,7 +138,7 @@ describe('mapSpeakersToGroups', () => {
     expect(sharedByUserId).toEqual({ u1: true, u2: true, u3: false });
   });
 
-  it('synthesises a project group for a team with more than one speaker', () => {
+  it('keeps every speaker of a team in its team group', () => {
     const groups = mapSpeakersToGroups(
       makeEvent([
         teamSpeaker('t1', 'Alpha', 'u1', 'Chair'),
@@ -146,19 +146,15 @@ describe('mapSpeakersToGroups', () => {
       ]),
     );
 
-    expect(groups).toContainEqual(
-      expect.objectContaining({
-        variant: 'project',
-        projectName: 'Alpha Project',
-        users: [expect.objectContaining({ id: 'u2' })],
-      }),
-    );
-    expect(groups).toContainEqual(
+    expect(groups).toEqual([
       expect.objectContaining({
         variant: 'team',
-        users: [expect.objectContaining({ id: 'u1' })],
+        users: [
+          expect.objectContaining({ id: 'u1' }),
+          expect.objectContaining({ id: 'u2' }),
+        ],
       }),
-    );
+    ]);
   });
 
   it('orders groups with a shared speaker first, then alphabetically', () => {

@@ -10,7 +10,6 @@ import {
   SpeakerGroup,
   SpeakerGroupExternalUser,
   SpeakerGroupUser,
-  SpeakerProjectGroup,
   SpeakerTeamGroup,
 } from '@asap-hub/react-components';
 
@@ -29,33 +28,6 @@ type MutableTeamGroup = {
     string,
     SpeakerGroupUser & { roles: string[]; speakerIds: string[] }
   >;
-};
-
-// Temporary fixture data: the API carries no speaker-to-project link yet, so the
-// project groups the redesigned page renders are invented here. When the backend
-// ticket lands, this function is the only thing to replace.
-const withFixtureProjectGroups = (
-  teams: SpeakerTeamGroup[],
-): Array<SpeakerTeamGroup | SpeakerProjectGroup> => {
-  const source = teams.find((team) => team.users.length > 1);
-  const projectUsers = source ? source.users.slice(-1) : [];
-
-  if (!source || projectUsers.length === 0) {
-    return teams;
-  }
-
-  return [
-    ...teams.map((team) =>
-      team === source ? { ...team, users: team.users.slice(0, -1) } : team,
-    ),
-    {
-      id: `project-${source.id}`,
-      variant: 'project',
-      projectName: `${source.teamName} Project`,
-      projectType: 'Discovery Project',
-      users: projectUsers,
-    },
-  ];
 };
 
 export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
@@ -125,7 +97,7 @@ export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
     }),
   );
 
-  const crnGroups = withFixtureProjectGroups(teams).sort((a, b) => {
+  const crnGroups = teams.sort((a, b) => {
     const aShared = groupFindings(a).hasAnyShared;
     const bShared = groupFindings(b).hasAnyShared;
     if (aShared !== bShared) {
