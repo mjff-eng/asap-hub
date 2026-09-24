@@ -4,7 +4,7 @@ import { Label, Paragraph, RadioButton } from '../atoms';
 import { colour } from '../colors';
 
 const disabledStyles = css({
-  color: colour.neutral[100],
+  color: colour.foreground.disabled,
 });
 
 type LabeledRadioButtonProps = {

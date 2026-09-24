@@ -43,16 +43,16 @@ const checkboxStyles = ({
       },
 
       ':disabled': {
-        borderColor: colour.border.tertiary,
-        backgroundColor: colour.neutral[100],
+        borderColor: colour.border.disabled,
+        backgroundColor: colour.background.disabled,
       },
       ':hover, :focus': {
         borderColor: primary900.rgba,
         backgroundColor: primary900.rgba,
 
         ':disabled': {
-          borderColor: colour.border.tertiary,
-          backgroundColor: colour.neutral[100],
+          borderColor: colour.border.disabled,
+          backgroundColor: colour.background.disabled,
         },
       },
     },

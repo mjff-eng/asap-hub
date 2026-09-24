@@ -168,7 +168,7 @@ export const deleteButtonStyles = (
       : `0 2px 4px ${
           colorWithTransparency(colorFromHex(colour.neutral[100]), 0.3).rgba
         }`,
-    color: enabled ? colour.foreground.primary : colour.neutral[600],
+    color: enabled ? colour.foreground.primary : colour.foreground.tertiary,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       minWidth: rem(24),
     },

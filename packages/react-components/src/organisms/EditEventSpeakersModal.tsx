@@ -88,7 +88,7 @@ const hideOnDesktopStyles = css({
   [`@media (min-width: ${mobileScreen.max + 1}px)`]: { display: 'none' },
 });
 
-const placeholderStyles = css({ color: colour.neutral[200] });
+const placeholderStyles = css({ color: colour.foreground.tertiary });
 
 const searchOptionStyles = css([
   flexRowGap8Styles,
@@ -185,7 +185,7 @@ const cardSurfaceStyles = (enabled: boolean) =>
     borderRadius: rem(8),
     backgroundColor: enabled
       ? colour.background.secondary
-      : colour.general.blue.cerulean[25],
+      : colour.background.disabled,
   });
 
 const groupsCardStyles = (enabled: boolean) =>

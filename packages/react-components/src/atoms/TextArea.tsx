@@ -26,12 +26,12 @@ const textareaStyles = css({
   },
 
   '::placeholder': {
-    color: colour.neutral[200],
+    color: colour.foreground.tertiary,
   },
 });
 const disabledStyles = css({
-  color: colour.foreground.tertiary,
-  backgroundColor: colour.background.tertiary,
+  color: colour.foreground.disabled,
+  backgroundColor: colour.background.disabled,
 });
 const invalidStyles = css({
   ':invalid': {

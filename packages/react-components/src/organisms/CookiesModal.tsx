@@ -100,7 +100,7 @@ const ThirdPartyCookieLink = ({ link, label }: ThirdPartyCookieLinkProps) => (
         {label}{' '}
         <ExternalLinkIcon
           size={16}
-          color={colors.colorFromHex(colors.colour.neutral[600])}
+          color={colors.colorFromHex(colors.colour.neutral[700])}
         />
       </span>
     </Pill>

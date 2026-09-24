@@ -16,7 +16,7 @@ const styles = css({
 });
 
 const disabledStyles = css({
-  color: colour.neutral[200],
+  color: colour.foreground.disabled,
 });
 const textStyles = css({ margin: 0, display: 'inline-flex', gap: rem(8) });
 const activeStyles = css({

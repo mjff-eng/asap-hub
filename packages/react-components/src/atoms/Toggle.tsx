@@ -11,10 +11,10 @@ const styles = css({
   minWidth: rem(240),
   borderRadius: '27px',
   backgroundColor: colour.background.tertiary,
-  color: colour.neutral[200],
+  color: colour.foreground.disabled,
   cursor: 'pointer',
   svg: {
-    stroke: colour.neutral[200],
+    stroke: colour.foreground.disabled,
   },
 });
 
