@@ -112,7 +112,7 @@ const iconStyles = css({
 });
 
 const teamLinkStyles = css({
-  color: '#00A650',
+  color: colour.foreground.brand,
   fontWeight: 500,
   textDecoration: 'none',
   '&:hover': {
