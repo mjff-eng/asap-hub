@@ -197,6 +197,15 @@ jobs:
       - name: lint
         run: yarn lint
 
+  cas-tokens-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the generated CAS tokens match the Figma exports
+        run: |
+          yarn cas-tokens:generate
+          git diff --exit-code packages/react-components/src/cas-tokens.generated.ts
+
   copy-paste-check:
     runs-on: ubuntu-latest
     # Run only on PRs
