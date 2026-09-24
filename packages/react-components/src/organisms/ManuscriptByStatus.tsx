@@ -31,7 +31,7 @@ const getbuttonStyles = (
   isSelected: boolean,
 ) => {
   const backgroundColors = {
-    warning: colour.utilitarian.orange[50],
+    warning: colour.background.warning,
     final: colour.background.success,
     default: colour.background.info,
     none: colour.background.info,
@@ -40,13 +40,13 @@ const getbuttonStyles = (
   const borderColors: ColorByType = {
     warning: colour.utilitarian.orange[100],
     final: colour.border.success,
-    default: isSelected ? colour.foreground.info : colour.neutral[100],
+    default: isSelected ? colour.border.info : colour.border.tertiary,
   };
 
   const textColors: ColorByType = {
-    warning: colour.utilitarian.orange[600],
+    warning: colour.foreground.warning,
     final: colour.foreground.success,
-    default: isSelected ? colour.foreground.info : colour.neutral[600],
+    default: isSelected ? colour.foreground.info : colour.foreground.tertiary,
   };
 
   return css({

@@ -35,12 +35,12 @@ const accentPalette: Record<
   },
   neutral: {
     bg: colour.general.blue.cerulean[25],
-    fg: colour.neutral[400],
+    fg: colour.foreground.quaternary,
     border: colour.neutral[400],
   },
   error: {
-    bg: colour.utilitarian.red[100],
-    fg: colour.utilitarian.red[600],
+    bg: colour.background.error,
+    fg: colour.foreground.error,
     border: colour.border.error,
   },
 };

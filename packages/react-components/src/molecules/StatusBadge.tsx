@@ -13,20 +13,19 @@ type StatusBadgeProps = {
 const getStatusBadgeStyles = (type: StatusType) => {
   const bgColor =
     type === 'warning'
-      ? colour.utilitarian.orange[50]
+      ? colour.background.warning
       : type === 'final'
         ? colour.background.success
         : colour.background.info;
 
   const textColor =
     type === 'warning'
-      ? colour.utilitarian.orange[600]
+      ? colour.foreground.warning
       : type === 'final'
         ? colour.foreground.success
         : colour.foreground.info;
 
-  const iconFill =
-    type === 'warning' ? colour.utilitarian.orange[600] : undefined;
+  const iconFill = type === 'warning' ? colour.foreground.warning : undefined;
 
   return css({
     backgroundColor: bgColor,
