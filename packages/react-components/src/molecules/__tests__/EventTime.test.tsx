@@ -52,6 +52,30 @@ describe('the date', () => {
     );
     expect(container).toHaveTextContent(/\D25\D.*\D26\D/);
   });
+
+  it('includes both months for a multi-day event spanning two months', () => {
+    const { container } = render(
+      <EventTime
+        startDate={new Date('2021-01-31T09:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2021-02-01T10:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+      />,
+    );
+    expect(container).toHaveTextContent(/January.*February 2021/);
+  });
+
+  it('includes both years for a multi-day event spanning two years', () => {
+    const { container } = render(
+      <EventTime
+        startDate={new Date('2021-12-31T09:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2022-01-01T10:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+      />,
+    );
+    expect(container).toHaveTextContent(/December 2021.*January 2022/);
+  });
 });
 
 describe('a tooltip', () => {
@@ -103,5 +127,19 @@ describe('the recurring badge', () => {
   it('is not shown for non-recurring events', () => {
     const { queryByText } = render(<EventTime {...props} recurring={false} />);
     expect(queryByText('Recurring')).not.toBeInTheDocument();
+  });
+
+  it('is shown alongside the day count for a recurring multi-day event', () => {
+    const { getByText } = render(
+      <EventTime
+        startDate={new Date('2021-01-25T09:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2021-01-26T10:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+        recurring
+      />,
+    );
+    expect(getByText('Recurring')).toBeVisible();
+    expect(getByText('2 days')).toBeVisible();
   });
 });

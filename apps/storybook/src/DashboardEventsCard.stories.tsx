@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react';
 import { addDays, addHours, subHours } from 'date-fns';
 import { createEventResponse } from '@asap-hub/fixtures';
-import { DashboardEventsCard } from '@asap-hub/react-components';
+import { DashboardEventsCard, EventOwner } from '@asap-hub/react-components';
 
 export default {
   title: 'Organisms / Dashboard / Events',
@@ -13,12 +13,27 @@ type EventItem = ComponentProps<
 
 const baseEvent = createEventResponse();
 
+const workingGroupOwner = (
+  <EventOwner workingGroup={{ id: 'wg-1', title: 'Working Group Name' }} />
+);
+
+const interestGroupOwner = (
+  <EventOwner
+    interestGroup={{
+      id: 'ig-1',
+      name: 'Interest Group Name',
+      active: true,
+      tools: {},
+    }}
+  />
+);
+
 const toEventItem = (
   overrides: Partial<EventItem> = {},
-  ownerLabel = 'Working Group Name',
+  eventOwner = workingGroupOwner,
 ): EventItem => ({
   ...baseEvent,
-  eventOwner: <div>{ownerLabel}</div>,
+  eventOwner,
   ...overrides,
 });
 
@@ -67,7 +82,7 @@ const pastEventWithMaterials = toEventItem(
     videoRecording: 'Video recording',
     presentation: 'Presentation',
   },
-  'Interest Group Name',
+  interestGroupOwner,
 );
 
 const pastEventWithoutMaterials = toEventItem(
@@ -80,7 +95,7 @@ const pastEventWithoutMaterials = toEventItem(
     videoRecording: null,
     presentation: null,
   },
-  'Interest Group Name',
+  interestGroupOwner,
 );
 
 export const Default = () => (

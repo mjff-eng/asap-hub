@@ -1,13 +1,12 @@
 import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
-import { differenceInCalendarDays } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
 
 import { formatDateToTimezone } from '../date';
 import { getLocalTimezone } from '../localization';
 import { info100, info500, lead, silver } from '../colors';
 import { rem } from '../pixels';
 import { calendarIcon, clockIcon } from '../icons';
+import { getMultiDayCount, getMultiDayDateRange } from '../utils';
 
 import { Info } from '.';
 
@@ -43,8 +42,11 @@ const tzStyles = css({
 });
 
 const recurringPillStyles = css({
+  display: 'inline-flex',
+  alignItems: 'center',
   flexShrink: 0,
   marginLeft: rem(8),
+  verticalAlign: 'middle',
 
   backgroundColor: info100.rgb,
   color: info500.rgb,
@@ -53,7 +55,9 @@ const recurringPillStyles = css({
 });
 
 const dayCountPillStyles = css({
-  flexShrink: 0,
+  display: 'inline-flex',
+  alignItems: 'center',
+  verticalAlign: 'middle',
 
   backgroundColor: silver.rgb,
   color: lead.rgb,
@@ -62,29 +66,24 @@ const dayCountPillStyles = css({
   padding: `${rem(4)} ${rem(8)}`,
 });
 
-const multiDayItemStyles = css({
-  flexWrap: 'wrap',
-  rowGap: rem(8),
-  columnGap: rem(8),
+const multiDayRowStyles = css({
+  color: lead.rgb,
+  overflow: 'hidden',
+  lineHeight: rem(32),
 });
 
-const multiDayDateGroupStyles = css({
-  display: 'flex',
-  alignItems: 'flex-start',
-  minWidth: 0,
+const multiDayIconStyles = css({
+  float: 'left',
+  marginRight: rem(8),
+  marginTop: rem(4),
+  lineHeight: 0,
 });
 
-const multiDayDateStyles = css({
-  whiteSpace: 'normal',
+const multiDayGapStyles = css({
+  wordSpacing: rem(8),
 });
 
-const multiDayPillsGroupStyles = css({
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: rem(8),
-});
-
-const noMarginPillStyles = css({
+const multiDayRecurringPillStyles = css({
   marginLeft: 0,
 });
 
@@ -105,12 +104,9 @@ const EventTime: React.FC<EventTimeProps> = ({
 }) => {
   const formattedStartDay = formatDateToTimezone(
     startDate,
-    'E, d MMM y',
-  ).toUpperCase();
-  const formattedEndDay = formatDateToTimezone(
-    endDate,
-    'E, d MMM y',
-  ).toUpperCase();
+    'EEEE, d MMMM yyyy',
+  );
+  const formattedEndDay = formatDateToTimezone(endDate, 'EEEE, d MMMM yyyy');
   const multiDay = formattedStartDay !== formattedEndDay;
 
   const formattedStartDateTimeZone = formatDateToTimezone(
@@ -125,45 +121,24 @@ const EventTime: React.FC<EventTimeProps> = ({
   );
 
   if (multiDay) {
-    const localTimezone = getLocalTimezone();
-    const dayCount =
-      differenceInCalendarDays(
-        utcToZonedTime(endDate, localTimezone),
-        utcToZonedTime(startDate, localTimezone),
-      ) + 1;
-
-    const startYear = formatDateToTimezone(startDate, 'yyyy');
-    const endYear = formatDateToTimezone(endDate, 'yyyy');
-    const startMonth = formatDateToTimezone(startDate, 'MMMM');
-    const endMonth = formatDateToTimezone(endDate, 'MMMM');
-
-    const startRangeFormat =
-      startYear !== endYear
-        ? 'EEEE d MMMM yyyy'
-        : startMonth !== endMonth
-          ? 'EEEE d MMMM'
-          : 'EEEE d';
-
-    const dateRange = `${formatDateToTimezone(
-      startDate,
-      startRangeFormat,
-    )} - ${formatDateToTimezone(endDate, 'EEEE d MMMM yyyy')}`;
+    const dayCount = getMultiDayCount(startDate, endDate, getLocalTimezone());
+    const dateRange = getMultiDayDateRange(startDate, endDate);
 
     return (
       <ul css={listStyles}>
-        <li css={[listItemStyles, multiDayItemStyles]}>
-          <div css={multiDayDateGroupStyles}>
-            <div css={iconStyles}>{calendarIcon}</div>
-            <span css={multiDayDateStyles}>{dateRange}</span>
-          </div>
-          <div css={multiDayPillsGroupStyles}>
-            <span css={dayCountPillStyles}>{dayCount} days</span>
-            {recurring && (
-              <span css={[recurringPillStyles, noMarginPillStyles]}>
+        <li css={multiDayRowStyles}>
+          <div css={multiDayIconStyles}>{calendarIcon}</div>
+          {dateRange}
+          <span css={multiDayGapStyles}> </span>
+          <span css={dayCountPillStyles}>{dayCount} days</span>
+          {recurring && (
+            <>
+              <span css={multiDayGapStyles}> </span>
+              <span css={[recurringPillStyles, multiDayRecurringPillStyles]}>
                 Recurring
               </span>
-            )}
-          </div>
+            </>
+          )}
         </li>
       </ul>
     );
