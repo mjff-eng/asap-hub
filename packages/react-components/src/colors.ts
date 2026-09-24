@@ -1,3 +1,5 @@
+import { casPrimitives } from './cas-tokens.generated';
+
 export interface OpaqueColor {
   r: number;
   g: number;
@@ -55,62 +57,23 @@ export const colorWithTransparency = (
   a: number,
 ): TransparentColor => color(opaqueColor.r, opaqueColor.g, opaqueColor.b, a);
 
-// CAS Design System primitives (Figma: CAS Design System → primitives → colour)
-// Only tokens whose exact values are used in this project are listed.
-export const colour = {
-  brand: {
-    crn: {
-      25: color(226, 238, 237),
-      100: color(191, 227, 211),
-      500: color(52, 162, 112),
-      800: color(40, 121, 83),
-    },
-    gp2: {
-      25: color(230, 243, 249),
-      100: color(192, 223, 237),
-      500: color(12, 141, 195),
-      800: color(0, 106, 146),
-    },
-  },
-  general: {
-    blue: {
-      cerulean: {
-        25: color(238, 243, 246),
-      },
-    },
-    purple: {
-      lavender: {
-        25: color(243, 243, 249),
-      },
-      iris: {
-        25: color(238, 238, 244),
-      },
-    },
-  },
-  neutral: {
-    0: color(255, 255, 255),
-    25: color(252, 252, 253),
-    50: color(250, 250, 250),
-    100: color(227, 230, 232),
-    200: color(197, 202, 206),
-    400: color(136, 147, 154),
-    600: color(86, 96, 102),
-    900: color(28, 31, 33),
-  },
-  utilitarian: {
-    red: {
-      100: color(254, 228, 226),
-      600: color(217, 45, 32),
-      700: color(180, 35, 24),
-    },
-    orange: {
-      50: color(252, 248, 238),
-      100: color(254, 240, 199),
-      600: color(220, 104, 3),
-      700: color(181, 71, 8),
-    },
-  },
-} as const;
+type PrimitiveColours<T> = T extends readonly [number, number, number]
+  ? OpaqueColor
+  : T extends readonly [number, number, number, number]
+    ? TransparentColor
+    : { readonly [K in keyof T]: PrimitiveColours<T[K]> };
+
+const toColours = <T>(node: T): PrimitiveColours<T> =>
+  (Array.isArray(node)
+    ? color(...(node as [number, number, number, number]))
+    : Object.fromEntries(
+        Object.entries(node as Record<string, unknown>).map(([key, child]) => [
+          key,
+          toColours(child),
+        ]),
+      )) as PrimitiveColours<T>;
+
+export const colour = toColours(casPrimitives);
 
 // Monochrome
 export const pearl = colour.neutral[25];
