@@ -28,7 +28,7 @@
     "build:storybook": "yarn workspace @asap-hub/storybook build",
     "build:typecheck": "turbo build:typecheck:tsc",
     "build:typecheck:tsc": "tsc -b -v $(node scripts/get-composite-ts-projects.js)",
-    "colours:report": "NODE_OPTIONS=\"$NODE_OPTIONS --disable-warning=MODULE_NOT_FOUND\" eslint --resolve-plugins-relative-to packages/eslint-config-asap-hub --rule 'import/no-deprecated: warn' --format ./scripts/colours-report-formatter.js --ext .ts,.tsx packages/react-components/src packages/gp2-components/src apps/crn-frontend/src apps/gp2-frontend/src apps/storybook/src",
+    "colours:report": "node scripts/colours-report.js",
     "cas-tokens:generate": "node packages/react-components/scripts/generate-cas-tokens.js && prettier --write packages/react-components/src/cas-tokens.generated.ts",
     "check:packages": "yarn install --immutable --immutable-cache",
     "clean": "rimraf \"{apps,packages}/*/{dist,build*,.turbo,*.tsbuildinfo}\" \"coverage\" \".serverless*\"",

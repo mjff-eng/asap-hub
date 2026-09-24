@@ -14,8 +14,6 @@ module.exports = {
   },
   settings: {
     'import/resolver': require.resolve('./import-resolver'),
-    'import/parsers': { '@typescript-eslint/parser': ['.ts', '.tsx'] },
-    'import/extensions': ['.js', '.mjs', '.jsx', '.ts', '.tsx'],
     jest: {
       version: require('jest-config/package.json').version,
     },
@@ -32,13 +30,6 @@ module.exports = {
   ],
   rules: {
     'import/prefer-default-export': 'off',
-    // run by `yarn colours:report`; lint fails on any warning
-    'import/no-deprecated': 'off',
-    'import/named': 'off',
-    'import/export': 'off',
-    'import/no-named-as-default': 'off',
-    'import/no-named-as-default-member': 'off',
-    'import/no-cycle': 'off',
     'import/no-extraneous-dependencies': [
       'error',
       { devDependencies: testFiles },
