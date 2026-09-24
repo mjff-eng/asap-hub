@@ -201,6 +201,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Cache unplugged packages
+        uses: ./.github/actions/cache-unplugged
       - name: Check the generated CAS tokens match the Figma exports
         run: |
           yarn cas-tokens:generate
