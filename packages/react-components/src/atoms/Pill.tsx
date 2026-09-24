@@ -83,8 +83,8 @@ export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
     ...(isLink
       ? {
           ':hover': {
-            color: colors.colour.foreground.info,
-            backgroundColor: 'rgba(207, 237, 251, 1)',
+            color: colors.colour.utilitarian.blue[700],
+            backgroundColor: colors.colour.utilitarian.blue[200],
           },
         }
       : {}),
