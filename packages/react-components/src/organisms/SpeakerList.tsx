@@ -74,7 +74,7 @@ const groupStyle = css({
 
 const toBeAnnouncedStyle = css({
   fontStyle: 'italic',
-  color: `${colorFromHex(colour.neutral[700])}`,
+  color: colour.foreground.tertiary,
 });
 
 const previewStyle = {

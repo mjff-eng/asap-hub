@@ -38,7 +38,7 @@ const getbuttonStyles = (
   };
 
   const borderColors: ColorByType = {
-    warning: colour.utilitarian.orange[100],
+    warning: colour.border.warning,
     final: colour.border.success,
     default: isSelected ? colour.border.info : colour.border.tertiary,
   };
