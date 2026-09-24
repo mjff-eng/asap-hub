@@ -1,9 +1,4 @@
-import {
-  casPrimitives,
-  casTheme,
-  colors,
-  cssColour,
-} from '@asap-hub/react-components';
+import { casPrimitives, casTheme, cssColour } from '@asap-hub/react-components';
 
 export { cssColour };
 
@@ -115,188 +110,246 @@ export const contrast = (foreground: string, background: string): number => {
 export const themeHex = (figmaName: string, product: Product = 'crn') =>
   casTheme[product][figmaName as keyof (typeof casTheme)['crn']].hex;
 
-export const legacyNamesByHex = (() => {
-  const names = new Map<string, string[]>();
-  Object.entries(colors).forEach(([name, value]) => {
-    const c = value as { r?: number; g?: number; b?: number; a?: number };
-    if (typeof c?.r !== 'number' || c.a !== undefined) return;
-    const hex = toHex([c.r, c.g as number, c.b as number]);
-    names.set(hex, [...(names.get(hex) ?? []), name]);
-  });
-  return names;
-})();
+const primitiveHexByPath = new Map(
+  primitives.map((primitive) => [primitive.figmaName, primitive.hex]),
+);
 
-export const legacyHex = (name: string): string => {
-  const c = (
-    colors as unknown as Record<string, { r: number; g: number; b: number }>
-  )[name];
-  return c ? toHex([c.r, c.g, c.b]) : '';
+// resolves a code name such as `foreground.primary`, `background['hover-brand']`
+// or `neutral[900]` to its CRN value
+export const casHex = (codePath: string, product: Product = 'crn'): string => {
+  const path = codePath
+    .replace(/\['([^']+)'\]/g, '/$1')
+    .replace(/\[(\d+)\]/g, '/$1')
+    .replace(/\./g, '/');
+  return /^(foreground|background|border)\//.test(path)
+    ? themeHex(`colour/${path}`, product)
+    : primitiveHexByPath.get(`colour/${path}`) ?? '';
 };
 
-type LegacyStatus = 'ready' | 'changes' | 'design';
+export type OldNameStatus = 'same' | 'cas' | 'approval';
 
-export interface LegacyName {
+export interface OldName {
   name: string;
   before: string;
-  replacement?: string;
-  status: LegacyStatus;
-  note?: string;
+  now: string;
+  where?: string;
+  status: OldNameStatus;
+  question?: number;
 }
 
-// `before` is the value on master before the CAS work started
-export const legacyNames: LegacyName[] = [
+// `before` is the production value before the CAS work; `now` is the CAS code
+// name that replaced it (for its main use when a name had several)
+export const oldNames: OldName[] = [
+  { name: 'paper', before: '#FFFFFF', now: 'neutral[0]', status: 'same' },
+  { name: 'fern', before: '#34A270', now: 'brand.crn[500]', status: 'same' },
+  { name: 'pine', before: '#287953', now: 'brand.crn[800]', status: 'same' },
+  { name: 'denim', before: '#006A92', now: 'brand.gp2[800]', status: 'same' },
+  { name: 'info200', before: '#BFE3D3', now: 'brand.crn[100]', status: 'same' },
   {
     name: 'charcoal',
     before: '#00222C',
-    replacement: 'colour.foreground.primary',
-    status: 'ready',
+    now: 'foreground.primary',
+    status: 'cas',
   },
   {
     name: 'neutral1000',
     before: '#00202C',
-    replacement: 'colour.foreground.primary',
-    status: 'ready',
+    now: 'foreground.primary',
+    status: 'cas',
   },
   {
     name: 'pearl',
     before: '#FCFDFE',
-    replacement: 'colour.background.secondary',
-    status: 'ready',
-  },
-  {
-    name: 'neutral300',
-    before: '#EDF1F3',
-    replacement: 'colour.background.tertiary',
-    status: 'ready',
-  },
-  {
-    name: 'neutral500',
-    before: '#DFE5EA',
-    replacement:
-      'colour.border.tertiary (borders), colour.background.hover (backgrounds)',
-    status: 'ready',
-  },
-  {
-    name: 'neutral700',
-    before: '#C2C9CE',
-    replacement: 'colour.border.secondary',
-    status: 'ready',
-  },
-  {
-    name: 'error100',
-    before: '#F7E8EA',
-    replacement: 'colour.background.error',
-    status: 'ready',
-  },
-  {
-    name: 'error500',
-    before: '#CD1426',
-    replacement: 'colour.foreground.error, colour.border.error',
-    status: 'ready',
-  },
-  {
-    name: 'error900',
-    before: '#B00A1A',
-    replacement: 'colour.background.button.utilitarian.error.hover',
-    status: 'ready',
-  },
-  {
-    name: 'warning150',
-    before: '#F2E1CB',
-    replacement: 'colour.background.warning',
-    status: 'ready',
-  },
-  {
-    name: 'warning500',
-    before: '#CE801A',
-    replacement: 'colour.foreground.warning, colour.border.warning',
-    status: 'ready',
-  },
-  {
-    name: 'warning900',
-    before: '#B56B0B',
-    replacement: 'colour.background.button.utilitarian.warning.hover',
-    status: 'ready',
+    now: 'background.secondary',
+    status: 'cas',
   },
   {
     name: 'neutral200',
     before: '#F6F9FB',
-    replacement: 'colour.background.secondary',
-    status: 'changes',
-    note: '#FAFAFA becomes #FCFCFD',
+    now: 'background.secondary',
+    status: 'cas',
   },
   {
-    name: 'warning100',
+    name: 'neutral300 (silver)',
+    before: '#EDF1F3',
+    now: 'background.tertiary',
+    status: 'cas',
+  },
+  {
+    name: 'neutral500 (steel)',
+    before: '#DFE5EA',
+    now: 'border.tertiary',
+    where: 'borders',
+    status: 'cas',
+  },
+  {
+    name: 'neutral700 (tin)',
+    before: '#C2C9CE',
+    now: 'border.secondary',
+    where: 'borders',
+    status: 'cas',
+  },
+  {
+    name: 'error100 (rose)',
+    before: '#F7E8EA',
+    now: 'background.error',
+    status: 'cas',
+  },
+  {
+    name: 'error500 (ember)',
+    before: '#CD1426',
+    now: 'foreground.error',
+    status: 'cas',
+  },
+  {
+    name: 'error900 (pepper)',
+    before: '#B00A1A',
+    now: 'utilitarian.red[700]',
+    status: 'cas',
+  },
+  {
+    name: 'warning100 (apricot)',
     before: '#F8EDDE',
-    replacement: 'colour.background.warning',
-    status: 'changes',
-    note: 'orange 50 becomes orange 100',
+    now: 'background.warning',
+    status: 'cas',
   },
   {
-    name: 'neutral900',
+    name: 'warning150',
+    before: '#F2E1CB',
+    now: 'background.warning',
+    status: 'cas',
+  },
+  {
+    name: 'warning500 (clay)',
+    before: '#CE801A',
+    now: 'foreground.warning',
+    status: 'cas',
+  },
+  {
+    name: 'warning900',
+    before: '#B56B0B',
+    now: 'utilitarian.orange[700]',
+    status: 'cas',
+  },
+  {
+    name: 'cerulean',
+    before: '#008CC6',
+    now: 'brand.gp2[500]',
+    where: 'gradients, reminders',
+    status: 'cas',
+  },
+  {
+    name: 'neutral900 (lead)',
     before: '#4D646B',
-    status: 'design',
-    note: 'question 1',
+    now: 'foreground.tertiary',
+    where: 'text',
+    status: 'approval',
+    question: 1,
   },
   {
     name: 'neutral800',
     before: '#92999E',
-    status: 'design',
-    note: 'question 1',
+    now: 'foreground.quaternary',
+    where: 'text',
+    status: 'approval',
+    question: 1,
   },
   {
-    name: 'success100',
+    name: 'success100 (mint)',
     before: '#E4F5EE',
-    status: 'design',
-    note: 'question 2',
+    now: 'background.success',
+    where: 'success states',
+    status: 'approval',
+    question: 2,
   },
   {
     name: 'success500',
     before: '#34A270',
-    status: 'design',
-    note: 'question 2',
+    now: 'foreground.success',
+    status: 'approval',
+    question: 2,
   },
   {
     name: 'success900',
     before: '#287953',
-    status: 'design',
-    note: 'question 2',
+    now: 'foreground.success',
+    status: 'approval',
+    question: 2,
   },
-  { name: 'info100', before: '#E6F3F9', status: 'design', note: 'question 2' },
-  { name: 'info150', before: '#C0DFED', status: 'design', note: 'question 2' },
   {
-    name: 'info200',
-    before: '#BFE3D3',
-    status: 'design',
-    note: 'question 2 (a green named info)',
-  },
-  { name: 'info500', before: '#0C8DC3', status: 'design', note: 'question 2' },
-  { name: 'info900', before: '#006A92', status: 'design', note: 'question 2' },
-  {
-    name: 'information100',
+    name: 'info100, information100',
     before: '#E6F3F9',
-    status: 'design',
-    note: 'question 2',
+    now: 'background.info',
+    status: 'approval',
+    question: 2,
   },
   {
-    name: 'information500',
+    name: 'info150',
+    before: '#C0DFED',
+    now: 'border.info',
+    status: 'approval',
+    question: 2,
+  },
+  {
+    name: 'info500, information500',
     before: '#0C8DC3',
-    status: 'design',
-    note: 'question 2',
+    now: 'foreground.info',
+    status: 'approval',
+    question: 2,
   },
   {
-    name: 'information900',
+    name: 'info900, information900',
     before: '#006A92',
-    status: 'design',
-    note: 'question 2',
+    now: 'foreground.info',
+    status: 'approval',
+    question: 2,
   },
-  { name: 'cerulean', before: '#008CC6', status: 'design', note: 'question 3' },
-  { name: 'space', before: '#004561', status: 'design', note: 'question 3' },
-  { name: 'azure', before: '#E7F7FE', status: 'design', note: 'question 3' },
-  { name: 'magenta', before: '#CF2FB3', status: 'design', note: 'question 3' },
-  { name: 'berry', before: '#9A2386', status: 'design', note: 'question 3' },
-  { name: 'lilac', before: '#F8EAF7', status: 'design', note: 'question 3' },
-  { name: 'iris', before: '#8C4E9F', status: 'design', note: 'question 3' },
-  { name: 'mauve', before: '#693B77', status: 'design', note: 'question 3' },
-  { name: 'lavender', before: '#F2EDF5', status: 'design', note: 'question 3' },
+  {
+    name: 'space',
+    before: '#004561',
+    now: 'neutral[900]',
+    where: 'tooltips',
+    status: 'approval',
+    question: 3,
+  },
+  {
+    name: 'azure, lilac, lavender, berry, mauve',
+    before: '#F8EAF7',
+    now: "background['color-lavender']",
+    where: 'avatars, now the five CAS colour pairs',
+    status: 'approval',
+    question: 3,
+  },
+  {
+    name: 'success100 (mint)',
+    before: '#E4F5EE',
+    now: "background['hover-brand']",
+    where: 'hover in lists',
+    status: 'approval',
+    question: 7,
+  },
+  {
+    name: 'side menu selected (unnamed)',
+    before: '#E7F7F0',
+    now: 'background.active',
+    where: 'selected item',
+    status: 'approval',
+    question: 7,
+  },
+  {
+    name: 'magenta',
+    before: '#CF2FB3',
+    now: 'magenta (kept, not in CAS)',
+    where: 'gradients',
+    status: 'approval',
+    question: 3,
+  },
+  {
+    name: 'iris',
+    before: '#8C4E9F',
+    now: 'iris (kept, not in CAS)',
+    where: 'gradients',
+    status: 'approval',
+    question: 3,
+  },
 ];
