@@ -7,7 +7,7 @@ import {
   MouseEventHandler,
   ComponentProps,
 } from 'react';
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { Anchor, Button } from '../atoms';
 import { rem, mobileScreen, formTargetWidth } from '../pixels';
 
@@ -100,10 +100,7 @@ const alignLeftStyles = css({
 
 export type ItemType = 'title' | 'inner' | 'default';
 
-const itemStyles = ({
-  primary900 = colorFromHex(colour.brand.crn[800]),
-  type = 'default',
-}: { type?: ItemType } & Theme['colors']) =>
+const itemStyles = (type: ItemType = 'default') =>
   css({
     color: colour.foreground.tertiary,
     backgroundColor:
@@ -115,7 +112,7 @@ const itemStyles = ({
     ':hover': {
       backgroundColor: colour.background['hover-brand'],
       span: {
-        color: primary900.rgba,
+        color: colour.foreground.brand,
       },
     },
   });
@@ -201,7 +198,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
               ({ item, type, href, onClick, closeOnClick = true }, index) => (
                 <li
                   key={`drop-${index}`}
-                  css={({ colors }) => itemStyles({ ...colors, type })}
+                  css={itemStyles(type)}
                 >
                   {href ? (
                     <Anchor href={href} onClick={() => setMenuShown(false)}>

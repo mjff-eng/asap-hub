@@ -1,8 +1,7 @@
 import { createVersionList, createVersionResponse } from '@asap-hub/fixtures';
-import { ThemeProvider } from '@emotion/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import OutputVersions, { OutputVersionsProps } from '../OutputVersions';
-import { color as colorConstructor, colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 
 const version: OutputVersionsProps['versions'][number] = {
   id: '1',
@@ -79,27 +78,11 @@ it('displays the correct message when versionAction is undefined', () => {
 });
 
 describe('theming', () => {
-  it('applies the default icon color', () => {
+  it('strokes the external link icon with the brand colour', () => {
     const { getByTitle } = render(<OutputVersions {...baseProps} />);
-    const icon = getByTitle('External Link');
-    const { stroke } = getComputedStyle(icon.parentNode as Element);
-    expect(stroke).toBe(colorFromHex(colour.brand.crn[500]).rgba);
-  });
-
-  it('uses theme primaryColor for the external icon svg', () => {
-    const testColor = colorConstructor(12, 141, 195);
-    const theme = {
-      colors: {
-        primary500: testColor,
-      },
-    };
-    const { getByTitle } = render(
-      <ThemeProvider theme={theme}>
-        <OutputVersions {...baseProps} />
-      </ThemeProvider>,
-    );
-    const icon = getByTitle('External Link');
-    const { stroke } = getComputedStyle(icon.parentNode as Element);
-    expect(stroke).toBe(testColor.rgba);
+    const link = getByTitle('External Link').closest('a');
+    expect(link).toHaveStyleRule('stroke', colour.foreground.brand, {
+      target: 'svg',
+    });
   });
 });

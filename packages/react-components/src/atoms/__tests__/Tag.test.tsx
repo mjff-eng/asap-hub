@@ -33,9 +33,20 @@ it('renders a tag with disabled styles when disabled', () => {
   rerender(<Tag enabled={false}>Text</Tag>);
 
   const tag = getParentStyle('borderStyle')?.element;
-  expect(tag).toHaveStyleRule('color', colour.foreground.primary);
+  expect(tag).toHaveStyleRule('color', colour.foreground.disabled);
   expect(tag).toHaveStyleRule('border-color', colour.border.tertiary);
-  expect(tag).toHaveStyleRule('background-color', colour.background.tertiary);
+  expect(tag).toHaveStyleRule('background-color', colour.background.disabled);
+});
+
+it('uses the brand border and text on hover when it links somewhere', () => {
+  const { getByText } = render(<Tag href="/somewhere">Text</Tag>);
+  const tag = findParentWithStyle(getByText('Text'), 'borderStyle')?.element;
+  expect(tag).toHaveStyleRule('border-color', colour.border.brand, {
+    target: ':hover',
+  });
+  expect(tag).toHaveStyleRule('color', colour.foreground.brand, {
+    target: ':hover',
+  });
 });
 
 it('renders a tag with a title', () => {

@@ -267,7 +267,7 @@ const matchedTeamStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: rem(8),
-  color: colour.brand.crn[500],
+  color: colour.foreground.brand,
   '> svg': {
     width: rem(24),
     height: rem(24),
@@ -276,7 +276,7 @@ const matchedTeamStyles = css({
 });
 
 const matchedTeamNameStyles = css({
-  color: colour.brand.crn[500],
+  color: colour.foreground.brand,
   fontWeight: 400,
 });
 
@@ -304,7 +304,7 @@ const unmatchedMetaStyles = css({
 });
 
 const suggestionLinkStyles = css({
-  color: colour.brand.crn[500],
+  color: colour.foreground.brand,
 });
 
 const addSuggestionButtonStyles = css({

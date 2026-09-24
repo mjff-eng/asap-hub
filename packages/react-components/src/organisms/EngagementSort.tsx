@@ -1,4 +1,4 @@
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { colorWithTransparency, colour, colorFromHex } from '../colors';
@@ -52,19 +52,16 @@ const optionStyles = css({
 
   ':hover': {
     backgroundColor: colour.background['hover-brand'],
-    color: colour.brand.crn[800],
+    color: colour.foreground.brand,
   },
 });
 
-const hoverStyles = ({
-  primary900 = colorFromHex(colour.brand.crn[800]),
-}: Theme['colors'] = {}) =>
-  css({
-    ':hover': {
-      backgroundColor: colour.background['hover-brand'],
-      color: primary900.rgba,
-    },
-  });
+const hoverStyles = css({
+  ':hover': {
+    backgroundColor: colour.background['hover-brand'],
+    color: colour.foreground.brand,
+  },
+});
 
 export interface EngagementSortProps {
   isActive: boolean;
@@ -122,7 +119,7 @@ const EngagementSort: React.FC<EngagementSortProps> = ({
             <button
               role="menuitem"
               key={key}
-              css={({ colors }) => [optionStyles, hoverStyles(colors)]}
+              css={[optionStyles, hoverStyles]}
               onClick={() => {
                 setMenuShown(false);
                 onClick();

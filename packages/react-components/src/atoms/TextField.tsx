@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { InputHTMLAttributes } from 'react';
-import { colour, colorFromHex } from '../colors';
+import { colour } from '../colors';
 import {
   indicatorPadding,
   indicatorSize,
@@ -76,10 +76,7 @@ const invalidStyles = css({
   },
 });
 
-const textFieldStyles = (
-  hasValue: boolean,
-  { primary900 = colorFromHex(colour.brand.crn[800]) }: Theme['colors'] = {},
-) =>
+const textFieldStyles = (hasValue: boolean) =>
   css({
     backgroundPosition: `right ${rem(paddingLeftRight)} top ${rem(
       paddingTopBottom,
@@ -102,7 +99,7 @@ const textFieldStyles = (
       stroke: colour.foreground.tertiary,
     },
     ':focus ~ div svg': {
-      stroke: primary900.rgba,
+      stroke: colour.foreground.brand,
     },
   });
 
@@ -202,9 +199,9 @@ const TextField: React.FC<TextFieldProps> = ({
         onChange={({ currentTarget: { value: newValue } }) =>
           onChange(newValue)
         }
-        css={({ colors }) => [
+        css={[
           styles,
-          textFieldStyles(Boolean(value), colors),
+          textFieldStyles(Boolean(value)),
           enabled || disabledStyles,
 
           validationMessage && invalidStyles,
@@ -216,9 +213,6 @@ const TextField: React.FC<TextFieldProps> = ({
 
           rightIndicator && {
             paddingRight: getIndicatorPadding(rightIndicator),
-          },
-          colors?.primary500 && {
-            ':focus': { borderColor: colors.primary500.rgba },
           },
         ]}
         {...(onBlur ? { onBlur } : {})}

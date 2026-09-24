@@ -2020,7 +2020,7 @@ const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
                         <ExternalLinkIcon
                           size={17}
                           color={colors.colorFromHex(
-                            colors.colour.brand.crn[800],
+                            colors.colour.brand.crn[600],
                           )}
                         />
                       </span>

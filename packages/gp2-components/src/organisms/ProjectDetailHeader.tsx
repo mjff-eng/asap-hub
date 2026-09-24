@@ -81,10 +81,10 @@ const copyButtonStyles = css({
   backgroundColor: 'inherit',
   borderColor: colour.brand.gp2[100],
   ':hover, :focus': {
-    borderColor: colour.brand.gp2[500],
+    borderColor: colour.border.brand,
   },
   path: {
-    fill: colour.brand.gp2[500],
+    fill: colour.foreground.brand,
   },
 });
 

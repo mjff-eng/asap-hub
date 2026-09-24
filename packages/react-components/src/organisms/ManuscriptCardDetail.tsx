@@ -6,19 +6,17 @@ import {
   ManuscriptVersion,
 } from '@asap-hub/model';
 import { projectRouteByType } from '@asap-hub/routing';
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { ComponentProps, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { DiscussionsTab } from '.';
 import {
   Button,
-  colors,
   complianceReportIcon,
   NotificationDotIcon,
   resubmitManuscriptIcon,
   Tooltip,
   colour,
-  colorFromHex,
 } from '..';
 import { rem, smallDesktopScreen } from '../pixels';
 import DiscussionCard from './DiscussionCard';
@@ -57,7 +55,7 @@ type ManuscriptCardDetailProps = Pick<
 };
 
 const buttonsContainerStyles = css({
-  borderBottom: `1px solid ${colors.colour.border.tertiary}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 const buttonsStyles = css({
@@ -89,12 +87,12 @@ const notificationDotStyles = css({
 
 const manuscriptDetailsContainerStyles = css({
   margin: `0 ${rem(16)} ${rem(16)}`,
-  border: `1px solid ${colors.colour.border.tertiary}`,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: `${rem(8)}`,
   boxSizing: 'border-box',
   borderWidth: 1,
   borderStyle: 'solid',
-  backgroundColor: colors.colour.neutral[0],
+  backgroundColor: colour.neutral[0],
 });
 
 const showMoreContainerStyles = css({
@@ -116,10 +114,7 @@ type VersionUserProps = {
   user: User | null;
 };
 
-const tabButtonStyles = ({
-  colors: { primary500 = colorFromHex(colour.brand.crn[500]) } = {},
-}: Theme) =>
-  css({
+const tabButtonStyles = css({
     paddingLeft: rem(0),
     paddingRight: rem(0),
     paddingBottom: rem(20),
@@ -130,7 +125,7 @@ const tabButtonStyles = ({
       paddingBottom: rem(16),
       color: colour.foreground.primary,
       fontWeight: 'bold',
-      borderBottom: `${rem(4)} solid ${primary500.rgba}`,
+      borderBottom: `${rem(4)} solid ${colour.foreground.brand}`,
     },
   });
 

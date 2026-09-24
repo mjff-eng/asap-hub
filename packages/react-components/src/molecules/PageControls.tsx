@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 
 import {
   rem,
@@ -10,7 +10,7 @@ import {
   mobileScreen,
   largeDesktopScreen,
 } from '../pixels';
-import { colour, colorFromHex } from '../colors';
+import { colour } from '../colors';
 import {
   firstPageIcon,
   nextPageIcon,
@@ -62,28 +62,22 @@ const itemStyles = css({
   },
 });
 
-const textStyles = ({
-  primary500 = colorFromHex(colour.brand.crn[500]),
-}: Theme['colors'] = {}) =>
-  css({
-    height: '100%',
-    display: 'grid',
-    justifyContent: 'center',
-    alignContent: 'center',
+const textStyles = css({
+  height: '100%',
+  display: 'grid',
+  justifyContent: 'center',
+  alignContent: 'center',
 
-    color: colour.foreground.tertiary,
-    svg: {
-      stroke: primary500.rgba,
-      verticalAlign: 'middle',
-    },
-  });
-const activeTextStyles = ({
-  primary500 = colorFromHex(colour.brand.crn[500]),
-}: Theme['colors'] = {}) =>
-  css({
-    backgroundColor: colour.background.brand,
-    color: primary500.rgba,
-  });
+  color: colour.foreground.tertiary,
+  svg: {
+    stroke: colour.foreground.brand,
+    verticalAlign: 'middle',
+  },
+});
+const activeTextStyles = css({
+  backgroundColor: colour.background.active,
+  color: colour.foreground.brand,
+});
 const disabledTextStyles = css({
   svg: {
     stroke: colour.foreground.disabled,
@@ -225,8 +219,8 @@ const PageControls: React.FC<PageControlsProps> = ({
         <li css={itemStyles}>
           <Anchor href={firstPageHref}>
             <span
-              css={({ colors }) => [
-                textStyles(colors),
+              css={[
+                textStyles,
                 firstPageHref ?? disabledTextStyles,
               ]}
             >
@@ -237,8 +231,8 @@ const PageControls: React.FC<PageControlsProps> = ({
         <li css={itemStyles}>
           <Anchor href={previousPageHref}>
             <span
-              css={({ colors }) => [
-                textStyles(colors),
+              css={[
+                textStyles,
                 previousPageHref ?? disabledTextStyles,
               ]}
             >
@@ -259,9 +253,9 @@ const PageControls: React.FC<PageControlsProps> = ({
             >
               <Anchor href={renderPageHref(index)}>
                 <span
-                  css={({ colors }) => [
-                    textStyles(colors),
-                    active && activeTextStyles(colors),
+                  css={[
+                    textStyles,
+                    active && activeTextStyles,
                   ]}
                 >
                   {index + 1}
@@ -273,8 +267,8 @@ const PageControls: React.FC<PageControlsProps> = ({
         <li css={itemStyles}>
           <Anchor href={nextPageHref}>
             <span
-              css={({ colors }) => [
-                textStyles(colors),
+              css={[
+                textStyles,
                 nextPageHref ?? disabledTextStyles,
               ]}
             >
@@ -285,8 +279,8 @@ const PageControls: React.FC<PageControlsProps> = ({
         <li css={itemStyles}>
           <Anchor href={lastPageHref}>
             <span
-              css={({ colors }) => [
-                textStyles(colors),
+              css={[
+                textStyles,
                 lastPageHref ?? disabledTextStyles,
               ]}
             >
