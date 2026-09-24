@@ -1,62 +1,49 @@
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import { rem } from '../pixels';
-import { colour, colorFromHex } from '../colors';
+import { colour } from '../colors';
 import { noop } from '../utils';
 import { tickIcon } from '../icons';
 
-const checkboxStyles = ({
-  primary500 = colorFromHex(colour.brand.crn[500]),
-  primary900 = colorFromHex(colour.brand.crn[800]),
-}: Theme['colors'] = {}) =>
-  css({
-    flexShrink: 0,
-    boxSizing: 'border-box',
-    width: rem(24),
-    height: rem(24),
-    marginRight: rem(12),
-    marginTop: rem(12),
-    marginBottom: rem(12),
+const checkboxStyles = css({
+  flexShrink: 0,
+  boxSizing: 'border-box',
+  width: rem(24),
+  height: rem(24),
+  marginRight: rem(12),
+  marginTop: rem(12),
+  marginBottom: rem(12),
 
-    appearance: 'none',
-    outline: 'none',
-    borderRadius: 0,
-    borderStyle: 'solid',
-    borderWidth: rem(1),
-    borderColor: colour.border.tertiary,
+  appearance: 'none',
+  outline: 'none',
+  borderRadius: 0,
+  borderStyle: 'solid',
+  borderWidth: rem(1),
+  borderColor: colour.border.tertiary,
 
-    ':enabled:hover, :enabled:focus': {
-      borderColor: colour.neutral[600],
+  ':enabled:hover, :enabled:focus': {
+    borderColor: colour.border.brand,
+  },
+
+  ':checked': {
+    borderColor: colour.background['hover-brand-inverse'],
+    backgroundColor: colour.background['hover-brand-inverse'],
+    '::before': {
+      content: `url(data:image/svg+xml;utf8,${encodeURIComponent(
+        renderToStaticMarkup(tickIcon),
+      )})`,
+      display: 'flex',
+      justifyContent: 'center',
+      lineHeight: rem(24),
     },
 
-    ':checked': {
-      borderColor: primary500.rgba,
-      backgroundColor: primary500.rgba,
-      '::before': {
-        content: `url(data:image/svg+xml;utf8,${encodeURIComponent(
-          renderToStaticMarkup(tickIcon),
-        )})`,
-        display: 'flex',
-        justifyContent: 'center',
-        lineHeight: rem(24),
-      },
-
-      ':disabled': {
-        borderColor: colour.border.disabled,
-        backgroundColor: colour.background.disabled,
-      },
-      ':hover, :focus': {
-        borderColor: primary900.rgba,
-        backgroundColor: primary900.rgba,
-
-        ':disabled': {
-          borderColor: colour.border.disabled,
-          backgroundColor: colour.background.disabled,
-        },
-      },
+    ':disabled': {
+      borderColor: colour.border.disabled,
+      backgroundColor: colour.background.disabled,
     },
-  });
+  },
+});
 
 interface CheckboxProps {
   readonly id?: string;
@@ -78,7 +65,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     checked={checked}
     disabled={!enabled}
     onChange={() => onSelect()}
-    css={({ colors }) => checkboxStyles(colors)}
+    css={checkboxStyles}
     type="checkbox"
   />
 );

@@ -1,6 +1,6 @@
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 
-import { OpaqueColor, TransparentColor, colour, colorFromHex } from './colors';
+import { colour } from './colors';
 import { formTargetWidth, mobileScreen, rem } from './pixels';
 
 const borderWidth = 1;
@@ -113,43 +113,36 @@ const smallIconOnlyStyles = css({
   paddingRight: rem(9 - borderWidth),
 });
 
-const boxShadow = (opaqueColor: OpaqueColor | TransparentColor) =>
-  `0px 2px 4px -2px ${opaqueColor.rgba}`;
+const boxShadow = (color: string) => `0px 2px 4px -2px ${color}`;
 
-const primaryStyles = ({
-  primary500 = colorFromHex(colour.brand.crn[500]),
-  primary900 = colorFromHex(colour.brand.crn[800]),
-}: Theme['colors'] = {}) =>
-  css({
-    color: colour.neutral[0],
-
-    backgroundColor: primary500.rgba,
-    borderColor: primary900.rgba,
-    boxShadow: boxShadow(primary900),
-    svg: {
-      stroke: colour.neutral[0],
-    },
-    ':hover, :focus': {
-      backgroundColor: primary900.rgba,
-      borderColor: primary900.rgba,
-      boxShadow: boxShadow(colorFromHex(colour.neutral[700])),
-    },
-
-    ':active': {
-      backgroundColor: primary900.rgba,
-      borderColor: primary900.rgba,
-      boxShadow: 'none',
-      color: colour.neutral[0],
-    },
-  });
+const primaryStyles = css({
+  color: colour.foreground.button.primary.default,
+  backgroundColor: colour.background.button.primary.default,
+  borderColor: colour.border.button.primary.default,
+  boxShadow: boxShadow(colour.border.button.primary.default),
+  svg: {
+    stroke: colour.foreground.button.primary.default,
+  },
+  ':hover, :focus': {
+    color: colour.foreground.button.primary.hover,
+    backgroundColor: colour.background.button.primary.hover,
+    borderColor: colour.border.button.primary.hover,
+    boxShadow: boxShadow(colour.neutral[700]),
+  },
+  ':active': {
+    backgroundColor: colour.background.button.primary.hover,
+    borderColor: colour.border.button.primary.hover,
+    boxShadow: 'none',
+  },
+});
 export const secondaryStyles = css({
   backgroundColor: colour.background.button.secondary.default,
   borderColor: colour.border.button.secondary.default,
-  boxShadow: boxShadow(colorFromHex(colour.neutral[100])),
+  boxShadow: boxShadow(colour.neutral[100]),
 
   ':hover, :focus': {
     borderColor: colour.border.button.secondary.hover,
-    boxShadow: boxShadow(colorFromHex(colour.neutral[100])),
+    boxShadow: boxShadow(colour.neutral[100]),
   },
 
   ':active': {
@@ -160,9 +153,9 @@ export const secondaryStyles = css({
 
 export const warningStyles = css({
   backgroundColor: colour.background.button.utilitarian.error.default,
-  color: colour.neutral[0],
-  borderColor: colour.utilitarian.red[700],
-  boxShadow: boxShadow(colorFromHex(colour.neutral[100])),
+  color: colour.foreground['primary-inverse'],
+  borderColor: 'transparent',
+  boxShadow: boxShadow(colour.neutral[100]),
 
   ':hover, :focus, :active': {
     backgroundColor: colour.background.button.utilitarian.error.hover,
@@ -184,24 +177,21 @@ const disabledStyles = css({
   },
 });
 
-export const activePrimaryStyles = ({
-  primary900 = colorFromHex(colour.brand.crn[800]),
-}: Theme['colors'] = {}) =>
-  css({
+export const activePrimaryStyles = css({
+  backgroundColor: colour.background.active,
+  borderColor: 'transparent',
+  color: colour.foreground.brand,
+  svg: {
+    stroke: colour.foreground.brand,
+    '& > path': {
+      fill: colour.foreground.brand,
+    },
+  },
+  ':hover, :focus': {
     backgroundColor: colour.background.active,
-    borderColor: 'transparent',
-    color: primary900.rgba,
-    svg: {
-      stroke: primary900.rgba,
-      '& > path': {
-        fill: primary900.rgba,
-      },
-    },
-    ':hover, :focus': {
-      backgroundColor: colour.background.active,
-      color: primary900.rgba,
-    },
-  });
+    color: colour.foreground.brand,
+  },
+});
 export const activeSecondaryStyles = css({
   backgroundColor: colour.neutral[0],
   color: colour.foreground.primary,
@@ -226,9 +216,7 @@ export const getButtonStyles = ({
   children = [] as React.ReactNode,
   noMargin = false,
   fullWidth = false,
-  colors,
 }: {
-  colors?: Theme['colors'];
   primary?: boolean;
   warning?: boolean;
   small?: boolean;
@@ -246,10 +234,10 @@ export const getButtonStyles = ({
     enabled
       ? active
         ? primary
-          ? activePrimaryStyles(colors)
+          ? activePrimaryStyles
           : activeSecondaryStyles
         : primary
-          ? primaryStyles(colors)
+          ? primaryStyles
           : secondaryStyles
       : disabledStyles,
     warning && enabled && warningStyles,

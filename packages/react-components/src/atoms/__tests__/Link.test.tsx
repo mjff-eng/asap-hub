@@ -13,8 +13,7 @@ it('renders the text in an anchor', () => {
 describe('the default theme', () => {
   it('applies the default link color', () => {
     const { getByRole } = render(<Link href="/">text</Link>);
-    const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(colorFromHex(colour.brand.crn[500]).rgb);
+    expect(getByRole('link')).toHaveStyleRule('color', colour.foreground.brand);
   });
 
   it('applies an invisible underline', () => {
@@ -35,7 +34,7 @@ it('applies an underline when requested', () => {
 });
 
 describe('theme with ThemeProvider', () => {
-  it('uses ThemeProvider theme primaryColor', () => {
+  it('uses the primary500 hex override that email layouts rely on', () => {
     const testColor = colorConstructor(12, 141, 195);
     const theme = {
       colors: {
@@ -146,8 +145,9 @@ describe('when button-styled', () => {
         text
       </Link>,
     );
-    expect(getComputedStyle(getByRole('link')).backgroundColor).not.toBe(
-      colorFromHex(colour.brand.crn[500]).rgb,
+    expect(getByRole('link')).not.toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
     );
 
     rerender(
@@ -155,8 +155,9 @@ describe('when button-styled', () => {
         text
       </Link>,
     );
-    expect(getComputedStyle(getByRole('link')).backgroundColor).toBe(
-      colorFromHex(colour.brand.crn[500]).rgb,
+    expect(getByRole('link')).toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
     );
   });
 
@@ -190,7 +191,7 @@ describe('when button-styled', () => {
     );
     expect(getByText('text').closest('a')).not.toHaveStyleRule(
       'background-color',
-      colour.background.tertiary,
+      colour.background.disabled,
     );
 
     rerender(
@@ -200,7 +201,7 @@ describe('when button-styled', () => {
     );
     expect(getByText('text').closest('a')).toHaveStyleRule(
       'background-color',
-      colour.background.tertiary,
+      colour.background.disabled,
     );
   });
 

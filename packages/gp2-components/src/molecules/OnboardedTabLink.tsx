@@ -21,7 +21,7 @@ const disabledStyles = css({
 const textStyles = css({ margin: 0, display: 'inline-flex', gap: rem(8) });
 const activeStyles = css({
   paddingBottom: rem(16),
-  borderBottom: `solid ${rem(4)} ${colour.brand.gp2[500]}`,
+  borderBottom: `solid ${rem(4)} ${colour.foreground.brand}`,
   color: colour.foreground.primary,
   fontWeight: 'bold',
   [mobileQuery]: {

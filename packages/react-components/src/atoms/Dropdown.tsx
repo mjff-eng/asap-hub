@@ -1,4 +1,4 @@
-import { css, useTheme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { FC, useEffect, useMemo, useRef, useState, ReactNode } from 'react';
 import Select, {
   ControlProps,
@@ -130,7 +130,6 @@ export default function Dropdown<V extends string>({
     [options],
   );
   const selectValue = validOptions.find((option) => option.value === value);
-  const theme = useTheme();
   return (
     <div css={containerStyles}>
       <Select<Option<V>, false, GroupBase<Option<V>>>
@@ -153,7 +152,7 @@ export default function Dropdown<V extends string>({
             <CustomOption {...props} renderOption={renderOption} />
           ),
         }}
-        styles={reactSelectStyles(theme, !!validationMessage)}
+        styles={reactSelectStyles(!!validationMessage)}
         noOptionsMessage={noOptionsMessage}
         tabSelectsValue={false}
         onBlur={() => {

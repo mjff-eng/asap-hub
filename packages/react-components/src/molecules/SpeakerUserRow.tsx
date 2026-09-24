@@ -55,7 +55,7 @@ export const avatar24Styles = css({
 
 // No truncation, matching the team name policy — a name wider than the card
 // just scrolls (overflowX: auto on groupsCardStyles). Color comes from
-// Link's default (colour.brand.crn[500]) for team members.
+// Link's default (colour.foreground.brand) for team members.
 const nameStyles = css({
   display: 'block',
   whiteSpace: 'nowrap',

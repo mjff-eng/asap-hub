@@ -27,7 +27,7 @@ const memberInfoStyles = css({
 const nameStyles = css({
   fontSize: rem(17),
   fontWeight: 500,
-  color: colour.brand.crn[500],
+  color: colour.foreground.brand,
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',

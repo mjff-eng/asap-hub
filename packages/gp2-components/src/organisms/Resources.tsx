@@ -69,7 +69,7 @@ const resourceLinkStyles = css({
   gap: rem(8),
   ':hover': {
     svg: {
-      stroke: colour.brand.gp2[500],
+      stroke: colour.foreground.brand,
     },
   },
 });
