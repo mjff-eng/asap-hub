@@ -232,7 +232,7 @@ const SpeakerTeamRow: React.FC<SpeakerTeamRowProps> = ({
                 preliminaryFindingsShared={user.preliminaryFindingsShared}
                 showShared={showShared}
                 onToggleShared={
-                  onToggleUserShared
+                  onToggleUserShared && !isExternalUser
                     ? (nextShared) => onToggleUserShared(user.id, nextShared)
                     : undefined
                 }

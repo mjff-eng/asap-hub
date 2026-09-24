@@ -40,6 +40,7 @@ import {
   SpeakerTeamGroup,
 } from './speaker-group';
 import SpeakerSection from './speaker-section';
+import Toast from './Toast';
 
 export type SpeakerTeamOption = AffiliationOption & {
   readonly teamType?: EventTeamType;
@@ -179,28 +180,16 @@ const removeGroupUser = (group: SpeakerGroup, userId: string): SpeakerGroup =>
     ? { ...group, users: group.users.filter((user) => user.id !== userId) }
     : { ...group, users: group.users.filter((user) => user.id !== userId) };
 
-const setGroupUserShared = (
-  group: SpeakerGroup,
+const setTeamUserShared = (
+  group: SpeakerTeamGroup,
   userId: string,
   shared: boolean,
-): SpeakerGroup =>
-  group.variant === 'external'
-    ? {
-        ...group,
-        users: group.users.map((user) =>
-          user.id === userId
-            ? { ...user, preliminaryFindingsShared: shared }
-            : user,
-        ),
-      }
-    : {
-        ...group,
-        users: group.users.map((user) =>
-          user.id === userId
-            ? { ...user, preliminaryFindingsShared: shared }
-            : user,
-        ),
-      };
+): SpeakerTeamGroup => ({
+  ...group,
+  users: group.users.map((user) =>
+    user.id === userId ? { ...user, preliminaryFindingsShared: shared } : user,
+  ),
+});
 
 const withoutGroupsAddedThisSession = (
   nextGroups: SpeakerGroup[],
@@ -248,6 +237,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   );
   const [addedSpeaker, setAddedSpeaker] = useState<AddedSpeaker | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [hasSaveError, setHasSaveError] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   // Never decremented: reusing a number after a removal makes two rows share an
   // id, and they then delete together.
@@ -418,8 +408,8 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   const toggleUserShared = (groupId: string, userId: string, shared: boolean) =>
     updateGroups((current) =>
       current.map((group) =>
-        group.id === groupId
-          ? setGroupUserShared(group, userId, shared)
+        group.id === groupId && group.variant === 'team'
+          ? setTeamUserShared(group, userId, shared)
           : group,
       ),
     );
@@ -471,10 +461,11 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
 
   const handleSave = async () => {
     setIsSaving(true);
+    setHasSaveError(false);
     try {
       await onSave(speakerGroups);
     } catch {
-      // The caller surfaces the error; the modal only has to unlock.
+      setHasSaveError(true);
     } finally {
       setIsSaving(false);
     }
@@ -499,8 +490,10 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       showCount={false}
       expanded={expandedIds.has(group.id)}
       onToggleExpanded={() => toggleExpanded(group.id)}
-      onToggleUserShared={(userId, shared) =>
-        toggleUserShared(group.id, userId, shared)
+      onToggleUserShared={
+        group.variant === 'team'
+          ? (userId, shared) => toggleUserShared(group.id, userId, shared)
+          : undefined
       }
       onRemoveUser={(userId) => removeUser(group.id, userId)}
       enabled={!isCancelling}
@@ -567,6 +560,9 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       </header>
 
       <div css={bodyStyles}>
+        {hasSaveError && (
+          <Toast>An error has occurred. Please try again later.</Toast>
+        )}
         <div css={searchSpacingStyles}>
           <MultiSelect<SpeakerSearchOption, false>
             isMulti={false}
@@ -702,9 +698,6 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
                       isExternal
                       preliminaryFindingsShared={user.preliminaryFindingsShared}
                       showShared={isPastEvent}
-                      onToggleShared={(shared) =>
-                        toggleUserShared('external', user.id, shared)
-                      }
                       onRemove={() => removeUser('external', user.id)}
                       enabled={!isCancelling}
                     />
