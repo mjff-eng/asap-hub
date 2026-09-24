@@ -310,14 +310,14 @@ describe('EditEventSpeakersModal', () => {
     await search('Alex', 'Alex Kim');
 
     expect(
-      screen.getByText('Pick a team or project to finish adding them.'),
+      screen.getByText(/Multiple affiliations were found for this speaker/),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
 
     await userEvent.click(screen.getByRole('button', { name: /Team Gamma/ }));
 
     expect(
-      screen.queryByText('Pick a team or project to finish adding them.'),
+      screen.queryByText(/Multiple affiliations were found for this speaker/),
     ).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
     expect(screen.getByText('Alex Kim')).toBeInTheDocument();
@@ -393,7 +393,7 @@ describe('EditEventSpeakersModal', () => {
       screen.queryByText('Added John Smith to Team Beta'),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByText('Pick a team or project to finish adding them.'),
+      screen.queryByText(/Multiple affiliations were found for this speaker/),
     ).not.toBeInTheDocument();
     expect(screen.getByRole('combobox')).toBeInTheDocument();
   });

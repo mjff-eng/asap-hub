@@ -58,6 +58,7 @@ export { default as errorIcon } from './error';
 export { default as EventIcon } from './event';
 export { default as ExportIcon } from './export';
 export { default as ExternalLinkIcon } from './external-link';
+export { default as externalUserAvatarIcon } from './external-user-avatar';
 export { default as feedbackIcon } from './feedback';
 export { default as filterIcon } from './filter-icon';
 export { default as firstPageIcon } from './first-page';

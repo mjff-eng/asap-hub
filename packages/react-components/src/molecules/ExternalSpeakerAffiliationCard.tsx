@@ -1,14 +1,10 @@
 import { ProjectType } from '@asap-hub/model';
 import { css } from '@emotion/react';
+import { StylesConfig } from 'react-select';
 
 import { Button, MultiSelect, Paragraph, Pill } from '../atoms';
-import { lead, neutral1000, warning100, warning900 } from '../colors';
-import {
-  crossIcon,
-  searchIcon,
-  userPlaceholderIcon,
-  WarningIcon,
-} from '../icons';
+import { lead, neutral700, neutral1000, warning100 } from '../colors';
+import { crossIcon, externalUserAvatarIcon, searchIcon } from '../icons';
 import { EventTeamType } from '../organisms/shared-event-card';
 import { mobileScreen, rem } from '../pixels';
 import {
@@ -17,27 +13,15 @@ import {
   squareIconButtonStyles,
 } from './SpeakerUserRow';
 
+const mobileQuery = `@media (max-width: ${mobileScreen.max}px)`;
+
 const cardStyles = css({
-  display: 'flex',
-  alignItems: 'flex-start',
-  gap: rem(16),
-  padding: rem(16),
-  border: `1px solid ${warning900.rgb}`,
-  borderRadius: rem(8),
-  backgroundColor: warning100.rgb,
-});
-
-const iconStyles = css({
-  flexShrink: 0,
-  [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
-});
-
-const contentStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(12),
-  flexGrow: 1,
-  minWidth: 0,
+  padding: rem(16),
+  borderRadius: rem(8),
+  backgroundColor: warning100.rgb,
 });
 
 const headerStyles = css({
@@ -49,7 +33,7 @@ const headerStyles = css({
 const identityStyles = css([
   flexRowGap8Styles,
   {
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mobileQuery]: {
       flexDirection: 'column',
       alignItems: 'flex-start',
     },
@@ -57,18 +41,20 @@ const identityStyles = css([
 ]);
 
 const nameStyles = css({
+  color: neutral1000.rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
 });
 
 const dismissStyles = (enabled: boolean) =>
-  css([
-    squareIconButtonStyles(enabled),
-    {
-      marginLeft: 'auto',
-    },
-  ]);
+  css([squareIconButtonStyles(enabled), { marginLeft: 'auto' }]);
+
+const messageStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: rem(8),
+});
 
 const bodyStyles = css({
   color: neutral1000.rgb,
@@ -80,21 +66,50 @@ const bodyStyles = css({
 const disclaimerStyles = css({
   color: lead.rgb,
   fontSize: rem(14),
-  lineHeight: rem(20),
+  lineHeight: rem(16),
 });
 
 const actionsStyles = css({
   display: 'flex',
   alignItems: 'center',
-  gap: rem(12),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  gap: rem(24),
+  [mobileQuery]: {
     flexDirection: 'column',
     alignItems: 'stretch',
+    gap: rem(12),
     textAlign: 'center',
   },
 });
 
 const searchStyles = css({ flexGrow: 1, minWidth: 0 });
+
+type SearchOption = { label: string; value: string };
+
+const searchSelectStyles: StylesConfig<SearchOption, false> = {
+  control: (base, { isFocused }) => ({
+    ...base,
+    minHeight: rem(40),
+    paddingTop: 0,
+    paddingBottom: 0,
+    borderRadius: rem(4),
+    ...(isFocused ? {} : { borderColor: neutral700.rgb }),
+  }),
+  input: (base) => ({ ...base, margin: `0 ${rem(6)}`, padding: 0 }),
+  placeholder: (base) => ({
+    ...base,
+    color: neutral700.rgb,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  }),
+};
+
+const keepAsGuestStyles = css({
+  flexGrow: 0,
+  minHeight: rem(40),
+  alignItems: 'center',
+  borderColor: neutral700.rgb,
+});
 
 export type AffiliationOption = {
   readonly id: string;
@@ -129,31 +144,28 @@ const ExternalSpeakerAffiliationCard: React.FC<
   enabled = true,
 }) => (
   <div css={cardStyles} role="status">
-    <span css={iconStyles}>
-      <WarningIcon />
-    </span>
-    <div css={contentStyles}>
-      <div css={headerStyles}>
-        <div css={identityStyles}>
-          <span css={flexRowGap8Styles}>
-            <span css={placeholderAvatarStyles}>{userPlaceholderIcon}</span>
-            <span css={nameStyles}>{displayName}</span>
-          </span>
-          <Pill accent="gray" noMargin>
-            Non CRN
-          </Pill>
-        </div>
-        <Button
-          noMargin
-          small
-          enabled={enabled}
-          aria-label={`Remove ${displayName}`}
-          onClick={onDismiss}
-          overrideStyles={dismissStyles(enabled)}
-        >
-          {crossIcon}
-        </Button>
+    <div css={headerStyles}>
+      <div css={identityStyles}>
+        <span css={flexRowGap8Styles}>
+          <span css={placeholderAvatarStyles}>{externalUserAvatarIcon}</span>
+          <span css={nameStyles}>{displayName}</span>
+        </span>
+        <Pill accent="gray" noMargin>
+          Non CRN
+        </Pill>
       </div>
+      <Button
+        noMargin
+        small
+        enabled={enabled}
+        aria-label={`Remove ${displayName}`}
+        onClick={onDismiss}
+        overrideStyles={dismissStyles(enabled)}
+      >
+        {crossIcon}
+      </Button>
+    </div>
+    <div css={messageStyles}>
       <Paragraph noMargin styles={bodyStyles}>
         This speaker is not a member on any CRN team or individual project.
         {affiliationOptions.length > 0
@@ -163,44 +175,46 @@ const ExternalSpeakerAffiliationCard: React.FC<
       <Paragraph noMargin styles={disclaimerStyles}>
         This does not add them to a team or project.
       </Paragraph>
-      <div css={actionsStyles}>
-        {affiliationOptions.length > 0 && (
-          <>
-            <div css={searchStyles}>
-              <MultiSelect<{ label: string; value: string }, false>
-                isMulti={false}
-                noMargin
-                enabled={enabled}
-                values={null}
-                leftIndicator={searchIcon}
-                placeholder="Search for a team or project…"
-                suggestions={affiliationOptions.map((affiliation) => ({
-                  label: affiliation.name,
-                  value: affiliationKey(affiliation),
-                }))}
-                onChange={(option) => {
-                  const selected = affiliationOptions.find(
-                    (affiliation) =>
-                      affiliationKey(affiliation) === option?.value,
-                  );
-                  if (selected) {
-                    onSelectAffiliation(selected);
-                  }
-                }}
-              />
-            </div>
-            <span>or</span>
-          </>
-        )}
-        <Button
-          noMargin
-          small
-          enabled={enabled}
-          onClick={onKeepAsExternalGuest}
-        >
-          Keep as External Guest
-        </Button>
-      </div>
+    </div>
+    <div css={actionsStyles}>
+      {affiliationOptions.length > 0 && (
+        <>
+          <div css={searchStyles}>
+            <MultiSelect<SearchOption, false>
+              isMulti={false}
+              noMargin
+              enabled={enabled}
+              values={null}
+              leftIndicator={searchIcon}
+              placeholder="Search team or project..."
+              styles={searchSelectStyles}
+              suggestions={affiliationOptions.map((affiliation) => ({
+                label: affiliation.name,
+                value: affiliationKey(affiliation),
+              }))}
+              onChange={(option) => {
+                const selected = affiliationOptions.find(
+                  (affiliation) =>
+                    affiliationKey(affiliation) === option?.value,
+                );
+                if (selected) {
+                  onSelectAffiliation(selected);
+                }
+              }}
+            />
+          </div>
+          <span>or</span>
+        </>
+      )}
+      <Button
+        noMargin
+        small
+        enabled={enabled}
+        onClick={onKeepAsExternalGuest}
+        overrideStyles={keepAsGuestStyles}
+      >
+        Keep as External Guest
+      </Button>
     </div>
   </div>
 );

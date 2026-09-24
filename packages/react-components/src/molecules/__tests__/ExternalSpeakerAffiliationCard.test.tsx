@@ -35,7 +35,7 @@ it('Should dismiss with a cross rather than a bin', () => {
 it('Should render the external placeholder avatar beside the name', () => {
   render(<ExternalSpeakerAffiliationCard {...defaultProps} />);
 
-  expect(screen.getByTitle('User Placeholder')).toBeInTheDocument();
+  expect(screen.getByTitle('External user')).toBeInTheDocument();
 });
 
 it('Should render the speaker name, the Non CRN pill and the explanatory copy', () => {
