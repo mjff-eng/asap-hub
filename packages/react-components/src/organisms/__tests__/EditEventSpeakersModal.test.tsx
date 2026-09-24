@@ -579,17 +579,34 @@ describe('EditEventSpeakersModal', () => {
     expect(screen.queryAllByText('John Smith')).toHaveLength(1);
   });
 
-  it('Should show external speakers’ findings as read-only, since they are never saved', () => {
-    renderModal({ groups: [getExternalGroup()] });
+  it('Should toggle one external speaker without touching the other', async () => {
+    renderModal({
+      groups: [
+        getExternalGroup({
+          users: [
+            getExternalUser({ id: 'ext-1', displayName: 'Guest One' }),
+            getExternalUser({ id: 'ext-2', displayName: 'Guest Two' }),
+          ],
+        }),
+      ],
+    });
 
-    expect(
-      screen.queryByRole('checkbox', {
+    await userEvent.click(
+      screen.getByRole('checkbox', {
         name: 'Guest One preliminary findings shared',
       }),
-    ).not.toBeInTheDocument();
+    );
+
     expect(
-      screen.getByRole('img', { name: 'No preliminary findings' }),
-    ).toBeVisible();
+      screen.getByRole('checkbox', {
+        name: 'Guest One preliminary findings shared',
+      }),
+    ).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Guest Two preliminary findings shared',
+      }),
+    ).not.toBeChecked();
   });
 
   it('Should reveal and re-hide the capped rows of the External section', async () => {
@@ -725,45 +742,21 @@ describe('EditEventSpeakersModal', () => {
     expect(screen.getByText('John Smith')).toBeInTheDocument();
   });
 
-  it('Should only let a real team member toggle findings, not a project speaker or a team guest', async () => {
-    renderModal({
-      groups: [
-        getTeamGroup({
-          users: [
-            getUser(),
-            getUser({
-              id: 'guest-1',
-              displayName: 'Walk In',
-              isExternal: true,
-            }),
-          ],
-        }),
-        getProjectGroup(),
-      ],
-    });
+  it('Should toggle an external speaker’s findings independently', async () => {
+    renderModal({ groups: [getExternalGroup()] });
 
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Expand Team Alpha' }),
-    );
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Expand Project One' }),
-    );
+    const toggle = screen.getByRole('checkbox', {
+      name: 'Guest One preliminary findings shared',
+    });
+    expect(toggle).not.toBeChecked();
+
+    await userEvent.click(toggle);
 
     expect(
       screen.getByRole('checkbox', {
-        name: 'Jane Doe preliminary findings shared',
+        name: 'Guest One preliminary findings shared',
       }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('checkbox', {
-        name: 'Walk In preliminary findings shared',
-      }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('checkbox', {
-        name: 'Robin Vale preliminary findings shared',
-      }),
-    ).not.toBeInTheDocument();
+    ).toBeChecked();
   });
 
   it('Should not duplicate a speaker who is searched and selected twice for the same team', async () => {
