@@ -47,7 +47,7 @@ const flattenPrimitives = (node: unknown, path: string[]): Primitive[] =>
     ? [
         {
           figmaName: path.join('/'),
-          codeName: `${codeNameFor(path)}.rgb`,
+          codeName: codeNameFor(path),
           step: path[path.length - 1] as string,
           hex: toHex(node),
           alpha: (node[3] as number | undefined) ?? 1,

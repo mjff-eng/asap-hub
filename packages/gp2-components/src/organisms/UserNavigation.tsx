@@ -31,7 +31,7 @@ const buttonStyles = css({
 });
 
 const userMenuStyles = css({
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   display: 'none',
   position: 'absolute',
   border: `1px solid ${neutral500.rgb}`,

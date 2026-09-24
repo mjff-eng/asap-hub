@@ -164,7 +164,7 @@ export const deleteButtonStyles = (
     padding: 0,
     border: `1px solid ${enabled ? neutral500.rgb : disabledBorder.rgb}`,
     borderRadius: rem(4),
-    backgroundColor: enabled ? colour.neutral[0].rgb : disabledBackground.rgb,
+    backgroundColor: enabled ? colour.neutral[0] : disabledBackground.rgb,
     boxShadow: enabled
       ? undefined
       : `0 2px 4px ${colorWithTransparency(neutral500, 0.3).rgba}`,

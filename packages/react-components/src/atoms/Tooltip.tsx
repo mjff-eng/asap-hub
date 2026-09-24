@@ -47,7 +47,7 @@ const tooltipStyles = css({
 });
 const bubbleStyles = css({
   backgroundColor: space.rgb,
-  color: colour.neutral[0].rgb,
+  color: colour.neutral[0],
   display: 'block',
 
   padding: `${rem(9)} ${rem(12)}`,

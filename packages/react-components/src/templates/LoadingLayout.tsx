@@ -69,7 +69,7 @@ const contentHeaderContainerStyles = css({
   gridColumn: '1 / -1',
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(48)}`,
   borderBottom: `1px solid ${neutral500.rgb}`,
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   rowGap: rem(12),
 });
 

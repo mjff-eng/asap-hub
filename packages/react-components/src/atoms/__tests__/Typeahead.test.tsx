@@ -3,7 +3,13 @@ import { waitFor } from '@testing-library/dom';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { colour, error500, neutral900, neutral300 } from '../../colors';
+import {
+  colour,
+  error500,
+  neutral900,
+  neutral300,
+  colorFromHex,
+} from '../../colors';
 import Typeahead from '../Typeahead';
 
 it('shows the selected value', () => {
@@ -62,12 +68,12 @@ it('shows the focused suggestion in green', async () => {
   await userEvent.click(getByDisplayValue(''));
   expect(
     findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).not.toBe(colour.brand.crn[800].rgb.replace(/ /g, ''));
+  ).not.toBe(colorFromHex(colour.brand.crn[800]).rgb.replace(/ /g, ''));
 
   fireEvent.mouseOver(getByText('LGW'));
   expect(
     findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).toBe(colour.brand.crn[800].rgb.replace(/ /g, ''));
+  ).toBe(colorFromHex(colour.brand.crn[800]).rgb.replace(/ /g, ''));
 });
 
 it('gets greyed out when disabled', () => {

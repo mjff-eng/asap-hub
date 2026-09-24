@@ -32,7 +32,7 @@ const bubbleStyles = css({
   pointerEvents: 'none',
 
   backgroundColor: space.rgb,
-  color: colour.neutral[0].rgb,
+  color: colour.neutral[0],
   borderRadius: rem(4),
   padding: `${rem(6)} ${rem(12)}`,
   whiteSpace: 'nowrap',

@@ -12,7 +12,7 @@ type PageInfoContainerProps = {
 };
 
 const containerStyles = css({
-  background: colour.neutral[0].rgb,
+  background: colour.neutral[0],
   boxShadow: `0 2px 4px -2px ${neutral500.rgb}`,
 });
 

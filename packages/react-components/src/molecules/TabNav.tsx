@@ -23,11 +23,11 @@ const containerStyles = css({
   },
   '::before': {
     left: 0,
-    background: `linear-gradient(to left, rgba(255, 255, 255, 0) 0%, ${colour.neutral[0].rgb} 100%)`,
+    background: `linear-gradient(to left, rgba(255, 255, 255, 0) 0%, ${colour.neutral[0]} 100%)`,
   },
   '::after': {
     right: 0,
-    background: `linear-gradient(to right, rgba(255, 255, 255, 0) 0%, ${colour.neutral[0].rgb} 100%)`,
+    background: `linear-gradient(to right, rgba(255, 255, 255, 0) 0%, ${colour.neutral[0]} 100%)`,
   },
 
   // Hide scrollbar on touch screens where our gradient indicator is sufficient.

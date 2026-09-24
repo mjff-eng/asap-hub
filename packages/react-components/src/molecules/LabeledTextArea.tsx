@@ -36,7 +36,7 @@ const infoStyle = css({
   },
   [`& p`]: {
     textAlign: 'left',
-    color: colour.neutral[0].rgb,
+    color: colour.neutral[0],
     marginTop: 0,
   },
 });

@@ -11,7 +11,7 @@ export const accents: Record<AccentVariant, CSSObject> = {
   },
   green: {
     backgroundColor: colors.success100.rgb,
-    color: colors.colour.brand.crn[500].rgb,
+    color: colors.colour.brand.crn[500],
   },
   blue: {
     backgroundColor: colors.info100.rgb,

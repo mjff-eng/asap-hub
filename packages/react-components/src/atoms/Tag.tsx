@@ -7,6 +7,7 @@ import {
   neutral500,
   success100,
   neutral300,
+  colorFromHex,
 } from '../colors';
 import { crossSmallIcon } from '../icons';
 import { rem } from '../pixels';
@@ -27,7 +28,7 @@ const styles = css({
   justifyContent: 'center',
   alignItems: 'center',
 
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   borderStyle: 'solid',
   borderWidth: `${borderWidth}px`,
   borderColor: neutral500.rgb,
@@ -40,7 +41,7 @@ const highlightStyles = css({
 
 const hoverStyles = ({
   primary100 = success100,
-  primary900 = colour.brand.crn[800],
+  primary900 = colorFromHex(colour.brand.crn[800]),
 }: Theme['colors'] = {}) =>
   css({
     ':hover': {

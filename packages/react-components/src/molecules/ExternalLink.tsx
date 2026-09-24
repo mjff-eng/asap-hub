@@ -24,10 +24,10 @@ const styles = (
     width: 'max-content',
     borderRadius: rem(36),
     minWidth: '24px',
-    color: colors?.primary500?.rgba || colour.brand.crn[500].rgb,
+    color: colors?.primary500?.rgba || colour.brand.crn[500],
     boxSizing: 'border-box',
     border: `${borderWidth}px solid ${
-      colors?.primary500?.rgba || colour.brand.crn[500].rgb
+      colors?.primary500?.rgba || colour.brand.crn[500]
     }`,
     margin: noMargin ? '0' : `${rem(12)} 0`,
     padding: withLabel ? `0 ${rem(12 - borderWidth)}` : rem(3),
@@ -35,13 +35,13 @@ const styles = (
       padding: full ? `0 ${rem(12 - borderWidth)}` : rem(3),
     },
     svg: {
-      stroke: colors?.primary500?.rgba || colour.brand.crn[500].rgb,
+      stroke: colors?.primary500?.rgba || colour.brand.crn[500],
     },
     ':hover, :focus': {
-      color: colors?.primary500?.rgba || colour.brand.crn[800].rgb,
-      borderColor: colors?.primary500?.rgba || colour.brand.crn[800].rgb,
+      color: colors?.primary500?.rgba || colour.brand.crn[800],
+      borderColor: colors?.primary500?.rgba || colour.brand.crn[800],
       svg: {
-        stroke: colors?.primary500?.rgba || colour.brand.crn[800].rgb,
+        stroke: colors?.primary500?.rgba || colour.brand.crn[800],
       },
     },
   });

@@ -20,7 +20,7 @@ const styles = css({
   // inner circle
   padding: rem(6),
   backgroundClip: 'content-box',
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
 
   ':disabled': {
     borderColor: neutral500.rgb,
@@ -33,12 +33,12 @@ const styles = css({
     borderColor: neutral900.rgb,
   },
   ':checked': {
-    borderColor: colour.brand.crn[500].rgb,
-    backgroundColor: colour.brand.crn[500].rgb,
+    borderColor: colour.brand.crn[500],
+    backgroundColor: colour.brand.crn[500],
 
     ':hover, :focus': {
-      borderColor: colour.brand.crn[800].rgb,
-      backgroundColor: colour.brand.crn[800].rgb,
+      borderColor: colour.brand.crn[800],
+      backgroundColor: colour.brand.crn[800],
     },
   },
 });

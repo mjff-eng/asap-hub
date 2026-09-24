@@ -2019,7 +2019,9 @@ const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
                         Open Science Compliance Checklist for Authors
                         <ExternalLinkIcon
                           size={17}
-                          color={colors.colour.brand.crn[800]}
+                          color={colors.colorFromHex(
+                            colors.colour.brand.crn[800],
+                          )}
                         />
                       </span>
                     </Link>

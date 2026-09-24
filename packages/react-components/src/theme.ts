@@ -8,9 +8,9 @@ export const themes: Record<
   ThemeVariant,
   { backgroundColor: string; color: string }
 > = {
-  light: { backgroundColor: colour.neutral[0].rgb, color: charcoal.rgb },
+  light: { backgroundColor: colour.neutral[0], color: charcoal.rgb },
   grey: { backgroundColor: neutral700.rgb, color: neutral900.rgb },
-  dark: { backgroundColor: charcoal.rgb, color: colour.neutral[0].rgb },
+  dark: { backgroundColor: charcoal.rgb, color: colour.neutral[0] },
 };
 
 export type Product = keyof typeof casTheme;

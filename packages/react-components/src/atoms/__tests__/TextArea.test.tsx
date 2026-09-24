@@ -1,7 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import TextArea from '../TextArea';
-import { colour, error500, neutral300 } from '../../colors';
+import { colour, error500, neutral300, colorFromHex } from '../../colors';
 
 it('renders a text area, passing through props', () => {
   const { getByRole } = render(<TextArea value="val" />);
@@ -74,7 +74,9 @@ describe('with a max length', () => {
     it('indicates how full it is in green', () => {
       const { getByText } = render(<TextArea value="val" maxLength={10} />);
       const indicator = getByText('10', { exact: false });
-      expect(getComputedStyle(indicator).color).toBe(colour.brand.crn[500].rgb);
+      expect(getComputedStyle(indicator).color).toBe(
+        colorFromHex(colour.brand.crn[500]).rgb,
+      );
     });
   });
 

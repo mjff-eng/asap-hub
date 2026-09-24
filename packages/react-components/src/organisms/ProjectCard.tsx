@@ -76,7 +76,7 @@ const iconStyles = css({
 });
 
 const teamNameStyles = css({
-  color: colour.brand.crn[500].rgb,
+  color: colour.brand.crn[500],
   fontWeight: 500,
 });
 

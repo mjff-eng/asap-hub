@@ -2,7 +2,7 @@ import { createVersionList, createVersionResponse } from '@asap-hub/fixtures';
 import { ThemeProvider } from '@emotion/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import OutputVersions, { OutputVersionsProps } from '../OutputVersions';
-import { color as colorConstructor, colour } from '../../colors';
+import { color as colorConstructor, colour, colorFromHex } from '../../colors';
 
 const version: OutputVersionsProps['versions'][number] = {
   id: '1',
@@ -83,7 +83,7 @@ describe('theming', () => {
     const { getByTitle } = render(<OutputVersions {...baseProps} />);
     const icon = getByTitle('External Link');
     const { stroke } = getComputedStyle(icon.parentNode as Element);
-    expect(stroke).toBe(colour.brand.crn[500].rgba);
+    expect(stroke).toBe(colorFromHex(colour.brand.crn[500]).rgba);
   });
 
   it('uses theme primaryColor for the external icon svg', () => {
