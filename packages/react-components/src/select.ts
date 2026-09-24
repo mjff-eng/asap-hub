@@ -181,12 +181,10 @@ export const reactMultiSelectStyles = <
       ...(isFocused ? { borderColor: primary500.rgba } : {}),
       ...(isInvalid
         ? {
-            borderColor: isFocused
-              ? primary900.rgba
-              : colour.utilitarian.red[600],
+            borderColor: isFocused ? primary900.rgba : colour.border.error,
             backgroundColor: isFocused
               ? colour.neutral[0]
-              : colour.utilitarian.red[100],
+              : colour.background.error,
             svg: { fill: 'unset' },
           }
         : {}),

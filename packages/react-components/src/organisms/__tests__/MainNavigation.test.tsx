@@ -210,7 +210,7 @@ describe('the collapse toggle', () => {
         />
       </MemoryRouter>,
     );
-    // Same alignment collapsed — the icon column position never changes.
+    // Same alignment collapsed: the icon column position never changes.
     expect(getByRole('button', { name: 'Expand', hidden: true })).toHaveStyle(
       'justify-content: flex-start',
     );
