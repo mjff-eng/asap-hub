@@ -4,9 +4,10 @@ import {
   Link,
   pixels,
   colour,
+  colorFromHex,
 } from '@asap-hub/react-components';
 import { staticPages } from '@asap-hub/routing';
-import { css } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
 import { ReactNode } from 'react';
 import { gp2Image } from '../images';
 
@@ -52,8 +53,12 @@ interface LayoutProps {
   readonly appOrigin: string;
 }
 
+const emailTheme = {
+  colors: { primary500: colorFromHex(colour.brand.gp2[600]) },
+};
+
 const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (
-  <>
+  <ThemeProvider theme={emailTheme}>
     <div css={containerStyles}>
       <div
         role="presentation"
@@ -79,7 +84,7 @@ const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (
         </Link>
       </ul>
     </div>
-  </>
+  </ThemeProvider>
 );
 
 export default MessageLayout;
