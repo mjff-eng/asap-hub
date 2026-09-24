@@ -993,6 +993,59 @@ export const DesignQuestions = () => (
       </Side>
     </Question>
 
+    <Question
+      number={7}
+      title="Highlight colour for selected and hovered items"
+      ask="The selected item in the side menu and a hovered item in a dropdown both show a light green highlight, but today they use two slightly different mints. CAS has a colour for each (hover and selected), and they are greyer than our mint. The CAS hover colour is also the same as ARIA's lightest green. Should we use the CAS ones for both, so they match each other and Figma?"
+    >
+      <Side source="today" columns={2}>
+        <Sample
+          name="Side menu, selected item"
+          text={cas('foreground/primary')}
+          background="#E7F7F0"
+        >
+          Projects
+        </Sample>
+        <Sample
+          name="Dropdown, hovered item"
+          text={cas('foreground/primary')}
+          background="#E4F5EE"
+        >
+          Not Requested
+        </Sample>
+      </Side>
+      <Side source="cas" columns={4}>
+        <Sample
+          name="CRN background/hover-brand"
+          text={cas('foreground/primary')}
+          background={cas('background/hover-brand', 'crn')}
+        >
+          Not Requested
+        </Sample>
+        <Sample
+          name="CRN background/active"
+          text={cas('foreground/primary')}
+          background={cas('background/active', 'crn')}
+        >
+          Projects
+        </Sample>
+        <Sample
+          name="GP2 background/hover-brand"
+          text={cas('foreground/primary')}
+          background={cas('background/hover-brand', 'gp2')}
+        >
+          Not Requested
+        </Sample>
+        <Sample
+          name="GP2 background/active"
+          text={cas('foreground/primary')}
+          background={cas('background/active', 'gp2')}
+        >
+          Projects
+        </Sample>
+      </Side>
+    </Question>
+
     <Section title="How to read the readability badges">
       <p style={{ marginTop: 0 }}>
         The number on each badge, for example 3.51:1, is the{' '}
