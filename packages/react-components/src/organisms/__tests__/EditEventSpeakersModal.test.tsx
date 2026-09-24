@@ -2,7 +2,7 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 
-import { colorFromHex, colour } from '../../colors';
+import { colour } from '../../colors';
 import EditEventSpeakersModal, {
   SpeakerSearchOption,
 } from '../EditEventSpeakersModal';
@@ -668,9 +668,10 @@ describe('EditEventSpeakersModal', () => {
     it('Should change speakers card background', async () => {
       await enterCancelConfirmation();
       const list = screen.getByRole('list');
-      expect(list.parentElement).toHaveStyle({
-        backgroundColor: colorFromHex(colour.general.blue.cerulean[25]).rgb,
-      });
+      expect(list.parentElement).toHaveStyleRule(
+        'background-color',
+        colour.background.disabled,
+      );
     });
 
     it('Should disable the search input', async () => {
