@@ -1,7 +1,12 @@
 import { createCsvFileStream } from '@asap-hub/frontend-utils';
 import { createEventResponse } from '@asap-hub/fixtures';
 import { EventResponse } from '@asap-hub/model';
-import { SpeakerGroup } from '@asap-hub/react-components';
+import {
+  SpeakerGroup,
+  SpeakerGroupUser,
+  SpeakerProjectGroup,
+  SpeakerTeamGroup,
+} from '@asap-hub/react-components';
 
 import {
   downloadEventSpeakers,
@@ -34,17 +39,40 @@ const getEvent = (overrides: Partial<EventResponse> = {}): EventResponse =>
     ...overrides,
   }) as EventResponse;
 
+const speaker = (
+  overrides: Partial<SpeakerGroupUser> = {},
+): SpeakerGroupUser => ({
+  id: 'u1',
+  displayName: 'Padmini',
+  roles: [],
+  preliminaryFindingsShared: false,
+  ...overrides,
+});
+
 const teamGroup = (
-  overrides: Partial<Extract<SpeakerGroup, { variant: 'team' }>> = {},
+  overrides: Partial<SpeakerTeamGroup> = {},
 ): SpeakerGroup => ({
   id: 'team-1',
   variant: 'team',
   teamName: 'Alessi',
-  preliminaryFindingsShared: true,
   users: [
-    { id: 'u1', displayName: 'Padmini', roles: [] },
-    { id: 'u2', displayName: 'Marco', roles: [] },
+    speaker({ preliminaryFindingsShared: true }),
+    speaker({
+      id: 'u2',
+      displayName: 'Marco',
+      preliminaryFindingsShared: true,
+    }),
   ],
+  ...overrides,
+});
+
+const projectGroup = (
+  overrides: Partial<SpeakerProjectGroup> = {},
+): SpeakerGroup => ({
+  id: 'project-1',
+  variant: 'project',
+  projectName: 'Alpha Project',
+  users: [speaker({ id: 'u9', displayName: 'Nadia' })],
   ...overrides,
 });
 
@@ -53,10 +81,10 @@ const externalGroup = (
 ): SpeakerGroup => ({
   id: 'external',
   variant: 'external',
-  preliminaryFindingsShared: false,
   users: displayNames.map((displayName, index) => ({
     id: `external-${index}`,
     displayName,
+    preliminaryFindingsShared: false,
   })),
 });
 
@@ -78,9 +106,58 @@ describe('eventSpeakersToCSV', () => {
     });
   });
 
+  test('Should stay identical to the pre-redesign row for a team-only event', () => {
+    const row = eventSpeakersToCSV(getEvent(), [
+      teamGroup(),
+      teamGroup({
+        id: 'team-2',
+        teamName: 'Barabasi',
+        users: [speaker({ id: 'u3', displayName: 'Ana' })],
+      }),
+      externalGroup(),
+    ]);
+
+    expect(row).toEqual({
+      eventTitle: 'Kick-off',
+      description: 'Intro session',
+      startDate: '2026-08-19T10:00:00.000Z',
+      endDate: '2026-08-19T11:00:00.000Z',
+      totalSpeakers: '4',
+      crnSpeakerCount: '3',
+      externalSpeakerCount: '1',
+      teamCount: '2',
+      teamsWithFindingsCount: '1',
+      teamsWithFindings: 'Alessi',
+      teamsWithoutFindings: 'Barabasi',
+      crnSpeakers: 'Alessi-Padmini; Alessi-Marco; Barabasi-Ana',
+      externalSpeakers: 'Jane Doe',
+    });
+  });
+
+  test('Should list project group speakers alongside team speakers', () => {
+    const row = eventSpeakersToCSV(getEvent(), [teamGroup(), projectGroup()]);
+
+    expect(row).toMatchObject({
+      totalSpeakers: '3',
+      crnSpeakerCount: '3',
+      crnSpeakers: 'Alessi-Padmini; Alessi-Marco; Alpha Project-Nadia',
+    });
+  });
+
+  test('Should count only team groups in the team columns', () => {
+    const row = eventSpeakersToCSV(getEvent(), [teamGroup(), projectGroup()]);
+
+    expect(row).toMatchObject({
+      teamCount: '1',
+      teamsWithFindingsCount: '1',
+      teamsWithFindings: 'Alessi',
+      teamsWithoutFindings: 'NA',
+    });
+  });
+
   test('Should report a team that has not shared preliminary findings', () => {
     const row = eventSpeakersToCSV(getEvent(), [
-      teamGroup({ preliminaryFindingsShared: false }),
+      teamGroup({ users: [speaker()] }),
     ]);
 
     expect(row).toMatchObject({
@@ -91,22 +168,33 @@ describe('eventSpeakersToCSV', () => {
     });
   });
 
+  test('Should treat a team as sharing when a single speaker shared', () => {
+    const row = eventSpeakersToCSV(getEvent(), [
+      teamGroup({
+        users: [
+          speaker(),
+          speaker({ id: 'u2', preliminaryFindingsShared: true }),
+        ],
+      }),
+    ]);
+
+    expect(row).toMatchObject({
+      teamsWithFindingsCount: '1',
+      teamsWithFindings: 'Alessi',
+      teamsWithoutFindings: 'NA',
+    });
+  });
+
   test('Should split and join teams across the two findings lists', () => {
     const row = eventSpeakersToCSV(getEvent(), [
       teamGroup(),
-      teamGroup({ id: 'team-2', teamName: 'Banteng', users: [] }),
       teamGroup({
-        id: 'team-3',
-        teamName: 'Barabasi',
-        preliminaryFindingsShared: false,
-        users: [],
+        id: 'team-2',
+        teamName: 'Banteng',
+        users: [speaker({ preliminaryFindingsShared: true })],
       }),
-      teamGroup({
-        id: 'team-4',
-        teamName: 'Cepheus',
-        preliminaryFindingsShared: false,
-        users: [],
-      }),
+      teamGroup({ id: 'team-3', teamName: 'Barabasi', users: [] }),
+      teamGroup({ id: 'team-4', teamName: 'Cepheus', users: [] }),
     ]);
 
     expect(row).toMatchObject({
@@ -123,8 +211,7 @@ describe('eventSpeakersToCSV', () => {
       teamGroup({
         id: 'team-2',
         teamName: 'Barabasi',
-        preliminaryFindingsShared: false,
-        users: [{ id: 'u3', displayName: 'Ana', roles: [] }],
+        users: [speaker({ id: 'u3', displayName: 'Ana' })],
       }),
     ]);
 
@@ -200,6 +287,33 @@ describe('eventSpeakersToCSV', () => {
       crnSpeakerCount: '0',
       crnSpeakers: 'NA',
     });
+  });
+
+  test('Should keep every mapped speaker in the CSV once project groups are synthesised', () => {
+    const event = getEvent({
+      speakers: [
+        {
+          id: 'es-1',
+          team: { id: 'team-1', displayName: 'Alessi' },
+          user: { id: 'u1', displayName: 'Padmini' },
+          role: 'Chair',
+        },
+        {
+          id: 'es-2',
+          team: { id: 'team-1', displayName: 'Alessi' },
+          user: { id: 'u2', displayName: 'Marco' },
+          role: 'Chair',
+        },
+      ] as unknown as EventResponse['speakers'],
+      preliminaryDataShared: [],
+    });
+
+    const row = eventSpeakersToCSV(event, mapSpeakersToGroups(event));
+
+    expect(row.totalSpeakers).toEqual('2');
+    expect(row.crnSpeakerCount).toEqual('2');
+    expect(row.crnSpeakers).toEqual(expect.stringContaining('Marco'));
+    expect(row.crnSpeakers).toEqual(expect.stringContaining('Padmini'));
   });
 });
 

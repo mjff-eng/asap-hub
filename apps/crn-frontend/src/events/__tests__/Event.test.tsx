@@ -2,7 +2,7 @@ import { createTestQueryClient } from '@asap-hub/frontend-utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   createCalendarResponse,
@@ -457,8 +457,14 @@ describe('the NEW_EVENT_PAGE flag', () => {
     });
 
     describe('upload a list', () => {
+      // The speakers card renders alongside attendance and is irrelevant here;
+      // its rows make every interaction in this block markedly slower.
       const eventWithOneTeam = () => ({
-        ...createEventResponse(),
+        ...createEventResponse({
+          numberOfSpeakers: 0,
+          numberOfExternalSpeakers: 0,
+          numberOfUnknownSpeakers: 0,
+        }),
         id,
         endDate: pastEndDate,
         attendance: [
@@ -470,17 +476,23 @@ describe('the NEW_EVENT_PAGE flag', () => {
         ],
       });
 
+      // Role queries call getComputedStyle per candidate, and jsdom resolves
+      // each one against every emotion rule on the page, which dominates the
+      // runtime of this block. Scoping to the dialog walks ~80 elements
+      // instead of ~350. It is looked up again per step: the modal remounts
+      // between them, so a captured node goes stale.
       const openUploadList = async () => {
         const rendered = render(<Event />, {
           wrapper: createWrapper({ techSupport: true }),
         });
+        const modal = () => within(rendered.getByRole('dialog'));
         await userEvent.click(
           await rendered.findByRole('button', { name: 'Edit attendance' }),
         );
         await userEvent.click(
-          rendered.getByRole('button', { name: /Upload a List/i }),
+          modal().getByRole('button', { name: /Upload a List/i }),
         );
-        return rendered;
+        return { container: rendered.container, modal };
       };
 
       const uploadCsv = async (container: HTMLElement, contents: string) => {
@@ -512,16 +524,16 @@ describe('the NEW_EVENT_PAGE flag', () => {
           { ...createTeamListItemResponse(), id: 't2', displayName: 'Alessi' },
         ]);
 
-        const { container, findByRole, findByText } = await openUploadList();
+        const { container, modal } = await openUploadList();
         await uploadCsv(container, 'Team Name\nTeam Alessi\nNo Such Team\n');
 
-        expect(await findByText('2 Teams')).toBeVisible();
+        expect(await modal().findByText('2 Teams')).toBeVisible();
         expect(
-          await findByRole('button', {
+          await modal().findByRole('button', {
             name: /will be added and marked if attended/,
           }),
         ).toBeVisible();
-        expect(await findByText(/1 not matched/)).toBeVisible();
+        expect(await modal().findByText(/1 not matched/)).toBeVisible();
       });
 
       it('does not re-add a team already on the list but updates its status on save', async () => {
@@ -535,17 +547,21 @@ describe('the NEW_EVENT_PAGE flag', () => {
           },
         ]);
 
-        const { container, getByRole } = await openUploadList();
+        const { container, modal } = await openUploadList();
         await uploadCsv(container, 'Team Name,Attendance\nTeam One,Yes\n');
 
         // Enabled means the upload resolved the team; the wording it shows for
         // an already-added one belongs to the modal's own test.
         await waitFor(() =>
-          expect(getByRole('button', { name: 'Add Attendees' })).toBeEnabled(),
+          expect(
+            modal().getByRole('button', { name: 'Add Attendees' }),
+          ).toBeEnabled(),
         );
 
-        await userEvent.click(getByRole('button', { name: 'Add Attendees' }));
-        await userEvent.click(getByRole('button', { name: 'Save' }));
+        await userEvent.click(
+          modal().getByRole('button', { name: 'Add Attendees' }),
+        );
+        await userEvent.click(modal().getByRole('button', { name: 'Save' }));
 
         await waitFor(() =>
           expect(mockPatchEvent).toHaveBeenCalledWith(
@@ -567,13 +583,13 @@ describe('the NEW_EVENT_PAGE flag', () => {
           { ...createTeamListItemResponse(), id: 't2', displayName: 'Alessi' },
         ]);
 
-        const { container, findByRole, getByRole } = await openUploadList();
+        const { container, modal } = await openUploadList();
         await uploadCsv(container, 'Team Name,Attendance\nAlessi,Yes\n');
 
         await userEvent.click(
-          await findByRole('button', { name: 'Add Attendees' }),
+          await modal().findByRole('button', { name: 'Add Attendees' }),
         );
-        await userEvent.click(getByRole('button', { name: 'Save' }));
+        await userEvent.click(modal().getByRole('button', { name: 'Save' }));
 
         await waitFor(() =>
           expect(mockPatchEvent).toHaveBeenCalledWith(
@@ -883,7 +899,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(queryByText('Preliminary Findings')).not.toBeInTheDocument();
     });
 
-    it('shows the view more speakers control beyond ten teams', async () => {
+    it('shows the show more control beyond five team rows', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
@@ -892,7 +908,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
         ),
       });
       const { findByText } = render(<Event />, { wrapper });
-      expect(await findByText('View More Speakers')).toBeVisible();
+      expect(await findByText('Show 6 more teams')).toBeVisible();
     });
 
     it('shows the non project manager empty state when there are no speakers', async () => {
@@ -946,12 +962,16 @@ describe('the NEW_EVENT_PAGE flag', () => {
       await userEvent.click(
         await findByRole('button', { name: 'Edit speakers' }),
       );
+      const modal = within(getByRole('dialog'));
       await userEvent.click(
-        getByRole('checkbox', {
-          name: 'Team One preliminary findings shared',
+        modal.getByRole('button', { name: 'Expand Team One' }),
+      );
+      await userEvent.click(
+        modal.getByRole('checkbox', {
+          name: 'User u1 preliminary findings shared',
         }),
       );
-      await userEvent.click(getByRole('button', { name: 'Save' }));
+      await userEvent.click(modal.getByRole('button', { name: 'Save' }));
 
       await waitFor(() =>
         expect(mockPatchEvent).toHaveBeenCalledWith(

@@ -2,138 +2,90 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Avatar, Button, Link, Paragraph, PillSelector } from '../atoms';
-import { fern, neutral1000, warning100, warning900 } from '../colors';
-import { binIcon, plusIcon, WarningIcon } from '../icons';
-import { deleteButtonStyles } from '../organisms/shared-event-card-styles';
+import { fern, neutral700, neutral1000, paper, warning100 } from '../colors';
+import { crossIcon, plusIcon } from '../icons';
+import { projectIcon, teamIcon } from '../organisms/shared-event-card';
 import { mobileScreen, rem } from '../pixels';
 import { splitDisplayName } from '../utils/user';
-import { avatar24Styles } from './SpeakerUserRow';
+import {
+  affiliationKey,
+  AffiliationOption,
+} from './ExternalSpeakerAffiliationCard';
+import { avatar24Styles, squareIconButtonStyles } from './SpeakerUserRow';
 
-const hideOnMobileStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
-});
+const mobileQuery = `@media (max-width: ${mobileScreen.max}px)`;
 
-const hideOnDesktopStyles = css({
-  [`@media (min-width: ${mobileScreen.max + 1}px)`]: { display: 'none' },
-});
-
-// Sits as the table's first row, so its own bottom spacing — not a top margin
-// — separates it from the row that follows. Desktop: [icon] [content column],
-// icon top-aligned 16px left of the content. Mobile: the desktop icon hides
-// and the mobile-only icon inside pendingHeaderStyles takes over.
 const cardStyles = css({
   display: 'flex',
-  alignItems: 'flex-start',
-  gap: rem(16),
+  flexDirection: 'column',
+  gap: rem(12),
   marginBottom: rem(16),
   padding: rem(16),
-  border: `1px solid ${warning900.rgb}`,
   borderRadius: rem(8),
   backgroundColor: warning100.rgb,
 });
 
-const iconDesktopStyles = css([hideOnMobileStyles, { flexShrink: 0 }]);
-
-const contentStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: rem(12),
-  flexGrow: 1,
-  minWidth: 0,
-});
-
-// Desktop: one row (avatar, name, dismiss — dismiss pushed flush right via its
-// own marginLeft: auto; the warning icon lives outside this row). Mobile: wraps
-// into two lines — icon + dismiss on top, avatar + name below — matching Figma.
-// `order`/`flexBasis` reflow visually without changing DOM order (kept stable
-// for a11y).
 const headerStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: rem(8),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
-    flexWrap: 'wrap',
-  },
 });
 
-const iconStyles = css([
-  hideOnDesktopStyles,
-  {
-    display: 'inline-flex',
-    alignItems: 'center',
-    [`@media (max-width: ${mobileScreen.max}px)`]: { order: 1 },
-  },
+const avatarStyles = css([
+  avatar24Styles,
+  { borderRadius: '50%', boxShadow: `0 0 0 1px ${paper.rgb}` },
 ]);
-
-// A dedicated, empty line-break — not `flexBasis: 100%` on the avatar or name
-// themselves, which would each claim the whole line for themselves (pushing the
-// other to a third line) instead of sharing the new line. Hidden on desktop:
-// even at zero width it's still a real flex item, so left unhidden it'd eat
-// headerStyles' gap on both sides — showing up as stray space before the avatar.
-const lineBreakStyles = css([
-  hideOnDesktopStyles,
-  {
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
-      order: 3,
-      flexBasis: '100%',
-      width: 0,
-    },
-  },
-]);
-
-const avatarSlotStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: { order: 4 },
-});
-
-// `order` lives on this wrapper, not on nameStyles below: Link renders an <a>,
-// so the actual flex child of headerStyles is the anchor, not the inner span —
-// order on the span would have no effect.
-const nameSlotStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: { order: 5 },
-});
 
 const nameStyles = css({
   color: fern.rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
+  [mobileQuery]: { fontSize: rem(14), lineHeight: rem(16) },
 });
 
 const dismissStyles = (enabled: boolean) =>
-  css([
-    deleteButtonStyles(enabled),
-    {
-      marginLeft: 'auto',
-      [`@media (max-width: ${mobileScreen.max}px)`]: {
-        order: 2,
-      },
-    },
-  ]);
+  css([squareIconButtonStyles(enabled), { marginLeft: 'auto' }]);
 
-const warningTextStyles = css({
-  color: warning900.rgb,
+const messageStyles = css({
+  color: neutral1000.rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
-    fontSize: rem(14),
-    lineHeight: rem(16),
-  },
 });
 
 const pillStyles = css({
+  maxWidth: '100%',
+  height: rem(40),
+  padding: `0 ${rem(16)}`,
+  borderColor: neutral700.rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
   color: neutral1000.rgb,
+  // PillSelector only sizes its direct svg children.
+  '> span > svg': { width: rem(24), height: rem(24) },
+  '> span:last-of-type': {
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  [mobileQuery]: { fontSize: rem(14), lineHeight: rem(16) },
+});
+
+const affiliationIconStyles = css({
+  display: 'inline-flex',
+  flexShrink: 0,
+  [mobileQuery]: { display: 'none' },
 });
 
 type PendingSpeakerCardProps = {
   readonly displayName: string;
   readonly avatarUrl?: string;
   readonly userId: string;
-  readonly teams: ReadonlyArray<{ teamId: string; teamName: string }>;
-  readonly onPickTeam: (teamId: string) => void;
+  readonly affiliations: ReadonlyArray<AffiliationOption>;
+  readonly onPickAffiliation: (affiliation: AffiliationOption) => void;
   readonly onDismiss: () => void;
   readonly enabled?: boolean;
 };
@@ -142,60 +94,67 @@ const PendingSpeakerCard: React.FC<PendingSpeakerCardProps> = ({
   displayName,
   avatarUrl,
   userId,
-  teams,
-  onPickTeam,
+  affiliations,
+  onPickAffiliation,
   onDismiss,
   enabled = true,
 }) => (
   <div css={cardStyles} role="status">
-    <span css={iconDesktopStyles}>
-      <WarningIcon />
-    </span>
-    <div css={contentStyles}>
-      <div css={headerStyles}>
-        <span css={iconStyles}>
-          <WarningIcon />
-        </span>
-        <span css={lineBreakStyles} aria-hidden="true" />
-        <span css={avatarSlotStyles}>
-          <Avatar
-            {...splitDisplayName(displayName)}
-            imageUrl={avatarUrl}
-            overrideStyles={avatar24Styles}
-          />
-        </span>
-        <span css={nameSlotStyles}>
-          <Link href={network({}).users({}).user({ userId }).$} openInNewTab>
-            <span css={nameStyles}>{displayName}</span>
-          </Link>
-        </span>
-        <Button
-          noMargin
-          small
-          enabled={enabled}
-          aria-label={`Remove ${displayName}`}
-          onClick={onDismiss}
-          overrideStyles={dismissStyles(enabled)}
-        >
-          {binIcon}
-        </Button>
-      </div>
-      <Paragraph noMargin styles={warningTextStyles}>
-        Pick a team to finish adding them.
-      </Paragraph>
-      <PillSelector<string>
-        fullWidthOnMobile
-        enabled={enabled}
-        overrideStyles={pillStyles}
-        options={teams.map((team) => ({
-          value: team.teamId,
-          label: team.teamName,
-          icon: plusIcon,
-        }))}
-        value={[]}
-        onChange={(values) => values.forEach(onPickTeam)}
+    <div css={headerStyles}>
+      <Avatar
+        {...splitDisplayName(displayName)}
+        imageUrl={avatarUrl}
+        overrideStyles={avatarStyles}
       />
+      <Link href={network({}).users({}).user({ userId }).$} openInNewTab>
+        <span css={nameStyles}>{displayName}</span>
+      </Link>
+      <Button
+        noMargin
+        small
+        enabled={enabled}
+        aria-label={`Remove ${displayName}`}
+        onClick={onDismiss}
+        overrideStyles={dismissStyles(enabled)}
+      >
+        {crossIcon}
+      </Button>
     </div>
+    <Paragraph noMargin styles={messageStyles}>
+      Multiple affiliations were found for this speaker. Choose the team or
+      individual project the speaker represented for their presentation during
+      this meeting.
+    </Paragraph>
+    <PillSelector<string>
+      fullWidthOnMobile
+      enabled={enabled}
+      overrideStyles={pillStyles}
+      options={affiliations.map((affiliation) => ({
+        value: affiliationKey(affiliation),
+        label: affiliation.name,
+        icon: (
+          <>
+            {plusIcon}
+            {/* Decorative: the pill's own label already names the team or
+                project, so the icon title would only double it up. */}
+            <span css={affiliationIconStyles} aria-hidden>
+              {affiliation.variant === 'team'
+                ? teamIcon(affiliation.teamType)
+                : projectIcon(affiliation.projectType)}
+            </span>
+          </>
+        ),
+      }))}
+      value={[]}
+      onChange={([picked]) => {
+        const affiliation = affiliations.find(
+          (option) => affiliationKey(option) === picked,
+        );
+        if (affiliation) {
+          onPickAffiliation(affiliation);
+        }
+      }}
+    />
   </div>
 );
 

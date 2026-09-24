@@ -4,6 +4,9 @@ import {
 } from '@asap-hub/react-components';
 import type {
   SpeakerGroup,
+  SpeakerGroupExternalUser,
+  SpeakerGroupUser,
+  SpeakerProjectGroup,
   SpeakerSearchOption,
   SpeakerTeamGroup,
 } from '@asap-hub/react-components';
@@ -17,10 +20,23 @@ const noop = () => undefined;
 
 const roles = ['Data Manager', 'Multiple roles', 'Lead PI', 'Project Manager'];
 
+const buildUsers = (
+  prefix: string,
+  numberOfUsers: number,
+  sharingFindings: number,
+): SpeakerGroupUser[] =>
+  Array.from({ length: numberOfUsers }, (_, index) => ({
+    id: `${prefix}-user-${index}`,
+    displayName: `John Doe ${index + 1}`,
+    roles: [roles[index % roles.length] ?? 'Lead PI'],
+    isAlumni: index === 1,
+    preliminaryFindingsShared: index < sharingFindings,
+  }));
+
 const buildTeams = (
   numberOfTeams: number,
-  membersPerTeam: number,
-  teamsSharingFindings: number,
+  speakersPerGroup: number,
+  sharedSpeakersPerGroup: number,
   hasInactiveTeam: boolean,
 ): SpeakerTeamGroup[] =>
   Array.from({ length: numberOfTeams }, (_, teamIndex) => ({
@@ -32,42 +48,93 @@ const buildTeams = (
         ? ('Discovery Team' as const)
         : ('Resource Team' as const),
     isTeamInactive: hasInactiveTeam && teamIndex === 2,
-    // The first N teams share findings — drives the preliminary-findings %.
-    preliminaryFindingsShared: teamIndex < teamsSharingFindings,
-    users: Array.from({ length: membersPerTeam }, (_m, memberIndex) => ({
-      id: `user-${teamIndex}-${memberIndex}`,
-      displayName: `John Doe ${teamIndex + 1}.${memberIndex + 1}`,
-      roles: [roles[memberIndex % roles.length] as string],
-      isAlumni: memberIndex === 1,
-    })),
+    users: buildUsers(
+      `team-${teamIndex}`,
+      speakersPerGroup,
+      sharedSpeakersPerGroup,
+    ),
+  }));
+
+const buildProjects = (
+  numberOfProjects: number,
+  speakersPerGroup: number,
+  sharedSpeakersPerGroup: number,
+): SpeakerProjectGroup[] =>
+  Array.from({ length: numberOfProjects }, (_, projectIndex) => ({
+    id: `project-${projectIndex}`,
+    variant: 'project',
+    projectName: `Project ${projectIndex + 1}`,
+    projectType:
+      projectIndex % 2 === 0
+        ? ('Discovery Project' as const)
+        : ('Trainee Project' as const),
+    users: buildUsers(
+      `project-${projectIndex}`,
+      speakersPerGroup,
+      sharedSpeakersPerGroup,
+    ),
   }));
 
 const buildExternalGroup = (
   numberOfExternalUsers: number,
-  externalSharedFindings: boolean,
-): SpeakerGroup | undefined =>
-  numberOfExternalUsers > 0
-    ? {
-        id: 'external',
-        variant: 'external',
-        preliminaryFindingsShared: externalSharedFindings,
-        users: Array.from({ length: numberOfExternalUsers }, (_, index) => ({
-          id: `ext-${index}`,
-          displayName: `External user ${index + 1}`,
-        })),
-      }
-    : undefined;
+  sharedExternalUsers: number,
+): SpeakerGroup[] => {
+  if (numberOfExternalUsers === 0) {
+    return [];
+  }
+  const users: SpeakerGroupExternalUser[] = Array.from(
+    { length: numberOfExternalUsers },
+    (_, index) => ({
+      id: `ext-${index}`,
+      displayName: `External user ${index + 1}`,
+      preliminaryFindingsShared: index < sharedExternalUsers,
+    }),
+  );
+  return [{ id: 'external', variant: 'external', users }];
+};
 
 type ControlArgs = {
   numberOfTeams: number;
-  membersPerTeam: number;
-  teamsSharingFindings: number;
+  numberOfProjects: number;
+  speakersPerGroup: number;
+  sharedSpeakersPerGroup: number;
   numberOfExternalUsers: number;
-  externalSharedFindings: boolean;
+  sharedExternalUsers: number;
   isEditor: boolean;
   hasFinished: boolean;
   longTeamNameExample: boolean;
   hasInactiveTeam: boolean;
+};
+
+const buildGroups = ({
+  numberOfTeams,
+  numberOfProjects,
+  speakersPerGroup,
+  sharedSpeakersPerGroup,
+  numberOfExternalUsers,
+  sharedExternalUsers,
+  longTeamNameExample,
+  hasInactiveTeam,
+}: ControlArgs): SpeakerGroup[] => {
+  const teams = buildTeams(
+    numberOfTeams,
+    speakersPerGroup,
+    sharedSpeakersPerGroup,
+    hasInactiveTeam,
+  );
+  const [firstTeam] = teams;
+  if (longTeamNameExample && firstTeam) {
+    teams[0] = { ...firstTeam, teamName: 'Sundaravadivelu' };
+  }
+  return [
+    ...teams,
+    ...buildProjects(
+      numberOfProjects,
+      speakersPerGroup,
+      sharedSpeakersPerGroup,
+    ),
+    ...buildExternalGroup(numberOfExternalUsers, sharedExternalUsers),
+  ];
 };
 
 const meta: Meta<ControlArgs> = {
@@ -81,19 +148,32 @@ const meta: Meta<ControlArgs> = {
     CenterDecorator,
   ],
   argTypes: {
-    numberOfTeams: { control: { type: 'range', min: 0, max: 20, step: 1 } },
-    membersPerTeam: { control: { type: 'range', min: 0, max: 8, step: 1 } },
-    teamsSharingFindings: {
+    numberOfTeams: {
+      control: { type: 'range', min: 0, max: 20, step: 1 },
+      description: 'Rows in the "From Team Projects" section (0 hides it)',
+    },
+    numberOfProjects: {
       control: { type: 'range', min: 0, max: 20, step: 1 },
       description:
-        'How many teams shared preliminary findings — drives the circle % (teams sharing ÷ number of teams). Set equal to "number of teams" for 100% (green), 0 for 0% (purple).',
+        'Rows in the "From Individual Projects" section (0 hides it)',
+    },
+    speakersPerGroup: {
+      control: { type: 'range', min: 0, max: 12, step: 1 },
+      description:
+        'Speakers inside each team/project group — above five, an expanded group shows "Show N more speakers in <label>"',
+    },
+    sharedSpeakersPerGroup: {
+      control: { type: 'range', min: 0, max: 12, step: 1 },
+      description:
+        'How many speakers per group shared preliminary findings — drives the group pill and the circle %. Equal to "speakers per group" for 100%, 0 for 0%.',
     },
     numberOfExternalUsers: {
-      control: { type: 'range', min: 0, max: 6, step: 1 },
+      control: { type: 'range', min: 0, max: 12, step: 1 },
+      description: 'Rows in the "External" section (0 hides it)',
     },
-    externalSharedFindings: {
-      control: 'boolean',
-      description: 'Tick/cross on the External Users row',
+    sharedExternalUsers: {
+      control: { type: 'range', min: 0, max: 12, step: 1 },
+      description: 'How many external speakers shared preliminary findings',
     },
     isEditor: {
       control: 'boolean',
@@ -101,7 +181,8 @@ const meta: Meta<ControlArgs> = {
     },
     hasFinished: {
       control: 'boolean',
-      description: 'Whether the event has already taken place',
+      description:
+        'Whether the event has already taken place — past events add the percentage tile and the Preliminary Findings column',
     },
     longTeamNameExample: {
       control: 'boolean',
@@ -113,40 +194,15 @@ const meta: Meta<ControlArgs> = {
       description: 'Mark the third team as inactive (shows the inactive badge)',
     },
   },
-  render: ({
-    numberOfTeams,
-    membersPerTeam,
-    teamsSharingFindings,
-    numberOfExternalUsers,
-    externalSharedFindings,
-    isEditor,
-    hasFinished,
-    longTeamNameExample,
-    hasInactiveTeam,
-  }) => {
-    const teams = buildTeams(
-      numberOfTeams,
-      membersPerTeam,
-      teamsSharingFindings,
-      hasInactiveTeam,
-    );
-    if (longTeamNameExample && teams[0]) {
-      teams[0] = { ...teams[0], teamName: 'Sundaravadivelu' };
-    }
-    const externalGroup = buildExternalGroup(
-      numberOfExternalUsers,
-      externalSharedFindings,
-    );
-    return (
-      <EventSpeakers
-        groups={externalGroup ? [...teams, externalGroup] : teams}
-        hasFinished={hasFinished}
-        onEdit={isEditor ? noop : undefined}
-        onExport={isEditor ? noop : undefined}
-        onAddSpeaker={isEditor ? noop : undefined}
-      />
-    );
-  },
+  render: (args) => (
+    <EventSpeakers
+      groups={buildGroups(args)}
+      hasFinished={args.hasFinished}
+      onEdit={args.isEditor ? noop : undefined}
+      onExport={args.isEditor ? noop : undefined}
+      onAddSpeaker={args.isEditor ? noop : undefined}
+    />
+  ),
 };
 
 export default meta;
@@ -156,10 +212,11 @@ type Story = StoryObj<ControlArgs>;
 export const Playground: Story = {
   args: {
     numberOfTeams: 3,
-    membersPerTeam: 3,
-    teamsSharingFindings: 2,
+    numberOfProjects: 2,
+    speakersPerGroup: 3,
+    sharedSpeakersPerGroup: 2,
     numberOfExternalUsers: 2,
-    externalSharedFindings: false,
+    sharedExternalUsers: 1,
     isEditor: true,
     hasFinished: true,
     longTeamNameExample: false,
@@ -175,31 +232,70 @@ export const Upcoming: Story = {
   args: { ...Playground.args, hasFinished: false },
 };
 
-export const Overflow: Story = {
+export const TeamProjectsOnly: Story = {
+  args: {
+    ...Playground.args,
+    numberOfProjects: 0,
+    numberOfExternalUsers: 0,
+    hasInactiveTeam: true,
+  },
+};
+
+export const IndividualProjectsOnly: Story = {
+  args: { ...Playground.args, numberOfTeams: 0, numberOfExternalUsers: 0 },
+};
+
+export const ExternalOnly: Story = {
+  args: { ...Playground.args, numberOfTeams: 0, numberOfProjects: 0 },
+};
+
+// Every section over its five-row cap: each gets its own
+// "Show N more teams|projects|speakers".
+export const SectionOverflow: Story = {
   args: {
     ...Playground.args,
     numberOfTeams: 14,
-    teamsSharingFindings: 9,
+    numberOfProjects: 8,
+    numberOfExternalUsers: 9,
+    sharedExternalUsers: 4,
     longTeamNameExample: true,
   },
 };
 
-export const FindingsFull: Story = {
-  args: { ...Playground.args, numberOfTeams: 5, teamsSharingFindings: 5 },
+// Expand any group to reach the five-speaker cap and its
+// "Show N more speakers in <label>".
+export const GroupOverflow: Story = {
+  args: {
+    ...Playground.args,
+    numberOfTeams: 2,
+    numberOfProjects: 1,
+    speakersPerGroup: 9,
+    sharedSpeakersPerGroup: 4,
+  },
 };
 
-export const FindingsNone: Story = {
-  args: { ...Playground.args, teamsSharingFindings: 0 },
+export const FindingsAllShared: Story = {
+  args: {
+    ...Playground.args,
+    sharedSpeakersPerGroup: 3,
+    sharedExternalUsers: 2,
+  },
+};
+
+export const FindingsNoneShared: Story = {
+  args: {
+    ...Playground.args,
+    sharedSpeakersPerGroup: 0,
+    sharedExternalUsers: 0,
+  },
 };
 
 export const EmptyEditorUpcoming: Story = {
   args: {
+    ...Playground.args,
     numberOfTeams: 0,
-    membersPerTeam: 0,
-    teamsSharingFindings: 0,
+    numberOfProjects: 0,
     numberOfExternalUsers: 0,
-    externalSharedFindings: false,
-    isEditor: true,
     hasFinished: false,
   },
 };
@@ -221,31 +317,45 @@ const editAndSaveInitial: SpeakerGroup[] = [
     variant: 'team',
     teamName: 'Aguzzi',
     teamType: 'Discovery Team',
-    preliminaryFindingsShared: true,
     users: [
-      { id: 'user-1', displayName: 'Jane Doe', roles: ['Lead PI'] },
-      { id: 'user-2', displayName: 'John Smith', roles: ['Data Manager'] },
+      {
+        id: 'user-1',
+        displayName: 'Jane Doe',
+        roles: ['Lead PI'],
+        preliminaryFindingsShared: true,
+      },
+      {
+        id: 'user-2',
+        displayName: 'John Smith',
+        roles: ['Data Manager'],
+        preliminaryFindingsShared: false,
+      },
     ],
   },
   {
-    id: 'team-2',
-    variant: 'team',
-    teamName: 'Herzog',
-    teamType: 'Resource Team',
-    preliminaryFindingsShared: false,
+    id: 'project-1',
+    variant: 'project',
+    projectName: 'Alpha-synuclein imaging',
+    projectType: 'Trainee Project',
     users: [
       {
         id: 'user-3',
         displayName: 'Priya Patel',
         roles: ['Project Manager', 'Data Manager'],
+        preliminaryFindingsShared: false,
       },
     ],
   },
   {
     id: 'external',
     variant: 'external',
-    preliminaryFindingsShared: false,
-    users: [{ id: 'ext-1', displayName: 'Sam Rivera' }],
+    users: [
+      {
+        id: 'ext-1',
+        displayName: 'Sam Rivera',
+        preliminaryFindingsShared: false,
+      },
+    ],
   },
 ];
 
@@ -256,8 +366,8 @@ const editAndSaveSearchResults: SpeakerSearchOption[] = [
     user: {
       userId: 'user-jordan',
       displayName: 'Jordan Lee',
-      teamOptions: [
-        { teamId: 'team-3', teamName: 'Chen', role: 'Data Manager' },
+      affiliationOptions: [
+        { variant: 'team', id: 'team-3', name: 'Chen', role: 'Data Manager' },
       ],
     },
   },
@@ -267,9 +377,14 @@ const editAndSaveSearchResults: SpeakerSearchOption[] = [
     user: {
       userId: 'user-alex',
       displayName: 'Alex Kim',
-      teamOptions: [
-        { teamId: 'team-1', teamName: 'Aguzzi', role: 'Project Manager' },
-        { teamId: 'team-3', teamName: 'Chen', role: 'Trainee' },
+      affiliationOptions: [
+        {
+          variant: 'team',
+          id: 'team-1',
+          name: 'Aguzzi',
+          role: 'Project Manager',
+        },
+        { variant: 'team', id: 'team-3', name: 'Chen', role: 'Trainee' },
       ],
     },
   },
@@ -296,6 +411,7 @@ export const EditAndSave: Story = {
         {isEditing && (
           <EditEventSpeakersModal
             groups={groups}
+            isPastEvent
             loadSearchOptions={loadEditAndSaveSearchOptions}
             onSave={(updated) => {
               setGroups(updated);
