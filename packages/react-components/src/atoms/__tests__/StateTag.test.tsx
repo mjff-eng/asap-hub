@@ -18,41 +18,17 @@ it('renders an icon if provided', () => {
   expect(screen.getByTitle('Icon')).toBeInTheDocument();
 });
 
-it('applies default colors (apricot/clay)', () => {
-  const { container } = render(<StateTag label="Text" />);
+it.each`
+  variant      | accent       | background                   | text
+  ${'default'} | ${undefined} | ${colour.background.warning} | ${colour.foreground.warning}
+  ${'green'}   | ${'green'}   | ${colour.background.success} | ${colour.foreground.success}
+  ${'blue'}    | ${'blue'}    | ${colour.background.info}    | ${colour.foreground.info}
+`('applies the $variant variant colours', ({ accent, background, text }) => {
+  const { container } = render(<StateTag label="Text" accent={accent} />);
 
-  expect(container.firstElementChild).toBeDefined();
-  const { backgroundColor } = getComputedStyle(
-    container.firstElementChild as Element,
-  );
-
-  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(252, 248, 238)"`);
   expect(container.firstElementChild).toHaveStyleRule(
-    'color',
-    colour.foreground.warning,
+    'background-color',
+    background,
   );
-});
-
-it('applies green variant colors (success100/crn green)', () => {
-  const { container } = render(<StateTag label="Text" accent="green" />);
-
-  expect(container.firstElementChild).toBeDefined();
-  const { backgroundColor, color } = getComputedStyle(
-    container.firstElementChild as Element,
-  );
-
-  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(226, 238, 237)"`);
-  expect(color).toMatchInlineSnapshot(`"rgb(52, 162, 112)"`);
-});
-
-it('applies blue variant colors (info100/info900)', () => {
-  const { container } = render(<StateTag label="Text" accent="blue" />);
-
-  expect(container.firstElementChild).toBeDefined();
-  const { backgroundColor, color } = getComputedStyle(
-    container.firstElementChild as Element,
-  );
-
-  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(230, 243, 249)"`);
-  expect(color).toMatchInlineSnapshot(`"rgb(12, 141, 195)"`);
+  expect(container.firstElementChild).toHaveStyleRule('color', text);
 });

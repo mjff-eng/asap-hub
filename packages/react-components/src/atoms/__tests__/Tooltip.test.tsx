@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { rem } from '../../pixels';
-import { space } from '../../colors';
+import { colorFromHex, colour } from '../../colors';
 
 import Tooltip from '../Tooltip';
 
@@ -45,5 +45,7 @@ it('recolours the bubble and its tail when a background is given', () => {
 
 it('keeps the default background when none is given', () => {
   const { getByRole } = render(<Tooltip shown>text</Tooltip>);
-  expect(getByRole('tooltip')).toHaveStyle({ backgroundColor: space.rgb });
+  expect(getByRole('tooltip')).toHaveStyle({
+    backgroundColor: colorFromHex(colour.neutral[900]).rgb,
+  });
 });

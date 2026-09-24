@@ -2,16 +2,7 @@ import { manuscriptStatus } from '@asap-hub/model';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {
-  info100,
-  info200,
-  info500,
-  success100,
-  success500,
-  warning100,
-  neutral900,
-  colour,
-} from '../../colors';
+import { colour } from '../../colors';
 import ManuscriptByStatus from '../ManuscriptByStatus';
 
 describe('ManuscriptByStatus', () => {
@@ -95,24 +86,38 @@ describe('ManuscriptByStatus', () => {
       .closest('button');
 
     expect(selectedWarningButton).toHaveStyle({
-      backgroundColor: warning100.rgb,
+      backgroundColor: colour.utilitarian.orange[50],
       borderColor: colour.utilitarian.orange[100],
       color: colour.utilitarian.orange[600],
     });
-    expect(selectedFinalButton).toHaveStyle({
-      backgroundColor: success100.rgb,
-      borderColor: info200.rgb,
-      color: success500.rgb,
-    });
-    expect(selectedDefaultButton).toHaveStyle({
-      backgroundColor: info100.rgb,
-      borderColor: info500.rgb,
-      color: info500.rgb,
-    });
+    expect(selectedFinalButton).toHaveStyleRule(
+      'background-color',
+      colour.background.success,
+    );
+    expect(selectedFinalButton).toHaveStyleRule(
+      'border-color',
+      colour.border.success,
+    );
+    expect(selectedFinalButton).toHaveStyleRule(
+      'color',
+      colour.foreground.success,
+    );
+    expect(selectedDefaultButton).toHaveStyleRule(
+      'background-color',
+      colour.background.info,
+    );
+    expect(selectedDefaultButton).toHaveStyleRule(
+      'border-color',
+      colour.foreground.info,
+    );
+    expect(selectedDefaultButton).toHaveStyleRule(
+      'color',
+      colour.foreground.info,
+    );
     expect(unselectedButton).toHaveStyle({
       backgroundColor: 'white',
       borderColor: colour.neutral[100],
-      color: neutral900.rgb,
+      color: colour.neutral[600],
     });
   });
 

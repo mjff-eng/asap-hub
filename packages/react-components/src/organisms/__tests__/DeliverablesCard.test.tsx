@@ -72,11 +72,11 @@ describe('view more and less', () => {
 
 it.each`
   status           | textColor
-  ${'Complete'}    | ${colors.colour.brand.crn[800]}
-  ${'In Progress'} | ${colors.info500.rgb}
+  ${'Complete'}    | ${colors.colour.foreground.success}
+  ${'In Progress'} | ${colors.colour.foreground.info}
   ${'Not Started'} | ${colors.colour.foreground.error}
   ${'Incomplete'}  | ${colors.colour.foreground.warning}
-  ${'Pending'}     | ${colors.neutral800.rgb}
+  ${'Pending'}     | ${colors.colour.foreground.quaternary}
 `(
   'uses the correct accent color for status $status',
   ({ status, textColor }) => {

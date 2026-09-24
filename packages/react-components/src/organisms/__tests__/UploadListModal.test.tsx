@@ -9,7 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { StaticRouter } from 'react-router';
 
-import { neutral300 } from '../../colors';
+import { colorFromHex, colour } from '../../colors';
 
 import UploadListModal, { UploadListResult } from '../UploadListModal';
 
@@ -937,7 +937,7 @@ describe('UploadListModal', () => {
       const resultCard = matchedHeader.closest('button')?.parentElement;
       expect(resultCard).not.toBeNull();
       expect(resultCard).toHaveStyle({
-        backgroundColor: neutral300.rgb,
+        backgroundColor: colorFromHex(colour.general.blue.cerulean[25]).rgb,
       });
     });
 
