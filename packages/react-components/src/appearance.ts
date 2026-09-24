@@ -4,8 +4,8 @@ export const ceruleanFernGradientStyles = {
   background: `linear-gradient(to right, ${colour.brand.gp2[500]}, ${colour.brand.crn[500]})`,
 } as const;
 export const magentaCeruleanGradientStyles = {
-  background: `linear-gradient(to right, ${magenta.rgb}, ${colour.brand.gp2[500]})`,
+  background: `linear-gradient(to right, ${magenta}, ${colour.brand.gp2[500]})`,
 } as const;
 export const irisCeruleanGradientStyles = {
-  background: `linear-gradient(to right, ${iris.rgb}, ${colour.brand.gp2[500]})`,
+  background: `linear-gradient(to right, ${iris}, ${colour.brand.gp2[500]})`,
 } as const;

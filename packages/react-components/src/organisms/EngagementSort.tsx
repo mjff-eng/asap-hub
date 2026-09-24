@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 
-import { colorWithTransparency, colour, colorFromHex } from '../colors';
+import { cssColour, colour } from '../colors';
 import { GeneralSortingIcon } from '../icons';
 import { rem } from '../pixels';
 
@@ -23,9 +23,7 @@ const menuStyles = css({
 
   backgroundColor: colour.neutral[0],
   border: `1px solid ${colour.border.tertiary}`,
-  boxShadow: `0 2px 6px 0 ${
-    colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
-  }`,
+  boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
 
   display: 'none',
   flexDirection: 'column',

@@ -3,7 +3,7 @@ import { css, ThemeProvider } from '@emotion/react';
 import { staticPages } from '@asap-hub/routing';
 
 import { Link } from '../atoms';
-import { colour, colorFromHex } from '../colors';
+import { colour } from '../colors';
 import { asapImage } from '../images';
 import { ceruleanFernGradientStyles } from '../appearance';
 import { rem } from '../pixels';
@@ -49,7 +49,7 @@ interface LayoutProps {
 }
 
 const emailTheme = {
-  colors: { primary500: colorFromHex(colour.brand.crn[600]) },
+  colors: { primary500: colour.brand.crn[600] },
 };
 
 const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (

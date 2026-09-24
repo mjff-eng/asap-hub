@@ -1,12 +1,10 @@
 import { SerializedStyles } from '@emotion/react';
 
-import { OpaqueColor, TransparentColor } from '../colors';
-
 declare module '@emotion/react' {
   export interface Theme {
     // hex link colour for email templates, which cannot use CSS variables
     colors?: {
-      primary500?: OpaqueColor | TransparentColor;
+      primary500?: string;
     };
     components?: {
       NavigationLink?: {

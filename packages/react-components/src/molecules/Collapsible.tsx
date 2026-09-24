@@ -4,15 +4,15 @@ import { useState } from 'react';
 import { Button } from '../atoms';
 import { chevronCircleDownIcon, chevronCircleUpIcon } from '../icons';
 import { rem } from '../pixels';
-import { colorWithTransparency, colour, colorFromHex } from '../colors';
+import { cssColour, colour } from '../colors';
 
 const previewStyles = (containerMaxHeight: number | string) =>
   css({
     maxHeight: containerMaxHeight,
     overflow: 'hidden',
-    background: `linear-gradient(180deg, ${colour.neutral[700]} 26.56%, ${
-      colorWithTransparency(colorFromHex(colour.neutral[700]), 0).rgba
-    } 100%)`,
+    background: `linear-gradient(180deg, ${
+      colour.neutral[700]
+    } 26.56%, ${cssColour(colour.neutral[700], 0)} 100%)`,
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',

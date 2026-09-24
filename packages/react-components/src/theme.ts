@@ -1,5 +1,5 @@
 import { casTheme } from './cas-tokens.generated';
-import { colour } from './colors';
+import { colour, cssColour } from './colors';
 
 export type ThemeVariant = 'light' | 'grey' | 'dark';
 export const defaultThemeVariant: ThemeVariant = 'light';
@@ -14,13 +14,6 @@ export const themes: Record<
 };
 
 export type Product = keyof typeof casTheme;
-
-export const cssColour = (hex: string, alpha = 1): string =>
-  alpha === 1
-    ? hex
-    : `rgba(${[1, 3, 5]
-        .map((start) => parseInt(hex.slice(start, start + 2), 16))
-        .join(', ')}, ${alpha})`;
 
 export const themeVariables = (product: Product): Record<string, string> =>
   Object.fromEntries(

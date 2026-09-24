@@ -11,7 +11,7 @@ import { css } from '@emotion/react';
 import { Anchor, Button } from '../atoms';
 import { rem, mobileScreen, formTargetWidth } from '../pixels';
 
-import { colorWithTransparency, colour, colorFromHex } from '../colors';
+import { cssColour, colour } from '../colors';
 
 const containerStyles = css({
   display: 'flex',
@@ -40,9 +40,7 @@ const menuContainerStyles = (customMenuWidth?: number) =>
     right: 0,
     backgroundColor: colour.neutral[0],
     border: `1px solid ${colour.border.tertiary}`,
-    boxShadow: `0 2px 6px 0 ${
-      colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
-    }`,
+    boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
 
     flexDirection: 'column',
 
