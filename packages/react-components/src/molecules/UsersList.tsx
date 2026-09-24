@@ -8,7 +8,7 @@ import { Avatar, Link } from '../atoms';
 import { ImageLink } from '.';
 import { rem } from '../pixels';
 import { alumniBadgeIcon, userPlaceholderIcon } from '../icons';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 
 const getPlaceholderAvatarUrl = () =>
   `data:image/svg+xml;base64,${btoa(
@@ -25,7 +25,7 @@ const listStyles = css({
   flexWrap: 'wrap',
   gap: `${rem(8)} ${rem(4)}`, // vertical gap, horizontal gap
 
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 const itemStyles = (isSeparator: boolean, noMargin: boolean) =>
   css({
@@ -57,7 +57,7 @@ const iconStyles = css({
 });
 const separatorStyles = css({
   fontSize: rem(20),
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 interface UsersListProps {

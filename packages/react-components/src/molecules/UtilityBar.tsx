@@ -9,14 +9,14 @@ import {
   vminLinearCalcClamped,
 } from '../pixels';
 import { asapLogo, gp2Logo } from '../icons';
-import { color, paper } from '../colors';
+import { color, colour } from '../colors';
 
 const headerStyles = css({
   display: 'flex',
   alignItems: 'center',
   backgroundColor: color(3, 92, 129).rgb,
   gap: rem(24),
-  color: paper.rgb,
+  color: colour.neutral[0].rgb,
   padding: `${rem(6)} ${vminLinearCalcClamped(
     mobileScreen,
     24,

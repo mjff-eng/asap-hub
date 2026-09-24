@@ -2,7 +2,7 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 
-import { silver } from '../../colors';
+import { neutral300 } from '../../colors';
 import EditEventSpeakersModal, {
   SpeakerSearchOption,
 } from '../EditEventSpeakersModal';
@@ -669,7 +669,7 @@ describe('EditEventSpeakersModal', () => {
       await enterCancelConfirmation();
       const list = screen.getByRole('list');
       expect(list.parentElement).toHaveStyle({
-        backgroundColor: silver.rgb,
+        backgroundColor: neutral300.rgb,
       });
     });
 

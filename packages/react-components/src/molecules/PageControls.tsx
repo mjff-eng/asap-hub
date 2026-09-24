@@ -10,7 +10,13 @@ import {
   mobileScreen,
   largeDesktopScreen,
 } from '../pixels';
-import { steel, fern, tin, lead, mint, paper } from '../colors';
+import {
+  colour,
+  neutral500,
+  neutral700,
+  neutral900,
+  success100,
+} from '../colors';
 import {
   firstPageIcon,
   nextPageIcon,
@@ -26,7 +32,7 @@ const containerStyles = css({
 const listStyles = css({
   margin: 0,
   padding: rem(12),
-  border: `${rem(1)} solid ${steel.rgb}`,
+  border: `${rem(1)} solid ${neutral500.rgb}`,
   borderRadius: rem(6),
 
   display: 'grid',
@@ -35,7 +41,7 @@ const listStyles = css({
   gridAutoColumns: rem(30),
   gridGap: vminLinearCalc(mobileScreen, 6, largeDesktopScreen, 12, 'px'),
 
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
 });
 
 const itemStyles = css({
@@ -45,7 +51,7 @@ const itemStyles = css({
     justifySelf: 'center',
     alignSelf: 'center',
 
-    color: lead.rgb,
+    color: neutral900.rgb,
   },
 
   '&.follows-gap::before': {
@@ -62,22 +68,24 @@ const itemStyles = css({
   },
 });
 
-const textStyles = ({ primary500 = fern }: Theme['colors'] = {}) =>
+const textStyles = ({
+  primary500 = colour.brand.crn[500],
+}: Theme['colors'] = {}) =>
   css({
     height: '100%',
     display: 'grid',
     justifyContent: 'center',
     alignContent: 'center',
 
-    color: lead.rgb,
+    color: neutral900.rgb,
     svg: {
       stroke: primary500.rgba,
       verticalAlign: 'middle',
     },
   });
 const activeTextStyles = ({
-  primary500 = fern,
-  primary100 = mint,
+  primary500 = colour.brand.crn[500],
+  primary100 = success100,
 }: Theme['colors'] = {}) =>
   css({
     backgroundColor: primary100.rgba,
@@ -85,7 +93,7 @@ const activeTextStyles = ({
   });
 const disabledTextStyles = css({
   svg: {
-    stroke: tin.rgb,
+    stroke: neutral700.rgb,
   },
 });
 

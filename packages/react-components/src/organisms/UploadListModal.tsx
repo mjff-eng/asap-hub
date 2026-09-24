@@ -6,12 +6,12 @@ import { Button, Headline2, Link, Paragraph, Tag } from '../atoms';
 import {
   error500,
   error900,
-  fern,
-  lead,
   neutral1000,
   pearl,
-  silver,
-  steel,
+  colour,
+  neutral900,
+  neutral300,
+  neutral500,
 } from '../colors';
 import {
   binIcon,
@@ -176,7 +176,7 @@ const summaryStyles = css({
   flexWrap: 'wrap',
   fontSize: rem(17),
   lineHeight: rem(24),
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const summaryStrongStyles = css({
@@ -191,9 +191,9 @@ const summarySeparatorStyles = css({
 
 const resultCardStyles = (enabled: boolean) =>
   css({
-    border: `1px solid ${steel.rgb}`,
+    border: `1px solid ${neutral500.rgb}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? pearl.rgb : silver.rgb,
+    backgroundColor: enabled ? pearl.rgb : neutral300.rgb,
     overflow: 'hidden',
   });
 
@@ -225,7 +225,7 @@ const sectionHeaderLabelStyles = css({
 });
 
 const matchedLabelStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontWeight: 400,
   gap: rem(8),
   strong: {
@@ -253,7 +253,7 @@ const chevronStyles = (open: boolean) =>
   });
 
 const dividerStyles = css({
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 });
 
 const sectionBodyStyles = css({
@@ -274,7 +274,7 @@ const matchedTeamStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: rem(8),
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   '> svg': {
     width: rem(24),
     height: rem(24),
@@ -283,7 +283,7 @@ const matchedTeamStyles = css({
 });
 
 const matchedTeamNameStyles = css({
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
   fontWeight: 400,
 });
 
@@ -303,15 +303,15 @@ const unmatchedRowStyles = css({
 const unmatchedTextStyles = css({
   fontSize: rem(17),
   lineHeight: rem(24),
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const unmatchedMetaStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const suggestionLinkStyles = css({
-  color: fern.rgb,
+  color: colour.brand.crn[500].rgb,
 });
 
 const addSuggestionButtonStyles = css({
@@ -320,7 +320,7 @@ const addSuggestionButtonStyles = css({
   alignItems: 'center',
   gap: rem(8),
   lineHeight: rem(24),
-  color: lead.rgb,
+  color: neutral900.rgb,
   '> svg': {
     width: rem(24),
     height: rem(24),
@@ -332,7 +332,7 @@ const addSuggestionButtonStyles = css({
 
 const emptyResultStyles = css({
   margin: 0,
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -352,7 +352,7 @@ const formatTooltipStyles = css({
 
 const unmatchedHelpStyles = css({
   margin: 0,
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontSize: rem(14),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -624,7 +624,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
       </header>
 
       <div css={bodyStyles}>
-        <Paragraph noMargin accent="lead">
+        <Paragraph noMargin accent="neutral900">
           Add teams from a list. Matched teams are added and marked attended. If
           a team is already in your list, their attendance will be updated to
           match the file. CSV or XLSX files only. What format does the file

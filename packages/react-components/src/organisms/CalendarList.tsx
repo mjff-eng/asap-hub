@@ -5,7 +5,7 @@ import { FC, useState } from 'react';
 import { Card, Headline3, Paragraph, Link, Button } from '../atoms';
 import { tabletScreen, rem } from '../pixels';
 import { CalendarLink } from '../molecules';
-import { steel } from '../colors';
+import { neutral500 } from '../colors';
 
 const containerStyles = css({
   display: 'grid',
@@ -67,7 +67,7 @@ const orderList = css({
     [`@media (max-width: ${tabletScreen.min}px)`]: {
       marginTop: rem(12),
     },
-    borderTop: `1px solid ${steel.rgb}`,
+    borderTop: `1px solid ${neutral500.rgb}`,
   },
 });
 
@@ -76,7 +76,7 @@ const showMoreStyles = css({
   justifyContent: 'center',
   paddingTop: rem(15),
   paddingBottom: rem(15),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 });
 
 interface CalendarListProps {
@@ -103,7 +103,7 @@ const CalendarList: FC<CalendarListProps> = ({
         </div>
         {description && (
           <div css={subheaderStyles}>
-            <Paragraph accent="lead" noMargin>
+            <Paragraph accent="neutral900" noMargin>
               {description}
             </Paragraph>
           </div>
@@ -145,7 +145,7 @@ const CalendarList: FC<CalendarListProps> = ({
         )}
       </Card>
       {!hideSupportText && (
-        <Paragraph accent="lead">
+        <Paragraph accent="neutral900">
           Having issues? Set up your calendar manually with these instructions
           for{' '}
           <Link href="https://support.apple.com/en-us/guide/calendar/icl1022/mac">

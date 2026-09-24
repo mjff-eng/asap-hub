@@ -10,7 +10,7 @@ import { PageControls } from '..';
 
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, lead, neutral200, steel } from '../colors';
+import { charcoal, neutral200, neutral900, neutral500 } from '../colors';
 import {
   InactiveBadgeIcon,
   AlphabeticalSortingIcon,
@@ -29,19 +29,19 @@ const container = css({
     paddingLeft: rem(24),
   },
   'th.team, td.team': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${neutral500.rgb}`,
   },
   'th.publications, td.publications': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${neutral500.rgb}`,
   },
   'th.datasets, td.datasets': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${neutral500.rgb}`,
   },
   'th.protocols, td.protocols': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${neutral500.rgb}`,
   },
   'th.code, td.code': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${neutral500.rgb}`,
   },
 });
 
@@ -71,7 +71,7 @@ const headerStyles = css({
 });
 
 const rowStyles = css({
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   ':nth-of-type(even)': {
     background: neutral200.rgb,
   },
@@ -87,7 +87,7 @@ const valueStyles = css({
   fontWeight: 400,
   fontSize: rem(17),
   textWrap: 'nowrap',
-  color: lead.rgb,
+  color: neutral900.rgb,
   width: rem(60),
 });
 

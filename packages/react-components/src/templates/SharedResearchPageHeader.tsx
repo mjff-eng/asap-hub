@@ -33,7 +33,7 @@ const SharedResearchPageHeader: React.FC<SharedResearchPageHeaderProps> = ({
     <PageInfoContainer>
       <Display styleAsHeading={2}>Shared Research</Display>
       <div css={textStyles}>
-        <Paragraph accent="lead">
+        <Paragraph accent="neutral900">
           This page contains all shared research outputs. As grantees begin to
           share more items, this library will grow. Grantees should be mindful
           to respect intellectual boundaries and not share private outputs

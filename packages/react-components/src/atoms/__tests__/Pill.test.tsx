@@ -10,12 +10,12 @@ it('renders a tag label with content', () => {
 
 it.each`
   accent       | border                  | background              | text
-  ${'default'} | ${'rgb(223, 229, 234)'} | ${'transparent'}        | ${'rgb(77, 100, 107)'}
-  ${'green'}   | ${'rgb(40, 121, 83)'}   | ${'rgb(228, 245, 238)'} | ${'rgb(40, 121, 83)'}
-  ${'warning'} | ${'rgb(206, 128, 26)'}  | ${'rgb(248, 237, 222)'} | ${'rgb(206, 128, 26)'}
+  ${'default'} | ${'rgb(227, 230, 232)'} | ${'transparent'}        | ${'rgb(86, 96, 102)'}
+  ${'green'}   | ${'rgb(40, 121, 83)'}   | ${'rgb(226, 238, 237)'} | ${'rgb(40, 121, 83)'}
+  ${'warning'} | ${'rgb(220, 104, 3)'}   | ${'rgb(252, 248, 238)'} | ${'rgb(220, 104, 3)'}
   ${'info'}    | ${'rgb(12, 141, 195)'}  | ${'rgb(230, 243, 249)'} | ${'rgb(12, 141, 195)'}
-  ${'neutral'} | ${'rgb(146, 153, 158)'} | ${'rgb(237, 241, 243)'} | ${'rgb(146, 153, 158)'}
-  ${'gray'}    | ${'transparent'}        | ${'rgb(237, 241, 243)'} | ${'rgb(77, 100, 107)'}
+  ${'neutral'} | ${'rgb(136, 147, 154)'} | ${'rgb(238, 243, 246)'} | ${'rgb(136, 147, 154)'}
+  ${'gray'}    | ${'transparent'}        | ${'rgb(238, 243, 246)'} | ${'rgb(86, 96, 102)'}
 `(
   'sets text color border and background color for $accent',
   ({ accent, border, text, background }) => {

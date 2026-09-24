@@ -2,7 +2,13 @@ import { gp2 as gp2Model } from '@asap-hub/model';
 import React, { FC } from 'react';
 import { css } from '@emotion/react';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
-import { Avatar, Link, pixels, lead, silver } from '@asap-hub/react-components';
+import {
+  Avatar,
+  Link,
+  pixels,
+  neutral900,
+  neutral300,
+} from '@asap-hub/react-components';
 import { workingGroupIcon, projectIcon } from '../icons';
 
 const { rem } = pixels;
@@ -18,10 +24,10 @@ const inlineContainerStyles = css({
 });
 
 const itemStyles = css({
-  borderBottom: `1px solid ${silver.rgb}`,
+  borderBottom: `1px solid ${neutral300.rgb}`,
   paddingBottom: rem(24),
   paddingTop: rem(24),
-  color: lead.rgb,
+  color: neutral900.rgb,
 
   '&:first-of-type': {
     paddingTop: rem(18),

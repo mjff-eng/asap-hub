@@ -18,13 +18,13 @@ import {
   Switch,
 } from '../atoms';
 import {
-  lead,
+  neutral900,
   neutral200,
   neutral800,
   neutral1000,
   pearl,
-  steel,
-  tin,
+  neutral500,
+  neutral700,
 } from '../colors';
 import {
   binIcon,
@@ -155,9 +155,9 @@ const uploadButtonStyles = (enabled: boolean) =>
     alignSelf: 'flex-start',
     gap: rem(8),
     padding: `${rem(8)} ${rem(16)}`,
-    border: `1px solid ${steel.rgb}`,
+    border: `1px solid ${neutral500.rgb}`,
     borderRadius: rem(4),
-    color: enabled ? neutral1000.rgb : lead.rgb,
+    color: enabled ? neutral1000.rgb : neutral900.rgb,
     maxWidth: 'none',
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       flexGrow: 0,
@@ -166,7 +166,7 @@ const uploadButtonStyles = (enabled: boolean) =>
     '> svg': {
       width: rem(24),
       height: rem(24),
-      stroke: enabled ? neutral1000.rgb : lead.rgb,
+      stroke: enabled ? neutral1000.rgb : neutral900.rgb,
       filter: 'none',
     },
     ...buttonIconGapReset,
@@ -204,7 +204,7 @@ const statsGroupStyles = css({
 const attendeesStatStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const separatorStyles = css([attendeesStatStyles, { padding: `0 ${rem(8)}` }]);
@@ -241,14 +241,14 @@ const emptyAttendeesStyles = css({
   gap: rem(8),
   textAlign: 'center',
   padding: `${rem(32)} ${rem(24)}`,
-  border: `1px solid ${steel.rgb}`,
+  border: `1px solid ${neutral500.rgb}`,
   borderRadius: rem(8),
   backgroundColor: pearl.rgb,
 });
 
 const attendeesCardStyles = (enabled: boolean) =>
   css({
-    border: `1px solid ${steel.rgb}`,
+    border: `1px solid ${neutral500.rgb}`,
     borderRadius: rem(8),
     backgroundColor: enabled ? pearl.rgb : neutral200.rgb,
     padding: rem(24),
@@ -336,7 +336,7 @@ const lockStyles = css({
 
 const rowDividerStyles = css({
   paddingBottom: rem(16),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
 });
 
 const teamCellStyles = css({
@@ -364,11 +364,11 @@ const searchOptionStyles = css({
 });
 
 const searchOptionMetaStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const placeholderStyles = css({
-  color: tin.rgb,
+  color: neutral700.rgb,
 });
 
 // react-select remounts a custom component whose identity changes, so the
@@ -718,7 +718,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
           >
             <div css={uploadTextStyles}>
               <SectionTitle optional>Upload a list</SectionTitle>
-              <Paragraph noMargin accent="lead">
+              <Paragraph noMargin accent="neutral900">
                 Add several teams at once from a spreadsheet, instead of
                 searching one by one.
               </Paragraph>
@@ -765,10 +765,10 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
 
           {!hasRows ? (
             <div css={emptyAttendeesStyles} role="status">
-              <Paragraph noMargin accent="lead">
+              <Paragraph noMargin accent="neutral900">
                 <strong>Add teams to track attendance</strong>
               </Paragraph>
-              <Paragraph noMargin accent="lead">
+              <Paragraph noMargin accent="neutral900">
                 This event has no hosting group, so nothing was added
                 automatically. Search for a team above or upload a list.
               </Paragraph>

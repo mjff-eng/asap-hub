@@ -1,6 +1,6 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { colors } from '..';
-import { lead, paper, steel, tin } from '../colors';
+import { colour, neutral900, neutral500, neutral700 } from '../colors';
 import { borderWidth } from '../form';
 import { mobileScreen, rem } from '../pixels';
 
@@ -24,8 +24,8 @@ const fullWidthOnMobilePillStyles = css({
 });
 
 const disabledStyles = css({
-  borderColor: tin.rgb,
-  color: tin.rgb,
+  borderColor: neutral700.rgb,
+  color: neutral700.rgb,
   cursor: 'not-allowed',
 });
 
@@ -40,12 +40,16 @@ const pillStyles = (selected: boolean, error: boolean) =>
 
     borderStyle: 'solid',
     borderWidth: `${borderWidth}px`,
-    borderColor: error ? tin.rgb : selected ? colors.info150.rgba : steel.rgb,
+    borderColor: error
+      ? neutral700.rgb
+      : selected
+        ? colors.info150.rgba
+        : neutral500.rgb,
     borderRadius: rem(24),
     cursor: 'pointer',
     userSelect: 'none',
-    backgroundColor: selected ? colors.info100.rgba : paper.rgb,
-    color: selected ? colors.info500.rgba : lead.rgba,
+    backgroundColor: selected ? colors.info100.rgba : colour.neutral[0].rgb,
+    color: selected ? colors.info500.rgba : neutral900.rgba,
     '> svg': {
       width: rem(24),
       height: rem(24),

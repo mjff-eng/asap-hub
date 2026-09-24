@@ -12,13 +12,13 @@ import {
 } from '../atoms';
 import {
   charcoal,
-  lead,
   neutral1000,
   pearl,
-  pine,
-  silver,
-  steel,
-  tin,
+  colour,
+  neutral900,
+  neutral300,
+  neutral500,
+  neutral700,
 } from '../colors';
 import { crossIcon, plusIcon, searchIcon } from '../icons';
 import { ConfirmableModalFooter, Modal } from '../molecules';
@@ -97,7 +97,7 @@ const hideOnDesktopStyles = css({
   [`@media (min-width: ${mobileScreen.max + 1}px)`]: { display: 'none' },
 });
 
-const placeholderStyles = css({ color: tin.rgb });
+const placeholderStyles = css({ color: neutral700.rgb });
 
 const searchOptionStyles = css([
   flexRowGap8Styles,
@@ -105,14 +105,14 @@ const searchOptionStyles = css([
 ]);
 
 const searchUserNameStyles = css({
-  color: pine.rgb,
+  color: colour.brand.crn[800].rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
 });
 
 const searchExternalTextStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -170,13 +170,13 @@ const statsGroupStyles = css({
 const statStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const separatorStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
-  color: lead.rgb,
+  color: neutral900.rgb,
   padding: `0 ${rem(8)}`,
 });
 
@@ -190,9 +190,9 @@ const markAllSharedButtonStyles = css({
 
 const cardSurfaceStyles = (enabled: boolean) =>
   css({
-    border: `1px solid ${steel.rgb}`,
+    border: `1px solid ${neutral500.rgb}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? pearl.rgb : silver.rgb,
+    backgroundColor: enabled ? pearl.rgb : neutral300.rgb,
   });
 
 const groupsCardStyles = (enabled: boolean) =>
@@ -576,10 +576,14 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
 
           {visibleGroups.length === 0 && !pendingSpeaker ? (
             <div css={emptyStateStyles(!isCancelling)} role="status">
-              <Paragraph noMargin accent="lead" styles={emptyStateTitleStyles}>
+              <Paragraph
+                noMargin
+                accent="neutral900"
+                styles={emptyStateTitleStyles}
+              >
                 Add speakers to this event
               </Paragraph>
-              <Paragraph noMargin accent="lead">
+              <Paragraph noMargin accent="neutral900">
                 Search for a person to add them to this event. Once the event
                 has taken place, you&apos;ll be able to mark whether each
                 speaker shared preliminary findings.

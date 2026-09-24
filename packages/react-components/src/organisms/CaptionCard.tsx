@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { largeDesktopScreen, rem } from '../pixels';
 import { Card, Paragraph } from '../atoms';
 import { contentSidePaddingWithNavigation } from '../layout';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import { PercentageIcon } from '../icons';
 
 const cardStyles = css({ marginBottom: rem(32) });
@@ -30,7 +30,7 @@ const captionLegend = css({
   gap: rem(14),
   alignItems: 'start',
   '& p': {
-    color: lead.rgb,
+    color: neutral900.rgb,
     marginBlockStart: 0,
     marginBlockEnd: 0,
   },
@@ -45,7 +45,7 @@ const CaptionCard: React.FC<CaptionCardProps> = ({ children, legend }) => (
     <div css={containerStyles}>{children}</div>
     {legend && (
       <div css={captionLegend}>
-        <PercentageIcon title="percentage" color={lead.rgb} />
+        <PercentageIcon title="percentage" color={neutral900.rgb} />
         <Paragraph>{legend}</Paragraph>
       </div>
     )}

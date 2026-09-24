@@ -66,7 +66,7 @@ const GroupTeamsTabbedCard: React.FC<InterestGroupTeamsTabbedCardProps> = ({
           truncateFrom: 8,
           disabled: !isInterestGroupActive,
           empty: (
-            <Paragraph accent="lead">
+            <Paragraph accent="neutral900">
               There are no active team members.
             </Paragraph>
           ),
@@ -77,7 +77,9 @@ const GroupTeamsTabbedCard: React.FC<InterestGroupTeamsTabbedCardProps> = ({
           truncateFrom: 8,
           disabled: inactiveTeams.length === 0,
           empty: (
-            <Paragraph accent="lead">There are no past team members.</Paragraph>
+            <Paragraph accent="neutral900">
+              There are no past team members.
+            </Paragraph>
           ),
         },
       ]}

@@ -20,11 +20,7 @@ import { rem, mobileScreen, formTargetWidth } from '../pixels';
 import { Portal } from '../utils/portal';
 
 import {
-  paper,
-  steel,
   colorWithTransparency,
-  tin,
-  lead,
   neutral200,
   info100,
   info500,
@@ -32,6 +28,10 @@ import {
   warning500,
   success100,
   success500,
+  colour,
+  neutral500,
+  neutral700,
+  neutral900,
 } from '../colors';
 
 const containerStyles = css({
@@ -59,9 +59,9 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     maxWidth: rem(formTargetWidth),
     top,
     left,
-    backgroundColor: paper.rgb,
-    border: `1px solid ${steel.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+    backgroundColor: colour.neutral[0].rgb,
+    border: `1px solid ${neutral500.rgb}`,
+    boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
     flexDirection: 'column',
     padding: `${rem(6)} 0`,
   });
@@ -189,7 +189,7 @@ export const statusTagStyles = (type: StatusType, noWrap: boolean = true) =>
   });
 
 const itemStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   backgroundColor: 'none',
   ':hover': {
     backgroundColor: neutral200.rgba,

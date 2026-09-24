@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { lead, silver } from '../../colors';
+import { neutral900, neutral300 } from '../../colors';
 import { indicatorPadding } from '../../form';
 import { perRem } from '../../pixels';
 import TextField from '../TextField';
@@ -28,12 +28,12 @@ it('renders a disabled input field', () => {
   ).toBeFalsy();
   expect(
     getComputedStyle(screen.getByRole('textbox')).backgroundColor,
-  ).not.toBe(silver.rgb);
+  ).not.toBe(neutral300.rgb);
 
   rerender(<TextField value="" enabled={false} />);
   expect((screen.getByRole('textbox') as HTMLInputElement).disabled).toBe(true);
   expect(getComputedStyle(screen.getByRole('textbox')).backgroundColor).toBe(
-    silver.rgb,
+    neutral300.rgb,
   );
 });
 
@@ -45,7 +45,7 @@ it('mutes the value colour of a disabled date field to match other disabled fiel
     'input[type="date"]',
   ) as HTMLInputElement;
   expect(dateInput.disabled).toBe(true);
-  expect(getComputedStyle(dateInput).color).toBe(lead.rgb);
+  expect(getComputedStyle(dateInput).color).toBe(neutral900.rgb);
 });
 
 it('with the label indicator prop prop shows a react node', () => {

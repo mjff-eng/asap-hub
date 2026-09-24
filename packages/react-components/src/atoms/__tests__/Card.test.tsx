@@ -15,7 +15,7 @@ it('applies a default border and paper background', () => {
     container.firstElementChild as Element,
   );
 
-  expect(borderColor).toMatchInlineSnapshot(`"rgb(223, 229, 234)"`);
+  expect(borderColor).toMatchInlineSnapshot(`"rgb(227, 230, 232)"`);
   expect(backgroundColor).toMatchInlineSnapshot(`"rgb(255, 255, 255)"`);
 });
 
@@ -27,8 +27,8 @@ it('applies a ember border and rose background', () => {
     container.firstElementChild as Element,
   );
 
-  expect(borderColor).toMatchInlineSnapshot(`"rgb(205, 20, 38)"`);
-  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(247, 232, 234)"`);
+  expect(borderColor).toMatchInlineSnapshot(`"rgb(217, 45, 32)"`);
+  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(254, 228, 226)"`);
 });
 
 it('omits the padding if requested', () => {

@@ -2,7 +2,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Avatar, Button, Link, Pill, SpeakerRoleBadge } from '../atoms';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import { alumniBadgeIcon, binIcon, userPlaceholderIcon } from '../icons';
 import { deleteButtonStyles } from '../organisms/shared-event-card-styles';
 import { mobileScreen, rem } from '../pixels';
@@ -55,7 +55,7 @@ export const avatar24Styles = css({
 
 // No truncation, matching the team name policy — a name wider than the card
 // just scrolls (overflowX: auto on groupsCardStyles). Color comes from
-// Link's default (fern) for team members.
+// Link's default (colour.brand.crn[500]) for team members.
 const nameStyles = css({
   display: 'block',
   whiteSpace: 'nowrap',
@@ -67,7 +67,7 @@ const nameStyles = css({
   },
 });
 
-const externalNameStyles = css([nameStyles, { color: lead.rgb }]);
+const externalNameStyles = css([nameStyles, { color: neutral900.rgb }]);
 
 const placeholderAvatarStyles = css({
   display: 'inline-flex',

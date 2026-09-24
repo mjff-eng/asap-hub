@@ -4,7 +4,7 @@ import formatDistance from 'date-fns/formatDistance';
 import { dashboard, network } from '@asap-hub/routing';
 import { InterestGroupResponse, InterestGroupTools } from '@asap-hub/model';
 
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
 import { CopyButton, Display, Link, StateTag, TabLink } from '../atoms';
 import {
@@ -205,7 +205,7 @@ const InterestGroupProfileHeader: React.FC<InterestGroupProfileHeaderProps> = ({
             css={{
               paddingTop: `${20 / 13.6}em`,
               fontSize: rem(13.6),
-              color: lead.rgb,
+              color: neutral900.rgb,
             }}
           >
             Last updated:{' '}

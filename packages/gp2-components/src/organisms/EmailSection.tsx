@@ -41,7 +41,7 @@ const EmailItem: React.FC<{ email: string; contact: string }> = ({
       flexDirection: 'column',
     })}
   >
-    <Subtitle noMargin accent="lead">
+    <Subtitle noMargin accent="neutral900">
       {contact}
     </Subtitle>
     <div css={itemStyles} key={contact}>

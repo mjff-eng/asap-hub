@@ -1,4 +1,4 @@
-import { paper, charcoal, tin, lead } from './colors';
+import { charcoal, colour, neutral700, neutral900 } from './colors';
 
 export type ThemeVariant = 'light' | 'grey' | 'dark';
 export const defaultThemeVariant: ThemeVariant = 'light';
@@ -7,7 +7,7 @@ export const themes: Record<
   ThemeVariant,
   { backgroundColor: string; color: string }
 > = {
-  light: { backgroundColor: paper.rgb, color: charcoal.rgb },
-  grey: { backgroundColor: tin.rgb, color: lead.rgb },
-  dark: { backgroundColor: charcoal.rgb, color: paper.rgb },
+  light: { backgroundColor: colour.neutral[0].rgb, color: charcoal.rgb },
+  grey: { backgroundColor: neutral700.rgb, color: neutral900.rgb },
+  dark: { backgroundColor: charcoal.rgb, color: colour.neutral[0].rgb },
 };

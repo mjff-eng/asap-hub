@@ -8,7 +8,6 @@ import {
   EventCard,
   Headline2,
   LabIcon,
-  lead,
   WorkingGroupsIcon,
   Link,
   Paragraph,
@@ -17,6 +16,8 @@ import {
   PastEventsDashboardCard,
   RecentSharedOutputs,
   NewsCard,
+  neutral1000,
+  neutral900,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
@@ -30,7 +31,7 @@ import { getIconForDocumentType } from '../utils';
 
 const { rem } = pixels;
 const infoStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
   padding: `${rem(3)} 0 ${rem(24)}`,
   lineHeight: rem(24),
 });
@@ -109,7 +110,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
       {announcements.length > 0 ? (
         <div css={columnContainer}>
           <Headline2>Announcements</Headline2>
-          <Paragraph accent="lead" noMargin>
+          <Paragraph accent="neutral900" noMargin>
             Latest admin announcements.
           </Paragraph>
           <div css={contentCardsStyles}>
@@ -120,7 +121,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
 
       <div css={columnContainer}>
         <Headline2>Reminders</Headline2>
-        <Paragraph accent="lead" noMargin>
+        <Paragraph accent="neutral900" noMargin>
           Latest reminders about published outputs and upcoming events.
         </Paragraph>
         <div css={contentCardsStyles}>
@@ -133,22 +134,28 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
       </div>
       <div css={columnContainer}>
         <Headline2>GP2 Hub Stats</Headline2>
-        <Paragraph accent="lead" noMargin>
+        <Paragraph accent="neutral900" noMargin>
           Here are the latest stats from the GP2 Hub.
         </Paragraph>
         <div css={contentCardsStyles}>
           <InfoCard
-            icon={<LabIcon color="#00202C" size={40} />}
+            icon={<LabIcon color={neutral1000.hex} size={40} />}
             title="Samples Processed & Shared"
             total={latestStats.sampleCount}
           />
           <InfoCard
-            icon={<WorkingGroupsIcon color="#00202C" width={40} height={40} />}
+            icon={
+              <WorkingGroupsIcon
+                color={neutral1000.hex}
+                width={40}
+                height={40}
+              />
+            }
             title="Cohorts Pledged"
             total={latestStats.cohortCount}
           />
           <InfoCard
-            icon={<ArticleIcon color="#00202C" size={40} />}
+            icon={<ArticleIcon color={neutral1000.hex} size={40} />}
             title="Research Articles"
             total={latestStats.articleCount}
           />
@@ -157,7 +164,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
       {guides && (
         <div css={columnContainer}>
           <Headline2>Tools and Tutorials</Headline2>
-          <Paragraph accent="lead" noMargin>
+          <Paragraph accent="neutral900" noMargin>
             Here are some quick links to GP2 Hub resources.
           </Paragraph>
           <div css={contentCardsStyles}>
@@ -243,7 +250,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
       </div>
       <div css={columnContainer}>
         <Headline2>Latest Users</Headline2>
-        <Paragraph accent="lead" noMargin>
+        <Paragraph accent="neutral900" noMargin>
           Explore and learn more about the latest users on the hub.
         </Paragraph>
         <div css={usersCardsStyles}>
@@ -267,7 +274,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
       {latestNews ? (
         <div css={columnContainer}>
           <Headline2>Latest News</Headline2>
-          <Paragraph accent="lead" noMargin>
+          <Paragraph accent="neutral900" noMargin>
             Here is the latest GP2 news.
           </Paragraph>
           <div css={[contentCardsStyles, columnContainer, { gap: rem(32) }]}>

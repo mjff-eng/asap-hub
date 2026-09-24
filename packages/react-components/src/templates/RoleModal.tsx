@@ -29,7 +29,7 @@ type RoleModalProps = Pick<
 const thinLineStyles = css({
   width: '100%',
   height: '1px',
-  borderTop: `1px solid ${colors.steel.rgb}`,
+  borderTop: `1px solid ${colors.neutral500.rgb}`,
 });
 
 const RoleModal: React.FC<RoleModalProps> = ({

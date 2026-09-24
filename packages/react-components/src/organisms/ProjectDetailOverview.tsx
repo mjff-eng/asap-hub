@@ -2,14 +2,14 @@ import { OriginalGrantInfo, SupplementGrantInfo } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { steel } from '../colors';
+import { neutral500 } from '../colors';
 import { Card, Display, Link, Paragraph, TabButton } from '../atoms';
 import { TabNav } from '../molecules';
 import { rem } from '../pixels';
 
 const tabsContainerStyles = css({
   display: 'flex',
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
 });
 
 const tabContentStyles = css({
@@ -36,7 +36,7 @@ const ProjectDetailOverviewContent: React.FC<
 > = ({ title, description, proposalURL }) => (
   <>
     <Display styleAsHeading={4}>{title}</Display>
-    <Paragraph accent="lead">{description}</Paragraph>
+    <Paragraph accent="neutral900">{description}</Paragraph>
     {proposalURL ? (
       <div css={buttonContainerStyles}>
         <Link

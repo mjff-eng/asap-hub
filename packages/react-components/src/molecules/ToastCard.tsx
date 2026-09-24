@@ -4,15 +4,15 @@ import { css } from '@emotion/react';
 import { rem, mobileScreen } from '../pixels';
 import { Card } from '../atoms';
 import {
-  lead,
-  silver,
-  apricot,
-  clay,
   info500,
   info100,
-  mint,
-  pine,
-  tin,
+  colour,
+  neutral900,
+  neutral300,
+  warning100,
+  warning500,
+  success100,
+  neutral700,
 } from '../colors';
 import { WarningIcon, infoInfoIcon, liveIcon, paperClipIcon } from '../icons';
 import { borderRadius, paddingStyles } from '../card';
@@ -39,14 +39,14 @@ const iconStyles = css({
 
 const mutedIconStyles = css({
   'svg path[stroke]': {
-    stroke: tin.rgb,
+    stroke: neutral700.rgb,
   },
 });
 
 const alertStyles = css({
-  backgroundColor: apricot.rgb,
-  color: clay.rgb,
-  fill: clay.rgb,
+  backgroundColor: warning100.rgb,
+  color: warning500.rgb,
+  fill: warning500.rgb,
 });
 
 const infoStyles = css({
@@ -56,15 +56,15 @@ const infoStyles = css({
 });
 
 const liveStyles = css({
-  backgroundColor: mint.rgb,
-  color: pine.rgb,
-  fill: pine.rgb,
+  backgroundColor: success100.rgb,
+  color: colour.brand.crn[800].rgb,
+  fill: colour.brand.crn[800].rgb,
 });
 
 const leadStyles = css({
-  backgroundColor: silver.rgb,
-  color: lead.rgb,
-  fill: lead.rgb,
+  backgroundColor: neutral300.rgb,
+  color: neutral900.rgb,
+  fill: neutral900.rgb,
 });
 
 const toastContentStyles = css({
@@ -79,7 +79,7 @@ const toastContentStyles = css({
 type Type = 'alert' | 'attachment' | 'live' | 'info';
 
 const iconMap: Record<Type, ReactNode> = {
-  alert: <WarningIcon color={clay.rgb} />,
+  alert: <WarningIcon color={warning500.rgb} />,
   attachment: paperClipIcon,
   live: liveIcon,
   info: infoInfoIcon,

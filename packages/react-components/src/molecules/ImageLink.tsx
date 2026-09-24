@@ -1,12 +1,12 @@
 import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { css } from '@emotion/react';
 import { Anchor } from '../atoms';
-import { fern } from '../colors';
+import { colour } from '../colors';
 
 export const hoverStyle = css({
   transition: `100ms ease-in-out, color 100ms ease-in-out`,
   ':hover': {
-    color: fern.rgb,
+    color: colour.brand.crn[500].rgb,
     opacity: '64%',
   },
 });

@@ -59,7 +59,7 @@ const Milestones: React.FC<MilestonesProps> = ({
         {title} ({milestones.length})
       </Headline3>
       <div css={[contentStyles]}>
-        <Paragraph noMargin accent="lead">
+        <Paragraph noMargin accent="neutral900">
           {description}
         </Paragraph>
       </div>

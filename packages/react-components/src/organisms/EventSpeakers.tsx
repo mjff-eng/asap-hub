@@ -11,7 +11,7 @@ import {
   Link,
   Paragraph,
 } from '../atoms';
-import { lead, neutral1000, steel } from '../colors';
+import { neutral1000, neutral900, neutral500 } from '../colors';
 import {
   chevronDownIcon,
   chevronUpIcon,
@@ -84,7 +84,7 @@ const shortFindingsLabel = css({
 const teamCellStyles = css({ paddingRight: rem(24) });
 
 const teamGroupStyles = css({
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   '&:last-of-type': {
     borderBottom: 'none',
   },
@@ -99,7 +99,7 @@ const membersCellStyles = css({
 });
 
 const leadTextStyles = css({
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const membersListStyles = css({
@@ -290,7 +290,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
           <Headline3 noMargin>Speakers</Headline3>
           {onAddSpeaker ? (
             <>
-              <Paragraph noMargin accent="lead">
+              <Paragraph noMargin accent="neutral900">
                 {editorEmptyMessage(hasFinished)}
               </Paragraph>
               <Button primary small noMargin onClick={onAddSpeaker}>
@@ -298,7 +298,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
               </Button>
             </>
           ) : (
-            <Paragraph noMargin accent="lead">
+            <Paragraph noMargin accent="neutral900">
               No speakers have been added for this event yet.
             </Paragraph>
           )}

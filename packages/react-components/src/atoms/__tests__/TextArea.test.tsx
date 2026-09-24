@@ -1,7 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import TextArea from '../TextArea';
-import { ember, fern, silver } from '../../colors';
+import { colour, error500, neutral300 } from '../../colors';
 
 it('renders a text area, passing through props', () => {
   const { getByRole } = render(<TextArea value="val" />);
@@ -22,13 +22,13 @@ it('renders a disabled text area', () => {
   const { getByRole, rerender } = render(<TextArea value="val" />);
   expect((getByRole('textbox') as HTMLInputElement).disabled).toBeFalsy();
   expect(getComputedStyle(getByRole('textbox')).backgroundColor).not.toBe(
-    silver.rgb,
+    neutral300.rgb,
   );
 
   rerender(<TextArea value="val" enabled={false} />);
   expect((getByRole('textbox') as HTMLInputElement).disabled).toBe(true);
   expect(getComputedStyle(getByRole('textbox')).backgroundColor).toBe(
-    silver.rgb,
+    neutral300.rgb,
   );
 });
 
@@ -46,7 +46,7 @@ describe('when invalid', () => {
     });
 
     const errorElement = await findByText(/fill/i);
-    expect(getComputedStyle(errorElement).color).toBe(ember.rgb);
+    expect(getComputedStyle(errorElement).color).toBe(error500.rgb);
   });
 
   it('shows a custom validation message', async () => {
@@ -57,7 +57,9 @@ describe('when invalid', () => {
       fireEvent.blur(getByRole('textbox'));
     });
     expect(await findByText('Wrong!')).toBeVisible();
-    expect(getComputedStyle(await findByText('Wrong!')).color).toBe(ember.rgb);
+    expect(getComputedStyle(await findByText('Wrong!')).color).toBe(
+      error500.rgb,
+    );
   });
 });
 
@@ -72,7 +74,7 @@ describe('with a max length', () => {
     it('indicates how full it is in green', () => {
       const { getByText } = render(<TextArea value="val" maxLength={10} />);
       const indicator = getByText('10', { exact: false });
-      expect(getComputedStyle(indicator).color).toBe(fern.rgb);
+      expect(getComputedStyle(indicator).color).toBe(colour.brand.crn[500].rgb);
     });
   });
 
@@ -82,7 +84,7 @@ describe('with a max length', () => {
         <TextArea value="val" maxLength={'val'.length} />,
       );
       const indicator = getByText(String('val'.length), { exact: false });
-      expect(getComputedStyle(indicator).color).toBe(ember.rgb);
+      expect(getComputedStyle(indicator).color).toBe(error500.rgb);
     });
 
     it('states that it is full', () => {

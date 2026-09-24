@@ -1,6 +1,13 @@
 import { css } from '@emotion/react';
 import { lineHeight, rem } from '../pixels';
-import { steel, paper, tin, charcoal, lead, silver } from '../colors';
+import {
+  charcoal,
+  colour,
+  neutral500,
+  neutral700,
+  neutral900,
+  neutral300,
+} from '../colors';
 import { noop } from '../utils';
 
 const styles = css({
@@ -10,11 +17,11 @@ const styles = css({
 
   minWidth: rem(240),
   borderRadius: '27px',
-  backgroundColor: silver.rgb,
-  color: tin.rgb,
+  backgroundColor: neutral300.rgb,
+  color: neutral700.rgb,
   cursor: 'pointer',
   svg: {
-    stroke: tin.rgb,
+    stroke: neutral700.rgb,
   },
 });
 
@@ -32,11 +39,11 @@ const iconStyles = css({
   paddingRight: rem(6),
 });
 const activeStyles = css({
-  backgroundColor: paper.rgb,
-  border: `1px solid ${steel.rgb}`,
+  backgroundColor: colour.neutral[0].rgb,
+  border: `1px solid ${neutral500.rgb}`,
   color: charcoal.rgb,
   svg: {
-    stroke: lead.rgb,
+    stroke: neutral900.rgb,
   },
 });
 const buttonRight = css({

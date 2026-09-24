@@ -6,7 +6,7 @@ import {
 import { projectRouteByType } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { Display, Pill, Link, CopyButton, TabLink } from '../atoms';
-import { lead } from '../colors';
+import { neutral900 } from '../colors';
 import {
   googleDriveIcon,
   DiscoveryTeamIcon,
@@ -87,7 +87,7 @@ const metadataRowStyles = css({
   alignItems: 'flex-start',
   gap: rem(8),
   fontSize: rem(17),
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 const iconContainerStyles = css({
   display: 'flex',

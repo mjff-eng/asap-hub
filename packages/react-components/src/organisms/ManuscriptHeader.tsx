@@ -3,13 +3,13 @@ import { css } from '@emotion/react';
 
 import { Display, Paragraph } from '../atoms';
 import { rem } from '../pixels';
-import { paper, steel } from '../colors';
+import { colour, neutral500 } from '../colors';
 import { contentSidePaddingWithNavigation } from '../layout';
 
 const headerStyles = css({
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(60)}`,
-  background: paper.rgb,
-  boxShadow: `0 2px 4px -2px ${steel.rgb}`,
+  background: colour.neutral[0].rgb,
+  boxShadow: `0 2px 4px -2px ${neutral500.rgb}`,
   marginBottom: rem(30),
   display: 'flex',
   justifyContent: 'center',
@@ -51,7 +51,7 @@ const ManuscriptHeader: React.FC<ManuscriptHeaderProps> = ({
       <div css={contentStyles}>
         <Display styleAsHeading={2}>{title}</Display>
         <div>
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="neutral900">
             {getDescription()}
           </Paragraph>
         </div>

@@ -13,7 +13,7 @@ import {
   CopyButton,
   Spinner,
 } from '../atoms';
-import { paper, tin } from '../colors';
+import { colour, neutral700 } from '../colors';
 import { editIcon, uploadIcon, alumniBadgeIcon } from '../icons';
 import { createMailTo } from '../mail';
 import {
@@ -345,7 +345,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                       {degree ? (
                         <Display styleAsHeading={2}>, {degree}</Display>
                       ) : isOwnProfile ? (
-                        <div css={{ color: tin.rgb }}>
+                        <div css={{ color: neutral700.rgb }}>
                           <Display styleAsHeading={2}>, Degree</Display>
                         </div>
                       ) : null}
@@ -393,7 +393,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                     <div css={savingOverlayStyles}>
                       <Spinner
                         size={24}
-                        color={paper.rgb}
+                        color={colour.neutral[0].rgb}
                         trackColor="rgba(255, 255, 255, 0.4)"
                         ariaLabel="Saving avatar"
                         ariaBusy

@@ -173,12 +173,12 @@ const ProjectDetailMilestones: React.FC<ProjectDetailMilestonesProps> = ({
                 </div>
               )}
             </div>
-            <Paragraph accent="lead">
+            <Paragraph accent="neutral900">
               These milestones track progress toward the objectives of the{' '}
               {grantLabel} Grant through defined deliverables and timelines.
               Each milestone supports one or more related aims.
             </Paragraph>
-            <Paragraph accent="lead">
+            <Paragraph accent="neutral900">
               Articles associated with a milestone may be added at any status.
               When a milestone is marked as complete, the resulting article(s)
               are expected to be included. These articles are linked to their

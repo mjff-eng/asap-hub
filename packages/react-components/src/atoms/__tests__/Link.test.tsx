@@ -4,7 +4,7 @@ import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { ThemeProvider } from '@emotion/react';
 
 import Link from '../Link';
-import { color as colorConstructor, fern, paper, silver } from '../../colors';
+import { color as colorConstructor, colour, neutral300 } from '../../colors';
 
 it('renders the text in an anchor', () => {
   const { getByText } = render(<Link href="/">text</Link>);
@@ -15,7 +15,7 @@ describe('the default theme', () => {
   it('applies the default link color', () => {
     const { getByRole } = render(<Link href="/">text</Link>);
     const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(fern.rgb);
+    expect(color).toBe(colour.brand.crn[500].rgb);
   });
 
   it('applies an invisible underline', () => {
@@ -60,7 +60,7 @@ describe('the dark theme', () => {
       </Link>,
     );
     const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(paper.rgb);
+    expect(color).toBe(colour.neutral[0].rgb);
   });
 
   it('applies an invisible underline', () => {
@@ -148,7 +148,7 @@ describe('when button-styled', () => {
       </Link>,
     );
     expect(getComputedStyle(getByRole('link')).backgroundColor).not.toBe(
-      fern.rgb,
+      colour.brand.crn[500].rgb,
     );
 
     rerender(
@@ -156,7 +156,9 @@ describe('when button-styled', () => {
         text
       </Link>,
     );
-    expect(getComputedStyle(getByRole('link')).backgroundColor).toBe(fern.rgb);
+    expect(getComputedStyle(getByRole('link')).backgroundColor).toBe(
+      colour.brand.crn[500].rgb,
+    );
   });
 
   it('supports small button styles', () => {
@@ -190,7 +192,7 @@ describe('when button-styled', () => {
     expect(
       findParentWithStyle(getByText('text'), 'backgroundColor')!
         .backgroundColor,
-    ).not.toBe(silver.rgb);
+    ).not.toBe(neutral300.rgb);
 
     rerender(
       <Link href="/" buttonStyle enabled={false}>
@@ -200,7 +202,7 @@ describe('when button-styled', () => {
     expect(
       findParentWithStyle(getByText('text'), 'backgroundColor')!
         .backgroundColor,
-    ).toBe(silver.rgb);
+    ).toBe(neutral300.rgb);
   });
 
   it('removes the href when disabled', () => {

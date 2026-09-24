@@ -5,15 +5,13 @@ import {
   color,
   error500,
   error900,
-  fern,
-  lead,
   OpaqueColor,
-  paper,
-  pine,
-  silver,
-  steel,
-  tin,
   TransparentColor,
+  colour,
+  neutral900,
+  neutral300,
+  neutral500,
+  neutral700,
 } from './colors';
 import { formTargetWidth, mobileScreen, rem } from './pixels';
 
@@ -133,52 +131,52 @@ const boxShadow = (opaqueColor: OpaqueColor | TransparentColor) =>
   `0px 2px 4px -2px ${opaqueColor.rgba}`;
 
 const primaryStyles = ({
-  primary500 = fern,
-  primary900 = pine,
+  primary500 = colour.brand.crn[500],
+  primary900 = colour.brand.crn[800],
 }: Theme['colors'] = {}) =>
   css({
-    color: paper.rgb,
+    color: colour.neutral[0].rgb,
 
     backgroundColor: primary500.rgba,
     borderColor: primary900.rgba,
     boxShadow: boxShadow(primary900),
     svg: {
-      stroke: paper.rgb,
+      stroke: colour.neutral[0].rgb,
     },
     ':hover, :focus': {
       backgroundColor: primary900.rgba,
       borderColor: primary900.rgba,
-      boxShadow: boxShadow(lead),
+      boxShadow: boxShadow(neutral900),
     },
 
     ':active': {
       backgroundColor: primary900.rgba,
       borderColor: primary900.rgba,
       boxShadow: 'none',
-      color: paper.rgb,
+      color: colour.neutral[0].rgb,
     },
   });
 export const secondaryStyles = css({
-  backgroundColor: paper.rgb,
-  borderColor: steel.rgb,
-  boxShadow: boxShadow(steel),
+  backgroundColor: colour.neutral[0].rgb,
+  borderColor: neutral500.rgb,
+  boxShadow: boxShadow(neutral500),
 
   ':hover, :focus': {
     borderColor: charcoal.rgb,
-    boxShadow: boxShadow(steel),
+    boxShadow: boxShadow(neutral500),
   },
 
   ':active': {
-    borderColor: steel.rgb,
+    borderColor: neutral500.rgb,
     boxShadow: 'none',
   },
 });
 
 export const warningStyles = css({
   backgroundColor: error500.rgb,
-  color: paper.rgb,
+  color: colour.neutral[0].rgb,
   borderColor: error900.rgb,
-  boxShadow: boxShadow(steel),
+  boxShadow: boxShadow(neutral500),
 
   ':hover, :focus, :active': {
     backgroundColor: error900.rgb,
@@ -187,22 +185,22 @@ export const warningStyles = css({
 });
 
 const disabledStyles = css({
-  color: lead.rgb,
-  backgroundColor: silver.rgb,
-  borderColor: steel.rgb,
+  color: neutral900.rgb,
+  backgroundColor: neutral300.rgb,
+  borderColor: neutral500.rgb,
   boxShadow: 'none',
 
   cursor: 'unset',
 
   svg: {
     filter: 'grayscale(1)',
-    stroke: tin.rgb,
+    stroke: neutral700.rgb,
   },
 });
 
 export const activePrimaryStyles = ({
   primary100 = activePrimaryBackgroundColorDefault,
-  primary900 = pine,
+  primary900 = colour.brand.crn[800],
 }: Theme['colors'] = {}) =>
   css({
     backgroundColor: primary100.rgba,
@@ -220,7 +218,7 @@ export const activePrimaryStyles = ({
     },
   });
 export const activeSecondaryStyles = css({
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
   color: charcoal.rgb,
   borderColor: charcoal.rgb,
 
@@ -228,7 +226,7 @@ export const activeSecondaryStyles = css({
     stroke: charcoal.rgb,
   },
   ':hover, :focus': {
-    backgroundColor: paper.rgb,
+    backgroundColor: colour.neutral[0].rgb,
     color: charcoal.rgb,
     borderColor: charcoal.rgb,
   },

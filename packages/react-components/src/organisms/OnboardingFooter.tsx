@@ -2,13 +2,13 @@ import { css } from '@emotion/react';
 
 import { successIcon } from '../icons';
 import { Link, Headline2, Paragraph } from '../atoms';
-import { paper, steel } from '../colors';
+import { colour, neutral500 } from '../colors';
 
 import { rem, tabletScreen } from '../pixels';
 import { irisCeruleanGradientStyles } from '../appearance';
 
 const footerStyles = css({
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
   padding: `${rem(6)} ${rem(24)}`,
   display: 'flex',
   position: 'fixed',
@@ -35,11 +35,11 @@ const containerStyles = css({
 
 const titleStyles = css({
   gridArea: 'title / title / span 2',
-  color: paper.rgb,
+  color: colour.neutral[0].rgb,
 });
 
 const subtitleStyles = css({
-  color: paper.rgb,
+  color: colour.neutral[0].rgb,
   display: 'none',
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     gridArea: 'subtitle / subtitle / span 2',

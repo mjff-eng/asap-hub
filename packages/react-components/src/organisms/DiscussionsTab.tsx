@@ -8,7 +8,7 @@ import { ComponentProps, useState } from 'react';
 
 import { DiscussionModal, DiscussionCard } from '.';
 import { Button } from '../atoms';
-import { fern } from '../colors';
+import { colour } from '../colors';
 import { replyIcon } from '../icons';
 import { InformationSection } from '../molecules';
 import { rem } from '../pixels';
@@ -32,7 +32,7 @@ const showMoreButtonStyles = css({
   justifyContent: 'center',
   width: '100%',
   fontWeight: 'normal',
-  color: fern.rgba,
+  color: colour.brand.crn[500].rgba,
   paddingTop: rem(24),
   paddingBottom: rem(24),
 

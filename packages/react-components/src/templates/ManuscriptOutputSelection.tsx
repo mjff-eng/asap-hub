@@ -10,10 +10,11 @@ import {
   LabeledMultiSelect,
   LabeledRadioButtonGroup,
   MultiSelectOptionsType,
-  paper,
   Pill,
+  colour,
 } from '..';
 import { mobileScreen, rem } from '../pixels';
+import { info900, neutral900, neutral500 } from '../colors';
 
 const mainStyles = css({
   display: 'flex',
@@ -86,7 +87,7 @@ const singleValueStyles = css({
   flexFlow: 'column',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
 });
 
 const pillContainerStyles = (isFocused?: boolean) =>
@@ -98,12 +99,12 @@ const pillContainerStyles = (isFocused?: boolean) =>
       flexDirection: 'column',
     },
     '& > *:nth-of-type(1), & > *:nth-of-type(2)': {
-      backgroundColor: isFocused ? '#DFE5EA' : undefined,
-      color: isFocused ? '#4D646B' : undefined,
+      backgroundColor: isFocused ? neutral500.hex : undefined,
+      color: isFocused ? neutral900.hex : undefined,
     },
     '& > *:nth-of-type(3)': {
       backgroundColor: isFocused ? '#CFEDFB' : undefined,
-      color: isFocused ? '#006A92' : undefined,
+      color: isFocused ? info900.hex : undefined,
     },
   });
 

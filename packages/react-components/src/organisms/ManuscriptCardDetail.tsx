@@ -15,11 +15,11 @@ import {
   charcoal,
   colors,
   complianceReportIcon,
-  fern,
   neutral900,
   NotificationDotIcon,
   resubmitManuscriptIcon,
   Tooltip,
+  colour,
 } from '..';
 import { rem, smallDesktopScreen } from '../pixels';
 import DiscussionCard from './DiscussionCard';
@@ -58,7 +58,7 @@ type ManuscriptCardDetailProps = Pick<
 };
 
 const buttonsContainerStyles = css({
-  borderBottom: `1px solid ${colors.steel.rgb}`,
+  borderBottom: `1px solid ${colors.neutral500.rgb}`,
 });
 
 const buttonsStyles = css({
@@ -90,12 +90,12 @@ const notificationDotStyles = css({
 
 const manuscriptDetailsContainerStyles = css({
   margin: `0 ${rem(16)} ${rem(16)}`,
-  border: `1px solid ${colors.steel.rgb}`,
+  border: `1px solid ${colors.neutral500.rgb}`,
   borderRadius: `${rem(8)}`,
   boxSizing: 'border-box',
   borderWidth: 1,
   borderStyle: 'solid',
-  backgroundColor: colors.paper.rgb,
+  backgroundColor: colors.colour.neutral[0].rgb,
 });
 
 const showMoreContainerStyles = css({
@@ -117,7 +117,9 @@ type VersionUserProps = {
   user: User | null;
 };
 
-const tabButtonStyles = ({ colors: { primary500 = fern } = {} }: Theme) =>
+const tabButtonStyles = ({
+  colors: { primary500 = colour.brand.crn[500] } = {},
+}: Theme) =>
   css({
     paddingLeft: rem(0),
     paddingRight: rem(0),

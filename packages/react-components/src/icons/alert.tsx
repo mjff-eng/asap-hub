@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import { FC } from 'react';
-import { steel } from '../colors';
+import { neutral500 } from '../colors';
 
 interface AlertProps {
   readonly color?: string;
@@ -40,7 +40,7 @@ const Alert: FC<AlertProps> = ({ color }) => (
                     <g id="Group-10">
                       <g id="Group-4"></g>
                       <rect
-                        fill={color || steel.rgb}
+                        fill={color || neutral500.rgb}
                         id="Rectangle"
                         x="0"
                         y="0"

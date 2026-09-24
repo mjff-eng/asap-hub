@@ -15,13 +15,13 @@ import { tags } from '@asap-hub/routing';
 import { ScrollContext } from '@asap-hub/react-context';
 
 import {
-  steel,
-  paper,
-  tin,
   colorWithTransparency,
   pearl,
   charcoal,
   success900,
+  colour,
+  neutral500,
+  neutral700,
 } from '../colors';
 import { MenuHeader, OnboardingFooter, ToastStack } from '../organisms';
 import { Overlay } from '../atoms';
@@ -116,7 +116,7 @@ export const headerStyles = css({
   gridArea: 'header',
 
   boxSizing: 'border-box',
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   [crossQuery]: {
     display: 'flex',
     alignItems: 'stretch',
@@ -133,7 +133,7 @@ export const contentStyles = css({
   gridColumn: '1 / -1',
   [crossQuery]: {
     gridColumn: 'content',
-    borderLeft: `1px solid ${steel.rgb}`,
+    borderLeft: `1px solid ${neutral500.rgb}`,
   },
   overflowY: 'auto',
 
@@ -162,8 +162,8 @@ export const userButtonStyles = css({
     display: 'none',
   },
 
-  borderBottom: `1px solid ${steel.rgb}`,
-  borderLeft: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderLeft: `1px solid ${neutral500.rgb}`,
 
   display: 'flex',
   justifyContent: 'flex-end',
@@ -180,7 +180,7 @@ export const userButtonStyles = css({
 });
 
 export const menuStyles = css({
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
   gridRow: `main-menu`,
   gridColumnStart: '1',
   overflowY: 'auto',
@@ -209,7 +209,7 @@ export const menuStyles = css({
     display: 'none',
     transform: 'translateX(-100%)',
     transition: `transform 250ms ease, visibility 0s 250ms`,
-    boxShadow: `0 -1px 0 ${steel.rgb}`, // instead of header border bottom
+    boxShadow: `0 -1px 0 ${neutral500.rgb}`, // instead of header border bottom
   },
 });
 const menuMenuShownStyles = css({
@@ -225,7 +225,7 @@ const mainMenuStyles = css({
   gridArea: 'main-menu',
 
   [drawerQuery]: {
-    boxShadow: `0 -1px 0 ${steel.rgb}`, // instead of header border bottom
+    boxShadow: `0 -1px 0 ${neutral500.rgb}`, // instead of header border bottom
     // Main nav gets 60% of the drawer height, the user nav 40%.
     flex: '3 3 0',
     minHeight: 0,
@@ -236,8 +236,8 @@ const mainMenuStyles = css({
 export const searchButtonAreaStyles = css({
   gridArea: 'search-button',
   boxSizing: 'border-box',
-  borderBottom: `1px solid ${steel.rgb}`,
-  borderLeft: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderLeft: `1px solid ${neutral500.rgb}`,
   // The header spans full width on desktop, so pin this to the header row.
   [crossQuery]: {
     gridColumn: '3 / 4',
@@ -277,7 +277,7 @@ const SearchIconStyles = css({
   height: '100%',
 });
 const userMenuStyles = css({
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.neutral[0].rgb,
   gridArea: 'user-menu',
   flexGrow: 1,
   [drawerQuery]: {
@@ -294,8 +294,8 @@ const userMenuStyles = css({
     top: '6px',
     right: '24px',
 
-    border: `1px solid ${steel.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+    border: `1px solid ${neutral500.rgb}`,
+    boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
   },
 });
 const userMenuShownStyles = css({

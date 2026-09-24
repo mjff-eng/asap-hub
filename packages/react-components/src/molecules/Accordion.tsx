@@ -9,9 +9,9 @@ import {
   info500,
   info100,
   info200,
-  silver,
-  steel,
   neutral900,
+  neutral300,
+  neutral500,
 } from '../colors';
 
 const containerStyles = css({
@@ -19,7 +19,7 @@ const containerStyles = css({
 });
 
 const itemStyles = css({
-  borderBottom: `${steel.rgb} solid 1px`,
+  borderBottom: `${neutral500.rgb} solid 1px`,
   '~ div:last-of-type': {
     borderBottom: 'none',
   },
@@ -74,7 +74,7 @@ const buttonStyles = css({
 
   cursor: 'pointer',
   ':hover': {
-    background: silver.rgb,
+    background: neutral300.rgb,
     borderRadius: rem(4),
   },
 });

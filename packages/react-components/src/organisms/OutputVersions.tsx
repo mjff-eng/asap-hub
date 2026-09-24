@@ -6,12 +6,10 @@ import { Button, Card, Headline2, Link, Paragraph, Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 import {
   charcoal,
-  fern,
-  lead,
   neutral200,
-  paper,
-  pine,
-  steel,
+  colour,
+  neutral900,
+  neutral500,
 } from '../colors';
 import { formatDateToTimezone } from '../date';
 import { ExternalLinkIcon } from '../icons';
@@ -30,7 +28,7 @@ const descriptionStyles = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     marginBottom: rem(32),
   },
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const gridTitleStyles = css({
@@ -52,7 +50,7 @@ const rowStyles = css({
   display: 'grid',
   paddingTop: rem(20),
   paddingBottom: rem(20),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${neutral500.rgb}`,
   ':last-child': {
     borderBottom: 'none',
     marginBottom: 0,
@@ -74,7 +72,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: lead.rgb,
+  color: neutral900.rgb,
 });
 
 const showMoreStyles = css({
@@ -83,17 +81,23 @@ const showMoreStyles = css({
   marginTop: rem(32),
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${neutral500.rgb}`,
 });
 
 const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    stroke: fern.rgb,
+    stroke: colour.brand.crn[500].rgb,
   }),
-  grey: css({ stroke: fern.rgb, ':active': { stroke: pine.rgb } }),
-  dark: css({ stroke: paper.rgb, ':active': { stroke: paper.rgb } }),
+  grey: css({
+    stroke: colour.brand.crn[500].rgb,
+    ':active': { stroke: colour.brand.crn[800].rgb },
+  }),
+  dark: css({
+    stroke: colour.neutral[0].rgb,
+    ':active': { stroke: colour.neutral[0].rgb },
+  }),
 };
 
 const mainStyles = css({

@@ -20,7 +20,7 @@ import {
 import { useScrollToHash } from '../routing';
 import { useDateHasPassed } from '../date';
 import { considerEndedAfter } from '../utils';
-import { paper, steel } from '../colors';
+import { colour, neutral500 } from '../colors';
 import PageConstraints from './PageConstraints';
 
 const cardsStyles = css({
@@ -30,8 +30,8 @@ const cardsStyles = css({
 });
 
 const heroBandStyles = css({
-  background: paper.rgb,
-  boxShadow: `0 2px 4px -2px ${steel.rgb}`,
+  background: colour.neutral[0].rgb,
+  boxShadow: `0 2px 4px -2px ${neutral500.rgb}`,
 });
 
 const heroContentStyles = css({

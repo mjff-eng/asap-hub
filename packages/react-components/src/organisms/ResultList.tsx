@@ -129,7 +129,7 @@ const ResultList: React.FC<ResultListProps> = ({
           <main css={{ textAlign: 'center' }}>
             {icon && <span css={iconStyles}>{icon}</span>}
             <Headline3>No results have been found.</Headline3>
-            <Paragraph accent="lead">
+            <Paragraph accent="neutral900">
               Please double-check your search for any typos or try a different
               search term.
             </Paragraph>

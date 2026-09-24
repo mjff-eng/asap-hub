@@ -2,13 +2,13 @@ import { css, Theme } from '@emotion/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import { rem } from '../pixels';
-import { fern, lead, pine, steel } from '../colors';
+import { colour, neutral900, neutral500 } from '../colors';
 import { noop } from '../utils';
 import { tickIcon } from '../icons';
 
 const checkboxStyles = ({
-  primary500 = fern,
-  primary900 = pine,
+  primary500 = colour.brand.crn[500],
+  primary900 = colour.brand.crn[800],
 }: Theme['colors'] = {}) =>
   css({
     flexShrink: 0,
@@ -24,10 +24,10 @@ const checkboxStyles = ({
     borderRadius: 0,
     borderStyle: 'solid',
     borderWidth: rem(1),
-    borderColor: steel.rgb,
+    borderColor: neutral500.rgb,
 
     ':enabled:hover, :enabled:focus': {
-      borderColor: lead.rgb,
+      borderColor: neutral900.rgb,
     },
 
     ':checked': {
@@ -43,16 +43,16 @@ const checkboxStyles = ({
       },
 
       ':disabled': {
-        borderColor: steel.rgba,
-        backgroundColor: steel.rgba,
+        borderColor: neutral500.rgba,
+        backgroundColor: neutral500.rgba,
       },
       ':hover, :focus': {
         borderColor: primary900.rgba,
         backgroundColor: primary900.rgba,
 
         ':disabled': {
-          borderColor: steel.rgba,
-          backgroundColor: steel.rgba,
+          borderColor: neutral500.rgba,
+          backgroundColor: neutral500.rgba,
         },
       },
     },

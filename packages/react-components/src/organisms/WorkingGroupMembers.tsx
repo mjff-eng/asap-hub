@@ -66,14 +66,18 @@ const GroupLeadersTabbedCard: React.FC<GroupLeadersTabbedCardProps> = ({
             items: activeLeaders,
             disabled: isComplete,
             empty: (
-              <Paragraph accent="lead">There are no active leaders.</Paragraph>
+              <Paragraph accent="neutral900">
+                There are no active leaders.
+              </Paragraph>
             ),
           },
           {
             tabTitle: `Past Leaders (${inactiveLeaders.length})`,
             items: inactiveLeaders,
             empty: (
-              <Paragraph accent="lead">There are no past leaders.</Paragraph>
+              <Paragraph accent="neutral900">
+                There are no past leaders.
+              </Paragraph>
             ),
           },
         ]}
@@ -109,7 +113,9 @@ const GroupLeadersTabbedCard: React.FC<GroupLeadersTabbedCardProps> = ({
             truncateFrom: 8,
             disabled: isComplete,
             empty: (
-              <Paragraph accent="lead">There are no active members.</Paragraph>
+              <Paragraph accent="neutral900">
+                There are no active members.
+              </Paragraph>
             ),
           },
           {
@@ -117,7 +123,9 @@ const GroupLeadersTabbedCard: React.FC<GroupLeadersTabbedCardProps> = ({
             items: inactiveMembers,
             truncateFrom: 8,
             empty: (
-              <Paragraph accent="lead">There are no past members.</Paragraph>
+              <Paragraph accent="neutral900">
+                There are no past members.
+              </Paragraph>
             ),
           },
         ]}

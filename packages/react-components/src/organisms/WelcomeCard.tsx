@@ -35,7 +35,7 @@ const Welcome: React.FC<WelcomeProps> = ({
       <article css={styles}>
         <header>
           <Display styleAsHeading={2}>{title}</Display>
-          <Paragraph accent="lead">{content}</Paragraph>
+          <Paragraph accent="neutral900">{content}</Paragraph>
         </header>
 
         <section css={buttonContainerStyles}>

@@ -12,7 +12,7 @@ const buttonStyles = css({
 
 const Events: React.FC<EventsProps> = ({ calendarId, paragraph }) => (
   <>
-    <Paragraph accent="lead">{paragraph}</Paragraph>
+    <Paragraph accent="neutral900">{paragraph}</Paragraph>
     <div css={buttonStyles}>
       <CalendarLink id={calendarId}>Subscribe to Calendar</CalendarLink>
     </div>

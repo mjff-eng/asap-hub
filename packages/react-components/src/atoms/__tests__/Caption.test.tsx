@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 
 import Caption from '../Caption';
-import { ember } from '../../colors';
+import { error500 } from '../../colors';
 
 it('renders the text in a FigCaption', () => {
   const { getByText } = render(
@@ -55,9 +55,9 @@ it('renders a given accent color', () => {
   const { getByText } = render(
     <figure>
       the figure
-      <Caption accent="ember">text</Caption>
+      <Caption accent="error500">text</Caption>
     </figure>,
   );
   const { color } = getComputedStyle(getByText('text'));
-  expect(color).toBe(ember.rgb);
+  expect(color).toBe(error500.rgb);
 });

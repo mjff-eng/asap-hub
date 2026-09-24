@@ -1,10 +1,10 @@
 import { css, Theme } from '@emotion/react';
-import { error500, fern, neutral800, steel } from '../colors';
+import { error500, neutral800, colour, neutral500 } from '../colors';
 import { noop } from '../utils';
 
 const toggleStyles = (
   uncheckedColor: 'default' | 'error',
-  { primary500 = fern }: Theme['colors'] = {},
+  { primary500 = colour.brand.crn[500] }: Theme['colors'] = {},
 ) =>
   css({
     position: 'relative',
@@ -12,7 +12,7 @@ const toggleStyles = (
     height: '20px',
     flexShrink: 0,
     appearance: 'none',
-    backgroundColor: uncheckedColor === 'error' ? error500.rgb : steel.rgb,
+    backgroundColor: uncheckedColor === 'error' ? error500.rgb : neutral500.rgb,
     borderRadius: '10px',
     outline: 'none',
     cursor: 'pointer',

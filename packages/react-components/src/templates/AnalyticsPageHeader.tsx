@@ -66,7 +66,7 @@ const AnalyticsPageHeader: React.FC<AnalyticsPageHeaderProps> = ({
       <Display styleAsHeading={2}>Analytics</Display>
       <div css={containerStyles}>
         <div css={textStyles}>
-          <Paragraph accent="lead">
+          <Paragraph accent="neutral900">
             Explore dashboards related to CRN activities.
           </Paragraph>
         </div>
