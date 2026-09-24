@@ -1,14 +1,12 @@
 import { ProjectType, TeamType } from '@asap-hub/model';
 
 import {
-  DiscoveryProjectIcon,
   DiscoveryTeamIcon,
   ProjectIcon,
-  ResourceProjectIcon,
   ResourceTeamIcon,
   TeamIcon,
-  TraineeProjectIcon,
 } from '../icons';
+import { getProjectIcon } from '../utils';
 
 export const defaultVisibleTeams = 10;
 export const defaultVisibleRows = 5;
@@ -27,15 +25,5 @@ export const teamIcon = (teamType?: EventTeamType) => {
   }
 };
 
-export const projectIcon = (projectType?: ProjectType) => {
-  switch (projectType) {
-    case 'Discovery Project':
-      return <DiscoveryProjectIcon />;
-    case 'Resource Project':
-      return <ResourceProjectIcon />;
-    case 'Trainee Project':
-      return <TraineeProjectIcon />;
-    default:
-      return <ProjectIcon />;
-  }
-};
+export const projectIcon = (projectType?: ProjectType) =>
+  projectType ? getProjectIcon(projectType) : <ProjectIcon />;

@@ -2,8 +2,14 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button, Card, Headline3, Paragraph } from '../atoms';
-import { neutral1000 } from '../colors';
+import { neutral900, neutral1000, steel } from '../colors';
 import { ExportIcon, PencilIcon, plusIcon } from '../icons';
+import EventAttendanceMetric, {
+  captionCountStyles,
+  containerStyles as metricContainerStyles,
+  headlineRowStyles,
+  valueStyles,
+} from '../molecules/EventAttendanceMetric';
 import SpeakerTeamRow from '../molecules/SpeakerTeamRow';
 import SpeakerUserRow, {
   chevronSpacerStyles,
@@ -31,19 +37,6 @@ import {
   SpeakerTeamGroup,
 } from './speaker-group';
 import SpeakerSection from './speaker-section';
-import {
-  tileBarFillStyles,
-  tileBarTrackStyles,
-  tileBreakdownStyles,
-  tileBreakdownValueStyles,
-  tileCaptionCountStyles,
-  tileCaptionStyles,
-  tileDividerStyles,
-  tileHeaderStyles,
-  tileRuleStyles,
-  tileStyles,
-  tileValueStyles,
-} from './speaker-metric-styles';
 
 const mobileQuery = `@media (max-width: ${tabletScreen.min}px)`;
 
@@ -70,55 +63,42 @@ const shortFindingsLabel = css({
   [mobileQuery]: { display: 'inline' },
 });
 
+const breakdownDividerStyles = css({
+  alignSelf: 'stretch',
+  height: rem(1),
+  border: 0,
+  margin: 0,
+  backgroundColor: steel.rgb,
+});
+
+const breakdownStyles = css({
+  display: 'grid',
+  gridTemplateColumns: '1fr auto',
+  columnGap: rem(8),
+  color: neutral900.rgb,
+  '> p': { margin: 0, fontSize: rem(14), lineHeight: 16 / 14 },
+});
+
+const breakdownValueStyles = css({ textAlign: 'right' });
+
 const SpeakerCountMetric: React.FC<{
   label: string;
   value: number;
   breakdown: ReadonlyArray<{ label: string; value: number }>;
 }> = ({ label, value, breakdown }) => (
-  <div css={tileStyles}>
-    <div css={tileHeaderStyles}>
-      <p css={tileValueStyles}>{value}</p>
-      <p css={tileCaptionCountStyles}>{label}</p>
+  <div css={metricContainerStyles}>
+    <div css={headlineRowStyles}>
+      <p css={valueStyles}>{value}</p>
+      <p css={captionCountStyles}>{label}</p>
     </div>
-    <hr css={tileDividerStyles} />
-    <div css={tileBreakdownStyles}>
+    <hr css={breakdownDividerStyles} />
+    <div css={breakdownStyles}>
       {breakdown.flatMap((row) => [
         <p key={`${row.label}-label`}>{row.label}</p>,
-        <p key={`${row.label}-value`} css={tileBreakdownValueStyles}>
+        <p key={`${row.label}-value`} css={breakdownValueStyles}>
           {row.value}
         </p>,
       ])}
-    </div>
-  </div>
-);
-
-const FindingsMetric: React.FC<{
-  label: string;
-  value: number;
-  shared: number;
-  total: number;
-}> = ({ label, value, shared, total }) => (
-  <div css={tileStyles}>
-    <div css={tileHeaderStyles}>
-      <p css={tileValueStyles}>{value}%</p>
-      <span css={tileRuleStyles} />
-      <div>
-        <p css={tileCaptionCountStyles}>{`${shared} of ${pluralize(
-          total,
-          'speaker',
-        )}`}</p>
-        <p css={tileCaptionStyles}>shared preliminary findings</p>
-      </div>
-    </div>
-    <div
-      css={tileBarTrackStyles}
-      role="progressbar"
-      aria-label={label}
-      aria-valuenow={value}
-      aria-valuemin={0}
-      aria-valuemax={100}
-    >
-      <div css={tileBarFillStyles} style={{ width: `${value}%` }} />
     </div>
   </div>
 );
@@ -291,11 +271,14 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
             ]}
           />
           {showFindings && (
-            <FindingsMetric
+            <EventAttendanceMetric
               label="Preliminary findings"
               value={findingsPercentage}
-              shared={sharedSpeakers}
-              total={totalSpeakers}
+              caption={`${sharedSpeakers} of ${pluralize(
+                totalSpeakers,
+                'speaker',
+              )}`}
+              captionDetail="shared preliminary findings"
             />
           )}
         </div>

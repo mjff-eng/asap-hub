@@ -60,7 +60,7 @@ const teamInnerStyles = css({
 
 const attendanceColStyles = css({ width: '1%' });
 
-const metricStyles = css({ marginTop: rem(24) });
+const metricStyles = css({ marginTop: rem(24), maxWidth: rem(380) });
 
 const tableWrapperStyles = css({ marginTop: rem(32), overflowX: 'auto' });
 
