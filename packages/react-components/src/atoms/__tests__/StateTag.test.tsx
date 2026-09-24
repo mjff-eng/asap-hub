@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
+import { colour } from '../../colors';
 import StateTag from '../StateTag';
 
 it('renders a tag label with content', () => {
@@ -21,12 +22,15 @@ it('applies default colors (apricot/clay)', () => {
   const { container } = render(<StateTag label="Text" />);
 
   expect(container.firstElementChild).toBeDefined();
-  const { backgroundColor, color } = getComputedStyle(
+  const { backgroundColor } = getComputedStyle(
     container.firstElementChild as Element,
   );
 
   expect(backgroundColor).toMatchInlineSnapshot(`"rgb(252, 248, 238)"`);
-  expect(color).toMatchInlineSnapshot(`"rgb(220, 104, 3)"`);
+  expect(container.firstElementChild).toHaveStyleRule(
+    'color',
+    colour.foreground.warning,
+  );
 });
 
 it('applies green variant colors (success100/crn green)', () => {

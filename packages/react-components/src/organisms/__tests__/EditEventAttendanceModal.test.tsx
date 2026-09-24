@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { StaticRouter } from 'react-router';
 
-import { neutral500 } from '../../colors';
+import { colour } from '../../colors';
 import EditEventAttendanceModal from '../EditEventAttendanceModal';
 import { EventAttendanceTeam } from '../EventAttendance';
 
@@ -313,7 +313,7 @@ describe('EditEventAttendanceModal', () => {
   });
 
   it('Should divide a row from whatever follows it, and nothing else', () => {
-    const divider = `1px solid ${neutral500.rgb}`;
+    const divider = `1px solid ${colour.border.tertiary}`;
     const row = (name: string) =>
       screen.getByRole('link', { name }).closest('[role="listitem"]');
     const { unmount } = renderModal();

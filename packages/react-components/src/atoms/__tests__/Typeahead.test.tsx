@@ -3,13 +3,7 @@ import { waitFor } from '@testing-library/dom';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {
-  colour,
-  error500,
-  neutral900,
-  neutral300,
-  colorFromHex,
-} from '../../colors';
+import { colour, neutral900, colorFromHex } from '../../colors';
 import Typeahead from '../Typeahead';
 
 it('shows the selected value', () => {
@@ -84,8 +78,9 @@ it('gets greyed out when disabled', () => {
   const disabledControl = container.querySelector('[aria-disabled="true"]');
   expect(disabledControl).not.toBeNull();
   expect(getComputedStyle(disabledControl!).color).toBe(neutral900.rgb);
-  expect(getComputedStyle(disabledControl!).backgroundColor).toBe(
-    neutral300.rgb,
+  expect(disabledControl).toHaveStyleRule(
+    'background-color',
+    colour.background.tertiary,
   );
   const disabledInput = container.querySelector('input');
   expect(disabledInput).toBeDisabled();
@@ -97,8 +92,9 @@ it('gets greyed out when disabled', () => {
   );
   expect(enabledControl).not.toBeNull();
   expect(getComputedStyle(enabledControl!).color).not.toBe(neutral900.rgb);
-  expect(getComputedStyle(enabledControl!).backgroundColor).not.toBe(
-    neutral300.rgb,
+  expect(enabledControl).not.toHaveStyleRule(
+    'background-color',
+    colour.background.tertiary,
   );
   const enabledInput = container.querySelector('input');
   expect(enabledInput).not.toBeDisabled();
@@ -112,8 +108,8 @@ describe('invalidity', () => {
     // In react-select v5, use findParentWithStyle from the input to check invalid state via borderColor
     const inputBefore = container.querySelector('input')!;
     expect(
-      findParentWithStyle(inputBefore, 'borderColor')?.borderColor,
-    ).not.toBe(error500.rgb);
+      findParentWithStyle(inputBefore, 'borderStyle')?.element,
+    ).not.toHaveStyleRule('border-color', colour.border.error);
 
     rerender(
       <Typeahead
@@ -124,9 +120,9 @@ describe('invalidity', () => {
     );
     // After rerender with validation message, control should have error500 color
     const inputAfter = container.querySelector('input')!;
-    expect(findParentWithStyle(inputAfter, 'borderColor')?.borderColor).toBe(
-      error500.rgb,
-    );
+    expect(
+      findParentWithStyle(inputAfter, 'borderStyle')?.element,
+    ).toHaveStyleRule('border-color', colour.border.error);
   });
 
   it('is caused by being empty when required', async () => {
@@ -139,8 +135,8 @@ describe('invalidity', () => {
       // In react-select v5, use findParentWithStyle from the input to check invalid state via borderColor
       const inputElement = container.querySelector('input')!;
       expect(
-        findParentWithStyle(inputElement, 'borderColor')?.borderColor,
-      ).toBe(error500.rgb);
+        findParentWithStyle(inputElement, 'borderStyle')?.element,
+      ).toHaveStyleRule('border-color', colour.border.error);
     });
   });
 });

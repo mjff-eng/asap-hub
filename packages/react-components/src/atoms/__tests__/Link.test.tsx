@@ -1,15 +1,9 @@
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { ThemeProvider } from '@emotion/react';
 
 import Link from '../Link';
-import {
-  color as colorConstructor,
-  colour,
-  neutral300,
-  colorFromHex,
-} from '../../colors';
+import { color as colorConstructor, colour, colorFromHex } from '../../colors';
 
 it('renders the text in an anchor', () => {
   const { getByText } = render(<Link href="/">text</Link>);
@@ -194,20 +188,20 @@ describe('when button-styled', () => {
         text
       </Link>,
     );
-    expect(
-      findParentWithStyle(getByText('text'), 'backgroundColor')!
-        .backgroundColor,
-    ).not.toBe(neutral300.rgb);
+    expect(getByText('text').closest('a')).not.toHaveStyleRule(
+      'background-color',
+      colour.background.tertiary,
+    );
 
     rerender(
       <Link href="/" buttonStyle enabled={false}>
         text
       </Link>,
     );
-    expect(
-      findParentWithStyle(getByText('text'), 'backgroundColor')!
-        .backgroundColor,
-    ).toBe(neutral300.rgb);
+    expect(getByText('text').closest('a')).toHaveStyleRule(
+      'background-color',
+      colour.background.tertiary,
+    );
   });
 
   it('removes the href when disabled', () => {

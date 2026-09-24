@@ -9,10 +9,8 @@ import {
   success100,
   success500,
   warning100,
-  warning150,
-  warning500,
   neutral900,
-  neutral500,
+  colour,
 } from '../../colors';
 import ManuscriptByStatus from '../ManuscriptByStatus';
 
@@ -98,8 +96,8 @@ describe('ManuscriptByStatus', () => {
 
     expect(selectedWarningButton).toHaveStyle({
       backgroundColor: warning100.rgb,
-      borderColor: warning150.rgb,
-      color: warning500.rgb,
+      borderColor: colour.utilitarian.orange[100],
+      color: colour.utilitarian.orange[600],
     });
     expect(selectedFinalButton).toHaveStyle({
       backgroundColor: success100.rgb,
@@ -113,7 +111,7 @@ describe('ManuscriptByStatus', () => {
     });
     expect(unselectedButton).toHaveStyle({
       backgroundColor: 'white',
-      borderColor: neutral500.rgb,
+      borderColor: colour.neutral[100],
       color: neutral900.rgb,
     });
   });
