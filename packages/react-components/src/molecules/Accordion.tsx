@@ -5,21 +5,14 @@ import { Headline5, Link, Paragraph } from '..';
 import { lineHeight, rem, tabletScreen } from '../pixels';
 import { chevronDownIcon, ExternalLinkIcon, infoInfoIcon } from '../icons';
 import { isInternalLink } from '../utils';
-import {
-  info500,
-  info100,
-  info200,
-  neutral900,
-  neutral300,
-  neutral500,
-} from '../colors';
+import { info500, info100, info200, neutral900, colour } from '../colors';
 
 const containerStyles = css({
   padding: `0 ${rem(9)}`,
 });
 
 const itemStyles = css({
-  borderBottom: `${neutral500.rgb} solid 1px`,
+  borderBottom: `${colour.border.tertiary} solid 1px`,
   '~ div:last-of-type': {
     borderBottom: 'none',
   },
@@ -74,7 +67,7 @@ const buttonStyles = css({
 
   cursor: 'pointer',
   ':hover': {
-    background: neutral300.rgb,
+    background: colour.background.tertiary,
     borderRadius: rem(4),
   },
 });

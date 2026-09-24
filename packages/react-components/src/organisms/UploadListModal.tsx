@@ -3,16 +3,7 @@ import { css } from '@emotion/react';
 import { useRef, useState } from 'react';
 
 import { Button, Headline2, Link, Paragraph, Tag } from '../atoms';
-import {
-  error500,
-  error900,
-  neutral1000,
-  pearl,
-  colour,
-  neutral900,
-  neutral300,
-  neutral500,
-} from '../colors';
+import { colour, neutral900 } from '../colors';
 import {
   binIcon,
   chevronDownIcon,
@@ -104,7 +95,7 @@ const titleStyles = css({
   fontSize: rem(26),
   fontWeight: 700,
   lineHeight: rem(32),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const headerIconStyles = css({
@@ -163,7 +154,7 @@ const addButtonStyles = css({
 
 const errorStyles = css({
   margin: 0,
-  color: error500.rgb,
+  color: colour.foreground.error,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -181,7 +172,7 @@ const summaryStyles = css({
 
 const summaryStrongStyles = css({
   fontWeight: 700,
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const summarySeparatorStyles = css({
@@ -191,9 +182,11 @@ const summarySeparatorStyles = css({
 
 const resultCardStyles = (enabled: boolean) =>
   css({
-    border: `1px solid ${neutral500.rgb}`,
+    border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? pearl.rgb : neutral300.rgb,
+    backgroundColor: enabled
+      ? colour.background.secondary
+      : colour.general.blue.cerulean[25],
     overflow: 'hidden',
   });
 
@@ -210,7 +203,7 @@ const sectionHeaderStyles = css({
   fontSize: rem(17),
   lineHeight: rem(24),
   textAlign: 'left',
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const sectionHeaderLabelStyles = css({
@@ -234,10 +227,10 @@ const matchedLabelStyles = css({
 });
 
 const notMatchedLabelStyles = css({
-  color: error900.rgb,
+  color: colour.utilitarian.red[700],
   gap: rem(8),
   '> svg': {
-    fill: error900.rgb,
+    fill: colour.utilitarian.red[700],
   },
 });
 
@@ -253,7 +246,7 @@ const chevronStyles = (open: boolean) =>
   });
 
 const dividerStyles = css({
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 const sectionBodyStyles = css({
@@ -633,7 +626,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
             openOnHover
             floating
             width={296}
-            background={neutral1000.rgb}
+            background={colour.neutral[900]}
             overrideTooltipStyles={formatTooltipStyles}
           >
             <span>Your file needs two columns.</span>

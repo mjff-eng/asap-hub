@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { info100, info500, neutral500 } from '../colors';
+import { info100, info500, colour } from '../colors';
 import { useTextTruncation } from '../hooks';
 import {
   descriptionContainerStyles,
@@ -21,7 +21,7 @@ const aimRowStyles = css({
   gridColumn: '1 / -1',
   gridTemplateColumns: 'subgrid',
   paddingBottom: rem(20),
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   marginBottom: rem(20),
   [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
     gridColumn: 'auto',

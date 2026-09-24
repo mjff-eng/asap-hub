@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { UserAwardWithTeam } from '@asap-hub/model';
 
 import { Button, Card, Headline2, Paragraph } from '../atoms';
-import { colour, neutral900, neutral500 } from '../colors';
+import { colour, neutral900 } from '../colors';
 import { rem } from '../pixels';
 
 export const badgesAnchorId = 'badges';
@@ -61,7 +61,7 @@ const showMoreButtonStyles = css({
   width: '100%',
   fontWeight: 'normal',
   color: colour.brand.crn[500],
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
   marginTop: rem(32),
   paddingTop: rem(16),
   textDecoration: 'none',

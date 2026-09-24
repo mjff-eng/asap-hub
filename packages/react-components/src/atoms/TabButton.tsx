@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { layoutStyles } from '../text';
 import { rem } from '../pixels';
-import { charcoal, info500, colour, neutral900 } from '../colors';
+import { info500, colour, neutral900 } from '../colors';
 
 const styles = css({
   display: 'inline-block',
@@ -19,7 +19,7 @@ const activeStyles = css({
   paddingBottom: rem(12 - 4),
   borderBottom: `solid ${rem(4)} ${colour.brand.crn[500]}`,
 
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   cursor: 'default',
   fontWeight: 'bold',
   "[data-app='gp2'] &": {

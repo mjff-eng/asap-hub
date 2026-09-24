@@ -1,17 +1,11 @@
 import { css, Theme } from '@emotion/react';
 
 import {
-  charcoal,
   color,
-  error500,
-  error900,
   OpaqueColor,
   TransparentColor,
   colour,
   neutral900,
-  neutral300,
-  neutral500,
-  neutral700,
   colorFromHex,
 } from './colors';
 import { formTargetWidth, mobileScreen, rem } from './pixels';
@@ -158,44 +152,44 @@ const primaryStyles = ({
     },
   });
 export const secondaryStyles = css({
-  backgroundColor: colour.neutral[0],
-  borderColor: neutral500.rgb,
-  boxShadow: boxShadow(neutral500),
+  backgroundColor: colour.background.button.secondary.default,
+  borderColor: colour.border.button.secondary.default,
+  boxShadow: boxShadow(colorFromHex(colour.neutral[100])),
 
   ':hover, :focus': {
-    borderColor: charcoal.rgb,
-    boxShadow: boxShadow(neutral500),
+    borderColor: colour.border.button.secondary.hover,
+    boxShadow: boxShadow(colorFromHex(colour.neutral[100])),
   },
 
   ':active': {
-    borderColor: neutral500.rgb,
+    borderColor: colour.border.button.secondary.default,
     boxShadow: 'none',
   },
 });
 
 export const warningStyles = css({
-  backgroundColor: error500.rgb,
+  backgroundColor: colour.background.button.utilitarian.error.default,
   color: colour.neutral[0],
-  borderColor: error900.rgb,
-  boxShadow: boxShadow(neutral500),
+  borderColor: colour.utilitarian.red[700],
+  boxShadow: boxShadow(colorFromHex(colour.neutral[100])),
 
   ':hover, :focus, :active': {
-    backgroundColor: error900.rgb,
+    backgroundColor: colour.background.button.utilitarian.error.hover,
     boxShadow: 'none',
   },
 });
 
 const disabledStyles = css({
   color: neutral900.rgb,
-  backgroundColor: neutral300.rgb,
-  borderColor: neutral500.rgb,
+  backgroundColor: colour.background.tertiary,
+  borderColor: colour.border.tertiary,
   boxShadow: 'none',
 
   cursor: 'unset',
 
   svg: {
     filter: 'grayscale(1)',
-    stroke: neutral700.rgb,
+    stroke: colour.neutral[200],
   },
 });
 
@@ -220,16 +214,16 @@ export const activePrimaryStyles = ({
   });
 export const activeSecondaryStyles = css({
   backgroundColor: colour.neutral[0],
-  color: charcoal.rgb,
-  borderColor: charcoal.rgb,
+  color: colour.foreground.primary,
+  borderColor: colour.neutral[900],
 
   svg: {
-    stroke: charcoal.rgb,
+    stroke: colour.foreground.primary,
   },
   ':hover, :focus': {
     backgroundColor: colour.neutral[0],
-    color: charcoal.rgb,
-    borderColor: charcoal.rgb,
+    color: colour.foreground.primary,
+    borderColor: colour.neutral[900],
   },
 });
 

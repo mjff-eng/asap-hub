@@ -3,7 +3,7 @@ import { UserProjectMembership, ProjectStatus } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
 import { Card, Paragraph, Button, Headline2, Anchor, Pill } from '../atoms';
-import { charcoal, neutral900, colour, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { getProjectRoute } from '../utils';
 import { getStatusPillAccent } from './ProjectCard';
@@ -35,7 +35,7 @@ const tableHeaderStyles = css({
   fontWeight: 700,
   lineHeight: '24px',
   letterSpacing: '0.1px',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
 });
 
 const tableHeaderAutoWidthStyles = css({
@@ -51,7 +51,7 @@ const tableHeaderLastColumnStyles = css({
 
 const tableCellStyles = css({
   padding: `${rem(16)} 0`,
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   verticalAlign: 'top',
   wordBreak: 'break-word',
   overflowWrap: 'break-word',
@@ -67,7 +67,7 @@ const tableCellLastColumnStyles = css({
   width: '1%',
   whiteSpace: 'nowrap',
   padding: `${rem(16)} 0 ${rem(16)} 0`,
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   verticalAlign: 'top',
 });
 
@@ -99,7 +99,7 @@ const showMoreButtonStyles = css({
   width: '100%',
   fontWeight: 'normal',
   color: colour.brand.crn[500],
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
   marginTop: rem(16),
   paddingTop: rem(16),
   textDecoration: 'none',
@@ -129,7 +129,7 @@ const mobileProjectItem = css({
   display: 'flex',
   flexDirection: 'column',
   padding: `${rem(20)} 0`,
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   gap: rem(32),
   ':last-child': {
     borderBottom: 'none',
@@ -147,7 +147,7 @@ const mobileFieldLabel = css({
   fontWeight: 700,
   lineHeight: '16px',
   letterSpacing: '0.1px',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   textTransform: 'uppercase',
 });
 

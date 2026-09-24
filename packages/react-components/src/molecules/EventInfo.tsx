@@ -5,7 +5,7 @@ import { ComponentProps } from 'react';
 
 import { EventDateBlock, EventTime, LinkHeadline, TagList } from '.';
 import { Headline3 } from '..';
-import { neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { largeDesktopScreen, rem } from '../pixels';
 
 const TITLE_LIMIT = 55;
@@ -26,7 +26,7 @@ const thumbnailStyles = css({
 
   borderStyle: 'solid',
   borderWidth: 1,
-  borderColor: neutral500.rgb,
+  borderColor: colour.border.tertiary,
   borderRadius: rem(8),
 });
 

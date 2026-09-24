@@ -73,7 +73,7 @@ const essentialCategoryStyles = css({
 
 const dividerStyles = css({
   paddingTop: rem(4),
-  borderBottom: `1px solid ${colors.neutral500.rgb}`,
+  borderBottom: `1px solid ${colors.colour.border.tertiary}`,
 });
 
 const thirdPartyCookieLinkStyles = css({

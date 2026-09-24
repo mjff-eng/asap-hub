@@ -10,7 +10,7 @@ import { ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { Card, Headline3, Paragraph } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 import Milestone from './Milestone';
-import { neutral1000, neutral200, neutral500 } from '../colors';
+import { neutral200, colour } from '../colors';
 import type { ResearchOutputOption } from '../utils';
 import { LabeledMultiSelect, PageControls } from '../molecules';
 import { NumericalSortingIcon, searchIcon } from '../icons';
@@ -57,7 +57,7 @@ const tableHeaderStyles = css({
 const headerLabelStyles = css({
   fontSize: rem(17),
   fontWeight: 'bold',
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const sortButtonStyles = css({
@@ -99,7 +99,7 @@ const milestoneRowWrapperStyles = (index: number, isLast: boolean) =>
     paddingInline: rem(24),
     paddingTop: index === 0 ? 0 : rem(20),
     paddingBottom: rem(20),
-    borderBottom: `1px solid ${neutral500.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
     ...(isLast
       ? { paddingBottom: rem(WRAPPER_TOP_PADDING), borderBottom: 'none' }
       : {}),
@@ -109,7 +109,7 @@ const noMilestonesTextStyles = css({
   fontSize: rem(17),
   lineHeight: rem(24),
   fontWeight: 700,
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const pageControlsStyles = css({
@@ -127,7 +127,7 @@ const noResultsStyles = css({
   svg: {
     width: rem(48),
     height: rem(48),
-    stroke: neutral1000.rgb,
+    stroke: colour.foreground.primary,
   },
 });
 

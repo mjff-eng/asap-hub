@@ -17,7 +17,7 @@ const Loading: React.FC<Record<string, never>> = () => (
     <Spinner
       size={18}
       color={colors.neutral900.rgb}
-      trackColor={colors.neutral300.rgb}
+      trackColor={colors.colour.general.blue.cerulean[25]}
     />
     <Paragraph noMargin>Loading...</Paragraph>
   </div>

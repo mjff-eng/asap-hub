@@ -7,8 +7,7 @@ import {
   navigationGrey,
   pixels,
   colour,
-  neutral500,
-  neutral700,
+  colorFromHex,
 } from '@asap-hub/react-components';
 import { useCurrentUserGP2 } from '@asap-hub/react-context';
 import { css } from '@emotion/react';
@@ -34,8 +33,10 @@ const userMenuStyles = css({
   backgroundColor: colour.neutral[0],
   display: 'none',
   position: 'absolute',
-  border: `1px solid ${neutral500.rgb}`,
-  boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
+  border: `1px solid ${colour.border.tertiary}`,
+  boxShadow: `0 2px 6px 0 ${
+    colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
+  }`,
   right: 5,
 });
 

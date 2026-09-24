@@ -1,9 +1,12 @@
 import { gp2 } from '@asap-hub/model';
-import { pixels, UserProfilePlaceholderCard } from '@asap-hub/react-components';
+import {
+  pixels,
+  UserProfilePlaceholderCard,
+  colour,
+} from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import EditableCard from '../molecules/EditableCard';
-import colors from '../templates/colors';
 
 const { rem } = pixels;
 
@@ -12,7 +15,7 @@ type UserQuestionsProps = {
 } & Pick<ComponentProps<typeof EditableCard>, 'editHref'>;
 
 const rowStyles = css({
-  borderBottom: `1px solid ${colors.neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   marginBottom: rem(12),
   padding: `${rem(16)} 0`,
   ':last-child': {

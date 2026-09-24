@@ -1,4 +1,4 @@
-import { pixels, useBlockedClick } from '@asap-hub/react-components';
+import { pixels, useBlockedClick, colour } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { NavLink } from 'react-router';
@@ -17,13 +17,13 @@ const styles = css({
 });
 
 const disabledStyles = css({
-  color: colors.neutral700.rgba,
+  color: colour.neutral[200],
 });
 const textStyles = css({ margin: 0, display: 'inline-flex', gap: rem(8) });
 const activeStyles = css({
   paddingBottom: rem(16),
   borderBottom: `solid ${rem(4)} ${colors.primary500.rgba}`,
-  color: colors.neutral1000.rgba,
+  color: colour.foreground.primary,
   fontWeight: 'bold',
   [mobileQuery]: {
     paddingBottom: rem(8),

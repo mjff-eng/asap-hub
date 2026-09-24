@@ -3,7 +3,7 @@ import { ResearchOutputResponse } from '@asap-hub/model';
 import { sharedResearch } from '@asap-hub/routing';
 
 import { Card, Anchor, Headline2 } from '../atoms';
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 import { paddingStyles } from '../card';
 import SharedResearchMetadata from './SharedResearchMetadata';
 import AlgoliaHit from '../atoms/AlgoliaHit';
@@ -16,7 +16,7 @@ const containerStyles = css({
 });
 
 const itemStyles = css({
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   display: 'grid',
   '&:last-of-type': {
     borderBottom: 'none',

@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button, Paragraph } from '../atoms';
-import { neutral800, neutral1000, neutral900, neutral500 } from '../colors';
+import { neutral800, neutral900, colour } from '../colors';
 import { ExportIcon, linkIcon } from '../icons';
 import { mobileScreen, rem } from '../pixels';
 import { UploadListSourceFile } from './UploadListModal';
@@ -27,7 +27,7 @@ const titleStyles = css({
   fontSize: rem(17),
   fontWeight: 700,
   lineHeight: rem(24),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const countStyles = css({
@@ -46,7 +46,7 @@ const rowStyles = css({
   justifyContent: 'space-between',
   gap: rem(16),
   padding: `${rem(16)} 0`,
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderTop: 'none',
     paddingTop: 0,
@@ -79,7 +79,7 @@ const nameStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const dateStyles = css({
@@ -96,7 +96,7 @@ const downloadButtonStyles = css({
   height: rem(40),
   gap: rem(8),
   maxWidth: 'none',
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   '> svg': {
     boxSizing: 'border-box',
     width: rem(24),

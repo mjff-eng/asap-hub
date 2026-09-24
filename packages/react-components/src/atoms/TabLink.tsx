@@ -6,7 +6,7 @@ import { css, Theme } from '@emotion/react';
 import { layoutStyles } from '../text';
 import { useBlockedClick } from '../navigation';
 import { rem } from '../pixels';
-import { neutral900, neutral1000, colour, colorFromHex } from '../colors';
+import { neutral900, colour, colorFromHex } from '../colors';
 import { useHasRouter } from '../routing';
 import IconProps from '../icons/props';
 
@@ -27,7 +27,7 @@ const activeStyles = ({
     paddingBottom: rem(16 + borderBottomWidth),
     borderBottom: `solid ${rem(borderBottomWidth)} ${primary500.rgba}`,
 
-    color: neutral1000.rgb,
+    color: colour.foreground.primary,
     fontWeight: 'bold',
   });
 
@@ -94,7 +94,7 @@ const TabLink: React.FC<TabLinkProps> = ({ href, children, Icon }) => {
     >
       {Icon && (
         <span css={iconStyles}>
-          <Icon color={isActive ? neutral1000.rgb : neutral900.rgb} />
+          <Icon color={isActive ? colour.neutral[900] : neutral900.rgb} />
         </span>
       )}
       {children}

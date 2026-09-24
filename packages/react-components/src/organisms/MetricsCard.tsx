@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
 
 import { Button, Card, Paragraph, Subtitle } from '../atoms';
-import { charcoal, neutral500, neutral900 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { minusRectIcon, plusRectIcon } from '../icons';
 import { ExpandableText, Info } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
@@ -41,7 +41,7 @@ const rowStyles = css({
     paddingBottom: 0,
   },
   '&:not(:last-of-type)': {
-    borderBottom: `1px solid ${neutral500.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     display: 'grid',
@@ -84,7 +84,7 @@ const fieldStyles = css({
 });
 
 const fieldLabelStyles = css({
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   fontWeight: 'bold',
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     display: 'none',

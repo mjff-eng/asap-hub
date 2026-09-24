@@ -10,7 +10,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, useState } from 'react';
 import { Card, Pill } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, neutral500 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import APCCoverageModal, { APCCoverageFormData } from './APCCoverageModal';
 import ComplianceAssignUsersModal, {
@@ -29,14 +29,14 @@ const container = css({
   },
   'th, td': {
     textAlign: 'left',
-    borderBottom: `1px solid ${neutral500.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
     paddingRight: rem(32),
     ':nth-of-type(2)': {
       paddingLeft: rem(32),
     },
   },
   'th.sticky, td.sticky': {
-    borderRight: `1px solid ${neutral500.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
     position: 'sticky',
     paddingLeft: rem(24),
     left: 0,
@@ -51,7 +51,7 @@ const pillIdStyles = css({
 const titleStyles = css({
   alignItems: 'center',
   fontWeight: 'bold',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   background: '#fff',
   verticalAlign: 'top',
   paddingTop: rem(32),

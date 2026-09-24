@@ -6,6 +6,7 @@ import {
   pixels,
   TagList,
   neutral900,
+  colour,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
@@ -41,7 +42,7 @@ export const cardStyles: Record<
     color: colors.secondary500.rgba,
   },
   Paused: {
-    color: colors.warning500.rgba,
+    color: colour.foreground.warning,
   },
 };
 
