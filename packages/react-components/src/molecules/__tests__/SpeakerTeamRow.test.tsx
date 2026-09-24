@@ -293,3 +293,16 @@ it('caps the speaker list and reveals the rest on demand', () => {
 
   expect(screen.getByText('Speaker 5')).toBeVisible();
 });
+
+it('keeps the darker cross inside a not-shared group pill', () => {
+  render(
+    <SpeakerTeamRow
+      {...defaultProps}
+      users={[getUser({ id: 'u1', preliminaryFindingsShared: false })]}
+    />,
+  );
+
+  expect(
+    screen.getByLabelText('No preliminary findings').querySelector('circle'),
+  ).toHaveAttribute('stroke', '#C2C9CE');
+});

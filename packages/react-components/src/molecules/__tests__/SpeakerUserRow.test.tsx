@@ -37,6 +37,14 @@ it('renders a standalone findings icon when there is no toggle callback', () => 
   expect(screen.getByLabelText('No preliminary findings')).toBeVisible();
 });
 
+it('draws the not-shared cross in the light steel grey', () => {
+  render(<SpeakerUserRow {...defaultProps} showShared />);
+
+  expect(
+    screen.getByLabelText('No preliminary findings').querySelector('circle'),
+  ).toHaveAttribute('stroke', 'rgb(223, 229, 234)');
+});
+
 it('renders no findings affordance at all when showShared is false', () => {
   render(
     <SpeakerUserRow
