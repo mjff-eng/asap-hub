@@ -654,12 +654,67 @@ describe('EditEventSpeakersModal', () => {
     expect(screen.getByText('Team 6')).toBeInTheDocument();
   });
 
-  it('Should hide preliminary findings controls on an upcoming event', () => {
-    renderModal({ isPastEvent: false, groups: [getTeamGroup()] });
+  it('Should hide preliminary findings for every kind of speaker on an upcoming event', async () => {
+    renderModal({
+      isPastEvent: false,
+      groups: [getTeamGroup(), getProjectGroup(), getExternalGroup()],
+    });
 
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Project One' }),
+    );
+
+    expect(screen.getByText('Jane Doe')).toBeVisible();
+    expect(screen.getByText('Robin Vale')).toBeVisible();
+    expect(screen.getByText('Guest One')).toBeVisible();
     expect(screen.queryByText('Preliminary Findings')).not.toBeInTheDocument();
-    expect(screen.queryByText('0 of 1 shared')).not.toBeInTheDocument();
+    expect(screen.queryByText(/of 1 shared/)).not.toBeInTheDocument();
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('img', { name: /preliminary findings/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('Should let every kind of speaker toggle findings on a past event', async () => {
+    renderModal({
+      groups: [
+        getTeamGroup({
+          users: [
+            getUser(),
+            getUser({
+              id: 'guest-1',
+              displayName: 'Walk In',
+              isExternal: true,
+            }),
+          ],
+        }),
+        getProjectGroup(),
+        getExternalGroup(),
+      ],
+    });
+    const toggleFor = (name: string) =>
+      screen.getByRole('checkbox', {
+        name: `${name} preliminary findings shared`,
+      });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Team Alpha' }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Expand Project One' }),
+    );
+    await userEvent.click(toggleFor('Jane Doe'));
+    await userEvent.click(toggleFor('Walk In'));
+    await userEvent.click(toggleFor('Robin Vale'));
+    await userEvent.click(toggleFor('Guest One'));
+
+    expect(toggleFor('Jane Doe')).toBeChecked();
+    expect(toggleFor('Walk In')).toBeChecked();
+    expect(toggleFor('Robin Vale')).toBeChecked();
+    expect(toggleFor('Guest One')).toBeChecked();
   });
 
   it('Should save groups carrying per-speaker findings', async () => {
