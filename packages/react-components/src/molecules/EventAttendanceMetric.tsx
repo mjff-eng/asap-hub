@@ -4,25 +4,25 @@ import AttendanceProgressBar from '../atoms/AttendanceProgressBar';
 import { neutral200, neutral1000, steel } from '../colors';
 import { mobileScreen, rem } from '../pixels';
 
-const containerStyles = css({
+export const containerStyles = css({
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'column',
+  justifyContent: 'center',
   gap: rem(12),
   width: '100%',
-  maxWidth: rem(380),
   padding: rem(24),
   backgroundColor: neutral200.rgb,
   borderRadius: rem(8),
 });
 
-const headlineRowStyles = css({
+export const headlineRowStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: rem(12),
 });
 
-const valueStyles = css({
+export const valueStyles = css({
   margin: 0,
   fontFamily: 'Roboto Slab',
   fontWeight: 'bold',
@@ -52,7 +52,7 @@ const captionStyles = css({
   color: neutral1000.rgb,
 });
 
-const captionCountStyles = css([captionStyles, { fontWeight: 'bold' }]);
+export const captionCountStyles = css([captionStyles, { fontWeight: 'bold' }]);
 
 type EventAttendanceMetricProps = {
   value: number;
