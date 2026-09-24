@@ -18,7 +18,7 @@ const showPasswordIndicatorStyles = (isInvalid: boolean) =>
     // move it down from the center to align with the field text that is also below center
     paddingTop: rem(1),
 
-    fill: isInvalid ? colour.foreground.error : colour.brand.crn[500],
+    fill: isInvalid ? colour.foreground.error : colour.foreground.brand,
   });
 
 type LabeledPasswordFieldProps = {

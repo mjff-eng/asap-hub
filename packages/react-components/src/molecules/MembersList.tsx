@@ -121,12 +121,7 @@ const MembersList: React.FC<MembersListProps> = ({
             </Anchor>
             <Anchor
               href={href}
-              css={({ colors }) => [
-                styles,
-                hover(colors),
-                nameStyles,
-                overrideNameStyles,
-              ]}
+              css={[styles, hover, nameStyles, overrideNameStyles]}
             >
               {firstLine}
               {alumniSinceDate && (

@@ -1,5 +1,5 @@
-import { css, Theme } from '@emotion/react';
-import { colour, colorFromHex } from '../colors';
+import { css } from '@emotion/react';
+import { colour } from '../colors';
 import { crossSmallIcon } from '../icons';
 import { rem } from '../pixels';
 import Ellipsis from './Ellipsis';
@@ -30,14 +30,11 @@ const highlightStyles = css({
   backgroundColor: colour.background.brand,
 });
 
-const hoverStyles = ({
-  primary900 = colorFromHex(colour.brand.crn[800]),
-}: Theme['colors'] = {}) =>
-  css({
+const hoverStyles = css({
     ':hover': {
       backgroundColor: colour.background['hover-brand'],
-      borderColor: primary900.rgba,
-      color: primary900.rgba,
+      borderColor: colour.border.brand,
+      color: colour.foreground.brand,
     },
   });
 
@@ -111,10 +108,10 @@ const Tag: React.FC<TagProps> = ({
   <div css={containerStyles} title={title}>
     <ConditionalLinkWrapper href={enabled ? href : undefined}>
       <div
-        css={({ colors }) => [
+        css={[
           styles,
           ...(enabled
-            ? [highlight && highlightStyles, !!href && hoverStyles(colors)]
+            ? [highlight && highlightStyles, !!href && hoverStyles]
             : [disabledStyles]),
         ]}
       >

@@ -93,7 +93,7 @@ const nameSlotStyles = css({
 });
 
 const nameStyles = css({
-  color: colour.brand.crn[500],
+  color: colour.foreground.brand,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),

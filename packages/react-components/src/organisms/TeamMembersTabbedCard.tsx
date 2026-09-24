@@ -19,7 +19,7 @@ const containerStyles = css({
 });
 
 const nameStyles = css({
-  color: colour.brand.crn[500],
+  color: colour.foreground.brand,
   fontWeight: 'normal',
 });
 

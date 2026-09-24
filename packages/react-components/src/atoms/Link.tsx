@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { css, SerializedStyles, Theme } from '@emotion/react';
 
 import { getButtonChildren, getButtonStyles } from '../button';
-import { colour, colorFromHex } from '../colors';
+import { colour } from '../colors';
 import { defaultThemeVariant, ThemeVariant } from '../theme';
 import Ellipsis from './Ellipsis';
 import Anchor from './Anchor';
@@ -21,11 +21,10 @@ export const styles = css({
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    color: colour.brand.crn[500],
+    color: colour.foreground.brand,
   }),
   grey: css({
-    color: colour.brand.crn[500],
-    ':active': { color: colour.brand.crn[800] },
+    color: colour.foreground.brand,
   }),
   dark: css({
     color: colour.neutral[0],
@@ -41,32 +40,18 @@ export const getLinkColors = (
     ? css({ color: colors.primary500.rgba })
     : themeStyles[themeVariant];
 
-const iconThemeStyles: (
-  colors: Theme['colors'],
-) => Record<ThemeVariant, SerializedStyles> = ({
-  primary500 = colorFromHex(colour.brand.crn[500]),
-  primary900 = colorFromHex(colour.brand.crn[800]),
-}: Theme['colors'] = {}) => ({
+const iconThemeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    svg: {
-      stroke: primary500.rgba,
-    },
-    ':hover': {
-      svg: {
-        stroke: primary900.rgba,
-      },
-    },
-    ':active': { svg: { stroke: primary500.rgba } },
+    svg: { stroke: colour.foreground.brand },
   }),
   grey: css({
-    svg: { stroke: primary500.rgba },
-    ':active': { svg: { stroke: primary900.rgba } },
+    svg: { stroke: colour.foreground.brand },
   }),
   dark: css({
     svg: { stroke: colour.neutral[0] },
     ':active': { svg: { stroke: colour.neutral[0] } },
   }),
-});
+};
 
 interface NormalLinkProps {
   readonly themeVariant?: ThemeVariant;
@@ -126,13 +111,12 @@ const Link: React.FC<LinkProps> = ({
             children,
             noMargin,
             fullWidth,
-            colors,
           }),
         ]
       : [
           styles,
           getLinkColors(colors, themeVariant),
-          applyIconTheme && iconThemeStyles(colors)[themeVariant],
+          applyIconTheme && iconThemeStyles[themeVariant],
           underlined && { textDecoration: 'underline' },
         ];
   const linkChildren = buttonStyle ? getButtonChildren(children) : children;

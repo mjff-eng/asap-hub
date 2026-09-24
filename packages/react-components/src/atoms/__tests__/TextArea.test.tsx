@@ -1,7 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import TextArea from '../TextArea';
-import { colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders a text area, passing through props', () => {
   const { getByRole } = render(<TextArea value="val" />);
@@ -23,14 +23,14 @@ it('renders a disabled text area', () => {
   expect((getByRole('textbox') as HTMLInputElement).disabled).toBeFalsy();
   expect(getByRole('textbox')).not.toHaveStyleRule(
     'background-color',
-    colour.background.tertiary,
+    colour.background.disabled,
   );
 
   rerender(<TextArea value="val" enabled={false} />);
   expect((getByRole('textbox') as HTMLInputElement).disabled).toBe(true);
   expect(getByRole('textbox')).toHaveStyleRule(
     'background-color',
-    colour.background.tertiary,
+    colour.background.disabled,
   );
 });
 
@@ -74,12 +74,10 @@ describe('with a max length', () => {
   });
 
   describe('that has not been reached', () => {
-    it('indicates how full it is in green', () => {
+    it('indicates how full it is in the brand colour', () => {
       const { getByText } = render(<TextArea value="val" maxLength={10} />);
       const indicator = getByText('10', { exact: false });
-      expect(getComputedStyle(indicator).color).toBe(
-        colorFromHex(colour.brand.crn[500]).rgb,
-      );
+      expect(indicator).toHaveStyleRule('color', colour.foreground.brand);
     });
   });
 

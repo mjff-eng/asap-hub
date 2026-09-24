@@ -1,10 +1,9 @@
-import { css, Theme } from '@emotion/react';
-import { colour, colorFromHex } from '../colors';
+import { css } from '@emotion/react';
+import { colour } from '../colors';
 import { noop } from '../utils';
 
 const toggleStyles = (
   uncheckedColor: 'default' | 'error',
-  { primary500 = colorFromHex(colour.brand.crn[500]) }: Theme['colors'] = {},
 ) =>
   css({
     position: 'relative',
@@ -34,7 +33,7 @@ const toggleStyles = (
     },
 
     ':checked': {
-      backgroundColor: primary500.rgba,
+      backgroundColor: colour.background['brand-inverse'],
       '::before': {
         transform: 'translateX(20px)',
       },
@@ -74,7 +73,7 @@ const Switch: React.FC<SwitchProps> = ({
     checked={checked}
     disabled={!enabled}
     onChange={onClick}
-    css={({ colors }) => toggleStyles(uncheckedColor, colors)}
+    css={toggleStyles(uncheckedColor)}
   />
 );
 

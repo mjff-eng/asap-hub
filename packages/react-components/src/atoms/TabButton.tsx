@@ -17,14 +17,11 @@ const styles = css({
 
 const activeStyles = css({
   paddingBottom: rem(12 - 4),
-  borderBottom: `solid ${rem(4)} ${colour.brand.crn[500]}`,
+  borderBottom: `solid ${rem(4)} ${colour.foreground.brand}`,
 
   color: colour.foreground.primary,
   cursor: 'default',
   fontWeight: 'bold',
-  "[data-app='gp2'] &": {
-    borderBottomColor: colour.brand.gp2[500],
-  },
 });
 
 const disabledStyles = css({

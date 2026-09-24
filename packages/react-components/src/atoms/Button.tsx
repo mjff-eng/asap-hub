@@ -98,7 +98,6 @@ const Button: React.FC<ButtonProps> = ({
             active,
             children,
             noMargin,
-            colors,
             fullWidth,
           }),
       overrideStyles,

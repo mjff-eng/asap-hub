@@ -1,8 +1,7 @@
 import { ReactNode, useEffect } from 'react';
-import { ThemeProvider } from '@emotion/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, useLocation, StaticRouter } from 'react-router';
-import { color, colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 import NavigationLink from '../NavigationLink';
 
 // Helper to capture location in tests
@@ -203,7 +202,7 @@ describe('without a router (external link with matching pathname)', () => {
   });
 });
 
-describe('with ThemeProvider', () => {
+describe('when active', () => {
   const originalLocation = window.location;
 
   beforeEach(() => {
@@ -227,7 +226,7 @@ describe('with ThemeProvider', () => {
     });
   });
 
-  it('uses default colors when no theme whas provided', () => {
+  it('uses the brand text colour on the active background', () => {
     render(
       <MemoryRouter>
         <NavigationLink href="http://example.com/" icon={<svg />}>
@@ -235,31 +234,10 @@ describe('with ThemeProvider', () => {
         </NavigationLink>
       </MemoryRouter>,
     );
-    const { color: primaryColor } = getComputedStyle(screen.getByRole('link'));
-    expect(primaryColor).toBe(colorFromHex(colour.brand.crn[800]).rgb);
     expect(screen.getByRole('link')).toHaveStyleRule(
-      'background-color',
-      colour.background.active,
+      'color',
+      colour.foreground.brand,
     );
-  });
-  it('uses the theme text colour and the product background', () => {
-    const activePrimaryColor = color(0, 106, 146);
-    const theme = {
-      colors: {
-        primary900: activePrimaryColor,
-      },
-    };
-    render(
-      <MemoryRouter>
-        <ThemeProvider theme={theme}>
-          <NavigationLink href="http://example.com/" icon={<svg />}>
-            Text
-          </NavigationLink>
-        </ThemeProvider>
-      </MemoryRouter>,
-    );
-    const { color: primaryColor } = getComputedStyle(screen.getByRole('link'));
-    expect(primaryColor).toBe(activePrimaryColor.rgb);
     expect(screen.getByRole('link')).toHaveStyleRule(
       'background-color',
       colour.background.active,

@@ -330,7 +330,7 @@ const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                   id={id}
                   required={required}
                   data-testid={isMarkdown ? 'markdown-test-id' : 'editor'}
-                  css={({ colors }) =>
+                  css={
                     !isMarkdown
                       ? [
                           styles,
@@ -338,11 +338,6 @@ const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                           (validationMessage || hasError) && {
                             backgroundColor: colour.background.error,
                             borderColor: `${colour.border.error}!important`,
-                          },
-                          colors?.primary500 && {
-                            ':focus': {
-                              borderColor: colors?.primary500.rgba,
-                            },
                           },
                           !enabled && {
                             color: colour.foreground.tertiary,

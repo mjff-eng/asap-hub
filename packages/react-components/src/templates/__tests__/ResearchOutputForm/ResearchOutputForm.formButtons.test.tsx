@@ -13,7 +13,7 @@ import {
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ResearchOutputForm from '../../ResearchOutputForm';
-import { colour, colorFromHex } from '../../../colors';
+import { colour } from '../../../colors';
 import {
   getDefaultProps,
   initialResearchOutputData,
@@ -116,8 +116,6 @@ describe('form buttons', () => {
     );
   };
 
-  const primaryButtonBg = colorFromHex(colour.brand.crn[500]).rgb;
-
   it('shows Cancel, Save Draft and Publish buttons when user has editing and publishing permissions and the research output has not been published yet', async () => {
     await setupForm({
       canEditResearchOutput: true,
@@ -129,7 +127,10 @@ describe('form buttons', () => {
       name: /Publish/i,
     });
     expect(publishButton).toBeInTheDocument();
-    expect(publishButton).toHaveStyle(`background-color:${primaryButtonBg}`);
+    expect(publishButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
+    );
 
     const saveDraftButton = screen.getByRole('button', { name: /Save Draft/i });
     expect(saveDraftButton).toBeInTheDocument();
@@ -160,7 +161,10 @@ describe('form buttons', () => {
 
     const saveDraftButton = screen.getByRole('button', { name: /Save/i });
     expect(saveDraftButton).toBeInTheDocument();
-    expect(saveDraftButton).toHaveStyle(`background-color:${primaryButtonBg}`);
+    expect(saveDraftButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
+    );
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     expect(cancelButton).toBeInTheDocument();
@@ -187,7 +191,10 @@ describe('form buttons', () => {
 
     const saveButton = screen.getByRole('button', { name: /Save/i });
     expect(saveButton).toBeInTheDocument();
-    expect(saveButton).toHaveStyle(`background-color:${primaryButtonBg}`);
+    expect(saveButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
+    );
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     expect(cancelButton).toBeInTheDocument();
@@ -214,7 +221,10 @@ describe('form buttons', () => {
 
     const saveButton = screen.getByRole('button', { name: /Publish/i });
     expect(saveButton).toBeInTheDocument();
-    expect(saveButton).toHaveStyle(`background-color:${primaryButtonBg}`);
+    expect(saveButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
+    );
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     expect(cancelButton).toBeInTheDocument();
@@ -237,7 +247,10 @@ describe('form buttons', () => {
 
     const saveDraftButton = screen.getByRole('button', { name: /Save Draft/i });
     expect(saveDraftButton).toBeInTheDocument();
-    expect(saveDraftButton).toHaveStyle(`background-color:${primaryButtonBg}`);
+    expect(saveDraftButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
+    );
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     expect(cancelButton).toBeInTheDocument();

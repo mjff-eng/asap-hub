@@ -1,4 +1,4 @@
-import { css, useTheme } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
   ReactElement,
   ReactNode,
@@ -157,7 +157,6 @@ const MultiSelect = <
   isMulti = true as M,
   values = getValues<T, M>(isMulti),
 }: MultiSelectProps<T, M>): ReactElement => {
-  const theme = useTheme();
   let inputRef: RefType<T, M> = null;
 
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -224,7 +223,7 @@ const MultiSelect = <
       ...components,
     } as Props<T, M, GroupBase<T>>['components'],
     noOptionsMessage,
-    styles: reactMultiSelectStyles(theme, !!validationMessage, isMulti),
+    styles: reactMultiSelectStyles(!!validationMessage, isMulti),
     onFocus: () => {
       onFocus();
     },

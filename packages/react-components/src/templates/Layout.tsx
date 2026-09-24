@@ -242,7 +242,7 @@ export const searchButtonAreaStyles = css({
   },
   '& .active': {
     svg: {
-      fill: colour.brand.crn[800],
+      fill: colour.foreground.brand,
     },
   },
   // Target the Navigation's inner div that renders the Search button

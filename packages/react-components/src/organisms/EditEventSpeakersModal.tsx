@@ -96,7 +96,7 @@ const searchOptionStyles = css([
 ]);
 
 const searchUserNameStyles = css({
-  color: colour.brand.crn[800],
+  color: colour.foreground.brand,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),

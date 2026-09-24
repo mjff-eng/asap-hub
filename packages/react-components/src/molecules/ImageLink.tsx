@@ -6,7 +6,7 @@ import { colour } from '../colors';
 export const hoverStyle = css({
   transition: `100ms ease-in-out, color 100ms ease-in-out`,
   ':hover': {
-    color: colour.brand.crn[500],
+    color: colour.foreground.brand,
     opacity: '64%',
   },
 });

@@ -3,7 +3,7 @@ import { waitFor } from '@testing-library/dom';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 import Typeahead from '../Typeahead';
 
 it('shows the selected value', () => {
@@ -55,19 +55,21 @@ it('allows non-suggested input', async () => {
   expect(handleChange).toHaveBeenLastCalledWith('LTN');
 });
 
-it('shows the focused suggestion in green', async () => {
+it('shows the focused suggestion in the brand colour', async () => {
   const { getByText, getByDisplayValue } = render(
     <Typeahead suggestions={['LHR', 'LGW']} value="" />,
   );
   await userEvent.click(getByDisplayValue(''));
-  expect(
-    findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).not.toBe(colorFromHex(colour.brand.crn[800]).rgb.replace(/ /g, ''));
+  expect(getByText('LGW').closest('[id*="-option-"]')).not.toHaveStyleRule(
+    'color',
+    colour.foreground.brand,
+  );
 
   fireEvent.mouseOver(getByText('LGW'));
-  expect(
-    findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).toBe(colorFromHex(colour.brand.crn[800]).rgb.replace(/ /g, ''));
+  expect(getByText('LGW').closest('[id*="-option-"]')).toHaveStyleRule(
+    'color',
+    colour.foreground.brand,
+  );
 });
 
 it('gets greyed out when disabled', () => {
@@ -77,10 +79,10 @@ it('gets greyed out when disabled', () => {
   // In react-select v5, the control element has the color/background styles
   const disabledControl = container.querySelector('[aria-disabled="true"]');
   expect(disabledControl).not.toBeNull();
-  expect(disabledControl).toHaveStyleRule('color', colour.foreground.tertiary);
+  expect(disabledControl).toHaveStyleRule('color', colour.foreground.disabled);
   expect(disabledControl).toHaveStyleRule(
     'background-color',
-    colour.background.tertiary,
+    colour.background.disabled,
   );
   const disabledInput = container.querySelector('input');
   expect(disabledInput).toBeDisabled();
@@ -93,11 +95,11 @@ it('gets greyed out when disabled', () => {
   expect(enabledControl).not.toBeNull();
   expect(enabledControl).not.toHaveStyleRule(
     'color',
-    colour.foreground.tertiary,
+    colour.foreground.disabled,
   );
   expect(enabledControl).not.toHaveStyleRule(
     'background-color',
-    colour.background.tertiary,
+    colour.background.disabled,
   );
   const enabledInput = container.querySelector('input');
   expect(enabledInput).not.toBeDisabled();
