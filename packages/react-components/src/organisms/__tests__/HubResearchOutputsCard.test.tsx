@@ -107,30 +107,6 @@ describe('HubResearchOutputsCard', () => {
     expect(within(mobileList).getAllByTitle('Info')).toHaveLength(rows.length);
   });
 
-  it('shows the mood label when clicking the mood icon', async () => {
-    render(
-      <HubResearchOutputsCard
-        rows={[
-          {
-            outputType: 'Articles',
-            numberOfOutputs: 42,
-            publicPercentage: 95,
-          },
-        ]}
-      />,
-    );
-    const table = screen.getByTestId('hub-research-outputs-table');
-    const moodLabel = within(table).getByText(
-      'Your team is doing an outstanding job! Keep up the good work!',
-    );
-
-    expect(moodLabel).not.toBeVisible();
-
-    await userEvent.click(moodLabel.closest('button') as HTMLButtonElement);
-
-    expect(moodLabel).toBeVisible();
-  });
-
   it('renders the metric details', () => {
     render(<HubResearchOutputsCard rows={rows} />);
 

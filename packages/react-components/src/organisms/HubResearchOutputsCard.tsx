@@ -2,9 +2,8 @@ import { css } from '@emotion/react';
 
 import { Card, Paragraph, Subtitle } from '../atoms';
 import { charcoal, lead, steel } from '../colors';
-import { ExpandableText, Info, TooltipInfo } from '../molecules';
+import { ExpandableText, TooltipInfo } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
-import { getPerformanceMoodIcon, getPerformanceMoodLabel } from '../utils';
 
 export type HubResearchOutputRow = {
   outputType: string;
@@ -58,20 +57,6 @@ const paddedCellStyles = css({
   paddingRight: rem(24),
 });
 
-const percentageCellStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  gap: rem(8),
-});
-
-const percentageValueStyles = css({
-  width: rem(40),
-  textWrap: 'nowrap',
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
-    width: 'unset',
-  },
-});
-
 const detailsStyles = css({
   display: 'flex',
   flexDirection: 'column',
@@ -123,43 +108,8 @@ const mobileLabelStyles = css({
   color: charcoal.rgb,
 });
 
-const percentageLabelContainerStyles = css({
-  display: 'flex',
-  marginTop: rem(4),
-});
-
-const percentageLabelStyles = css({
-  display: 'flex',
-  maxWidth: 'unset',
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
-    maxWidth: rem(90),
-  },
-});
-
 const formatPercentage = (publicPercentage: number | null) =>
   publicPercentage === null ? 'N/A' : `${publicPercentage}%`;
-
-const PercentageValue: React.FC<{ publicPercentage: number | null }> = ({
-  publicPercentage,
-}) => (
-  <span css={percentageCellStyles}>
-    <span css={percentageValueStyles}>
-      {formatPercentage(publicPercentage)}
-    </span>
-    <span css={percentageLabelContainerStyles}>
-      <Info
-        icon={getPerformanceMoodIcon(
-          publicPercentage,
-          publicPercentage === null,
-        )}
-      >
-        <span css={percentageLabelStyles}>
-          {getPerformanceMoodLabel(publicPercentage, publicPercentage === null)}
-        </span>
-      </Info>
-    </span>
-  </span>
-);
 
 const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
   rows,
@@ -191,9 +141,7 @@ const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
           <tr key={row.outputType}>
             <td css={[cellStyles, paddedCellStyles]}>{row.outputType}</td>
             <td css={[cellStyles, paddedCellStyles]}>{row.numberOfOutputs}</td>
-            <td css={cellStyles}>
-              <PercentageValue publicPercentage={row.publicPercentage} />
-            </td>
+            <td css={cellStyles}>{formatPercentage(row.publicPercentage)}</td>
           </tr>
         ))}
       </tbody>
@@ -223,7 +171,7 @@ const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
                 {PUBLIC_OUTPUTS_TOOLTIP}
               </TooltipInfo>
             </div>
-            <PercentageValue publicPercentage={row.publicPercentage} />
+            <div>{formatPercentage(row.publicPercentage)}</div>
           </div>
         </div>
       ))}
