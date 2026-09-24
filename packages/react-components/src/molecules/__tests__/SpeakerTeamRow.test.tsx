@@ -294,7 +294,7 @@ it('caps the speaker list and reveals the rest on demand', () => {
   expect(screen.getByText('Speaker 5')).toBeVisible();
 });
 
-it('keeps the darker cross inside a not-shared group pill', () => {
+it('draws the cross inside a not-shared group pill in the pill text colour', () => {
   render(
     <SpeakerTeamRow
       {...defaultProps}
@@ -304,5 +304,5 @@ it('keeps the darker cross inside a not-shared group pill', () => {
 
   expect(
     screen.getByLabelText('No preliminary findings').querySelector('circle'),
-  ).toHaveAttribute('stroke', '#C2C9CE');
+  ).toHaveAttribute('stroke', 'rgb(77, 100, 107)');
 });
