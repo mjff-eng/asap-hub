@@ -22,6 +22,7 @@ import {
   Section,
   Swatch,
   TextSample,
+  useCopy,
 } from './ui';
 
 export default {
@@ -315,22 +316,14 @@ export const ThemeTokens = () => {
 };
 
 const PrimitiveCard = ({ primitive }: { primitive: Primitive }) => {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopy(primitive.codeName);
   const legacy =
     primitive.alpha === 1 ? legacyNamesByHex.get(primitive.hex) : [];
   return (
     <button
       type="button"
       title={`Click to copy ${primitive.codeName}`}
-      onClick={() =>
-        navigator.clipboard?.writeText(primitive.codeName).then(
-          () => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1200);
-          },
-          () => undefined,
-        )
-      }
+      onClick={copy}
       style={{
         width: '96px',
         padding: 0,
