@@ -54,9 +54,7 @@ const InterestGroupLeadersTabbedCard: React.FC<
           disabled: inactiveLeaders.length === 0,
 
           empty: (
-            <Paragraph accent="tertiary">
-              There are no past leaders.
-            </Paragraph>
+            <Paragraph accent="tertiary">There are no past leaders.</Paragraph>
           ),
         },
       ]}
