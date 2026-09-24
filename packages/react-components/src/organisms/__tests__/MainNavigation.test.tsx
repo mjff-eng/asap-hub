@@ -4,7 +4,7 @@ import { network } from '@asap-hub/routing';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import MainNavigation from '../MainNavigation';
-import { charcoal } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders the navigation items', () => {
   const { getAllByRole } = render(
@@ -181,7 +181,7 @@ describe('the collapse toggle', () => {
     // charcoal, matching the other sidebar labels (not the lighter lead grey).
     expect(
       getByRole('button', { name: 'Collapse Menu', hidden: true }),
-    ).toHaveStyle(`color: ${charcoal.rgb}`);
+    ).toHaveStyleRule('color', colour.foreground.primary);
 
     rerender(
       <MemoryRouter>
@@ -192,9 +192,9 @@ describe('the collapse toggle', () => {
         />
       </MemoryRouter>,
     );
-    expect(getByRole('button', { name: 'Expand', hidden: true })).toHaveStyle(
-      `color: ${charcoal.rgb}`,
-    );
+    expect(
+      getByRole('button', { name: 'Expand', hidden: true }),
+    ).toHaveStyleRule('color', colour.foreground.primary);
   });
 
   it('keeps the toggle left-aligned in both states so the icon never shifts', () => {

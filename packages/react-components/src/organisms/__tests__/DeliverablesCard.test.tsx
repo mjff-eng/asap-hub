@@ -72,10 +72,10 @@ describe('view more and less', () => {
 
 it.each`
   status           | textColor
-  ${'Complete'}    | ${colors.colorFromHex(colors.colour.brand.crn[800]).rgb}
+  ${'Complete'}    | ${colors.colour.brand.crn[800]}
   ${'In Progress'} | ${colors.info500.rgb}
-  ${'Not Started'} | ${colors.error500.rgb}
-  ${'Incomplete'}  | ${colors.warning500.rgb}
+  ${'Not Started'} | ${colors.colour.foreground.error}
+  ${'Incomplete'}  | ${colors.colour.foreground.warning}
   ${'Pending'}     | ${colors.neutral800.rgb}
 `(
   'uses the correct accent color for status $status',
@@ -87,7 +87,7 @@ it.each`
       />,
     );
     expect(
-      findParentWithStyle(screen.getByText(status), 'color')!.color,
-    ).toEqual(textColor);
+      findParentWithStyle(screen.getByText(status), 'borderStyle')!.element,
+    ).toHaveStyleRule('color', textColor);
   },
 );

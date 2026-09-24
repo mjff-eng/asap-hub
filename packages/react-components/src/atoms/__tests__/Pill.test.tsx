@@ -1,11 +1,9 @@
-import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { render } from '@testing-library/react';
 
-import { colorFromHex } from '../../colors';
+import * as colors from '../../colors';
 import Pill from '../Pill';
 
-const toRgb = (value: string) =>
-  value.startsWith('#') ? colorFromHex(value).rgb : value;
+const { colour } = colors;
 
 it('renders a tag label with content', () => {
   const { container } = render(<Pill>Text</Pill>);
@@ -13,25 +11,21 @@ it('renders a tag label with content', () => {
 });
 
 it.each`
-  accent       | border                  | background              | text
-  ${'default'} | ${'rgb(227, 230, 232)'} | ${'transparent'}        | ${'rgb(86, 96, 102)'}
-  ${'green'}   | ${'rgb(40, 121, 83)'}   | ${'rgb(226, 238, 237)'} | ${'rgb(40, 121, 83)'}
-  ${'warning'} | ${'rgb(220, 104, 3)'}   | ${'rgb(252, 248, 238)'} | ${'rgb(220, 104, 3)'}
-  ${'info'}    | ${'rgb(12, 141, 195)'}  | ${'rgb(230, 243, 249)'} | ${'rgb(12, 141, 195)'}
-  ${'neutral'} | ${'rgb(136, 147, 154)'} | ${'rgb(238, 243, 246)'} | ${'rgb(136, 147, 154)'}
-  ${'gray'}    | ${'transparent'}        | ${'rgb(238, 243, 246)'} | ${'rgb(86, 96, 102)'}
+  accent       | borderRule        | border                    | background                    | text
+  ${'default'} | ${'border-color'} | ${colour.border.tertiary} | ${'transparent'}              | ${colors.neutral900.rgb}
+  ${'green'}   | ${'border-color'} | ${colour.brand.crn[800]}  | ${colors.success100.rgb}      | ${colour.brand.crn[800]}
+  ${'warning'} | ${'border-color'} | ${colour.border.warning}  | ${colors.warning100.rgb}      | ${colour.foreground.warning}
+  ${'info'}    | ${'border-color'} | ${colors.info500.rgb}     | ${colors.info100.rgb}         | ${colors.info500.rgb}
+  ${'neutral'} | ${'border-color'} | ${colors.neutral800.rgb}  | ${colour.background.tertiary} | ${colors.neutral800.rgb}
+  ${'gray'}    | ${'border'}       | ${'transparent'}          | ${colour.background.tertiary} | ${colors.neutral900.rgb}
 `(
   'sets text color border and background color for $accent',
-  ({ accent, border, text, background }) => {
-    const { getByText } = render(<Pill accent={accent}>Text</Pill>);
+  ({ accent, borderRule, border, text, background }) => {
+    const { container } = render(<Pill accent={accent}>Text</Pill>);
+    const pill = container.firstElementChild;
 
-    expect(
-      [
-        findParentWithStyle(getByText('Text')!, 'borderColor')!.borderColor,
-        findParentWithStyle(getByText('Text')!, 'backgroundColor')!
-          .backgroundColor,
-        findParentWithStyle(getByText('Text')!, 'color')!.color,
-      ].map(toRgb),
-    ).toEqual([border, background, text]);
+    expect(pill).toHaveStyleRule(borderRule, border);
+    expect(pill).toHaveStyleRule('background-color', background);
+    expect(pill).toHaveStyleRule('color', text);
   },
 );
