@@ -131,7 +131,13 @@ export const StartHere = () => (
         </li>
         <li>
           Email templates cannot use CSS variables, because email clients do not
-          support them. Use primitives there.
+          support them. Use primitives there. The email layouts give links the
+          product brand colour as a fixed value, and a test fails if an email
+          renders a CSS variable.
+        </li>
+        <li>
+          In Storybook, the <b>Product</b> menu in the toolbar switches every
+          story between the CRN and GP2 colours. GP2 stories use GP2 by default.
         </li>
         <li>
           Some colours still wait on design decisions. See{' '}
@@ -525,42 +531,6 @@ export const LegacyNames = () => (
         </tbody>
       </table>
     </Section>
-    <Section title="CAS values not adopted yet">
-      <p style={muted}>
-        Figma defines these, but they change how buttons and links look, so they
-        wait on design questions 5 and 6.
-      </p>
-      <table style={table}>
-        <tbody>
-          {[
-            [
-              'CRN primary button',
-              '#34A270',
-              'colour/background/button/primary/default',
-            ],
-            ['CRN brand text and links', '#34A270', 'colour/foreground/brand'],
-            [
-              'Disabled button background',
-              '#EDF1F3',
-              'colour/background/disabled',
-            ],
-            ['Disabled button text', '#4D646B', 'colour/foreground/disabled'],
-            ['Disabled button border', '#DFE5EA', 'colour/border/disabled'],
-          ].map(([label, before, token]) => (
-            <tr key={label}>
-              <td style={cell}>{label}</td>
-              <td style={cell}>
-                <BeforeAfter
-                  before={before as string}
-                  after={themeHex(token as string)}
-                />
-              </td>
-              <td style={cell}>{code(token as string)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </Section>
   </Page>
 );
 
@@ -693,6 +663,56 @@ const Question = ({
 const cas = (name: string, product: Product = 'crn') =>
   themeHex(`colour/${name}`, product);
 
+const Pair = ({
+  product,
+  children,
+}: {
+  product: Product;
+  children: ReactNode;
+}) =>
+  product === 'gp2' ? (
+    <span data-app="gp2" style={{ display: 'contents' }}>
+      {children}
+    </span>
+  ) : (
+    <>{children}</>
+  );
+
+const NamedSwatch = ({
+  name,
+  hex,
+  note,
+}: {
+  name: string;
+  hex: string;
+  note?: string;
+}) => (
+  <div>
+    <Swatch background={hex} label={hex} />
+    <div style={{ ...mono, fontSize: '11px' }}>{name}</div>
+    <div style={muted}>
+      {note ? `${note}, ` : ''}
+      {hex}
+    </div>
+  </div>
+);
+
+const figmaFixes = [
+  'color-brand, one of the five avatar pairs, is built from the ARIA green. ASAP needs its own, or four pairs.',
+  'The Dropdown menu hover uses an ARIA primitive instead of a theme role.',
+  'Shadows use colours that are invisible on white, so the code keeps its own shadow greys.',
+  'Several component layers still use raw hex instead of variables: the Checkbox and Radio label (#000000) and the legacy Top Nav GP2 frame.',
+  'The 48px icon-only Warning button hover is bound to the default variable.',
+  'The Search input placeholder uses foreground/quaternary at Large but foreground/disabled at Small and Mobile.',
+  'utilitarian/error/100 is used on the Event Card live indicator but is not a theme role.',
+  'Missing roles we had to fill with primitives or neighbours: focus ring, icon, link, overlay, tooltip, table stripe (row alternate), and darker status text for labels.',
+  'border/button/tertiary is red/700. Is it meant to be the destructive button border?',
+  'border/disabled (#687883) is darker than the normal border (#E3E6E8), so disabled controls look more active than enabled ones.',
+  'background/brand, background/hover-brand and background/highlight all resolve to brand/25: three names for one value.',
+  'In GP2, background/brand-inverse (gp2/800) is darker than background/hover-brand-inverse (gp2/600). In CRN it is the other way round.',
+  'No variable has a description or WEB code syntax. With code syntax set, Dev Mode shows engineers exactly what to type, for example colour.foreground.brand.',
+];
+
 export const DesignQuestions = () => (
   <Page
     title="Questions for design"
@@ -703,20 +723,22 @@ export const DesignQuestions = () => (
         our proposal, and it will not be merged until design approves it. Every
         example is labelled: <b>Our Hub today</b> is the live Hub,{' '}
         <b>This PR, for approval</b> is what this PR shows, and{' '}
-        <b>Other CAS options</b> are alternatives from the CAS file.
+        <b>Other CAS options</b> are alternatives from the CAS file. Use the{' '}
+        <b>Product</b> menu in the toolbar to see the other Hub where a sample
+        says so.
       </>
     }
   >
     <Question
       number={1}
-      title="Grey text"
-      ask="Our grey text (dates, captions, hints) and the hint text inside empty fields are not CAS colours. This PR uses the CAS text greys instead: foreground/tertiary for grey text and foreground/quaternary for hint text. Is that right, or would you pick different CAS greys?"
+      title="Grey text and hint text"
+      ask="Our grey text (dates, captions) and the hint text inside empty fields are not CAS colours. This PR uses foreground/tertiary for both, as the CAS Input component does. Our old hint text was too faint to read (1.67:1). Is foreground/tertiary right for hints, or should they be the lighter foreground/quaternary so they look different from a typed value?"
     >
       <Side source="today" columns={2}>
         <Sample name="Grey text" text="#4D646B">
           Updated 3 days ago
         </Sample>
-        <Sample name="Hint text in empty fields" text="#92999E">
+        <Sample name="Hint text in empty fields" text="#C2C9CE">
           Search for a team…
         </Sample>
       </Side>
@@ -724,16 +746,19 @@ export const DesignQuestions = () => (
         <Sample name="foreground/tertiary" text={cas('foreground/tertiary')}>
           Updated 3 days ago
         </Sample>
-        <Sample
-          name="foreground/quaternary"
-          text={cas('foreground/quaternary')}
-        >
+        <Sample name="foreground/tertiary" text={cas('foreground/tertiary')}>
           Search for a team…
         </Sample>
       </Side>
       <Side source="cas" columns={2}>
         <Sample name="foreground/secondary" text={cas('foreground/secondary')}>
           Updated 3 days ago
+        </Sample>
+        <Sample
+          name="foreground/quaternary"
+          text={cas('foreground/quaternary')}
+        >
+          Search for a team…
         </Sample>
       </Side>
     </Question>
@@ -772,12 +797,12 @@ export const DesignQuestions = () => (
     <Question
       number={3}
       title="Colours that are not in CAS"
-      ask="A few colours have no CAS equivalent. For each one below, is our proposal right?"
+      ask="A few colours have no CAS role. For each one below, is our proposal right?"
     >
       <h3 style={{ fontSize: '14px', margin: '8px 0 0' }}>
         Initials of users without a profile photo: this PR uses the five CAS
-        colour pairs. One of them, color-brand, is built from the ARIA green. Is
-        that acceptable on ASAP?
+        colour pairs instead of our six. One of them, color-brand, is built from
+        the ARIA green. Is that acceptable on ASAP?
       </h3>
       <Side source="today" columns={6}>
         {[
@@ -812,8 +837,10 @@ export const DesignQuestions = () => (
       </Side>
 
       <h3 style={{ fontSize: '14px', margin: '24px 0 0' }}>
-        Gradients: this PR keeps ours, because no CAS gradient matches. Should
-        CAS add them as ASAP gradients, or should we use CAS ones?
+        Gradients: this PR keeps ours, built from CAS brand colours where they
+        match (the two middle stops of the event attendance bar are not CAS
+        colours). Should CAS add them as ASAP gradients, or should we use CAS
+        ones?
       </h3>
       <Side source="pr" columns={2}>
         <GradientSample
@@ -830,7 +857,13 @@ export const DesignQuestions = () => (
         />
         <GradientSample
           name="Event attendance bar"
-          stops={['#8C4E9F', '#0C8DC3', '#1491B2', '#299C86', '#34A270']}
+          stops={[
+            '#8C4E9F',
+            colour.brand.gp2[500],
+            '#1491B2',
+            '#299C86',
+            colour.brand.crn[500],
+          ]}
         />
       </Side>
       <Side source="cas" columns={3}>
@@ -844,8 +877,9 @@ export const DesignQuestions = () => (
       </Side>
 
       <h3 style={{ fontSize: '14px', margin: '24px 0 0' }}>
-        Tooltip background: CAS has no tooltip colour. This PR uses the CAS
-        near-black neutral/900 instead of our dark blue.
+        Tooltip background: CAS has no tooltip role. This PR uses
+        foreground/secondary, as the CAS Tooltip component does. Can CAS add a
+        tooltip role so the component and the code share a name?
       </h3>
       <Side source="today" columns={3}>
         <Sample name="Tooltip" text="#FFFFFF" background="#004561">
@@ -854,9 +888,9 @@ export const DesignQuestions = () => (
       </Side>
       <Side source="pr" columns={3}>
         <Sample
-          name="neutral/900"
-          text="#FFFFFF"
-          background={colour.neutral[900]}
+          name="foreground/secondary"
+          text={cas('foreground/primary-inverse')}
+          background={cas('foreground/secondary')}
         >
           Copied to clipboard
         </Sample>
@@ -866,7 +900,7 @@ export const DesignQuestions = () => (
     <Question
       number={4}
       title="Coloured text on light backgrounds is hard to read"
-      ask="This PR uses the CAS status pairs exactly as Figma defines them. In all four, the text is below the minimum for readable text. Keep them, or use the darker CAS shade for the text? If darker, could CAS add those as variables so the rule lives in Figma?"
+      ask="Toasts now follow the CAS Toast: dark text, with the status colour only on the icon and border. Status pills, tags and messages still use the CAS status pairs, and in all four the text is below the minimum for readable text. Keep them, or use the darker CAS shade for the text? If darker, could CAS add those as variables?"
     >
       <Side source="pr" columns={4}>
         {(['error', 'warning', 'success', 'info'] as const).map((status) => (
@@ -907,8 +941,8 @@ export const DesignQuestions = () => (
 
     <Question
       number={5}
-      title="Disabled buttons (not in this PR)"
-      ask="CAS makes a disabled button pale grey text on grey with a dark grey border, so it stands out more than a normal button. This PR keeps our current disabled style. Should we adopt the CAS one?"
+      title="Disabled buttons, fields and rows"
+      ask="This PR uses the CAS disabled colours for buttons, fields, checkboxes, radios and unavailable rows. We left out the CAS disabled border on buttons, because border/disabled is darker than a normal border and made disabled buttons look more active than enabled ones. Checkboxes and radios keep it. Is that right?"
     >
       <Side source="today" columns={2}>
         <ButtonSample
@@ -918,12 +952,12 @@ export const DesignQuestions = () => (
           border="#DFE5EA"
         />
       </Side>
-      <Side source="cas" columns={2}>
+      <Side source="pr" columns={2}>
         <ButtonSample
           name="Disabled button"
           text={cas('foreground/disabled')}
           background={cas('background/disabled')}
-          border={cas('border/disabled')}
+          border="transparent"
         />
         <ButtonSample
           name="Normal button, for comparison"
@@ -932,12 +966,20 @@ export const DesignQuestions = () => (
           border={cas('border/button/secondary/default')}
         />
       </Side>
+      <Side source="cas" columns={2}>
+        <ButtonSample
+          name="Disabled button with border/disabled"
+          text={cas('foreground/disabled')}
+          background={cas('background/disabled')}
+          border={cas('border/disabled')}
+        />
+      </Side>
     </Question>
 
     <Question
       number={6}
-      title="Links and main buttons (not in this PR)"
-      ask="Brand-coloured links and the white text on the main button are below the minimum for readable text in both Hubs, today and in CAS. This PR keeps today's colours. Should we adopt the CAS ones, or a darker green and blue?"
+      title="Links and main buttons"
+      ask="This PR uses the CAS brand colours: links are foreground/brand and the main button is background/button/primary. They are a little darker than today, but still below the minimum for readable text (links 3.78:1 in CRN and 4.38:1 in GP2; button text 3.69:1 and 3.65:1). Keep the CAS colours, or use the darker brand/800, which passes?"
     >
       <Side source="today" columns={4}>
         <Sample name="CRN link" text="#34A270">
@@ -953,7 +995,7 @@ export const DesignQuestions = () => (
           <b>Save</b>
         </Sample>
       </Side>
-      <Side source="cas" columns={4}>
+      <Side source="pr" columns={4}>
         <Sample
           name="CRN foreground/brand"
           text={cas('foreground/brand', 'crn')}
@@ -1008,7 +1050,7 @@ export const DesignQuestions = () => (
     <Question
       number={7}
       title="Highlight colour for hovered and selected items"
-      ask="Hovered items in dropdowns, select lists, sort menus and tags, and the selected side-menu item, used two light mints. This PR uses CAS roles: background/hover-brand for hover and background/active for the selected item, in each Hub's colour. But CAS's own dropdown and side-menu components in Figma use grey (background/hover) for hover. Which do you want for hover: the brand tint (this PR) or grey?"
+      ask="Hovered items in dropdowns, select lists, sort menus and tags, and the selected side-menu item and page number, now use CAS roles in each Hub's colour: background/hover-brand for hover and background/active for selected, with foreground/brand text. CAS's own Dropdown and Side Bar components use grey (background/hover) for hover and keep the brand tint for selected. Which do you want for hover? Note that foreground/brand on the hover tint is 3.18:1 in CRN, lower than today's 4.48:1."
     >
       <Side source="today" columns={2}>
         <Sample
@@ -1027,34 +1069,24 @@ export const DesignQuestions = () => (
         </Sample>
       </Side>
       <Side source="pr" columns={4}>
-        <Sample
-          name="CRN background/active"
-          text={colour.brand.crn[800]}
-          background={cas('background/active', 'crn')}
-        >
-          Projects
-        </Sample>
-        <Sample
-          name="CRN background/hover-brand"
-          text={colour.brand.crn[800]}
-          background={cas('background/hover-brand', 'crn')}
-        >
-          Not Requested
-        </Sample>
-        <Sample
-          name="GP2 background/active"
-          text={colour.brand.gp2[800]}
-          background={cas('background/active', 'gp2')}
-        >
-          Projects
-        </Sample>
-        <Sample
-          name="GP2 background/hover-brand"
-          text={colour.brand.gp2[800]}
-          background={cas('background/hover-brand', 'gp2')}
-        >
-          Not Requested
-        </Sample>
+        {(['crn', 'gp2'] as const).map((product) => (
+          <Pair key={product} product={product}>
+            <Sample
+              name={`${product.toUpperCase()} background/active`}
+              text={cas('foreground/brand', product)}
+              background={cas('background/active', product)}
+            >
+              Projects
+            </Sample>
+            <Sample
+              name={`${product.toUpperCase()} background/hover-brand`}
+              text={cas('foreground/brand', product)}
+              background={cas('background/hover-brand', product)}
+            >
+              Not Requested
+            </Sample>
+          </Pair>
+        ))}
       </Side>
       <Side source="cas" columns={2}>
         <Sample
@@ -1066,6 +1098,157 @@ export const DesignQuestions = () => (
         </Sample>
       </Side>
     </Question>
+
+    <Question
+      number={8}
+      title="Form controls"
+      ask="This PR follows the CAS Input, Checkbox, Radio and Toggle components: focus and hover borders are border/brand, a checked checkbox is background/hover-brand-inverse, a checked radio and an active toggle are background/brand-inverse. In CRN the colours barely change. In GP2 the two blues are swapped compared with CRN, so a checked checkbox (#0681B2) is lighter than a checked radio (#006A92). Is that intended?"
+    >
+      <Side source="today" columns={3}>
+        <NamedSwatch
+          name="brand/crn/500"
+          hex="#34A270"
+          note="focus border, checked checkbox and radio; GP2 radios were CRN green"
+        />
+      </Side>
+      <Side source="pr" columns={3}>
+        {(
+          [
+            ['border/brand', 'focus and hover border'],
+            ['background/hover-brand-inverse', 'checkbox checked'],
+            ['background/brand-inverse', 'radio checked, toggle on'],
+          ] as const
+        ).map(([name, use]) =>
+          (['crn', 'gp2'] as const).map((product) => (
+            <NamedSwatch
+              key={`${name}-${product}`}
+              name={`${product.toUpperCase()} ${name}`}
+              hex={cas(name, product)}
+              note={use}
+            />
+          )),
+        )}
+      </Side>
+    </Question>
+
+    <Question
+      number={9}
+      title="Tabs, pagination and dividers"
+      ask="This PR follows the CAS components for the selected tab (underline foreground/brand, brand/600 instead of brand/500) and the selected page (background/active with foreground/brand). Dividers stay border/tertiary (#E3E6E8), while the CAS Side Bar uses border/secondary (#C5CACE). Which divider colour do you want?"
+    >
+      <Side source="pr" columns={2}>
+        <Sample
+          name="Divider: border/tertiary"
+          text={cas('foreground/primary')}
+        >
+          <div style={{ borderTop: `1px solid ${cas('border/tertiary')}` }} />
+        </Sample>
+      </Side>
+      <Side source="cas" columns={2}>
+        <Sample
+          name="Divider: border/secondary"
+          text={cas('foreground/primary')}
+        >
+          <div style={{ borderTop: `1px solid ${cas('border/secondary')}` }} />
+        </Sample>
+      </Side>
+    </Question>
+
+    <Question
+      number={10}
+      title="Table stripes"
+      ask="Alternate table rows were #F6F9FB. CAS has no role for them and background/secondary (#FCFCFD) is invisible on white, so this PR uses the primitive neutral/50 (#FAFAFA). Should CAS add a row-alternate role, should stripes be background/tertiary (#EEF3F6), or should tables drop stripes?"
+    >
+      <Side source="today" columns={3}>
+        <NamedSwatch name="Table stripe" hex="#F6F9FB" />
+      </Side>
+      <Side source="pr" columns={3}>
+        <NamedSwatch name="neutral/50" hex={colour.neutral[50]} />
+      </Side>
+      <Side source="cas" columns={3}>
+        <NamedSwatch
+          name="background/tertiary"
+          hex={cas('background/tertiary')}
+        />
+      </Side>
+    </Question>
+
+    <Question
+      number={11}
+      title="Status colours on things that are not statuses"
+      ask="Two places now use a status colour because the old colour was mapped by meaning. The GP2 project Active stripe was the GP2 brand blue (#0C8DC3) and is now foreground/info (#1570EF). Green call-to-action cards were the brand mint and are now background/success with border/success. Should these be brand or status colours?"
+    >
+      <Side source="pr" columns={2}>
+        <Sample
+          name="CTA card: success"
+          text={cas('foreground/primary')}
+          background={cas('background/success')}
+        >
+          Get in touch
+        </Sample>
+        <Sample
+          name="GP2 Active stripe: foreground/info"
+          text={cas('foreground/info')}
+        >
+          Active
+        </Sample>
+      </Side>
+      <Side source="cas" columns={2}>
+        <Sample
+          name="CTA card: brand"
+          text={cas('foreground/primary')}
+          background={cas('background/brand')}
+        >
+          Get in touch
+        </Sample>
+        <Sample
+          name="GP2 Active stripe: foreground/brand"
+          text={cas('foreground/brand', 'gp2')}
+        >
+          Active
+        </Sample>
+      </Side>
+    </Question>
+
+    <Question
+      number={12}
+      title="Event date block"
+      ask="The date block on event cards uses background/brand. The CAS Event Card uses background/active for upcoming events and background/hover for past ones. Should we follow the Event Card?"
+    >
+      <Side source="pr" columns={3}>
+        <Sample
+          name="background/brand"
+          text={cas('foreground/primary')}
+          background={cas('background/brand')}
+        >
+          <b>12 MAR</b>
+        </Sample>
+      </Side>
+      <Side source="cas" columns={3}>
+        <Sample
+          name="upcoming: background/active"
+          text={cas('foreground/primary')}
+          background={cas('background/active')}
+        >
+          <b>12 MAR</b>
+        </Sample>
+        <Sample
+          name="past: background/hover"
+          text={cas('foreground/primary')}
+          background={cas('background/hover')}
+        >
+          <b>12 MAR</b>
+        </Sample>
+      </Side>
+    </Question>
+
+    <Section title="Fixes we ask of the CAS Figma file">
+      <ol style={{ paddingLeft: '20px', marginTop: 0 }}>
+        {figmaFixes.map((fix) => (
+          <li key={fix}>{fix}</li>
+        ))}
+      </ol>
+    </Section>
 
     <Section title="How to read the readability badges">
       <p style={{ marginTop: 0 }}>
