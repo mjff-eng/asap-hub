@@ -180,16 +180,28 @@ const removeGroupUser = (group: SpeakerGroup, userId: string): SpeakerGroup =>
     ? { ...group, users: group.users.filter((user) => user.id !== userId) }
     : { ...group, users: group.users.filter((user) => user.id !== userId) };
 
-const setTeamUserShared = (
-  group: SpeakerTeamGroup,
+const setGroupUserShared = (
+  group: SpeakerGroup,
   userId: string,
   shared: boolean,
-): SpeakerTeamGroup => ({
-  ...group,
-  users: group.users.map((user) =>
-    user.id === userId ? { ...user, preliminaryFindingsShared: shared } : user,
-  ),
-});
+): SpeakerGroup =>
+  group.variant === 'external'
+    ? {
+        ...group,
+        users: group.users.map((user) =>
+          user.id === userId
+            ? { ...user, preliminaryFindingsShared: shared }
+            : user,
+        ),
+      }
+    : {
+        ...group,
+        users: group.users.map((user) =>
+          user.id === userId
+            ? { ...user, preliminaryFindingsShared: shared }
+            : user,
+        ),
+      };
 
 const withoutGroupsAddedThisSession = (
   nextGroups: SpeakerGroup[],
@@ -408,8 +420,8 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   const toggleUserShared = (groupId: string, userId: string, shared: boolean) =>
     updateGroups((current) =>
       current.map((group) =>
-        group.id === groupId && group.variant === 'team'
-          ? setTeamUserShared(group, userId, shared)
+        group.id === groupId
+          ? setGroupUserShared(group, userId, shared)
           : group,
       ),
     );
@@ -490,10 +502,8 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       showCount={false}
       expanded={expandedIds.has(group.id)}
       onToggleExpanded={() => toggleExpanded(group.id)}
-      onToggleUserShared={
-        group.variant === 'team'
-          ? (userId, shared) => toggleUserShared(group.id, userId, shared)
-          : undefined
+      onToggleUserShared={(userId, shared) =>
+        toggleUserShared(group.id, userId, shared)
       }
       onRemoveUser={(userId) => removeUser(group.id, userId)}
       enabled={!isCancelling}
@@ -698,6 +708,9 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
                       isExternal
                       preliminaryFindingsShared={user.preliminaryFindingsShared}
                       showShared={isPastEvent}
+                      onToggleShared={(shared) =>
+                        toggleUserShared('external', user.id, shared)
+                      }
                       onRemove={() => removeUser('external', user.id)}
                       enabled={!isCancelling}
                     />
