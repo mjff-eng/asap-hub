@@ -1,4 +1,10 @@
-import { Display, Link, mail, Paragraph } from '@asap-hub/react-components';
+import {
+  Display,
+  Link,
+  mail,
+  MessageButtonLink,
+  Paragraph,
+} from '@asap-hub/react-components';
 
 const { mailToSupport, INVITE_SUPPORT_EMAIL } = mail;
 
@@ -21,9 +27,7 @@ const Welcome: React.FC<WelcomeProps> = ({ firstName, link }) => (
       Click ‘Create Account’ below to get started - we look forward to seeing
       you there!
     </Paragraph>
-    <Link buttonStyle primary href={link}>
-      Create account
-    </Link>
+    <MessageButtonLink href={link}>Create account</MessageButtonLink>
     <Paragraph>
       As with every new experience, you may have some questions and{' '}
       <Link

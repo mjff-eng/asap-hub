@@ -73,7 +73,11 @@ export * from './layout';
 export * from './routing';
 export * from './navigation';
 export * from './date';
-export { MessageLayout, WelcomeMessage } from './messages';
+export {
+  MessageButtonLink,
+  MessageLayout,
+  WelcomeMessage,
+} from './messages';
 export {
   Accordion,
   ArticlesList,

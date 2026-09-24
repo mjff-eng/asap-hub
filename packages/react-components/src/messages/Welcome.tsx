@@ -1,5 +1,6 @@
 import { Display, Paragraph, Link } from '../atoms';
 import { mailToSupport } from '../mail';
+import ButtonLink from './ButtonLink';
 
 type WelcomeProps = {
   readonly firstName: string;
@@ -29,9 +30,7 @@ const Welcome: React.FC<WelcomeProps> = ({ firstName, link }) => (
       Click ‘Create Account’ below to get started - we look forward to seeing
       you there!
     </Paragraph>
-    <Link buttonStyle primary href={link}>
-      Create account
-    </Link>
+    <ButtonLink href={link}>Create account</ButtonLink>
     <Paragraph>
       As with every new path, you may come across some questions and{' '}
       <Link href={mailToSupport()}>our team</Link> would be delighted to answer
