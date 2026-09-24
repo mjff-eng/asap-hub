@@ -837,11 +837,13 @@ describe('the NEW_EVENT_PAGE flag', () => {
       teamName: string,
       userId: string,
       speakerId = `es-${teamId}-${userId}`,
+      preliminaryDataShared = false,
     ): EventSpeaker => ({
       id: speakerId,
       team: { id: teamId, displayName: teamName },
       user: { id: userId, displayName: `User ${userId}` },
       role: 'Chair',
+      preliminaryDataShared,
     });
 
     beforeEach(() => {
@@ -855,11 +857,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
         endDate: pastEndDate,
         speakers: [
           teamSpeaker('t-alpha', 'Alpha', 'u1'),
-          teamSpeaker('t-zeta', 'Zeta', 'u2'),
-        ],
-        preliminaryDataShared: [
-          { team: { id: 't-alpha' }, shared: false },
-          { team: { id: 't-zeta' }, shared: true },
+          teamSpeaker('t-zeta', 'Zeta', 'u2', undefined, true),
         ],
       });
       const { findByText, getAllByRole } = render(<Event />, { wrapper });
@@ -932,7 +930,6 @@ describe('the NEW_EVENT_PAGE flag', () => {
         id,
         endDate: pastEndDate,
         speakers: [teamSpeaker('t1', 'Team One', 'u1', 'es-1')],
-        preliminaryDataShared: [{ team: { id: 't1' }, shared: false }],
       });
       mockPatchEvent.mockResolvedValue({
         ...createEventResponse(),

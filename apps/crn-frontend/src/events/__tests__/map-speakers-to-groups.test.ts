@@ -3,13 +3,9 @@ import { createEventResponse } from '@asap-hub/fixtures';
 
 import { mapSpeakersToGroups } from '../map-speakers-to-groups';
 
-const makeEvent = (
-  speakers: EventSpeaker[],
-  preliminaryDataShared?: EventResponse['preliminaryDataShared'],
-): EventResponse => ({
+const makeEvent = (speakers: EventSpeaker[]): EventResponse => ({
   ...createEventResponse(),
   speakers,
-  ...(preliminaryDataShared ? { preliminaryDataShared } : {}),
 });
 
 const teamSpeaker = (
@@ -23,6 +19,7 @@ const teamSpeaker = (
     inactiveSince: string;
     displayName: string;
     speakerId: string;
+    preliminaryDataShared: boolean;
   }> = {},
 ): EventSpeaker => ({
   id: extra.speakerId ?? `es-${teamId}-${userId}-${role}`,
@@ -38,6 +35,7 @@ const teamSpeaker = (
     alumniSinceDate: extra.alumniSinceDate,
   },
   role,
+  preliminaryDataShared: extra.preliminaryDataShared,
 });
 
 describe('mapSpeakersToGroups', () => {
@@ -113,18 +111,17 @@ describe('mapSpeakersToGroups', () => {
 
   it('attaches preliminaryFindingsShared per team and orders shared teams first then alphabetically', () => {
     const groups = mapSpeakersToGroups(
-      makeEvent(
-        [
-          teamSpeaker('t-charlie', 'Charlie', 'u1', 'Chair'),
-          teamSpeaker('t-alpha', 'Alpha', 'u2', 'Chair'),
-          teamSpeaker('t-bravo', 'Bravo', 'u3', 'Chair'),
-        ],
-        [
-          { team: { id: 't-charlie' }, shared: true },
-          { team: { id: 't-alpha' }, shared: false },
-          { team: { id: 't-bravo' }, shared: true },
-        ],
-      ),
+      makeEvent([
+        teamSpeaker('t-charlie', 'Charlie', 'u1', 'Chair', {
+          preliminaryDataShared: true,
+        }),
+        teamSpeaker('t-alpha', 'Alpha', 'u2', 'Chair', {
+          preliminaryDataShared: false,
+        }),
+        teamSpeaker('t-bravo', 'Bravo', 'u3', 'Chair', {
+          preliminaryDataShared: true,
+        }),
+      ]),
     );
 
     expect(groups.map((group) => group.id)).toEqual([
@@ -137,6 +134,22 @@ describe('mapSpeakersToGroups', () => {
       true,
       false,
     ]);
+  });
+
+  it('marks a team as shared when any of its speakers shared preliminary data', () => {
+    const groups = mapSpeakersToGroups(
+      makeEvent([
+        teamSpeaker('t1', 'Alpha', 'u1', 'Chair', {
+          preliminaryDataShared: false,
+        }),
+        teamSpeaker('t1', 'Alpha', 'u2', 'Speaker', {
+          preliminaryDataShared: true,
+        }),
+      ]),
+    );
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]!.preliminaryFindingsShared).toBe(true);
   });
 
   it('collects external speakers into a single trailing external group', () => {
