@@ -1,7 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import TextArea from '../TextArea';
-import { colour, error500, neutral300, colorFromHex } from '../../colors';
+import { colour, colorFromHex } from '../../colors';
 
 it('renders a text area, passing through props', () => {
   const { getByRole } = render(<TextArea value="val" />);
@@ -21,14 +21,16 @@ it('emits value changes', async () => {
 it('renders a disabled text area', () => {
   const { getByRole, rerender } = render(<TextArea value="val" />);
   expect((getByRole('textbox') as HTMLInputElement).disabled).toBeFalsy();
-  expect(getComputedStyle(getByRole('textbox')).backgroundColor).not.toBe(
-    neutral300.rgb,
+  expect(getByRole('textbox')).not.toHaveStyleRule(
+    'background-color',
+    colour.background.tertiary,
   );
 
   rerender(<TextArea value="val" enabled={false} />);
   expect((getByRole('textbox') as HTMLInputElement).disabled).toBe(true);
-  expect(getComputedStyle(getByRole('textbox')).backgroundColor).toBe(
-    neutral300.rgb,
+  expect(getByRole('textbox')).toHaveStyleRule(
+    'background-color',
+    colour.background.tertiary,
   );
 });
 
@@ -46,7 +48,7 @@ describe('when invalid', () => {
     });
 
     const errorElement = await findByText(/fill/i);
-    expect(getComputedStyle(errorElement).color).toBe(error500.rgb);
+    expect(errorElement).toHaveStyleRule('color', colour.foreground.error);
   });
 
   it('shows a custom validation message', async () => {
@@ -57,8 +59,9 @@ describe('when invalid', () => {
       fireEvent.blur(getByRole('textbox'));
     });
     expect(await findByText('Wrong!')).toBeVisible();
-    expect(getComputedStyle(await findByText('Wrong!')).color).toBe(
-      error500.rgb,
+    expect(await findByText('Wrong!')).toHaveStyleRule(
+      'color',
+      colour.foreground.error,
     );
   });
 });
@@ -86,7 +89,7 @@ describe('with a max length', () => {
         <TextArea value="val" maxLength={'val'.length} />,
       );
       const indicator = getByText(String('val'.length), { exact: false });
-      expect(getComputedStyle(indicator).color).toBe(error500.rgb);
+      expect(indicator).toHaveStyleRule('color', colour.foreground.error);
     });
 
     it('states that it is full', () => {

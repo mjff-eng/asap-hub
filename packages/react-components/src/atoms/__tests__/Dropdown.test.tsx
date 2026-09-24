@@ -5,14 +5,7 @@ import { Theme } from '@emotion/react';
 import { matchers } from '@emotion/jest';
 import { GroupBase, SingleValueProps } from 'react-select';
 
-import {
-  colour,
-  error500,
-  neutral900,
-  neutral300,
-  neutral700,
-  colorFromHex,
-} from '../../colors';
+import { colour, neutral900, colorFromHex } from '../../colors';
 import Dropdown from '../Dropdown';
 import { Option, reactSelectStyles } from '../../select';
 
@@ -182,8 +175,8 @@ it('gets greyed out when disabled', () => {
     findParentWithStyle(screen.getByText('Heathrow'), 'color')?.color,
   ).toBe(neutral900.rgb);
   expect(
-    findParentWithStyle(screen.getByText('Heathrow'), 'background')?.background,
-  ).toBe(neutral300.rgb);
+    findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
+  ).toHaveStyleRule('background-color', colour.background.tertiary);
   expect(screen.getByRole('combobox', { hidden: true })).toBeDisabled();
 
   rerender(
@@ -193,8 +186,8 @@ it('gets greyed out when disabled', () => {
     findParentWithStyle(screen.getByText('Heathrow'), 'color')?.color,
   ).not.toBe(neutral900.rgb);
   expect(
-    findParentWithStyle(screen.getByText('Heathrow'), 'background')?.background,
-  ).not.toBe(neutral300.rgb);
+    findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
+  ).not.toHaveStyleRule('background-color', colour.background.tertiary);
   expect(screen.getByRole('combobox', { hidden: true })).not.toBeDisabled();
 });
 
@@ -299,14 +292,15 @@ it('shows the field in red when required field not filled', async () => {
     />,
   );
   const input = screen.getByRole('combobox', { hidden: false });
-  expect(findParentWithStyle(input, 'borderColor')?.borderColor).not.toBe(
-    error500.rgb,
-  );
+  expect(
+    findParentWithStyle(input, 'borderStyle')?.element,
+  ).not.toHaveStyleRule('border-color', colour.border.error);
 
   await userEvent.click(input);
   await userEvent.tab();
-  expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-    error500.rgb,
+  expect(findParentWithStyle(input, 'borderStyle')?.element).toHaveStyleRule(
+    'border-color',
+    colour.border.error,
   );
 
   await userEvent.click(input);
@@ -322,7 +316,9 @@ it('shows the field in red when required field not filled', async () => {
       required={false}
     />,
   );
-  expect(findParentWithStyle(input, 'color')?.color).not.toBe(error500.rgb);
+  expect(
+    findParentWithStyle(input, 'borderStyle')?.element,
+  ).not.toHaveStyleRule('color', colour.foreground.error);
 });
 
 it('shows an error message when required field not filled', async () => {
@@ -505,7 +501,7 @@ it('applies neutral700 color for singleValue when selected value is empty string
     baseProvided,
     createSingleValueProps(''),
   );
-  expect(styleResult?.color).toBe(neutral700.rgb);
+  expect(styleResult?.color).toBe(colour.neutral[200]);
 });
 
 it('applies unset color for singleValue when selected value is not empty string', () => {

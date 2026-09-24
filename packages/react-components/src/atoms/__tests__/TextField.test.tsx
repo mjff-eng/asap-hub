@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { neutral900, neutral300 } from '../../colors';
+import { colour, neutral900 } from '../../colors';
 import { indicatorPadding } from '../../form';
 import { perRem } from '../../pixels';
 import TextField from '../TextField';
@@ -26,14 +26,16 @@ it('renders a disabled input field', () => {
   expect(
     (screen.getByRole('textbox') as HTMLInputElement).disabled,
   ).toBeFalsy();
-  expect(
-    getComputedStyle(screen.getByRole('textbox')).backgroundColor,
-  ).not.toBe(neutral300.rgb);
+  expect(screen.getByRole('textbox')).not.toHaveStyleRule(
+    'background-color',
+    colour.background.tertiary,
+  );
 
   rerender(<TextField value="" enabled={false} />);
   expect((screen.getByRole('textbox') as HTMLInputElement).disabled).toBe(true);
-  expect(getComputedStyle(screen.getByRole('textbox')).backgroundColor).toBe(
-    neutral300.rgb,
+  expect(screen.getByRole('textbox')).toHaveStyleRule(
+    'background-color',
+    colour.background.tertiary,
   );
 });
 

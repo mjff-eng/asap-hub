@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { StaticRouter } from 'react-router';
 
-import { neutral500 } from '../../colors';
+import { colour } from '../../colors';
 import { rem } from '../../pixels';
 import EventAttendance, {
   compareAttendanceTeams,
@@ -277,7 +277,7 @@ describe('EventAttendance', () => {
   });
 
   it('divides a row from whatever follows it, and nothing else', () => {
-    const divider = `1px solid ${neutral500.rgb}`;
+    const divider = `1px solid ${colour.border.tertiary}`;
     const { getByText, rerender } = renderCard();
 
     expect(getByText('Team Alpha').closest('tr')).toHaveStyleRule(

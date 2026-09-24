@@ -6,7 +6,7 @@ import {
 import fc from 'fast-check';
 
 import PageControls from '../PageControls';
-import { colour, neutral700, colorFromHex } from '../../colors';
+import { colour, colorFromHex } from '../../colors';
 
 mockConsoleError();
 
@@ -65,11 +65,8 @@ describe('the arrow controls', () => {
       />,
     );
     expect(
-      findParentWithStyle(getByTitle(/first page/i), 'stroke')?.stroke?.replace(
-        / /g,
-        '',
-      ),
-    ).toBe(neutral700.rgb.replace(/ /g, ''));
+      findParentWithStyle(getByTitle(/first page/i), 'stroke')?.stroke,
+    ).toBe(colour.neutral[200]);
     expect(getByTitle(/first page/i).closest('a')).not.toHaveAttribute('href');
   });
 
@@ -101,11 +98,8 @@ describe('the arrow controls', () => {
       />,
     );
     expect(
-      findParentWithStyle(
-        getByTitle(/previous page/i),
-        'stroke',
-      )?.stroke?.replace(/ /g, ''),
-    ).toBe(neutral700.rgb.replace(/ /g, ''));
+      findParentWithStyle(getByTitle(/previous page/i), 'stroke')?.stroke,
+    ).toBe(colour.neutral[200]);
     expect(getByTitle(/previous page/i).closest('a')).not.toHaveAttribute(
       'href',
     );
@@ -136,11 +130,8 @@ describe('the arrow controls', () => {
       />,
     );
     expect(
-      findParentWithStyle(getByTitle(/next page/i), 'stroke')?.stroke?.replace(
-        / /g,
-        '',
-      ),
-    ).toBe(neutral700.rgb.replace(/ /g, ''));
+      findParentWithStyle(getByTitle(/next page/i), 'stroke')?.stroke,
+    ).toBe(colour.neutral[200]);
     expect(getByTitle(/next page/i).closest('a')).not.toHaveAttribute('href');
   });
 
@@ -169,11 +160,8 @@ describe('the arrow controls', () => {
       />,
     );
     expect(
-      findParentWithStyle(getByTitle(/last page/i), 'stroke')?.stroke?.replace(
-        / /g,
-        '',
-      ),
-    ).toBe(neutral700.rgb.replace(/ /g, ''));
+      findParentWithStyle(getByTitle(/last page/i), 'stroke')?.stroke,
+    ).toBe(colour.neutral[200]);
     expect(getByTitle(/last page/i).closest('a')).not.toHaveAttribute('href');
   });
 });
