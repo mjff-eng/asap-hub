@@ -11,11 +11,7 @@ const containerStyles = css({
   display: 'flex',
 });
 const borderWidth = 1;
-const styles = (
-  withLabel: boolean,
-  noMargin: boolean,
-  full: boolean,
-) =>
+const styles = (withLabel: boolean, noMargin: boolean, full: boolean) =>
   css({
     display: 'flex',
     alignItems: 'center',
