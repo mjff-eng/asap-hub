@@ -59,7 +59,7 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     maxWidth: rem(formTargetWidth),
     top,
     left,
-    backgroundColor: colour.neutral[0].rgb,
+    backgroundColor: colour.neutral[0],
     border: `1px solid ${neutral500.rgb}`,
     boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
     flexDirection: 'column',

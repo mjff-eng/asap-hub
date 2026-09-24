@@ -12,6 +12,7 @@ import {
   neutral300,
   neutral500,
   neutral700,
+  colorFromHex,
 } from './colors';
 import { formTargetWidth, mobileScreen, rem } from './pixels';
 
@@ -131,17 +132,17 @@ const boxShadow = (opaqueColor: OpaqueColor | TransparentColor) =>
   `0px 2px 4px -2px ${opaqueColor.rgba}`;
 
 const primaryStyles = ({
-  primary500 = colour.brand.crn[500],
-  primary900 = colour.brand.crn[800],
+  primary500 = colorFromHex(colour.brand.crn[500]),
+  primary900 = colorFromHex(colour.brand.crn[800]),
 }: Theme['colors'] = {}) =>
   css({
-    color: colour.neutral[0].rgb,
+    color: colour.neutral[0],
 
     backgroundColor: primary500.rgba,
     borderColor: primary900.rgba,
     boxShadow: boxShadow(primary900),
     svg: {
-      stroke: colour.neutral[0].rgb,
+      stroke: colour.neutral[0],
     },
     ':hover, :focus': {
       backgroundColor: primary900.rgba,
@@ -153,11 +154,11 @@ const primaryStyles = ({
       backgroundColor: primary900.rgba,
       borderColor: primary900.rgba,
       boxShadow: 'none',
-      color: colour.neutral[0].rgb,
+      color: colour.neutral[0],
     },
   });
 export const secondaryStyles = css({
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   borderColor: neutral500.rgb,
   boxShadow: boxShadow(neutral500),
 
@@ -174,7 +175,7 @@ export const secondaryStyles = css({
 
 export const warningStyles = css({
   backgroundColor: error500.rgb,
-  color: colour.neutral[0].rgb,
+  color: colour.neutral[0],
   borderColor: error900.rgb,
   boxShadow: boxShadow(neutral500),
 
@@ -200,7 +201,7 @@ const disabledStyles = css({
 
 export const activePrimaryStyles = ({
   primary100 = activePrimaryBackgroundColorDefault,
-  primary900 = colour.brand.crn[800],
+  primary900 = colorFromHex(colour.brand.crn[800]),
 }: Theme['colors'] = {}) =>
   css({
     backgroundColor: primary100.rgba,
@@ -218,7 +219,7 @@ export const activePrimaryStyles = ({
     },
   });
 export const activeSecondaryStyles = css({
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   color: charcoal.rgb,
   borderColor: charcoal.rgb,
 
@@ -226,7 +227,7 @@ export const activeSecondaryStyles = css({
     stroke: charcoal.rgb,
   },
   ':hover, :focus': {
-    backgroundColor: colour.neutral[0].rgb,
+    backgroundColor: colour.neutral[0],
     color: charcoal.rgb,
     borderColor: charcoal.rgb,
   },

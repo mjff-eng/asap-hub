@@ -78,7 +78,7 @@ const lastRowNoBorder = css({
 const projectNameStyles = css({
   fontSize: rem(17),
   fontWeight: '500',
-  color: colour.brand.crn[500].rgb,
+  color: colour.brand.crn[500],
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',
@@ -98,7 +98,7 @@ const showMoreButtonStyles = css({
   justifyContent: 'center',
   width: '100%',
   fontWeight: 'normal',
-  color: colour.brand.crn[500].rgba,
+  color: colour.brand.crn[500],
   borderTop: `1px solid ${neutral500.rgb}`,
   marginTop: rem(16),
   paddingTop: rem(16),
@@ -161,7 +161,7 @@ const mobileFieldValue = css({
 const mobileProjectNameValue = css({
   fontSize: rem(17),
   fontWeight: '500',
-  color: colour.brand.crn[500].rgb,
+  color: colour.brand.crn[500],
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',

@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { css, SerializedStyles, Theme } from '@emotion/react';
 
 import { getButtonChildren, getButtonStyles } from '../button';
-import { colour } from '../colors';
+import { colour, colorFromHex } from '../colors';
 import { defaultThemeVariant, ThemeVariant } from '../theme';
 import Ellipsis from './Ellipsis';
 import Anchor from './Anchor';
@@ -21,15 +21,15 @@ export const styles = css({
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    color: colour.brand.crn[500].rgb,
+    color: colour.brand.crn[500],
   }),
   grey: css({
-    color: colour.brand.crn[500].rgb,
-    ':active': { color: colour.brand.crn[800].rgb },
+    color: colour.brand.crn[500],
+    ':active': { color: colour.brand.crn[800] },
   }),
   dark: css({
-    color: colour.neutral[0].rgb,
-    ':active': { color: colour.neutral[0].rgb },
+    color: colour.neutral[0],
+    ':active': { color: colour.neutral[0] },
   }),
 };
 
@@ -44,8 +44,8 @@ export const getLinkColors = (
 const iconThemeStyles: (
   colors: Theme['colors'],
 ) => Record<ThemeVariant, SerializedStyles> = ({
-  primary500 = colour.brand.crn[500],
-  primary900 = colour.brand.crn[800],
+  primary500 = colorFromHex(colour.brand.crn[500]),
+  primary900 = colorFromHex(colour.brand.crn[800]),
 }: Theme['colors'] = {}) => ({
   light: css({
     svg: {
@@ -63,8 +63,8 @@ const iconThemeStyles: (
     ':active': { svg: { stroke: primary900.rgba } },
   }),
   dark: css({
-    svg: { stroke: colour.neutral[0].rgb },
-    ':active': { svg: { stroke: colour.neutral[0].rgb } },
+    svg: { stroke: colour.neutral[0] },
+    ':active': { svg: { stroke: colour.neutral[0] } },
   }),
 });
 

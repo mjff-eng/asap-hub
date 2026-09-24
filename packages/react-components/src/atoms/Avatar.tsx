@@ -85,11 +85,11 @@ const textStyle = css(fontStyles, headlineStyles[3], {
 });
 
 const placeholderColorStyle = css({
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   fill: neutral900.rgb,
 });
 const colorStyles = [
-  css({ backgroundColor: success100.rgb, fill: colour.brand.crn[800].rgb }),
+  css({ backgroundColor: success100.rgb, fill: colour.brand.crn[800] }),
   css({ backgroundColor: warning100.rgb, fill: warning500.rgb }),
   css({ backgroundColor: info100.rgb, fill: info900.rgb }),
   css({ backgroundColor: azure.rgb, fill: space.rgb }),

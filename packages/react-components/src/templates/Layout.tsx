@@ -180,7 +180,7 @@ export const userButtonStyles = css({
 });
 
 export const menuStyles = css({
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   gridRow: `main-menu`,
   gridColumnStart: '1',
   overflowY: 'auto',
@@ -277,7 +277,7 @@ const SearchIconStyles = css({
   height: '100%',
 });
 const userMenuStyles = css({
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   gridArea: 'user-menu',
   flexGrow: 1,
   [drawerQuery]: {

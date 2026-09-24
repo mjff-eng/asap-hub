@@ -88,15 +88,15 @@ const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    stroke: colour.brand.crn[500].rgb,
+    stroke: colour.brand.crn[500],
   }),
   grey: css({
-    stroke: colour.brand.crn[500].rgb,
-    ':active': { stroke: colour.brand.crn[800].rgb },
+    stroke: colour.brand.crn[500],
+    ':active': { stroke: colour.brand.crn[800] },
   }),
   dark: css({
-    stroke: colour.neutral[0].rgb,
-    ':active': { stroke: colour.neutral[0].rgb },
+    stroke: colour.neutral[0],
+    ':active': { stroke: colour.neutral[0] },
   }),
 };
 

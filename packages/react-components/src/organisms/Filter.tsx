@@ -37,7 +37,7 @@ const dropdownContainer = css({
   top: rem(8),
   zIndex: 1000,
 
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   border: `1px solid ${neutral500.rgb}`,
   boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
 

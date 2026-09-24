@@ -17,7 +17,7 @@ const styles = css({
 
 const activeStyles = css({
   paddingBottom: rem(12 - 4),
-  borderBottom: `solid ${rem(4)} ${colour.brand.crn[500].rgb}`,
+  borderBottom: `solid ${rem(4)} ${colour.brand.crn[500]}`,
 
   color: charcoal.rgb,
   cursor: 'default',

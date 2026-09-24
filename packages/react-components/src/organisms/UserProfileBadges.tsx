@@ -60,7 +60,7 @@ const showMoreButtonStyles = css({
   justifyContent: 'center',
   width: '100%',
   fontWeight: 'normal',
-  color: colour.brand.crn[500].rgba,
+  color: colour.brand.crn[500],
   borderTop: `1px solid ${neutral500.rgb}`,
   marginTop: rem(32),
   paddingTop: rem(16),

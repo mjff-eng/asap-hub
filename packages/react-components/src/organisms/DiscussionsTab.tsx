@@ -32,7 +32,7 @@ const showMoreButtonStyles = css({
   justifyContent: 'center',
   width: '100%',
   fontWeight: 'normal',
-  color: colour.brand.crn[500].rgba,
+  color: colour.brand.crn[500],
   paddingTop: rem(24),
   paddingBottom: rem(24),
 

@@ -96,7 +96,7 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     left,
     zIndex: 1,
     minWidth: rem(160),
-    backgroundColor: colour.neutral[0].rgb,
+    backgroundColor: colour.neutral[0],
     border: `1px solid ${neutral500.rgb}`,
     boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
     padding: `${rem(8)} 0`,

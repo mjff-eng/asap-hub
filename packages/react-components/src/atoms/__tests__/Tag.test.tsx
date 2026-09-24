@@ -8,6 +8,7 @@ import {
   success100,
   neutral300,
   neutral500,
+  colorFromHex,
 } from '../../colors';
 
 it('renders a tag with content', () => {
@@ -19,7 +20,7 @@ it('renders a white tag with a success100 background when highlighted', () => {
   const { getByText, rerender } = render(<Tag>Text</Tag>);
   expect(
     findParentWithStyle(getByText('Text'), 'backgroundColor')?.backgroundColor,
-  ).toBe(colour.neutral[0].rgb);
+  ).toBe(colorFromHex(colour.neutral[0]).rgb);
 
   rerender(<Tag highlight>Text</Tag>);
   expect(
@@ -33,7 +34,7 @@ it('renders a tag with disabled styles when disabled', () => {
     findParentWithStyle(getByText('Text'), prop);
 
   expect(getParentStyle('backgroundColor')?.backgroundColor).toBe(
-    colour.neutral[0].rgb,
+    colorFromHex(colour.neutral[0]).rgb,
   );
 
   rerender(<Tag enabled={false}>Text</Tag>);

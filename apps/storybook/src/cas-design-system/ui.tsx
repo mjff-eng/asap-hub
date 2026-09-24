@@ -82,7 +82,7 @@ export const Swatch = ({
       height: `${size}px`,
       borderRadius: '6px',
       border: `1px solid ${colour.border.tertiary}`,
-      background: `linear-gradient(${background}, ${background}), repeating-conic-gradient(${colour.neutral[100].hex} 0% 25%, ${colour.neutral[0].hex} 0% 50%) 0 0 / 10px 10px`,
+      background: `linear-gradient(${background}, ${background}), repeating-conic-gradient(${colour.neutral[100]} 0% 25%, ${colour.neutral[0]} 0% 50%) 0 0 / 10px 10px`,
     }}
   />
 );

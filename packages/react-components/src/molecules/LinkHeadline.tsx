@@ -16,7 +16,7 @@ import { headlineStyles } from '../text';
 export const hover = (colors: Theme['colors']): SerializedStyles =>
   css({
     ':hover': {
-      color: colors?.primary500?.rgba || colour.brand.crn[500].rgb,
+      color: colors?.primary500?.rgba || colour.brand.crn[500],
     },
   });
 
