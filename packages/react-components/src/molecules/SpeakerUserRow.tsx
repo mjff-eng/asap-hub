@@ -2,14 +2,21 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Avatar, Button, Link, Pill, SpeakerRoleBadge, Switch } from '../atoms';
-import { lead, neutral1000, silver, success100, success500 } from '../colors';
+import {
+  lead,
+  neutral1000,
+  silver,
+  steel,
+  success100,
+  success500,
+} from '../colors';
 import {
   alumniBadgeIcon,
   binIcon,
-  invalidTickIcon,
   tickInCircleIcon,
   userPlaceholderIcon,
 } from '../icons';
+import { InvalidTickIcon } from '../icons/invalid-tick-icon';
 import {
   deleteButtonStyles,
   statusIconStyles,
@@ -157,7 +164,7 @@ const alumniStyles = css({
   alignItems: 'center',
 });
 
-export const findingsIcon = (shared: boolean) => (
+export const findingsIcon = (shared: boolean, crossColor?: string) => (
   <span
     css={statusIconStyles}
     role="img"
@@ -165,7 +172,7 @@ export const findingsIcon = (shared: boolean) => (
       shared ? 'Shared preliminary findings' : 'No preliminary findings'
     }
   >
-    {shared ? tickInCircleIcon : invalidTickIcon}
+    {shared ? tickInCircleIcon : <InvalidTickIcon color={crossColor} />}
   </span>
 );
 
@@ -239,7 +246,7 @@ const SpeakerUserRow: React.FC<SpeakerUserRowProps> = ({
                   onClick={() => onToggleShared(!preliminaryFindingsShared)}
                 />
               ) : (
-                findingsIcon(preliminaryFindingsShared)
+                findingsIcon(preliminaryFindingsShared, steel.rgb)
               )}
             </span>
           )}
