@@ -853,10 +853,10 @@ export const DesignQuestions = () => (
     >
       <Side source="today" columns={4}>
         <Sample name="CRN link" text="#34A270">
-          <u>Read the guidelines</u>
+          <u>Link example</u>
         </Sample>
         <Sample name="GP2 link" text="#0C8DC3">
-          <u>Read the guidelines</u>
+          <u>Link example</u>
         </Sample>
         <Sample name="CRN main button" text="#FFFFFF" background="#34A270">
           <b>Save</b>
@@ -870,13 +870,13 @@ export const DesignQuestions = () => (
           name="CRN foreground/brand"
           text={cas('foreground/brand', 'crn')}
         >
-          <u>Read the guidelines</u>
+          <u>Link example</u>
         </Sample>
         <Sample
           name="GP2 foreground/brand"
           text={cas('foreground/brand', 'gp2')}
         >
-          <u>Read the guidelines</u>
+          <u>Link example</u>
         </Sample>
         <Sample
           name="CRN background/button/primary/default"
@@ -895,10 +895,10 @@ export const DesignQuestions = () => (
       </Side>
       <Side source="option" columns={4}>
         <Sample name="brand/crn/800" text={colour.brand.crn[800]}>
-          <u>Read the guidelines</u>
+          <u>Link example</u>
         </Sample>
         <Sample name="brand/gp2/800" text={colour.brand.gp2[800]}>
-          <u>Read the guidelines</u>
+          <u>Link example</u>
         </Sample>
         <Sample
           name="brand/crn/800 (the CAS hover colour)"
