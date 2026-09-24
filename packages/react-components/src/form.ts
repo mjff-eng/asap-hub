@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { colour, error500, neutral500 } from './colors';
+import { colour } from './colors';
 import { lineHeight, rem } from './pixels';
 import { themes } from './theme';
 
@@ -37,7 +37,7 @@ export const styles = {
 
   borderStyle: 'solid',
   borderWidth: rem(borderWidth),
-  borderColor: neutral500.rgb,
+  borderColor: colour.border.tertiary,
   ':focus': {
     borderColor: colour.brand.crn[500],
   },
@@ -49,8 +49,8 @@ export const validationMessageStyles = {
   },
   whiteSpace: 'pre-wrap',
   paddingTop: rem(16),
-  color: error500.rgb,
-  borderColor: error500.rgb,
+  color: colour.foreground.error,
+  borderColor: colour.border.error,
 } as const;
 
 type ValidationTarget =

@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
 import { Card, Headline2, Headline3 } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 import { ExternalLink } from '../molecules';
 
 const orderList = css({
@@ -11,7 +11,7 @@ const orderList = css({
   paddingLeft: 0,
   marginBottom: 0,
   '&> li + li': {
-    borderTop: `1px solid ${neutral500.rgb}`,
+    borderTop: `1px solid ${colour.border.tertiary}`,
     marginTop: rem(12),
     paddingTop: rem(6),
     [`@media (min-width: ${tabletScreen.min}px)`]: {

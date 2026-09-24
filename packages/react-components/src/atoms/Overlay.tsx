@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 
 const buttonResetStyles = css({
   padding: 0,
@@ -10,7 +10,7 @@ const buttonResetStyles = css({
 const styles = css({
   width: '100%',
   height: '100%',
-  backgroundColor: charcoal.rgb,
+  backgroundColor: colour.neutral[900],
 
   visibility: 'hidden',
   opacity: 0,

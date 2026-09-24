@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 
-import { charcoal } from '../colors';
+import { colour, colorFromHex } from '../colors';
 import type { OpaqueColor } from '../colors';
 
 type ExternalLinkIconProps = {
@@ -10,7 +10,7 @@ type ExternalLinkIconProps = {
 
 const ExternalLinkIcon: React.FC<ExternalLinkIconProps> = ({
   size = 24,
-  color = charcoal,
+  color = colorFromHex(colour.neutral[900]),
 }) => (
   <svg
     width={size}

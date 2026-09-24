@@ -2,7 +2,7 @@ import { useState, ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 import { Tooltip } from '../atoms';
-import { neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { rem } from '../pixels';
 
 const buttonStyles = css({
@@ -26,7 +26,7 @@ const counterStyle = css({
   marginLeft: rem(9),
   textAlign: 'center',
   minWidth: rem(24),
-  border: `1px solid ${neutral500.rgb}`,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: '100%',
   fontSize: '14px',
   fontWeight: 'bold',

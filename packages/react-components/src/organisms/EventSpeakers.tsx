@@ -11,7 +11,7 @@ import {
   Link,
   Paragraph,
 } from '../atoms';
-import { neutral1000, neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import {
   chevronDownIcon,
   chevronUpIcon,
@@ -84,7 +84,7 @@ const shortFindingsLabel = css({
 const teamCellStyles = css({ paddingRight: rem(24) });
 
 const teamGroupStyles = css({
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   '&:last-of-type': {
     borderBottom: 'none',
   },
@@ -366,7 +366,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
                 onClick={onEdit}
                 overrideStyles={editIconButtonStyles}
               >
-                <PencilIcon color={neutral1000.rgb} />
+                <PencilIcon color={colour.neutral[900]} />
               </Button>
             )}
           </div>

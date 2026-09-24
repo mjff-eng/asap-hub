@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { Card } from '../atoms';
 import { ProjectOutputBody } from '../molecules';
 import type { ProjectOutput } from '../molecules';
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 import { paddingStyles } from '../card';
 import AlgoliaHit from '../atoms/AlgoliaHit';
 import { rem } from '../pixels';
@@ -15,7 +15,7 @@ const containerStyles = css({
 });
 
 const itemStyles = css({
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   display: 'grid',
   rowGap: rem(12),
   '&:last-of-type': {

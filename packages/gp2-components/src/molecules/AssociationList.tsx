@@ -7,7 +7,7 @@ import {
   Link,
   pixels,
   neutral900,
-  neutral300,
+  colour,
 } from '@asap-hub/react-components';
 import { workingGroupIcon, projectIcon } from '../icons';
 
@@ -24,7 +24,7 @@ const inlineContainerStyles = css({
 });
 
 const itemStyles = css({
-  borderBottom: `1px solid ${neutral300.rgb}`,
+  borderBottom: `1px solid ${colour.general.blue.cerulean[25]}`,
   paddingBottom: rem(24),
   paddingTop: rem(24),
   color: neutral900.rgb,

@@ -49,8 +49,8 @@ export const accents: Record<AccentVariant, CSSObject> = {
   },
   warning: {
     backgroundColor: colors.warning100.rgb,
-    color: colors.warning500.rgb,
-    borderColor: colors.warning900.rgb,
+    color: colors.colour.foreground.warning,
+    borderColor: colors.colour.utilitarian.orange[700],
   },
   information: {
     backgroundColor: colors.information100.rgb,

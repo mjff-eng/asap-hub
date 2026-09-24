@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { Paragraph, PillSelector } from '../atoms';
 import { validationMessageStyles } from '../form';
-import { neutral900, error100, neutral300, neutral500 } from '../colors';
+import { neutral900 } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { colors } from '..';
 
@@ -32,14 +32,16 @@ const descriptionStyles = css({
 const containerStyles = (hasError: boolean, enabled: boolean) =>
   css({
     border: '1px solid',
-    borderColor: hasError ? colors.error500.rgba : neutral500.rgba,
+    borderColor: hasError
+      ? colors.colour.border.error
+      : colors.colour.border.tertiary,
     padding: `${rem(3)} ${rem(9)}`,
 
     backgroundColor: enabled
       ? hasError
-        ? error100.rgba
+        ? colors.colour.background.error
         : '#fff'
-      : neutral300.rgba,
+      : colors.colour.background.tertiary,
   });
 
 type LabeledPillSelectorProps = ComponentProps<typeof PillSelector> & {

@@ -5,7 +5,7 @@ import { rem } from '../pixels';
 import { ResultList, EventCard } from '../organisms';
 import AlgoliaHit from '../atoms/AlgoliaHit';
 import { EventIcon } from '../icons';
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 
 const containerStyles = css({
   display: 'grid',
@@ -22,7 +22,7 @@ const EventsListPage: FC<EventsListProps> = ({
   ...props
 }) => (
   <div css={containerStyles}>
-    <ResultList icon={<EventIcon color={charcoal.rgb} />} {...props}>
+    <ResultList icon={<EventIcon color={colour.neutral[900]} />} {...props}>
       {events.map(({ ...event }, index) => (
         <AlgoliaHit
           key={event.id}

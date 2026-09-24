@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { Label, TextField, Paragraph, Link, Button } from '../atoms';
 import { rem } from '../pixels';
 import { showPasswordIcon, hidePasswordIcon } from '../icons';
-import { colour, error500 } from '../colors';
+import { colour } from '../colors';
 
 const forgotPasswordStyles = css({
   paddingTop: rem(6),
@@ -18,7 +18,7 @@ const showPasswordIndicatorStyles = (isInvalid: boolean) =>
     // move it down from the center to align with the field text that is also below center
     paddingTop: rem(1),
 
-    fill: isInvalid ? error500.rgb : colour.brand.crn[500],
+    fill: isInvalid ? colour.foreground.error : colour.brand.crn[500],
   });
 
 type LabeledPasswordFieldProps = {

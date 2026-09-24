@@ -63,14 +63,14 @@ type ManuscriptCardProps = Pick<
 
 const manuscriptContainerStyles = css({
   marginTop: rem(12),
-  border: `1px solid ${colors.neutral500.rgb}`,
+  border: `1px solid ${colors.colour.border.tertiary}`,
   borderRadius: `${rem(8)}`,
   boxSizing: 'border-box',
   width: '100%',
   borderWidth: 1,
   borderStyle: 'solid',
   display: 'block',
-  backgroundColor: colors.pearl.rgb,
+  backgroundColor: colors.colour.background.secondary,
 });
 
 const toastStyles = css({

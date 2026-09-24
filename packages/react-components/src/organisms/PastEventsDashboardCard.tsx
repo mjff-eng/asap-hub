@@ -3,7 +3,7 @@ import { EventResponse } from '@asap-hub/model';
 import { events as eventsRoute } from '@asap-hub/routing';
 
 import { Card, Link, MaterialAvailability } from '../atoms';
-import { charcoal, neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { formatDateToTimezone } from '../date';
 
@@ -31,7 +31,7 @@ const rowTitleStyles = css({
 
 const rowStyles = css({
   display: 'grid',
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   paddingBottom: rem(21),
   marginBottom: rem(21),
   ':last-child': {
@@ -45,7 +45,10 @@ const rowStyles = css({
   },
 });
 
-const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyles = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 type PastEventsDashboardCardProps = {
   events: Pick<

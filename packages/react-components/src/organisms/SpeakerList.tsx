@@ -13,7 +13,7 @@ import {
 } from '../icons';
 import { useDateHasPassed } from '../date';
 import { considerEndedAfter } from '../utils';
-import { colorWithTransparency, neutral500, neutral900 } from '../colors';
+import { colorWithTransparency, neutral900, colour } from '../colors';
 
 const gridStyles = css({
   display: 'grid',
@@ -92,7 +92,7 @@ const previewStyle = {
 const speakerListMobileMixin = {
   gridAutoFlow: 'row',
   alignItems: 'start',
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   paddingBottom: rem(12),
   paddingTop: rem(12),
 };
@@ -135,7 +135,7 @@ const buttonWrapperStyles = css({
   display: 'flex',
   justifyContent: 'center',
   width: '100%',
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   [`@media (min-width: ${tabletScreen.width - 1}px)`]: {
     borderBottom: `transparent`,
   },
@@ -159,7 +159,7 @@ const SpeakerList: React.FC<SpeakerListProps> = ({ speakers, endDate }) => {
       return {
         ...speakerListStyles,
         [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
-          borderBottom: `1px solid ${neutral500.rgb}`,
+          borderBottom: `1px solid ${colour.border.tertiary}`,
         },
       };
     }

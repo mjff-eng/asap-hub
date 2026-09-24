@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { clampPercentage } from '../utils';
 
@@ -68,7 +68,7 @@ const GradientProgressWheel: React.FC<GradientProgressWheelProps> = ({
           position: 'absolute',
           inset: 0,
           borderRadius: '50%',
-          background: neutral500.rgb,
+          background: colour.neutral[100],
         }}
       />
       {value > 0 && (

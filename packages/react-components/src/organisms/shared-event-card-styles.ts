@@ -1,14 +1,10 @@
 import { css } from '@emotion/react';
 
 import {
-  charcoal,
   colorWithTransparency,
   colour,
-  neutral300,
-  neutral500,
-  neutral700,
   neutral900,
-  neutral1000,
+  colorFromHex,
 } from '../colors';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
 
@@ -37,9 +33,9 @@ export const iconButtonStyles = css({
   width: rem(40),
   height: rem(40),
   alignItems: 'center',
-  borderColor: neutral700.rgb,
+  borderColor: colour.border.secondary,
   ':hover, :focus': {
-    borderColor: neutral700.rgb,
+    borderColor: colour.border.secondary,
   },
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     // Button re-asserts flexGrow:1 at this breakpoint; re-declare it so the
@@ -75,7 +71,7 @@ export const viewMoreStyles = css({
   alignItems: 'center',
   justifyContent: 'center',
   height: rem(56),
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 export const emptyStateStyles = css({
@@ -118,7 +114,7 @@ export const tableWrapperStyles = css({
 
 export const headerCellStyles = css({
   textAlign: 'left',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   fontSize: rem(17),
   fontWeight: 'bold',
   lineHeight: rem(24),
@@ -148,9 +144,14 @@ export const deleteButtonStyles = (
   enabled: boolean,
   disabledPalette: 'default' | 'light' = 'default',
 ) => {
-  const disabledBorder = disabledPalette === 'light' ? neutral500 : neutral700;
+  const disabledBorder =
+    disabledPalette === 'light'
+      ? colorFromHex(colour.neutral[100])
+      : colorFromHex(colour.neutral[200]);
   const disabledBackground =
-    disabledPalette === 'light' ? neutral300 : neutral500;
+    disabledPalette === 'light'
+      ? colorFromHex(colour.general.blue.cerulean[25])
+      : colorFromHex(colour.neutral[100]);
   return css({
     flexGrow: 0,
     flexShrink: 0,
@@ -162,13 +163,17 @@ export const deleteButtonStyles = (
     height: rem(24),
     minHeight: rem(24),
     padding: 0,
-    border: `1px solid ${enabled ? neutral500.rgb : disabledBorder.rgb}`,
+    border: `1px solid ${
+      enabled ? colour.border.tertiary : disabledBorder.rgb
+    }`,
     borderRadius: rem(4),
     backgroundColor: enabled ? colour.neutral[0] : disabledBackground.rgb,
     boxShadow: enabled
       ? undefined
-      : `0 2px 4px ${colorWithTransparency(neutral500, 0.3).rgba}`,
-    color: enabled ? neutral1000.rgb : neutral900.rgb,
+      : `0 2px 4px ${
+          colorWithTransparency(colorFromHex(colour.neutral[100]), 0.3).rgba
+        }`,
+    color: enabled ? colour.foreground.primary : neutral900.rgb,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       minWidth: rem(24),
     },

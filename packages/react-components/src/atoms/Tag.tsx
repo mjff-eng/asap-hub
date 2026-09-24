@@ -1,14 +1,5 @@
 import { css, Theme } from '@emotion/react';
-import {
-  neutral900,
-  neutral1000,
-  charcoal,
-  colour,
-  neutral500,
-  success100,
-  neutral300,
-  colorFromHex,
-} from '../colors';
+import { neutral900, colour, success100, colorFromHex } from '../colors';
 import { crossSmallIcon } from '../icons';
 import { rem } from '../pixels';
 import Ellipsis from './Ellipsis';
@@ -31,7 +22,7 @@ const styles = css({
   backgroundColor: colour.neutral[0],
   borderStyle: 'solid',
   borderWidth: `${borderWidth}px`,
-  borderColor: neutral500.rgb,
+  borderColor: colour.border.tertiary,
   borderRadius: rem(18),
 });
 
@@ -52,9 +43,9 @@ const hoverStyles = ({
   });
 
 const disabledStyles = css({
-  backgroundColor: neutral300.rgb,
-  borderColor: neutral500.rgb,
-  color: neutral1000.rgb,
+  backgroundColor: colour.background.tertiary,
+  borderColor: colour.border.tertiary,
+  color: colour.foreground.primary,
 });
 
 const iconStyles = css({
@@ -72,7 +63,7 @@ const iconStyles = css({
 const iconDisabledStyles = css({
   cursor: 'not-allowed',
   svg: {
-    fill: neutral1000.rgb,
+    fill: colour.foreground.primary,
   },
 });
 
@@ -98,7 +89,10 @@ const ConditionalLinkWrapper: React.FC<{
 }> = ({ href, children }) => (
   <>
     {href ? (
-      <a href={href} style={{ color: charcoal.rgb, textDecoration: 'inherit' }}>
+      <a
+        href={href}
+        style={{ color: colour.foreground.primary, textDecoration: 'inherit' }}
+      >
         {children}
       </a>
     ) : (

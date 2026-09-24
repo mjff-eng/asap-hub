@@ -1,13 +1,6 @@
 import { css } from '@emotion/react';
 import { lineHeight, rem } from '../pixels';
-import {
-  charcoal,
-  colour,
-  neutral500,
-  neutral700,
-  neutral900,
-  neutral300,
-} from '../colors';
+import { colour, neutral900 } from '../colors';
 import { noop } from '../utils';
 
 const styles = css({
@@ -17,11 +10,11 @@ const styles = css({
 
   minWidth: rem(240),
   borderRadius: '27px',
-  backgroundColor: neutral300.rgb,
-  color: neutral700.rgb,
+  backgroundColor: colour.background.tertiary,
+  color: colour.neutral[200],
   cursor: 'pointer',
   svg: {
-    stroke: neutral700.rgb,
+    stroke: colour.neutral[200],
   },
 });
 
@@ -40,8 +33,8 @@ const iconStyles = css({
 });
 const activeStyles = css({
   backgroundColor: colour.neutral[0],
-  border: `1px solid ${neutral500.rgb}`,
-  color: charcoal.rgb,
+  border: `1px solid ${colour.border.tertiary}`,
+  color: colour.foreground.primary,
   svg: {
     stroke: neutral900.rgb,
   },

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { calendarIcon } from '../icons';
 import { rem } from '../pixels';
-import { charcoal, Display, Link, Paragraph } from '..';
+import { Display, Link, Paragraph, colour } from '..';
 
 const wrapperStyle = css({
   textAlign: 'center',
@@ -11,7 +11,7 @@ const iconStyles = css({
   svg: {
     width: rem(48),
     height: rem(48),
-    stroke: charcoal.rgb,
+    stroke: colour.foreground.primary,
   },
 });
 

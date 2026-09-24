@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph } from '../atoms';
-import { neutral900, neutral800, neutral1000, neutral500 } from '../colors';
+import { neutral900, neutral800, colour } from '../colors';
 import {
   ExportIcon,
   InactiveBadgeIcon,
@@ -39,7 +39,7 @@ const tableStyles = css({
 });
 
 const rowDividerStyles = css({
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 const minGapOnMobile = css({
@@ -64,7 +64,10 @@ const metricStyles = css({ marginTop: rem(24) });
 
 const tableWrapperStyles = css({ marginTop: rem(32), overflowX: 'auto' });
 
-const columnHeaderStyles = css([headerCellStyles, { color: neutral1000.rgb }]);
+const columnHeaderStyles = css([
+  headerCellStyles,
+  { color: colour.foreground.primary },
+]);
 
 const teamColumnHeaderStyles = css([
   columnHeaderStyles,
@@ -88,7 +91,7 @@ const sectionTitleStyles = css([
   sectionLineStyles,
   {
     fontWeight: 700,
-    color: neutral1000.rgb,
+    color: colour.foreground.primary,
     [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'block' },
   },
 ]);
@@ -198,7 +201,7 @@ const TeamRows: React.FC<{
             {team.attended ? (
               tickInCircleIcon
             ) : (
-              <InvalidTickIcon color={neutral500.rgb} />
+              <InvalidTickIcon color={colour.neutral[100]} />
             )}
           </span>
         </td>
@@ -304,7 +307,7 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
               onClick={onEdit}
               overrideStyles={editIconButtonStyles}
             >
-              <PencilIcon color={neutral1000.rgb} />
+              <PencilIcon color={colour.neutral[900]} />
             </Button>
           )}
         </div>

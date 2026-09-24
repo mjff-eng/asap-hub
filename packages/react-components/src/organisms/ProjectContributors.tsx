@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Card, Headline3, Paragraph, Pill, TabButton } from '../atoms';
-import { neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import {
   TabNav,
   ProjectMembers,
@@ -23,7 +23,7 @@ const subtitleStyles = css({
 
 const tabsContainerStyles = css({
   display: 'flex',
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   marginTop: rem(8),
 });
 

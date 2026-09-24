@@ -10,12 +10,9 @@ import {
   mauve,
   colour,
   info900,
-  neutral300,
   success100,
   warning100,
-  warning500,
   neutral900,
-  neutral500,
 } from '../colors';
 import { rem } from '../pixels';
 import { headlineStyles, fontStyles } from '../text';
@@ -52,13 +49,13 @@ const ringBorderStyle = css({
   borderWidth,
   borderStyle: 'solid',
   borderRadius: '50%',
-  borderColor: neutral300.rgb,
+  borderColor: colour.general.blue.cerulean[25],
 });
 const placeholderStyle = css({
   borderWidth: '1px',
   borderStyle: 'solid',
   borderRadius: '50%',
-  borderColor: neutral500.rgb,
+  borderColor: colour.border.tertiary,
 });
 
 const circleStyle = css({
@@ -90,7 +87,7 @@ const placeholderColorStyle = css({
 });
 const colorStyles = [
   css({ backgroundColor: success100.rgb, fill: colour.brand.crn[800] }),
-  css({ backgroundColor: warning100.rgb, fill: warning500.rgb }),
+  css({ backgroundColor: warning100.rgb, fill: colour.foreground.warning }),
   css({ backgroundColor: info100.rgb, fill: info900.rgb }),
   css({ backgroundColor: azure.rgb, fill: space.rgb }),
   css({ backgroundColor: lilac.rgb, fill: berry.rgb }),

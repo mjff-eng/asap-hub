@@ -7,17 +7,13 @@ import { Pill, Spinner } from '../atoms';
 import {
   colorWithTransparency,
   neutral200,
-  neutral300,
   neutral800,
   info100,
   info500,
   success100,
   success500,
-  error100,
-  error500,
   colour,
-  neutral500,
-  neutral700,
+  colorFromHex,
 } from '../colors';
 import { chevronDownIcon, chevronUpIcon } from '../icons';
 import { rem } from '../pixels';
@@ -44,11 +40,15 @@ const accentPalette: Record<
   },
   info: { bg: info100.rgb, fg: info500.rgb, border: info500.rgb },
   neutral: {
-    bg: neutral300.rgb,
+    bg: colour.general.blue.cerulean[25],
     fg: neutral800.rgb,
     border: neutral800.rgb,
   },
-  error: { bg: error100.rgb, fg: error500.rgb, border: error500.rgb },
+  error: {
+    bg: colour.utilitarian.red[100],
+    fg: colour.utilitarian.red[600],
+    border: colour.border.error,
+  },
 };
 
 const triggerStyles = (accent: StatusAccent) => {
@@ -68,7 +68,9 @@ const triggerStyles = (accent: StatusAccent) => {
     lineHeight: 1.2,
     margin: 0,
     ':focus-visible': {
-      outline: `2px solid ${colorWithTransparency(neutral700, 0.7).rgba}`,
+      outline: `2px solid ${
+        colorWithTransparency(colorFromHex(colour.neutral[200]), 0.7).rgba
+      }`,
       outlineOffset: rem(2),
     },
     '& svg': {
@@ -97,8 +99,10 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     zIndex: 1,
     minWidth: rem(160),
     backgroundColor: colour.neutral[0],
-    border: `1px solid ${neutral500.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
+    border: `1px solid ${colour.border.tertiary}`,
+    boxShadow: `0 2px 6px 0 ${
+      colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
+    }`,
     padding: `${rem(8)} 0`,
     display: 'flex',
     flexDirection: 'column',

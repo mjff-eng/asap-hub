@@ -1,6 +1,6 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { colors } from '..';
-import { colour, neutral900, neutral500, neutral700 } from '../colors';
+import { colour, neutral900 } from '../colors';
 import { borderWidth } from '../form';
 import { mobileScreen, rem } from '../pixels';
 
@@ -24,8 +24,8 @@ const fullWidthOnMobilePillStyles = css({
 });
 
 const disabledStyles = css({
-  borderColor: neutral700.rgb,
-  color: neutral700.rgb,
+  borderColor: colour.border.secondary,
+  color: colour.neutral[200],
   cursor: 'not-allowed',
 });
 
@@ -41,10 +41,10 @@ const pillStyles = (selected: boolean, error: boolean) =>
     borderStyle: 'solid',
     borderWidth: `${borderWidth}px`,
     borderColor: error
-      ? neutral700.rgb
+      ? colour.border.secondary
       : selected
         ? colors.info150.rgba
-        : neutral500.rgb,
+        : colour.neutral[100],
     borderRadius: rem(24),
     cursor: 'pointer',
     userSelect: 'none',

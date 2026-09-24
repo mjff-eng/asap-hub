@@ -17,7 +17,7 @@ import {
   plusIcon,
   StatusButton,
   neutral900,
-  neutral500,
+  colour,
 } from '..';
 import { Anchor, Button, Link, Pill } from '../atoms';
 import { borderRadius } from '../card';
@@ -27,7 +27,7 @@ import { getProjectConfig, getReviewerStatusType } from '../utils';
 
 const rowStyles = css({
   padding: `${rem(20)} ${rem(24)} 0`,
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
   },

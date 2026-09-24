@@ -4,10 +4,10 @@ import {
   Headline3,
   Paragraph,
   pixels,
+  colour,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { useState } from 'react';
-import colors from '../templates/colors';
 import Milestone from './Milestone';
 
 const { rem } = pixels;
@@ -23,7 +23,7 @@ const contentStyles = css({
 });
 const rowStyles = css({
   display: 'grid',
-  borderBottom: `1px solid ${colors.neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   marginBottom: rem(12),
   padding: `${rem(16)} 0 ${rem(12)}`,
 });

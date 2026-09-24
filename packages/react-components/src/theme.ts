@@ -1,5 +1,5 @@
 import { casTheme } from './cas-tokens.generated';
-import { charcoal, colour, neutral700, neutral900 } from './colors';
+import { colour, neutral900 } from './colors';
 
 export type ThemeVariant = 'light' | 'grey' | 'dark';
 export const defaultThemeVariant: ThemeVariant = 'light';
@@ -8,9 +8,9 @@ export const themes: Record<
   ThemeVariant,
   { backgroundColor: string; color: string }
 > = {
-  light: { backgroundColor: colour.neutral[0], color: charcoal.rgb },
-  grey: { backgroundColor: neutral700.rgb, color: neutral900.rgb },
-  dark: { backgroundColor: charcoal.rgb, color: colour.neutral[0] },
+  light: { backgroundColor: colour.neutral[0], color: colour.neutral[900] },
+  grey: { backgroundColor: colour.neutral[200], color: neutral900.rgb },
+  dark: { backgroundColor: colour.neutral[900], color: colour.neutral[0] },
 };
 
 export type Product = keyof typeof casTheme;

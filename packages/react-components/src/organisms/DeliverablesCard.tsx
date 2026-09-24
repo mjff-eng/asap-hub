@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 
 import { Button, Card, Headline3, Headline5, Paragraph, Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 import { paddingStyles } from '../card';
 
 const statusToAccent: Record<
@@ -29,7 +29,7 @@ const deliverablesRowStyles = css({
 const deliverablesRowSeperatorStyles = css({
   paddingBottom: rem(9),
   marginBottom: rem(9),
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   [`:nth-last-of-type(1)`]: {
     borderBottom: 'none',
     paddingBottom: 0,
@@ -42,7 +42,7 @@ const showMoreStyles = css({
   justifyContent: 'center',
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 const mobileTitle = {

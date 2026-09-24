@@ -8,11 +8,8 @@ import {
   info100,
   colour,
   neutral900,
-  neutral300,
   warning100,
-  warning500,
   success100,
-  neutral700,
 } from '../colors';
 import { WarningIcon, infoInfoIcon, liveIcon, paperClipIcon } from '../icons';
 import { borderRadius, paddingStyles } from '../card';
@@ -39,14 +36,14 @@ const iconStyles = css({
 
 const mutedIconStyles = css({
   'svg path[stroke]': {
-    stroke: neutral700.rgb,
+    stroke: colour.neutral[200],
   },
 });
 
 const alertStyles = css({
   backgroundColor: warning100.rgb,
-  color: warning500.rgb,
-  fill: warning500.rgb,
+  color: colour.foreground.warning,
+  fill: colour.foreground.warning,
 });
 
 const infoStyles = css({
@@ -62,7 +59,7 @@ const liveStyles = css({
 });
 
 const leadStyles = css({
-  backgroundColor: neutral300.rgb,
+  backgroundColor: colour.background.tertiary,
   color: neutral900.rgb,
   fill: neutral900.rgb,
 });
@@ -79,7 +76,7 @@ const toastContentStyles = css({
 type Type = 'alert' | 'attachment' | 'live' | 'info';
 
 const iconMap: Record<Type, ReactNode> = {
-  alert: <WarningIcon color={warning500.rgb} />,
+  alert: <WarningIcon color={colour.utilitarian.orange[600]} />,
   attachment: paperClipIcon,
   live: liveIcon,
   info: infoInfoIcon,

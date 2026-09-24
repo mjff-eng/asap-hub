@@ -4,13 +4,7 @@ import { useState } from 'react';
 
 import { Button, Card, Headline2, Link, Paragraph, Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import {
-  charcoal,
-  neutral200,
-  colour,
-  neutral900,
-  neutral500,
-} from '../colors';
+import { neutral200, colour, neutral900 } from '../colors';
 import { formatDateToTimezone } from '../date';
 import { ExternalLinkIcon } from '../icons';
 import { contentSidePaddingWithNavigation } from '../layout';
@@ -50,7 +44,7 @@ const rowStyles = css({
   display: 'grid',
   paddingTop: rem(20),
   paddingBottom: rem(20),
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':last-child': {
     borderBottom: 'none',
     marginBottom: 0,
@@ -81,10 +75,13 @@ const showMoreStyles = css({
   marginTop: rem(32),
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
-const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyles = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 import { crossQuery } from '../layout';
 import { Header, MenuButton } from '../molecules';
 import { rem } from '../pixels';
@@ -29,7 +29,7 @@ export const menuButtonStyles = css({
 
   width: `${menuButtonWidth}px`,
   boxSizing: 'content-box',
-  borderRight: `1px solid ${neutral500.rgb}`,
+  borderRight: `1px solid ${colour.border.tertiary}`,
 
   display: 'flex',
   justifyContent: 'stretch',

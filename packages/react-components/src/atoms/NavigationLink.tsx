@@ -3,7 +3,7 @@ import { css, keyframes, Theme } from '@emotion/react';
 import { PropsWithChildren } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import { activePrimaryStyles } from '../button';
-import { charcoal, neutral900, neutral300 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { crossQuery } from '../layout';
 import { useBlockedClick } from '../navigation';
 import { lineHeight, rem } from '../pixels';
@@ -18,14 +18,14 @@ const styles = css({
   padding: rem(16),
   stroke: neutral900.rgb,
   svg: {
-    stroke: charcoal.rgb,
+    stroke: colour.foreground.primary,
   },
   textDecoration: 'none',
   outline: 'none',
   borderRadius: rem(6),
   transition: 'background-color 100ms ease-in-out, color 100ms ease-in-out',
   ':hover, :focus': {
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
   },
 });
 

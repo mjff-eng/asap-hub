@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Display, Link, Paragraph } from '../atoms';
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 import { LockIcon } from '../icons';
 import { contentSidePaddingWithNavigation } from '../layout';
 import {
@@ -40,7 +40,7 @@ const ManuscriptWorkspaceUnavailablePage: React.FC<
 > = () => (
   <div css={styles}>
     <span css={iconStyles}>
-      <LockIcon color={charcoal.rgb} />
+      <LockIcon color={colour.neutral[900]} />
     </span>
     <div>
       <Display styleAsHeading={2}>You can't access this manuscript.</Display>

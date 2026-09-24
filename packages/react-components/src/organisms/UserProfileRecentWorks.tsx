@@ -15,7 +15,7 @@ import {
 } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 import { ExternalLinkIcon, OrcidIcon } from '../icons';
-import { charcoal, neutral900 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { mailToSupport } from '../mail';
 import { LinkHeadline } from '../molecules';
 
@@ -87,7 +87,10 @@ const listStyles = css({
   gridRowGap: rem(12),
 });
 
-const titleStyle = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyle = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 type UserProfileRecentWorkProps = Omit<OrcidWork, 'id'>;
 
