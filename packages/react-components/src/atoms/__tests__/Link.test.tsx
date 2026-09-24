@@ -4,7 +4,12 @@ import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { ThemeProvider } from '@emotion/react';
 
 import Link from '../Link';
-import { color as colorConstructor, colour, neutral300 } from '../../colors';
+import {
+  color as colorConstructor,
+  colour,
+  neutral300,
+  colorFromHex,
+} from '../../colors';
 
 it('renders the text in an anchor', () => {
   const { getByText } = render(<Link href="/">text</Link>);
@@ -15,7 +20,7 @@ describe('the default theme', () => {
   it('applies the default link color', () => {
     const { getByRole } = render(<Link href="/">text</Link>);
     const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(colour.brand.crn[500].rgb);
+    expect(color).toBe(colorFromHex(colour.brand.crn[500]).rgb);
   });
 
   it('applies an invisible underline', () => {
@@ -60,7 +65,7 @@ describe('the dark theme', () => {
       </Link>,
     );
     const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(colour.neutral[0].rgb);
+    expect(color).toBe(colorFromHex(colour.neutral[0]).rgb);
   });
 
   it('applies an invisible underline', () => {
@@ -148,7 +153,7 @@ describe('when button-styled', () => {
       </Link>,
     );
     expect(getComputedStyle(getByRole('link')).backgroundColor).not.toBe(
-      colour.brand.crn[500].rgb,
+      colorFromHex(colour.brand.crn[500]).rgb,
     );
 
     rerender(
@@ -157,7 +162,7 @@ describe('when button-styled', () => {
       </Link>,
     );
     expect(getComputedStyle(getByRole('link')).backgroundColor).toBe(
-      colour.brand.crn[500].rgb,
+      colorFromHex(colour.brand.crn[500]).rgb,
     );
   });
 

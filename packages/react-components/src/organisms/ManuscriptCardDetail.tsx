@@ -20,6 +20,7 @@ import {
   resubmitManuscriptIcon,
   Tooltip,
   colour,
+  colorFromHex,
 } from '..';
 import { rem, smallDesktopScreen } from '../pixels';
 import DiscussionCard from './DiscussionCard';
@@ -95,7 +96,7 @@ const manuscriptDetailsContainerStyles = css({
   boxSizing: 'border-box',
   borderWidth: 1,
   borderStyle: 'solid',
-  backgroundColor: colors.colour.neutral[0].rgb,
+  backgroundColor: colors.colour.neutral[0],
 });
 
 const showMoreContainerStyles = css({
@@ -118,7 +119,7 @@ type VersionUserProps = {
 };
 
 const tabButtonStyles = ({
-  colors: { primary500 = colour.brand.crn[500] } = {},
+  colors: { primary500 = colorFromHex(colour.brand.crn[500]) } = {},
 }: Theme) =>
   css({
     paddingLeft: rem(0),

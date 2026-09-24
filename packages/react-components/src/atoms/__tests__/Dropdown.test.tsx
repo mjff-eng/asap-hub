@@ -11,6 +11,7 @@ import {
   neutral900,
   neutral300,
   neutral700,
+  colorFromHex,
 } from '../../colors';
 import Dropdown from '../Dropdown';
 import { Option, reactSelectStyles } from '../../select';
@@ -136,7 +137,7 @@ it('shows the focused option in green', async () => {
       / /g,
       '',
     ),
-  ).toBe(colour.brand.crn[800].rgb.replace(/ /g, ''));
+  ).toBe(colorFromHex(colour.brand.crn[800]).rgb.replace(/ /g, ''));
 
   await userEvent.hover(screen.getByText('Heathrow'));
   expect(
@@ -144,7 +145,7 @@ it('shows the focused option in green', async () => {
       / /g,
       '',
     ),
-  ).not.toBe(colour.brand.crn[800].rgb.replace(/ /g, ''));
+  ).not.toBe(colorFromHex(colour.brand.crn[800]).rgb.replace(/ /g, ''));
 });
 
 it('gets a green border when focused', async () => {
@@ -159,12 +160,12 @@ it('gets a green border when focused', async () => {
   await userEvent.click(screen.getByText('Select'));
   expect(
     findParentWithStyle(screen.getByText('Select'), 'borderColor')?.borderColor,
-  ).toBe(colour.brand.crn[500].rgba);
+  ).toBe(colorFromHex(colour.brand.crn[500]).rgba);
 
   await userEvent.tab();
   expect(
     findParentWithStyle(screen.getByText('Select'), 'borderColor')?.borderColor,
-  ).not.toBe(colour.brand.crn[500].rgb);
+  ).not.toBe(colorFromHex(colour.brand.crn[500]).rgb);
 });
 
 it('gets greyed out when disabled', () => {

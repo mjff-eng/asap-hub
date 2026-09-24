@@ -10,7 +10,7 @@ import { Breadcrumbs, BreadcrumbItem } from '../molecules';
 
 const headerStyles = css({
   padding: `${rem(12)} ${contentSidePaddingWithNavigation(8)} ${rem(60)}`,
-  background: colour.neutral[0].rgb,
+  background: colour.neutral[0],
   boxShadow: `0 2px 4px -2px ${neutral500.rgb}`,
   marginBottom: rem(30),
   display: 'flex',

@@ -1,7 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ThemeProvider } from '@emotion/react';
 
-import { charcoal, color, colour, neutral300 } from '../../colors';
+import {
+  charcoal,
+  color,
+  colour,
+  neutral300,
+  colorFromHex,
+} from '../../colors';
 import { OrcidIcon } from '../../icons';
 import { activePrimaryBackgroundColorDefault } from '../../button';
 
@@ -86,11 +92,11 @@ describe('primary button', () => {
   it('renders a primary button', () => {
     const { getByRole, rerender } = render(<Button />);
     expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
-      colour.brand.crn[500].rgb,
+      colorFromHex(colour.brand.crn[500]).rgb,
     );
     rerender(<Button primary />);
     expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
-      colour.brand.crn[500].rgb,
+      colorFromHex(colour.brand.crn[500]).rgb,
     );
   });
 
@@ -192,7 +198,7 @@ describe('the type', () => {
 it('renders a link-styled button', () => {
   const { getByRole } = render(<Button linkStyle />);
   const { color: buttonColor, padding } = getComputedStyle(getByRole('button'));
-  expect(buttonColor).toBe(colour.brand.crn[500].rgb);
+  expect(buttonColor).toBe(colorFromHex(colour.brand.crn[500]).rgb);
   expect(padding).toMatchInlineSnapshot(`"0px"`);
 });
 

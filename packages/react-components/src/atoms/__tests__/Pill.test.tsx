@@ -1,7 +1,11 @@
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { render } from '@testing-library/react';
 
+import { colorFromHex } from '../../colors';
 import Pill from '../Pill';
+
+const toRgb = (value: string) =>
+  value.startsWith('#') ? colorFromHex(value).rgb : value;
 
 it('renders a tag label with content', () => {
   const { container } = render(<Pill>Text</Pill>);
@@ -21,11 +25,13 @@ it.each`
   ({ accent, border, text, background }) => {
     const { getByText } = render(<Pill accent={accent}>Text</Pill>);
 
-    expect([
-      findParentWithStyle(getByText('Text')!, 'borderColor')!.borderColor,
-      findParentWithStyle(getByText('Text')!, 'backgroundColor')!
-        .backgroundColor,
-      findParentWithStyle(getByText('Text')!, 'color')!.color,
-    ]).toEqual([border, background, text]);
+    expect(
+      [
+        findParentWithStyle(getByText('Text')!, 'borderColor')!.borderColor,
+        findParentWithStyle(getByText('Text')!, 'backgroundColor')!
+          .backgroundColor,
+        findParentWithStyle(getByText('Text')!, 'color')!.color,
+      ].map(toRgb),
+    ).toEqual([border, background, text]);
   },
 );

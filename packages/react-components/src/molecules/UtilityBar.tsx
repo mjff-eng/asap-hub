@@ -16,7 +16,7 @@ const headerStyles = css({
   alignItems: 'center',
   backgroundColor: color(3, 92, 129).rgb,
   gap: rem(24),
-  color: colour.neutral[0].rgb,
+  color: colour.neutral[0],
   padding: `${rem(6)} ${vminLinearCalcClamped(
     mobileScreen,
     24,

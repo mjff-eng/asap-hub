@@ -24,7 +24,7 @@ export type AccentVariant =
 export const accents: Record<AccentVariant, CSSObject> = {
   default: {
     borderColor: colors.colour.border.card.default,
-    boxShadow: `0px 2px 4px ${colors.colour.neutral[100].rgb}`,
+    boxShadow: `0px 2px 4px ${colors.colour.neutral[100]}`,
   },
   red: {
     backgroundColor: colors.colour.background.error,
@@ -33,8 +33,8 @@ export const accents: Record<AccentVariant, CSSObject> = {
   },
   green: {
     backgroundColor: colors.success100.rgb,
-    color: colors.colour.brand.crn[800].rgb,
-    borderColor: colors.colour.brand.crn[800].rgb,
+    color: colors.colour.brand.crn[800],
+    borderColor: colors.colour.brand.crn[800],
   },
   placeholder: {
     backgroundColor: 'transparent',
@@ -45,7 +45,7 @@ export const accents: Record<AccentVariant, CSSObject> = {
   neutral200: {
     backgroundColor: colors.neutral200.rgb,
     borderColor: colors.colour.border.card.default,
-    boxShadow: `0px 2px 4px ${colors.colour.neutral[100].rgb}`,
+    boxShadow: `0px 2px 4px ${colors.colour.neutral[100]}`,
   },
   warning: {
     backgroundColor: colors.warning100.rgb,

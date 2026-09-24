@@ -393,7 +393,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                     <div css={savingOverlayStyles}>
                       <Spinner
                         size={24}
-                        color={colour.neutral[0].rgb}
+                        color={colour.neutral[0]}
                         trackColor="rgba(255, 255, 255, 0.4)"
                         ariaLabel="Saving avatar"
                         ariaBusy

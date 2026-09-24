@@ -105,8 +105,8 @@ export const StartHere = () => (
           <i>Theme Tokens</i>.
         </li>
         <li>
-          <b>Primitives</b> ({code('colour.neutral[100].rgb')}), only when no
-          theme token fits, for example a shadow. See <i>Primitives</i>.
+          <b>Primitives</b> ({code('colour.neutral[100]')}), only when no theme
+          token fits, for example a shadow. See <i>Primitives</i>.
         </li>
         <li>
           <b>Never the old names</b> ({code('neutral500')}, {code('charcoal')},{' '}
@@ -348,8 +348,8 @@ const PrimitiveCard = ({ primitive }: { primitive: Primitive }) => {
           )}, ${cssColour(
             primitive.hex,
             primitive.alpha,
-          )}), repeating-conic-gradient(${colour.neutral[100].hex} 0% 25%, ${
-            colour.neutral[0].hex
+          )}), repeating-conic-gradient(${colour.neutral[100]} 0% 25%, ${
+            colour.neutral[0]
           } 0% 50%) 0 0 / 10px 10px`,
         }}
       />
@@ -376,8 +376,8 @@ export const Primitives = () => (
         The raw palette (Figma collection primitives, ARIA ramps left out).
         Prefer theme tokens; reach for a primitive only when no theme token
         fits. Click a swatch to copy its code name, e.g.{' '}
-        {code('colour.neutral[100].rgb')}. &quot;old&quot; lists deprecated
-        names that currently hold that exact value.
+        {code('colour.neutral[100]')}. &quot;old&quot; lists deprecated names
+        that currently hold that exact value.
       </>
     }
   >

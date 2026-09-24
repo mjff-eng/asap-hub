@@ -6,7 +6,7 @@ import {
 import fc from 'fast-check';
 
 import PageControls from '../PageControls';
-import { colour, neutral700 } from '../../colors';
+import { colour, neutral700, colorFromHex } from '../../colors';
 
 mockConsoleError();
 
@@ -50,7 +50,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(colour.brand.crn[500].rgba.replace(/ /g, ''));
+    ).toBe(colorFromHex(colour.brand.crn[500]).rgba.replace(/ /g, ''));
     expect(getByTitle(/first page/i).closest('a')).toHaveAttribute(
       'href',
       '#0',
@@ -86,7 +86,7 @@ describe('the arrow controls', () => {
         getByTitle(/previous page/i),
         'stroke',
       )?.stroke?.replace(/ /g, ''),
-    ).toBe(colour.brand.crn[500].rgba.replace(/ /g, ''));
+    ).toBe(colorFromHex(colour.brand.crn[500]).rgba.replace(/ /g, ''));
     expect(getByTitle(/previous page/i).closest('a')).toHaveAttribute(
       'href',
       '#1',
@@ -124,7 +124,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(colour.brand.crn[500].rgba.replace(/ /g, ''));
+    ).toBe(colorFromHex(colour.brand.crn[500]).rgba.replace(/ /g, ''));
     expect(getByTitle(/next page/i).closest('a')).toHaveAttribute('href', '#1');
   });
   it('disable the link to the next page on the last page', () => {
@@ -157,7 +157,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(colour.brand.crn[500].rgba.replace(/ /g, ''));
+    ).toBe(colorFromHex(colour.brand.crn[500]).rgba.replace(/ /g, ''));
     expect(getByTitle(/last page/i).closest('a')).toHaveAttribute('href', '#2');
   });
   it('disable the link to the last page on the last page', () => {
@@ -270,10 +270,10 @@ it('highlights the active page number', () => {
     />,
   );
   expect(getComputedStyle(getByText('4')).color).not.toBe(
-    colour.brand.crn[500].rgb,
+    colorFromHex(colour.brand.crn[500]).rgb,
   );
   expect(getComputedStyle(getByText('5')).color).toBe(
-    colour.brand.crn[500].rgb,
+    colorFromHex(colour.brand.crn[500]).rgb,
   );
 });
 

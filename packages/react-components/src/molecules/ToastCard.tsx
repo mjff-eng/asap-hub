@@ -57,8 +57,8 @@ const infoStyles = css({
 
 const liveStyles = css({
   backgroundColor: success100.rgb,
-  color: colour.brand.crn[800].rgb,
-  fill: colour.brand.crn[800].rgb,
+  color: colour.brand.crn[800],
+  fill: colour.brand.crn[800],
 });
 
 const leadStyles = css({

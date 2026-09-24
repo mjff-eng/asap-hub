@@ -39,7 +39,7 @@ const iconStyles = css({
   paddingRight: rem(6),
 });
 const activeStyles = css({
-  backgroundColor: colour.neutral[0].rgb,
+  backgroundColor: colour.neutral[0],
   border: `1px solid ${neutral500.rgb}`,
   color: charcoal.rgb,
   svg: {

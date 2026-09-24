@@ -6,7 +6,7 @@ import { css, Theme } from '@emotion/react';
 import { layoutStyles } from '../text';
 import { useBlockedClick } from '../navigation';
 import { rem } from '../pixels';
-import { neutral900, neutral1000, colour } from '../colors';
+import { neutral900, neutral1000, colour, colorFromHex } from '../colors';
 import { useHasRouter } from '../routing';
 import IconProps from '../icons/props';
 
@@ -21,7 +21,7 @@ const styles = css({
   whiteSpace: 'nowrap',
 });
 const activeStyles = ({
-  colors: { primary500 = colour.brand.crn[500] } = {},
+  colors: { primary500 = colorFromHex(colour.brand.crn[500]) } = {},
 }: Theme) =>
   css({
     paddingBottom: rem(16 + borderBottomWidth),
