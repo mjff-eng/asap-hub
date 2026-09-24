@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 
 import { BasicEvent } from '@asap-hub/model';
 import { events } from '@asap-hub/routing';
+import { useFlags } from '@asap-hub/react-context';
 
 import { eventMaterialSectionIds } from '../organisms/EventMaterials';
 import { Link } from '../atoms';
@@ -28,16 +29,15 @@ const mutedIconStyles = css({
   },
 });
 
-const displayedMaterialTypes = [
+export type MaterialType = 'notes' | 'videoRecording' | 'presentation';
+
+const DEFAULT_ORDER: MaterialType[] = [
   'videoRecording',
   'presentation',
   'notes',
-] as const;
+];
 
-const eventMaterialLabels: Record<
-  (typeof displayedMaterialTypes)[number],
-  string
-> = {
+const eventMaterialLabels: Record<MaterialType, string> = {
   videoRecording: 'Recording',
   presentation: 'Presentation',
   notes: 'Notes',
@@ -66,26 +66,34 @@ const unavailableMaterialStyles = css({
 type EventMaterialsListProps = Pick<
   BasicEvent,
   'id' | 'notes' | 'videoRecording' | 'presentation'
->;
+> & {
+  order?: MaterialType[];
+  showIcon?: boolean;
+};
 
 const EventMaterialsList: React.FC<EventMaterialsListProps> = ({
   id,
   notes,
   videoRecording,
   presentation,
+  order = DEFAULT_ORDER,
+  showIcon = true,
 }) => {
+  const { isEnabled } = useFlags();
   const materials = { notes, videoRecording, presentation };
-  const isMaterialAvailable = (
-    key: (typeof displayedMaterialTypes)[number],
-  ): boolean => Boolean(materials[key]);
-  const eventHref = events({}).event({ eventId: id }).$;
-  const noneAvailable = !displayedMaterialTypes.some(isMaterialAvailable);
+  const isMaterialAvailable = (key: MaterialType): boolean =>
+    Boolean(materials[key]);
+  const eventRoute = events({}).event({ eventId: id });
+  const eventHref = isEnabled('NEW_EVENT_PAGE')
+    ? eventRoute.meetingMaterials({}).$
+    : eventRoute.$;
+  const noneAvailable = !order.some(isMaterialAvailable);
 
   return (
     <span css={[containerStyles, noneAvailable && mutedIconStyles]}>
-      {paperClipIcon}
+      {showIcon && paperClipIcon}
       <span css={materialListStyles}>
-        {displayedMaterialTypes.map((key, index) => {
+        {order.map((key, index) => {
           const available = isMaterialAvailable(key);
           return (
             <Fragment key={key}>
