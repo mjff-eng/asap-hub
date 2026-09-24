@@ -124,7 +124,7 @@ export const casHex = (codePath: string, product: Product = 'crn'): string => {
     .replace(/\./g, '/');
   return /^(foreground|background|border)\//.test(path)
     ? themeHex(`colour/${path}`, product)
-    : (primitiveHexByPath.get(`colour/${path}`) ?? '');
+    : primitiveHexByPath.get(`colour/${path}`) ?? '';
 };
 
 export type OldNameStatus = 'same' | 'cas' | 'approval';
@@ -347,14 +347,16 @@ export const oldNames: OldName[] = [
       ['lilac / berry', '#F8EAF7', 'lavender'],
       ['lavender / mauve', '#F2EDF5', 'lavender'],
     ] as const
-  ).map(([name, before, pair]): OldName => ({
-    name,
-    before,
-    now: `background['color-${pair}']`,
-    where: 'avatar initials; CAS has five pairs, we had six',
-    status: 'approval',
-    question: 3,
-  })),
+  ).map(
+    ([name, before, pair]): OldName => ({
+      name,
+      before,
+      now: `background['color-${pair}']`,
+      where: 'avatar initials; CAS has five pairs, we had six',
+      status: 'approval',
+      question: 3,
+    }),
+  ),
   {
     name: 'silver',
     before: '#EDF1F3',

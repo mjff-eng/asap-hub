@@ -21,12 +21,12 @@ const styles = css({
   whiteSpace: 'nowrap',
 });
 const activeStyles = css({
-    paddingBottom: rem(16 + borderBottomWidth),
-    borderBottom: `solid ${rem(borderBottomWidth)} ${colour.foreground.brand}`,
+  paddingBottom: rem(16 + borderBottomWidth),
+  borderBottom: `solid ${rem(borderBottomWidth)} ${colour.foreground.brand}`,
 
-    color: colour.foreground.primary,
-    fontWeight: 'bold',
-  });
+  color: colour.foreground.primary,
+  fontWeight: 'bold',
+});
 
 const iconStyles = css({
   display: 'inline-grid',
