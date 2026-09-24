@@ -2,13 +2,13 @@ import { ReactNode } from 'react';
 import { css, Theme } from '@emotion/react';
 
 import { Anchor } from '../atoms';
-import { colour, colorFromHex } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const borderWidth = 1;
 
 const styles = ({
-  colors: { primary500 = colorFromHex(colour.brand.crn[600]) } = {},
+  colors: { primary500 = colour.brand.crn[600] } = {},
 }: Theme) =>
   css({
     display: 'inline-block',
@@ -26,8 +26,8 @@ const styles = ({
     textAlign: 'center',
     textDecoration: 'none',
     color: colour.neutral[0],
-    backgroundColor: primary500.rgba,
-    borderColor: primary500.rgba,
+    backgroundColor: primary500,
+    borderColor: primary500,
   });
 
 interface ButtonLinkProps {

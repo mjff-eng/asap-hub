@@ -5,7 +5,7 @@ import { useDebounce } from 'use-debounce';
 import { CheckboxGroup } from '.';
 import { FILTERS_KEY, FILTER_EVENT, FILTER_TITLE_KEY } from '../analytics';
 import { Button } from '../atoms';
-import { colorWithTransparency, colour, colorFromHex } from '../colors';
+import { cssColour, colour } from '../colors';
 import { filterIcon } from '../icons';
 import {
   tabletScreen,
@@ -34,9 +34,7 @@ const dropdownContainer = css({
 
   backgroundColor: colour.neutral[0],
   border: `1px solid ${colour.border.tertiary}`,
-  boxShadow: `0 2px 6px 0 ${
-    colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
-  }`,
+  boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
 
   display: 'none',
   flexDirection: 'column',

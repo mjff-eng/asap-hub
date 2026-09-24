@@ -5,13 +5,12 @@ import {
   largeDesktopScreen,
   rem,
 } from './pixels';
-import { color } from './colors';
 
 export const MAX_PAGE_CONTENT_WIDTH = 1600;
 
 export const MAX_NAVIGATION_MENU_WIDTH = MAX_PAGE_CONTENT_WIDTH / 3;
 
-export const navigationGrey = color(242, 245, 247);
+export const navigationGrey = '#F2F5F7';
 
 export const drawerQuery = `@media (max-width: ${
   smallDesktopScreen.width - 1

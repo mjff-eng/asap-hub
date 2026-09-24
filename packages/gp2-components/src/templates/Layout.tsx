@@ -88,7 +88,7 @@ const mainMenuStyles = css({
   gridArea: 'main-menu',
 });
 const userMenuStyles = css({
-  backgroundColor: navigationGrey.rgb,
+  backgroundColor: navigationGrey,
   gridArea: 'user-menu',
   flexGrow: 1,
 });

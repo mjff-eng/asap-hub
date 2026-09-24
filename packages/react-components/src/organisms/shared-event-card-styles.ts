@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { colorWithTransparency, colour, colorFromHex } from '../colors';
+import { cssColour, colour } from '../colors';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
 
 export const contentStyles = css({
@@ -140,13 +140,11 @@ export const deleteButtonStyles = (
   disabledPalette: 'default' | 'light' = 'default',
 ) => {
   const disabledBorder =
-    disabledPalette === 'light'
-      ? colorFromHex(colour.neutral[100])
-      : colorFromHex(colour.neutral[200]);
+    disabledPalette === 'light' ? colour.neutral[100] : colour.neutral[200];
   const disabledBackground =
     disabledPalette === 'light'
-      ? colorFromHex(colour.general.blue.cerulean[25])
-      : colorFromHex(colour.neutral[100]);
+      ? colour.general.blue.cerulean[25]
+      : colour.neutral[100];
   return css({
     flexGrow: 0,
     flexShrink: 0,
@@ -158,16 +156,12 @@ export const deleteButtonStyles = (
     height: rem(24),
     minHeight: rem(24),
     padding: 0,
-    border: `1px solid ${
-      enabled ? colour.border.tertiary : disabledBorder.rgb
-    }`,
+    border: `1px solid ${enabled ? colour.border.tertiary : disabledBorder}`,
     borderRadius: rem(4),
-    backgroundColor: enabled ? colour.neutral[0] : disabledBackground.rgb,
+    backgroundColor: enabled ? colour.neutral[0] : disabledBackground,
     boxShadow: enabled
       ? undefined
-      : `0 2px 4px ${
-          colorWithTransparency(colorFromHex(colour.neutral[100]), 0.3).rgba
-        }`,
+      : `0 2px 4px ${cssColour(colour.neutral[100], 0.3)}`,
     color: enabled ? colour.foreground.primary : colour.foreground.tertiary,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       minWidth: rem(24),

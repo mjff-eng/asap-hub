@@ -19,7 +19,7 @@ import {
 import { rem, mobileScreen, formTargetWidth } from '../pixels';
 import { Portal } from '../utils/portal';
 
-import { colorWithTransparency, colour, colorFromHex } from '../colors';
+import { cssColour, colour } from '../colors';
 
 const containerStyles = css({
   display: 'flex',
@@ -48,9 +48,7 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     left,
     backgroundColor: colour.neutral[0],
     border: `1px solid ${colour.border.tertiary}`,
-    boxShadow: `0 2px 6px 0 ${
-      colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
-    }`,
+    boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
     flexDirection: 'column',
     padding: `${rem(6)} 0`,
   });

@@ -1,12 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 import { OrcidIcon } from '../../icons';
 
 import Button from '../Button';
-
-const toRgb = (value: string) =>
-  value.startsWith('#') ? colorFromHex(value).rgb : value;
 
 it('renders a button with an icon and text', () => {
   const { getByRole } = render(
@@ -122,14 +119,14 @@ describe('primary button', () => {
 
 it('renders an active secondary button', () => {
   const { getByRole, rerender } = render(<Button />);
-  expect(toRgb(getComputedStyle(getByRole('button')).borderColor)).not.toBe(
-    colorFromHex(colour.neutral[900]).rgb,
-  );
+  expect(getByRole('button')).not.toHaveStyle({
+    borderColor: colour.neutral[900],
+  });
 
   rerender(<Button active />);
-  expect(toRgb(getComputedStyle(getByRole('button')).borderColor)).toBe(
-    colorFromHex(colour.neutral[900]).rgb,
-  );
+  expect(getByRole('button')).toHaveStyle({
+    borderColor: colour.neutral[900],
+  });
 });
 
 it('renders an active primary button', () => {

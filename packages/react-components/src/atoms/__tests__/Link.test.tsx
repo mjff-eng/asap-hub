@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router';
 import { ThemeProvider } from '@emotion/react';
 
 import Link from '../Link';
-import { color as colorConstructor, colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders the text in an anchor', () => {
   const { getByText } = render(<Link href="/">text</Link>);
@@ -35,7 +35,7 @@ it('applies an underline when requested', () => {
 
 describe('theme with ThemeProvider', () => {
   it('uses the primary500 hex override that email layouts rely on', () => {
-    const testColor = colorConstructor(12, 141, 195);
+    const testColor = '#0C8DC3';
     const theme = {
       colors: {
         primary500: testColor,
@@ -46,8 +46,7 @@ describe('theme with ThemeProvider', () => {
         <Link href="/">text</Link>
       </ThemeProvider>,
     );
-    const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(testColor.rgb);
+    expect(getByRole('link')).toHaveStyle({ color: testColor });
   });
 });
 describe('the dark theme', () => {
@@ -57,8 +56,7 @@ describe('the dark theme', () => {
         text
       </Link>,
     );
-    const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(colorFromHex(colour.neutral[0]).rgb);
+    expect(getByRole('link')).toHaveStyle({ color: colour.neutral[0] });
   });
 
   it('applies an invisible underline', () => {

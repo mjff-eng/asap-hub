@@ -4,7 +4,6 @@ import {
   Link,
   pixels,
   colour,
-  colorFromHex,
 } from '@asap-hub/react-components';
 import { staticPages } from '@asap-hub/routing';
 import { css, ThemeProvider } from '@emotion/react';
@@ -54,7 +53,7 @@ interface LayoutProps {
 }
 
 const emailTheme = {
-  colors: { primary500: colorFromHex(colour.brand.gp2[600]) },
+  colors: { primary500: colour.brand.gp2[600] },
 };
 
 const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (

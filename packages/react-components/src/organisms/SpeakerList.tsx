@@ -13,7 +13,7 @@ import {
 } from '../icons';
 import { useDateHasPassed } from '../date';
 import { considerEndedAfter } from '../utils';
-import { colorWithTransparency, colour, colorFromHex } from '../colors';
+import { cssColour, colour } from '../colors';
 
 const gridStyles = css({
   display: 'grid',
@@ -80,9 +80,9 @@ const toBeAnnouncedStyle = css({
 const previewStyle = {
   maxHeight: rem(69),
   overflow: 'hidden',
-  background: `linear-gradient(180deg, ${colour.neutral[700]} 26.56%, ${
-    colorWithTransparency(colorFromHex(colour.neutral[700]), 0).rgba
-  } 100%)`,
+  background: `linear-gradient(180deg, ${
+    colour.neutral[700]
+  } 26.56%, ${cssColour(colour.neutral[700], 0)} 100%)`,
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',

@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { Pill, Spinner } from '../atoms';
-import { colorWithTransparency, colour, colorFromHex } from '../colors';
+import { cssColour, colour } from '../colors';
 import { chevronDownIcon, chevronUpIcon } from '../icons';
 import { rem } from '../pixels';
 import { Portal } from '../utils/portal';
@@ -62,9 +62,7 @@ const triggerStyles = (accent: StatusAccent) => {
     lineHeight: 1.2,
     margin: 0,
     ':focus-visible': {
-      outline: `2px solid ${
-        colorWithTransparency(colorFromHex(colour.neutral[200]), 0.7).rgba
-      }`,
+      outline: `2px solid ${cssColour(colour.neutral[200], 0.7)}`,
       outlineOffset: rem(2),
     },
     '& svg': {
@@ -94,9 +92,7 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     minWidth: rem(160),
     backgroundColor: colour.neutral[0],
     border: `1px solid ${colour.border.tertiary}`,
-    boxShadow: `0 2px 6px 0 ${
-      colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
-    }`,
+    boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
     padding: `${rem(8)} 0`,
     display: 'flex',
     flexDirection: 'column',

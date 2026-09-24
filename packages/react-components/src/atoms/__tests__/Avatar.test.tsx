@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import Avatar from '../Avatar';
-import { colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders the profile picture', () => {
   const { getByRole } = render(<Avatar imageUrl="/avatar.png" />);
@@ -32,11 +32,9 @@ it('shows a placeholder on white background', () => {
 
   expect(getByText('+1')).toBeVisible();
 
-  const { backgroundColor } = findParentWithStyle(
-    getByText('+1'),
-    'backgroundColor',
-  )!;
-  expect(backgroundColor).toBe(colorFromHex(colour.neutral[0]).rgb);
+  expect(
+    findParentWithStyle(getByText('+1'), 'backgroundColor')!.element,
+  ).toHaveStyle({ backgroundColor: colour.neutral[0] });
 });
 
 it("shows the initials 'JD' on colored background", () => {

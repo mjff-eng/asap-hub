@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import ButtonLink from '../ButtonLink';
 import Layout from '../Layout';
-import { colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders a link to the given href', () => {
   render(<ButtonLink href="https://example.com">Create account</ButtonLink>);
@@ -20,6 +20,6 @@ it('fills the button with the hex brand colour of the email layout', () => {
   );
   expect(screen.getByRole('link', { name: 'Create account' })).toHaveStyleRule(
     'background-color',
-    colorFromHex(colour.brand.crn[600]).rgba,
+    colour.brand.crn[600],
   );
 });
