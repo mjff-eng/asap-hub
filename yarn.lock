@@ -1098,7 +1098,6 @@ __metadata:
     "@graphql-typed-document-node/core": "npm:3.2.0"
     "@hapi/boom": "npm:9.1.4"
     "@hapi/bourne": "npm:2.1.0"
-    "@hapi/joi": "npm:17.1.1"
     "@opensearch-project/opensearch": "npm:^3.5.1"
     "@sentry/serverless": "npm:6.19.7"
     "@serverless/typescript": "npm:3.38.0"
@@ -1167,6 +1166,7 @@ __metadata:
     graphql-typescript-integration: "npm:1.2.1"
     html-to-text: "npm:^9.0.5"
     jest-when: "npm:3.5.2"
+    joi: "npm:17.1.1"
     jsonwebtoken: "npm:9.0.1"
     jwt-decode: "npm:2.2.0"
     jwt-encode: "npm:1.0.1"
@@ -1889,7 +1889,6 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@hapi/boom": "npm:9.1.4"
     "@hapi/bourne": "npm:2.1.0"
-    "@hapi/joi": "npm:17.1.1"
     "@types/apr-intercept": "workspace:*"
     "@types/aws-lambda": "npm:8.10.159"
     "@types/debug": "npm:4.1.12"
@@ -1908,6 +1907,7 @@ __metadata:
     got: "npm:11.8.6"
     graphql: "npm:15.8.0"
     graphql-request: "npm:6.1.0"
+    joi: "npm:17.1.1"
     jwt-decode: "npm:2.2.0"
     jwt-encode: "npm:1.0.1"
     nock: "npm:13.4.0"
@@ -10909,19 +10909,6 @@ __metadata:
     "@hapi/cryptiles": "npm:^6.0.1"
     "@hapi/hoek": "npm:^11.0.2"
   checksum: 10/e86f8b73cca392dd51888e994b86c44839acc3b5697249a921b03ed66b65e3876d9ca539aaa7072c049398a15a8c0b40c4b72a9a0ec33821a7a718f375d9cf68
-  languageName: node
-  linkType: hard
-
-"@hapi/joi@npm:17.1.1":
-  version: 17.1.1
-  resolution: "@hapi/joi@npm:17.1.1"
-  dependencies:
-    "@hapi/address": "npm:^4.0.1"
-    "@hapi/formula": "npm:^2.0.0"
-    "@hapi/hoek": "npm:^9.0.0"
-    "@hapi/pinpoint": "npm:^2.0.0"
-    "@hapi/topo": "npm:^5.0.0"
-  checksum: 10/ee454f653f6dc973fd6500529a84b7a01cef145b9b50e126ea8db3099c7600002c92345909970947f844b7d02ca78b452ce43ec03772220a5aaae76b68f92537
   languageName: node
   linkType: hard
 
@@ -30635,6 +30622,19 @@ __metadata:
   version: 0.16.0
   resolution: "jmespath@npm:0.16.0"
   checksum: 10/cc8b4a5cd2a22a79fc2695d66e5a43bc0020ec1ebdbe648440e796764751af2f495771ce877dea45ee6545530f0a1528450c3c3026bc0e9d976a93447af9fb74
+  languageName: node
+  linkType: hard
+
+"joi@npm:17.1.1":
+  version: 17.1.1
+  resolution: "joi@npm:17.1.1"
+  dependencies:
+    "@hapi/address": "npm:^4.0.1"
+    "@hapi/formula": "npm:^2.0.0"
+    "@hapi/hoek": "npm:^9.0.0"
+    "@hapi/pinpoint": "npm:^2.0.0"
+    "@hapi/topo": "npm:^5.0.0"
+  checksum: 10/12efa61e0ce3a0a10a6bdee4e4f9a5ac3fc62cf99d02d741a1589b04d7540d409d78706ea45fb876f7e83a43053045ec7b538c0885da713a481247d3ff60ef22
   languageName: node
   linkType: hard
 
