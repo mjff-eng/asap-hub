@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
 
-import { charcoal, pearl, neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { headlineStyles } from '../text';
 
 export const metricContainerStyles = css({
   boxSizing: 'border-box',
   padding: rem(24),
-  backgroundColor: pearl.rgb,
-  border: `1px solid ${neutral500.rgb}`,
+  backgroundColor: colour.background.secondary,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: rem(8),
 });
 
@@ -21,7 +21,7 @@ export const metricLabelStyles = css({
 
 export const metricValueStyles = css(headlineStyles[1], {
   margin: 0,
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
 });
 
 export const metricProgressRowStyles = css({

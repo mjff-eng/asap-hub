@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router';
 import { DiscussionsTab } from '.';
 import {
   Button,
-  charcoal,
   colors,
   complianceReportIcon,
   neutral900,
@@ -59,7 +58,7 @@ type ManuscriptCardDetailProps = Pick<
 };
 
 const buttonsContainerStyles = css({
-  borderBottom: `1px solid ${colors.neutral500.rgb}`,
+  borderBottom: `1px solid ${colors.colour.border.tertiary}`,
 });
 
 const buttonsStyles = css({
@@ -91,7 +90,7 @@ const notificationDotStyles = css({
 
 const manuscriptDetailsContainerStyles = css({
   margin: `0 ${rem(16)} ${rem(16)}`,
-  border: `1px solid ${colors.neutral500.rgb}`,
+  border: `1px solid ${colors.colour.border.tertiary}`,
   borderRadius: `${rem(8)}`,
   boxSizing: 'border-box',
   borderWidth: 1,
@@ -130,7 +129,7 @@ const tabButtonStyles = ({
     border: 'none',
     '&.active': {
       paddingBottom: rem(16),
-      color: charcoal.rgb,
+      color: colour.foreground.primary,
       fontWeight: 'bold',
       borderBottom: `${rem(4)} solid ${primary500.rgba}`,
     },

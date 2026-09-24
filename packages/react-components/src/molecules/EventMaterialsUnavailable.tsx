@@ -1,7 +1,7 @@
 import { isEnabled } from '@asap-hub/flags';
 import { css } from '@emotion/react';
 import { Card, Headline2, Headline3, Link, Paragraph } from '../atoms';
-import { neutral1000 } from '../colors';
+import { colour } from '../colors';
 import { paperClipIcon } from '../icons';
 import { createMailTo } from '../mail';
 import { rem } from '../pixels';
@@ -12,7 +12,7 @@ const iconStyles = css({
     width: 'auto',
   },
   'svg path[stroke]': {
-    stroke: neutral1000.rgba,
+    stroke: colour.foreground.primary,
   },
   'svg path[stroke-width]': {
     strokeWidth: 1,

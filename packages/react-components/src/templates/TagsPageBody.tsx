@@ -12,7 +12,7 @@ import {
 } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import { Headline3, Paragraph } from '../atoms';
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 import { tagsIcon } from '../icons';
 import {
   EventCard,
@@ -37,7 +37,7 @@ const iconStyles = css({
   svg: {
     width: rem(48),
     height: rem(48),
-    fill: charcoal.rgb,
+    fill: colour.foreground.primary,
   },
 });
 

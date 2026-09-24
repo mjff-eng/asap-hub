@@ -5,7 +5,7 @@ import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph, Pill } from '../atoms';
-import { charcoal, neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const container = css({
@@ -40,7 +40,7 @@ const rowStyles = css({
   display: 'grid',
   paddingTop: rem(20),
   paddingBottom: rem(20),
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':last-child': {
     borderBottom: 'none',
     marginBottom: 0,
@@ -58,7 +58,7 @@ const rowStyles = css({
 const rowDivider = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     paddingTop: rem(16),
-    borderBottom: `1px solid ${neutral500.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -78,10 +78,13 @@ const showMoreStyles = css({
   marginTop: rem(32),
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
-const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyles = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 const iconStyles = css({
   verticalAlign: 'middle',

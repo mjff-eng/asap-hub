@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import { neutral300, colour, neutral500 } from '../colors';
+import { colour } from '../colors';
 import { contentSidePaddingWithNavigation } from '../layout';
 import { Header } from '../molecules';
 import {
@@ -68,7 +68,7 @@ const contentHeaderContainerStyles = css({
   boxSizing: 'border-box',
   gridColumn: '1 / -1',
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(48)}`,
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   backgroundColor: colour.neutral[0],
   rowGap: rem(12),
 });
@@ -91,7 +91,7 @@ const iconStyles = [
   css({
     width: rem(24),
     height: rem(24),
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
     borderRadius: rem(4),
     alignSelf: 'center',
   }),
@@ -102,7 +102,7 @@ const avatarStyles = [
   css({
     width: rem(48),
     height: rem(48),
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
     borderRadius: '50%',
     alignSelf: 'center',
   }),
@@ -113,7 +113,7 @@ const menuTextStyles = [
   css({
     width: '100%',
     height: rem(18),
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
     borderRadius: rem(4),
     alignSelf: 'center',
   }),
@@ -124,7 +124,7 @@ const headerTitleStyles = [
   css({
     width: '50%',
     height: rem(32),
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
     marginBottom: rem(16),
     borderRadius: rem(4),
     alignSelf: 'center',
@@ -136,7 +136,7 @@ const bodyTitleStyles = [
   css({
     width: '33%',
     height: rem(32),
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
     marginBottom: rem(16),
     borderRadius: rem(4),
     alignSelf: 'center',
@@ -148,7 +148,7 @@ const headerDescriptionStyles = (width: string) => [
   css({
     width,
     height: rem(12),
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
     borderRadius: rem(4),
     alignSelf: 'center',
   }),
@@ -159,7 +159,7 @@ const bodyDescriptionStyles = (width: string) => [
   css({
     width,
     height: rem(238),
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
     borderRadius: rem(4),
     alignSelf: 'center',
   }),
@@ -220,7 +220,7 @@ const bodyDescriptionStylesTable = (width: string) => [
   css({
     width,
     height: rem(238),
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
     borderRadius: rem(4),
     alignSelf: 'center',
   }),
@@ -231,7 +231,7 @@ const tableHeaderAndFooterStyles = [
   css({
     width: '100%',
     height: rem(32),
-    backgroundColor: neutral300.rgb,
+    backgroundColor: colour.background.tertiary,
     marginBottom: rem(16),
     marginTop: rem(16),
     borderRadius: rem(4),

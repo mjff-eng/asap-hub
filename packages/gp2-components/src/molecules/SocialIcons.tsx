@@ -1,10 +1,10 @@
 import { gp2 as gp2Model } from '@asap-hub/model';
 import { css } from '@emotion/react';
-import { Link, pixels, colors } from '@asap-hub/react-components';
+import { Link, pixels, colors, colour } from '@asap-hub/react-components';
 import { socialIconsMap } from '../utils';
 
 const { rem } = pixels;
-const { neutral700, neutral900 } = colors;
+const { neutral900 } = colors;
 
 const ROW_GAP = 12;
 
@@ -25,7 +25,7 @@ const iconStyles = css({
 });
 
 const inactiveStyles = css({
-  svg: { fill: neutral700.rgb, stroke: neutral700.rgb },
+  svg: { fill: colour.neutral[200], stroke: colour.neutral[200] },
 });
 
 type SocialIconsProps = gp2Model.UserSocial;

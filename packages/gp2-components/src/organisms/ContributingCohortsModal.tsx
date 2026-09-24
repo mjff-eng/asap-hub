@@ -28,7 +28,7 @@ const thinLineStyles = css({
   height: '1px',
   marginTop: rem(48),
   marginBottom: rem(48),
-  borderTop: `1px solid ${colors.neutral500.rgb}`,
+  borderTop: `1px solid ${colors.colour.border.tertiary}`,
 });
 
 const required = '(required)';

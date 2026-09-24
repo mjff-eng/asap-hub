@@ -9,10 +9,8 @@ import {
   success100,
   success500,
   warning100,
-  warning150,
-  warning500,
   neutral900,
-  neutral500,
+  colour,
 } from '..';
 import { Card, Paragraph } from '../atoms';
 import { iconStyles, statusIcon } from '../molecules/StatusButton';
@@ -50,13 +48,13 @@ const getbuttonStyles = (
   };
 
   const borderColors: ColorByType = {
-    warning: warning150.rgb,
+    warning: colour.utilitarian.orange[100],
     final: info200.rgb,
-    default: isSelected ? info500.rgb : neutral500.rgb,
+    default: isSelected ? info500.rgb : colour.neutral[100],
   };
 
   const textColors: ColorByType = {
-    warning: warning500.rgb,
+    warning: colour.utilitarian.orange[600],
     final: success500.rgb,
     default: isSelected ? info500.rgb : neutral900.rgb,
   };

@@ -1,6 +1,5 @@
-import { pixels } from '@asap-hub/react-components';
+import { pixels, colour } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
-import colors from './templates/colors';
 
 const {
   largeDesktopScreen,
@@ -51,7 +50,7 @@ export const detailHeaderStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(32),
-  borderBottom: `1px solid ${colors.neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 export const mainStyles = css({
@@ -90,7 +89,7 @@ export const footerStyles = css({
     flexDirection: 'column-reverse',
   },
 
-  borderTop: `1px solid ${colors.neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 export const padding24Styles = css({

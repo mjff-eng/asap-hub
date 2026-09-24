@@ -13,7 +13,7 @@ import {
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { neutral300 } from '../colors';
+import { colour } from '../colors';
 import { getSelectedNode } from './lexical-utils';
 
 const editorContainerStyles = css({
@@ -62,7 +62,7 @@ const buttonStyles = css({
   borderRadius: '4px',
   fontSize: '13px',
   '&:hover': {
-    background: neutral300.rgb,
+    background: colour.background.tertiary,
   },
 });
 

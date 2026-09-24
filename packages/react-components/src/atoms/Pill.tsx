@@ -38,7 +38,7 @@ export type AccentVariant =
 export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
   default: {
     backgroundColor: 'transparent',
-    borderColor: colors.neutral500.rgb,
+    borderColor: colors.colour.border.tertiary,
     color: colors.neutral900.rgb,
   },
   green: {
@@ -48,8 +48,8 @@ export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
   },
   warning: {
     backgroundColor: colors.warning100.rgb,
-    color: colors.warning500.rgb,
-    borderColor: colors.warning500.rgb,
+    color: colors.colour.foreground.warning,
+    borderColor: colors.colour.border.warning,
   },
   info: {
     backgroundColor: colors.info100.rgb,
@@ -57,14 +57,14 @@ export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
     borderColor: colors.info500.rgb,
   },
   neutral: {
-    backgroundColor: colors.neutral300.rgb,
+    backgroundColor: colors.colour.background.tertiary,
     color: colors.neutral800.rgb,
     borderColor: colors.neutral800.rgb,
   },
   error: {
-    backgroundColor: colors.error100.rgb,
-    color: colors.error500.rgb,
-    borderColor: colors.error500.rgb,
+    backgroundColor: colors.colour.background.error,
+    color: colors.colour.foreground.error,
+    borderColor: colors.colour.border.error,
   },
   success: {
     backgroundColor: colors.success100.rgb,
@@ -73,7 +73,7 @@ export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
   },
   gray: {
     color: colors.neutral900.rgb,
-    backgroundColor: colors.neutral300.rgb,
+    backgroundColor: colors.colour.background.tertiary,
     border: 'transparent',
   },
   blue: {

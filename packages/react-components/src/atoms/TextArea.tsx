@@ -4,15 +4,7 @@ import { css } from '@emotion/react';
 
 import { useValidation, styles, validationMessageStyles } from '../form';
 import { noop } from '../utils';
-import {
-  colour,
-  error500,
-  error100,
-  neutral700,
-  neutral900,
-  neutral300,
-  colorFromHex,
-} from '../colors';
+import { colour, neutral900, colorFromHex } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const containerStyles = css({
@@ -34,21 +26,21 @@ const textareaStyles = css({
   },
 
   '::placeholder': {
-    color: neutral700.rgb,
+    color: colour.neutral[200],
   },
 });
 const disabledStyles = css({
   color: neutral900.rgb,
-  backgroundColor: neutral300.rgb,
+  backgroundColor: colour.background.tertiary,
 });
 const invalidStyles = css({
   ':invalid': {
-    color: error500.rgb,
-    borderColor: error500.rgb,
-    backgroundColor: error100.rgb,
+    color: colour.foreground.error,
+    borderColor: colour.border.error,
+    backgroundColor: colour.background.error,
 
     '::placeholder': {
-      color: error500.rgb,
+      color: colour.foreground.error,
       opacity: 0.4,
     },
     '~ div:last-of-type': {
@@ -152,7 +144,11 @@ const TextArea: React.FC<TextAreaProps> = ({
             }) => [
               validationMessageStyles,
               limitStyles,
-              { color: reachedMaxLength ? error500.rgb : primary500.rgba },
+              {
+                color: reachedMaxLength
+                  ? colour.foreground.error
+                  : primary500.rgba,
+              },
             ]}
           >
             {value.length}/{maxLength}

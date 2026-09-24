@@ -1,11 +1,5 @@
 import { css, Theme } from '@emotion/react';
-import {
-  error500,
-  neutral800,
-  colour,
-  neutral500,
-  colorFromHex,
-} from '../colors';
+import { neutral800, colour, colorFromHex } from '../colors';
 import { noop } from '../utils';
 
 const toggleStyles = (
@@ -18,7 +12,10 @@ const toggleStyles = (
     height: '20px',
     flexShrink: 0,
     appearance: 'none',
-    backgroundColor: uncheckedColor === 'error' ? error500.rgb : neutral500.rgb,
+    backgroundColor:
+      uncheckedColor === 'error'
+        ? colour.background['error-inverse']
+        : colour.neutral[100],
     borderRadius: '10px',
     outline: 'none',
     cursor: 'pointer',

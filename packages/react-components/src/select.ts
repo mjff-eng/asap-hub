@@ -3,18 +3,7 @@ import { CSSObject } from '@emotion/serialize';
 import { GroupBase, InputProps, StylesConfig } from 'react-select';
 import { ellipsisStyles } from './atoms/Ellipsis';
 import { MultiSelectOptionsType } from './atoms/MultiSelect';
-import {
-  charcoal,
-  colour,
-  error500,
-  neutral900,
-  success100,
-  error100,
-  neutral300,
-  neutral500,
-  neutral700,
-  colorFromHex,
-} from './colors';
+import { colour, neutral900, success100, colorFromHex } from './colors';
 import {
   borderWidth,
   indicatorPadding,
@@ -39,7 +28,7 @@ const disabledStyles = {
   svg: {
     fill: neutral900.rgb,
   },
-  backgroundColor: neutral300.rgb,
+  backgroundColor: colour.background.tertiary,
 };
 
 const baseSelectStyles = {
@@ -48,10 +37,10 @@ const baseSelectStyles = {
     padding: 0,
     margin: '0 2px',
     width: '100%',
-    color: charcoal.rgb,
+    color: colour.foreground.primary,
     input: {
       width: '100% !important',
-      color: `${charcoal.rgb} !important`,
+      color: `${colour.foreground.primary} !important`,
     },
   }),
   indicatorSeparator: () => ({
@@ -75,14 +64,14 @@ const baseSelectStyles = {
     paddingTop: rem(9),
 
     borderRadius: 0,
-    boxShadow: `0px 2px 4px ${neutral500.rgb}`,
+    boxShadow: `0px 2px 4px ${colour.neutral[100]}`,
   }),
   menuList: (provided: CSSObject) => ({
     ...provided,
 
     borderStyle: 'solid',
     borderWidth: rem(borderWidth),
-    borderColor: neutral500.rgb,
+    borderColor: colour.border.tertiary,
   }),
 
   noOptionsMessage: () => ({
@@ -124,9 +113,9 @@ export const reactSelectStyles = <
       ...(isFocused ? { borderColor: primary500.rgba } : {}),
       ...(isInvalid
         ? {
-            color: error500.rgb,
-            borderColor: error500.rgb,
-            backgroundColor: error100.rgb,
+            color: colour.foreground.error,
+            borderColor: colour.border.error,
+            backgroundColor: colour.background.error,
           }
         : {}),
       ...(isDisabled ? disabledStyles : {}),
@@ -136,7 +125,7 @@ export const reactSelectStyles = <
       margin: 0,
       color: getValue()?.some((option) => option.value !== '')
         ? 'unset'
-        : neutral700.rgb,
+        : colour.neutral[200],
     }),
     valueContainer: (provided) => ({
       ...provided,
@@ -145,7 +134,7 @@ export const reactSelectStyles = <
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: isInvalid ? error500.rgb : neutral900.rgb,
+      color: isInvalid ? colour.foreground.error : neutral900.rgb,
       opacity: isInvalid ? 0.4 : provided.opacity,
     }),
     menu: (provided: CSSObject) => ({
@@ -194,8 +183,12 @@ export const reactMultiSelectStyles = <
       ...(isFocused ? { borderColor: primary500.rgba } : {}),
       ...(isInvalid
         ? {
-            borderColor: isFocused ? primary900.rgba : error500.rgb,
-            backgroundColor: isFocused ? colour.neutral[0] : error100.rgb,
+            borderColor: isFocused
+              ? primary900.rgba
+              : colour.utilitarian.red[600],
+            backgroundColor: isFocused
+              ? colour.neutral[0]
+              : colour.utilitarian.red[100],
             svg: { fill: 'unset' },
           }
         : {}),
@@ -210,7 +203,7 @@ export const reactMultiSelectStyles = <
 
       borderStyle: 'solid',
       borderWidth: `${borderWidth}px`,
-      borderColor: isInvalid ? neutral700.rgba : neutral500.rgb,
+      borderColor: isInvalid ? colour.border.secondary : colour.neutral[100],
       borderRadius: rem(18),
       backgroundColor: colour.neutral[0],
     }),
@@ -218,7 +211,7 @@ export const reactMultiSelectStyles = <
       ...provided,
       ...ellipsisStyles,
       padding: 0,
-      color: charcoal.rgb,
+      color: colour.foreground.primary,
       fontSize: 'unset',
     }),
     multiValueRemove: (provided, state) =>
@@ -256,7 +249,7 @@ export const reactMultiSelectStyles = <
     },
     placeholder: (provided) => ({
       ...provided,
-      color: isInvalid ? error500.rgb : provided.color,
+      color: isInvalid ? colour.foreground.error : provided.color,
       opacity: isInvalid ? 0.4 : provided.opacity,
       marginLeft: rem(6),
     }),

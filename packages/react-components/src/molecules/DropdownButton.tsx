@@ -15,11 +15,8 @@ import {
   colorWithTransparency,
   neutral200,
   colour,
-  neutral500,
-  neutral700,
   success100,
   neutral900,
-  neutral300,
   colorFromHex,
 } from '../colors';
 
@@ -49,8 +46,10 @@ const menuContainerStyles = (customMenuWidth?: number) =>
     top: 0,
     right: 0,
     backgroundColor: colour.neutral[0],
-    border: `1px solid ${neutral500.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
+    border: `1px solid ${colour.border.tertiary}`,
+    boxShadow: `0 2px 6px 0 ${
+      colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
+    }`,
 
     flexDirection: 'column',
 
@@ -117,7 +116,7 @@ const itemStyles = ({
     color: neutral900.rgb,
     backgroundColor:
       type === 'title'
-        ? neutral300.rgba
+        ? colour.general.blue.cerulean[25]
         : type === 'inner'
           ? neutral200.rgba
           : 'none',

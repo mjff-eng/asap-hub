@@ -6,7 +6,7 @@ import { Display, Paragraph, Link } from '../atoms';
 import { mobileScreen } from '../pixels';
 import { contentSidePaddingWithNavigation } from '../layout';
 import { LibraryIcon } from '../icons';
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 
 const styles = css({
   padding: `0 ${contentSidePaddingWithNavigation()}`,
@@ -35,7 +35,7 @@ const NoOutputsPage: React.FC<NoOutputsPageProps> = ({
 }) => (
   <div css={styles}>
     <span css={iconStyles}>
-      <LibraryIcon color={charcoal.rgb} />
+      <LibraryIcon color={colour.neutral[900]} />
     </span>
     <div>
       <Display styleAsHeading={3}>{title}</Display>

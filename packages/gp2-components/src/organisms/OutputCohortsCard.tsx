@@ -9,10 +9,11 @@ import {
   Paragraph,
   pixels,
   colors,
+  colour,
 } from '@asap-hub/react-components';
 
 const { rem, tabletScreen } = pixels;
-const { charcoal, neutral900 } = colors;
+const { neutral900 } = colors;
 
 const container = css({
   display: 'grid',
@@ -61,7 +62,10 @@ const paragraphStyle = css({
   color: neutral900.rgb,
 });
 
-const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyles = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 type OutputCohortsCardProps = Pick<
   gp2.OutputBaseResponse,

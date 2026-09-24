@@ -10,16 +10,7 @@ import {
   MultiSelectOptionsType,
   Paragraph,
 } from '../atoms';
-import {
-  charcoal,
-  neutral1000,
-  pearl,
-  colour,
-  neutral900,
-  neutral300,
-  neutral500,
-  neutral700,
-} from '../colors';
+import { colour, neutral900 } from '../colors';
 import { crossIcon, plusIcon, searchIcon } from '../icons';
 import { ConfirmableModalFooter, Modal } from '../molecules';
 import PendingSpeakerCard from '../molecules/PendingSpeakerCard';
@@ -78,7 +69,7 @@ const titleStyles = css({
   fontSize: rem(26),
   fontWeight: 700,
   lineHeight: rem(32),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const bodyStyles = css({
@@ -97,7 +88,7 @@ const hideOnDesktopStyles = css({
   [`@media (min-width: ${mobileScreen.max + 1}px)`]: { display: 'none' },
 });
 
-const placeholderStyles = css({ color: neutral700.rgb });
+const placeholderStyles = css({ color: colour.neutral[200] });
 
 const searchOptionStyles = css([
   flexRowGap8Styles,
@@ -144,7 +135,7 @@ const sectionTitleStyles = css({
   fontSize: rem(17),
   fontWeight: 700,
   lineHeight: rem(24),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 // Wraps the "Speakers" heading and the stat span — always stacked on
@@ -190,9 +181,11 @@ const markAllSharedButtonStyles = css({
 
 const cardSurfaceStyles = (enabled: boolean) =>
   css({
-    border: `1px solid ${neutral500.rgb}`,
+    border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? pearl.rgb : neutral300.rgb,
+    backgroundColor: enabled
+      ? colour.background.secondary
+      : colour.general.blue.cerulean[25],
   });
 
 const groupsCardStyles = (enabled: boolean) =>
@@ -210,7 +203,7 @@ const groupsTableHeaderStyles = css({
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   paddingBottom: rem(16),
 });
 

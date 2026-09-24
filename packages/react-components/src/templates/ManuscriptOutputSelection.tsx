@@ -14,7 +14,7 @@ import {
   colour,
 } from '..';
 import { mobileScreen, rem } from '../pixels';
-import { info900, neutral900, neutral500 } from '../colors';
+import { info900, neutral900 } from '../colors';
 
 const mainStyles = css({
   display: 'flex',
@@ -99,7 +99,7 @@ const pillContainerStyles = (isFocused?: boolean) =>
       flexDirection: 'column',
     },
     '& > *:nth-of-type(1), & > *:nth-of-type(2)': {
-      backgroundColor: isFocused ? neutral500.hex : undefined,
+      backgroundColor: isFocused ? colour.neutral[100] : undefined,
       color: isFocused ? neutral900.hex : undefined,
     },
     '& > *:nth-of-type(3)': {

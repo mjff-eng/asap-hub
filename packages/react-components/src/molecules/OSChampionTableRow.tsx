@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import { Button, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { neutral200, neutral500 } from '../colors';
+import { neutral200, colour } from '../colors';
 import {
   plusRectIcon,
   minusRectIcon,
@@ -17,15 +17,15 @@ import { rem } from '../pixels';
 const rowStyles = (isEvenRow: boolean) =>
   css({
     padding: `${rem(20)} ${rem(24)} 0`,
-    borderBottom: `1px solid ${neutral500.rgb}`,
-    borderTop: `1px solid ${neutral500.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
+    borderTop: `1px solid ${colour.border.tertiary}`,
     ':first-of-type': {
       borderTop: 'none',
       borderBottom: 'none',
     },
     background: isEvenRow ? '#fff' : neutral200.rgb,
     td: {
-      borderBottom: `1px solid ${neutral500.rgb}`,
+      borderBottom: `1px solid ${colour.border.tertiary}`,
     },
     ':last-child': {
       borderBottom: 'none',
@@ -42,7 +42,7 @@ const rowStyles = (isEvenRow: boolean) =>
 const collapsedRowStyles = (isEvenRow: boolean) =>
   css({
     'td:nth-of-type(2), td:nth-of-type(3)': {
-      borderBottom: `1px solid ${neutral500.rgb}`,
+      borderBottom: `1px solid ${colour.border.tertiary}`,
     },
     ':last-of-type': {
       td: {

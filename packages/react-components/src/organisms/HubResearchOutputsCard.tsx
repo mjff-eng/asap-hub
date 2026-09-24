@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Card, Paragraph, Subtitle } from '../atoms';
-import { charcoal, neutral500, neutral900 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { ExpandableText, Info, TooltipInfo } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
 import { getPerformanceMoodIcon, getPerformanceMoodLabel } from '../utils';
@@ -24,7 +24,7 @@ const tableStyles = css({
   width: '100%',
   borderCollapse: 'collapse',
   'tbody tr:not(:last-child) td': {
-    borderBottom: `1px solid ${neutral500.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
   [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
     display: 'none !important',
@@ -33,7 +33,7 @@ const tableStyles = css({
 
 const headerCellStyles = css({
   textAlign: 'left',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   fontSize: rem(17),
   fontWeight: 'bold',
   lineHeight: rem(24),
@@ -102,7 +102,7 @@ const mobileItemStyles = css({
     paddingTop: 0,
   },
   '&:not(:last-child)': {
-    borderBottom: `1px solid ${neutral500.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -120,7 +120,7 @@ const mobileLabelStyles = css({
   fontWeight: 700,
   lineHeight: rem(16),
   letterSpacing: rem(0.1),
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
 });
 
 const percentageLabelContainerStyles = css({

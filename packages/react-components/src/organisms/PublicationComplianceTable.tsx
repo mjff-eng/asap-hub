@@ -10,7 +10,7 @@ import { PageControls } from '..';
 
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, neutral200, neutral900, neutral500 } from '../colors';
+import { neutral200, neutral900, colour } from '../colors';
 import {
   InactiveBadgeIcon,
   AlphabeticalSortingIcon,
@@ -29,26 +29,26 @@ const container = css({
     paddingLeft: rem(24),
   },
   'th.team, td.team': {
-    borderRight: `1px solid ${neutral500.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
   'th.publications, td.publications': {
-    borderRight: `1px solid ${neutral500.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
   'th.datasets, td.datasets': {
-    borderRight: `1px solid ${neutral500.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
   'th.protocols, td.protocols': {
-    borderRight: `1px solid ${neutral500.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
   'th.code, td.code': {
-    borderRight: `1px solid ${neutral500.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
 });
 
 const titleStyles = css({
   alignItems: 'center',
   fontWeight: 'bold',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   background: '#fff',
   verticalAlign: 'top',
   paddingTop: rem(32),
@@ -71,7 +71,7 @@ const headerStyles = css({
 });
 
 const rowStyles = css({
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':nth-of-type(even)': {
     background: neutral200.rgb,
   },

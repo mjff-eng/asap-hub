@@ -17,15 +17,7 @@ import {
   Paragraph,
   Switch,
 } from '../atoms';
-import {
-  neutral900,
-  neutral200,
-  neutral800,
-  neutral1000,
-  pearl,
-  neutral500,
-  neutral700,
-} from '../colors';
+import { neutral900, neutral200, neutral800, colour } from '../colors';
 import {
   binIcon,
   InactiveBadgeIcon,
@@ -89,7 +81,7 @@ const titleStyles = css({
   fontSize: rem(26),
   fontWeight: 700,
   lineHeight: 32 / 26,
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const bodyStyles = css({
@@ -133,7 +125,7 @@ const sectionTitleStyles = css({
   fontSize: rem(17),
   fontWeight: 700,
   lineHeight: 24 / 17,
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const optionalLabelStyles = css({ fontWeight: 400 });
@@ -155,9 +147,9 @@ const uploadButtonStyles = (enabled: boolean) =>
     alignSelf: 'flex-start',
     gap: rem(8),
     padding: `${rem(8)} ${rem(16)}`,
-    border: `1px solid ${neutral500.rgb}`,
+    border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(4),
-    color: enabled ? neutral1000.rgb : neutral900.rgb,
+    color: enabled ? colour.foreground.primary : neutral900.rgb,
     maxWidth: 'none',
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       flexGrow: 0,
@@ -166,7 +158,7 @@ const uploadButtonStyles = (enabled: boolean) =>
     '> svg': {
       width: rem(24),
       height: rem(24),
-      stroke: enabled ? neutral1000.rgb : neutral900.rgb,
+      stroke: enabled ? colour.foreground.primary : neutral900.rgb,
       filter: 'none',
     },
     ...buttonIconGapReset,
@@ -241,16 +233,16 @@ const emptyAttendeesStyles = css({
   gap: rem(8),
   textAlign: 'center',
   padding: `${rem(32)} ${rem(24)}`,
-  border: `1px solid ${neutral500.rgb}`,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: rem(8),
-  backgroundColor: pearl.rgb,
+  backgroundColor: colour.background.secondary,
 });
 
 const attendeesCardStyles = (enabled: boolean) =>
   css({
-    border: `1px solid ${neutral500.rgb}`,
+    border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? pearl.rgb : neutral200.rgb,
+    backgroundColor: enabled ? colour.background.secondary : neutral200.rgb,
     padding: rem(24),
     overflowX: 'auto',
   });
@@ -272,7 +264,7 @@ const attendeesTableHeaderStyles = css({
   fontWeight: 'bold',
   lineHeight: 24 / 17,
   letterSpacing: rem(0.1),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   paddingBottom: rem(12),
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     fontSize: rem(14),
@@ -317,7 +309,7 @@ const groupLineStyles = css({
 
 const groupTitleStyles = css([
   groupLineStyles,
-  { fontWeight: 700, color: neutral1000.rgb },
+  { fontWeight: 700, color: colour.foreground.primary },
 ]);
 
 const groupHelperStyles = css([
@@ -336,7 +328,7 @@ const lockStyles = css({
 
 const rowDividerStyles = css({
   paddingBottom: rem(16),
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 const teamCellStyles = css({
@@ -368,7 +360,7 @@ const searchOptionMetaStyles = css({
 });
 
 const placeholderStyles = css({
-  color: neutral700.rgb,
+  color: colour.neutral[200],
 });
 
 // react-select remounts a custom component whose identity changes, so the

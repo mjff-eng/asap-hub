@@ -7,7 +7,7 @@ import {
   getButtonChildren,
   getButtonStyles,
 } from '../button';
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 import { defaultThemeVariant, ThemeVariant } from '../theme';
 import { noop } from '../utils';
 import { getLinkColors, styles as linkStyles } from './Link';
@@ -111,7 +111,7 @@ const Button: React.FC<ButtonProps> = ({
           size={small ? 18 : 24}
           thickness={2}
           color="currentColor"
-          trackColor={neutral500.rgb}
+          trackColor={colour.neutral[100]}
         />
         {getButtonChildren(children)}
       </span>

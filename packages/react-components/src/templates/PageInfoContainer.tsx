@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
-import { colour, neutral500 } from '../colors';
+import { colour } from '../colors';
 import PageConstraints from './PageConstraints';
 import { rem } from '../pixels';
 
@@ -13,7 +13,7 @@ type PageInfoContainerProps = {
 
 const containerStyles = css({
   background: colour.neutral[0],
-  boxShadow: `0 2px 4px -2px ${neutral500.rgb}`,
+  boxShadow: `0 2px 4px -2px ${colour.neutral[100]}`,
 });
 
 const navContainerStyles = css({

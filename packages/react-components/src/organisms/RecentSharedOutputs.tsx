@@ -6,7 +6,7 @@ import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { Card, Link } from '../atoms';
 import { formatDateToTimezone } from '../date';
 import { rem, tabletScreen } from '../pixels';
-import { charcoal, neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 
 const container = css({
   display: 'grid',
@@ -32,7 +32,7 @@ const rowTitleStyles = css({
 
 const rowStyles = css({
   display: 'grid',
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   paddingBottom: rem(21),
   marginBottom: rem(21),
   ':last-child': {
@@ -56,7 +56,10 @@ const paragraphStyle = css({
   color: neutral900.rgb,
 });
 
-const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyles = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 const getSharedOutputHrefCRN = (id: string) =>
   sharedResearch({}).researchOutput({

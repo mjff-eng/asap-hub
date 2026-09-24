@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral500, neutral900 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { rem } from '../pixels';
 
 const badgeStyles = css({
@@ -9,7 +9,7 @@ const badgeStyles = css({
   minWidth: '24px',
   height: '24px',
   borderRadius: '50%',
-  border: `1px solid ${neutral500.rgba}`,
+  border: `1px solid ${colour.border.tertiary}`,
   backgroundColor: 'transparent',
   fontFamily: 'Roboto, sans-serif',
   fontSize: rem(14),
