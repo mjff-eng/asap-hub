@@ -168,7 +168,11 @@ export const ContrastBadge = ({
   const ratio = contrast(foreground, background);
   const kind = ratio >= 4.5 ? 'green' : ratio >= 3 ? 'amber' : 'red';
   const label =
-    ratio >= 4.5 ? 'AA text' : ratio >= 3 ? 'AA large only' : 'fails AA';
+    ratio >= 4.5
+      ? 'easy to read'
+      : ratio >= 3
+        ? 'readable only when large'
+        : 'hard to read';
   return (
     <Chip kind={kind}>
       {ratio}:1 {label}
