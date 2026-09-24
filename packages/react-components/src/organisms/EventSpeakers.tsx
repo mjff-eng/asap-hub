@@ -201,14 +201,14 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
     (total, group) => total + group.users.length,
     0,
   );
-  const totalSpeakers = teamSpeakers + projectSpeakers + externalUsers.length;
-  const sharedSpeakers = [
-    ...teamGroups,
-    ...projectGroups,
-    { users: externalUsers },
-  ].reduce((total, group) => total + groupFindings(group).shared, 0);
+  const crnSpeakers = teamSpeakers + projectSpeakers;
+  const totalSpeakers = crnSpeakers + externalUsers.length;
+  const sharedSpeakers = [...teamGroups, ...projectGroups].reduce(
+    (total, group) => total + groupFindings(group).shared,
+    0,
+  );
   const findingsPercentage =
-    totalSpeakers > 0 ? Math.round((sharedSpeakers / totalSpeakers) * 100) : 0;
+    crnSpeakers > 0 ? Math.round((sharedSpeakers / crnSpeakers) * 100) : 0;
 
   const renderGroupRow = (group: SpeakerTeamGroup | SpeakerProjectGroup) => (
     <SpeakerTeamRow
@@ -275,7 +275,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
               label="Preliminary findings"
               value={findingsPercentage}
               caption={`${sharedSpeakers} of ${pluralize(
-                totalSpeakers,
+                crnSpeakers,
                 'speaker',
               )}`}
               captionDetail="shared preliminary findings"

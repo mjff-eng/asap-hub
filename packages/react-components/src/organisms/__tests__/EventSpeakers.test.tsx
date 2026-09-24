@@ -196,12 +196,19 @@ describe('EventSpeakers', () => {
       expect(getAllByText('2').length).toBeGreaterThan(0);
     });
 
-    it('Should count shared speakers, not groups, across all sections', () => {
-      const { getByText } = renderCard({ groups: mixedGroups });
-      // 1 team + 2 project + 0 external shared of 8 speakers.
-      expect(getByText('38%')).toBeVisible();
+    it('Should count shared CRN speakers, not groups, and leave externals out', () => {
+      const { getByText } = renderCard({
+        groups: [
+          teamGroup({ users: makeUsers('team-0', 4, 1) }),
+          projectGroup({ users: makeUsers('project-0', 2, 2) }),
+          externalGroup({ users: makeExternalUsers(2, 2) }),
+        ],
+      });
+      // 1 team + 2 project shared of 6 CRN speakers; the 2 externals who shared
+      // count in neither side.
+      expect(getByText('50%')).toBeVisible();
       // The count and the sentence are separate nodes so only the count is bold.
-      expect(getByText(/3 of 8 speakers/)).toBeVisible();
+      expect(getByText(/3 of 6 speakers/)).toBeVisible();
       expect(getByText('shared preliminary findings')).toBeVisible();
     });
 
