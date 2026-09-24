@@ -2,12 +2,11 @@ import {
   Avatar,
   chevronDownIcon,
   chevronUpIcon,
-  colorWithTransparency,
+  cssColour,
   drawerQuery,
   navigationGrey,
   pixels,
   colour,
-  colorFromHex,
 } from '@asap-hub/react-components';
 import { useCurrentUserGP2 } from '@asap-hub/react-context';
 import { css } from '@emotion/react';
@@ -34,16 +33,14 @@ const userMenuStyles = css({
   display: 'none',
   position: 'absolute',
   border: `1px solid ${colour.border.tertiary}`,
-  boxShadow: `0 2px 6px 0 ${
-    colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
-  }`,
+  boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
   right: 5,
 });
 
 const userMenuShownStyles = css({
   zIndex: 1,
   [drawerQuery]: {
-    backgroundColor: navigationGrey.rgb,
+    backgroundColor: navigationGrey,
   },
   display: 'unset',
 });

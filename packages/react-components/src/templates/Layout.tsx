@@ -14,7 +14,7 @@ import { css } from '@emotion/react';
 import { tags } from '@asap-hub/routing';
 import { ScrollContext } from '@asap-hub/react-context';
 
-import { colorWithTransparency, colour, colorFromHex } from '../colors';
+import { cssColour, colour } from '../colors';
 import { MenuHeader, OnboardingFooter, ToastStack } from '../organisms';
 import { Overlay } from '../atoms';
 import {
@@ -287,14 +287,12 @@ const userMenuStyles = css({
     right: '24px',
 
     border: `1px solid ${colour.border.tertiary}`,
-    boxShadow: `0 2px 6px 0 ${
-      colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
-    }`,
+    boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
   },
 });
 const userMenuShownStyles = css({
   [drawerQuery]: {
-    backgroundColor: navigationGrey.rgb,
+    backgroundColor: navigationGrey,
   },
   // The 90vh cap and own scrollbar are for the desktop dropdown only.
   [crossQuery]: {

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import userEvent from '@testing-library/user-event';
 import Tag from '../Tag';
-import { colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders a tag with content', () => {
   const { container } = render(<Tag>Text</Tag>);
@@ -12,8 +12,8 @@ it('renders a tag with content', () => {
 it('renders a white tag with the brand background when highlighted', () => {
   const { getByText, rerender } = render(<Tag>Text</Tag>);
   expect(
-    findParentWithStyle(getByText('Text'), 'backgroundColor')?.backgroundColor,
-  ).toBe(colorFromHex(colour.neutral[0]).rgb);
+    findParentWithStyle(getByText('Text'), 'backgroundColor')?.element,
+  ).toHaveStyle({ backgroundColor: colour.neutral[0] });
 
   rerender(<Tag highlight>Text</Tag>);
   expect(
@@ -26,9 +26,9 @@ it('renders a tag with disabled styles when disabled', () => {
   const getParentStyle = (prop: keyof CSSStyleDeclaration) =>
     findParentWithStyle(getByText('Text'), prop);
 
-  expect(getParentStyle('backgroundColor')?.backgroundColor).toBe(
-    colorFromHex(colour.neutral[0]).rgb,
-  );
+  expect(getParentStyle('backgroundColor')?.element).toHaveStyle({
+    backgroundColor: colour.neutral[0],
+  });
 
   rerender(<Tag enabled={false}>Text</Tag>);
 

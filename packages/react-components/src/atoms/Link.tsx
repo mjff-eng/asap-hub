@@ -37,7 +37,7 @@ export const getLinkColors = (
   themeVariant: ThemeVariant,
 ): SerializedStyles =>
   colors?.primary500
-    ? css({ color: colors.primary500.rgba })
+    ? css({ color: colors.primary500 })
     : themeStyles[themeVariant];
 
 const iconThemeStyles: Record<ThemeVariant, SerializedStyles> = {

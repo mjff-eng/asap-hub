@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { colorFromHex, colour } from '../../colors';
+import { colour } from '../../colors';
 import SpeakerRoleBadge from '../SpeakerRoleBadge';
 
 it('Should render the single role when exactly one role is given', () => {
@@ -23,6 +23,6 @@ it('Should apply the neutral 100 background when disabled', () => {
   const textEl = screen.getByText('Lead PI');
   const pillSpan = textEl.parentElement?.parentElement;
   expect(pillSpan).toHaveStyle({
-    backgroundColor: colorFromHex(colour.neutral[100]).rgb,
+    backgroundColor: colour.neutral[100],
   });
 });
