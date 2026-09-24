@@ -1,4 +1,11 @@
-import { casPrimitives, casTheme, colors } from '@asap-hub/react-components';
+import {
+  casPrimitives,
+  casTheme,
+  colors,
+  cssColour,
+} from '@asap-hub/react-components';
+
+export { cssColour };
 
 export type Product = keyof typeof casTheme;
 
@@ -74,13 +81,6 @@ export const themeTokens: ThemeToken[] = Object.entries(casTheme.crn).map(
     };
   },
 );
-
-export const cssColour = (hex: string, alpha = 1): string =>
-  alpha === 1
-    ? hex
-    : `rgba(${[1, 3, 5]
-        .map((start) => parseInt(hex.slice(start, start + 2), 16))
-        .join(', ')}, ${alpha})`;
 
 const luminance = (hex: string): number => {
   const [r, g, b] = [1, 3, 5].map((start) => {
