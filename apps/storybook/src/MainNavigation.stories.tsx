@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { StaticRouter } from 'react-router';
-import { MainNavigation, neutral500 } from '@asap-hub/react-components';
+import { colour, MainNavigation } from '@asap-hub/react-components';
 import {
   about,
   discover,
@@ -32,7 +32,7 @@ const RailFrame = ({
   <div
     style={{
       width: collapsed ? collapsedRailWidth : expandedRailWidth,
-      borderRight: `1px solid ${neutral500.rgb}`,
+      borderRight: `1px solid ${colour.border.tertiary}`,
       minHeight: '100vh',
       boxSizing: 'border-box',
       transition: 'width 250ms ease',
