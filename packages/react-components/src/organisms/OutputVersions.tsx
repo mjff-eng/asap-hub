@@ -85,11 +85,11 @@ const titleStyles = css({
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    stroke: colour.brand.crn[500],
+    stroke: colour.foreground.brand,
   }),
   grey: css({
-    stroke: colour.brand.crn[500],
-    ':active': { stroke: colour.brand.crn[800] },
+    stroke: colour.foreground.brand,
+    ':active': { stroke: colour.border.brand },
   }),
   dark: css({
     stroke: colour.neutral[0],

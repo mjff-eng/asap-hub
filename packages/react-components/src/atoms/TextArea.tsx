@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 
 import { useValidation, styles, validationMessageStyles } from '../form';
 import { noop } from '../utils';
-import { colour, colorFromHex } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const containerStyles = css({
@@ -119,16 +119,11 @@ const TextArea: React.FC<TextAreaProps> = ({
         onChange={({ currentTarget: { value: newValue } }) =>
           onChange(newValue)
         }
-        css={({ colors }) => [
+        css={[
           styles,
           textareaStyles,
           enabled || disabledStyles,
           validationMessage && invalidStyles,
-          colors?.primary500 && {
-            ':focus': {
-              borderColor: colors?.primary500.rgba,
-            },
-          },
         ]}
         {...(onBlur ? { onBlur } : {})}
       />
@@ -139,15 +134,13 @@ const TextArea: React.FC<TextAreaProps> = ({
 
         {maxLength !== undefined && (
           <div
-            css={({
-              colors: { primary500 = colorFromHex(colour.brand.crn[500]) } = {},
-            }) => [
+            css={[
               validationMessageStyles,
               limitStyles,
               {
                 color: reachedMaxLength
                   ? colour.foreground.error
-                  : primary500.rgba,
+                  : colour.foreground.brand,
               },
             ]}
           >

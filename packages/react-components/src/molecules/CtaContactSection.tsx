@@ -24,11 +24,11 @@ const copyButtonStyles = css({
   backgroundColor: 'inherit',
   borderColor: colors.colour.brand.crn[100],
   ':hover, :focus': {
-    borderColor: colors.colour.brand.crn[500],
+    borderColor: colors.colour.border.brand,
   },
   path: {
-    fill: colors.colour.brand.crn[500],
-    stroke: colors.colour.brand.crn[500],
+    fill: colors.colour.foreground.brand,
+    stroke: colors.colour.foreground.brand,
   },
 });
 interface CtaContactSectionProps {

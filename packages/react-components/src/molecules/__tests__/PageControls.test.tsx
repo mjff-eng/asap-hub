@@ -6,7 +6,7 @@ import {
 import fc from 'fast-check';
 
 import PageControls from '../PageControls';
-import { colour, colorFromHex } from '../../colors';
+import { colour } from '../../colors';
 
 mockConsoleError();
 
@@ -50,7 +50,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(colorFromHex(colour.brand.crn[500]).rgba.replace(/ /g, ''));
+    ).toBe(colour.foreground.brand);
     expect(getByTitle(/first page/i).closest('a')).toHaveAttribute(
       'href',
       '#0',
@@ -66,7 +66,7 @@ describe('the arrow controls', () => {
     );
     expect(
       findParentWithStyle(getByTitle(/first page/i), 'stroke')?.stroke,
-    ).toBe(colour.neutral[200]);
+    ).toBe(colour.foreground.disabled);
     expect(getByTitle(/first page/i).closest('a')).not.toHaveAttribute('href');
   });
 
@@ -83,7 +83,7 @@ describe('the arrow controls', () => {
         getByTitle(/previous page/i),
         'stroke',
       )?.stroke?.replace(/ /g, ''),
-    ).toBe(colorFromHex(colour.brand.crn[500]).rgba.replace(/ /g, ''));
+    ).toBe(colour.foreground.brand);
     expect(getByTitle(/previous page/i).closest('a')).toHaveAttribute(
       'href',
       '#1',
@@ -99,7 +99,7 @@ describe('the arrow controls', () => {
     );
     expect(
       findParentWithStyle(getByTitle(/previous page/i), 'stroke')?.stroke,
-    ).toBe(colour.neutral[200]);
+    ).toBe(colour.foreground.disabled);
     expect(getByTitle(/previous page/i).closest('a')).not.toHaveAttribute(
       'href',
     );
@@ -118,7 +118,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(colorFromHex(colour.brand.crn[500]).rgba.replace(/ /g, ''));
+    ).toBe(colour.foreground.brand);
     expect(getByTitle(/next page/i).closest('a')).toHaveAttribute('href', '#1');
   });
   it('disable the link to the next page on the last page', () => {
@@ -131,7 +131,7 @@ describe('the arrow controls', () => {
     );
     expect(
       findParentWithStyle(getByTitle(/next page/i), 'stroke')?.stroke,
-    ).toBe(colour.neutral[200]);
+    ).toBe(colour.foreground.disabled);
     expect(getByTitle(/next page/i).closest('a')).not.toHaveAttribute('href');
   });
 
@@ -148,7 +148,7 @@ describe('the arrow controls', () => {
         / /g,
         '',
       ),
-    ).toBe(colorFromHex(colour.brand.crn[500]).rgba.replace(/ /g, ''));
+    ).toBe(colour.foreground.brand);
     expect(getByTitle(/last page/i).closest('a')).toHaveAttribute('href', '#2');
   });
   it('disable the link to the last page on the last page', () => {
@@ -161,7 +161,7 @@ describe('the arrow controls', () => {
     );
     expect(
       findParentWithStyle(getByTitle(/last page/i), 'stroke')?.stroke,
-    ).toBe(colour.neutral[200]);
+    ).toBe(colour.foreground.disabled);
     expect(getByTitle(/last page/i).closest('a')).not.toHaveAttribute('href');
   });
 });
@@ -257,11 +257,11 @@ it('highlights the active page number', () => {
       renderPageHref={renderPageHref}
     />,
   );
-  expect(getComputedStyle(getByText('4')).color).not.toBe(
-    colorFromHex(colour.brand.crn[500]).rgb,
-  );
-  expect(getComputedStyle(getByText('5')).color).toBe(
-    colorFromHex(colour.brand.crn[500]).rgb,
+  expect(getByText('4')).not.toHaveStyleRule('color', colour.foreground.brand);
+  expect(getByText('5')).toHaveStyleRule('color', colour.foreground.brand);
+  expect(getByText('5')).toHaveStyleRule(
+    'background-color',
+    colour.background.active,
   );
 });
 

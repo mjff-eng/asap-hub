@@ -1,9 +1,8 @@
-import { Theme } from '@emotion/react';
 import { CSSObject } from '@emotion/serialize';
 import { GroupBase, InputProps, StylesConfig } from 'react-select';
 import { ellipsisStyles } from './atoms/Ellipsis';
 import { MultiSelectOptionsType } from './atoms/MultiSelect';
-import { colour, colorFromHex } from './colors';
+import { colour } from './colors';
 import {
   borderWidth,
   indicatorPadding,
@@ -84,12 +83,6 @@ export const reactSelectStyles = <
   T extends { value: string; label: string } = { value: string; label: string },
   M extends boolean = boolean,
 >(
-  {
-    colors: {
-      primary500 = colorFromHex(colour.brand.crn[500]),
-      primary900 = colorFromHex(colour.brand.crn[800]),
-    } = {},
-  }: Theme,
   isInvalid: boolean,
 ): StylesConfig<T, M, GroupBase<T>> =>
   ({
@@ -100,7 +93,7 @@ export const reactSelectStyles = <
       padding: `${rem(12)} ${rem(paddingLeftRight)}`,
 
       backgroundColor: isFocused ? colour.background['hover-brand'] : 'unset',
-      color: isFocused ? primary900.rgba : 'unset',
+      color: isFocused ? colour.foreground.brand : 'unset',
       ':active': undefined,
     }),
     control: (_provided, { isFocused, isDisabled }) => ({
@@ -109,7 +102,7 @@ export const reactSelectStyles = <
       justifyContent: 'space-between',
       alignItems: 'center',
 
-      ...(isFocused ? { borderColor: primary500.rgba } : {}),
+      ...(isFocused ? { borderColor: colour.border.brand } : {}),
       ...(isInvalid
         ? {
             color: colour.foreground.error,
@@ -147,12 +140,6 @@ export const reactMultiSelectStyles = <
   T extends MultiSelectOptionsType,
   M extends boolean = true,
 >(
-  {
-    colors: {
-      primary500 = colorFromHex(colour.brand.crn[500]),
-      primary900 = colorFromHex(colour.brand.crn[800]),
-    } = {},
-  }: Theme,
   isInvalid: boolean,
   isMulti: boolean,
 ): StylesConfig<T, M, GroupBase<T>> =>
@@ -164,7 +151,7 @@ export const reactMultiSelectStyles = <
       padding: `${rem(12)} ${rem(paddingLeftRight)}`,
 
       backgroundColor: isFocused ? colour.background['hover-brand'] : 'unset',
-      color: isFocused ? primary900.rgba : 'unset',
+      color: isFocused ? colour.foreground.brand : 'unset',
       ':active': undefined,
     }),
     control: (_provided, { isFocused, isDisabled }) => ({
@@ -178,10 +165,10 @@ export const reactMultiSelectStyles = <
       // Ensure single-select has same height as multi-select with chips
       ...(!isMulti ? { minHeight: rem(54) } : {}),
 
-      ...(isFocused ? { borderColor: primary500.rgba } : {}),
+      ...(isFocused ? { borderColor: colour.border.brand } : {}),
       ...(isInvalid
         ? {
-            borderColor: isFocused ? primary900.rgba : colour.border.error,
+            borderColor: isFocused ? colour.border.brand : colour.border.error,
             backgroundColor: isFocused
               ? colour.neutral[0]
               : colour.background.error,

@@ -151,10 +151,10 @@ export const Navigation: React.FC<NavigationProps & PropsWithChildren> = ({
         onClick={blockedClick}
       >
         <div
-          css={({ colors, components }: Theme) => [
+          css={({ components }: Theme) => [
             styles,
             squareBorder && squareBorderStyles,
-            enabled && isActive && activePrimaryStyles(colors),
+            enabled && isActive && activePrimaryStyles,
             !enabled && disableStyles,
             components?.NavigationLink?.styles,
           ]}
@@ -171,10 +171,10 @@ export const Navigation: React.FC<NavigationProps & PropsWithChildren> = ({
     <a
       href={url}
       className={active ? 'active' : undefined}
-      css={({ colors, components }: Theme) => [
+      css={({ components }: Theme) => [
         styles,
         squareBorder && squareBorderStyles,
-        active && activePrimaryStyles(colors),
+        active && activePrimaryStyles,
         !enabled && disableStyles,
         components?.NavigationLink?.styles,
       ]}

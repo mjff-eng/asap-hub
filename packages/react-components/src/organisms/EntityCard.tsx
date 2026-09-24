@@ -33,7 +33,7 @@ const googleDriveButtonStyle = css({
 });
 
 const textStyles = css({
-  color: colour.brand.crn[500],
+  color: colour.foreground.brand,
   display: 'flex',
 });
 

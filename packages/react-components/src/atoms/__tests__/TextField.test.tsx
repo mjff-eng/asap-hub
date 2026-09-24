@@ -28,14 +28,14 @@ it('renders a disabled input field', () => {
   ).toBeFalsy();
   expect(screen.getByRole('textbox')).not.toHaveStyleRule(
     'background-color',
-    colour.background.tertiary,
+    colour.background.disabled,
   );
 
   rerender(<TextField value="" enabled={false} />);
   expect((screen.getByRole('textbox') as HTMLInputElement).disabled).toBe(true);
   expect(screen.getByRole('textbox')).toHaveStyleRule(
     'background-color',
-    colour.background.tertiary,
+    colour.background.disabled,
   );
 });
 
@@ -47,7 +47,7 @@ it('mutes the value colour of a disabled date field to match other disabled fiel
     'input[type="date"]',
   ) as HTMLInputElement;
   expect(dateInput.disabled).toBe(true);
-  expect(dateInput).toHaveStyleRule('color', colour.foreground.tertiary);
+  expect(dateInput).toHaveStyleRule('color', colour.foreground.disabled);
 });
 
 it('with the label indicator prop prop shows a react node', () => {

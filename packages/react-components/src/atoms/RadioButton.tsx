@@ -31,15 +31,15 @@ const styles = css({
   },
 
   ':hover, :focus': {
-    borderColor: colour.neutral[600],
+    borderColor: colour.border.brand,
   },
   ':checked': {
-    borderColor: colour.brand.crn[500],
-    backgroundColor: colour.brand.crn[500],
+    borderColor: colour.background['brand-inverse'],
+    backgroundColor: colour.background['brand-inverse'],
 
     ':hover, :focus': {
-      borderColor: colour.brand.crn[800],
-      backgroundColor: colour.brand.crn[800],
+      borderColor: colour.background['hover-brand-inverse'],
+      backgroundColor: colour.background['hover-brand-inverse'],
     },
   },
 });

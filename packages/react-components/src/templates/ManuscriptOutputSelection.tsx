@@ -102,7 +102,7 @@ const pillContainerStyles = (isFocused?: boolean) =>
       color: isFocused ? colour.foreground.tertiary : undefined,
     },
     '& > *:nth-of-type(3)': {
-      backgroundColor: isFocused ? '#CFEDFB' : undefined,
+      backgroundColor: isFocused ? colour.brand.gp2[50] : undefined,
       color: isFocused ? colour.brand.gp2[800] : undefined,
     },
   });
