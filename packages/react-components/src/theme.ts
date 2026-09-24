@@ -1,3 +1,4 @@
+import { casTheme } from './cas-tokens.generated';
 import { charcoal, colour, neutral700, neutral900 } from './colors';
 
 export type ThemeVariant = 'light' | 'grey' | 'dark';
@@ -11,3 +12,17 @@ export const themes: Record<
   grey: { backgroundColor: neutral700.rgb, color: neutral900.rgb },
   dark: { backgroundColor: charcoal.rgb, color: colour.neutral[0].rgb },
 };
+
+export type Product = keyof typeof casTheme;
+
+export const themeVariables = (product: Product): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(casTheme[product]).map(([name, { hex, alpha }]) => [
+      `--${name.replace(/\//g, '-')}`,
+      alpha === 1
+        ? hex
+        : `rgba(${[1, 3, 5]
+            .map((start) => parseInt(hex.slice(start, start + 2), 16))
+            .join(', ')}, ${alpha})`,
+    ]),
+  );
