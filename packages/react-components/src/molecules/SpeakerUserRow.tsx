@@ -164,7 +164,7 @@ const alumniStyles = css({
   alignItems: 'center',
 });
 
-export const findingsIcon = (shared: boolean, crossColor?: string) => (
+export const findingsIcon = (shared: boolean, crossColor: string) => (
   <span
     css={statusIconStyles}
     role="img"

@@ -197,7 +197,7 @@ const SpeakerTeamRow: React.FC<SpeakerTeamRowProps> = ({
           {showShared && (
             <span css={findingsColumnStyles}>
               <span css={findingsPillStyles(hasAnyShared)}>
-                {findingsIcon(hasAnyShared)}
+                {findingsIcon(hasAnyShared, lead.rgb)}
                 {`${shared} of ${total} shared`}
               </span>
             </span>
