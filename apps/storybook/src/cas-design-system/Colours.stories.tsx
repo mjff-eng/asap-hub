@@ -1,10 +1,9 @@
 import { CSSProperties, ReactNode, useState } from 'react';
 import { colour } from '@asap-hub/react-components';
 import {
+  casHex,
   cssColour,
-  legacyHex,
-  legacyNames,
-  legacyNamesByHex,
+  oldNames,
   Primitive,
   primitiveRamps,
   Product,
@@ -117,10 +116,9 @@ export const StartHere = () => (
           token fits, for example a shadow. See <i>Primitives</i>.
         </li>
         <li>
-          <b>Never the old names</b> ({code('neutral500')}, {code('charcoal')},{' '}
-          {code('success100')}…). They are marked deprecated and show struck
-          through in the editor. <i>Legacy Names</i> lists what replaces each
-          one.
+          <b>The old names are gone</b> ({code('neutral500')},{' '}
+          {code('charcoal')}, {code('success100')}…). <i>Legacy Names</i>{' '}
+          records what replaced each one, for anyone reading older code.
         </li>
       </ol>
     </Section>
@@ -325,8 +323,6 @@ export const ThemeTokens = () => {
 
 const PrimitiveCard = ({ primitive }: { primitive: Primitive }) => {
   const { copied, copy } = useCopy(primitive.codeName);
-  const legacy =
-    primitive.alpha === 1 ? legacyNamesByHex.get(primitive.hex) : [];
   const usedBy = themeTokensByPrimitive.get(primitive.figmaName);
   return (
     <button
@@ -376,11 +372,6 @@ const PrimitiveCard = ({ primitive }: { primitive: Primitive }) => {
           {copied ? 'copied' : primitive.step}
         </div>
         <div style={muted}>{primitive.hex}</div>
-        {legacy && legacy.length > 0 && (
-          <div style={{ ...muted, fontSize: '10px' }}>
-            old: {legacy.join(', ')}
-          </div>
-        )}
         {usedBy && (
           <div style={{ ...muted, fontSize: '10px' }}>
             used by {usedBy.length} token{usedBy.length > 1 ? 's' : ''}
@@ -398,7 +389,6 @@ const primitiveMatches = (primitive: Primitive, query: string) => {
     primitive.figmaName,
     primitive.codeName,
     primitive.hex.replace('#', ''),
-    ...(legacyNamesByHex.get(primitive.hex) ?? []),
     ...(themeTokensByPrimitive.get(primitive.figmaName) ?? []),
   ].some((text) => text.toLowerCase().includes(needle));
 };
@@ -424,16 +414,15 @@ export const Primitives = () => {
           The raw palette (Figma collection primitives, ARIA ramps left out).
           Prefer theme tokens; reach for a primitive only when no theme token
           fits. Click a swatch to copy its code name, e.g.{' '}
-          {code('colour.neutral[100]')}. &quot;old&quot; lists deprecated names
-          that currently hold that exact value, and &quot;used by&quot; lists
-          the theme tokens built on it.
+          {code('colour.neutral[100]')}. &quot;used by&quot; counts the theme
+          tokens built on it (hover to see them).
         </>
       }
     >
       <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
         <input
           type="search"
-          placeholder="Search a name, hex, old name or token"
+          placeholder="Search a name, hex or token"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           style={{
@@ -470,57 +459,76 @@ export const Primitives = () => {
 };
 
 const statusChip = {
-  ready: <Chip kind="green">replace now, same colour</Chip>,
-  changes: <Chip kind="amber">replace, colour shifts</Chip>,
-  design: <Chip kind="grey">waiting on design</Chip>,
+  same: <Chip kind="green">same colour</Chip>,
+  cas: <Chip kind="blue">CAS value</Chip>,
+  approval: <Chip kind="amber">needs design approval</Chip>,
 };
 
 const BeforeAfter = ({ before, after }: { before: string; after: string }) => (
   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
     <Swatch background={before} size={20} label={before} />
     <span style={muted}>{before}</span>
-    <span style={muted}>→</span>
-    <Swatch background={after} size={20} label={after} />
-    <span style={muted}>{after}</span>
+    {after && (
+      <>
+        <span style={muted}>→</span>
+        <Swatch background={after} size={20} label={after} />
+        <span style={muted}>{after}</span>
+      </>
+    )}
   </span>
 );
 
 export const LegacyNames = () => (
   <Page
     title="Legacy names"
-    intro="Every old colour name, what it is today and what replaces it. Components move over one area at a time; each move should update this page."
+    intro={
+      <>
+        The colour names the code used before CAS, and the CAS name that
+        replaced each one. None of the old names are used any more, except{' '}
+        {code('magenta')} and {code('iris')}, which have no CAS equivalent.{' '}
+        <b>Same colour</b>: only the name changed. <b>CAS value</b>: the colour
+        moved to the exact value Figma defines for that role.{' '}
+        <b>Needs design approval</b>: our proposal, listed in{' '}
+        <i>Design Questions</i>.
+      </>
+    }
   >
-    <Section title="Old name to CAS token">
+    <Section title="Old name to CAS name">
       <table style={table}>
         <thead>
           <tr>
             <th style={headCell}>Old name</th>
-            <th style={headCell}>Before CAS → today</th>
+            <th style={headCell}>Before CAS → now (CRN)</th>
             <th style={headCell}>Status</th>
-            <th style={headCell}>Replace with</th>
+            <th style={headCell}>Now called</th>
           </tr>
         </thead>
         <tbody>
-          {legacyNames.map(({ name, before, replacement, status, note }) => (
-            <tr key={name}>
+          {oldNames.map(({ name, before, now, where, status, question }) => (
+            <tr key={`${name}-${now}`}>
               <td style={cell}>{code(name)}</td>
               <td style={cell}>
-                <BeforeAfter before={before} after={legacyHex(name)} />
+                <BeforeAfter before={before} after={casHex(now)} />
               </td>
-              <td style={cell}>{statusChip[status]}</td>
               <td style={cell}>
-                {replacement && <div style={mono}>{replacement}</div>}
-                {note && <div style={muted}>{note}</div>}
+                {statusChip[status]}
+                {question && <div style={muted}>question {question}</div>}
+              </td>
+              <td style={cell}>
+                <div style={mono}>
+                  {now.includes('kept') ? now : `colour.${now}`}
+                </div>
+                {where && <div style={muted}>{where}</div>}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     </Section>
-    <Section title="Colours that change when a component adopts the CAS tokens">
+    <Section title="CAS values not adopted yet">
       <p style={muted}>
-        Figma is explicit about these, so they are not open questions, but they
-        are visible and should be called out when the component moves.
+        Figma defines these, but they change how buttons and links look, so they
+        wait on design questions 5 and 6.
       </p>
       <table style={table}>
         <tbody>
@@ -533,11 +541,11 @@ export const LegacyNames = () => (
             ['CRN brand text and links', '#34A270', 'colour/foreground/brand'],
             [
               'Disabled button background',
-              '#EEF3F6',
+              '#EDF1F3',
               'colour/background/disabled',
             ],
-            ['Disabled button text', '#566066', 'colour/foreground/disabled'],
-            ['Disabled button border', '#E3E6E8', 'colour/border/disabled'],
+            ['Disabled button text', '#4D646B', 'colour/foreground/disabled'],
+            ['Disabled button border', '#DFE5EA', 'colour/border/disabled'],
           ].map(([label, before, token]) => (
             <tr key={label}>
               <td style={cell}>{label}</td>
@@ -560,14 +568,14 @@ const sourceStyles = {
   today: [colour.background.tertiary, colour.foreground.tertiary],
   cas: [colour.background.info, colour.foreground.info],
   option: [colour.background.warning, colour.foreground.warning],
-  next: [colour.background.brand, colour.foreground.brand],
+  pr: [colour.background.brand, colour.foreground.brand],
 } as const;
 
 const sourceLabels = {
   today: 'Our Hub today',
-  cas: 'CAS, from Figma',
+  cas: 'Other CAS options, from Figma',
   option: 'Option: darker CAS shade',
-  next: 'After this work, not live yet',
+  pr: 'This PR, for approval',
 };
 
 const Side = ({
@@ -690,21 +698,19 @@ export const DesignQuestions = () => (
     title="Questions for design"
     intro={
       <>
-        We are switching the Hub colours to the CAS Design System in Figma. For
-        the colours below, design needs to choose what to use. Every example is
-        labelled: <b>Our Hub today</b> is what users see on the live Hub now,{' '}
-        <b>CAS, from Figma</b> is the colour defined in the CAS file, with its
-        Figma variable name. Where this work already moved a colour to its
-        nearest CAS colour before design decided,{' '}
-        <b>After this work, not live yet</b> shows what it will look like once
-        released.
+        This PR moves every Hub colour onto the CAS Design System in Figma.
+        Where Figma was clear we followed it. Where it was not, the PR contains
+        our proposal, and it will not be merged until design approves it. Every
+        example is labelled: <b>Our Hub today</b> is the live Hub,{' '}
+        <b>This PR, for approval</b> is what this PR shows, and{' '}
+        <b>Other CAS options</b> are alternatives from the CAS file.
       </>
     }
   >
     <Question
       number={1}
       title="Grey text"
-      ask="Our grey text (dates, captions, hints) and the hint text inside empty form fields don't exist in CAS. Which CAS grey should each become?"
+      ask="Our grey text (dates, captions, hints) and the hint text inside empty fields are not CAS colours. This PR uses the CAS text greys instead: foreground/tertiary for grey text and foreground/quaternary for hint text. Is that right, or would you pick different CAS greys?"
     >
       <Side source="today" columns={2}>
         <Sample name="Grey text" text="#4D646B">
@@ -714,18 +720,7 @@ export const DesignQuestions = () => (
           Search for a team…
         </Sample>
       </Side>
-      <Side source="next" columns={2}>
-        <Sample name="Grey text" text={legacyHex('neutral900')}>
-          Updated 3 days ago
-        </Sample>
-        <Sample name="Hint text in empty fields" text={legacyHex('neutral800')}>
-          Search for a team…
-        </Sample>
-      </Side>
-      <Side source="cas">
-        <Sample name="foreground/secondary" text={cas('foreground/secondary')}>
-          Updated 3 days ago
-        </Sample>
+      <Side source="pr" columns={2}>
         <Sample name="foreground/tertiary" text={cas('foreground/tertiary')}>
           Updated 3 days ago
         </Sample>
@@ -733,6 +728,11 @@ export const DesignQuestions = () => (
           name="foreground/quaternary"
           text={cas('foreground/quaternary')}
         >
+          Search for a team…
+        </Sample>
+      </Side>
+      <Side source="cas" columns={2}>
+        <Sample name="foreground/secondary" text={cas('foreground/secondary')}>
           Updated 3 days ago
         </Sample>
       </Side>
@@ -740,8 +740,8 @@ export const DesignQuestions = () => (
 
     <Question
       number={2}
-      title="Success and info messages"
-      ask="Success messages use the CRN green and info messages use the GP2 blue, in both Hubs. CAS has its own green and blue for these. Should we switch to the CAS ones?"
+      title="Success and info colours"
+      ask="Success and info used the CRN green and the GP2 blue, in both Hubs. This PR switches them to the CAS success green and info blue, which are the same in both Hubs. This affects success and info messages, status pills and tags, and the green and blue card accents. Is that right?"
     >
       <Side source="today" columns={2}>
         <Sample name="Success" text="#287953" background="#E4F5EE">
@@ -751,16 +751,7 @@ export const DesignQuestions = () => (
           Reminders are sent every Monday.
         </Sample>
       </Side>
-      <Side source="next" columns={2}>
-        <Sample
-          name="Success"
-          text={colour.brand.crn[800]}
-          background={legacyHex('success100')}
-        >
-          Your changes were saved.
-        </Sample>
-      </Side>
-      <Side source="cas" columns={2}>
+      <Side source="pr" columns={2}>
         <Sample
           name="foreground/success on background/success"
           text={cas('foreground/success')}
@@ -780,11 +771,13 @@ export const DesignQuestions = () => (
 
     <Question
       number={3}
-      title="Colours missing from CAS"
-      ask="These colours have no CAS equivalent. What should replace them?"
+      title="Colours that are not in CAS"
+      ask="A few colours have no CAS equivalent. For each one below, is our proposal right?"
     >
       <h3 style={{ fontSize: '14px', margin: '8px 0 0' }}>
-        Initials of users without a profile photo
+        Initials of users without a profile photo: this PR uses the five CAS
+        colour pairs. One of them, color-brand, is built from the ARIA green. Is
+        that acceptable on ASAP?
       </h3>
       <Side source="today" columns={6}>
         {[
@@ -805,31 +798,8 @@ export const DesignQuestions = () => (
           </Sample>
         ))}
       </Side>
-      <Side source="next" columns={6}>
-        {[
-          ['Light green / green', legacyHex('success100'), '#287953'],
-          [
-            'Light orange / orange',
-            legacyHex('warning100'),
-            legacyHex('warning500'),
-          ],
-          ['Light blue / blue', legacyHex('info100'), legacyHex('info900')],
-          ['Pale blue / dark blue', legacyHex('azure'), legacyHex('space')],
-          ['Light pink / berry', legacyHex('lilac'), legacyHex('berry')],
-          ['Light purple / purple', legacyHex('lavender'), legacyHex('mauve')],
-        ].map(([name, background, text]) => (
-          <Sample
-            key={name}
-            name={name as string}
-            text={text as string}
-            background={background}
-          >
-            <b style={{ fontSize: '20px' }}>AB</b>
-          </Sample>
-        ))}
-      </Side>
-      <Side source="cas" columns={5}>
-        {['yellow', 'brand', 'green', 'lavender', 'blue'].map((name) => (
+      <Side source="pr" columns={5}>
+        {['yellow', 'green', 'lavender', 'blue', 'brand'].map((name) => (
           <Sample
             key={name}
             name={`color-${name}${name === 'brand' ? ' (ARIA green)' : ''}`}
@@ -841,37 +811,26 @@ export const DesignQuestions = () => (
         ))}
       </Side>
 
-      <h3 style={{ fontSize: '14px', margin: '24px 0 0' }}>Gradients</h3>
-      <Side source="today" columns={2}>
+      <h3 style={{ fontSize: '14px', margin: '24px 0 0' }}>
+        Gradients: this PR keeps ours, because no CAS gradient matches. Should
+        CAS add them as ASAP gradients, or should we use CAS ones?
+      </h3>
+      <Side source="pr" columns={2}>
         <GradientSample
           name="Bar at the top of the header"
-          stops={['#008CC6', '#34A270']}
+          stops={[colour.brand.gp2[500], colour.brand.crn[500]]}
         />
         <GradientSample
           name="Dashboard banner"
-          stops={['#CF2FB3', '#008CC6']}
+          stops={['#CF2FB3', colour.brand.gp2[500]]}
         />
         <GradientSample
           name="Onboarding footer"
-          stops={['#8C4E9F', '#008CC6']}
+          stops={['#8C4E9F', colour.brand.gp2[500]]}
         />
         <GradientSample
           name="Event attendance bar"
           stops={['#8C4E9F', '#0C8DC3', '#1491B2', '#299C86', '#34A270']}
-        />
-      </Side>
-      <Side source="next" columns={2}>
-        <GradientSample
-          name="Bar at the top of the header"
-          stops={[legacyHex('cerulean'), '#34A270']}
-        />
-        <GradientSample
-          name="Dashboard banner"
-          stops={['#CF2FB3', legacyHex('cerulean')]}
-        />
-        <GradientSample
-          name="Onboarding footer"
-          stops={['#8C4E9F', legacyHex('cerulean')]}
         />
       </Side>
       <Side source="cas" columns={3}>
@@ -885,25 +844,19 @@ export const DesignQuestions = () => (
       </Side>
 
       <h3 style={{ fontSize: '14px', margin: '24px 0 0' }}>
-        Tooltip background
+        Tooltip background: CAS has no tooltip colour. This PR uses the CAS
+        near-black neutral/900 instead of our dark blue.
       </h3>
       <Side source="today" columns={3}>
         <Sample name="Tooltip" text="#FFFFFF" background="#004561">
           Copied to clipboard
         </Sample>
       </Side>
-      <Side source="cas" columns={3}>
+      <Side source="pr" columns={3}>
         <Sample
-          name="foreground/primary"
+          name="neutral/900"
           text="#FFFFFF"
-          background={cas('foreground/primary')}
-        >
-          Copied to clipboard
-        </Sample>
-        <Sample
-          name="brand/gp2/900"
-          text="#FFFFFF"
-          background={colour.brand.gp2[900]}
+          background={colour.neutral[900]}
         >
           Copied to clipboard
         </Sample>
@@ -913,9 +866,9 @@ export const DesignQuestions = () => (
     <Question
       number={4}
       title="Coloured text on light backgrounds is hard to read"
-      ask="In CAS, coloured text on a light background of the same colour is below the minimum for readable text. Both rows below are CAS colours: can we use the darker CAS shade for the text?"
+      ask="This PR uses the CAS status pairs exactly as Figma defines them. In all four, the text is below the minimum for readable text. Keep them, or use the darker CAS shade for the text? If darker, could CAS add those as variables so the rule lives in Figma?"
     >
-      <Side source="cas" columns={4}>
+      <Side source="pr" columns={4}>
         {(['error', 'warning', 'success', 'info'] as const).map((status) => (
           <Sample
             key={status}
@@ -954,8 +907,8 @@ export const DesignQuestions = () => (
 
     <Question
       number={5}
-      title="Disabled buttons"
-      ask="In CAS a disabled button has pale grey text on grey with a dark grey border, which makes it stand out more than a normal button. Is that intended?"
+      title="Disabled buttons (not in this PR)"
+      ask="CAS makes a disabled button pale grey text on grey with a dark grey border, so it stands out more than a normal button. This PR keeps our current disabled style. Should we adopt the CAS one?"
     >
       <Side source="today" columns={2}>
         <ButtonSample
@@ -983,8 +936,8 @@ export const DesignQuestions = () => (
 
     <Question
       number={6}
-      title="Links and main buttons are hard to read"
-      ask="Brand-coloured links and the white text on the main button are below the minimum for readable text in both Hubs, today and in CAS. Keep them, or use a darker green or blue?"
+      title="Links and main buttons (not in this PR)"
+      ask="Brand-coloured links and the white text on the main button are below the minimum for readable text in both Hubs, today and in CAS. This PR keeps today's colours. Should we adopt the CAS ones, or a darker green and blue?"
     >
       <Side source="today" columns={4}>
         <Sample name="CRN link" text="#34A270">
@@ -1054,62 +1007,62 @@ export const DesignQuestions = () => (
 
     <Question
       number={7}
-      title="Highlight colour for selected and hovered items"
-      ask="The selected item in the side menu and a hovered item in a dropdown both show a light green highlight, but today they use two slightly different mints. CAS has a colour for each (hover and selected), and they are greyer than our mint. The CAS hover colour is also the same as ARIA's lightest green. Should we use the CAS ones for both, so they match each other and Figma?"
+      title="Highlight colour for hovered and selected items"
+      ask="Hovered items in dropdowns, select lists, sort menus and tags, and the selected side-menu item, used two light mints. This PR uses CAS roles: background/hover-brand for hover and background/active for the selected item, in each Hub's colour. But CAS's own dropdown and side-menu components in Figma use grey (background/hover) for hover. Which do you want for hover: the brand tint (this PR) or grey?"
     >
       <Side source="today" columns={2}>
         <Sample
           name="Side menu, selected item"
-          text={cas('foreground/primary')}
+          text={colour.brand.crn[800]}
           background="#E7F7F0"
         >
           Projects
         </Sample>
         <Sample
           name="Dropdown, hovered item"
-          text={cas('foreground/primary')}
+          text={colour.brand.crn[800]}
           background="#E4F5EE"
         >
           Not Requested
         </Sample>
       </Side>
-      <Side source="next" columns={2}>
-        <Sample
-          name="Dropdown, hovered item"
-          text={cas('foreground/primary')}
-          background={legacyHex('success100')}
-        >
-          Not Requested
-        </Sample>
-      </Side>
-      <Side source="cas" columns={4}>
-        <Sample
-          name="CRN background/hover-brand"
-          text={cas('foreground/primary')}
-          background={cas('background/hover-brand', 'crn')}
-        >
-          Not Requested
-        </Sample>
+      <Side source="pr" columns={4}>
         <Sample
           name="CRN background/active"
-          text={cas('foreground/primary')}
+          text={colour.brand.crn[800]}
           background={cas('background/active', 'crn')}
         >
           Projects
         </Sample>
         <Sample
-          name="GP2 background/hover-brand"
-          text={cas('foreground/primary')}
-          background={cas('background/hover-brand', 'gp2')}
+          name="CRN background/hover-brand"
+          text={colour.brand.crn[800]}
+          background={cas('background/hover-brand', 'crn')}
         >
           Not Requested
         </Sample>
         <Sample
           name="GP2 background/active"
-          text={cas('foreground/primary')}
+          text={colour.brand.gp2[800]}
           background={cas('background/active', 'gp2')}
         >
           Projects
+        </Sample>
+        <Sample
+          name="GP2 background/hover-brand"
+          text={colour.brand.gp2[800]}
+          background={cas('background/hover-brand', 'gp2')}
+        >
+          Not Requested
+        </Sample>
+      </Side>
+      <Side source="cas" columns={2}>
+        <Sample
+          name="background/hover (CAS components)"
+          text={cas('foreground/secondary')}
+          background={cas('background/hover')}
+        >
+          Not Requested
         </Sample>
       </Side>
     </Question>
