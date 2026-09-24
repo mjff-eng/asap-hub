@@ -72,14 +72,13 @@ const placeholderColorStyle = css({
   backgroundColor: colour.neutral[0],
   fill: colour.foreground.tertiary,
 });
-const colorStyles = (
-  ['yellow', 'green', 'lavender', 'blue', 'brand'] as const
-).map((name) =>
-  css({
-    backgroundColor: colour.background[`color-${name}`],
-    fill: colour.foreground[`color-${name}`],
-  }),
-);
+const colorStyles = [
+  [colour.background['color-yellow'], colour.foreground['color-yellow']],
+  [colour.background['color-green'], colour.foreground['color-green']],
+  [colour.background['color-lavender'], colour.foreground['color-lavender']],
+  [colour.background['color-blue'], colour.foreground['color-blue']],
+  [colour.background['color-brand'], colour.foreground['color-brand']],
+].map(([backgroundColor, fill]) => css({ backgroundColor, fill }));
 
 type RegularAvatarProps = {
   readonly imageUrl?: string;
