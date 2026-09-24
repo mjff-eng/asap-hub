@@ -1,4 +1,4 @@
-import { ComponentProps, Fragment } from 'react';
+import { ComponentProps } from 'react';
 import { css } from '@emotion/react';
 
 import {
@@ -6,18 +6,15 @@ import {
   eventMaterialTypes,
   EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
 } from '@asap-hub/model';
-import { events } from '@asap-hub/routing';
-import { useFlags } from '@asap-hub/react-context';
 
 import { subMinutes, parseISO } from 'date-fns';
 
-import { ToastCard, EventInfo } from '../molecules';
+import { ToastCard, EventInfo, EventMaterialsList } from '../molecules';
+import type { MaterialType } from '../molecules';
 import { rem, mobileScreen } from '../pixels';
 import { Link } from '../atoms';
-import { tin } from '../colors';
 import { useDateHasPassed } from '../date';
 import { considerEndedAfter } from '../utils';
-import { eventMaterialSectionIds } from './EventMaterials';
 
 type EventCardProps = ComponentProps<typeof EventInfo> &
   Pick<
@@ -46,34 +43,12 @@ const displayedMaterialTypes = [
   'videoRecording',
   'presentation',
 ] as const;
-const eventMaterialLabels: Record<
-  (typeof displayedMaterialTypes)[number],
-  string
-> = {
-  notes: 'Notes',
-  videoRecording: 'Recording',
-  presentation: 'Presentation',
-};
 
-const materialListStyles = css({
-  display: 'flex',
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  columnGap: rem(8),
-  rowGap: rem(4),
-
-  a: {
-    color: 'inherit',
-    textDecoration: 'none',
-    ':hover': {
-      textDecoration: 'underline',
-    },
-  },
-});
-
-const unavailableMaterialStyles = css({
-  color: tin.rgb,
-});
+const materialOrder: MaterialType[] = [
+  'notes',
+  'videoRecording',
+  'presentation',
+];
 
 const EventCard: React.FC<EventCardProps> = ({
   status,
@@ -81,7 +56,6 @@ const EventCard: React.FC<EventCardProps> = ({
   hasSpeakersToBeAnnounced,
   ...props
 }) => {
-  const { isEnabled } = useFlags();
   const considerStartedAfter = subMinutes(
     parseISO(props.startDate),
     EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
@@ -147,40 +121,19 @@ const EventCard: React.FC<EventCardProps> = ({
         const value = props[key];
         return Array.isArray(value) ? value.length > 0 : Boolean(value);
       };
-      const eventRoute = events({}).event({ eventId: props.id });
-      const eventHref = isEnabled('NEW_EVENT_PAGE')
-        ? eventRoute.meetingMaterials({}).$
-        : eventRoute.$;
       return {
         type: 'attachment',
         accent: 'neutral200',
         mutedIcon: !displayedMaterialTypes.some(isMaterialAvailable),
         toastContent: (
-          <span css={materialListStyles}>
-            {displayedMaterialTypes.map((key, index) => {
-              const available = isMaterialAvailable(key);
-              return (
-                <Fragment key={key}>
-                  {index > 0 && (
-                    <span
-                      css={available ? undefined : unavailableMaterialStyles}
-                    >
-                      •
-                    </span>
-                  )}
-                  {available ? (
-                    <Link href={`${eventHref}#${eventMaterialSectionIds[key]}`}>
-                      {eventMaterialLabels[key]}
-                    </Link>
-                  ) : (
-                    <span css={unavailableMaterialStyles}>
-                      {eventMaterialLabels[key]}
-                    </span>
-                  )}
-                </Fragment>
-              );
-            })}
-          </span>
+          <EventMaterialsList
+            id={props.id}
+            notes={props.notes}
+            videoRecording={props.videoRecording}
+            presentation={props.presentation}
+            order={materialOrder}
+            showIcon={false}
+          />
         ),
       };
     }
