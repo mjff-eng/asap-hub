@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@asap-hub/eslint-config-asap-hub": "workspace:*",
-    "@babel/core": "7.28.6",
+    "@babel/core": "7.29.6",
     "@chromatic-com/storybook": "^4.1.1",
     "@types/react": "18.3.12",
     "babel-preset-react-app": "10.0.1",
