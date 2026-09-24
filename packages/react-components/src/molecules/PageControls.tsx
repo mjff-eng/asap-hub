@@ -218,24 +218,14 @@ const PageControls: React.FC<PageControlsProps> = ({
       <ol css={listStyles}>
         <li css={itemStyles}>
           <Anchor href={firstPageHref}>
-            <span
-              css={[
-                textStyles,
-                firstPageHref ?? disabledTextStyles,
-              ]}
-            >
+            <span css={[textStyles, firstPageHref ?? disabledTextStyles]}>
               {firstPageIcon}
             </span>
           </Anchor>
         </li>
         <li css={itemStyles}>
           <Anchor href={previousPageHref}>
-            <span
-              css={[
-                textStyles,
-                previousPageHref ?? disabledTextStyles,
-              ]}
-            >
+            <span css={[textStyles, previousPageHref ?? disabledTextStyles]}>
               {previousPageIcon}
             </span>
           </Anchor>
@@ -252,12 +242,7 @@ const PageControls: React.FC<PageControlsProps> = ({
               ].join(' ')}
             >
               <Anchor href={renderPageHref(index)}>
-                <span
-                  css={[
-                    textStyles,
-                    active && activeTextStyles,
-                  ]}
-                >
+                <span css={[textStyles, active && activeTextStyles]}>
                   {index + 1}
                 </span>
               </Anchor>
@@ -266,24 +251,14 @@ const PageControls: React.FC<PageControlsProps> = ({
         })}
         <li css={itemStyles}>
           <Anchor href={nextPageHref}>
-            <span
-              css={[
-                textStyles,
-                nextPageHref ?? disabledTextStyles,
-              ]}
-            >
+            <span css={[textStyles, nextPageHref ?? disabledTextStyles]}>
               {nextPageIcon}
             </span>
           </Anchor>
         </li>
         <li css={itemStyles}>
           <Anchor href={lastPageHref}>
-            <span
-              css={[
-                textStyles,
-                lastPageHref ?? disabledTextStyles,
-              ]}
-            >
+            <span css={[textStyles, lastPageHref ?? disabledTextStyles]}>
               {lastPageIcon}
             </span>
           </Anchor>

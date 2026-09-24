@@ -115,19 +115,19 @@ type VersionUserProps = {
 };
 
 const tabButtonStyles = css({
-    paddingLeft: rem(0),
-    paddingRight: rem(0),
-    paddingBottom: rem(20),
-    color: colour.foreground.tertiary,
-    backgroundColor: 'transparent',
-    border: 'none',
-    '&.active': {
-      paddingBottom: rem(16),
-      color: colour.foreground.primary,
-      fontWeight: 'bold',
-      borderBottom: `${rem(4)} solid ${colour.foreground.brand}`,
-    },
-  });
+  paddingLeft: rem(0),
+  paddingRight: rem(0),
+  paddingBottom: rem(20),
+  color: colour.foreground.tertiary,
+  backgroundColor: 'transparent',
+  border: 'none',
+  '&.active': {
+    paddingBottom: rem(16),
+    color: colour.foreground.primary,
+    fontWeight: 'bold',
+    borderBottom: `${rem(4)} solid ${colour.foreground.brand}`,
+  },
+});
 
 const isManuscriptLead = ({ version, user }: VersionUserProps) =>
   user &&
