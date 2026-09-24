@@ -6,7 +6,7 @@ import { createUserResponse } from '@asap-hub/fixtures';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import ExpertiseAndResourcesModal from '../ExpertiseAndResourcesModal';
-import { error500, neutral500 } from '../../colors';
+import { colour, colorFromHex } from '../../colors';
 
 const mapTags = (tags: string[]) => tags.map((tag) => ({ name: tag, id: tag }));
 
@@ -124,12 +124,13 @@ describe('tags selection', () => {
       />,
     );
     const input = getByLabelText(/tags\s*\(required\)/i);
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).not.toEqual(
-      error500.rgb,
-    );
+    expect(
+      findParentWithStyle(input, 'borderStyle')?.element,
+    ).not.toHaveStyleRule('border-color', colour.utilitarian.red[600]);
     await userEvent.click(getByText(/save/i));
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toEqual(
-      neutral500.rgb,
+    expect(findParentWithStyle(input, 'borderStyle')?.element).toHaveStyleRule(
+      'border-color',
+      colour.border.tertiary,
     );
     expect(handleSave).not.toHaveBeenCalled();
   });
@@ -151,9 +152,9 @@ describe('tags selection', () => {
     await userEvent.type(input, `{enter}`);
     fireEvent.blur(input);
 
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toEqual(
-      error500.rgb,
-    );
+    expect(
+      colorFromHex(findParentWithStyle(input, 'borderColor')!.borderColor).rgb,
+    ).toEqual(colorFromHex(colour.utilitarian.red[600]).rgb);
     expect(getByText('Please add a minimum of 5 tags')).toBeVisible();
 
     await userEvent.click(input);
@@ -161,8 +162,9 @@ describe('tags selection', () => {
     await userEvent.type(input, `{enter}`);
     fireEvent.blur(input);
 
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toEqual(
-      neutral500.rgb,
+    expect(findParentWithStyle(input, 'borderStyle')?.element).toHaveStyleRule(
+      'border-color',
+      colour.border.tertiary,
     );
     expect(
       queryByText('Please add a minimum of 5 tags'),

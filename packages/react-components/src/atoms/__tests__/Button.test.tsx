@@ -1,17 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ThemeProvider } from '@emotion/react';
 
-import {
-  charcoal,
-  color,
-  colour,
-  neutral300,
-  colorFromHex,
-} from '../../colors';
+import { charcoal, color, colour, colorFromHex } from '../../colors';
 import { OrcidIcon } from '../../icons';
 import { activePrimaryBackgroundColorDefault } from '../../button';
 
 import Button from '../Button';
+
+const toRgb = (value: string) =>
+  value.startsWith('#') ? colorFromHex(value).rgb : value;
 
 it('renders a button with an icon and text', () => {
   const { getByRole } = render(
@@ -124,12 +121,14 @@ describe('primary button', () => {
 
 it('renders an active secondary button', () => {
   const { getByRole, rerender } = render(<Button />);
-  expect(getComputedStyle(getByRole('button')).borderColor).not.toBe(
+  expect(toRgb(getComputedStyle(getByRole('button')).borderColor)).not.toBe(
     charcoal.rgb,
   );
 
   rerender(<Button active />);
-  expect(getComputedStyle(getByRole('button')).borderColor).toBe(charcoal.rgb);
+  expect(toRgb(getComputedStyle(getByRole('button')).borderColor)).toBe(
+    charcoal.rgb,
+  );
 });
 
 it('renders an active primary button', () => {
@@ -147,14 +146,16 @@ it('renders an active primary button', () => {
 it('renders a disabled button', () => {
   const { getByRole, rerender } = render(<Button />);
   expect((getByRole('button') as HTMLButtonElement).disabled).toBeFalsy();
-  expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
-    neutral300.rgb,
+  expect(getByRole('button')).not.toHaveStyleRule(
+    'background-color',
+    colour.background.tertiary,
   );
 
   rerender(<Button enabled={false} />);
   expect((getByRole('button') as HTMLButtonElement).disabled).toBe(true);
-  expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
-    neutral300.rgb,
+  expect(getByRole('button')).toHaveStyleRule(
+    'background-color',
+    colour.background.tertiary,
   );
 });
 

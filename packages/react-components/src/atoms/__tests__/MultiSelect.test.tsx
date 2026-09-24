@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { waitFor } from '@testing-library/dom';
 
-import { colour, error500, colorFromHex } from '../../colors';
+import { colour, colorFromHex } from '../../colors';
 
 import MultiSelect from '../MultiSelect';
 import { searchIcon } from '../../icons';
@@ -168,9 +168,9 @@ describe('invalidity', () => {
     fireEvent.focusOut(input);
 
     expect(getByText('Nope.')).toBeDefined();
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-      error500.rgb,
-    );
+    expect(
+      colorFromHex(findParentWithStyle(input, 'borderColor')!.borderColor).rgb,
+    ).toBe(colorFromHex(colour.utilitarian.red[600]).rgb);
   });
 
   it('shows the default state when input is focused', () => {

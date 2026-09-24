@@ -2,14 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import userEvent from '@testing-library/user-event';
 import Tag from '../Tag';
-import {
-  neutral1000,
-  colour,
-  success100,
-  neutral300,
-  neutral500,
-  colorFromHex,
-} from '../../colors';
+import { colour, success100, colorFromHex } from '../../colors';
 
 it('renders a tag with content', () => {
   const { container } = render(<Tag>Text</Tag>);
@@ -39,11 +32,10 @@ it('renders a tag with disabled styles when disabled', () => {
 
   rerender(<Tag enabled={false}>Text</Tag>);
 
-  expect(getParentStyle('color')?.color).toBe(neutral1000.rgb);
-  expect(getParentStyle('borderColor')?.borderColor).toBe(neutral500.rgb);
-  expect(getParentStyle('backgroundColor')?.backgroundColor).toBe(
-    neutral300.rgb,
-  );
+  const tag = getParentStyle('borderStyle')?.element;
+  expect(tag).toHaveStyleRule('color', colour.foreground.primary);
+  expect(tag).toHaveStyleRule('border-color', colour.border.tertiary);
+  expect(tag).toHaveStyleRule('background-color', colour.background.tertiary);
 });
 
 it('renders a tag with a title', () => {
