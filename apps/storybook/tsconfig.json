@@ -7,7 +7,13 @@
     "noEmit": true,
 
     "lib": ["esnext", "dom", "dom.iterable"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@asap-hub/react-components/cas-tokens": [
+        "../../packages/react-components/src/cas-tokens.generated"
+      ]
+    }
   },
   "include": ["src"],
   "references": [
