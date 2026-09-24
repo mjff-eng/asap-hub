@@ -1,9 +1,6 @@
-import { colour, success500, success900 } from '@asap-hub/react-components';
+import { colour, success500 } from '@asap-hub/react-components';
 
 const colors = {
-  error100: colour.utilitarian.red[100],
-  error500: colour.utilitarian.red[600],
-  error900: colour.utilitarian.red[700],
   greyscale1000: colour.neutral[600],
   info100: colour.brand.gp2[25],
   info150: colour.brand.gp2[100],
@@ -19,11 +16,7 @@ const colors = {
   primary500: colour.brand.gp2[500],
   primary900: colour.brand.gp2[800],
   secondary500: success500,
-  success100: success500,
   success500,
-  success900,
-  warning100: colour.utilitarian.orange[50],
   warning500: colour.utilitarian.orange[600],
-  warning900: colour.utilitarian.orange[700],
 };
 export default colors;
