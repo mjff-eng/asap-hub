@@ -116,7 +116,7 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
       {tags.length ? (
         <Card overrideStyles={cardStyles}>
           <Headline3 noMargin>Tags</Headline3>
-          <Paragraph accent="neutral900">
+          <Paragraph accent="tertiary">
             Explore keywords related to skills, techniques, resources, and
             tools.
           </Paragraph>

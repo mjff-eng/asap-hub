@@ -1,16 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
-import {
-  color,
-  OpaqueColor,
-  TransparentColor,
-  colour,
-  neutral900,
-  colorFromHex,
-} from './colors';
+import { OpaqueColor, TransparentColor, colour, colorFromHex } from './colors';
 import { formTargetWidth, mobileScreen, rem } from './pixels';
-
-export const activePrimaryBackgroundColorDefault = color(122, 210, 169, 0.18);
 
 const borderWidth = 1;
 const styles = css({
@@ -141,7 +132,7 @@ const primaryStyles = ({
     ':hover, :focus': {
       backgroundColor: primary900.rgba,
       borderColor: primary900.rgba,
-      boxShadow: boxShadow(neutral900),
+      boxShadow: boxShadow(colorFromHex(colour.neutral[600])),
     },
 
     ':active': {
@@ -180,7 +171,7 @@ export const warningStyles = css({
 });
 
 const disabledStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   backgroundColor: colour.background.tertiary,
   borderColor: colour.border.tertiary,
   boxShadow: 'none',
@@ -194,11 +185,10 @@ const disabledStyles = css({
 });
 
 export const activePrimaryStyles = ({
-  primary100 = activePrimaryBackgroundColorDefault,
   primary900 = colorFromHex(colour.brand.crn[800]),
 }: Theme['colors'] = {}) =>
   css({
-    backgroundColor: primary100.rgba,
+    backgroundColor: colour.background.active,
     borderColor: 'transparent',
     color: primary900.rgba,
     svg: {
@@ -208,7 +198,7 @@ export const activePrimaryStyles = ({
       },
     },
     ':hover, :focus': {
-      backgroundColor: primary100.rgba,
+      backgroundColor: colour.background.active,
       color: primary900.rgba,
     },
   });

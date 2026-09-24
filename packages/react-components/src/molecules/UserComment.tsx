@@ -28,7 +28,7 @@ const textEditorStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: colors.neutral900.rgb,
+  color: colors.colour.foreground.tertiary,
 });
 const getUserHref = (id: string) =>
   network({}).users({}).user({ userId: id }).$;

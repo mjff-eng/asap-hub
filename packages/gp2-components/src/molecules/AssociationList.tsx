@@ -2,13 +2,7 @@ import { gp2 as gp2Model } from '@asap-hub/model';
 import React, { FC } from 'react';
 import { css } from '@emotion/react';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
-import {
-  Avatar,
-  Link,
-  pixels,
-  neutral900,
-  colour,
-} from '@asap-hub/react-components';
+import { Avatar, Link, pixels, colour } from '@asap-hub/react-components';
 import { workingGroupIcon, projectIcon } from '../icons';
 
 const { rem } = pixels;
@@ -27,7 +21,7 @@ const itemStyles = css({
   borderBottom: `1px solid ${colour.general.blue.cerulean[25]}`,
   paddingBottom: rem(24),
   paddingTop: rem(24),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 
   '&:first-of-type': {
     paddingTop: rem(18),

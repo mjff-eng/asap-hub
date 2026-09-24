@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import AttendanceProgressBar from '../atoms/AttendanceProgressBar';
-import { neutral200, colour } from '../colors';
+import { colour } from '../colors';
 import { mobileScreen, rem } from '../pixels';
 
 export const containerStyles = css({
@@ -13,7 +13,7 @@ export const containerStyles = css({
   width: '100%',
   maxWidth: rem(380),
   padding: rem(24),
-  backgroundColor: neutral200.rgb,
+  backgroundColor: colour.background.secondary,
   borderRadius: rem(8),
 });
 

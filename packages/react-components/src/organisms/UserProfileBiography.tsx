@@ -33,7 +33,7 @@ const UserProfileBiography: React.FC<UserProfileBiographyProps> = ({
       >
         <Headline2 styleAsHeading={3}>Biography</Headline2>
         {biography ? (
-          <Paragraph accent="neutral900">{biography}</Paragraph>
+          <Paragraph accent="tertiary">{biography}</Paragraph>
         ) : (
           <UserProfilePlaceholderCard title="What’s your story?">
             Complement your profile with a biography. You may summarize your

@@ -3,14 +3,7 @@ import { css } from '@emotion/react';
 
 import { rem, mobileScreen } from '../pixels';
 import { Card } from '../atoms';
-import {
-  info500,
-  info100,
-  colour,
-  neutral900,
-  warning100,
-  success100,
-} from '../colors';
+import { colour } from '../colors';
 import { WarningIcon, infoInfoIcon, liveIcon, paperClipIcon } from '../icons';
 import { borderRadius, paddingStyles } from '../card';
 
@@ -41,27 +34,27 @@ const mutedIconStyles = css({
 });
 
 const alertStyles = css({
-  backgroundColor: warning100.rgb,
+  backgroundColor: colour.background.warning,
   color: colour.foreground.warning,
   fill: colour.foreground.warning,
 });
 
 const infoStyles = css({
-  backgroundColor: info100.rgb,
-  color: info500.rgb,
-  fill: info500.rgb,
+  backgroundColor: colour.background.info,
+  color: colour.foreground.info,
+  fill: colour.foreground.info,
 });
 
 const liveStyles = css({
-  backgroundColor: success100.rgb,
-  color: colour.brand.crn[800],
-  fill: colour.brand.crn[800],
+  backgroundColor: colour.background.success,
+  color: colour.foreground.success,
+  fill: colour.foreground.success,
 });
 
 const leadStyles = css({
   backgroundColor: colour.background.tertiary,
-  color: neutral900.rgb,
-  fill: neutral900.rgb,
+  color: colour.foreground.tertiary,
+  fill: colour.foreground.tertiary,
 });
 
 const toastContentStyles = css({

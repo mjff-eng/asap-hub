@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { Paragraph, PillSelector } from '../atoms';
 import { validationMessageStyles } from '../form';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { colors } from '..';
 
@@ -22,7 +22,7 @@ const subtitleStyles = css({
 });
 
 const descriptionStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   display: 'inline-block',
   [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
     display: 'unset',

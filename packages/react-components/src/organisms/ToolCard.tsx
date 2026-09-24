@@ -55,7 +55,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
       <div css={{ flex: 1 }}>
         <Anchor href={url}>
           <Headline3 styleAsHeading={4}>{name}</Headline3>
-          <Paragraph accent="neutral900">{description}</Paragraph>
+          <Paragraph accent="tertiary">{description}</Paragraph>
         </Anchor>
         <ol css={linksStyles}>
           <li>

@@ -14,12 +14,7 @@ import { css } from '@emotion/react';
 import { tags } from '@asap-hub/routing';
 import { ScrollContext } from '@asap-hub/react-context';
 
-import {
-  colorWithTransparency,
-  success900,
-  colour,
-  colorFromHex,
-} from '../colors';
+import { colorWithTransparency, colour, colorFromHex } from '../colors';
 import { MenuHeader, OnboardingFooter, ToastStack } from '../organisms';
 import { Overlay } from '../atoms';
 import {
@@ -247,7 +242,7 @@ export const searchButtonAreaStyles = css({
   },
   '& .active': {
     svg: {
-      fill: success900.rgb,
+      fill: colour.brand.crn[800],
     },
   },
   // Target the Navigation's inner div that renders the Search button

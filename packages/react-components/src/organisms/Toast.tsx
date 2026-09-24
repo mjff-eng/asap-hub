@@ -18,16 +18,7 @@ import {
   mobileScreen,
   largeDesktopScreen,
 } from '../pixels';
-import {
-  info100,
-  info900,
-  info500,
-  success100,
-  success900,
-  success500,
-  warning100,
-  colour,
-} from '../colors';
+import { colour } from '../colors';
 
 const SIDE_PADDING = 24;
 
@@ -104,28 +95,28 @@ const accentStyles: Record<ToastAccents, CSSObject> = {
     svg: { stroke: colour.foreground.error },
   },
   info: {
-    backgroundColor: info100.rgb,
-    borderColor: info900.rgb,
-    color: info900.rgb,
-    svg: { stroke: info500.rgb },
+    backgroundColor: colour.background.info,
+    borderColor: colour.border.info,
+    color: colour.foreground.info,
+    svg: { stroke: colour.foreground.info },
   },
   warning: {
-    backgroundColor: warning100.rgb,
+    backgroundColor: colour.background.warning,
     borderColor: colour.utilitarian.orange[700],
     color: colour.utilitarian.orange[700],
     svg: { stroke: colour.foreground.warning },
   },
   success: {
-    backgroundColor: success100.rgb,
-    borderColor: success900.rgb,
-    color: success900.rgb,
-    svg: { stroke: success500.rgb },
+    backgroundColor: colour.background.success,
+    borderColor: colour.border.success,
+    color: colour.foreground.success,
+    svg: { stroke: colour.foreground.success },
   },
   successLarge: {
-    backgroundColor: success100.rgb,
-    borderColor: success900.rgb,
-    color: success900.rgb,
-    svg: { stroke: success500.rgb },
+    backgroundColor: colour.background.success,
+    borderColor: colour.border.success,
+    color: colour.foreground.success,
+    svg: { stroke: colour.foreground.success },
   },
 };
 

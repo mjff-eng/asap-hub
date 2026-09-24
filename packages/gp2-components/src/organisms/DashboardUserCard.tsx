@@ -70,7 +70,7 @@ const DashboardRecommendedUsers: React.FC<DashboardRecommendedUsersProps> = ({
       </LinkHeadline>
 
       <div css={roleStyles}>
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           {user.role}
         </Paragraph>
       </div>

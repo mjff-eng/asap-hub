@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Avatar, Button, Link, Paragraph } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { binIcon, uploadIcon } from '../icons';
 import { rem } from '../pixels';
 
@@ -35,7 +35,7 @@ const buttonContentStyles = css({
 
 const subtitleStyles = css({
   paddingLeft: rem(6),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 type EditUserAvatarProps = {

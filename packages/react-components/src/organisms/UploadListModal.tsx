@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { useRef, useState } from 'react';
 
 import { Button, Headline2, Link, Paragraph, Tag } from '../atoms';
-import { colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 import {
   binIcon,
   chevronDownIcon,
@@ -167,7 +167,7 @@ const summaryStyles = css({
   flexWrap: 'wrap',
   fontSize: rem(17),
   lineHeight: rem(24),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const summaryStrongStyles = css({
@@ -218,7 +218,7 @@ const sectionHeaderLabelStyles = css({
 });
 
 const matchedLabelStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontWeight: 400,
   gap: rem(8),
   strong: {
@@ -296,11 +296,11 @@ const unmatchedRowStyles = css({
 const unmatchedTextStyles = css({
   fontSize: rem(17),
   lineHeight: rem(24),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const unmatchedMetaStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const suggestionLinkStyles = css({
@@ -313,7 +313,7 @@ const addSuggestionButtonStyles = css({
   alignItems: 'center',
   gap: rem(8),
   lineHeight: rem(24),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   '> svg': {
     width: rem(24),
     height: rem(24),
@@ -325,7 +325,7 @@ const addSuggestionButtonStyles = css({
 
 const emptyResultStyles = css({
   margin: 0,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -345,7 +345,7 @@ const formatTooltipStyles = css({
 
 const unmatchedHelpStyles = css({
   margin: 0,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(14),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -617,7 +617,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
       </header>
 
       <div css={bodyStyles}>
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           Add teams from a list. Matched teams are added and marked attended. If
           a team is already in your list, their attendance will be updated to
           match the file. CSV or XLSX files only. What format does the file

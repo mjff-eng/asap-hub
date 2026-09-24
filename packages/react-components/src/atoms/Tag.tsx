@@ -1,5 +1,5 @@
 import { css, Theme } from '@emotion/react';
-import { neutral900, colour, success100, colorFromHex } from '../colors';
+import { colour, colorFromHex } from '../colors';
 import { crossSmallIcon } from '../icons';
 import { rem } from '../pixels';
 import Ellipsis from './Ellipsis';
@@ -27,16 +27,15 @@ const styles = css({
 });
 
 const highlightStyles = css({
-  backgroundColor: success100.rgb,
+  backgroundColor: colour.background.brand,
 });
 
 const hoverStyles = ({
-  primary100 = success100,
   primary900 = colorFromHex(colour.brand.crn[800]),
 }: Theme['colors'] = {}) =>
   css({
     ':hover': {
-      backgroundColor: primary100.rgba,
+      backgroundColor: colour.background['hover-brand'],
       borderColor: primary900.rgba,
       color: primary900.rgba,
     },
@@ -55,7 +54,7 @@ const iconStyles = css({
   border: 'none',
   backgroundColor: 'unset',
   svg: {
-    fill: neutral900.rgba,
+    fill: colour.foreground.tertiary,
   },
   cursor: 'pointer',
 });

@@ -31,7 +31,7 @@ import {
 } from '@lexical/markdown';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import { $nodesOfType, EditorState } from 'lexical';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { styles, useValidation, validationMessageStyles } from '../form';
 import { noop } from '../utils';
 import ToolbarPlugin from './TextEditorToolbar';
@@ -345,7 +345,7 @@ const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                             },
                           },
                           !enabled && {
-                            color: neutral900.rgb,
+                            color: colour.foreground.tertiary,
                             backgroundColor: colour.background.tertiary,
                           },
                         ]

@@ -11,14 +11,7 @@ import { css, Theme } from '@emotion/react';
 import { Anchor, Button } from '../atoms';
 import { rem, mobileScreen, formTargetWidth } from '../pixels';
 
-import {
-  colorWithTransparency,
-  neutral200,
-  colour,
-  success100,
-  neutral900,
-  colorFromHex,
-} from '../colors';
+import { colorWithTransparency, colour, colorFromHex } from '../colors';
 
 const containerStyles = css({
   display: 'flex',
@@ -108,20 +101,19 @@ const alignLeftStyles = css({
 export type ItemType = 'title' | 'inner' | 'default';
 
 const itemStyles = ({
-  primary100 = success100,
   primary900 = colorFromHex(colour.brand.crn[800]),
   type = 'default',
 }: { type?: ItemType } & Theme['colors']) =>
   css({
-    color: neutral900.rgb,
+    color: colour.foreground.tertiary,
     backgroundColor:
       type === 'title'
         ? colour.general.blue.cerulean[25]
         : type === 'inner'
-          ? neutral200.rgba
+          ? colour.neutral[50]
           : 'none',
     ':hover': {
-      backgroundColor: primary100.rgba,
+      backgroundColor: colour.background['hover-brand'],
       span: {
         color: primary900.rgba,
       },

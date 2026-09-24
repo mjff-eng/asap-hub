@@ -95,7 +95,7 @@ const EventPage = <
       <div css={cardsStyles}>
         <Card>
           <EventInfo {...props} titleLimit={null} tags={[]} />
-          <Paragraph accent="neutral900" styles={updatedParagraphStyles}>
+          <Paragraph accent="tertiary" styles={updatedParagraphStyles}>
             <small>
               Last updated:{' '}
               {formatDistance(new Date(), new Date(lastModifiedDate))} ago

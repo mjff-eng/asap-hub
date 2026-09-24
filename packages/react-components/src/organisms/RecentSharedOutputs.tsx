@@ -6,11 +6,11 @@ import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { Card, Link } from '../atoms';
 import { formatDateToTimezone } from '../date';
 import { rem, tabletScreen } from '../pixels';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 
 const container = css({
   display: 'grid',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const gridTitleStyles = css({
@@ -53,7 +53,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const titleStyles = css({

@@ -54,7 +54,7 @@ const TeamMembersTabbedCard: React.FC<TeamMembersTabbedCardProps> = ({
           truncateFrom: 8,
           disabled: isTeamInactive,
           empty: (
-            <Paragraph accent="neutral900">
+            <Paragraph accent="tertiary">
               There are no active team members.
             </Paragraph>
           ),
@@ -65,7 +65,7 @@ const TeamMembersTabbedCard: React.FC<TeamMembersTabbedCardProps> = ({
           truncateFrom: 8,
           disabled: pastMembers.length === 0,
           empty: (
-            <Paragraph accent="neutral900">
+            <Paragraph accent="tertiary">
               There are no past team members.
             </Paragraph>
           ),

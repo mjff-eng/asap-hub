@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Card, Paragraph, Subtitle } from '../atoms';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { ExpandableText, TooltipInfo } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
 
@@ -47,7 +47,7 @@ const headerWithInfoStyles = css({
 const cellStyles = css({
   padding: `${rem(20)} 0`,
   verticalAlign: 'middle',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -95,7 +95,7 @@ const mobileFieldStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(8),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   lineHeight: rem(24),
 });
@@ -180,19 +180,19 @@ const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
     <ExpandableText variant="arrow" expandOnce>
       <div css={detailsStyles}>
         <div css={detailsBlockStyles}>
-          <Subtitle accent="neutral900" noMargin>
+          <Subtitle accent="tertiary" noMargin>
             ASAP Philosophy:
           </Subtitle>
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             ASAP's goal is for all ASAP-generated CRN outputs to be well-curated
             and shared within the ASAP research community through the CRN Hub.
           </Paragraph>
         </div>
         <div css={detailsBlockStyles}>
-          <Subtitle accent="neutral900" noMargin>
+          <Subtitle accent="tertiary" noMargin>
             Metric Definition:
           </Subtitle>
-          <Paragraph noMargin accent="neutral900">
+          <Paragraph noMargin accent="tertiary">
             The Hub Research Outputs Metric provides a high-level overview of
             ASAP-funded outputs that are listed on the Hub, along with their
             public sharing status. Please note that this metric reflects only
@@ -201,7 +201,7 @@ const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
             Science compliance review.
           </Paragraph>
         </div>
-        <Paragraph noMargin accent="neutral900">
+        <Paragraph noMargin accent="tertiary">
           As a reminder, ASAP requires that all ASAP-funded outputs be included
           on the Hub by the time of final publication. While it is possible for
           the values to differ between the Hub Research Outputs metrics and Open

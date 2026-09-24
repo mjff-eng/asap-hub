@@ -3,7 +3,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Link } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import {
   asapEventIcon,
   InterestGroupsIcon,
@@ -13,7 +13,7 @@ import {
 import { rem } from '../pixels';
 
 const listItemStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   whiteSpace: 'break-spaces',
   overflow: 'hidden',
   textOverflow: 'ellipsis',

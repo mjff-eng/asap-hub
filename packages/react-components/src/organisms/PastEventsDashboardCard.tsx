@@ -3,13 +3,13 @@ import { EventResponse } from '@asap-hub/model';
 import { events as eventsRoute } from '@asap-hub/routing';
 
 import { Card, Link, MaterialAvailability } from '../atoms';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { formatDateToTimezone } from '../date';
 
 const container = css({
   display: 'grid',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const gridTitleStyles = css({

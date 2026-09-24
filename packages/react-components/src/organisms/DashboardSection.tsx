@@ -2,11 +2,11 @@ import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 
 import { Headline2, Link } from '../atoms';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const infoStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   padding: `${rem(3)} 0 ${rem(24)}`,
   lineHeight: rem(24),
 });

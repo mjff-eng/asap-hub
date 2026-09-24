@@ -1,17 +1,7 @@
 import { manuscriptStatus, ManuscriptStatus } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
-import {
-  info100,
-  info200,
-  info500,
-  StatusType,
-  success100,
-  success500,
-  warning100,
-  neutral900,
-  colour,
-} from '..';
+import { StatusType, colour } from '..';
 import { Card, Paragraph } from '../atoms';
 import { iconStyles, statusIcon } from '../molecules/StatusButton';
 import { rem } from '../pixels';
@@ -41,22 +31,22 @@ const getbuttonStyles = (
   isSelected: boolean,
 ) => {
   const backgroundColors = {
-    warning: warning100.rgb,
-    final: success100.rgb,
-    default: info100.rgb,
-    none: info100.rgb,
+    warning: colour.utilitarian.orange[50],
+    final: colour.background.success,
+    default: colour.background.info,
+    none: colour.background.info,
   };
 
   const borderColors: ColorByType = {
     warning: colour.utilitarian.orange[100],
-    final: info200.rgb,
-    default: isSelected ? info500.rgb : colour.neutral[100],
+    final: colour.border.success,
+    default: isSelected ? colour.foreground.info : colour.neutral[100],
   };
 
   const textColors: ColorByType = {
     warning: colour.utilitarian.orange[600],
-    final: success500.rgb,
-    default: isSelected ? info500.rgb : neutral900.rgb,
+    final: colour.foreground.success,
+    default: isSelected ? colour.foreground.info : colour.neutral[600],
   };
 
   return css({

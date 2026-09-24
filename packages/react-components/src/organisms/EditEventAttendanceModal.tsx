@@ -17,7 +17,7 @@ import {
   Paragraph,
   Switch,
 } from '../atoms';
-import { neutral900, neutral200, neutral800, colour } from '../colors';
+import { colour } from '../colors';
 import {
   binIcon,
   InactiveBadgeIcon,
@@ -149,7 +149,7 @@ const uploadButtonStyles = (enabled: boolean) =>
     padding: `${rem(8)} ${rem(16)}`,
     border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(4),
-    color: enabled ? colour.foreground.primary : neutral900.rgb,
+    color: enabled ? colour.foreground.primary : colour.neutral[600],
     maxWidth: 'none',
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       flexGrow: 0,
@@ -158,7 +158,7 @@ const uploadButtonStyles = (enabled: boolean) =>
     '> svg': {
       width: rem(24),
       height: rem(24),
-      stroke: enabled ? colour.foreground.primary : neutral900.rgb,
+      stroke: enabled ? colour.foreground.primary : colour.neutral[600],
       filter: 'none',
     },
     ...buttonIconGapReset,
@@ -196,7 +196,7 @@ const statsGroupStyles = css({
 const attendeesStatStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const separatorStyles = css([attendeesStatStyles, { padding: `0 ${rem(8)}` }]);
@@ -242,7 +242,7 @@ const attendeesCardStyles = (enabled: boolean) =>
   css({
     border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? colour.background.secondary : neutral200.rgb,
+    backgroundColor: enabled ? colour.background.secondary : colour.neutral[50],
     padding: rem(24),
     overflowX: 'auto',
   });
@@ -314,7 +314,7 @@ const groupTitleStyles = css([
 
 const groupHelperStyles = css([
   groupLineStyles,
-  { fontWeight: 400, color: neutral800.rgb },
+  { fontWeight: 400, color: colour.foreground.quaternary },
 ]);
 
 const lockStyles = css({
@@ -356,7 +356,7 @@ const searchOptionStyles = css({
 });
 
 const searchOptionMetaStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const placeholderStyles = css({
@@ -710,7 +710,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
           >
             <div css={uploadTextStyles}>
               <SectionTitle optional>Upload a list</SectionTitle>
-              <Paragraph noMargin accent="neutral900">
+              <Paragraph noMargin accent="tertiary">
                 Add several teams at once from a spreadsheet, instead of
                 searching one by one.
               </Paragraph>
@@ -757,10 +757,10 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
 
           {!hasRows ? (
             <div css={emptyAttendeesStyles} role="status">
-              <Paragraph noMargin accent="neutral900">
+              <Paragraph noMargin accent="tertiary">
                 <strong>Add teams to track attendance</strong>
               </Paragraph>
-              <Paragraph noMargin accent="neutral900">
+              <Paragraph noMargin accent="tertiary">
                 This event has no hosting group, so nothing was added
                 automatically. Search for a team above or upload a list.
               </Paragraph>

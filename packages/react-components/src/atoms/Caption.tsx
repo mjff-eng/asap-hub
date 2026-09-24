@@ -28,7 +28,7 @@ const Caption: React.FC<CaptionProps> = ({
   const styles = [
     layoutStyles,
     captionStyles,
-    accent ? { color: colors[accent].rgb } : null,
+    accent ? { color: colors.colour.foreground[accent] } : null,
     bold ? boldStyles : null,
     noMargin ? { margin: 0 } : null,
   ];

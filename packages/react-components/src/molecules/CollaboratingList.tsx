@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button } from '../atoms';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 export const nonMobileQuery = `@media (min-width: ${tabletScreen.min}px)`;
@@ -52,7 +52,7 @@ export const chevronStyles = css({
 });
 
 export const emptyStateStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   margin: 0,
   padding: `${rem(24)} 0`,
   textAlign: 'left',

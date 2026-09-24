@@ -60,7 +60,7 @@ const TutorialDetailsPage: React.FC<TutorialDetailsPageProps> = ({
             {!!tags.length && (
               <>
                 <Headline2>Tags</Headline2>
-                <Paragraph noMargin accent="neutral900">
+                <Paragraph noMargin accent="tertiary">
                   Explore keywords related to skills, techniques, resources, and
                   tools.
                 </Paragraph>

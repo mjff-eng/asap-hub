@@ -27,7 +27,7 @@ const TeamProfileTags: React.FC<TeamProfileTagsProps> = ({ tags }) => (
     </div>
     <Headline3 noMargin>Tags</Headline3>
     <Paragraph
-      accent="neutral900"
+      accent="tertiary"
       noMargin
       styles={css({ marginTop: rem(24) })}
     >

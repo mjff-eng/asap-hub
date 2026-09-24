@@ -13,7 +13,6 @@ import {
   colour,
 } from '@asap-hub/react-components';
 import { mobileQuery, nonMobileQuery } from '../layout';
-import colors from '../templates/colors';
 
 const { rem } = pixels;
 
@@ -52,7 +51,7 @@ const headingListStyles = css({
 });
 
 const secondaryTextStyles = css({
-  color: colors.greyscale1000.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const textWrap = css({

@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { Button, Card, Headline2, Link, Paragraph, Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { neutral200, colour, neutral900 } from '../colors';
+import { colour } from '../colors';
 import { formatDateToTimezone } from '../date';
 import { ExternalLinkIcon } from '../icons';
 import { contentSidePaddingWithNavigation } from '../layout';
@@ -22,7 +22,7 @@ const descriptionStyles = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     marginBottom: rem(32),
   },
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const gridTitleStyles = css({
@@ -66,7 +66,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const showMoreStyles = css({
@@ -108,7 +108,7 @@ const createVersionWrapperStyles = css({
 });
 
 const createVersionCardStyles = css({
-  background: neutral200.rgb,
+  background: colour.background.secondary,
 });
 
 type Version = Omit<ResearchOutputVersion, 'documentType' | 'type'> & {

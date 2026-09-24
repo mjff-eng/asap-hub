@@ -1,19 +1,6 @@
 import { css, SerializedStyles } from '@emotion/react';
 
-import {
-  info100,
-  azure,
-  space,
-  lilac,
-  berry,
-  lavender,
-  mauve,
-  colour,
-  info900,
-  success100,
-  warning100,
-  neutral900,
-} from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { headlineStyles, fontStyles } from '../text';
 
@@ -83,16 +70,16 @@ const textStyle = css(fontStyles, headlineStyles[3], {
 
 const placeholderColorStyle = css({
   backgroundColor: colour.neutral[0],
-  fill: neutral900.rgb,
+  fill: colour.foreground.tertiary,
 });
-const colorStyles = [
-  css({ backgroundColor: success100.rgb, fill: colour.brand.crn[800] }),
-  css({ backgroundColor: warning100.rgb, fill: colour.foreground.warning }),
-  css({ backgroundColor: info100.rgb, fill: info900.rgb }),
-  css({ backgroundColor: azure.rgb, fill: space.rgb }),
-  css({ backgroundColor: lilac.rgb, fill: berry.rgb }),
-  css({ backgroundColor: lavender.rgb, fill: mauve.rgb }),
-];
+const colorStyles = (
+  ['yellow', 'green', 'lavender', 'blue', 'brand'] as const
+).map((name) =>
+  css({
+    backgroundColor: colour.background[`color-${name}`],
+    fill: colour.foreground[`color-${name}`],
+  }),
+);
 
 type RegularAvatarProps = {
   readonly imageUrl?: string;

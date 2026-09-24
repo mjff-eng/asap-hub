@@ -14,7 +14,7 @@ const DiscoverPageHeader: React.FC = () => (
       }
     >
       <Display styleAsHeading={2}>Guides &amp; Tutorials</Display>
-      <Paragraph accent="neutral900">
+      <Paragraph accent="tertiary">
         Guidance and resources about ASAP’s programs and policies.
       </Paragraph>
     </PageInfoContainer>

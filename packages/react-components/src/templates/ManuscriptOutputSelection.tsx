@@ -14,7 +14,6 @@ import {
   colour,
 } from '..';
 import { mobileScreen, rem } from '../pixels';
-import { info900, neutral900 } from '../colors';
 
 const mainStyles = css({
   display: 'flex',
@@ -100,11 +99,11 @@ const pillContainerStyles = (isFocused?: boolean) =>
     },
     '& > *:nth-of-type(1), & > *:nth-of-type(2)': {
       backgroundColor: isFocused ? colour.neutral[100] : undefined,
-      color: isFocused ? neutral900.hex : undefined,
+      color: isFocused ? colour.foreground.tertiary : undefined,
     },
     '& > *:nth-of-type(3)': {
       backgroundColor: isFocused ? '#CFEDFB' : undefined,
-      color: isFocused ? info900.hex : undefined,
+      color: isFocused ? colour.brand.gp2[800] : undefined,
     },
   });
 

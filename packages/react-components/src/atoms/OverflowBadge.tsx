@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const badgeStyles = css({
@@ -16,7 +16,7 @@ const badgeStyles = css({
   fontWeight: 700,
   lineHeight: rem(16),
   letterSpacing: 0,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   boxSizing: 'border-box',
   verticalAlign: 'middle',
   margin: `0 ${rem(8)}`,

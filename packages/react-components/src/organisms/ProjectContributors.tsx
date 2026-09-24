@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Card, Headline3, Paragraph, Pill, TabButton } from '../atoms';
-import { neutral900, colour } from '../colors';
+import { colour } from '../colors';
 import {
   TabNav,
   ProjectMembers,
@@ -48,7 +48,7 @@ const teamHeaderStyles = css({
 });
 
 const teamDescriptionStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   lineHeight: rem(24),
   margin: 0,
@@ -82,7 +82,7 @@ const ProjectContributors: React.FC<ProjectContributorsProps> = ({
       <Card padding={false}>
         <div css={cardContentStyles}>
           <Headline3 noMargin>Contributors</Headline3>
-          <Paragraph noMargin accent="neutral900" styles={subtitleStyles}>
+          <Paragraph noMargin accent="tertiary" styles={subtitleStyles}>
             View the people contributing to this project.
           </Paragraph>
           <div css={membersContentStyles}>
@@ -103,7 +103,7 @@ const ProjectContributors: React.FC<ProjectContributorsProps> = ({
     <Card padding={false}>
       <div css={cardContentStyles}>
         <Headline3 noMargin>Contributors</Headline3>
-        <Paragraph noMargin accent="neutral900" styles={subtitleStyles}>
+        <Paragraph noMargin accent="tertiary" styles={subtitleStyles}>
           View the funded team leading this project and the teams that have
           collaborated on its articles.
         </Paragraph>
