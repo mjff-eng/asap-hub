@@ -63,27 +63,32 @@ export const StartHere = () => (
       <table style={table}>
         <thead>
           <tr>
+            <th style={headCell}>Before: name in code</th>
             <th style={headCell}>Figma variable</th>
-            <th style={headCell}>Code</th>
-            <th style={headCell}>CSS variable</th>
+            <th style={headCell}>Now: name in code</th>
           </tr>
         </thead>
         <tbody>
           {[
-            'colour/foreground/primary',
-            'colour/border/tertiary',
-            'colour/foreground/primary-inverse',
-            'colour/background/button/primary/default',
-          ].map((name) => {
+            ['colour/foreground/primary', 'charcoal, neutral1000'],
+            ['colour/border/tertiary', 'steel, neutral500'],
+            ['colour/foreground/primary-inverse', 'paper'],
+            [
+              'colour/background/button/primary/default',
+              'fern (CRN), primary500 (GP2)',
+            ],
+          ].map(([name, before]) => {
             const token = themeTokens.find((t) => t.figmaName === name);
             return (
               token && (
                 <tr key={name}>
+                  <td style={{ ...cell, ...muted }}>
+                    {code(before as string)}
+                  </td>
                   <td style={cell}>{code(token.figmaName)}</td>
                   <td style={cell}>
                     <Copy text={token.codeName} />
                   </td>
-                  <td style={cell}>{code(`var(${token.cssVariable})`)}</td>
                 </tr>
               )
             );
@@ -91,7 +96,9 @@ export const StartHere = () => (
         </tbody>
       </table>
       <p>
-        Swap each {code('/')} for {code('.')}. Parts with a hyphen go in
+        Before, the code used its own names, sometimes two for the same colour,
+        and none of them appeared in Figma. Now the name in code is the Figma
+        name: swap each {code('/')} for {code('.')}. Parts with a hyphen go in
         brackets, for example {code("colour.foreground['primary-inverse']")}.
       </p>
     </Section>
