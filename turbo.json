@@ -1,9 +1,15 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "envMode": "loose",
+  "tasks": {
     "build:babel": {
       "dependsOn": ["^build:babel"],
-      "outputs": ["build/**/*", "build-cjs/**/*"]
+      "outputs": [
+        "build/**/*",
+        "!build/**/*.d.ts",
+        "!build/**/*.d.ts.map",
+        "build-cjs/**/*"
+      ]
     },
     "//#build:typecheck:tsc": {
       "outputs": [
@@ -20,7 +26,13 @@
     },
     "build": {
       "dependsOn": ["typecheck", "build:babel", "//#build:typecheck:tsc"],
-      "outputs": ["build/**/*", "dist/**/*", "build-templates/**/*"]
+      "outputs": [
+        "build/**/*",
+        "!build/**/*.d.ts",
+        "!build/**/*.d.ts.map",
+        "dist/**/*",
+        "build-templates/**/*"
+      ]
     },
     "test": {
       "dependsOn": ["topo"]
