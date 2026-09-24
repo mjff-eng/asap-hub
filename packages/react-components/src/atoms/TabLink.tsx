@@ -94,7 +94,7 @@ const TabLink: React.FC<TabLinkProps> = ({ href, children, Icon }) => {
     >
       {Icon && (
         <span css={iconStyles}>
-          <Icon color={isActive ? colour.neutral[900] : colour.neutral[600]} />
+          <Icon color={isActive ? colour.neutral[900] : colour.neutral[700]} />
         </span>
       )}
       {children}

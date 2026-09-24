@@ -132,7 +132,7 @@ const primaryStyles = ({
     ':hover, :focus': {
       backgroundColor: primary900.rgba,
       borderColor: primary900.rgba,
-      boxShadow: boxShadow(colorFromHex(colour.neutral[600])),
+      boxShadow: boxShadow(colorFromHex(colour.neutral[700])),
     },
 
     ':active': {
@@ -171,16 +171,16 @@ export const warningStyles = css({
 });
 
 const disabledStyles = css({
-  color: colour.foreground.tertiary,
-  backgroundColor: colour.background.tertiary,
-  borderColor: colour.border.tertiary,
+  color: colour.foreground.disabled,
+  backgroundColor: colour.background.disabled,
+  borderColor: 'transparent',
   boxShadow: 'none',
 
   cursor: 'unset',
 
   svg: {
     filter: 'grayscale(1)',
-    stroke: colour.neutral[200],
+    stroke: colour.foreground.disabled,
   },
 });
 

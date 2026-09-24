@@ -42,9 +42,9 @@ const hoverStyles = ({
   });
 
 const disabledStyles = css({
-  backgroundColor: colour.background.tertiary,
+  backgroundColor: colour.background.disabled,
   borderColor: colour.border.tertiary,
-  color: colour.foreground.primary,
+  color: colour.foreground.disabled,
 });
 
 const iconStyles = css({

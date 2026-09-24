@@ -19,7 +19,9 @@ const iconStyles = (isGenerateButtonEnabled: boolean) =>
     display: 'flex',
     marginRight: rem(8),
     path: {
-      fill: isGenerateButtonEnabled ? '#FFFFFF' : colour.neutral[600],
+      fill: isGenerateButtonEnabled
+        ? colour.neutral[0]
+        : colour.foreground.tertiary,
     },
   });
 

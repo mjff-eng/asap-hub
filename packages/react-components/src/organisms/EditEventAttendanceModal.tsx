@@ -149,7 +149,7 @@ const uploadButtonStyles = (enabled: boolean) =>
     padding: `${rem(8)} ${rem(16)}`,
     border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(4),
-    color: enabled ? colour.foreground.primary : colour.neutral[600],
+    color: enabled ? colour.foreground.primary : colour.foreground.tertiary,
     maxWidth: 'none',
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       flexGrow: 0,
@@ -158,7 +158,7 @@ const uploadButtonStyles = (enabled: boolean) =>
     '> svg': {
       width: rem(24),
       height: rem(24),
-      stroke: enabled ? colour.foreground.primary : colour.neutral[600],
+      stroke: enabled ? colour.foreground.primary : colour.foreground.tertiary,
       filter: 'none',
     },
     ...buttonIconGapReset,
@@ -242,7 +242,9 @@ const attendeesCardStyles = (enabled: boolean) =>
   css({
     border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? colour.background.secondary : colour.neutral[50],
+    backgroundColor: enabled
+      ? colour.background.secondary
+      : colour.background.disabled,
     padding: rem(24),
     overflowX: 'auto',
   });
@@ -360,7 +362,7 @@ const searchOptionMetaStyles = css({
 });
 
 const placeholderStyles = css({
-  color: colour.neutral[200],
+  color: colour.foreground.tertiary,
 });
 
 // react-select remounts a custom component whose identity changes, so the

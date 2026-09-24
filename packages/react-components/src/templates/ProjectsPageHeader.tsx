@@ -69,7 +69,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
                   color={
                     isDiscoveryActive
                       ? colour.neutral[900]
-                      : colour.neutral[600]
+                      : colour.neutral[700]
                   }
                 />
               )}
@@ -81,7 +81,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
               Icon={() => (
                 <ResourceProjectIcon
                   color={
-                    isResourceActive ? colour.neutral[900] : colour.neutral[600]
+                    isResourceActive ? colour.neutral[900] : colour.neutral[700]
                   }
                 />
               )}
@@ -93,7 +93,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
               Icon={() => (
                 <TraineeProjectIcon
                   color={
-                    isTraineeActive ? colour.neutral[900] : colour.neutral[600]
+                    isTraineeActive ? colour.neutral[900] : colour.neutral[700]
                   }
                 />
               )}

@@ -25,7 +25,7 @@ const fullWidthOnMobilePillStyles = css({
 
 const disabledStyles = css({
   borderColor: colour.border.secondary,
-  color: colour.neutral[200],
+  color: colour.foreground.disabled,
   cursor: 'not-allowed',
 });
 
@@ -51,7 +51,9 @@ const pillStyles = (selected: boolean, error: boolean) =>
     backgroundColor: selected
       ? colors.colour.background.info
       : colour.neutral[0],
-    color: selected ? colors.colour.foreground.info : colour.neutral[600],
+    color: selected
+      ? colors.colour.foreground.info
+      : colour.foreground.tertiary,
     '> svg': {
       width: rem(24),
       height: rem(24),
