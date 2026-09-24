@@ -32,8 +32,8 @@ module.exports = {
   ],
   rules: {
     'import/prefer-default-export': 'off',
-    // parsing .ts exports is only for no-deprecated; tsc covers the rest
-    'import/no-deprecated': 'warn',
+    // run by `yarn lint:deprecated-colours`; lint fails on any warning
+    'import/no-deprecated': 'off',
     'import/named': 'off',
     'import/export': 'off',
     'import/no-named-as-default': 'off',
