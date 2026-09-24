@@ -117,7 +117,6 @@ describe('form buttons', () => {
   };
 
   const primaryButtonBg = colorFromHex(colour.brand.crn[500]).rgb;
-  const notPrimaryButtonBg = colorFromHex(colour.neutral[0]).rgb;
 
   it('shows Cancel, Save Draft and Publish buttons when user has editing and publishing permissions and the research output has not been published yet', async () => {
     await setupForm({
@@ -134,13 +133,17 @@ describe('form buttons', () => {
 
     const saveDraftButton = screen.getByRole('button', { name: /Save Draft/i });
     expect(saveDraftButton).toBeInTheDocument();
-    expect(saveDraftButton).toHaveStyle(
-      `background-color:${notPrimaryButtonBg}`,
+    expect(saveDraftButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.secondary.default,
     );
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveStyle(`background-color:${notPrimaryButtonBg}`);
+    expect(cancelButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.secondary.default,
+    );
   });
 
   it('shows only Cancel and Save buttons when user has editing and publishing permission and the research output has already been published', async () => {
@@ -161,7 +164,10 @@ describe('form buttons', () => {
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveStyle(`background-color:${notPrimaryButtonBg}`);
+    expect(cancelButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.secondary.default,
+    );
   });
 
   it('shows only Cancel and Save buttons when research output is manuscript output and the research output has already been published', async () => {
@@ -185,7 +191,10 @@ describe('form buttons', () => {
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveStyle(`background-color:${notPrimaryButtonBg}`);
+    expect(cancelButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.secondary.default,
+    );
   });
 
   it('shows only Cancel and Publish buttons when research output is manuscript output and the research output has not been published', async () => {
@@ -209,7 +218,10 @@ describe('form buttons', () => {
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveStyle(`background-color:${notPrimaryButtonBg}`);
+    expect(cancelButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.secondary.default,
+    );
   });
 
   it('shows only Cancel and Save Draft buttons when user has editing permission and the research output has not been published yet', async () => {
@@ -229,7 +241,10 @@ describe('form buttons', () => {
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveStyle(`background-color:${notPrimaryButtonBg}`);
+    expect(cancelButton).toHaveStyleRule(
+      'background-color',
+      colour.background.button.secondary.default,
+    );
   });
 
   describe('save loader', () => {

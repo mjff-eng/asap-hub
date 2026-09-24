@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 
 import Caption from '../Caption';
-import { error500 } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders the text in a FigCaption', () => {
   const { getByText } = render(
@@ -58,6 +58,5 @@ it('renders a given accent color', () => {
       <Caption accent="error">text</Caption>
     </figure>,
   );
-  const { color } = getComputedStyle(getByText('text'));
-  expect(color).toBe(error500.rgb);
+  expect(getByText('text')).toHaveStyleRule('color', colour.foreground.error);
 });

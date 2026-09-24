@@ -5,7 +5,7 @@ import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { addMinutes, subDays, subMinutes, addDays } from 'date-fns';
 
 import EventCard from '../EventCard';
-import { neutral200 } from '../../colors';
+import { colour } from '../../colors';
 
 const mockIsEnabled = jest.fn();
 jest.mock('@asap-hub/react-context', () => ({
@@ -157,9 +157,8 @@ describe('past events', () => {
       />,
     );
     expect(
-      findParentWithStyle(screen.getByRole('heading'), 'backgroundColor')
-        ?.backgroundColor,
-    ).toBe(neutral200.rgb);
+      findParentWithStyle(screen.getByRole('heading'), 'borderStyle')?.element,
+    ).toHaveStyleRule('background-color', colour.background.secondary);
     unmount();
 
     render(
@@ -171,9 +170,8 @@ describe('past events', () => {
       />,
     );
     expect(
-      findParentWithStyle(screen.getByRole('heading'), 'backgroundColor')
-        ?.backgroundColor,
-    ).not.toBe(neutral200.rgb);
+      findParentWithStyle(screen.getByRole('heading'), 'borderStyle')?.element,
+    ).not.toHaveStyleRule('background-color', colour.background.secondary);
   });
   it('lists every material greyed out and non-clickable while they are still pending', () => {
     render(
