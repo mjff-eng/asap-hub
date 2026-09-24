@@ -1,31 +1,87 @@
 import { CSSProperties, Fragment, ReactNode } from 'react';
-import { colors } from '@asap-hub/react-components';
-import { colors as gp2Colors } from '@asap-hub/gp2-components';
-import valueTokens from './cas-tokens/Value.tokens.json';
-import lightTokens from './cas-tokens/Light.tokens.json';
-import crnTheme from './cas-tokens/CRN.tokens.json';
-import gp2Theme from './cas-tokens/GP2.tokens.json';
 import {
-  TokenEntry,
-  groupInOrder,
-  parseColourTokens,
-} from './cas-tokens/parse';
+  casModeLight,
+  casPrimitives,
+  casTheme,
+  colors,
+} from '@asap-hub/react-components';
+import { colors as gp2Colors } from '@asap-hub/gp2-components';
 
-const primitives = parseColourTokens(valueTokens);
-const light = parseColourTokens(lightTokens);
-const crn = parseColourTokens(crnTheme);
-const gp2 = parseColourTokens(gp2Theme);
+interface TokenEntry {
+  path: string[];
+  name: string;
+  group: string;
+  hex: string;
+  alpha: number;
+  alias?: string;
+}
 
-const primitiveByPath = new Map(
-  primitives.map((entry) => [entry.path.join('/'), entry]),
-);
-
-// which primitive values are used in code, and under which names
-const rgbToHex = (c: { r: number; g: number; b: number }): string =>
-  `#${[c.r, c.g, c.b]
+const toHex = (channels: readonly number[]): string =>
+  `#${channels
+    .slice(0, 3)
     .map((v) => v.toString(16).padStart(2, '0'))
     .join('')
     .toUpperCase()}`;
+
+const entry = (
+  path: string[],
+  hex: string,
+  alpha: number,
+  alias?: string,
+): TokenEntry => ({
+  path,
+  name: path[path.length - 1] as string,
+  group: path.slice(0, -1).join(' / '),
+  hex,
+  alpha,
+  alias,
+});
+
+const flattenPrimitives = (node: unknown, path: string[]): TokenEntry[] =>
+  Array.isArray(node)
+    ? [entry(path, toHex(node), (node[3] as number | undefined) ?? 1)]
+    : Object.entries(node as Record<string, unknown>).flatMap(([key, child]) =>
+        flattenPrimitives(child, [...path, key]),
+      );
+
+const groupInOrder = (
+  entries: TokenEntry[],
+): { group: string; tokens: TokenEntry[] }[] => {
+  const groups: { group: string; tokens: TokenEntry[] }[] = [];
+  entries.forEach((token) => {
+    const last = groups[groups.length - 1];
+    if (last && last.group === token.group) {
+      last.tokens.push(token);
+    } else {
+      groups.push({ group: token.group, tokens: [token] });
+    }
+  });
+  return groups;
+};
+
+const primitives = flattenPrimitives(casPrimitives, ['colour']);
+const primitiveByPath = new Map(
+  primitives.map((token) => [token.path.join('/'), token]),
+);
+const light = Object.entries(casModeLight).map(([name, alias]) => {
+  const target = primitiveByPath.get(alias);
+  return entry(name.split('/'), target?.hex ?? '', target?.alpha ?? 1, alias);
+});
+const themeEntries = (product: 'crn' | 'gp2') =>
+  Object.entries(casTheme[product]).map(([name, token]) =>
+    entry(
+      name.split('/'),
+      token.hex,
+      token.alpha,
+      'alias' in token ? token.alias : undefined,
+    ),
+  );
+const crn = themeEntries('crn');
+const gp2 = themeEntries('gp2');
+
+// which primitive values are used in code, and under which names
+const rgbToHex = (c: { r: number; g: number; b: number }): string =>
+  toHex([c.r, c.g, c.b]);
 
 // keyed by hex plus alpha so a transparent code colour only matches a CAS
 // alpha token with the same base value AND the same opacity; .rgb and .rgba
