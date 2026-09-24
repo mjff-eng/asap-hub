@@ -65,7 +65,6 @@ export type {
   MetricsCardProps,
 } from './organisms';
 export * from './colors';
-export * from './cas-tokens.generated';
 export { borderWidth } from './form';
 export * from './hooks';
 export * from './icons';
