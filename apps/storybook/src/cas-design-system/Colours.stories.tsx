@@ -926,9 +926,47 @@ export const DesignQuestions = () => (
         higher the number, the easier the text is to read.
       </p>
       <p>
-        The Web Content Accessibility Guidelines (WCAG) set the minimums most
-        websites follow (level AA):
+        <b>WCAG</b> (Web Content Accessibility Guidelines) is the standard
+        rulebook for making websites usable by everyone, including people with
+        low vision or colour blindness. Its rules come in three levels, each
+        stricter than the one before:
       </p>
+      <table style={{ ...table, maxWidth: '760px' }}>
+        <thead>
+          <tr>
+            <th style={headCell}>Level</th>
+            <th style={headCell}>What it means</th>
+            <th style={headCell}>Text contrast it asks for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style={cell}>A</td>
+            <td style={cell}>The basics</td>
+            <td style={cell}>No contrast rule</td>
+          </tr>
+          <tr>
+            <td style={cell}>
+              <b>AA</b>
+            </td>
+            <td style={cell}>
+              <b>
+                The usual target, and what accessibility laws and contracts
+                normally ask for. This is what we aim for.
+              </b>
+            </td>
+            <td style={cell}>
+              <b>4.5:1 normal text, 3:1 large text</b>
+            </td>
+          </tr>
+          <tr>
+            <td style={cell}>AAA</td>
+            <td style={cell}>The strictest. Rarely met across a whole site.</td>
+            <td style={cell}>7:1 normal text, 4.5:1 large text</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>So for the Hub, the minimums are:</p>
       <ul style={{ paddingLeft: '20px' }}>
         <li>
           <b>4.5:1 for normal text</b>, which covers most text on the Hub.
