@@ -81,4 +81,10 @@ export const projectRouteByType = {
     projects({}).traineeProjects({}).traineeProject({ projectId }),
 } as const;
 
+export const projectListRouteByType = {
+  'Discovery Project': () => projects({}).discoveryProjects({}),
+  'Resource Project': () => projects({}).resourceProjects({}),
+  'Trainee Project': () => projects({}).traineeProjects({}),
+} as const;
+
 export default projects;

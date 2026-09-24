@@ -222,7 +222,7 @@ describe('ProjectManuscript', () => {
     await renderPage('discovery', true);
     await waitFor(() => {
       expect(
-        screen.getByText(/Submit Revised Manuscript/i),
+        screen.getByRole('heading', { name: /Submit Revised Manuscript/i }),
       ).toBeInTheDocument();
     });
   });
@@ -349,6 +349,8 @@ describe('ProjectManuscript', () => {
 
   it('uses fundedTeam from projectDetail for teamId and team display name', async () => {
     mockUseProjectById.mockReturnValueOnce({
+      title: 'Test Project',
+      projectType: 'Discovery Project',
       fundedTeam: {
         id: 'funded-team-1',
         displayName: 'Funded Team',
@@ -371,6 +373,8 @@ describe('ProjectManuscript', () => {
 
   it('passes projectId and not teamId when creating a user-based project manuscript', async () => {
     mockUseProjectById.mockReturnValueOnce({
+      title: 'Test Project',
+      projectType: 'Resource Project',
       members: [{ id: 'member-1' }, { id: 'member-2' }],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
@@ -473,6 +477,8 @@ describe('ProjectManuscript', () => {
 
   it('passes projectMemberIds when projectDetail has members', async () => {
     mockUseProjectById.mockReturnValueOnce({
+      title: 'Test Project',
+      projectType: 'Resource Project',
       members: [{ id: 'member-1' }, { id: 'member-2' }],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
