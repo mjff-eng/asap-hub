@@ -3,7 +3,7 @@ import {
   ceruleanFernGradientStyles,
   Link,
   pixels,
-  neutral300,
+  colour,
 } from '@asap-hub/react-components';
 import { staticPages } from '@asap-hub/routing';
 import { css } from '@emotion/react';
@@ -36,7 +36,7 @@ const contentContainerStyles = css({
 });
 
 const footerContainerStyles = css({
-  backgroundColor: neutral300.rgb,
+  backgroundColor: colour.general.blue.cerulean[25],
   padding: rem(12),
 });
 

@@ -25,13 +25,11 @@ import {
   info100,
   info500,
   warning100,
-  warning500,
   success100,
   success500,
   colour,
-  neutral500,
-  neutral700,
   neutral900,
+  colorFromHex,
 } from '../colors';
 
 const containerStyles = css({
@@ -60,8 +58,10 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     top,
     left,
     backgroundColor: colour.neutral[0],
-    border: `1px solid ${neutral500.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(neutral700, 0.34).rgba}`,
+    border: `1px solid ${colour.border.tertiary}`,
+    boxShadow: `0 2px 6px 0 ${
+      colorWithTransparency(colorFromHex(colour.neutral[200]), 0.34).rgba
+    }`,
     flexDirection: 'column',
     padding: `${rem(6)} 0`,
   });
@@ -99,7 +99,8 @@ export const itemContentStyles = (type: StatusType = 'default') =>
     maxWidth: 'fit-content',
     ...(type === 'warning' || type === 'final'
       ? {
-          color: type === 'warning' ? warning500.rgba : success500.rgba,
+          color:
+            type === 'warning' ? colour.foreground.warning : success500.rgba,
           backgroundColor:
             type === 'warning' ? warning100.rgba : success100.rgba,
           columnGap: rem(6),
@@ -136,7 +137,7 @@ export const statusButtonStyles = (
     ...(type === 'warning'
       ? {
           background: warning100.rgba,
-          color: warning500.rgba,
+          color: colour.foreground.warning,
         }
       : type === 'final'
         ? {
@@ -148,7 +149,7 @@ export const statusButtonStyles = (
       stroke: info500.rgba,
       ...([isComplianceReviewer ? 'warning' : 'default', 'final'].includes(type)
         ? {
-            stroke: warning500.rgba,
+            stroke: colour.foreground.warning,
           }
         : {}),
     },
@@ -171,7 +172,7 @@ export const statusTagStyles = (type: StatusType, noWrap: boolean = true) =>
     ...(type === 'default'
       ? {
           background: warning100.rgba,
-          color: warning500.rgba,
+          color: colour.foreground.warning,
         }
       : type === 'final'
         ? {
@@ -210,7 +211,7 @@ export const iconStyles = (type: string, isComplianceReviewer: boolean) =>
       (type === 'default' && !isComplianceReviewer)
         ? {
             '& > g > path': {
-              fill: warning500.rgba,
+              fill: colour.foreground.warning,
             },
           }
         : {}),

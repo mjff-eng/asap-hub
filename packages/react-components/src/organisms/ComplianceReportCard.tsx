@@ -129,7 +129,7 @@ const ComplianceReportCard: React.FC<ComplianceReportCardProps> = ({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div css={{ borderBottom: `1px solid ${colors.neutral500.rgb}` }}>
+    <div css={{ borderBottom: `1px solid ${colors.colour.border.tertiary}` }}>
       <div css={toastStyles}>
         <span css={toastHeaderStyles}>
           <span css={[iconStyles]}>

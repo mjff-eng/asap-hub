@@ -37,12 +37,12 @@ const fileLinkStyles = css({
   alignItems: 'center',
   width: 'fit-content',
   gap: rem(8),
-  border: `1px solid ${colors.neutral500.rgb}`,
+  border: `1px solid ${colors.colour.border.tertiary}`,
   borderRadius: rem(24),
   padding: `${rem(8)} ${rem(12)} ${rem(8)} ${rem(8)}`,
   transition: 'border-color 0.2s ease-in-out',
   ':hover': {
-    borderColor: colors.neutral700.rgb,
+    borderColor: colors.colour.border.secondary,
   },
 });
 
@@ -58,7 +58,7 @@ const fileNameStyles = css({
   fontSize: rem(14),
   fontWeight: 400,
   lineHeight: rem(16),
-  color: colors.neutral1000.rgb,
+  color: colors.colour.foreground.primary,
   ':hover': {
     textDecoration: 'underline',
   },

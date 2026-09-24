@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { charcoal, neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { formatDateToTimezone } from '../date';
 
 const container = css({
@@ -49,7 +49,7 @@ const underlineStyles = css({
   [`@media (max-width: ${tabletScreen.min}px)`]: {
     paddingBottom: rem(16),
     '&:not(:last-child)': {
-      borderBottom: `1px solid ${neutral500.rgb}`,
+      borderBottom: `1px solid ${colour.border.tertiary}`,
     },
   },
 });
@@ -70,10 +70,13 @@ const showMoreStyles = css({
   marginTop: rem(32),
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
-const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyles = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 type RelatedEventsCardProps = (
   | Pick<ResearchOutputResponse, 'relatedEvents'>

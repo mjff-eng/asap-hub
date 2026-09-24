@@ -7,7 +7,7 @@ import {
   noop,
   NavigationLink,
   tagSearchIcon,
-  neutral500,
+  colour,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
@@ -40,7 +40,7 @@ const navigationHeaderStyles = css({
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     gap: rem(24),
-    borderBottom: `1px solid ${neutral500.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -51,7 +51,7 @@ const menuButtonStyles = css({
 
   width: `${menuButtonWidth}px`,
   boxSizing: 'content-box',
-  borderRight: `1px solid ${neutral500.rgb}`,
+  borderRight: `1px solid ${colour.border.tertiary}`,
 
   display: 'flex',
   justifyContent: 'stretch',
@@ -73,8 +73,8 @@ const bottomBorderStyles = css({
 const searchButtonAreaStyles = css({
   gridArea: 'search-button',
   boxSizing: 'border-box',
-  borderBottom: `1px solid ${neutral500.rgb}`,
-  borderLeft: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
+  borderLeft: `1px solid ${colour.border.tertiary}`,
   display: 'flex',
   alignItems: 'center',
 });

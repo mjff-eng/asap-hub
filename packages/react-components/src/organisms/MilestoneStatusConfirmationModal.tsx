@@ -6,7 +6,7 @@ import { LabeledMultiSelect, Modal } from '../molecules';
 import { crossIcon } from '../icons';
 import { Button, Headline3, Paragraph, Spinner } from '../atoms';
 import { mobileScreen, rem } from '../pixels';
-import { error500, neutral300, neutral900 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { ResearchOutputOption } from '../utils';
 import { articleSelectComponents } from '../utils/article-select-components';
 import { articlesToOptions } from './MilestoneArticlesModal';
@@ -91,7 +91,7 @@ const loadingWrapperStyles = css({
 
 const errorMessageStyles = css({
   marginTop: rem(8),
-  color: error500.rgb,
+  color: colour.foreground.error,
 });
 
 export type MilestoneStatusConfirmationStatus = 'Complete' | 'Terminated';
@@ -176,7 +176,7 @@ const MilestoneStatusConfirmationModal: React.FC<
             <Spinner
               size={18}
               color={neutral900.rgb}
-              trackColor={neutral300.rgb}
+              trackColor={colour.general.blue.cerulean[25]}
             />
             <Paragraph noMargin>Loading...</Paragraph>
           </div>

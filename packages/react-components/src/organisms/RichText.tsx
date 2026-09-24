@@ -13,7 +13,7 @@ import githubSanitizationSchema from 'hast-util-sanitize/lib/github';
 import { parseComponents, parseTagNames } from '../utils/parsing';
 import { Headline2 } from '../atoms';
 import { rem } from '../pixels';
-import { charcoal, neutral900 } from '../colors';
+import { neutral900, colour } from '../colors';
 
 interface RichTextProps {
   readonly toc?: boolean;
@@ -39,13 +39,13 @@ const styles = css({
     paddingLeft: rem(18),
   },
   'p > strong, b, h4, h5, h6': {
-    color: charcoal.rgb,
+    color: colour.foreground.primary,
   },
   img: { height: 'auto', maxWidth: '100%' },
 });
 
 const tableOfContentsStyles = css({
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
 });
 
 const hasClass = (html: string, className: string): boolean => {

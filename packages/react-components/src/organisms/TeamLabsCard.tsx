@@ -6,7 +6,7 @@ import { Card, Paragraph, Button, Headline3, Ellipsis, Link } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 
 import { LabIcon } from '../icons';
-import { neutral500, neutral900 } from '../colors';
+import { neutral900, colour } from '../colors';
 
 type TeamLabsCardProps = {
   readonly labs: ReadonlyArray<LabDataObject>;
@@ -41,7 +41,7 @@ const buttonWrapperStyle = css({
   display: 'flex',
   justifyContent: 'center',
   padding: `${rem(16)} 0`,
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 const contentStyles = css({

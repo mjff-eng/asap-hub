@@ -2,14 +2,14 @@ import { OriginalGrantInfo, SupplementGrantInfo } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 import { Card, Display, Link, Paragraph, TabButton } from '../atoms';
 import { TabNav } from '../molecules';
 import { rem } from '../pixels';
 
 const tabsContainerStyles = css({
   display: 'flex',
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 const tabContentStyles = css({

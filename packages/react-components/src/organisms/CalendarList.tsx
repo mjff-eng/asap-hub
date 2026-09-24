@@ -5,7 +5,7 @@ import { FC, useState } from 'react';
 import { Card, Headline3, Paragraph, Link, Button } from '../atoms';
 import { tabletScreen, rem } from '../pixels';
 import { CalendarLink } from '../molecules';
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 
 const containerStyles = css({
   display: 'grid',
@@ -67,7 +67,7 @@ const orderList = css({
     [`@media (max-width: ${tabletScreen.min}px)`]: {
       marginTop: rem(12),
     },
-    borderTop: `1px solid ${neutral500.rgb}`,
+    borderTop: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -76,7 +76,7 @@ const showMoreStyles = css({
   justifyContent: 'center',
   paddingTop: rem(15),
   paddingBottom: rem(15),
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 interface CalendarListProps {

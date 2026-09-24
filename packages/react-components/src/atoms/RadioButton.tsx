@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { rem } from '../pixels';
-import { colour, neutral900, neutral500 } from '../colors';
+import { colour, neutral900 } from '../colors';
 import { noop } from '../utils';
 
 const styles = css({
@@ -16,16 +16,16 @@ const styles = css({
   borderRadius: '12px',
   borderStyle: 'solid',
   borderWidth: rem(1),
-  borderColor: neutral500.rgb,
+  borderColor: colour.border.tertiary,
   // inner circle
   padding: rem(6),
   backgroundClip: 'content-box',
   backgroundColor: colour.neutral[0],
 
   ':disabled': {
-    borderColor: neutral500.rgb,
+    borderColor: colour.border.tertiary,
     ':hover, :focus': {
-      borderColor: neutral500.rgb,
+      borderColor: colour.border.tertiary,
     },
   },
 

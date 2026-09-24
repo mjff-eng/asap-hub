@@ -3,7 +3,7 @@ import { projects } from '@asap-hub/routing';
 
 import { Display, Paragraph, TabLink } from '../atoms';
 import { rem, smallDesktopScreen } from '../pixels';
-import { neutral900, neutral1000 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { SearchAndFilter } from '../organisms';
 import { TabNav } from '../molecules';
 import {
@@ -66,7 +66,9 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
               href={projects.template + projects({}).discoveryProjects.template}
               Icon={() => (
                 <DiscoveryProjectIcon
-                  color={isDiscoveryActive ? neutral1000.rgb : neutral900.rgb}
+                  color={
+                    isDiscoveryActive ? colour.neutral[900] : neutral900.rgb
+                  }
                 />
               )}
             >
@@ -76,7 +78,9 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
               href={projects.template + projects({}).resourceProjects.template}
               Icon={() => (
                 <ResourceProjectIcon
-                  color={isResourceActive ? neutral1000.rgb : neutral900.rgb}
+                  color={
+                    isResourceActive ? colour.neutral[900] : neutral900.rgb
+                  }
                 />
               )}
             >
@@ -86,7 +90,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
               href={projects.template + projects({}).traineeProjects.template}
               Icon={() => (
                 <TraineeProjectIcon
-                  color={isTraineeActive ? neutral1000.rgb : neutral900.rgb}
+                  color={isTraineeActive ? colour.neutral[900] : neutral900.rgb}
                 />
               )}
             >

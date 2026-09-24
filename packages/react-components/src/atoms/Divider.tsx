@@ -1,7 +1,7 @@
 import { ReactText } from 'react';
 import { css } from '@emotion/react';
 
-import { colour, neutral900, neutral500 } from '../colors';
+import { colour, neutral900 } from '../colors';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -16,7 +16,7 @@ const hrStyles = css({
   margin: 0,
 
   border: 'none',
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 const textStyles = css({
   ':empty': {

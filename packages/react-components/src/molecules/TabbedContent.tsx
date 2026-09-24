@@ -2,20 +2,20 @@
 import { css } from '@emotion/react';
 import { ReactNode, useEffect, useState } from 'react';
 import { Headline3, TabButton, Button } from '../atoms';
-import { neutral500 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { TabNav } from '.';
 
 const headerStyles = css({
   display: 'grid',
   paddingBottom: 0,
-  borderBottom: `1px solid ${neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 const showMoreStyles = css({
   display: 'flex',
   justifyContent: 'center',
-  borderTop: `1px solid ${neutral500.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
   paddingTop: rem(16),
   marginTop: rem(32),
 });

@@ -10,14 +10,7 @@ import {
   mobileScreen,
   largeDesktopScreen,
 } from '../pixels';
-import {
-  colour,
-  neutral500,
-  neutral700,
-  neutral900,
-  success100,
-  colorFromHex,
-} from '../colors';
+import { colour, neutral900, success100, colorFromHex } from '../colors';
 import {
   firstPageIcon,
   nextPageIcon,
@@ -33,7 +26,7 @@ const containerStyles = css({
 const listStyles = css({
   margin: 0,
   padding: rem(12),
-  border: `${rem(1)} solid ${neutral500.rgb}`,
+  border: `${rem(1)} solid ${colour.border.tertiary}`,
   borderRadius: rem(6),
 
   display: 'grid',
@@ -94,7 +87,7 @@ const activeTextStyles = ({
   });
 const disabledTextStyles = css({
   svg: {
-    stroke: neutral700.rgb,
+    stroke: colour.neutral[200],
   },
 });
 

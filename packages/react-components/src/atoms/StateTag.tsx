@@ -7,7 +7,7 @@ export type AccentVariant = 'default' | 'green' | 'blue';
 export const accents: Record<AccentVariant, CSSObject> = {
   default: {
     backgroundColor: colors.warning100.rgb,
-    color: colors.warning500.rgb,
+    color: colors.colour.foreground.warning,
   },
   green: {
     backgroundColor: colors.success100.rgb,
@@ -25,7 +25,7 @@ const styles = css({
   padding: `${rem(3)} 0`,
   height: `calc(${lineHeight}px + ${rem(6)})`,
   backgroundColor: colors.warning100.rgb,
-  color: colors.warning500.rgb,
+  color: colors.colour.foreground.warning,
   borderRadius: rem(18),
 });
 

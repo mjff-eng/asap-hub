@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { rem, tabletScreen } from '../pixels';
-import { neutral900, neutral1000, colour } from '../colors';
+import { neutral900, colour } from '../colors';
 
 export const descriptionContainerStyles = css({
   display: 'flex',
@@ -13,7 +13,7 @@ export const descriptionContainerStyles = css({
 export const mobileLabelStyles = css({
   fontSize: rem(17),
   fontWeight: 'bold',
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   display: 'none',
   [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
     display: 'block',

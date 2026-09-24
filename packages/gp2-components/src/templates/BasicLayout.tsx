@@ -2,7 +2,7 @@ import {
   ceruleanFernGradientStyles,
   drawerQuery,
   pixels,
-  neutral500,
+  colour,
 } from '@asap-hub/react-components';
 
 import { css } from '@emotion/react';
@@ -32,7 +32,10 @@ type BasicLayoutProps = {
 const BasicLayout: React.FC<BasicLayoutProps> = ({ children, logoHref }) => (
   <article>
     <header
-      css={css({ width: '100%', borderBottom: `1px solid ${neutral500.rgb}` })}
+      css={css({
+        width: '100%',
+        borderBottom: `1px solid ${colour.border.tertiary}`,
+      })}
     >
       <div css={logoStyles}>
         <HeaderLogo logoHref={logoHref} />

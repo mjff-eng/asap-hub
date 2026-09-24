@@ -237,7 +237,7 @@ const ManuscriptVersionCard: React.FC<ManuscriptVersionCardProps> = ({
     <>
       <div
         css={{
-          borderBottom: `1px solid ${colors.neutral500.rgb}`,
+          borderBottom: `1px solid ${colors.colour.border.tertiary}`,
           backgroundColor: colors.colour.neutral[0],
           ':first-of-type': {
             borderRadius: `${rem(8)} ${rem(8)} 0 0`,

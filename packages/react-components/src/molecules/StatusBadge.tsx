@@ -6,9 +6,9 @@ import {
   info100,
   info500,
   warning100,
-  warning500,
   success100,
   success500,
+  colour,
 } from '../colors';
 import { statusIcon, StatusType } from './StatusButton';
 import { getReviewerStatusType } from '../utils';
@@ -27,12 +27,13 @@ const getStatusBadgeStyles = (type: StatusType) => {
 
   const textColor =
     type === 'warning'
-      ? warning500.rgba
+      ? colour.utilitarian.orange[600]
       : type === 'final'
         ? success500.rgba
         : info500.rgba;
 
-  const iconFill = type === 'warning' ? warning500.rgba : undefined;
+  const iconFill =
+    type === 'warning' ? colour.utilitarian.orange[600] : undefined;
 
   return css({
     backgroundColor: bgColor,

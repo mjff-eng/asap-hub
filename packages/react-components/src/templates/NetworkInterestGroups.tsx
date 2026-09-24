@@ -2,7 +2,7 @@ import { FC, Fragment, ComponentProps } from 'react';
 
 import { ResultList, InterestGroupCard } from '../organisms';
 import { InterestGroupsIcon } from '../icons';
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 
 type NetworkInterestGroupsProps = Omit<
   ComponentProps<typeof ResultList>,
@@ -18,7 +18,7 @@ const NetworkInterestGroups: FC<NetworkInterestGroupsProps> = ({
   ...cardListProps
 }) => (
   <ResultList
-    icon={<InterestGroupsIcon color={charcoal.rgb} />}
+    icon={<InterestGroupsIcon color={colour.neutral[900]} />}
     {...cardListProps}
   >
     {interestGroups.map((group) => (

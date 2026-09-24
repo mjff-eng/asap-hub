@@ -3,7 +3,7 @@ import { ReminderResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
 import { Card } from '..';
-import { neutral900, neutral500 } from '../colors';
+import { neutral900, colour } from '../colors';
 import { rem } from '../pixels';
 import { Button } from '../atoms';
 import ReminderItem from '../molecules/ReminderItem';
@@ -17,7 +17,7 @@ const container = css({
 
 const row = (hasShowMore: boolean) =>
   css({
-    borderBottom: `1px solid ${neutral500.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
     padding: `${rem(12)} 0`,
     ':last-child': {
       borderBottom: 'none',

@@ -1,17 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, Theme } from '@emotion/react';
 import { InputHTMLAttributes } from 'react';
-import {
-  neutral800,
-  colour,
-  error500,
-  neutral900,
-  error100,
-  neutral300,
-  neutral500,
-  neutral700,
-  colorFromHex,
-} from '../colors';
+import { neutral800, colour, neutral900, colorFromHex } from '../colors';
 import {
   indicatorPadding,
   indicatorSize,
@@ -37,7 +27,7 @@ type FieldType =
 
 const disabledStyles = css({
   color: neutral900.rgb,
-  backgroundColor: neutral300.rgb,
+  backgroundColor: colour.background.tertiary,
   '&[type="date"]': {
     color: neutral900.rgb,
   },
@@ -46,8 +36,8 @@ const disabledStyles = css({
 const LABEL_INDICATOR_CLASS_NAME = 'labelIndicator';
 const labelIndicatorStyles = css({
   padding: `${rem(15)} ${rem(18)}`,
-  backgroundColor: neutral300.rgb,
-  border: `1px solid ${neutral500.rgb}`,
+  backgroundColor: colour.background.tertiary,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRight: 0,
   display: 'flex',
   color: neutral900.rgb,
@@ -56,12 +46,12 @@ const labelIndicatorStyles = css({
 
 const invalidStyles = css({
   ':invalid': {
-    color: error500.rgb,
-    borderColor: error500.rgb,
-    backgroundColor: error100.rgb,
+    color: colour.foreground.error,
+    borderColor: colour.border.error,
+    backgroundColor: colour.background.error,
 
     '::placeholder': {
-      color: error500.rgb,
+      color: colour.foreground.error,
       opacity: 0.4,
     },
 
@@ -69,14 +59,14 @@ const invalidStyles = css({
       display: 'block',
     },
     '~ div': {
-      color: error500.rgb,
+      color: colour.foreground.error,
     },
     '~ div svg': {
-      fill: error500.rgb,
+      fill: colour.foreground.error,
     },
     [`& ~ .${LABEL_INDICATOR_CLASS_NAME}`]: {
-      backgroundColor: error500.rgb,
-      borderColor: error500.rgb,
+      backgroundColor: colour.background['error-inverse'],
+      borderColor: colour.border.error,
       color: colour.neutral[0],
       svg: {
         stroke: colour.neutral[0],
@@ -98,7 +88,7 @@ const textFieldStyles = (
     backgroundSize: `auto ${rem(indicatorSize)}`,
 
     '::placeholder': {
-      color: neutral700.rgb,
+      color: colour.neutral[200],
     },
     '&[type="date"]': {
       color: hasValue ? '#000' : neutral800.hex,

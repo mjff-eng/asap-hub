@@ -1,4 +1,4 @@
-import { Subtitle, pixels } from '@asap-hub/react-components';
+import { Subtitle, pixels, colour } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { CollapsibleTable } from '../molecules';
 
@@ -11,7 +11,7 @@ const { rem } = pixels;
 
 const rowStyles = css({
   display: 'grid',
-  borderBottom: `1px solid ${colors.neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   padding: `${rem(16)} 0 ${rem(12)}`,
   rowGap: rem(32),
   [nonMobileQuery]: {
