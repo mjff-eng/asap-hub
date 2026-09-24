@@ -103,4 +103,3 @@ export {
   WorkingGroupResources,
   WorkingGroupsPage,
 } from './templates';
-export { default as colors } from './templates/colors';
