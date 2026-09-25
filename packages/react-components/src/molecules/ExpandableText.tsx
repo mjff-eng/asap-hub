@@ -88,9 +88,19 @@ const ExpandableText: React.FC<{
   const [showToggle, setShowToggle] = useState(false);
   const textElement = React.useRef<HTMLParagraphElement>(null);
   useLayoutEffect(() => {
-    setShowToggle(
-      (textElement?.current?.scrollHeight || 0) > expandableMaxHeight,
-    );
+    const element = textElement.current;
+    if (!element) {
+      return undefined;
+    }
+    const measure = () =>
+      setShowToggle((element.scrollHeight || 0) > expandableMaxHeight);
+    measure();
+    if (typeof ResizeObserver === 'undefined') {
+      return undefined;
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
   }, [textElement?.current?.scrollHeight]);
 
   const hideToggle = expandOnce && expanded;
