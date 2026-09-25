@@ -5,6 +5,10 @@
 //
 // ASAP only uses the primitives "Value" mode, the mode "Light" mode and the
 // theme "CRN" and "GP2" modes; ARIA and Dark are left out on purpose.
+//
+// asap-overrides.json points a theme token at another CAS primitive until
+// design updates Figma, so the Hub keeps its current look. Each entry is a
+// change request for the CAS file; generation fails once Figma matches it.
 
 const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
@@ -96,6 +100,46 @@ const themeFor = (name) => {
 };
 
 const theme = { crn: themeFor('CRN'), gp2: themeFor('GP2') };
+
+const overrides = JSON.parse(
+  readFileSync(resolve(tokensDir, 'asap-overrides.json'), 'utf8'),
+);
+const primitiveAt = (name) =>
+  name
+    .split('/')
+    .slice(1)
+    .reduce((node, key) => (node ? node[key] : undefined), primitives);
+Object.entries(overrides).forEach(([product, entries]) => {
+  if (!theme[product])
+    throw new Error(`Unknown product in overrides: ${product}`);
+  Object.entries(entries).forEach(([name, { use, master }]) => {
+    const token = theme[product][name];
+    if (!token)
+      throw new Error(`Override for unknown token ${product} ${name}`);
+    const value = primitiveAt(use);
+    if (!Array.isArray(value)) {
+      throw new Error(
+        `Override ${product} ${name} uses unknown primitive ${use}`,
+      );
+    }
+    if (token.alias === use) {
+      throw new Error(
+        `Figma now sets ${product} ${name} to ${use}: remove it from asap-overrides.json`,
+      );
+    }
+    const [r, g, b, alpha = 1] = value;
+    theme[product][name] = {
+      hex: `#${[r, g, b]
+        .map((channel) => channel.toString(16).padStart(2, '0'))
+        .join('')
+        .toUpperCase()}`,
+      alpha,
+      alias: use,
+      figma: { hex: token.hex, alpha: token.alpha, alias: token.alias },
+      master,
+    };
+  });
+});
 
 const crnNames = Object.keys(theme.crn).sort().join();
 if (crnNames !== Object.keys(theme.gp2).sort().join()) {
