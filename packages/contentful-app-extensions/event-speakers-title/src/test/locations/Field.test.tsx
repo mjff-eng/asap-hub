@@ -1,20 +1,14 @@
 import '@testing-library/jest-dom';
-import React, { useState } from 'react';
-import Field, { CustomCard } from '../../locations/Field';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  queryByTestId,
-} from '@testing-library/react';
-import { FieldExtensionSDK, Entry } from '@contentful/app-sdk';
+import React from 'react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { FieldExtensionSDK } from '@contentful/app-sdk';
 import {
   MultipleEntryReferenceEditor,
   CustomEntityCardProps,
   useEntity,
 } from '@contentful/field-editor-reference';
 import { useSDK, useAutoResizer } from '@contentful/react-apps-toolkit';
+import Field, { CustomCard } from '../../locations/Field';
 
 jest.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: jest.fn(),
@@ -64,6 +58,7 @@ describe('Field component', () => {
 
   describe('CustomCard component', () => {
     beforeEach(() => {
+      // eslint-disable-next-line consistent-return
       (useEntity as jest.Mock).mockImplementation((type, id) => {
         if (id === 'team-1') {
           return {
@@ -99,6 +94,24 @@ describe('Field component', () => {
                 },
                 lastName: {
                   'en-US': 'Last',
+                },
+              },
+            },
+          };
+        }
+        if (id === 'project-1') {
+          return {
+            data: {
+              sys: {
+                contentType: {
+                  sys: {
+                    id: 'projects',
+                  },
+                },
+              },
+              fields: {
+                title: {
+                  'en-US': 'My Project',
                 },
               },
             },
@@ -225,6 +238,197 @@ describe('Field component', () => {
         expect(screen.queryByText('User')).not.toBeInTheDocument();
         expect(screen.queryByText('External Author')).toBeInTheDocument();
       });
+    });
+
+    it('loads project title from related entity and renders project title', async () => {
+      const props = {
+        entity: {
+          fields: {
+            team: null,
+            user: {
+              'en-US': {
+                sys: {
+                  id: 'user-1',
+                },
+              },
+            },
+            project: {
+              'en-US': {
+                sys: {
+                  id: 'project-1',
+                },
+              },
+            },
+          },
+          sys: {
+            type: 'Entry',
+            publishedVersion: 1,
+            version: 1,
+          },
+        },
+        onEdit: jest.fn(),
+        onRemove: jest.fn(),
+      } as unknown as CustomEntityCardProps;
+
+      render(<CustomCard {...props} />);
+
+      await waitFor(() => {
+        expect(useEntity).toHaveBeenCalledWith('Entry', 'project-1');
+        expect(screen.queryByText('My Project')).toBeInTheDocument();
+        expect(screen.queryByText('Project')).toBeInTheDocument();
+      });
+    });
+
+    it('does not render a project title when no project is linked', async () => {
+      const props = {
+        entity: {
+          fields: {
+            team: {
+              'en-US': {
+                sys: {
+                  id: 'team-1',
+                },
+              },
+            },
+            user: null,
+          },
+          sys: {
+            type: 'Entry',
+            publishedVersion: 1,
+            version: 1,
+          },
+        },
+        onEdit: jest.fn(),
+        onRemove: jest.fn(),
+      } as unknown as CustomEntityCardProps;
+
+      render(<CustomCard {...props} />);
+
+      await waitFor(() => {
+        expect(screen.queryByText('My Team')).toBeInTheDocument();
+      });
+      expect(screen.queryByText('Project')).not.toBeInTheDocument();
+    });
+
+    it.each`
+      preliminaryDataShared | badge
+      ${true}               | ${'Preliminary Data Shared'}
+      ${false}              | ${'Preliminary Data Not Shared'}
+    `(
+      'renders the "$badge" badge when preliminaryDataShared is $preliminaryDataShared',
+      async ({ preliminaryDataShared, badge }) => {
+        const props = {
+          entity: {
+            fields: {
+              team: {
+                'en-US': {
+                  sys: {
+                    id: 'team-1',
+                  },
+                },
+              },
+              user: null,
+              ...(preliminaryDataShared === undefined
+                ? {}
+                : {
+                    preliminaryDataShared: { 'en-US': preliminaryDataShared },
+                  }),
+            },
+            sys: {
+              type: 'Entry',
+              publishedVersion: 1,
+              version: 1,
+            },
+          },
+          onEdit: jest.fn(),
+          onRemove: jest.fn(),
+        } as unknown as CustomEntityCardProps;
+
+        render(<CustomCard {...props} />);
+
+        await waitFor(() => {
+          expect(screen.getByText(badge)).toBeInTheDocument();
+        });
+      },
+    );
+
+    it.each`
+      preliminaryDataShared
+      ${null}
+      ${undefined}
+    `(
+      'does not render the preliminary data badge when preliminaryDataShared is $preliminaryDataShared',
+      async ({ preliminaryDataShared }) => {
+        const props = {
+          entity: {
+            fields: {
+              team: {
+                'en-US': {
+                  sys: {
+                    id: 'team-1',
+                  },
+                },
+              },
+              user: null,
+              ...(preliminaryDataShared === undefined
+                ? {}
+                : {
+                    preliminaryDataShared: { 'en-US': preliminaryDataShared },
+                  }),
+            },
+            sys: {
+              type: 'Entry',
+              publishedVersion: 1,
+              version: 1,
+            },
+          },
+          onEdit: jest.fn(),
+          onRemove: jest.fn(),
+        } as unknown as CustomEntityCardProps;
+
+        render(<CustomCard {...props} />);
+
+        await waitFor(() => {
+          expect(screen.getByText('My Team')).toBeInTheDocument();
+        });
+        expect(
+          screen.queryByText('Preliminary Data Shared'),
+        ).not.toBeInTheDocument();
+        expect(
+          screen.queryByText('Preliminary Data Not Shared'),
+        ).not.toBeInTheDocument();
+      },
+    );
+
+    it('does not render the preliminary data badge when there is no team, project or user', async () => {
+      const props = {
+        entity: {
+          fields: {
+            team: null,
+            user: null,
+            preliminaryDataShared: { 'en-US': true },
+          },
+          sys: {
+            type: 'Entry',
+            publishedVersion: 1,
+            version: 1,
+          },
+        },
+        onEdit: jest.fn(),
+        onRemove: jest.fn(),
+      } as unknown as CustomEntityCardProps;
+
+      render(<CustomCard {...props} />);
+
+      await waitFor(() => {
+        expect(screen.getByText('No speakers selected')).toBeInTheDocument();
+      });
+      expect(
+        screen.queryByText('Preliminary Data Shared'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('Preliminary Data Not Shared'),
+      ).not.toBeInTheDocument();
     });
 
     it('calls the `onEdit` handler in contentful to open the related entity when clicked', async () => {
