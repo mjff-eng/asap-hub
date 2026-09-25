@@ -847,318 +847,393 @@ const noCloseMatch: {
   },
 ];
 
-export const DesignQuestions = () => (
-  <Page
-    title="Questions for design"
-    intro={
-      <>
-        The goal: the Hub looks exactly as it does in production, the code uses
-        the CAS names from Figma, and Figma holds the right colour for each
-        name. The code already uses the names. Where a name&apos;s CRN or GP2
-        value in Figma differs from production, the code temporarily points the
-        name at the closest CAS colour ({code('asap-overrides.json')}). Each
-        entry below is a change we ask of the CAS file; once Figma matches, the
-        override is removed and nothing else changes.
-      </>
-    }
-  >
-    <Section title="1. Point these names at the Hub's colours">
-      <p style={{ marginTop: 0 }}>
-        <b>Exact match</b>: CAS already has production&apos;s colour, so the fix
-        is to point the name at it. <b>Closest match</b>: CAS has no exact
-        colour; either add production&apos;s colour to the palette or accept the
-        closest one.
-      </p>
-      <table style={table}>
-        <thead>
-          <tr>
-            <th style={headCell}>Name</th>
-            <th style={headCell}>Hub</th>
-            <th style={headCell}>Figma today</th>
-            <th style={headCell}>Production</th>
-            <th style={headCell}>Ask</th>
-          </tr>
-        </thead>
-        <tbody>
-          {figmaChanges.map(({ figmaName, product, figma, use, master }) => {
-            const exact = use.hex.toUpperCase() === master.toUpperCase();
-            return (
-              <tr key={`${figmaName}-${product}`}>
-                <td style={cell}>{code(figmaName)}</td>
-                <td style={cell}>{product.toUpperCase()}</td>
+const TableSearch = ({
+  value,
+  onChange,
+  placeholder,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+}) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '8px 0' }}>
+    <input
+      type="search"
+      aria-label={placeholder}
+      placeholder={placeholder}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      style={{
+        ...mono,
+        padding: '6px 10px',
+        width: '260px',
+        border: `1px solid ${colour.border.secondary}`,
+        borderRadius: '6px',
+      }}
+    />
+  </div>
+);
+
+const matches = (row: unknown, query: string) =>
+  JSON.stringify(row).toLowerCase().includes(query.trim().toLowerCase());
+
+const NoMatch = ({ columns, query }: { columns: number; query: string }) => (
+  <tr>
+    <td style={{ ...cell, ...muted }} colSpan={columns}>
+      Nothing matches &quot;{query}&quot;.
+    </td>
+  </tr>
+);
+
+export const DesignQuestions = () => {
+  const [changesQuery, setChangesQuery] = useState('');
+  const [noMatchQuery, setNoMatchQuery] = useState('');
+  const [namesQuery, setNamesQuery] = useState('');
+  const changes = figmaChanges.filter((row) => matches(row, changesQuery));
+  const noClose = noCloseMatch.filter((row) => matches(row, noMatchQuery));
+  const names = missingNames.filter((row) => matches(row, namesQuery));
+  return (
+    <Page
+      title="Questions for design"
+      intro={
+        <>
+          The goal: the Hub looks exactly as it does in production, the code
+          uses the CAS names from Figma, and Figma holds the right colour for
+          each name. The code already uses the names. Where a name&apos;s CRN or
+          GP2 value in Figma differs from production, the code temporarily
+          points the name at the closest CAS colour (
+          {code('asap-overrides.json')}). Each entry below is a change we ask of
+          the CAS file; once Figma matches, the override is removed and nothing
+          else changes.
+        </>
+      }
+    >
+      <Section title="1. Point these names at the Hub's colours">
+        <p style={{ marginTop: 0 }}>
+          <b>Exact match</b>: CAS already has production&apos;s colour, so the
+          fix is to point the name at it. <b>Closest match</b>: CAS has no exact
+          colour; either add production&apos;s colour to the palette or accept
+          the closest one.
+        </p>
+        <TableSearch
+          value={changesQuery}
+          onChange={setChangesQuery}
+          placeholder="Search a name, product or hex"
+        />
+        <table style={table}>
+          <thead>
+            <tr>
+              <th style={headCell}>Name</th>
+              <th style={headCell}>Hub</th>
+              <th style={headCell}>Figma today</th>
+              <th style={headCell}>Production</th>
+              <th style={headCell}>Ask</th>
+            </tr>
+          </thead>
+          <tbody>
+            {changes.length === 0 && (
+              <NoMatch columns={5} query={changesQuery} />
+            )}
+            {changes.map(({ figmaName, product, figma, use, master }) => {
+              const exact = use.hex.toUpperCase() === master.toUpperCase();
+              return (
+                <tr key={`${figmaName}-${product}`}>
+                  <td style={cell}>{code(figmaName)}</td>
+                  <td style={cell}>{product.toUpperCase()}</td>
+                  <td style={cell}>
+                    <HubSwatch
+                      hex={figma.hex}
+                      label={`${figma.alias?.replace('colour/', '') ?? ''} ${
+                        figma.hex
+                      }`}
+                    />
+                  </td>
+                  <td style={cell}>
+                    <HubSwatch hex={master} />
+                  </td>
+                  <td style={cell}>
+                    {exact ? (
+                      <Chip kind="green">exact match</Chip>
+                    ) : (
+                      <Chip kind="amber">closest match</Chip>
+                    )}
+                    <div style={muted}>
+                      {exact ? (
+                        <>
+                          Point to{' '}
+                          <Colour
+                            value={use.hex}
+                            label={use.alias?.replace('colour/', '')}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          Add <Colour value={master} />, or accept{' '}
+                          <Colour
+                            value={use.hex}
+                            label={`${use.alias?.replace('colour/', '')} ${
+                              use.hex
+                            }`}
+                          />
+                        </>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </Section>
+
+      <Section title="2. Hub colours with no close CAS colour">
+        <p style={{ marginTop: 0 }}>
+          For these, Figma&apos;s current value is already the closest CAS
+          colour, so the Hub uses it as is and looks slightly different from
+          production.
+        </p>
+        <TableSearch
+          value={noMatchQuery}
+          onChange={setNoMatchQuery}
+          placeholder="Search a use, name or hex"
+        />
+        <table style={table}>
+          <thead>
+            <tr>
+              <th style={headCell}>Used for</th>
+              <th style={headCell}>Production</th>
+              <th style={headCell}>Figma today</th>
+              <th style={headCell}>Suggestion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {noClose.length === 0 && (
+              <NoMatch columns={4} query={noMatchQuery} />
+            )}
+            {noClose.map(({ use, hub, figma, suggestion }) => (
+              <tr key={use}>
+                <td style={cell}>{use}</td>
+                <td style={cell}>
+                  <HubSwatch hex={hub} />
+                </td>
                 <td style={cell}>
                   <HubSwatch
-                    hex={figma.hex}
-                    label={`${figma.alias?.replace('colour/', '') ?? ''} ${
-                      figma.hex
-                    }`}
+                    hex={figma.split(' ').pop() as string}
+                    label={figma}
                   />
                 </td>
-                <td style={cell}>
-                  <HubSwatch hex={master} />
-                </td>
-                <td style={cell}>
-                  {exact ? (
-                    <Chip kind="green">exact match</Chip>
-                  ) : (
-                    <Chip kind="amber">closest match</Chip>
-                  )}
-                  <div style={muted}>
-                    {exact ? (
-                      <>
-                        Point to{' '}
-                        <Colour
-                          value={use.hex}
-                          label={use.alias?.replace('colour/', '')}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        Add <Colour value={master} />, or accept{' '}
-                        <Colour
-                          value={use.hex}
-                          label={`${use.alias?.replace('colour/', '')} ${
-                            use.hex
-                          }`}
-                        />
-                      </>
-                    )}
-                  </div>
+                <td style={{ ...cell, ...muted }}>
+                  <Rich text={suggestion} />
                 </td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </Section>
+            ))}
+          </tbody>
+        </table>
+      </Section>
 
-    <Section title="2. Hub colours with no close CAS colour">
-      <p style={{ marginTop: 0 }}>
-        For these, Figma&apos;s current value is already the closest CAS colour,
-        so the Hub uses it as is and looks slightly different from production.
-      </p>
-      <table style={table}>
-        <thead>
-          <tr>
-            <th style={headCell}>Used for</th>
-            <th style={headCell}>Production</th>
-            <th style={headCell}>Figma today</th>
-            <th style={headCell}>Suggestion</th>
-          </tr>
-        </thead>
-        <tbody>
-          {noCloseMatch.map(({ use, hub, figma, suggestion }) => (
-            <tr key={use}>
-              <td style={cell}>{use}</td>
-              <td style={cell}>
-                <HubSwatch hex={hub} />
-              </td>
-              <td style={cell}>
-                <HubSwatch
-                  hex={figma.split(' ').pop() as string}
-                  label={figma}
-                />
-              </td>
-              <td style={{ ...cell, ...muted }}>
-                <Rich text={suggestion} />
-              </td>
+      <Section title="3. Names CAS does not have yet">
+        <p style={{ marginTop: 0 }}>
+          The Hub uses these colours, but no CAS name fits, so the code uses the
+          nearest name or a primitive for now.
+        </p>
+        <TableSearch
+          value={namesQuery}
+          onChange={setNamesQuery}
+          placeholder="Search a use, name or hex"
+        />
+        <table style={table}>
+          <thead>
+            <tr>
+              <th style={headCell}>Used for</th>
+              <th style={headCell}>Production</th>
+              <th style={headCell}>Code uses now</th>
+              <th style={headCell}>Suggestion</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </Section>
+          </thead>
+          <tbody>
+            {names.length === 0 && <NoMatch columns={4} query={namesQuery} />}
+            {names.map(({ name, hub, now, suggestion }) => (
+              <tr key={name}>
+                <td style={cell}>{name}</td>
+                <td style={cell}>
+                  <ShadeList shades={hub} />
+                </td>
+                <td style={cell}>
+                  <ShadeList shades={now.map(codeShade)} />
+                </td>
+                <td style={{ ...cell, ...muted }}>
+                  <Rich text={suggestion} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Section>
 
-    <Section title="3. Names CAS does not have yet">
-      <p style={{ marginTop: 0 }}>
-        The Hub uses these colours, but no CAS name fits, so the code uses the
-        nearest name or a primitive for now.
-      </p>
-      <table style={table}>
-        <thead>
-          <tr>
-            <th style={headCell}>Used for</th>
-            <th style={headCell}>Production</th>
-            <th style={headCell}>Code uses now</th>
-            <th style={headCell}>Suggestion</th>
-          </tr>
-        </thead>
-        <tbody>
-          {missingNames.map(({ name, hub, now, suggestion }) => (
-            <tr key={name}>
-              <td style={cell}>{name}</td>
-              <td style={cell}>
-                <ShadeList shades={hub} />
-              </td>
-              <td style={cell}>
-                <ShadeList shades={now.map(codeShade)} />
-              </td>
-              <td style={{ ...cell, ...muted }}>
-                <Rich text={suggestion} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </Section>
+      <Section title="4. Avatars without a photo">
+        <p style={{ marginTop: 0 }}>
+          Production has six colour pairs, including a pink and a purple. CAS
+          has five pairs (color-*) and nothing close to the pink{' '}
+          <Colour value="#9A2386" /> or the purple <Colour value="#693B77" />,
+          and color-brand is the ARIA green. The code keeps the five CAS pairs.
+          Should CAS add ASAP pairs that match production, or is the CAS set
+          fine?
+        </p>
+        <div style={{ ...muted, marginBottom: '6px' }}>Production</div>
+        <AvatarRow
+          pairs={[
+            ['#E4F5EE', '#287953'],
+            ['#F8EDDE', '#CE801A'],
+            ['#E6F3F9', '#006A92'],
+            ['#E7F7FE', '#004561'],
+            ['#F8EAF7', '#9A2386'],
+            ['#F2EDF5', '#693B77'],
+          ]}
+        />
+        <div style={{ ...muted, margin: '12px 0 6px' }}>CAS (code now)</div>
+        <AvatarRow
+          pairs={['yellow', 'green', 'lavender', 'blue', 'brand'].map(
+            (name) => [
+              casHex(`background['color-${name}']`),
+              casHex(`foreground['color-${name}']`),
+            ],
+          )}
+        />
+      </Section>
 
-    <Section title="4. Avatars without a photo">
-      <p style={{ marginTop: 0 }}>
-        Production has six colour pairs, including a pink and a purple. CAS has
-        five pairs (color-*) and nothing close to the pink{' '}
-        <Colour value="#9A2386" /> or the purple <Colour value="#693B77" />, and
-        color-brand is the ARIA green. The code keeps the five CAS pairs. Should
-        CAS add ASAP pairs that match production, or is the CAS set fine?
-      </p>
-      <div style={{ ...muted, marginBottom: '6px' }}>Production</div>
-      <AvatarRow
-        pairs={[
-          ['#E4F5EE', '#287953'],
-          ['#F8EDDE', '#CE801A'],
-          ['#E6F3F9', '#006A92'],
-          ['#E7F7FE', '#004561'],
-          ['#F8EAF7', '#9A2386'],
-          ['#F2EDF5', '#693B77'],
-        ]}
-      />
-      <div style={{ ...muted, margin: '12px 0 6px' }}>CAS (code now)</div>
-      <AvatarRow
-        pairs={['yellow', 'green', 'lavender', 'blue', 'brand'].map((name) => [
-          casHex(`background['color-${name}']`),
-          casHex(`foreground['color-${name}']`),
-        ])}
-      />
-    </Section>
-
-    <Section title="5. Readability">
-      <p style={{ marginTop: 0 }}>
-        Matching production keeps some colours below the readability minimum
-        (4.5:1 for normal text):
-      </p>
-      <ul style={{ paddingLeft: '20px' }}>
-        <li>
-          Links and the white text on the main button: CRN{' '}
-          <ContrastBadge foreground="#34A270" background="#FFFFFF" />, GP2{' '}
-          <ContrastBadge foreground="#0C8DC3" background="#FFFFFF" />.
-        </li>
-        <li>
-          Hint text: <ContrastBadge foreground="#C5CACE" background="#FFFFFF" />
-          .
-        </li>
-        <li>
-          Status text on its light background, e.g. success{' '}
-          <ContrastBadge foreground="#34A270" background="#F1FCF6" /> and
-          warning <ContrastBadge foreground="#B88500" background="#FCF8EE" />.
-        </li>
-      </ul>
-      <p>
-        Keep production&apos;s look, or move these to darker shades (for example
-        brand/800: CRN{' '}
-        <ContrastBadge foreground="#287953" background="#FFFFFF" />, GP2{' '}
-        <ContrastBadge foreground="#006A92" background="#FFFFFF" />
-        )?
-      </p>
-    </Section>
-
-    <Section title="6. One deliberate difference from production">
-      <p style={{ marginTop: 0 }}>
-        In GP2, checked radio buttons showed the CRN green{' '}
-        <Colour value="#34A270" /> (a bug). They now use the GP2 blue{' '}
-        <Colour value="#0C8DC3" />, like GP2 checkboxes and switches.
-      </p>
-    </Section>
-
-    <Section title="Fixes we ask of the CAS Figma file">
-      <ol style={{ paddingLeft: '20px', marginTop: 0 }}>
-        {figmaFixes.map((fix) => (
-          <li key={fix}>
-            <Rich text={fix} />
+      <Section title="5. Readability">
+        <p style={{ marginTop: 0 }}>
+          Matching production keeps some colours below the readability minimum
+          (4.5:1 for normal text):
+        </p>
+        <ul style={{ paddingLeft: '20px' }}>
+          <li>
+            Links and the white text on the main button: CRN{' '}
+            <ContrastBadge foreground="#34A270" background="#FFFFFF" />, GP2{' '}
+            <ContrastBadge foreground="#0C8DC3" background="#FFFFFF" />.
           </li>
-        ))}
-      </ol>
-    </Section>
+          <li>
+            Hint text:{' '}
+            <ContrastBadge foreground="#C5CACE" background="#FFFFFF" />.
+          </li>
+          <li>
+            Status text on its light background, e.g. success{' '}
+            <ContrastBadge foreground="#34A270" background="#F1FCF6" /> and
+            warning <ContrastBadge foreground="#B88500" background="#FCF8EE" />.
+          </li>
+        </ul>
+        <p>
+          Keep production&apos;s look, or move these to darker shades (for
+          example brand/800: CRN{' '}
+          <ContrastBadge foreground="#287953" background="#FFFFFF" />, GP2{' '}
+          <ContrastBadge foreground="#006A92" background="#FFFFFF" />
+          )?
+        </p>
+      </Section>
 
-    <Section title="How to read the readability badges">
-      <p style={{ marginTop: 0 }}>
-        The number on each badge, for example 3.51:1, is the{' '}
-        <b>contrast ratio</b> between the text colour and its background. It
-        compares how bright the two colours are. It goes from 1:1 (text the same
-        colour as its background, invisible) to 21:1 (black on white). The
-        higher the number, the easier the text is to read.
-      </p>
-      <p>
-        <b>WCAG</b> (Web Content Accessibility Guidelines) is the standard
-        rulebook for making websites usable by everyone, including people with
-        low vision or colour blindness. Its rules come in three levels, each
-        stricter than the one before:
-      </p>
-      <table style={{ ...table, maxWidth: '760px' }}>
-        <thead>
-          <tr>
-            <th style={headCell}>Level</th>
-            <th style={headCell}>What it means</th>
-            <th style={headCell}>Text contrast it asks for</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style={cell}>A</td>
-            <td style={cell}>The basics</td>
-            <td style={cell}>No contrast rule</td>
-          </tr>
-          <tr>
-            <td style={cell}>
-              <b>AA</b>
-            </td>
-            <td style={cell}>
-              <b>
-                The usual target, and what accessibility laws and contracts
-                normally ask for. This is what we aim for.
-              </b>
-            </td>
-            <td style={cell}>
-              <b>4.5:1 normal text, 3:1 large text</b>
-            </td>
-          </tr>
-          <tr>
-            <td style={cell}>AAA</td>
-            <td style={cell}>The strictest. Rarely met across a whole site.</td>
-            <td style={cell}>7:1 normal text, 4.5:1 large text</td>
-          </tr>
-        </tbody>
-      </table>
-      <p>So for the Hub, the minimums are:</p>
-      <ul style={{ paddingLeft: '20px' }}>
-        <li>
-          <b>4.5:1 for normal text</b>, which covers most text on the Hub.
-        </li>
-        <li>
-          <b>3:1 for large text</b> (24px and above, or 19px and above in bold),
-          and for icons and borders that people need to see.
-        </li>
-        <li>
-          No minimum for disabled buttons and fields, since they can&apos;t be
-          used.
-        </li>
-      </ul>
-      <p>The badges follow those minimums:</p>
-      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-        <span>
-          <ContrastBadge foreground="#1C1F21" background="#FFFFFF" /> 4.5:1 or
-          more: fine for any text
-        </span>
-        <span>
-          <ContrastBadge foreground="#079455" background="#DCFAE6" /> 3:1 to
-          4.5:1: fine for large text and icons only
-        </span>
-        <span>
-          <ContrastBadge foreground="#92999E" background="#FFFFFF" /> below 3:1:
-          too faint for any text
-        </span>
-      </div>
-      <p style={muted}>
-        So a badge showing 3.51:1 means the colour pair is fine for a large
-        heading or an icon, but too faint for normal-sized text.
-      </p>
-    </Section>
-  </Page>
-);
+      <Section title="6. One deliberate difference from production">
+        <p style={{ marginTop: 0 }}>
+          In GP2, checked radio buttons showed the CRN green{' '}
+          <Colour value="#34A270" /> (a bug). They now use the GP2 blue{' '}
+          <Colour value="#0C8DC3" />, like GP2 checkboxes and switches.
+        </p>
+      </Section>
+
+      <Section title="Fixes we ask of the CAS Figma file">
+        <ol style={{ paddingLeft: '20px', marginTop: 0 }}>
+          {figmaFixes.map((fix) => (
+            <li key={fix}>
+              <Rich text={fix} />
+            </li>
+          ))}
+        </ol>
+      </Section>
+
+      <Section title="How to read the readability badges">
+        <p style={{ marginTop: 0 }}>
+          The number on each badge, for example 3.51:1, is the{' '}
+          <b>contrast ratio</b> between the text colour and its background. It
+          compares how bright the two colours are. It goes from 1:1 (text the
+          same colour as its background, invisible) to 21:1 (black on white).
+          The higher the number, the easier the text is to read.
+        </p>
+        <p>
+          <b>WCAG</b> (Web Content Accessibility Guidelines) is the standard
+          rulebook for making websites usable by everyone, including people with
+          low vision or colour blindness. Its rules come in three levels, each
+          stricter than the one before:
+        </p>
+        <table style={{ ...table, maxWidth: '760px' }}>
+          <thead>
+            <tr>
+              <th style={headCell}>Level</th>
+              <th style={headCell}>What it means</th>
+              <th style={headCell}>Text contrast it asks for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={cell}>A</td>
+              <td style={cell}>The basics</td>
+              <td style={cell}>No contrast rule</td>
+            </tr>
+            <tr>
+              <td style={cell}>
+                <b>AA</b>
+              </td>
+              <td style={cell}>
+                <b>
+                  The usual target, and what accessibility laws and contracts
+                  normally ask for. This is what we aim for.
+                </b>
+              </td>
+              <td style={cell}>
+                <b>4.5:1 normal text, 3:1 large text</b>
+              </td>
+            </tr>
+            <tr>
+              <td style={cell}>AAA</td>
+              <td style={cell}>
+                The strictest. Rarely met across a whole site.
+              </td>
+              <td style={cell}>7:1 normal text, 4.5:1 large text</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>So for the Hub, the minimums are:</p>
+        <ul style={{ paddingLeft: '20px' }}>
+          <li>
+            <b>4.5:1 for normal text</b>, which covers most text on the Hub.
+          </li>
+          <li>
+            <b>3:1 for large text</b> (24px and above, or 19px and above in
+            bold), and for icons and borders that people need to see.
+          </li>
+          <li>
+            No minimum for disabled buttons and fields, since they can&apos;t be
+            used.
+          </li>
+        </ul>
+        <p>The badges follow those minimums:</p>
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <span>
+            <ContrastBadge foreground="#1C1F21" background="#FFFFFF" /> 4.5:1 or
+            more: fine for any text
+          </span>
+          <span>
+            <ContrastBadge foreground="#079455" background="#DCFAE6" /> 3:1 to
+            4.5:1: fine for large text and icons only
+          </span>
+          <span>
+            <ContrastBadge foreground="#92999E" background="#FFFFFF" /> below
+            3:1: too faint for any text
+          </span>
+        </div>
+        <p style={muted}>
+          So a badge showing 3.51:1 means the colour pair is fine for a large
+          heading or an icon, but too faint for normal-sized text.
+        </p>
+      </Section>
+    </Page>
+  );
+};
