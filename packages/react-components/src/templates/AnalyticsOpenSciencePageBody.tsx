@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { analytics } from '@asap-hub/routing';
-import { colors } from '..';
+import { colour } from '..';
 import { Dropdown, Headline3, Paragraph, Subtitle } from '../atoms';
 import { AnalyticsControls } from '../molecules';
 import { rem } from '../pixels';
@@ -73,7 +73,7 @@ const AnalyticsOpenSciencePageBody: React.FC<OpenScienceAnalyticsProps> = ({
       </div>
       <div css={tableHeaderStyles}>
         <Headline3>{metricOptions[metric]}</Headline3>
-        <Paragraph styles={css({ color: colors.colour.foreground.tertiary })}>
+        <Paragraph styles={css({ color: colour.foreground.tertiary })}>
           {metricDescription[metric]}.
         </Paragraph>
       </div>

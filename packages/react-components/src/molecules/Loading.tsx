@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Paragraph, Spinner } from '../atoms';
 import { rem } from '../pixels';
-import { colors } from '..';
+import { colour } from '..';
 
 const loadingContainerStyles = css({
   display: 'flex',
@@ -16,8 +16,8 @@ const Loading: React.FC<Record<string, never>> = () => (
   <div css={[loadingContainerStyles]}>
     <Spinner
       size={18}
-      color={colors.colour.neutral[700]}
-      trackColor={colors.colour.general.blue.cerulean[25]}
+      color={colour.neutral[700]}
+      trackColor={colour.general.blue.cerulean[25]}
     />
     <Paragraph noMargin>Loading...</Paragraph>
   </div>
