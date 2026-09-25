@@ -23,12 +23,12 @@ const checkboxStyles = css({
   borderColor: colour.border.tertiary,
 
   ':enabled:hover, :enabled:focus': {
-    borderColor: colour.border.brand,
+    borderColor: colour.neutral[600],
   },
 
   ':checked': {
-    borderColor: colour.background['hover-brand-inverse'],
-    backgroundColor: colour.background['hover-brand-inverse'],
+    borderColor: colour.background['brand-inverse'],
+    backgroundColor: colour.background['brand-inverse'],
     '::before': {
       content: `url(data:image/svg+xml;utf8,${encodeURIComponent(
         renderToStaticMarkup(tickIcon),
@@ -41,6 +41,15 @@ const checkboxStyles = css({
     ':disabled': {
       borderColor: colour.border.disabled,
       backgroundColor: colour.background.disabled,
+    },
+    ':hover, :focus': {
+      borderColor: colour.background['hover-brand-inverse'],
+      backgroundColor: colour.background['hover-brand-inverse'],
+
+      ':disabled': {
+        borderColor: colour.border.disabled,
+        backgroundColor: colour.background.disabled,
+      },
     },
   },
 });

@@ -127,7 +127,7 @@ const primaryStyles = css({
     color: colour.foreground.button.primary.hover,
     backgroundColor: colour.background.button.primary.hover,
     borderColor: colour.border.button.primary.hover,
-    boxShadow: boxShadow(colour.neutral[700]),
+    boxShadow: boxShadow(colour.neutral[600]),
   },
   ':active': {
     backgroundColor: colour.background.button.primary.hover,
@@ -154,7 +154,7 @@ export const secondaryStyles = css({
 export const warningStyles = css({
   backgroundColor: colour.background.button.utilitarian.error.default,
   color: colour.foreground['primary-inverse'],
-  borderColor: 'transparent',
+  borderColor: colour.utilitarian.red[700],
   boxShadow: boxShadow(colour.neutral[100]),
 
   ':hover, :focus, :active': {
@@ -164,9 +164,9 @@ export const warningStyles = css({
 });
 
 const disabledStyles = css({
-  color: colour.foreground.disabled,
+  color: colour.foreground.tertiary,
   backgroundColor: colour.background.disabled,
-  borderColor: 'transparent',
+  borderColor: colour.border.disabled,
   boxShadow: 'none',
 
   cursor: 'unset',
