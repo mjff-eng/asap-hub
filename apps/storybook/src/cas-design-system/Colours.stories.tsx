@@ -603,71 +603,137 @@ const figmaFixes = [
   'No variable has a description or WEB code syntax. With code syntax set, Dev Mode shows engineers exactly what to type, for example colour.foreground.brand.',
 ];
 
+type Shade = { label?: string; hex: string };
+type CodeShade = {
+  label: string;
+  code: string;
+  product?: Product;
+  alpha?: number;
+};
+
+const codeShade = ({
+  label,
+  code,
+  product = 'crn',
+  alpha,
+}: CodeShade): Shade => {
+  const hex = casHex(code, product);
+  return { label, hex: alpha === undefined ? hex : cssColour(hex, alpha) };
+};
+
 const missingNames: {
   name: string;
-  hub: string;
-  now: string;
+  hub: Shade[];
+  now: CodeShade[];
   suggestion: string;
 }[] = [
   {
     name: 'Strong brand text (hovered menu items, selected side-menu item, tag hover border)',
-    hub: 'CRN #287953, GP2 #006A92',
-    now: 'foreground/brand (the lighter brand/500)',
+    hub: [
+      { label: 'CRN', hex: '#287953' },
+      { label: 'GP2', hex: '#006A92' },
+    ],
+    now: [
+      { label: 'CRN foreground/brand', code: 'foreground.brand' },
+      {
+        label: 'GP2 foreground/brand',
+        code: 'foreground.brand',
+        product: 'gp2',
+      },
+    ],
     suggestion: 'Add foreground/brand-strong pointing at brand/800.',
   },
   {
     name: 'Tooltip background',
-    hub: '#004561',
-    now: 'primitive brand/gp2/900 #005F83, the closest CAS colour',
+    hub: [{ hex: '#004561' }],
+    now: [{ label: 'primitive brand/gp2/900', code: 'brand.gp2[900]' }],
     suggestion: 'Add background/tooltip.',
   },
   {
     name: 'Hint and placeholder text',
-    hub: '#C2C9CE',
-    now: 'foreground/disabled',
+    hub: [{ hex: '#C2C9CE' }],
+    now: [{ label: 'foreground/disabled', code: 'foreground.disabled' }],
     suggestion:
       'Add foreground/placeholder, so hints are not tied to disabled text.',
   },
   {
-    name: 'Disabled button text',
-    hub: '#4D646B, darker than other disabled text',
-    now: 'foreground/tertiary',
+    name: 'Disabled button text (darker than other disabled text)',
+    hub: [{ hex: '#4D646B' }],
+    now: [{ label: 'foreground/tertiary', code: 'foreground.tertiary' }],
     suggestion:
       'Decide if buttons use foreground/disabled like everything else.',
   },
   {
     name: 'Checkbox and radio hover border',
-    hub: '#4D646B',
-    now: 'primitive neutral/600',
+    hub: [{ hex: '#4D646B' }],
+    now: [{ label: 'primitive neutral/600', code: 'neutral[600]' }],
     suggestion:
       'Add border/hover, or use border/brand as the Figma components do.',
   },
   {
     name: 'Darker status text (toasts, status pills and cards)',
-    hub: 'success #287953, info #006A92, warning #B56B0B',
-    now: 'foreground/success, info and warning (the lighter shades)',
+    hub: [
+      { label: 'success', hex: '#287953' },
+      { label: 'info', hex: '#006A92' },
+      { label: 'warning', hex: '#B56B0B' },
+    ],
+    now: [
+      { label: 'foreground/success', code: 'foreground.success' },
+      { label: 'foreground/info', code: 'foreground.info' },
+      { label: 'foreground/warning', code: 'foreground.warning' },
+    ],
     suggestion:
       'Add foreground/{status}-strong, which would also fix readability.',
   },
   {
     name: 'Warning button border',
-    hub: '#B00A1A',
-    now: 'primitive utilitarian/red/700',
+    hub: [{ hex: '#B00A1A' }],
+    now: [
+      { label: 'primitive utilitarian/red/700', code: 'utilitarian.red[700]' },
+    ],
     suggestion: 'Add border/button/utilitarian/error.',
   },
   {
     name: 'Table stripes',
-    hub: '#F6F9FB',
-    now: 'primitive neutral/50 #FAFAFA',
+    hub: [{ hex: '#F6F9FB' }],
+    now: [{ label: 'primitive neutral/50', code: 'neutral[50]' }],
     suggestion: 'Add background/row-alternate.',
   },
   {
-    name: 'Overlays and focus rings',
-    hub: 'dark overlay at 50%, grey focus ring at 70%',
-    now: 'primitives with transparency',
-    suggestion: 'Add background/overlay and border/focus.',
+    name: 'Overlay on the profile photo',
+    hub: [{ label: 'black at 50%', hex: 'rgba(0, 0, 0, 0.5)' }],
+    now: [
+      {
+        label: 'primitive neutral/900 at 50%',
+        code: 'neutral[900]',
+        alpha: 0.5,
+      },
+    ],
+    suggestion: 'Add background/overlay.',
+  },
+  {
+    name: 'Focus ring on status dropdowns',
+    hub: [{ label: 'grey at 70%', hex: 'rgba(194, 201, 206, 0.7)' }],
+    now: [
+      {
+        label: 'border/secondary at 70%',
+        code: 'border.secondary',
+        alpha: 0.7,
+      },
+    ],
+    suggestion: 'Add border/focus.',
   },
 ];
+
+const ShadeList = ({ shades }: { shades: Shade[] }) => (
+  <div style={{ display: 'grid', gap: '6px' }}>
+    {shades.map(({ label, hex }) => (
+      <div key={`${label}-${hex}`}>
+        <HubSwatch hex={hex} label={label ? `${label} ${hex}` : hex} />
+      </div>
+    ))}
+  </div>
+);
 
 const noCloseMatch: {
   use: string;
@@ -826,8 +892,12 @@ export const DesignQuestions = () => (
           {missingNames.map(({ name, hub, now, suggestion }) => (
             <tr key={name}>
               <td style={cell}>{name}</td>
-              <td style={{ ...cell, ...mono }}>{hub}</td>
-              <td style={{ ...cell, ...muted }}>{now}</td>
+              <td style={cell}>
+                <ShadeList shades={hub} />
+              </td>
+              <td style={cell}>
+                <ShadeList shades={now.map(codeShade)} />
+              </td>
               <td style={{ ...cell, ...muted }}>{suggestion}</td>
             </tr>
           ))}
