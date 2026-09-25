@@ -1,6 +1,6 @@
 import { CSSProperties, ReactNode, useState } from 'react';
 import { colour } from '@asap-hub/react-components';
-import { contrast, cssColour } from './tokens';
+import { contrast } from './tokens';
 
 export const mono: CSSProperties = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
@@ -179,28 +179,3 @@ export const ContrastBadge = ({
     </Chip>
   );
 };
-
-export const TextSample = ({
-  foreground,
-  background,
-  children,
-}: {
-  foreground: string;
-  background: string;
-  children: ReactNode;
-}) => (
-  <div
-    style={{
-      background: cssColour(background),
-      color: cssColour(foreground),
-      border: `1px solid ${colour.border.tertiary}`,
-      borderRadius: '6px',
-      padding: '10px 12px',
-    }}
-  >
-    {children}
-    <div style={{ marginTop: '6px' }}>
-      <ContrastBadge foreground={foreground} background={background} />
-    </div>
-  </div>
-);
