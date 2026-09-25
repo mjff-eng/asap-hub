@@ -2,7 +2,7 @@ import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import * as colors from '../../colors';
+import { colour } from '../../colors';
 
 import DeliverablesCard from '../DeliverablesCard';
 
@@ -72,11 +72,11 @@ describe('view more and less', () => {
 
 it.each`
   status           | textColor
-  ${'Complete'}    | ${colors.colour.foreground.success}
-  ${'In Progress'} | ${colors.colour.foreground.info}
-  ${'Not Started'} | ${colors.colour.foreground.error}
-  ${'Incomplete'}  | ${colors.colour.foreground.warning}
-  ${'Pending'}     | ${colors.colour.foreground.quaternary}
+  ${'Complete'}    | ${colour.foreground.success}
+  ${'In Progress'} | ${colour.foreground.info}
+  ${'Not Started'} | ${colour.foreground.error}
+  ${'Incomplete'}  | ${colour.foreground.warning}
+  ${'Pending'}     | ${colour.foreground.quaternary}
 `(
   'uses the correct accent color for status $status',
   ({ status, textColor }) => {

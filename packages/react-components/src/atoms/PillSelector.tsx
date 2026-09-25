@@ -1,5 +1,4 @@
 import { css, SerializedStyles } from '@emotion/react';
-import { colors } from '..';
 import { colour } from '../colors';
 import { borderWidth } from '../form';
 import { mobileScreen, rem } from '../pixels';
@@ -43,17 +42,13 @@ const pillStyles = (selected: boolean, error: boolean) =>
     borderColor: error
       ? colour.border.secondary
       : selected
-        ? colors.colour.border.info
+        ? colour.border.info
         : colour.neutral[100],
     borderRadius: rem(24),
     cursor: 'pointer',
     userSelect: 'none',
-    backgroundColor: selected
-      ? colors.colour.background.info
-      : colour.neutral[0],
-    color: selected
-      ? colors.colour.foreground.info
-      : colour.foreground.tertiary,
+    backgroundColor: selected ? colour.background.info : colour.neutral[0],
+    color: selected ? colour.foreground.info : colour.foreground.tertiary,
     '> svg': {
       width: rem(24),
       height: rem(24),
@@ -63,9 +58,9 @@ const pillStyles = (selected: boolean, error: boolean) =>
 
 const hoverStyles = css({
   ':hover': {
-    backgroundColor: colors.colour.background.info,
-    borderColor: colors.colour.border.info,
-    color: colors.colour.foreground.info,
+    backgroundColor: colour.background.info,
+    borderColor: colour.border.info,
+    color: colour.foreground.info,
   },
 });
 

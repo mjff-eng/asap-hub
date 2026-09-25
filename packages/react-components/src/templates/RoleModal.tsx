@@ -10,7 +10,7 @@ import {
 } from '../molecules';
 import { EditUserModal } from '../organisms';
 import { rem } from '../pixels';
-import { colors } from '..';
+import { colour } from '..';
 
 type RoleModalProps = Pick<
   UserResponse,
@@ -29,7 +29,7 @@ type RoleModalProps = Pick<
 const thinLineStyles = css({
   width: '100%',
   height: '1px',
-  borderTop: `1px solid ${colors.colour.border.tertiary}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 const RoleModal: React.FC<RoleModalProps> = ({

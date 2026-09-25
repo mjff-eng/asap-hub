@@ -36,7 +36,7 @@ import {
   useRef,
 } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { colors, LabeledDateInput } from '..';
+import { colour, LabeledDateInput } from '..';
 import { Button, Link, MultiSelectOptionsType, Paragraph } from '../atoms';
 import { defaultPageLayoutPaddingStyle } from '../layout';
 import { mobileScreen, rem } from '../pixels';
@@ -2019,7 +2019,7 @@ const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
                         Open Science Compliance Checklist for Authors
                         <ExternalLinkIcon
                           size={17}
-                          color={colors.colour.brand.crn[600]}
+                          color={colour.brand.crn[600]}
                         />
                       </span>
                     </Link>
