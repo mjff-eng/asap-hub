@@ -30,13 +30,11 @@ const animation = (width: string, height: string) =>
         content: '""',
         transform: 'skewX(-45deg)',
         backgroundImage: `linear-gradient(90deg, ${
-          colour.general.blue.classic[25]
+          colour.background.tertiary
         } 0px, ${colourWithAlpha(
           colour.neutral[0],
           0.3,
-        )} calc(${shineWidth}/2), ${
-          colour.general.blue.classic[25]
-        } ${shineWidth})`,
+        )} calc(${shineWidth}/2), ${colour.background.tertiary} ${shineWidth})`,
         position: 'absolute',
         backgroundRepeat: 'repeat-x',
         left: `calc((${width}/2) + ${shineWidth} * -1)`,
