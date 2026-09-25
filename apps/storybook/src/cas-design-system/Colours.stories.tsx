@@ -729,8 +729,8 @@ const NamedSwatch = ({
 );
 
 const figmaFixes = [
-  'color-brand, one of the five avatar pairs, is built from the ARIA green. ASAP needs its own, or four pairs.',
-  'The Dropdown menu hover uses an ARIA primitive instead of a theme role.',
+  'color-brand, one of the five avatar pairs, is a theme token, but its CRN and GP2 values point at the ARIA primitives brand/aria/2/200 and 2/900, so avatars show the ARIA green in every Hub. ASAP needs its own values, or four pairs.',
+  'In the Navigation component, the hover and active fills of the Menu, Close and Account buttons are bound straight to the primitive brand/aria/1/900-A32 instead of a theme token, so they stay ARIA green in the CRN and GP2 modes.',
   'Shadows use colours that are invisible on white, so the code keeps its own shadow greys.',
   'Several component layers still use raw hex instead of variables: the Checkbox and Radio label (#000000) and the legacy Top Nav GP2 frame.',
   'The 48px icon-only Warning button hover is bound to the default variable.',
