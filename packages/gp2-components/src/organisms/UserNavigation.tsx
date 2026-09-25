@@ -2,7 +2,7 @@ import {
   Avatar,
   chevronDownIcon,
   chevronUpIcon,
-  cssColour,
+  colourWithAlpha,
   drawerQuery,
   pixels,
   colour,
@@ -28,11 +28,11 @@ const buttonStyles = css({
 });
 
 const userMenuStyles = css({
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   display: 'none',
   position: 'absolute',
   border: `1px solid ${colour.border.tertiary}`,
-  boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
+  boxShadow: `0 2px 6px 0 ${colourWithAlpha(colour.neutral[200], 0.34)}`,
   right: 5,
 });
 

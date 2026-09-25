@@ -63,7 +63,7 @@ const overlayMenuShownStyles = css({
 });
 
 const menuStyles = css({
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   gridColumnStart: '1',
   overflowY: 'auto',
   display: 'flex',

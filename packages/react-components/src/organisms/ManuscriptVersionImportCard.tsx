@@ -35,8 +35,8 @@ export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
     ':active': { stroke: colour.border.brand },
   }),
   dark: css({
-    stroke: colour.neutral[0],
-    ':active': { stroke: colour.neutral[0] },
+    stroke: colour.foreground['primary-inverse'],
+    ':active': { stroke: colour.foreground['primary-inverse'] },
   }),
 };
 const mainStyles = css({

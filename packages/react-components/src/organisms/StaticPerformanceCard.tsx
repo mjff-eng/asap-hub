@@ -98,7 +98,7 @@ const StaticPerformanceCard = ({
         <div css={iconContainerStyles}>
           {PercentageIcon({
             title: 'percentage',
-            color: colour.neutral[700],
+            color: colour.foreground.tertiary,
           })}
         </div>
         <Paragraph

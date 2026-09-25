@@ -12,8 +12,8 @@ it('renders a tag with content', () => {
 it('renders a white tag with the brand background when highlighted', () => {
   const { getByText, rerender } = render(<Tag>Text</Tag>);
   expect(
-    findParentWithStyle(getByText('Text'), 'backgroundColor')?.element,
-  ).toHaveStyle({ backgroundColor: colour.neutral[0] });
+    findParentWithStyle(getByText('Text'), 'borderStyle')?.element,
+  ).toHaveStyleRule('background-color', colour.background.primary);
 
   rerender(<Tag highlight>Text</Tag>);
   expect(
@@ -26,9 +26,10 @@ it('renders a tag with disabled styles when disabled', () => {
   const getParentStyle = (prop: keyof CSSStyleDeclaration) =>
     findParentWithStyle(getByText('Text'), prop);
 
-  expect(getParentStyle('backgroundColor')?.element).toHaveStyle({
-    backgroundColor: colour.neutral[0],
-  });
+  expect(getParentStyle('borderStyle')?.element).toHaveStyleRule(
+    'background-color',
+    colour.background.primary,
+  );
 
   rerender(<Tag enabled={false}>Text</Tag>);
 

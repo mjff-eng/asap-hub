@@ -92,7 +92,7 @@ const manuscriptDetailsContainerStyles = css({
   boxSizing: 'border-box',
   borderWidth: 1,
   borderStyle: 'solid',
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
 });
 
 const showMoreContainerStyles = css({

@@ -47,7 +47,7 @@ const tooltipStyles = css({
 });
 const bubbleStyles = css({
   backgroundColor: colour.foreground.secondary,
-  color: colour.neutral[0],
+  color: colour.foreground['primary-inverse'],
   display: 'block',
 
   padding: `${rem(9)} ${rem(12)}`,

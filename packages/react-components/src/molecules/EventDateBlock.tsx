@@ -15,7 +15,7 @@ const containerStyles = css({
 
   textAlign: 'center',
 
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   borderStyle: 'solid',
   borderWidth: 1,
   borderColor: colour.border.tertiary,

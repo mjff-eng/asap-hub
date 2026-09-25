@@ -14,8 +14,9 @@ it('uses the CAS card border and a white background by default', () => {
     'border-color',
     'var(--colour-border-card-default)',
   );
-  expect(getComputedStyle(getByText('text')).backgroundColor).toBe(
-    'rgb(255, 255, 255)',
+  expect(getByText('text')).toHaveStyleRule(
+    'background-color',
+    'var(--colour-background-primary)',
   );
 });
 

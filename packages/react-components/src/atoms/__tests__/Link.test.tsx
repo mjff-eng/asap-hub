@@ -56,7 +56,10 @@ describe('the dark theme', () => {
         text
       </Link>,
     );
-    expect(getByRole('link')).toHaveStyle({ color: colour.neutral[0] });
+    expect(getByRole('link')).toHaveStyleRule(
+      'color',
+      colour.foreground['primary-inverse'],
+    );
   });
 
   it('applies an invisible underline', () => {

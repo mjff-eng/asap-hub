@@ -8,9 +8,18 @@ export const themes: Record<
   ThemeVariant,
   { backgroundColor: string; color: string }
 > = {
-  light: { backgroundColor: colour.neutral[0], color: colour.neutral[900] },
-  grey: { backgroundColor: colour.neutral[200], color: colour.neutral[700] },
-  dark: { backgroundColor: colour.neutral[900], color: colour.neutral[0] },
+  light: {
+    backgroundColor: colour.background.primary,
+    color: colour.foreground.primary,
+  },
+  grey: {
+    backgroundColor: colour.neutral[200],
+    color: colour.foreground.tertiary,
+  },
+  dark: {
+    backgroundColor: colour.neutral[900],
+    color: colour.foreground['primary-inverse'],
+  },
 };
 
 export type Product = keyof typeof casTheme;

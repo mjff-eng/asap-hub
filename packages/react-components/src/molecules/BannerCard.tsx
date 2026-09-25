@@ -25,7 +25,10 @@ const bannerStyles = css({
   flexDirection: 'column',
   alignItems: 'center',
 
-  svg: { stroke: colour.neutral[0], fill: colour.neutral[0] },
+  svg: {
+    stroke: colour.foreground['primary-inverse'],
+    fill: colour.foreground['primary-inverse'],
+  },
 });
 
 const contentStyles = css({

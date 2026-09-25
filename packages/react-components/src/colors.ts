@@ -7,6 +7,9 @@ export const cssColour = (hex: string, alpha = 1): string =>
         .map((start) => parseInt(hex.slice(start, start + 2), 16))
         .join(', ')}, ${alpha})`;
 
+export const colourWithAlpha = (value: string, alpha: number): string =>
+  `color-mix(in srgb, ${value} ${Math.round(alpha * 1000) / 10}%, transparent)`;
+
 type PrimitiveValues<T> = T extends readonly number[]
   ? string
   : { readonly [K in keyof T]: PrimitiveValues<T[K]> };

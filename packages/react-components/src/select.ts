@@ -170,7 +170,7 @@ export const reactMultiSelectStyles = <
         ? {
             borderColor: isFocused ? colour.border.brand : colour.border.error,
             backgroundColor: isFocused
-              ? colour.neutral[0]
+              ? colour.background.primary
               : colour.background.error,
             svg: { fill: 'unset' },
           }
@@ -188,7 +188,7 @@ export const reactMultiSelectStyles = <
       borderWidth: `${borderWidth}px`,
       borderColor: isInvalid ? colour.border.secondary : colour.neutral[100],
       borderRadius: rem(18),
-      backgroundColor: colour.neutral[0],
+      backgroundColor: colour.background.primary,
     }),
     multiValueLabel: (provided) => ({
       ...provided,

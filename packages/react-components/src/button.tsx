@@ -193,7 +193,7 @@ export const activePrimaryStyles = css({
   },
 });
 export const activeSecondaryStyles = css({
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   color: colour.foreground.primary,
   borderColor: colour.neutral[900],
 
@@ -201,7 +201,7 @@ export const activeSecondaryStyles = css({
     stroke: colour.foreground.primary,
   },
   ':hover, :focus': {
-    backgroundColor: colour.neutral[0],
+    backgroundColor: colour.background.primary,
     color: colour.foreground.primary,
     borderColor: colour.neutral[900],
   },

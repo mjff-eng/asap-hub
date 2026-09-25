@@ -20,7 +20,7 @@ const iconStyles = (isGenerateButtonEnabled: boolean) =>
     marginRight: rem(8),
     path: {
       fill: isGenerateButtonEnabled
-        ? colour.neutral[0]
+        ? colour.foreground['primary-inverse']
         : colour.foreground.tertiary,
     },
   });

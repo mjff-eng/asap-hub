@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { Pill, Spinner } from '../atoms';
-import { cssColour, colour } from '../colors';
+import { colourWithAlpha, colour } from '../colors';
 import { chevronDownIcon, chevronUpIcon } from '../icons';
 import { rem } from '../pixels';
 import { Portal } from '../utils/portal';
@@ -34,7 +34,7 @@ const accentPalette: Record<
     border: colour.border.info,
   },
   neutral: {
-    bg: colour.general.blue.cerulean[25],
+    bg: colour.background.tertiary,
     fg: colour.foreground.quaternary,
     border: colour.neutral[400],
   },
@@ -62,7 +62,7 @@ const triggerStyles = (accent: StatusAccent) => {
     lineHeight: 1.2,
     margin: 0,
     ':focus-visible': {
-      outline: `2px solid ${cssColour(colour.neutral[200], 0.7)}`,
+      outline: `2px solid ${colourWithAlpha(colour.border.secondary, 0.7)}`,
       outlineOffset: rem(2),
     },
     '& svg': {
@@ -90,9 +90,9 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     left,
     zIndex: 1,
     minWidth: rem(160),
-    backgroundColor: colour.neutral[0],
+    backgroundColor: colour.background.primary,
     border: `1px solid ${colour.border.tertiary}`,
-    boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
+    boxShadow: `0 2px 6px 0 ${colourWithAlpha(colour.neutral[200], 0.34)}`,
     padding: `${rem(8)} 0`,
     display: 'flex',
     flexDirection: 'column',

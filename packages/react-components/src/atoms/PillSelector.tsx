@@ -43,11 +43,13 @@ const pillStyles = (selected: boolean, error: boolean) =>
       ? colour.border.secondary
       : selected
         ? colour.border.info
-        : colour.neutral[100],
+        : colour.border.tertiary,
     borderRadius: rem(24),
     cursor: 'pointer',
     userSelect: 'none',
-    backgroundColor: selected ? colour.background.info : colour.neutral[0],
+    backgroundColor: selected
+      ? colour.background.info
+      : colour.background.primary,
     color: selected ? colour.foreground.info : colour.foreground.tertiary,
     '> svg': {
       width: rem(24),

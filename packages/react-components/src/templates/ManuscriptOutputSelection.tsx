@@ -86,7 +86,7 @@ const singleValueStyles = css({
   flexFlow: 'column',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
 });
 
 const pillContainerStyles = (isFocused?: boolean) =>

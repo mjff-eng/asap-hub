@@ -16,7 +16,7 @@ const headerStyles = css({
   alignItems: 'center',
   backgroundColor: colour.brand.gp2[900],
   gap: rem(24),
-  color: colour.neutral[0],
+  color: colour.foreground['primary-inverse'],
   padding: `${rem(6)} ${vminLinearCalcClamped(
     mobileScreen,
     24,

@@ -32,7 +32,7 @@ const textStyles = css({
   justifySelf: 'center',
   textAlign: 'center',
 
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   color: colour.foreground.tertiary,
   textTransform: 'uppercase',
   fontWeight: 'bold',

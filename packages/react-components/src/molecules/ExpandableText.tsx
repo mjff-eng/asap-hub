@@ -1,7 +1,13 @@
 import { css } from '@emotion/react';
 import React, { useLayoutEffect, useState } from 'react';
 
-import { Button, chevronCircleDownIcon, cssColour, pixels, colour } from '..';
+import {
+  Button,
+  chevronCircleDownIcon,
+  colourWithAlpha,
+  pixels,
+  colour,
+} from '..';
 
 const { rem, lineHeight } = pixels;
 
@@ -16,14 +22,14 @@ const textStyles = css({
 const expandedTextStyles = css({
   maxHeight: rem(lineHeight * 500), // aproximation of possible max height (2500 characters)
   transition: 'max-height 300ms linear',
-  background: cssColour(colour.neutral[700], 0),
+  background: colourWithAlpha(colour.neutral[700], 0),
 });
 
 const expandableTextStyles = css({
   maxHeight: rem(expandableMaxHeight),
   background: `linear-gradient(180deg, ${
     colour.neutral[700]
-  } 26.56%, ${cssColour(colour.neutral[700], 0)} 100%)`,
+  } 26.56%, ${colourWithAlpha(colour.neutral[700], 0)} 100%)`,
   WebkitBackgroundClip: 'text',
   backgroundClip: 'text',
   maskImage: 'linear-gradient(to bottom, black, transparent)',

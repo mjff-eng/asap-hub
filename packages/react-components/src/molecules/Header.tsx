@@ -21,7 +21,7 @@ const containerStyles = (logoAlignment: 'center' | 'left') =>
         : undefined,
   });
 const containerOpaqueStyles = css({
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
 });
 
 const logoStyles = css({

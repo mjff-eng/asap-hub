@@ -20,7 +20,7 @@ const styles = css({
   // inner circle
   padding: rem(6),
   backgroundClip: 'content-box',
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
 
   ':disabled': {
     borderColor: colour.border.disabled,

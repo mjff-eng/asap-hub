@@ -22,7 +22,7 @@ const containerStyles = (isLast: boolean, unread: boolean) =>
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: colour.neutral[0],
+    backgroundColor: colour.background.primary,
     gap: rem(20),
     padding: `${rem(24)} ${rem(15)}`,
 
