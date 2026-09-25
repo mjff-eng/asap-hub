@@ -11,8 +11,8 @@ const previewStyles = (containerMaxHeight: number | string) =>
     maxHeight: containerMaxHeight,
     overflow: 'hidden',
     background: `linear-gradient(180deg, ${
-      colour.neutral[700]
-    } 26.56%, ${colourWithAlpha(colour.neutral[700], 0)} 100%)`,
+      colour.neutral[600]
+    } 26.56%, ${colourWithAlpha(colour.neutral[600], 0)} 100%)`,
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',

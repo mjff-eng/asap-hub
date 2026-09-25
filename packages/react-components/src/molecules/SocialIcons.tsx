@@ -17,7 +17,7 @@ import {
 } from '../icons';
 import { rem } from '../pixels';
 
-const SOCIAL_ICON_COLOR = colour.neutral[700];
+const SOCIAL_ICON_COLOR = colour.neutral[600];
 const ROW_GAP = 12;
 const socialContainerStyles = css({
   display: 'flex',

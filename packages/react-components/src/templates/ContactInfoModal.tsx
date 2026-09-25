@@ -47,7 +47,7 @@ const wrapIcon = (
   adjustBackground?: boolean,
 ) => (
   <span css={[iconStyles, adjustBackground ? iconCSS : {}]}>
-    <Icon color={colour.neutral[700]} />
+    <Icon color={colour.neutral[600]} />
   </span>
 );
 

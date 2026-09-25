@@ -8,7 +8,7 @@ import { rem } from '../pixels';
 const borderWidth = 1;
 
 const styles = ({
-  colors: { primary500 = colour.brand.crn[600] } = {},
+  colors: { primary500 = colour.brand.crn[500] } = {},
 }: Theme) =>
   css({
     display: 'inline-block',
