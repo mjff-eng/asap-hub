@@ -45,7 +45,7 @@ const CaptionCard: React.FC<CaptionCardProps> = ({ children, legend }) => (
     <div css={containerStyles}>{children}</div>
     {legend && (
       <div css={captionLegend}>
-        <PercentageIcon title="percentage" color={colour.neutral[700]} />
+        <PercentageIcon title="percentage" color={colour.neutral[600]} />
         <Paragraph>{legend}</Paragraph>
       </div>
     )}

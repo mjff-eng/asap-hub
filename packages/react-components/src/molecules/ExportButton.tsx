@@ -171,7 +171,7 @@ const ExportButton: React.FC<ExportButtonProps> = ({
                   <Spinner
                     size={16}
                     thickness={2}
-                    color={colour.neutral[700]}
+                    color={colour.neutral[600]}
                     trackColor={colour.neutral[100]}
                     ariaLabel="Exporting"
                     css={{ flexShrink: 0 }}

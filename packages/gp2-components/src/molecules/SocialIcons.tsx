@@ -44,7 +44,7 @@ const SocialIcons: React.FC<SocialIconsProps> = ({
   researchGate,
   blog,
 }) => {
-  const iconProps = { color: colour.neutral[700] };
+  const iconProps = { color: colour.neutral[600] };
 
   const socialLinks = [
     { key: 'orcid', link: orcid, Icon: socialIconsMap.orcid },

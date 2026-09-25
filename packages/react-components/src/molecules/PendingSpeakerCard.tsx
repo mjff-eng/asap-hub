@@ -27,7 +27,7 @@ const cardStyles = css({
   gap: rem(16),
   marginBottom: rem(16),
   padding: rem(16),
-  border: `1px solid ${colour.utilitarian.orange[700]}`,
+  border: `1px solid ${colour.general.yellow[800]}`,
   borderRadius: rem(8),
   backgroundColor: colour.background.warning,
 });
@@ -111,7 +111,7 @@ const dismissStyles = (enabled: boolean) =>
   ]);
 
 const warningTextStyles = css({
-  color: colour.utilitarian.orange[700],
+  color: colour.general.yellow[800],
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),

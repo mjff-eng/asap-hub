@@ -175,7 +175,7 @@ const MilestoneStatusConfirmationModal: React.FC<
           <div css={loadingWrapperStyles}>
             <Spinner
               size={18}
-              color={colour.neutral[700]}
+              color={colour.neutral[600]}
               trackColor={colour.general.blue.cerulean[25]}
             />
             <Paragraph noMargin>Loading...</Paragraph>
