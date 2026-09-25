@@ -4,7 +4,6 @@ import {
   chevronUpIcon,
   cssColour,
   drawerQuery,
-  navigationGrey,
   pixels,
   colour,
 } from '@asap-hub/react-components';
@@ -40,7 +39,7 @@ const userMenuStyles = css({
 const userMenuShownStyles = css({
   zIndex: 1,
   [drawerQuery]: {
-    backgroundColor: navigationGrey,
+    backgroundColor: colour.background.tertiary,
   },
   display: 'unset',
 });

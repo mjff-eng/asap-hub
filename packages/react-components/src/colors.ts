@@ -39,3 +39,7 @@ export const colour = {
 export const magenta = '#CF2FB3';
 /** @deprecated not in CAS; waiting on a design decision (see the CAS colours Notion doc). */
 export const iris = '#8C4E9F';
+/** @deprecated not in CAS; a stop of the preliminary findings gradient, waiting on the gradient design question. */
+export const findingsTeal = '#1491B2';
+/** @deprecated not in CAS; a stop of the preliminary findings gradient, waiting on the gradient design question. */
+export const findingsGreen = '#299C86';

@@ -14,7 +14,7 @@ import { colour } from '../colors';
 const headerStyles = css({
   display: 'flex',
   alignItems: 'center',
-  backgroundColor: '#035C81',
+  backgroundColor: colour.brand.gp2[900],
   gap: rem(24),
   color: colour.neutral[0],
   padding: `${rem(6)} ${vminLinearCalcClamped(

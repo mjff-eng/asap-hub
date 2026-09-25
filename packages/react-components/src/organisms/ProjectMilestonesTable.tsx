@@ -94,7 +94,8 @@ const milestoneRowWrapperStyles = (index: number, isLast: boolean) =>
     display: 'grid',
     gridColumn: '1 / -1',
     gridTemplateColumns: 'subgrid',
-    backgroundColor: index % 2 === 0 ? '#FFFFFF' : colour.neutral[50],
+    backgroundColor:
+      index % 2 === 0 ? colour.background.primary : colour.neutral[50],
     marginInline: rem(-24),
     paddingInline: rem(24),
     paddingTop: index === 0 ? 0 : rem(20),

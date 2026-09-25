@@ -2,7 +2,6 @@ import {
   colour,
   crossQuery,
   Loading,
-  navigationGrey,
   Overlay,
   ToastStack,
   usePrevious,
@@ -88,7 +87,7 @@ const mainMenuStyles = css({
   gridArea: 'main-menu',
 });
 const userMenuStyles = css({
-  backgroundColor: navigationGrey,
+  backgroundColor: colour.background.tertiary,
   gridArea: 'user-menu',
   flexGrow: 1,
 });

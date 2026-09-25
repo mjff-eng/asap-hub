@@ -25,7 +25,7 @@ const toggleStyles = (uncheckedColor: 'default' | 'error') =>
       left: '2px',
       width: '16px',
       height: '16px',
-      backgroundColor: '#fff',
+      backgroundColor: colour.background.primary,
       borderRadius: '50%',
       transition: 'transform 0.2s',
     },
@@ -41,7 +41,7 @@ const toggleStyles = (uncheckedColor: 'default' | 'error') =>
       backgroundColor: colour.neutral[400],
       cursor: 'not-allowed',
       '::before': {
-        backgroundColor: '#fff',
+        backgroundColor: colour.background.primary,
       },
     },
   });

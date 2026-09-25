@@ -69,7 +69,7 @@ const containerStyles = css({
   margin: '0px auto',
   borderRadius: '2px',
   width: '100%',
-  color: '#000',
+  color: colour.foreground.primary,
   position: 'relative',
   lineHeight: '20px',
   fontWeight: 400,
@@ -79,7 +79,7 @@ const containerStyles = css({
 
   // editor styles
   '& .editor-link': {
-    color: 'rgb(33, 111, 219)',
+    color: colour.foreground.brand,
     textDecoration: 'none',
   },
 
@@ -129,7 +129,7 @@ const containerStyles = css({
   },
   '& .editor-heading-h1': {
     fontSize: '24px',
-    color: 'rgb(5, 5, 5)',
+    color: colour.foreground.primary,
     fontWeight: 400,
     margin: 0,
     marginBottom: '12px',
@@ -138,20 +138,20 @@ const containerStyles = css({
 });
 
 const innerStyles = css({
-  background: '#fff',
+  background: colour.background.primary,
   position: 'relative',
 });
 const inputStyles = {
   minHeight: '150px',
   fontSize: '15px',
-  caretColor: 'rgb(5, 5, 5)',
+  caretColor: colour.foreground.primary,
   tabSize: 1,
   outline: 0,
   padding: '15px 10px',
 };
 
 const placeholderStyles = css({
-  color: '#999',
+  color: colour.foreground.tertiary,
   overflow: 'hidden',
   position: 'absolute',
   textOverflow: 'ellipsis',

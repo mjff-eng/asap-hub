@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import { colour } from '../colors';
+import { colour, cssColour } from '../colors';
 import { contentSidePaddingWithNavigation } from '../layout';
 import { Header } from '../molecules';
 import {
@@ -29,7 +29,11 @@ const animation = (width: string, height: string) =>
       '&:before': {
         content: '""',
         transform: 'skewX(-45deg)',
-        backgroundImage: `linear-gradient(90deg, #eee 0px, rgba(255,255,255,.3) calc(${shineWidth}/2), #eee ${shineWidth})`,
+        backgroundImage: `linear-gradient(90deg, ${
+          colour.neutral[100]
+        } 0px, ${cssColour(colour.neutral[0], 0.3)} calc(${shineWidth}/2), ${
+          colour.neutral[100]
+        } ${shineWidth})`,
         position: 'absolute',
         backgroundRepeat: 'repeat-x',
         left: `calc((${width}/2) + ${shineWidth} * -1)`,

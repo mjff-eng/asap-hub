@@ -49,7 +49,7 @@ const titleStyles = css({
   alignItems: 'center',
   fontWeight: 'bold',
   color: colour.foreground.primary,
-  background: '#fff',
+  background: colour.background.primary,
   verticalAlign: 'top',
   paddingTop: rem(32),
   overflowWrap: 'break-word',

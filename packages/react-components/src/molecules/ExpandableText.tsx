@@ -26,8 +26,8 @@ const expandableTextStyles = css({
   } 26.56%, ${cssColour(colour.neutral[700], 0)} 100%)`,
   WebkitBackgroundClip: 'text',
   backgroundClip: 'text',
-  maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))',
-  WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))',
+  maskImage: 'linear-gradient(to bottom, black, transparent)',
+  WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)',
 });
 
 const buttonContainerStyles = (marginTop: number) =>
