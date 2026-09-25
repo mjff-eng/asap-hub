@@ -22,7 +22,7 @@ const startButtonTextStyles = css({
   gap: rem(8),
   margin: `0 ${rem(8)} 0 0`,
   path: {
-    stroke: '#FFFFFF',
+    stroke: colour.foreground['primary-inverse'],
   },
 });
 

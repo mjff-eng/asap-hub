@@ -23,7 +23,7 @@ const rowStyles = (isEvenRow: boolean) =>
       borderTop: 'none',
       borderBottom: 'none',
     },
-    background: isEvenRow ? '#fff' : colour.neutral[50],
+    background: isEvenRow ? colour.background.primary : colour.neutral[50],
     td: {
       borderBottom: `1px solid ${colour.border.tertiary}`,
     },
@@ -49,7 +49,7 @@ const collapsedRowStyles = (isEvenRow: boolean) =>
         borderBottom: 'none',
       },
     },
-    background: isEvenRow ? '#fff' : colour.neutral[50],
+    background: isEvenRow ? colour.background.primary : colour.neutral[50],
   });
 const teamLinkStyles = css({
   display: 'inline-block',

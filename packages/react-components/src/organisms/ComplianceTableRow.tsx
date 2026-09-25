@@ -33,7 +33,7 @@ const rowStyles = css({
     background: colour.neutral[50],
   },
   ':nth-of-type(odd) td': {
-    background: '#fff',
+    background: colour.background.primary,
   },
   ':last-child': {
     borderBottom: 'none',

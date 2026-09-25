@@ -40,7 +40,7 @@ const containerStyles = (hasError: boolean, enabled: boolean) =>
     backgroundColor: enabled
       ? hasError
         ? colors.colour.background.error
-        : '#fff'
+        : colors.colour.background.primary
       : colors.colour.background.tertiary,
   });
 

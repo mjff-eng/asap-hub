@@ -18,7 +18,6 @@ import { cssColour, colour } from '../colors';
 import { MenuHeader, OnboardingFooter, ToastStack } from '../organisms';
 import { Overlay } from '../atoms';
 import {
-  navigationGrey,
   crossQuery,
   drawerQuery,
   networkContentTopPadding,
@@ -292,7 +291,7 @@ const userMenuStyles = css({
 });
 const userMenuShownStyles = css({
   [drawerQuery]: {
-    backgroundColor: navigationGrey,
+    backgroundColor: colour.background.tertiary,
   },
   // The 90vh cap and own scrollbar are for the desktop dropdown only.
   [crossQuery]: {
