@@ -10,7 +10,7 @@ type EventsSectionProps = {
 };
 
 const EventsSection: FC<EventsSectionProps> = ({ date }) => {
-  const { items: upcomingItems } = useEvents(
+  const { items: upcomingItems, total: upcomingTotal } = useEvents(
     getEventListOptions(date, {
       past: false,
       pageSize: 3,
@@ -31,7 +31,9 @@ const EventsSection: FC<EventsSectionProps> = ({ date }) => {
       description="Explore upcoming and previous events and learn about what was discussed."
       upcomingEvents={upcomingItems.map(eventMapper)}
       pastEvents={pastItems.map(eventMapper)}
-      upcomingViewAllHref={eventsRoute({}).upcoming({}).$}
+      upcomingViewAllHref={
+        upcomingTotal > 3 ? eventsRoute({}).upcoming({}).$ : undefined
+      }
       pastViewAllHref={eventsRoute({}).past({}).$}
     />
   );
