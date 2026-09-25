@@ -100,7 +100,7 @@ const ExpandableText: React.FC<{
     const observer = new ResizeObserver(measure);
     observer.observe(textElement);
     return () => observer.disconnect();
-  }, [textElement]);
+  }, [textElement, children]);
 
   const hideToggle = expandOnce && expanded;
 
