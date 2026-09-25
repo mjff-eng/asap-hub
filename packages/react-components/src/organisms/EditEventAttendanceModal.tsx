@@ -362,7 +362,7 @@ const searchOptionMetaStyles = css({
 });
 
 const placeholderStyles = css({
-  color: colour.foreground.tertiary,
+  color: colour.foreground.disabled,
 });
 
 // react-select remounts a custom component whose identity changes, so the

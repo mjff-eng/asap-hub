@@ -345,7 +345,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                       {degree ? (
                         <Display styleAsHeading={2}>, {degree}</Display>
                       ) : isOwnProfile ? (
-                        <div css={{ color: colour.foreground.tertiary }}>
+                        <div css={{ color: colour.foreground.disabled }}>
                           <Display styleAsHeading={2}>, Degree</Display>
                         </div>
                       ) : null}
