@@ -88,7 +88,7 @@ const textFieldStyles = (hasValue: boolean) =>
       color: colour.foreground.tertiary,
     },
     '&[type="date"]': {
-      color: hasValue ? '#000' : colour.neutral[400],
+      color: hasValue ? colour.foreground.primary : colour.foreground.tertiary,
     },
 
     // see invalid

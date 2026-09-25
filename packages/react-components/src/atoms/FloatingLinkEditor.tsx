@@ -19,10 +19,10 @@ import { getSelectedNode } from './lexical-utils';
 const editorContainerStyles = css({
   position: 'absolute',
   zIndex: 10,
-  background: '#fff',
-  border: '1px solid #ddd',
+  background: colour.background.primary,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: '8px',
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+  boxShadow: `0 2px 8px ${colour.neutral['900-A16']}`,
   padding: '6px',
   display: 'flex',
   alignItems: 'flex-start',
@@ -36,7 +36,7 @@ const inputColumnStyles = css({
 });
 
 const inputStyles = css({
-  border: '1px solid #ddd',
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: '4px',
   padding: '6px 8px',
   fontSize: '14px',
@@ -45,11 +45,11 @@ const inputStyles = css({
 });
 
 const inputErrorStyles = css({
-  borderColor: '#d6453d',
+  borderColor: colour.border.error,
 });
 
 const errorStyles = css({
-  color: '#d6453d',
+  color: colour.foreground.error,
   fontSize: '12px',
   maxWidth: '300px',
 });
@@ -72,7 +72,7 @@ const linkPreviewStyles = css({
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
-  color: 'rgb(33, 111, 219)',
+  color: colour.foreground.brand,
 });
 
 const SAFE_URL_PATTERN = /^(?:https?:\/\/|mailto:|tel:)/i;

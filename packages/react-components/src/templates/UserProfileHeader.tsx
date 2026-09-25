@@ -13,7 +13,7 @@ import {
   CopyButton,
   Spinner,
 } from '../atoms';
-import { colour } from '../colors';
+import { colour, cssColour } from '../colors';
 import { editIcon, uploadIcon, alumniBadgeIcon } from '../icons';
 import { createMailTo } from '../mail';
 import {
@@ -158,7 +158,7 @@ const uploadOverlayStyles = css({
   borderRadius: '50%',
   cursor: 'pointer',
   opacity: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: cssColour(colour.neutral[900], 0.5),
   transition: 'opacity 150ms ease-in-out',
   ':hover, :focus-within': {
     opacity: 1,
@@ -172,7 +172,7 @@ const savingOverlayStyles = css({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '50%',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: cssColour(colour.neutral[900], 0.5),
 });
 const badgeSize = 48;
 const badgeStyles = css({
@@ -394,7 +394,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                       <Spinner
                         size={24}
                         color={colour.neutral[0]}
-                        trackColor="rgba(255, 255, 255, 0.4)"
+                        trackColor={cssColour(colour.neutral[0], 0.4)}
                         ariaLabel="Saving avatar"
                         ariaBusy
                       />

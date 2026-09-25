@@ -14,7 +14,7 @@ const EDGE_BLUR = 0.6;
 
 const wheelRingMask = `radial-gradient(farthest-side, transparent calc(100% - ${rem(
   WHEEL_STROKE,
-)}), #000 calc(100% - ${rem(WHEEL_STROKE)} + ${EDGE_BLUR}px))`;
+)}), black calc(100% - ${rem(WHEEL_STROKE)} + ${EDGE_BLUR}px))`;
 
 const WHEEL_MID_RADIUS = (WHEEL_SIZE - WHEEL_STROKE) / 2;
 
@@ -41,7 +41,7 @@ const GradientProgressWheel: React.FC<GradientProgressWheelProps> = ({
   label,
 }) => {
   const value = clampPercentage(percentage);
-  const arcMask = `conic-gradient(from 0deg, #000 0 ${value}%, transparent ${
+  const arcMask = `conic-gradient(from 0deg, black 0 ${value}%, transparent ${
     value + EDGE_BLUR
   }% 100%)`;
   return (
