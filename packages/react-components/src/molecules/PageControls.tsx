@@ -35,7 +35,7 @@ const listStyles = css({
   gridAutoColumns: rem(30),
   gridGap: vminLinearCalc(mobileScreen, 6, largeDesktopScreen, 12, 'px'),
 
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
 });
 
 const itemStyles = css({

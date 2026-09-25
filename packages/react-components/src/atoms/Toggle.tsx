@@ -32,7 +32,7 @@ const iconStyles = css({
   paddingRight: rem(6),
 });
 const activeStyles = css({
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   border: `1px solid ${colour.border.tertiary}`,
   color: colour.foreground.primary,
   svg: {

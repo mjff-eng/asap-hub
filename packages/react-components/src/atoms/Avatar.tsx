@@ -69,7 +69,7 @@ const textStyle = css(fontStyles, headlineStyles[3], {
 });
 
 const placeholderColorStyle = css({
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   fill: colour.foreground.tertiary,
 });
 const colorStyles = [

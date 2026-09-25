@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import { colour, cssColour } from '../colors';
+import { colour, colourWithAlpha } from '../colors';
 import { contentSidePaddingWithNavigation } from '../layout';
 import { Header } from '../molecules';
 import {
@@ -31,9 +31,10 @@ const animation = (width: string, height: string) =>
         transform: 'skewX(-45deg)',
         backgroundImage: `linear-gradient(90deg, ${
           colour.neutral[100]
-        } 0px, ${cssColour(colour.neutral[0], 0.3)} calc(${shineWidth}/2), ${
-          colour.neutral[100]
-        } ${shineWidth})`,
+        } 0px, ${colourWithAlpha(
+          colour.neutral[0],
+          0.3,
+        )} calc(${shineWidth}/2), ${colour.neutral[100]} ${shineWidth})`,
         position: 'absolute',
         backgroundRepeat: 'repeat-x',
         left: `calc((${width}/2) + ${shineWidth} * -1)`,
@@ -73,7 +74,7 @@ const contentHeaderContainerStyles = css({
   gridColumn: '1 / -1',
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(48)}`,
   borderBottom: `1px solid ${colour.border.tertiary}`,
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   rowGap: rem(12),
 });
 

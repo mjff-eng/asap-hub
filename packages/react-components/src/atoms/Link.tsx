@@ -27,8 +27,8 @@ export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
     color: colour.foreground.brand,
   }),
   dark: css({
-    color: colour.neutral[0],
-    ':active': { color: colour.neutral[0] },
+    color: colour.foreground['primary-inverse'],
+    ':active': { color: colour.foreground['primary-inverse'] },
   }),
 };
 
@@ -48,8 +48,8 @@ const iconThemeStyles: Record<ThemeVariant, SerializedStyles> = {
     svg: { stroke: colour.foreground.brand },
   }),
   dark: css({
-    svg: { stroke: colour.neutral[0] },
-    ':active': { svg: { stroke: colour.neutral[0] } },
+    svg: { stroke: colour.foreground['primary-inverse'] },
+    ':active': { svg: { stroke: colour.foreground['primary-inverse'] } },
   }),
 };
 

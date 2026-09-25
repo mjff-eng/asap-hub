@@ -32,7 +32,7 @@ const bubbleStyles = css({
   pointerEvents: 'none',
 
   backgroundColor: colour.foreground.secondary,
-  color: colour.neutral[0],
+  color: colour.foreground['primary-inverse'],
   borderRadius: rem(4),
   padding: `${rem(6)} ${rem(12)}`,
   whiteSpace: 'nowrap',
