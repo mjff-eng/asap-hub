@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 
 import { UserCommentHeader } from '.';
-import { colors, ExpandableText } from '..';
+import { colour, ExpandableText } from '..';
 import { TextEditor } from '../atoms';
 import { rem } from '../pixels';
 import DiscussionAttachedFiles from './DiscussionAttachedFiles';
@@ -28,7 +28,7 @@ const textEditorStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: colors.colour.foreground.tertiary,
+  color: colour.foreground.tertiary,
 });
 const getUserHref = (id: string) =>
   network({}).users({}).user({ userId: id }).$;

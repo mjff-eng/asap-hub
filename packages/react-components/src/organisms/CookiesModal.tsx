@@ -2,7 +2,6 @@
 import { css } from '@emotion/react';
 import { CSSInterpolation } from '@emotion/serialize';
 import { useState } from 'react';
-import { colors } from '..';
 
 import {
   Button,
@@ -16,6 +15,7 @@ import {
 } from '../atoms';
 import { ExternalLinkIcon } from '../icons';
 import { Modal } from '../molecules';
+import { colour } from '../colors';
 import { mobileScreen, rem } from '../pixels';
 
 const modalStyles = css({
@@ -73,7 +73,7 @@ const essentialCategoryStyles = css({
 
 const dividerStyles = css({
   paddingTop: rem(4),
-  borderBottom: `1px solid ${colors.colour.border.tertiary}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 const thirdPartyCookieLinkStyles = css({
@@ -97,8 +97,7 @@ const ThirdPartyCookieLink = ({ link, label }: ThirdPartyCookieLinkProps) => (
   <Link href={link}>
     <Pill>
       <span css={pillStyles}>
-        {label}{' '}
-        <ExternalLinkIcon size={16} color={colors.colour.neutral[700]} />
+        {label} <ExternalLinkIcon size={16} color={colour.neutral[700]} />
       </span>
     </Pill>
   </Link>
@@ -170,7 +169,7 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
                         <strong>Essential</strong>
                         <span
                           css={css({
-                            color: colors.colour.foreground.tertiary,
+                            color: colour.foreground.tertiary,
                           })}
                         >
                           <strong>Always Active</strong>

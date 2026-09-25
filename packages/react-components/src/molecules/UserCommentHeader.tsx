@@ -8,7 +8,6 @@ import { formatDate } from '../date';
 import { rem } from '../pixels';
 import { ImageLink } from '.';
 import UserTeamInfo from './UserTeamInfo';
-import { colors } from '..';
 
 const containerStyles = css({
   display: 'flex',
@@ -33,7 +32,7 @@ const userInfoStyles = css({
 const separatorStyles = css({
   fontSize: rem(14),
   fontWeight: 400,
-  color: colors.colour.foreground.tertiary,
+  color: colour.foreground.tertiary,
 });
 
 const dateStyles = css({

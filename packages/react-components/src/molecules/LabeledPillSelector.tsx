@@ -4,7 +4,6 @@ import { Paragraph, PillSelector } from '../atoms';
 import { validationMessageStyles } from '../form';
 import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
-import { colors } from '..';
 
 const fieldsetStyles = css({
   border: 'none',
@@ -32,16 +31,14 @@ const descriptionStyles = css({
 const containerStyles = (hasError: boolean, enabled: boolean) =>
   css({
     border: '1px solid',
-    borderColor: hasError
-      ? colors.colour.border.error
-      : colors.colour.border.tertiary,
+    borderColor: hasError ? colour.border.error : colour.border.tertiary,
     padding: `${rem(3)} ${rem(9)}`,
 
     backgroundColor: enabled
       ? hasError
-        ? colors.colour.background.error
-        : colors.colour.background.primary
-      : colors.colour.background.tertiary,
+        ? colour.background.error
+        : colour.background.primary
+      : colour.background.tertiary,
   });
 
 type LabeledPillSelectorProps = ComponentProps<typeof PillSelector> & {

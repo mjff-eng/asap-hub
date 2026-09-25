@@ -2,7 +2,7 @@ import { ManuscriptFileResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 
-import { colors } from '..';
+import { colour } from '..';
 import { Anchor } from '../atoms';
 import { downloadIcon, linkIcon } from '../icons';
 import { rem } from '../pixels';
@@ -17,7 +17,7 @@ const containerStyles = css({
 });
 
 const titleStyles = css({
-  color: colors.colour.foreground.tertiary,
+  color: colour.foreground.tertiary,
   fontSize: rem(14),
   lineHeight: rem(16),
   fontWeight: '700',
@@ -37,12 +37,12 @@ const fileLinkStyles = css({
   alignItems: 'center',
   width: 'fit-content',
   gap: rem(8),
-  border: `1px solid ${colors.colour.border.tertiary}`,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: rem(24),
   padding: `${rem(8)} ${rem(12)} ${rem(8)} ${rem(8)}`,
   transition: 'border-color 0.2s ease-in-out',
   ':hover': {
-    borderColor: colors.colour.border.secondary,
+    borderColor: colour.border.secondary,
   },
 });
 
@@ -58,7 +58,7 @@ const fileNameStyles = css({
   fontSize: rem(14),
   fontWeight: 400,
   lineHeight: rem(16),
-  color: colors.colour.foreground.primary,
+  color: colour.foreground.primary,
   ':hover': {
     textDecoration: 'underline',
   },
@@ -71,7 +71,7 @@ const downloadIconStyles = css({
     height: rem(16),
   },
   '& > svg > path:first-of-type': {
-    fill: colors.colour.foreground.tertiary,
+    fill: colour.foreground.tertiary,
   },
 });
 

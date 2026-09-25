@@ -1,21 +1,21 @@
 import { css, CSSObject } from '@emotion/react';
-import * as colors from '../colors';
+import { colour } from '../colors';
 import { lineHeight, rem } from '../pixels';
 
 export type AccentVariant = 'default' | 'green' | 'blue';
 
 export const accents: Record<AccentVariant, CSSObject> = {
   default: {
-    backgroundColor: colors.colour.background.warning,
-    color: colors.colour.foreground.warning,
+    backgroundColor: colour.background.warning,
+    color: colour.foreground.warning,
   },
   green: {
-    backgroundColor: colors.colour.background.success,
-    color: colors.colour.foreground.success,
+    backgroundColor: colour.background.success,
+    color: colour.foreground.success,
   },
   blue: {
-    backgroundColor: colors.colour.background.info,
-    color: colors.colour.foreground.info,
+    backgroundColor: colour.background.info,
+    color: colour.foreground.info,
   },
 };
 
@@ -24,8 +24,8 @@ const styles = css({
   boxSizing: 'border-box',
   padding: `${rem(3)} 0`,
   height: `calc(${lineHeight}px + ${rem(6)})`,
-  backgroundColor: colors.colour.background.warning,
-  color: colors.colour.foreground.warning,
+  backgroundColor: colour.background.warning,
+  color: colour.foreground.warning,
   borderRadius: rem(18),
 });
 
