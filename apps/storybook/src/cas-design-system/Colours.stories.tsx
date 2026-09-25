@@ -665,11 +665,11 @@ type CodeShade = {
 
 const codeShade = ({
   label,
-  code,
+  code: codeName,
   product = 'crn',
   alpha,
 }: CodeShade): Shade => {
-  const hex = casHex(code, product);
+  const hex = casHex(codeName, product);
   return { label, hex: alpha === undefined ? hex : cssColour(hex, alpha) };
 };
 
@@ -853,7 +853,7 @@ const TableSearch = ({
   placeholder,
 }: {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (query: string) => void;
   placeholder: string;
 }) => (
   <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '8px 0' }}>
