@@ -9,8 +9,16 @@ export interface ThemeToken {
   figmaName: string;
   codeName: string;
   cssVariable: string;
-  crn: { hex: string; alpha: number; alias?: string };
-  gp2: { hex: string; alpha: number; alias?: string };
+  crn: ThemeValue;
+  gp2: ThemeValue;
+}
+
+export interface ThemeValue {
+  hex: string;
+  alpha: number;
+  alias?: string;
+  figma?: { hex: string; alpha: number; alias?: string };
+  master?: string;
 }
 
 export interface Primitive {
@@ -78,6 +86,33 @@ export const themeTokens: ThemeToken[] = Object.entries(casTheme.crn).map(
   },
 );
 
+export interface FigmaChange {
+  figmaName: string;
+  product: Product;
+  figma: { hex: string; alias?: string };
+  use: { hex: string; alias?: string };
+  master: string;
+}
+
+// every theme token that asap-overrides.json points somewhere else until design
+// updates Figma, generated so this list can never drift from the code
+export const figmaChanges: FigmaChange[] = themeTokens.flatMap((token) =>
+  (['crn', 'gp2'] as const).flatMap((product) => {
+    const value = token[product];
+    return value.figma && value.master
+      ? [
+          {
+            figmaName: token.figmaName,
+            product,
+            figma: value.figma,
+            use: { hex: value.hex, alias: value.alias },
+            master: value.master,
+          },
+        ]
+      : [];
+  }),
+);
+
 export const themeTokensByPrimitive = themeTokens.reduce<Map<string, string[]>>(
   (byPrimitive, token) => {
     new Set([token.crn.alias, token.gp2.alias]).forEach((alias) => {
@@ -127,353 +162,254 @@ export const casHex = (codePath: string, product: Product = 'crn'): string => {
     : primitiveHexByPath.get(`colour/${path}`) ?? '';
 };
 
-export type OldNameStatus = 'same' | 'cas' | 'approval';
-
 export interface OldName {
   name: string;
   before: string;
   now: string;
-  where?: string;
-  status: OldNameStatus;
-  question?: number;
+  where: string;
 }
 
 // `before` is the production value before the CAS work; `now` is the CAS code
-// name that replaced it (for its main use when a name had several)
+// name used in its place
 export const oldNames: OldName[] = [
-  { name: 'paper', before: '#FFFFFF', now: 'neutral[0]', status: 'same' },
-  { name: 'fern', before: '#34A270', now: 'brand.crn[500]', status: 'same' },
-  { name: 'pine', before: '#287953', now: 'brand.crn[800]', status: 'same' },
-  { name: 'denim', before: '#006A92', now: 'brand.gp2[800]', status: 'same' },
-  { name: 'info200', before: '#BFE3D3', now: 'brand.crn[100]', status: 'same' },
   {
-    name: 'charcoal',
+    name: 'paper',
+    before: '#FFFFFF',
+    now: 'background.primary',
+    where: 'backgrounds',
+  },
+  {
+    name: 'paper',
+    before: '#FFFFFF',
+    now: "foreground['primary-inverse']",
+    where: 'text on dark',
+  },
+  {
+    name: 'charcoal, neutral1000',
     before: '#00222C',
     now: 'foreground.primary',
-    status: 'cas',
+    where: 'main text',
   },
   {
-    name: 'neutral1000',
-    before: '#00202C',
-    now: 'foreground.primary',
-    status: 'cas',
-  },
-  {
-    name: 'pearl',
-    before: '#FCFDFE',
-    now: 'background.secondary',
-    status: 'cas',
-  },
-  {
-    name: 'neutral200',
-    before: '#F6F9FB',
-    now: 'background.secondary',
-    status: 'cas',
-  },
-  {
-    name: 'neutral300 (silver)',
-    before: '#EDF1F3',
-    now: 'background.tertiary',
-    status: 'cas',
-  },
-  {
-    name: 'neutral500 (steel)',
-    before: '#DFE5EA',
-    now: 'border.tertiary',
-    where: 'borders',
-    status: 'cas',
-  },
-  {
-    name: 'neutral700 (tin)',
-    before: '#C2C9CE',
-    now: 'border.secondary',
-    where: 'borders',
-    status: 'cas',
-  },
-  {
-    name: 'error100 (rose)',
-    before: '#F7E8EA',
-    now: 'background.error',
-    status: 'cas',
-  },
-  {
-    name: 'error500 (ember)',
-    before: '#CD1426',
-    now: 'foreground.error',
-    status: 'cas',
-  },
-  {
-    name: 'error900 (pepper)',
-    before: '#B00A1A',
-    now: 'utilitarian.red[700]',
-    status: 'cas',
-  },
-  {
-    name: 'warning100 (apricot)',
-    before: '#F8EDDE',
-    now: 'background.warning',
-    status: 'cas',
-  },
-  {
-    name: 'warning150',
-    before: '#F2E1CB',
-    now: 'background.warning',
-    status: 'cas',
-  },
-  {
-    name: 'warning500 (clay)',
-    before: '#CE801A',
-    now: 'foreground.warning',
-    status: 'cas',
-  },
-  {
-    name: 'warning900',
-    before: '#B56B0B',
-    now: 'utilitarian.orange[700]',
-    status: 'cas',
-  },
-  {
-    name: 'cerulean',
-    before: '#008CC6',
-    now: 'brand.gp2[500]',
-    where: 'gradients, reminders',
-    status: 'cas',
-  },
-  {
-    name: 'neutral900 (lead)',
+    name: 'lead, neutral900',
     before: '#4D646B',
     now: 'foreground.tertiary',
-    where: 'grey text',
-    status: 'approval',
-    question: 1,
+    where: 'grey text, disabled field and button text',
   },
   {
-    name: 'neutral900 (lead)',
+    name: 'lead, neutral900',
     before: '#4D646B',
-    now: 'neutral[700]',
-    where:
-      'icon colours, gradients and shadows, where a CSS variable cannot be used',
-    status: 'approval',
-    question: 1,
-  },
-  {
-    name: 'neutral700 (tin)',
-    before: '#C2C9CE',
-    now: 'foreground.tertiary',
-    where: 'hint text in empty fields',
-    status: 'approval',
-    question: 1,
+    now: 'neutral[600]',
+    where: 'icon colours, fades, checkbox and radio hover border',
   },
   {
     name: 'neutral800',
     before: '#92999E',
     now: 'foreground.quaternary',
-    where: 'light grey text',
-    status: 'approval',
-    question: 1,
+    where: 'light grey text, empty date field',
+  },
+  {
+    name: 'tin, neutral700',
+    before: '#C2C9CE',
+    now: 'foreground.disabled',
+    where: 'hint text, placeholders, disabled icons',
+  },
+  {
+    name: 'tin, neutral700',
+    before: '#C2C9CE',
+    now: 'border.secondary',
+    where: 'borders',
+  },
+  {
+    name: 'steel, neutral500',
+    before: '#DFE5EA',
+    now: 'border.tertiary',
+    where: 'borders and dividers',
+  },
+  {
+    name: 'steel',
+    before: '#DFE5EA',
+    now: 'border.disabled',
+    where: 'disabled buttons, checkboxes and radios',
+  },
+  {
+    name: 'silver, neutral300',
+    before: '#EDF1F3',
+    now: 'background.tertiary',
+    where: 'grey panels',
+  },
+  {
+    name: 'silver',
+    before: '#EDF1F3',
+    now: 'background.disabled',
+    where: 'disabled buttons, fields and tags',
+  },
+  {
+    name: 'pearl',
+    before: '#FCFDFE',
+    now: 'background.secondary',
+    where: 'light panels',
+  },
+  {
+    name: 'neutral200',
+    before: '#F6F9FB',
+    now: 'neutral[50]',
+    where: 'table stripes',
+  },
+  {
+    name: 'fern, primary500',
+    before: '#34A270',
+    now: 'foreground.brand',
+    where: 'links, tabs, pagination, brand text and icons',
+  },
+  {
+    name: 'fern, primary500',
+    before: '#34A270',
+    now: 'background.button.primary.default',
+    where: 'main button',
+  },
+  {
+    name: 'pine, primary900',
+    before: '#287953',
+    now: 'background.button.primary.hover',
+    where: 'main button on hover',
+  },
+  {
+    name: 'fern, primary500',
+    before: '#34A270',
+    now: 'border.brand',
+    where: 'focus borders',
+  },
+  {
+    name: 'fern, primary500',
+    before: '#34A270',
+    now: "background['brand-inverse']",
+    where: 'checkbox and radio checked, switch on',
+  },
+  {
+    name: 'pine, primary900',
+    before: '#287953',
+    now: "background['hover-brand-inverse']",
+    where: 'checkbox and radio checked, on hover',
+  },
+  {
+    name: 'pine, primary900',
+    before: '#287953',
+    now: 'foreground.brand',
+    where: 'hovered menu text, selected side menu text',
+  },
+  {
+    name: 'mint, primary100',
+    before: '#E4F5EE',
+    now: "background['hover-brand']",
+    where: 'hover in dropdowns, selects and tags',
+  },
+  {
+    name: 'side menu selected',
+    before: '#E7F7F0',
+    now: 'background.active',
+    where: 'selected side-menu item and page',
   },
   {
     name: 'success100 (mint)',
     before: '#E4F5EE',
     now: 'background.success',
     where: 'success states',
-    status: 'approval',
-    question: 2,
   },
   {
     name: 'success500',
     before: '#34A270',
     now: 'foreground.success',
-    status: 'approval',
-    question: 2,
+    where: 'success text and icons',
   },
   {
     name: 'success900',
     before: '#287953',
-    now: 'foreground.success',
-    status: 'approval',
-    question: 2,
+    now: 'border.success',
+    where: 'success borders',
   },
   {
-    name: 'info100, information100',
+    name: 'info100',
     before: '#E6F3F9',
     now: 'background.info',
-    status: 'approval',
-    question: 2,
+    where: 'info states',
   },
   {
-    name: 'info150',
-    before: '#C0DFED',
-    now: 'border.info',
-    status: 'approval',
-    question: 2,
-  },
-  {
-    name: 'info500, information500',
+    name: 'info500',
     before: '#0C8DC3',
     now: 'foreground.info',
-    status: 'approval',
-    question: 2,
+    where: 'info text and icons',
   },
   {
-    name: 'info900, information900',
-    before: '#006A92',
-    now: 'foreground.info',
-    status: 'approval',
-    question: 2,
+    name: 'info500',
+    before: '#0C8DC3',
+    now: 'border.info',
+    where: 'info borders',
   },
   {
-    name: 'pine, clay, ember',
-    before: '#287953',
-    now: 'foreground.primary',
-    where:
-      'toast text; the status colour stays on the icon and border, as in the Figma Toast',
-    status: 'cas',
+    name: 'warning100 (apricot)',
+    before: '#F8EDDE',
+    now: 'background.warning',
+    where: 'warning states',
+  },
+  {
+    name: 'warning500 (clay)',
+    before: '#CE801A',
+    now: 'foreground.warning',
+    where: 'warning text and icons',
+  },
+  {
+    name: 'warning900',
+    before: '#B56B0B',
+    now: 'general.yellow[800]',
+    where: 'darker warning text',
+  },
+  {
+    name: 'error100 (rose)',
+    before: '#F7E8EA',
+    now: 'background.error',
+    where: 'error states',
+  },
+  {
+    name: 'error500 (ember)',
+    before: '#CD1426',
+    now: 'foreground.error',
+    where: 'error text',
+  },
+  {
+    name: 'error900 (pepper)',
+    before: '#B00A1A',
+    now: 'utilitarian.red[700]',
+    where: 'warning button border and hover',
   },
   {
     name: 'space',
     before: '#004561',
-    now: 'foreground.secondary',
-    where: 'tooltip background, as in the Figma Tooltip',
-    status: 'approval',
-    question: 3,
-  },
-  ...(
-    [
-      ['mint / pine', '#E4F5EE', 'green'],
-      ['apricot / clay', '#F8EDDE', 'yellow'],
-      ['info100 / denim', '#E6F3F9', 'blue'],
-      ['azure / space', '#E7F7FE', 'blue'],
-      ['lilac / berry', '#F8EAF7', 'lavender'],
-      ['lavender / mauve', '#F2EDF5', 'lavender'],
-    ] as const
-  ).map(
-    ([name, before, pair]): OldName => ({
-      name,
-      before,
-      now: `background['color-${pair}']`,
-      where: 'avatar initials; CAS has five pairs, we had six',
-      status: 'approval',
-      question: 3,
-    }),
-  ),
-  {
-    name: 'silver',
-    before: '#EDF1F3',
-    now: 'background.disabled',
-    where: 'disabled buttons, fields and rows',
-    status: 'approval',
-    question: 5,
+    now: 'brand.gp2[900]',
+    where: 'tooltip background',
   },
   {
-    name: 'lead',
-    before: '#4D646B',
-    now: 'foreground.disabled',
-    where: 'disabled text',
-    status: 'approval',
-    question: 5,
+    name: 'cerulean',
+    before: '#008CC6',
+    now: 'brand.gp2[500]',
+    where: 'gradients, reminders',
   },
   {
-    name: 'steel',
-    before: '#DFE5EA',
-    now: 'border.disabled',
-    where: 'disabled checkbox and radio; disabled buttons have no border',
-    status: 'approval',
-    question: 5,
-  },
-  {
-    name: 'fern',
-    before: '#34A270',
-    now: 'foreground.brand',
-    where: 'links, tab underline, pagination arrows, brand text and icons',
-    status: 'approval',
-    question: 6,
-  },
-  {
-    name: 'fern',
-    before: '#34A270',
-    now: 'background.button.primary.default',
-    where: 'main button',
-    status: 'approval',
-    question: 6,
-  },
-  {
-    name: 'pine',
-    before: '#287953',
-    now: 'background.button.primary.hover',
-    where: 'main button on hover',
-    status: 'cas',
-  },
-  {
-    name: 'success100 (mint)',
-    before: '#E4F5EE',
-    now: "background['hover-brand']",
-    where: 'hover in dropdowns, select lists, sort menus and tags',
-    status: 'approval',
-    question: 7,
-  },
-  {
-    name: 'pine',
-    before: '#287953',
-    now: 'foreground.brand',
-    where: 'hovered item text in dropdowns, select lists and sort menus',
-    status: 'approval',
-    question: 7,
-  },
-  {
-    name: 'side menu selected (unnamed)',
-    before: '#E7F7F0',
-    now: 'background.active',
-    where: 'selected side-menu item and selected page',
-    status: 'approval',
-    question: 7,
-  },
-  {
-    name: 'fern',
-    before: '#34A270',
-    now: 'border.brand',
-    where: 'focus border of fields and selects, checkbox and radio hover',
-    status: 'approval',
-    question: 8,
-  },
-  {
-    name: 'fern',
-    before: '#34A270',
-    now: "background['brand-inverse']",
-    where: 'radio checked, switch on (same in CRN, darker blue in GP2)',
-    status: 'approval',
-    question: 8,
-  },
-  {
-    name: 'fern',
-    before: '#34A270',
-    now: "background['hover-brand-inverse']",
-    where: 'checkbox checked, as in the Figma Checkbox',
-    status: 'approval',
-    question: 8,
-  },
-  {
-    name: 'neutral200',
-    before: '#F6F9FB',
-    now: 'neutral[50]',
-    where: 'table stripes (CAS has no role for them)',
-    status: 'approval',
-    question: 10,
+    name: 'info200',
+    before: '#BFE3D3',
+    now: 'brand.crn[100]',
+    where: 'light brand borders',
   },
   {
     name: 'magenta',
     before: '#CF2FB3',
     now: 'magenta (kept, not in CAS)',
     where: 'gradients',
-    status: 'approval',
-    question: 3,
   },
   {
     name: 'iris',
     before: '#8C4E9F',
     now: 'iris (kept, not in CAS)',
     where: 'gradients',
-    status: 'approval',
-    question: 3,
   },
 ];
