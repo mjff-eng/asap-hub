@@ -98,6 +98,26 @@ describe('tabs', () => {
     );
   });
 
+  it('calls onTabChange with the clicked tab index', () => {
+    const onTabChange = jest.fn();
+    render(
+      <TabbedContent
+        {...props}
+        onTabChange={onTabChange}
+        tabs={[
+          { items: [], tabTitle: 'First Tab', empty: '' },
+          { items: [], tabTitle: 'Second Tab', empty: '' },
+        ]}
+      />,
+    );
+
+    fireEvent.click(screen.getByText('Second Tab'));
+    expect(onTabChange).toHaveBeenCalledWith(1);
+
+    fireEvent.click(screen.getByText('First Tab'));
+    expect(onTabChange).toHaveBeenCalledWith(0);
+  });
+
   it('shows the second tab', () => {
     render(
       <TabbedContent

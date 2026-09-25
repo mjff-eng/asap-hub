@@ -24,6 +24,8 @@ export { default as EventDateBlock } from './EventDateBlock';
 export { default as EventInfo } from './EventInfo';
 export { default as EventMaterialComingSoon } from './EventMaterialComingSoon';
 export { default as EventMaterialsEmptyView } from './EventMaterialsEmptyView';
+export { default as EventMaterialsList } from './EventMaterialsList';
+export type { MaterialType } from './EventMaterialsList';
 export { default as EventMaterialsUnavailable } from './EventMaterialsUnavailable';
 export { default as EventMaterialUnavailable } from './EventMaterialUnavailable';
 export { default as EventNumberOfSpeakers } from './EventNumberOfSpeakers';

@@ -14,7 +14,7 @@ import {
   pine,
   tin,
 } from '../colors';
-import { WarningIcon, infoInfoIcon, liveIcon, paperClipIcon } from '../icons';
+import { WarningIcon, infoInfoIcon, LiveIcon, paperClipIcon } from '../icons';
 import { borderRadius, paddingStyles } from '../card';
 
 const toastStyles = css({
@@ -81,7 +81,7 @@ type Type = 'alert' | 'attachment' | 'live' | 'info';
 const iconMap: Record<Type, ReactNode> = {
   alert: <WarningIcon color={clay.rgb} />,
   attachment: paperClipIcon,
-  live: liveIcon,
+  live: <LiveIcon />,
   info: infoInfoIcon,
 };
 

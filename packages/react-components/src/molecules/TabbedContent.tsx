@@ -37,6 +37,7 @@ type TabbedCardProps<T> = {
   description?: ReactNode;
   tabs: TabProps<T>[];
   activeTabIndex?: number;
+  onTabChange?: (index: number) => void;
   getShowMoreText?: (showMore: boolean) => string;
   children: (state: { data: T[] }) => ReactNode;
 };
@@ -46,6 +47,7 @@ export const TabbedContent = <T extends object>({
   description,
   tabs,
   activeTabIndex = 0,
+  onTabChange,
   getShowMoreText,
   children,
 }: TabbedCardProps<T>) => {
@@ -73,6 +75,7 @@ export const TabbedContent = <T extends object>({
               onClick={() => {
                 setShowMore(false);
                 setActive(index);
+                onTabChange?.(index);
               }}
               disabled={disabled}
             >
