@@ -910,10 +910,11 @@ export const DesignQuestions = () => {
     >
       <Section title="1. Point these names at the Hub's colours">
         <p style={{ marginTop: 0 }}>
-          <b>Exact match</b>: CAS already has production&apos;s colour, so the
-          fix is to point the name at it. <b>Closest match</b>: CAS has no exact
-          colour; either add production&apos;s colour to the palette or accept
-          the closest one.
+          In every row, the name&apos;s colour in Figma today differs from
+          production. <b>Colour exists in CAS</b>: the palette already has
+          production&apos;s colour, so the fix is to point the name at it.{' '}
+          <b>Colour missing from CAS</b>: the palette has no exact match; either
+          add production&apos;s colour or accept the closest one.
         </p>
         <TableSearch
           value={changesQuery}
@@ -953,9 +954,9 @@ export const DesignQuestions = () => {
                   </td>
                   <td style={cell}>
                     {exact ? (
-                      <Chip kind="green">exact match</Chip>
+                      <Chip kind="green">colour exists in CAS</Chip>
                     ) : (
-                      <Chip kind="amber">closest match</Chip>
+                      <Chip kind="amber">colour missing from CAS</Chip>
                     )}
                     <div style={muted}>
                       {exact ? (
