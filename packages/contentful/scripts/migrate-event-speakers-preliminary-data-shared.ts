@@ -238,7 +238,11 @@ const processEvent = async (
         );
       }
 
-      acc[teamId] = item.preliminaryDataShared;
+      const previous = acc[teamId] ?? null;
+      const current = item.preliminaryDataShared;
+
+      acc[teamId] =
+        previous === true || current === true ? true : current ?? previous;
       return acc;
     },
     {} as Record<string, boolean | null>,
