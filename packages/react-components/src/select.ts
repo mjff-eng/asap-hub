@@ -23,9 +23,9 @@ export type OptionsType<T> = readonly T[];
 const { ...baseStyles } = styles;
 
 const disabledStyles = {
-  color: colour.foreground.disabled,
+  color: colour.foreground.tertiary,
   svg: {
-    fill: colour.foreground.disabled,
+    fill: colour.foreground.tertiary,
   },
   backgroundColor: colour.background.disabled,
 };
@@ -117,7 +117,7 @@ export const reactSelectStyles = <
       margin: 0,
       color: getValue()?.some((option) => option.value !== '')
         ? 'unset'
-        : colour.foreground.tertiary,
+        : colour.foreground.disabled,
     }),
     valueContainer: (provided) => ({
       ...provided,
