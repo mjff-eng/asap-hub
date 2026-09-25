@@ -30,9 +30,6 @@ const styles = (withLabel: boolean, noMargin: boolean, full: boolean) =>
     svg: {
       stroke: colour.foreground.brand,
     },
-    ':hover, :focus': {
-      backgroundColor: colour.background['hover-brand'],
-    },
   });
 
 const textStyles = (full: boolean) =>

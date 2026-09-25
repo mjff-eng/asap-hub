@@ -92,7 +92,7 @@ const statusStyles = (
 ): CSSObject => ({
   backgroundColor: colour.background[status],
   borderColor: colour.border[status],
-  color: colour.foreground.primary,
+  color: colour.foreground[status],
   svg: { stroke: colour.foreground[status] },
 });
 
