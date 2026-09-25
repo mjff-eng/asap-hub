@@ -41,7 +41,7 @@ const hoverStyles = css({
 const disabledStyles = css({
   backgroundColor: colour.background.disabled,
   borderColor: colour.border.tertiary,
-  color: colour.foreground.disabled,
+  color: colour.foreground.primary,
 });
 
 const iconStyles = css({

@@ -151,7 +151,7 @@ const inputStyles = {
 };
 
 const placeholderStyles = css({
-  color: colour.foreground.tertiary,
+  color: colour.foreground.quaternary,
   overflow: 'hidden',
   position: 'absolute',
   textOverflow: 'ellipsis',

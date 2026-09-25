@@ -88,7 +88,7 @@ const hideOnDesktopStyles = css({
   [`@media (min-width: ${mobileScreen.max + 1}px)`]: { display: 'none' },
 });
 
-const placeholderStyles = css({ color: colour.foreground.tertiary });
+const placeholderStyles = css({ color: colour.foreground.disabled });
 
 const searchOptionStyles = css([
   flexRowGap8Styles,
