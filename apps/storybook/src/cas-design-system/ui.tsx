@@ -174,8 +174,58 @@ export const ContrastBadge = ({
         ? 'readable only when large'
         : 'hard to read';
   return (
-    <Chip kind={kind}>
-      {ratio}:1 {label}
-    </Chip>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+      <span
+        title={`${foreground} on ${background}`}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '20px',
+          height: '16px',
+          borderRadius: '4px',
+          border: `1px solid ${colour.border.tertiary}`,
+          background,
+          color: foreground,
+          fontSize: '11px',
+          fontWeight: 700,
+        }}
+      >
+        Aa
+      </span>
+      <Chip kind={kind}>
+        {ratio}:1 {label}
+      </Chip>
+    </span>
   );
 };
+
+export const Colour = ({ value, label }: { value: string; label?: string }) => (
+  <span
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '4px',
+      verticalAlign: 'middle',
+    }}
+  >
+    <Swatch background={value} size={12} label={value} />
+    <code style={mono}>{label ?? value}</code>
+  </span>
+);
+
+const hexPattern = /(#[0-9A-Fa-f]{6})\b/;
+
+export const Rich = ({ text }: { text: string }) => (
+  <>
+    {text
+      .split(new RegExp(hexPattern.source, 'g'))
+      .map((part, index) =>
+        hexPattern.test(part) ? (
+          <Colour key={`${part}-${index}`} value={part} />
+        ) : (
+          part
+        ),
+      )}
+  </>
+);

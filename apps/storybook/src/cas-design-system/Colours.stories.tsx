@@ -15,11 +15,13 @@ import {
 } from './tokens';
 import {
   Chip,
+  Colour,
   ContrastBadge,
   Copy,
   mono,
   muted,
   Page,
+  Rich,
   Section,
   Swatch,
   useCopy,
@@ -30,6 +32,9 @@ export default {
 };
 
 const code = (text: string) => <code style={mono}>{text}</code>;
+const codeColour = (name: string) => (
+  <Colour value={casHex(name)} label={`colour.${name}`} />
+);
 
 const table: CSSProperties = {
   width: '100%',
@@ -63,24 +68,42 @@ export const StartHere = () => (
         </thead>
         <tbody>
           {[
-            ['colour/foreground/primary', 'charcoal, neutral1000'],
-            ['colour/border/tertiary', 'steel, neutral500'],
-            ['colour/foreground/primary-inverse', 'paper'],
+            ['colour/foreground/primary', 'charcoal, neutral1000', '#00222C'],
+            ['colour/border/tertiary', 'steel, neutral500', '#DFE5EA'],
+            ['colour/foreground/primary-inverse', 'paper', '#FFFFFF'],
             [
               'colour/background/button/primary/default',
               'fern (CRN), primary500 (GP2)',
+              '#34A270',
             ],
-          ].map(([name, before]) => {
+          ].map(([name, before, beforeHex]) => {
             const token = themeTokens.find((t) => t.figmaName === name);
             return (
               token && (
                 <tr key={name}>
                   <td style={{ ...cell, ...muted }}>
-                    {code(before as string)}
+                    <Colour
+                      value={beforeHex as string}
+                      label={`${before} ${beforeHex}`}
+                    />
                   </td>
-                  <td style={cell}>{code(token.figmaName)}</td>
                   <td style={cell}>
-                    <Copy text={token.codeName} />
+                    <Colour
+                      value={token.crn.hex}
+                      label={`${token.figmaName} ${token.crn.hex}`}
+                    />
+                  </td>
+                  <td style={cell}>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}
+                    >
+                      <Swatch background={token.crn.hex} size={12} />
+                      <Copy text={token.codeName} />
+                    </span>
                   </td>
                 </tr>
               )
@@ -92,16 +115,19 @@ export const StartHere = () => (
         Before, the code used its own names, sometimes two for the same colour,
         and none of them appeared in Figma. Now the name in code is the Figma
         name: swap each {code('/')} for {code('.')}. Parts with a hyphen go in
-        brackets, for example {code("colour.foreground['primary-inverse']")}.
+        brackets, for example {codeColour("foreground['primary-inverse']")}.
       </p>
     </Section>
     <Section title="Which colour to use">
       <p style={{ marginTop: 0 }}>
         Type the name the design shows. A frame that uses{' '}
-        {code('colour/border/secondary')} becomes{' '}
-        {code('colour.border.secondary')}. If design later points that token at
-        another colour, re-exporting from Figma updates every screen with no
-        code change.
+        <Colour
+          value={casHex('border.secondary')}
+          label="colour/border/secondary"
+        />{' '}
+        becomes {codeColour('border.secondary')}. If design later points that
+        token at another colour, re-exporting from Figma updates every screen
+        with no code change.
       </p>
       <ol style={{ paddingLeft: '20px' }}>
         <li>
@@ -113,11 +139,15 @@ export const StartHere = () => (
         </li>
         <li>
           <b>Transparency</b>:{' '}
-          {code('colourWithAlpha(colour.border.secondary, 0.7)')}. It works with
-          tokens and primitives and still follows the token value.
+          <Colour
+            value={cssColour(casHex('border.secondary'), 0.7)}
+            label="colourWithAlpha(colour.border.secondary, 0.7)"
+          />
+          . It works with tokens and primitives and still follows the token
+          value.
         </li>
         <li>
-          <b>Primitives</b> ({code('colour.neutral[700]')}) only when a token
+          <b>Primitives</b> ({codeColour('neutral[700]')}) only when a token
           cannot work or does not exist:
           <ul style={{ paddingLeft: '20px' }}>
             <li>
@@ -140,9 +170,12 @@ export const StartHere = () => (
           {code('yarn colours:report')} shows how code uses colour.
         </li>
         <li>
-          <b>The old names are gone</b> ({code('neutral500')},{' '}
-          {code('charcoal')}, {code('success100')}…). <i>Legacy Names</i>{' '}
-          records what replaced each one, for anyone reading older code.
+          <b>The old names are gone</b> (
+          <Colour value="#DFE5EA" label="neutral500" />,{' '}
+          <Colour value="#00222C" label="charcoal" />,{' '}
+          <Colour value="#E4F5EE" label="success100" />
+          …). <i>Legacy Names</i> records what replaced each one, for anyone
+          reading older code.
         </li>
       </ol>
     </Section>
@@ -309,25 +342,44 @@ export const ThemeTokens = () => {
                                   {product.toUpperCase()} overridden
                                 </Chip>{' '}
                                 Figma{' '}
-                                {token[product].figma?.alias?.replace(
-                                  'colour/',
-                                  '',
-                                )}{' '}
-                                {token[product].figma?.hex}
+                                <Colour
+                                  value={token[product].figma?.hex ?? ''}
+                                  label={`${
+                                    token[product].figma?.alias?.replace(
+                                      'colour/',
+                                      '',
+                                    ) ?? ''
+                                  } ${token[product].figma?.hex}`}
+                                />
                               </div>
                             ),
                         )}
                         {token.gp2.hex === token.crn.hex ? (
                           <div>
-                            {token.crn.alias ?? ''} {token.crn.hex}
-                            {token.crn.alpha !== 1 &&
-                              ` ${token.crn.alpha * 100}%`}
+                            <Colour
+                              value={cssColour(token.crn.hex, token.crn.alpha)}
+                              label={`${token.crn.alias ?? ''} ${
+                                token.crn.hex
+                              }${
+                                token.crn.alpha !== 1
+                                  ? ` ${token.crn.alpha * 100}%`
+                                  : ''
+                              }`}
+                            />
                           </div>
                         ) : (
                           (['crn', 'gp2'] as const).map((product) => (
                             <div key={product}>
                               {product.toUpperCase()}{' '}
-                              {token[product].alias ?? ''} {token[product].hex}
+                              <Colour
+                                value={cssColour(
+                                  token[product].hex,
+                                  token[product].alpha,
+                                )}
+                                label={`${token[product].alias ?? ''} ${
+                                  token[product].hex
+                                }`}
+                              />
                             </div>
                           ))
                         )}
@@ -725,6 +777,33 @@ const missingNames: {
   },
 ];
 
+const AvatarRow = ({ pairs }: { pairs: string[][] }) => (
+  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+    {pairs.map(([background, text]) => (
+      <div key={`${background}-${text}`} style={{ textAlign: 'center' }}>
+        <div
+          style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            background,
+            color: text,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 700,
+            margin: '0 auto 4px',
+          }}
+        >
+          AB
+        </div>
+        <div style={{ ...mono, fontSize: '10px' }}>{background}</div>
+        <div style={{ ...mono, fontSize: '10px' }}>{text}</div>
+      </div>
+    ))}
+  </div>
+);
+
 const ShadeList = ({ shades }: { shades: Shade[] }) => (
   <div style={{ display: 'grid', gap: '6px' }}>
     {shades.map(({ label, hex }) => (
@@ -825,12 +904,25 @@ export const DesignQuestions = () => (
                     <Chip kind="amber">closest match</Chip>
                   )}
                   <div style={muted}>
-                    {exact
-                      ? `Point to ${use.alias?.replace('colour/', '')}`
-                      : `Add ${master}, or accept ${use.alias?.replace(
-                          'colour/',
-                          '',
-                        )} ${use.hex}`}
+                    {exact ? (
+                      <>
+                        Point to{' '}
+                        <Colour
+                          value={use.hex}
+                          label={use.alias?.replace('colour/', '')}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        Add <Colour value={master} />, or accept{' '}
+                        <Colour
+                          value={use.hex}
+                          label={`${use.alias?.replace('colour/', '')} ${
+                            use.hex
+                          }`}
+                        />
+                      </>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -867,7 +959,9 @@ export const DesignQuestions = () => (
                   label={figma}
                 />
               </td>
-              <td style={{ ...cell, ...muted }}>{suggestion}</td>
+              <td style={{ ...cell, ...muted }}>
+                <Rich text={suggestion} />
+              </td>
             </tr>
           ))}
         </tbody>
@@ -898,7 +992,9 @@ export const DesignQuestions = () => (
               <td style={cell}>
                 <ShadeList shades={now.map(codeShade)} />
               </td>
-              <td style={{ ...cell, ...muted }}>{suggestion}</td>
+              <td style={{ ...cell, ...muted }}>
+                <Rich text={suggestion} />
+              </td>
             </tr>
           ))}
         </tbody>
@@ -908,11 +1004,29 @@ export const DesignQuestions = () => (
     <Section title="4. Avatars without a photo">
       <p style={{ marginTop: 0 }}>
         Production has six colour pairs, including a pink and a purple. CAS has
-        five pairs (color-*) and nothing close to the pink #9A2386 or the purple
-        #693B77, and color-brand is the ARIA green. The code keeps the five CAS
-        pairs. Should CAS add ASAP pairs that match production, or is the CAS
-        set fine?
+        five pairs (color-*) and nothing close to the pink{' '}
+        <Colour value="#9A2386" /> or the purple <Colour value="#693B77" />, and
+        color-brand is the ARIA green. The code keeps the five CAS pairs. Should
+        CAS add ASAP pairs that match production, or is the CAS set fine?
       </p>
+      <div style={{ ...muted, marginBottom: '6px' }}>Production</div>
+      <AvatarRow
+        pairs={[
+          ['#E4F5EE', '#287953'],
+          ['#F8EDDE', '#CE801A'],
+          ['#E6F3F9', '#006A92'],
+          ['#E7F7FE', '#004561'],
+          ['#F8EAF7', '#9A2386'],
+          ['#F2EDF5', '#693B77'],
+        ]}
+      />
+      <div style={{ ...muted, margin: '12px 0 6px' }}>CAS (code now)</div>
+      <AvatarRow
+        pairs={['yellow', 'green', 'lavender', 'blue', 'brand'].map((name) => [
+          casHex(`background['color-${name}']`),
+          casHex(`foreground['color-${name}']`),
+        ])}
+      />
     </Section>
 
     <Section title="5. Readability">
@@ -947,15 +1061,18 @@ export const DesignQuestions = () => (
 
     <Section title="6. One deliberate difference from production">
       <p style={{ marginTop: 0 }}>
-        In GP2, checked radio buttons showed the CRN green (a bug). They now use
-        the GP2 blue, like GP2 checkboxes and switches.
+        In GP2, checked radio buttons showed the CRN green{' '}
+        <Colour value="#34A270" /> (a bug). They now use the GP2 blue{' '}
+        <Colour value="#0C8DC3" />, like GP2 checkboxes and switches.
       </p>
     </Section>
 
     <Section title="Fixes we ask of the CAS Figma file">
       <ol style={{ paddingLeft: '20px', marginTop: 0 }}>
         {figmaFixes.map((fix) => (
-          <li key={fix}>{fix}</li>
+          <li key={fix}>
+            <Rich text={fix} />
+          </li>
         ))}
       </ol>
     </Section>
