@@ -62,9 +62,6 @@ outputs:
   contentful-app-event-additional-materials:
     description: 'Contentful App Extension Event Additional Materials Id'
     value: ${{ steps.vars.outputs.contentful-app-event-additional-materials }}
-  contentful-app-event-custom-validation:
-    description: 'Contentful App Extension Event Custom Validation'
-    value: ${{ steps.vars.outputs.contentful-app-event-custom-validation }}
   contentful-app-event-speakers-title:
     description: 'Contentful App Extension Event Speakers Title Id'
     value: ${{ steps.vars.outputs.contentful-app-event-speakers-title }}
