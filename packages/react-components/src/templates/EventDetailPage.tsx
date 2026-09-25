@@ -30,7 +30,7 @@ const cardsStyles = css({
 });
 
 const heroBandStyles = css({
-  background: colour.neutral[0],
+  background: colour.background.primary,
   boxShadow: `0 2px 4px -2px ${colour.neutral[100]}`,
 });
 

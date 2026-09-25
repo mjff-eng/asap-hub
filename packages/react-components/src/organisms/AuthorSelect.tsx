@@ -75,7 +75,7 @@ const singleValueStyles = css({
   borderWidth: `${borderWidth}px`,
   borderColor: colour.border.tertiary,
   borderRadius: rem(18),
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
 
   // Position above react-select's input overlay to enable click interactions
   position: 'relative',

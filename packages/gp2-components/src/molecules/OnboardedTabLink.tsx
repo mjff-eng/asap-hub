@@ -84,7 +84,7 @@ const OnboardedTabLink: React.FC<OnboardedTabLinkProps> = ({
                 height: rem(24),
                 borderRadius: rem(12),
                 backgroundColor: colour.brand.gp2[500],
-                color: colour.neutral[0],
+                color: colour.foreground['primary-inverse'],
                 textAlign: 'center',
               })}
             >

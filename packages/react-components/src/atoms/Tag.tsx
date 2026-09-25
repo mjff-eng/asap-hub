@@ -19,7 +19,7 @@ const styles = css({
   justifyContent: 'center',
   alignItems: 'center',
 
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   borderStyle: 'solid',
   borderWidth: `${borderWidth}px`,
   borderColor: colour.border.tertiary,

@@ -67,9 +67,9 @@ const invalidStyles = css({
     [`& ~ .${LABEL_INDICATOR_CLASS_NAME}`]: {
       backgroundColor: colour.background['error-inverse'],
       borderColor: colour.border.error,
-      color: colour.neutral[0],
+      color: colour.foreground['primary-inverse'],
       svg: {
-        stroke: colour.neutral[0],
+        stroke: colour.foreground['primary-inverse'],
         fill: 'white',
       },
     },

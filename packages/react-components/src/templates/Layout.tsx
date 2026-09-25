@@ -14,7 +14,7 @@ import { css } from '@emotion/react';
 import { tags } from '@asap-hub/routing';
 import { ScrollContext } from '@asap-hub/react-context';
 
-import { cssColour, colour } from '../colors';
+import { colourWithAlpha, colour } from '../colors';
 import { MenuHeader, OnboardingFooter, ToastStack } from '../organisms';
 import { Overlay } from '../atoms';
 import {
@@ -171,7 +171,7 @@ export const userButtonStyles = css({
 });
 
 export const menuStyles = css({
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   gridRow: `main-menu`,
   gridColumnStart: '1',
   overflowY: 'auto',
@@ -268,7 +268,7 @@ const SearchIconStyles = css({
   height: '100%',
 });
 const userMenuStyles = css({
-  backgroundColor: colour.neutral[0],
+  backgroundColor: colour.background.primary,
   gridArea: 'user-menu',
   flexGrow: 1,
   [drawerQuery]: {
@@ -286,7 +286,7 @@ const userMenuStyles = css({
     right: '24px',
 
     border: `1px solid ${colour.border.tertiary}`,
-    boxShadow: `0 2px 6px 0 ${cssColour(colour.neutral[200], 0.34)}`,
+    boxShadow: `0 2px 6px 0 ${colourWithAlpha(colour.neutral[200], 0.34)}`,
   },
 });
 const userMenuShownStyles = css({

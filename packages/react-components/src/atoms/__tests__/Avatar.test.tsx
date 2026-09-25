@@ -32,9 +32,10 @@ it('shows a placeholder on white background', () => {
 
   expect(getByText('+1')).toBeVisible();
 
-  expect(
-    findParentWithStyle(getByText('+1'), 'backgroundColor')!.element,
-  ).toHaveStyle({ backgroundColor: colour.neutral[0] });
+  expect(getByText('+1').closest('svg')!.parentElement).toHaveStyleRule(
+    'background-color',
+    colour.background.primary,
+  );
 });
 
 it("shows the initials 'JD' on colored background", () => {
