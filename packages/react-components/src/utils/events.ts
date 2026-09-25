@@ -1,12 +1,36 @@
-import { EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT } from '@asap-hub/model';
-import { parseISO, addHours, differenceInCalendarDays } from 'date-fns';
+import {
+  EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
+  EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT,
+} from '@asap-hub/model';
+import {
+  parseISO,
+  addHours,
+  subMinutes,
+  differenceInCalendarDays,
+} from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { formatDateToTimezone } from '../date';
+import { formatDateToTimezone, useDateHasPassed } from '../date';
 
 export function considerEndedAfter(endDate: string): Date {
   return addHours(parseISO(endDate), EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT);
 }
+
+export const useEventLiveStatus = (
+  startDate: string,
+  endDate: string,
+  enabled = true,
+): { hasStarted: boolean; hasFinished: boolean } => {
+  const considerStartedAfter = subMinutes(
+    parseISO(startDate),
+    EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
+  );
+
+  const hasStarted = useDateHasPassed(considerStartedAfter, enabled);
+  const hasFinished = useDateHasPassed(considerEndedAfter(endDate), enabled);
+
+  return { hasStarted, hasFinished };
+};
 
 export const getMultiDayCount = (
   startDate: string,
