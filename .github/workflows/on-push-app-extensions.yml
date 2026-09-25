@@ -68,7 +68,6 @@ jobs:
           - date-field-as-last-published-at
           - disabled-fields
           - event-additional-materials
-          - event-custom-validation
           - event-speakers-title
           - event-speakers-gp2
           - field-as-updated-at
