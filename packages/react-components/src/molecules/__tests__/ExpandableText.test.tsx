@@ -1,26 +1,50 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React, { ComponentProps } from 'react';
+import { ComponentProps } from 'react';
 import ExpandableText from '../ExpandableText';
+
+const mockScrollHeight = (scrollHeight: number) => {
+  const original = Object.getOwnPropertyDescriptor(
+    HTMLElement.prototype,
+    'scrollHeight',
+  );
+  Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
+    configurable: true,
+    get: () => scrollHeight,
+  });
+  return () => {
+    if (original) {
+      Object.defineProperty(HTMLElement.prototype, 'scrollHeight', original);
+    } else {
+      Reflect.deleteProperty(HTMLElement.prototype, 'scrollHeight');
+    }
+  };
+};
 
 describe('ExpandableText', () => {
   const text = 'this is a text';
+  let restoreScrollHeight = () => {};
+
+  afterEach(() => {
+    restoreScrollHeight();
+    restoreScrollHeight = () => {};
+  });
+
   it('renders the children', () => {
     render(<ExpandableText>{text}</ExpandableText>);
     expect(screen.getByText(text)).toBeVisible();
   });
-  it('renders show more if text height is larger than max height', async () => {
-    const ref = { current: { scrollHeight: 125 } };
 
-    Object.defineProperty(ref, 'current', {
-      set(_current) {
-        this.mockedCurrent = _current;
-      },
-      get() {
-        return { scrollHeight: 125 };
-      },
-    });
-    jest.spyOn(React, 'useRef').mockReturnValue(ref);
+  it('does not render a toggle when the text fits', () => {
+    restoreScrollHeight = mockScrollHeight(80);
+
+    render(<ExpandableText>{text}</ExpandableText>);
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('renders show more if text height is larger than max height', async () => {
+    restoreScrollHeight = mockScrollHeight(125);
 
     render(<ExpandableText>{text}</ExpandableText>);
     const button = screen.getByRole('button');
@@ -31,17 +55,7 @@ describe('ExpandableText', () => {
   });
 
   it('renders show more with arrow variant', async () => {
-    const ref = { current: { scrollHeight: 125 } };
-
-    Object.defineProperty(ref, 'current', {
-      set(_current) {
-        this.mockedCurrent = _current;
-      },
-      get() {
-        return { scrollHeight: 125 };
-      },
-    });
-    jest.spyOn(React, 'useRef').mockReturnValue(ref);
+    restoreScrollHeight = mockScrollHeight(125);
 
     render(<ExpandableText variant="arrow">{text}</ExpandableText>);
     const button = screen.getByRole('button');
@@ -55,17 +69,7 @@ describe('ExpandableText', () => {
     const renderExpanded = async (
       overrideProps?: ComponentProps<typeof ExpandableText>,
     ) => {
-      const ref = { current: { scrollHeight: 125 } };
-
-      Object.defineProperty(ref, 'current', {
-        set(_current) {
-          this.mockedCurrent = _current;
-        },
-        get() {
-          return { scrollHeight: 125 };
-        },
-      });
-      jest.spyOn(React, 'useRef').mockReturnValue(ref);
+      restoreScrollHeight = mockScrollHeight(125);
 
       render(<ExpandableText {...overrideProps}>{text}</ExpandableText>);
       const button = screen.getByRole('button');

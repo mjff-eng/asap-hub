@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react';
+import { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -27,16 +27,14 @@ it('renders the rich text notes', () => {
 });
 
 it('is collapsible when prop set', async () => {
-  const ref = { current: { scrollHeight: 125 } };
-  Object.defineProperty(ref, 'current', {
-    set(_current) {
-      this.mockedCurrent = _current;
-    },
-    get() {
-      return { scrollHeight: 125 };
-    },
+  const originalScrollHeight = Object.getOwnPropertyDescriptor(
+    HTMLElement.prototype,
+    'scrollHeight',
+  );
+  Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
+    configurable: true,
+    get: () => 125,
   });
-  jest.spyOn(React, 'useRef').mockReturnValue(ref);
 
   const { getByRole, queryByText } = render(
     <RichTextCard {...props} text="example text" collapsible />,
@@ -47,4 +45,14 @@ it('is collapsible when prop set', async () => {
   expect(button.textContent).toContain('Show more');
   await userEvent.click(button);
   expect(button.textContent).toContain('Show less');
+
+  if (originalScrollHeight) {
+    Object.defineProperty(
+      HTMLElement.prototype,
+      'scrollHeight',
+      originalScrollHeight,
+    );
+  } else {
+    Reflect.deleteProperty(HTMLElement.prototype, 'scrollHeight');
+  }
 });

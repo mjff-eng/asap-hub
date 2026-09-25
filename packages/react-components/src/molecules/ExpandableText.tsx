@@ -86,12 +86,21 @@ const ExpandableText: React.FC<{
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [showToggle, setShowToggle] = useState(false);
-  const textElement = React.useRef<HTMLParagraphElement>(null);
+  const [textElement, setTextElement] = useState<HTMLDivElement | null>(null);
   useLayoutEffect(() => {
-    setShowToggle(
-      (textElement?.current?.scrollHeight || 0) > expandableMaxHeight,
-    );
-  }, [textElement?.current?.scrollHeight]);
+    if (!textElement) return undefined;
+
+    const measure = () =>
+      setShowToggle(textElement.scrollHeight > expandableMaxHeight);
+    measure();
+
+    // The content reflows as fonts load and the viewport changes, and a ref
+    // alone never re-runs this effect.
+    if (typeof ResizeObserver === 'undefined') return undefined;
+    const observer = new ResizeObserver(measure);
+    observer.observe(textElement);
+    return () => observer.disconnect();
+  }, [textElement, children]);
 
   const hideToggle = expandOnce && expanded;
 
@@ -102,7 +111,7 @@ const ExpandableText: React.FC<{
           textStyles,
           expanded ? expandedTextStyles : showToggle && expandableTextStyles,
         ]}
-        ref={textElement}
+        ref={setTextElement}
       >
         {children}
       </div>

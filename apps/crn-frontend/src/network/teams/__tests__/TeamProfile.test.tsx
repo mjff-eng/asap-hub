@@ -16,6 +16,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import { createTestQueryClient } from '@asap-hub/frontend-utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { getEvents } from '../../../events/api';
+import { getTeamEngagementMetrics } from '../../../analytics/engagement/api';
 import { getTeamLeadershipMetrics } from '../../../analytics/leadership/api';
 import { getTeamHubResearchOutputs } from '../../../analytics/productivity/api';
 import { getTeam } from '../api';
@@ -48,6 +49,7 @@ jest.mock('../../../shared-research/api');
 jest.mock('../../../events/api');
 jest.mock('../../../analytics/productivity/api');
 jest.mock('../../../analytics/leadership/api');
+jest.mock('../../../analytics/engagement/api');
 
 const mockGetEventsFromAlgolia = getEvents as jest.MockedFunction<
   typeof getEvents
@@ -322,6 +324,10 @@ describe('the metrics tab', () => {
     getTeamLeadershipMetrics as jest.MockedFunction<
       typeof getTeamLeadershipMetrics
     >;
+  const mockGetTeamEngagementMetrics =
+    getTeamEngagementMetrics as jest.MockedFunction<
+      typeof getTeamEngagementMetrics
+    >;
   const team = createTeamResponse();
   const teamMember = {
     teams: [{ id: team.id, role: 'Project Manager' as const }],
@@ -333,6 +339,11 @@ describe('the metrics tab', () => {
     mockGetTeamLeadershipMetrics.mockResolvedValue({
       workingGroupLead: false,
       interestGroupLead: false,
+    });
+    mockGetTeamEngagementMetrics.mockResolvedValue({
+      speakerDiversity: null,
+      traineePresentations: null,
+      meetingRepAttendance: { percentage: null, limitedData: true },
     });
   });
 
@@ -386,6 +397,11 @@ describe('the metrics tab', () => {
       expect.anything(),
       { teamId: team.id },
     );
+    expect(mockGetTeamEngagementMetrics).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      { teamId: team.id },
+    );
   });
 
   it('does not render the metrics route when the flag is disabled', async () => {
@@ -403,5 +419,6 @@ describe('the metrics tab', () => {
     ).not.toBeInTheDocument();
     expect(mockGetTeamHubResearchOutputs).not.toHaveBeenCalled();
     expect(mockGetTeamLeadershipMetrics).not.toHaveBeenCalled();
+    expect(mockGetTeamEngagementMetrics).not.toHaveBeenCalled();
   });
 });

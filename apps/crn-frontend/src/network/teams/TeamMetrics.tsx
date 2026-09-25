@@ -1,6 +1,7 @@
 import { TeamAward, TeamMetricsPage } from '@asap-hub/react-components';
 import { FC } from 'react';
 
+import { useTeamEngagementMetrics } from '../../analytics/engagement/state';
 import { useTeamLeadershipMetrics } from '../../analytics/leadership/state';
 import { useTeamHubResearchOutputs } from '../../analytics/productivity/state';
 import { getHubResearchOutputRows } from './getHubResearchOutputRows';
@@ -14,6 +15,7 @@ const TeamMetrics: FC<TeamMetricsProps> = ({ teamId }) => {
   const { all, public: publicOutputs } = useTeamHubResearchOutputs({ teamId });
   const leadershipMetrics = useTeamLeadershipMetrics({ teamId });
   const { items: awardMetrics } = useTeamAwardMetrics(teamId);
+  const engagementMetrics = useTeamEngagementMetrics({ teamId });
 
   const hubResearchOutputRows = getHubResearchOutputRows(all, publicOutputs);
   const awards: TeamAward[] = awardMetrics.map(
@@ -31,6 +33,7 @@ const TeamMetrics: FC<TeamMetricsProps> = ({ teamId }) => {
       hubResearchOutputRows={hubResearchOutputRows}
       leadershipMetrics={leadershipMetrics}
       awards={awards}
+      engagementMetrics={engagementMetrics}
     />
   );
 };
