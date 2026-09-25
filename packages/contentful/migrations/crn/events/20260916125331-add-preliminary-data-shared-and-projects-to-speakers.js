@@ -47,6 +47,11 @@ module.exports.up = (migration) => {
     showCreateEntityAction: false,
   });
 
+  eventSpeakers.changeFieldControl('team', 'builtin', 'entryLinkEditor', {
+    showLinkEntityAction: true,
+    showCreateEntityAction: false,
+  });
+
   eventSpeakers.moveField('preliminaryDataShared').afterField('user');
   eventSpeakers.moveField('project').beforeField('team');
 };
