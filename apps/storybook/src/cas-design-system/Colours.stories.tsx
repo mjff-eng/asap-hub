@@ -103,17 +103,48 @@ export const StartHere = () => (
       </p>
     </Section>
     <Section title="Which colour to use">
+      <p style={{ marginTop: 0 }}>
+        Type the name the design shows. A frame that uses{' '}
+        {code('colour/border/secondary')} becomes{' '}
+        {code('colour.border.secondary')}. If design later points that token at
+        another colour, re-exporting from Figma updates every screen with no
+        code change.
+      </p>
       <ol style={{ paddingLeft: '20px' }}>
         <li>
-          <b>Theme tokens</b> ({code('colour.foreground.*')},{' '}
-          {code('colour.background.*')}, {code('colour.border.*')}). These are
-          what designers use in Figma. Each one has a CRN value and a GP2 value,
-          so shared components get the right product colour automatically. See{' '}
-          <i>Theme Tokens</i>.
+          <b>Theme tokens first</b> ({code('colour.foreground.*')},{' '}
+          {code('colour.background.*')}, {code('colour.border.*')}). Use them
+          for anything with a meaning: text, links, backgrounds, borders, hover,
+          selected, disabled, status. Each has a CRN and a GP2 value, so shared
+          components show the right product colour. See <i>Theme Tokens</i>.
         </li>
         <li>
-          <b>Primitives</b> ({code('colour.neutral[100]')}), only when no theme
-          token fits, for example a shadow. See <i>Primitives</i>.
+          <b>Transparency</b>:{' '}
+          {code('colourWithAlpha(colour.border.secondary, 0.7)')}. It works with
+          tokens and primitives and still follows the token value.
+        </li>
+        <li>
+          <b>Primitives</b> ({code('colour.neutral[700]')}) only when a token
+          cannot work or does not exist:
+          <ul style={{ paddingLeft: '20px' }}>
+            <li>
+              emails and SVG attributes such as {code('fill={...}')}, which
+              cannot read CSS variables;
+            </li>
+            <li>
+              shadows, gradients, table stripes and artwork, which have no token
+              yet;
+            </li>
+            <li>colours that must stay the same in both products.</li>
+          </ul>
+          If a colour has a meaning but no token fits, use the nearest primitive
+          and add it to <i>Design Questions</i> so CAS can add a token. See{' '}
+          <i>Primitives</i>.
+        </li>
+        <li>
+          <b>Never a hard-coded value.</b> Lint rejects hex, {code('rgb()')} and{' '}
+          {code('hsl()')} values outside icons, images and tests.{' '}
+          {code('yarn colours:report')} shows how code uses colour.
         </li>
         <li>
           <b>The old names are gone</b> ({code('neutral500')},{' '}
