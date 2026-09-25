@@ -20,6 +20,6 @@ it('fills the button with the hex brand colour of the email layout', () => {
   );
   expect(screen.getByRole('link', { name: 'Create account' })).toHaveStyleRule(
     'background-color',
-    colour.brand.crn[600],
+    colour.brand.crn[500],
   );
 });
