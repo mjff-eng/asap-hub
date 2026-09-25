@@ -911,10 +911,12 @@ export const DesignQuestions = () => {
       <Section title="1. Point these names at the Hub's colours">
         <p style={{ marginTop: 0 }}>
           In every row, the name&apos;s colour in Figma today differs from
-          production. <b>Colour exists in CAS</b>: the palette already has
-          production&apos;s colour, so the fix is to point the name at it.{' '}
-          <b>Colour missing from CAS</b>: the palette has no exact match; either
-          add production&apos;s colour or accept the closest one.
+          production. <b>Hub uses now</b> is what the code shows until Figma is
+          updated (from {code('asap-overrides.json')}); <b>Ask design</b> is the
+          change we request in Figma. <b>Colour exists in CAS</b>: the palette
+          already has production&apos;s colour, so the fix is to point the name
+          at it. <b>Colour missing from CAS</b>: the palette has no exact match;
+          either add production&apos;s colour or accept the closest one.
         </p>
         <TableSearch
           value={changesQuery}
@@ -925,15 +927,16 @@ export const DesignQuestions = () => {
           <thead>
             <tr>
               <th style={headCell}>Name</th>
-              <th style={headCell}>Hub</th>
+              <th style={headCell}>Product</th>
               <th style={headCell}>Figma today</th>
               <th style={headCell}>Production</th>
-              <th style={headCell}>Ask</th>
+              <th style={headCell}>Hub uses now</th>
+              <th style={headCell}>Ask design</th>
             </tr>
           </thead>
           <tbody>
             {changes.length === 0 && (
-              <NoMatch columns={5} query={changesQuery} />
+              <NoMatch columns={6} query={changesQuery} />
             )}
             {changes.map(({ figmaName, product, figma, use, master }) => {
               const exact = use.hex.toUpperCase() === master.toUpperCase();
@@ -951,6 +954,14 @@ export const DesignQuestions = () => {
                   </td>
                   <td style={cell}>
                     <HubSwatch hex={master} />
+                  </td>
+                  <td style={cell}>
+                    <HubSwatch
+                      hex={use.hex}
+                      label={`${use.alias?.replace('colour/', '') ?? ''} ${
+                        use.hex
+                      }`}
+                    />
                   </td>
                   <td style={cell}>
                     {exact ? (
