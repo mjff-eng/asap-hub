@@ -35,19 +35,19 @@ const mutedIconStyles = css({
 
 const alertStyles = css({
   backgroundColor: colour.background.warning,
-  color: colour.foreground.primary,
+  color: colour.foreground.warning,
   fill: colour.foreground.warning,
 });
 
 const infoStyles = css({
   backgroundColor: colour.background.info,
-  color: colour.foreground.primary,
+  color: colour.foreground.info,
   fill: colour.foreground.info,
 });
 
 const liveStyles = css({
   backgroundColor: colour.background.success,
-  color: colour.foreground.primary,
+  color: colour.foreground.success,
   fill: colour.foreground.success,
 });
 
@@ -69,7 +69,7 @@ const toastContentStyles = css({
 type Type = 'alert' | 'attachment' | 'live' | 'info';
 
 const iconMap: Record<Type, ReactNode> = {
-  alert: <WarningIcon color={colour.utilitarian.orange[600]} />,
+  alert: <WarningIcon color={colour.general.yellow[800]} />,
   attachment: paperClipIcon,
   live: liveIcon,
   info: infoInfoIcon,

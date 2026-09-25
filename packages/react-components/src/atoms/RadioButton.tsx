@@ -31,7 +31,7 @@ const styles = css({
   },
 
   ':hover, :focus': {
-    borderColor: colour.border.brand,
+    borderColor: colour.neutral[600],
   },
   ':checked': {
     borderColor: colour.background['brand-inverse'],

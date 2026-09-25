@@ -28,25 +28,30 @@ it('fires the select event', async () => {
   expect(handleChange.mock.calls.length).toBe(1);
 });
 
-it('uses the brand hover border', () => {
+it('uses a grey hover border', () => {
   const { getByRole } = render(<Checkbox {...props} />);
   expect(getByRole('checkbox')).toHaveStyleRule(
     'border-color',
-    colour.border.brand,
+    colour.neutral[600],
     { target: ':enabled:hover' },
   );
 });
 
-it('fills the checked state with the hover brand inverse background', () => {
+it('fills the checked state with the brand inverse background and darkens it on hover', () => {
   const { getByRole } = render(<Checkbox {...props} checked />);
   expect(getByRole('checkbox')).toHaveStyleRule(
     'background-color',
-    colour.background['hover-brand-inverse'],
+    colour.background['brand-inverse'],
     { target: /:checked$/ },
   );
   expect(getByRole('checkbox')).toHaveStyleRule(
     'border-color',
-    colour.background['hover-brand-inverse'],
+    colour.background['brand-inverse'],
     { target: /:checked$/ },
+  );
+  expect(getByRole('checkbox')).toHaveStyleRule(
+    'background-color',
+    colour.background['hover-brand-inverse'],
+    { target: /:checked:hover$/ },
   );
 });
