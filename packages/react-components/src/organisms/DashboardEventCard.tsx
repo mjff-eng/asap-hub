@@ -1,19 +1,14 @@
 import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
-import {
-  BasicEvent,
-  EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
-} from '@asap-hub/model';
-import { subMinutes, parseISO } from 'date-fns';
+import { BasicEvent } from '@asap-hub/model';
 
 import { EventInfo, EventMaterialsList } from '../molecules';
 import { Link } from '../atoms';
 import { ember, silver, lead } from '../colors';
 import { EventsUpcomingIcon, LiveIcon, MapPinIcon } from '../icons';
 import { rem, mobileScreen, largeDesktopScreen } from '../pixels';
-import { useDateHasPassed } from '../date';
-import { considerEndedAfter } from '../utils';
+import { useEventLiveStatus } from '../utils';
 
 const positionedWrapperStyles = css({
   position: 'relative',
@@ -87,13 +82,11 @@ const DashboardEventCard: React.FC<DashboardEventCardProps> = ({
   variant,
   ...props
 }) => {
-  const considerStartedAfter = subMinutes(
-    parseISO(props.startDate),
-    EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
+  const { hasStarted, hasFinished } = useEventLiveStatus(
+    props.startDate,
+    props.endDate,
+    variant === 'upcoming',
   );
-
-  const hasStarted = useDateHasPassed(considerStartedAfter);
-  const hasFinished = useDateHasPassed(considerEndedAfter(props.endDate));
 
   const live =
     variant === 'upcoming' &&

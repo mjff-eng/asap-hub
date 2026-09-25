@@ -1,20 +1,13 @@
 import { ComponentProps } from 'react';
 import { css } from '@emotion/react';
 
-import {
-  BasicEvent,
-  eventMaterialTypes,
-  EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
-} from '@asap-hub/model';
-
-import { subMinutes, parseISO } from 'date-fns';
+import { BasicEvent, eventMaterialTypes } from '@asap-hub/model';
 
 import { ToastCard, EventInfo, EventMaterialsList } from '../molecules';
 import type { MaterialType } from '../molecules';
 import { rem, mobileScreen } from '../pixels';
 import { Link } from '../atoms';
-import { useDateHasPassed } from '../date';
-import { considerEndedAfter } from '../utils';
+import { useEventLiveStatus } from '../utils';
 
 type EventCardProps = ComponentProps<typeof EventInfo> &
   Pick<
@@ -56,13 +49,10 @@ const EventCard: React.FC<EventCardProps> = ({
   hasSpeakersToBeAnnounced,
   ...props
 }) => {
-  const considerStartedAfter = subMinutes(
-    parseISO(props.startDate),
-    EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
+  const { hasStarted, hasFinished } = useEventLiveStatus(
+    props.startDate,
+    props.endDate,
   );
-
-  const hasStarted = useDateHasPassed(considerStartedAfter);
-  const hasFinished = useDateHasPassed(considerEndedAfter(props.endDate));
   const toastCardProps = (
     shouldDisplayToast: boolean,
   ): Omit<ComponentProps<typeof ToastCard>, 'children'> => {

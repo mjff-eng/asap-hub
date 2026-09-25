@@ -45,8 +45,8 @@ type DashboardEventsCardProps = {
   description: string;
   upcomingEvents: DashboardEventCardItem[];
   pastEvents: DashboardEventCardItem[];
-  upcomingViewAllHref: string;
-  pastViewAllHref: string;
+  upcomingViewAllHref?: string;
+  pastViewAllHref?: string;
 };
 
 const DashboardEventsCard: React.FC<DashboardEventsCardProps> = ({
@@ -59,7 +59,6 @@ const DashboardEventsCard: React.FC<DashboardEventsCardProps> = ({
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const variant = activeTabIndex === 0 ? 'upcoming' : 'past';
-  const activeEvents = activeTabIndex === 0 ? upcomingEvents : pastEvents;
   const viewAllHref =
     activeTabIndex === 0 ? upcomingViewAllHref : pastViewAllHref;
 
@@ -109,7 +108,7 @@ const DashboardEventsCard: React.FC<DashboardEventsCardProps> = ({
           </div>
         )}
       </TabbedCard>
-      {activeEvents.length > 0 && (
+      {viewAllHref && (
         <p css={viewAllStyles}>
           <Link href={viewAllHref}>View All →</Link>
         </p>

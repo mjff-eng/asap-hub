@@ -54,13 +54,13 @@ it('changes the View All link to follow the active tab', () => {
   );
 });
 
-it('shows the View All link when the active tab has events', () => {
+it('shows the View All link when the active tab has a viewAllHref', () => {
   render(<DashboardEventsCard {...props} />);
   expect(screen.getByRole('link', { name: /view all/i })).toBeVisible();
 });
 
-it('hides the View All link when the active tab has no events', () => {
-  render(<DashboardEventsCard {...props} upcomingEvents={[]} />);
+it('hides the View All link when the active tab has no viewAllHref', () => {
+  render(<DashboardEventsCard {...props} upcomingViewAllHref={undefined} />);
   expect(
     screen.queryByRole('link', { name: /view all/i }),
   ).not.toBeInTheDocument();

@@ -19,7 +19,7 @@ const containerStyles = css({
   borderStyle: 'solid',
   borderWidth: 1,
   borderColor: steel.rgb,
-  borderRadius: rem(8),
+  borderRadius: rem(4),
 });
 
 const monthStyles = css({
