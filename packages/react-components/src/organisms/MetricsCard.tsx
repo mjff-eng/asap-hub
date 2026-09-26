@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
 
 import { Button, Card, Paragraph, Subtitle } from '../atoms';
-import { charcoal, lead, steel } from '../colors';
+import { colour } from '../colors';
 import { minusRectIcon, plusRectIcon } from '../icons';
 import { ExpandableText, Info } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
@@ -41,7 +41,7 @@ const rowStyles = css({
     paddingBottom: 0,
   },
   '&:not(:last-of-type)': {
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     display: 'grid',
@@ -75,7 +75,7 @@ const fieldStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(8),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   lineHeight: rem(24),
   [`@media (min-width: ${tabletScreen.min}px)`]: {
@@ -84,7 +84,7 @@ const fieldStyles = css({
 });
 
 const fieldLabelStyles = css({
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   fontWeight: 'bold',
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     display: 'none',
@@ -163,18 +163,18 @@ const MetricDetails: React.FC<Pick<Metric, 'philosophy' | 'definition'>> = ({
 }) => (
   <div css={detailsContentStyles}>
     <div>
-      <Subtitle accent="lead" noMargin>
+      <Subtitle accent="tertiary" noMargin>
         ASAP Philosophy
       </Subtitle>
-      <Paragraph noMargin accent="lead">
+      <Paragraph noMargin accent="tertiary">
         {philosophy}
       </Paragraph>
     </div>
     <div css={definitionStyles}>
-      <Subtitle accent="lead" noMargin>
+      <Subtitle accent="tertiary" noMargin>
         Metric Definition
       </Subtitle>
-      <Paragraph noMargin accent="lead">
+      <Paragraph noMargin accent="tertiary">
         {definition}
       </Paragraph>
     </div>

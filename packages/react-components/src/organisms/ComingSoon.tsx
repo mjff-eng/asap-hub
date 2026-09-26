@@ -1,6 +1,6 @@
 import { TextChildren } from '../text';
 import { Paragraph } from '../atoms';
-import { lead } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 interface ComingSoonProps {
@@ -11,7 +11,7 @@ const ComingSoon: React.FC<ComingSoonProps> = ({ children }) => (
     <Paragraph>
       <strong>More to come!</strong>
       <br />
-      <span css={{ color: lead.rgb }}>{children}</span>
+      <span css={{ color: colour.foreground.tertiary }}>{children}</span>
     </Paragraph>
   </section>
 );

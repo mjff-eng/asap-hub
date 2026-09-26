@@ -113,7 +113,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         <Headline3>{title}</Headline3>
       </header>
       <div css={[paddingStyles, { paddingTop: 0 }]}>
-        <Paragraph accent="lead">{description}</Paragraph>
+        <Paragraph accent="tertiary">{description}</Paragraph>
         <div css={buttonContainerStyles}>
           <div css={backStyles}>
             {backHref ? (

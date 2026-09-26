@@ -77,7 +77,7 @@ const UserWorkingGroups: React.FC<UserWorkingGroupsProps> = ({
           })}
         </CardTable>
       ) : (
-        <Subtitle accent={'lead'}>
+        <Subtitle accent="tertiary">
           You are not associated to any working groups.
         </Subtitle>
       )}

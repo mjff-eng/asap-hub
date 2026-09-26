@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 
 import LabeledTextArea from '../LabeledTextArea';
-import { lead } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders a labeled text area, passing through props', () => {
   const { getByRole, getByLabelText } = render(
@@ -17,5 +17,5 @@ it('renders a greyed out tip', () => {
   const { getByText } = render(
     <LabeledTextArea title="Title" tip="Tip" value="val" />,
   );
-  expect(getComputedStyle(getByText('Tip')).color).toBe(lead.rgb);
+  expect(getByText('Tip')).toHaveStyleRule('color', colour.foreground.tertiary);
 });

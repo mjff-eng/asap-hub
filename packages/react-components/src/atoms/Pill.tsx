@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, CSSObject } from '@emotion/react';
 import { Ellipsis } from '.';
-import * as colors from '../colors';
+import { colour } from '../colors';
 import { lineHeight, rem } from '../pixels';
 
 const borderWidth = 1;
@@ -38,53 +38,53 @@ export type AccentVariant =
 export const accents = (isLink: boolean): Record<AccentVariant, CSSObject> => ({
   default: {
     backgroundColor: 'transparent',
-    borderColor: colors.steel.rgb,
-    color: colors.lead.rgb,
+    borderColor: colour.border.tertiary,
+    color: colour.foreground.tertiary,
   },
   green: {
-    backgroundColor: colors.mint.rgb,
-    color: colors.pine.rgb,
-    borderColor: colors.pine.rgb,
+    backgroundColor: colour.background.success,
+    color: colour.foreground.success,
+    borderColor: colour.border.success,
   },
   warning: {
-    backgroundColor: colors.warning100.rgb,
-    color: colors.warning500.rgb,
-    borderColor: colors.warning500.rgb,
+    backgroundColor: colour.background.warning,
+    color: colour.foreground.warning,
+    borderColor: colour.border.warning,
   },
   info: {
-    backgroundColor: colors.info100.rgb,
-    color: colors.info500.rgb,
-    borderColor: colors.info500.rgb,
+    backgroundColor: colour.background.info,
+    color: colour.foreground.info,
+    borderColor: colour.border.info,
   },
   neutral: {
-    backgroundColor: colors.neutral300.rgb,
-    color: colors.neutral800.rgb,
-    borderColor: colors.neutral800.rgb,
+    backgroundColor: colour.background.tertiary,
+    color: colour.foreground.quaternary,
+    borderColor: colour.neutral[400],
   },
   error: {
-    backgroundColor: colors.error100.rgb,
-    color: colors.error500.rgb,
-    borderColor: colors.error500.rgb,
+    backgroundColor: colour.background.error,
+    color: colour.foreground.error,
+    borderColor: colour.border.error,
   },
   success: {
-    backgroundColor: colors.success100.rgb,
-    color: colors.success500.rgb,
-    borderColor: colors.success500.rgb,
+    backgroundColor: colour.background.success,
+    color: colour.foreground.success,
+    borderColor: colour.border.success,
   },
   gray: {
-    color: colors.lead.rgb,
-    backgroundColor: colors.silver.rgb,
+    color: colour.foreground.tertiary,
+    backgroundColor: colour.background.tertiary,
     border: 'transparent',
   },
   blue: {
-    color: colors.info500.rgb,
-    backgroundColor: colors.info100.rgb,
+    color: colour.foreground.info,
+    backgroundColor: colour.background.info,
     border: 'transparent',
     ...(isLink
       ? {
           ':hover': {
-            color: colors.info900.rgb,
-            backgroundColor: 'rgba(207, 237, 251, 1)',
+            color: colour.utilitarian.blue[700],
+            backgroundColor: colour.utilitarian.blue[200],
           },
         }
       : {}),

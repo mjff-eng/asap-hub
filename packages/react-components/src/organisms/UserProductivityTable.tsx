@@ -12,7 +12,7 @@ import { PageControls, PerformanceCard } from '..';
 
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, lead, neutral200, steel } from '../colors';
+import { colour } from '../colors';
 import {
   AlphabeticalSortingIcon,
   alumniBadgeIcon,
@@ -45,12 +45,12 @@ const rowTitleStyles = css({
 const rowStyles = css({
   display: 'grid',
   padding: `${rem(20)} ${rem(24)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
   },
   ':nth-of-type(2n+3)': {
-    background: neutral200.rgb,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',
@@ -63,7 +63,7 @@ const rowStyles = css({
     columnGap: rem(15),
     paddingTop: 0,
     paddingBottom: 0,
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -71,7 +71,7 @@ const titleStyles = css({
   display: 'flex',
   alignItems: 'center',
   fontWeight: 'bold',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   gap: rem(8),
 });
 
@@ -83,11 +83,11 @@ const rowValueStyles = css({
 
 const counterStyle = css({
   display: 'inline-flex',
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   marginLeft: rem(9),
   textAlign: 'center',
   minWidth: rem(24),
-  border: `1px solid ${steel.rgb}`,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: '100%',
   fontSize: '14px',
   fontWeight: 'bold',

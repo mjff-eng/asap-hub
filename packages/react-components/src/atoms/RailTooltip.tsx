@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-import { paper, space } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { canHover } from '../utils/common';
 import { Portal } from '../utils/portal';
@@ -31,8 +31,8 @@ const bubbleStyles = css({
   zIndex: 100,
   pointerEvents: 'none',
 
-  backgroundColor: space.rgb,
-  color: paper.rgb,
+  backgroundColor: colour.brand.gp2[900],
+  color: colour.foreground['primary-inverse'],
   borderRadius: rem(4),
   padding: `${rem(6)} ${rem(12)}`,
   whiteSpace: 'nowrap',
@@ -46,7 +46,7 @@ const bubbleStyles = css({
     transform: 'translateY(-50%)',
     borderTop: `${rem(triangle)} solid transparent`,
     borderBottom: `${rem(triangle)} solid transparent`,
-    borderRight: `${rem(triangle)} solid ${space.rgb}`,
+    borderRight: `${rem(triangle)} solid ${colour.brand.gp2[900]}`,
   },
 });
 

@@ -1,17 +1,18 @@
-import { findParentWithStyle } from '@asap-hub/dom-test-utils';
-import { render, screen } from '@testing-library/react';
-import colors from '../../templates/colors';
+import { matchers } from '@emotion/jest';
+import { colour } from '@asap-hub/react-components';
+import { render } from '@testing-library/react';
 import StatusPill from '../StatusPill';
+
+expect.extend(matchers);
 
 describe('StatusPill', () => {
   it.each`
     status                  | color
-    ${'Active' as const}    | ${colors.info500.rgb}
-    ${'Completed' as const} | ${colors.success500.rgb}
-    ${'Paused' as const}    | ${colors.warning500.rgb}
+    ${'Active' as const}    | ${colour.foreground.info}
+    ${'Completed' as const} | ${colour.foreground.success}
+    ${'Paused' as const}    | ${colour.foreground.warning}
   `("has the color '$color' for the status $status", ({ status, color }) => {
-    render(<StatusPill status={status} />);
-    const pill = findParentWithStyle(screen.getByText(status), 'color');
-    expect(pill?.color).toBe(color);
+    const { container } = render(<StatusPill status={status} />);
+    expect(container.firstElementChild).toHaveStyleRule('color', color);
   });
 });

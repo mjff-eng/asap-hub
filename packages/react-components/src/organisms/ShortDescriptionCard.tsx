@@ -4,6 +4,7 @@ import { Button } from '../atoms';
 import { aiGenerate } from '../icons';
 import { LabeledTextArea } from '../molecules';
 import { rem } from '../pixels';
+import { colour } from '../colors';
 
 type ShortDescriptionCardProps = Omit<
   ComponentProps<typeof LabeledTextArea>,
@@ -18,7 +19,9 @@ const iconStyles = (isGenerateButtonEnabled: boolean) =>
     display: 'flex',
     marginRight: rem(8),
     path: {
-      fill: isGenerateButtonEnabled ? '#FFFFFF' : '#4D646B',
+      fill: isGenerateButtonEnabled
+        ? colour.foreground['primary-inverse']
+        : colour.foreground.tertiary,
     },
   });
 

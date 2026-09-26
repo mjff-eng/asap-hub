@@ -3,13 +3,13 @@ import { EventResponse } from '@asap-hub/model';
 import { events as eventsRoute } from '@asap-hub/routing';
 
 import { Card, Link, MaterialAvailability } from '../atoms';
-import { charcoal, lead, steel } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { formatDateToTimezone } from '../date';
 
 const container = css({
   display: 'grid',
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const gridTitleStyles = css({
@@ -31,7 +31,7 @@ const rowTitleStyles = css({
 
 const rowStyles = css({
   display: 'grid',
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   paddingBottom: rem(21),
   marginBottom: rem(21),
   ':last-child': {
@@ -45,7 +45,10 @@ const rowStyles = css({
   },
 });
 
-const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyles = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 type PastEventsDashboardCardProps = {
   events: Pick<

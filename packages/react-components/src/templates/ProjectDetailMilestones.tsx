@@ -7,7 +7,7 @@ import { Button, Headline3, Link, Paragraph } from '../atoms';
 import { formatDateToTimezone } from '../date';
 import { LabeledDropdown, LabeledMultiSelect } from '../molecules';
 import { rem, mobileScreen } from '../pixels';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import MilestonesMobilePage from './MilestonesMobilePage';
 import { plusIcon } from '../icons';
 import CreateMilestoneModal from './CreateMilestoneModal';
@@ -50,7 +50,7 @@ const aimsLinkTextStyles = css({
 const lastUpdatedBarStyles = css({
   display: 'flex',
   alignItems: 'center',
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const pageMobileStyles = css({
@@ -173,12 +173,12 @@ const ProjectDetailMilestones: React.FC<ProjectDetailMilestonesProps> = ({
                 </div>
               )}
             </div>
-            <Paragraph accent="lead">
+            <Paragraph accent="tertiary">
               These milestones track progress toward the objectives of the{' '}
               {grantLabel} Grant through defined deliverables and timelines.
               Each milestone supports one or more related aims.
             </Paragraph>
-            <Paragraph accent="lead">
+            <Paragraph accent="tertiary">
               Articles associated with a milestone may be added at any status.
               When a milestone is marked as complete, the resulting article(s)
               are expected to be included. These articles are linked to their

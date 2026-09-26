@@ -7,8 +7,8 @@ import {
   pixels,
   SharedResearchMetadata,
   UsersList,
-  lead,
   TagList,
+  colour,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
@@ -42,7 +42,7 @@ const entitiesStyles = css({
 });
 
 const timestampStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   display: 'flex',
   flexDirection: 'row',
   whiteSpace: 'pre',

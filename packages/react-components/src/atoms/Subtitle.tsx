@@ -1,4 +1,4 @@
-import * as colors from '../colors';
+import { colour } from '../colors';
 import {
   AccentColorName,
   headlineStyles,
@@ -28,7 +28,7 @@ const Subtitle: React.FC<SubtitleProps> = ({
       noMargin ? { margin: 0 } : layoutStyles,
       headlineStyles[styleAsHeading],
       bold ? { fontWeight: 'bold' } : null,
-      accent ? { color: colors[accent].rgb } : null,
+      accent ? { color: colour.foreground[accent] } : null,
     ]}
     id={id}
     {...props}

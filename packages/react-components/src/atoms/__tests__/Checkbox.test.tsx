@@ -1,10 +1,9 @@
 import { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider } from '@emotion/react';
 
 import Checkbox from '../Checkbox';
-import { color } from '../../colors';
+import { colour } from '../../colors';
 
 const props: ComponentProps<typeof Checkbox> = {
   groupName: '',
@@ -29,43 +28,30 @@ it('fires the select event', async () => {
   expect(handleChange.mock.calls.length).toBe(1);
 });
 
-it('uses ThemeProvider theme primaryColor', () => {
-  // Mock getComputedStyle to avoid jsdom "Not implemented: window.computedStyle(elt, pseudoElt)" error
-  const originalGetComputedStyle = window.getComputedStyle;
-  const mockGetComputedStyle = jest.fn(
-    (elt: Element, pseudoElt?: string | null) => {
-      if (pseudoElt) {
-        // Return a mock CSSStyleDeclaration for pseudo-elements
-        return {
-          backgroundColor: 'rgb(0, 106, 146)',
-        } as unknown as CSSStyleDeclaration;
-      }
-      return originalGetComputedStyle(elt);
-    },
+it('uses a grey hover border', () => {
+  const { getByRole } = render(<Checkbox {...props} />);
+  expect(getByRole('checkbox')).toHaveStyleRule(
+    'border-color',
+    colour.neutral[600],
+    { target: ':enabled:hover' },
   );
-  window.getComputedStyle = mockGetComputedStyle;
+});
 
-  const testCheckedBackgroundColor = color(0, 106, 146);
-  const theme = {
-    colors: {
-      primary500: testCheckedBackgroundColor,
-    },
-  };
-  const { getByRole } = render(
-    <ThemeProvider theme={theme}>
-      <Checkbox {...props} checked />
-    </ThemeProvider>,
+it('fills the checked state with the brand inverse background and darkens it on hover', () => {
+  const { getByRole } = render(<Checkbox {...props} checked />);
+  expect(getByRole('checkbox')).toHaveStyleRule(
+    'background-color',
+    colour.background['brand-inverse'],
+    { target: /:checked$/ },
   );
-
-  const checkbox = getByRole('checkbox');
-
-  const { backgroundColor: checkedBackgroundColor } = getComputedStyle(
-    checkbox,
-    ':checked',
+  expect(getByRole('checkbox')).toHaveStyleRule(
+    'border-color',
+    colour.background['brand-inverse'],
+    { target: /:checked$/ },
   );
-
-  expect(checkedBackgroundColor).toBe(testCheckedBackgroundColor.rgb);
-
-  // Restore original getComputedStyle
-  window.getComputedStyle = originalGetComputedStyle;
+  expect(getByRole('checkbox')).toHaveStyleRule(
+    'background-color',
+    colour.background['hover-brand-inverse'],
+    { target: /:checked:hover$/ },
+  );
 });

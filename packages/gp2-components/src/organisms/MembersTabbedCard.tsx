@@ -97,7 +97,7 @@ const MembersTabbedCard: React.FC<MembersTabbedCardProps> = ({
             items: activeLeaders,
             empty: (
               <div css={emptyLeaderStyles}>
-                <Paragraph accent="lead" noMargin>
+                <Paragraph accent="tertiary" noMargin>
                   There are no active leaders.
                 </Paragraph>
               </div>
@@ -108,7 +108,7 @@ const MembersTabbedCard: React.FC<MembersTabbedCardProps> = ({
             items: pastLeaders,
             empty: (
               <div css={emptyLeaderStyles}>
-                <Paragraph accent="lead" noMargin>
+                <Paragraph accent="tertiary" noMargin>
                   There are no past leaders.
                 </Paragraph>
               </div>
@@ -133,7 +133,7 @@ const MembersTabbedCard: React.FC<MembersTabbedCardProps> = ({
               truncateFrom: 8,
               empty: (
                 <div css={emptyMemberStyles}>
-                  <Paragraph accent="lead" noMargin>
+                  <Paragraph accent="tertiary" noMargin>
                     There are no active members.
                   </Paragraph>
                 </div>
@@ -145,7 +145,7 @@ const MembersTabbedCard: React.FC<MembersTabbedCardProps> = ({
               truncateFrom: 8,
               empty: (
                 <div css={emptyMemberStyles}>
-                  <Paragraph accent="lead" noMargin>
+                  <Paragraph accent="tertiary" noMargin>
                     There are no past members.
                   </Paragraph>
                 </div>

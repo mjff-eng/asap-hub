@@ -5,21 +5,14 @@ import { Headline5, Link, Paragraph } from '..';
 import { lineHeight, rem, tabletScreen } from '../pixels';
 import { chevronDownIcon, ExternalLinkIcon, infoInfoIcon } from '../icons';
 import { isInternalLink } from '../utils';
-import {
-  info500,
-  info100,
-  info200,
-  silver,
-  steel,
-  neutral900,
-} from '../colors';
+import { colour } from '../colors';
 
 const containerStyles = css({
   padding: `0 ${rem(9)}`,
 });
 
 const itemStyles = css({
-  borderBottom: `${steel.rgb} solid 1px`,
+  borderBottom: `${colour.border.tertiary} solid 1px`,
   '~ div:last-of-type': {
     borderBottom: 'none',
   },
@@ -52,7 +45,7 @@ const iconOpenStyles = css({
 
 const bodyStyles = css({
   padding: `0 ${rem(54)} ${rem(15)}`,
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const hiddenStyles = css({
@@ -74,7 +67,7 @@ const buttonStyles = css({
 
   cursor: 'pointer',
   ':hover': {
-    background: silver.rgb,
+    background: colour.background.tertiary,
     borderRadius: rem(4),
   },
 });
@@ -84,8 +77,8 @@ const infoItem = css({
   display: 'grid',
   gridColumnGap: rem(15),
   gridTemplateColumns: 'min-content 1fr auto',
-  color: info500.rgb,
-  background: info100.rgb,
+  color: colour.foreground.info,
+  background: colour.background.info,
   alignItems: 'center',
   alignContent: 'center',
   rowGap: rem(9),
@@ -100,10 +93,10 @@ const infoButtonWrap = css({
     gridColumn: 'unset',
   },
   '> a': {
-    backgroundColor: info100.rgb,
-    borderColor: info200.rgb,
+    backgroundColor: colour.background.info,
+    borderColor: colour.brand.crn[100],
     ':hover': {
-      borderColor: info500.rgb,
+      borderColor: colour.border.info,
     },
   },
 });

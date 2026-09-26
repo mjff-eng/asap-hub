@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 
 import { Link } from '../atoms';
-import { info100, info500 } from '../colors';
+import { colour } from '../colors';
 import { crossIcon, informationIcon } from '../icons';
 import { Toast } from '../organisms';
 import { rem } from '../pixels';
@@ -11,11 +11,11 @@ import PageConstraints from './PageConstraints';
 import TeamProfileHeader from './TeamProfileHeader';
 
 const projectBannerStyles = css({
-  backgroundColor: info100.rgb,
-  border: `1px solid ${info500.rgb}`,
+  backgroundColor: colour.background.info,
+  border: `1px solid ${colour.border.info}`,
   borderLeftWidth: rem(4),
   borderRadius: rem(8),
-  color: info500.rgb,
+  color: colour.foreground.info,
   display: 'flex',
   alignItems: 'flex-start',
   gap: rem(12),
@@ -41,7 +41,7 @@ const projectBannerDismissStyles = css({
   cursor: 'pointer',
   display: 'flex',
   svg: {
-    stroke: info500.rgb,
+    stroke: colour.foreground.info,
     width: rem(20),
     height: rem(20),
   },

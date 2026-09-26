@@ -1,7 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import TextArea from '../TextArea';
-import { ember, fern, silver } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders a text area, passing through props', () => {
   const { getByRole } = render(<TextArea value="val" />);
@@ -21,14 +21,16 @@ it('emits value changes', async () => {
 it('renders a disabled text area', () => {
   const { getByRole, rerender } = render(<TextArea value="val" />);
   expect((getByRole('textbox') as HTMLInputElement).disabled).toBeFalsy();
-  expect(getComputedStyle(getByRole('textbox')).backgroundColor).not.toBe(
-    silver.rgb,
+  expect(getByRole('textbox')).not.toHaveStyleRule(
+    'background-color',
+    colour.background.disabled,
   );
 
   rerender(<TextArea value="val" enabled={false} />);
   expect((getByRole('textbox') as HTMLInputElement).disabled).toBe(true);
-  expect(getComputedStyle(getByRole('textbox')).backgroundColor).toBe(
-    silver.rgb,
+  expect(getByRole('textbox')).toHaveStyleRule(
+    'background-color',
+    colour.background.disabled,
   );
 });
 
@@ -46,7 +48,7 @@ describe('when invalid', () => {
     });
 
     const errorElement = await findByText(/fill/i);
-    expect(getComputedStyle(errorElement).color).toBe(ember.rgb);
+    expect(errorElement).toHaveStyleRule('color', colour.foreground.error);
   });
 
   it('shows a custom validation message', async () => {
@@ -57,7 +59,10 @@ describe('when invalid', () => {
       fireEvent.blur(getByRole('textbox'));
     });
     expect(await findByText('Wrong!')).toBeVisible();
-    expect(getComputedStyle(await findByText('Wrong!')).color).toBe(ember.rgb);
+    expect(await findByText('Wrong!')).toHaveStyleRule(
+      'color',
+      colour.foreground.error,
+    );
   });
 });
 
@@ -69,10 +74,10 @@ describe('with a max length', () => {
   });
 
   describe('that has not been reached', () => {
-    it('indicates how full it is in green', () => {
+    it('indicates how full it is in the brand colour', () => {
       const { getByText } = render(<TextArea value="val" maxLength={10} />);
       const indicator = getByText('10', { exact: false });
-      expect(getComputedStyle(indicator).color).toBe(fern.rgb);
+      expect(indicator).toHaveStyleRule('color', colour.foreground.brand);
     });
   });
 
@@ -82,7 +87,7 @@ describe('with a max length', () => {
         <TextArea value="val" maxLength={'val'.length} />,
       );
       const indicator = getByText(String('val'.length), { exact: false });
-      expect(getComputedStyle(indicator).color).toBe(ember.rgb);
+      expect(indicator).toHaveStyleRule('color', colour.foreground.error);
     });
 
     it('states that it is full', () => {

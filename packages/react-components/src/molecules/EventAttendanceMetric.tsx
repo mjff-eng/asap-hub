@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import AttendanceProgressBar from '../atoms/AttendanceProgressBar';
-import { neutral200, neutral1000, steel } from '../colors';
+import { colour } from '../colors';
 import { mobileScreen, rem } from '../pixels';
 
 const containerStyles = css({
@@ -12,7 +12,7 @@ const containerStyles = css({
   width: '100%',
   maxWidth: rem(380),
   padding: rem(24),
-  backgroundColor: neutral200.rgb,
+  backgroundColor: colour.background.secondary,
   borderRadius: rem(8),
 });
 
@@ -30,7 +30,7 @@ const valueStyles = css({
   // A ratio, not `rem`: line-height in `em` resolves against the element's own
   // font size, so `rem(40)` here would render 40/17 x 30px.
   lineHeight: 40 / 30,
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     fontFamily: 'inherit',
     fontSize: rem(21),
@@ -42,14 +42,14 @@ const dividerStyles = css({
   width: rem(1),
   height: rem(24),
   flexShrink: 0,
-  backgroundColor: steel.rgb,
+  backgroundColor: colour.neutral[100],
 });
 
 const captionStyles = css({
   margin: 0,
   fontSize: rem(14),
   lineHeight: 16 / 14,
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const captionCountStyles = css([captionStyles, { fontWeight: 'bold' }]);

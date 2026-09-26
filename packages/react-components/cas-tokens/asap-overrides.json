@@ -1,0 +1,186 @@
+{
+  "crn": {
+    "colour/background/active": {
+      "use": "colour/brand/crn/25",
+      "master": "#E7F7F0"
+    },
+    "colour/background/button/primary/default": {
+      "use": "colour/brand/crn/500",
+      "master": "#34A270"
+    },
+    "colour/background/disabled": {
+      "use": "colour/general/blue/cerulean/25",
+      "master": "#EDF1F3"
+    },
+    "colour/background/error": {
+      "use": "colour/utilitarian/red/50",
+      "master": "#F7E8EA"
+    },
+    "colour/background/info": {
+      "use": "colour/brand/gp2/25",
+      "master": "#E6F3F9"
+    },
+    "colour/background/success": {
+      "use": "colour/utilitarian/green/50",
+      "master": "#E4F5EE"
+    },
+    "colour/background/warning": {
+      "use": "colour/utilitarian/orange/50",
+      "master": "#F8EDDE"
+    },
+    "colour/border/brand": {
+      "use": "colour/brand/crn/500",
+      "master": "#34A270"
+    },
+    "colour/border/disabled": {
+      "use": "colour/neutral/100",
+      "master": "#DFE5EA"
+    },
+    "colour/border/info": {
+      "use": "colour/brand/gp2/500",
+      "master": "#0C8DC3"
+    },
+    "colour/border/success": {
+      "use": "colour/brand/crn/800",
+      "master": "#287953"
+    },
+    "colour/border/warning": {
+      "use": "colour/general/yellow/800",
+      "master": "#CE801A"
+    },
+    "colour/foreground/brand": {
+      "use": "colour/brand/crn/500",
+      "master": "#34A270"
+    },
+    "colour/foreground/button/primary/default": {
+      "use": "colour/neutral/0",
+      "master": "#FFFFFF"
+    },
+    "colour/foreground/button/primary/hover": {
+      "use": "colour/neutral/0",
+      "master": "#FFFFFF"
+    },
+    "colour/foreground/disabled": {
+      "use": "colour/neutral/200",
+      "master": "#C2C9CE"
+    },
+    "colour/foreground/info": {
+      "use": "colour/brand/gp2/500",
+      "master": "#0C8DC3"
+    },
+    "colour/foreground/primary-inverse": {
+      "use": "colour/neutral/0",
+      "master": "#FFFFFF"
+    },
+    "colour/foreground/quaternary": {
+      "use": "colour/neutral/400",
+      "master": "#92999E"
+    },
+    "colour/foreground/success": {
+      "use": "colour/brand/crn/500",
+      "master": "#34A270"
+    },
+    "colour/foreground/tertiary": {
+      "use": "colour/neutral/600",
+      "master": "#4D646B"
+    },
+    "colour/foreground/warning": {
+      "use": "colour/general/yellow/800",
+      "master": "#CE801A"
+    }
+  },
+  "gp2": {
+    "colour/background/active": {
+      "use": "colour/brand/gp2/25",
+      "master": "#E6F3F9"
+    },
+    "colour/background/brand-inverse": {
+      "use": "colour/brand/gp2/500",
+      "master": "#0C8DC3"
+    },
+    "colour/background/disabled": {
+      "use": "colour/general/blue/cerulean/25",
+      "master": "#EDF1F3"
+    },
+    "colour/background/error": {
+      "use": "colour/utilitarian/red/50",
+      "master": "#F7E8EA"
+    },
+    "colour/background/hover-brand-inverse": {
+      "use": "colour/brand/gp2/800",
+      "master": "#006A92"
+    },
+    "colour/background/info": {
+      "use": "colour/brand/gp2/25",
+      "master": "#E6F3F9"
+    },
+    "colour/background/success": {
+      "use": "colour/utilitarian/green/50",
+      "master": "#E4F5EE"
+    },
+    "colour/background/warning": {
+      "use": "colour/utilitarian/orange/50",
+      "master": "#F8EDDE"
+    },
+    "colour/border/brand": {
+      "use": "colour/brand/gp2/500",
+      "master": "#0C8DC3"
+    },
+    "colour/border/disabled": {
+      "use": "colour/neutral/100",
+      "master": "#DFE5EA"
+    },
+    "colour/border/info": {
+      "use": "colour/brand/gp2/500",
+      "master": "#0C8DC3"
+    },
+    "colour/border/success": {
+      "use": "colour/brand/crn/800",
+      "master": "#287953"
+    },
+    "colour/border/warning": {
+      "use": "colour/general/yellow/800",
+      "master": "#CE801A"
+    },
+    "colour/foreground/brand": {
+      "use": "colour/brand/gp2/500",
+      "master": "#0C8DC3"
+    },
+    "colour/foreground/button/primary/default": {
+      "use": "colour/neutral/0",
+      "master": "#FFFFFF"
+    },
+    "colour/foreground/button/primary/hover": {
+      "use": "colour/neutral/0",
+      "master": "#FFFFFF"
+    },
+    "colour/foreground/disabled": {
+      "use": "colour/neutral/200",
+      "master": "#C2C9CE"
+    },
+    "colour/foreground/info": {
+      "use": "colour/brand/gp2/500",
+      "master": "#0C8DC3"
+    },
+    "colour/foreground/primary-inverse": {
+      "use": "colour/neutral/0",
+      "master": "#FFFFFF"
+    },
+    "colour/foreground/quaternary": {
+      "use": "colour/neutral/400",
+      "master": "#92999E"
+    },
+    "colour/foreground/success": {
+      "use": "colour/brand/crn/500",
+      "master": "#34A270"
+    },
+    "colour/foreground/tertiary": {
+      "use": "colour/neutral/600",
+      "master": "#4D646B"
+    },
+    "colour/foreground/warning": {
+      "use": "colour/general/yellow/800",
+      "master": "#CE801A"
+    }
+  }
+}

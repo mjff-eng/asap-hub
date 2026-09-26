@@ -1,6 +1,6 @@
 import { css, CSSObject, SerializedStyles } from '@emotion/react';
 import { borderRadius } from '../card';
-import * as colors from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { themes } from '../theme';
 
@@ -23,39 +23,39 @@ export type AccentVariant =
 
 export const accents: Record<AccentVariant, CSSObject> = {
   default: {
-    borderColor: colors.steel.rgb,
-    boxShadow: `0px 2px 4px ${colors.steel.rgb}`,
+    borderColor: colour.border.card.default,
+    boxShadow: `0px 2px 4px ${colour.neutral[100]}`,
   },
   red: {
-    backgroundColor: colors.rose.rgb,
-    color: colors.ember.rgb,
-    borderColor: colors.ember.rgb,
+    backgroundColor: colour.background.error,
+    color: colour.foreground.error,
+    borderColor: colour.border.error,
   },
   green: {
-    backgroundColor: colors.mint.rgb,
-    color: colors.pine.rgb,
-    borderColor: colors.pine.rgb,
+    backgroundColor: colour.background.success,
+    color: colour.foreground.success,
+    borderColor: colour.border.success,
   },
   placeholder: {
     backgroundColor: 'transparent',
-    color: colors.charcoal.rgb,
-    border: `2px dotted ${colors.tin.rgb}`,
+    color: colour.foreground.primary,
+    border: `2px dotted ${colour.border.secondary}`,
     borderRadius: 0,
   },
   neutral200: {
-    backgroundColor: colors.neutral200.rgb,
-    borderColor: colors.steel.rgb,
-    boxShadow: `0px 2px 4px ${colors.steel.rgb}`,
+    backgroundColor: colour.background.secondary,
+    borderColor: colour.border.card.default,
+    boxShadow: `0px 2px 4px ${colour.neutral[100]}`,
   },
   warning: {
-    backgroundColor: colors.warning100.rgb,
-    color: colors.warning500.rgb,
-    borderColor: colors.warning900.rgb,
+    backgroundColor: colour.background.warning,
+    color: colour.foreground.warning,
+    borderColor: colour.general.yellow[800],
   },
   information: {
-    backgroundColor: colors.information100.rgb,
-    color: colors.information900.rgb,
-    borderColor: colors.information500.rgb,
+    backgroundColor: colour.background.info,
+    color: colour.foreground.info,
+    borderColor: colour.border.info,
   },
 };
 
@@ -90,7 +90,7 @@ const Card: React.FC<CardProps> = ({
   padding = true,
   stroke = false,
   shadow = true,
-  strokeColor = colors.cerulean.rgb,
+  strokeColor = colour.brand.gp2[500],
   strokeSize = borderRadius,
   overrideStyles,
   title,

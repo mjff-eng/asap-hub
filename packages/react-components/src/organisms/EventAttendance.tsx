@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph } from '../atoms';
-import { lead, neutral800, neutral1000, steel } from '../colors';
+import { colour } from '../colors';
 import {
   ExportIcon,
   InactiveBadgeIcon,
@@ -39,7 +39,7 @@ const tableStyles = css({
 });
 
 const rowDividerStyles = css({
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 const minGapOnMobile = css({
@@ -64,7 +64,10 @@ const metricStyles = css({ marginTop: rem(24) });
 
 const tableWrapperStyles = css({ marginTop: rem(32), overflowX: 'auto' });
 
-const columnHeaderStyles = css([headerCellStyles, { color: neutral1000.rgb }]);
+const columnHeaderStyles = css([
+  headerCellStyles,
+  { color: colour.foreground.primary },
+]);
 
 const teamColumnHeaderStyles = css([
   columnHeaderStyles,
@@ -88,7 +91,7 @@ const sectionTitleStyles = css([
   sectionLineStyles,
   {
     fontWeight: 700,
-    color: neutral1000.rgb,
+    color: colour.foreground.primary,
     [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'block' },
   },
 ]);
@@ -96,7 +99,7 @@ const sectionTitleStyles = css([
 const sectionSeparatorStyles = css([
   sectionLineStyles,
   {
-    color: lead.rgb,
+    color: colour.foreground.tertiary,
     padding: `0 ${rem(8)}`,
     [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
   },
@@ -105,7 +108,7 @@ const sectionSeparatorStyles = css([
 const sectionCountStyles = css([
   sectionLineStyles,
   {
-    color: lead.rgb,
+    color: colour.foreground.tertiary,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       display: 'block',
       marginTop: rem(8),
@@ -115,7 +118,7 @@ const sectionCountStyles = css([
 
 const sectionHelperStyles = css([
   sectionLineStyles,
-  { margin: `${rem(8)} 0 0`, color: neutral800.rgb },
+  { margin: `${rem(8)} 0 0`, color: colour.foreground.quaternary },
 ]);
 
 const showMoreCellStyles = css({
@@ -198,7 +201,7 @@ const TeamRows: React.FC<{
             {team.attended ? (
               tickInCircleIcon
             ) : (
-              <InvalidTickIcon color={steel.rgb} />
+              <InvalidTickIcon color={colour.neutral[100]} />
             )}
           </span>
         </td>
@@ -304,7 +307,7 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
               onClick={onEdit}
               overrideStyles={editIconButtonStyles}
             >
-              <PencilIcon color={neutral1000.rgb} />
+              <PencilIcon color={colour.neutral[900]} />
             </Button>
           )}
         </div>
@@ -317,7 +320,7 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
       <Card>
         <div css={emptyStateStyles}>
           {header}
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="tertiary">
             No attendance recorded yet
           </Paragraph>
         </div>

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Link } from '../atoms';
 import { rem } from '../pixels';
-import { fern, lead } from '../colors';
+import { colour } from '../colors';
 import { GroupedProjectMember } from '../utils';
 import RolesList from './RolesList';
 import UserAvatar from './UserAvatar';
@@ -27,7 +27,7 @@ const memberInfoStyles = css({
 const nameStyles = css({
   fontSize: rem(17),
   fontWeight: 500,
-  color: fern.rgb,
+  color: colour.foreground.brand,
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',
@@ -35,7 +35,7 @@ const nameStyles = css({
 });
 
 const noRoleStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   fontStyle: 'italic',
 });

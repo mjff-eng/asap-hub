@@ -3,7 +3,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import React, { ComponentProps } from 'react';
 import { Paragraph, StateTag } from '../atoms';
-import { charcoal, steel } from '../colors';
+import { colour } from '../colors';
 import { InactiveBadgeIcon, TeamIcon } from '../icons';
 import { LinkHeadline, TabbedCard } from '../molecules';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
@@ -31,14 +31,14 @@ const listElementStyles = css({
   gap: rem(24),
   paddingTop: rem(28),
   paddingBottom: rem(28),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':last-child': {
     borderBottom: 'none',
   },
 });
 
 const teamsStyles = css({
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   display: 'flex',
   alignItems: 'center',
 });
@@ -109,7 +109,7 @@ const TeamInterestGroupsTabbedCard: React.FC<TeamGroupsTabbedCardProps> = ({
           truncateFrom: 2,
           disabled: isTeamInactive,
           empty: (
-            <Paragraph accent="lead" noMargin>
+            <Paragraph accent="tertiary" noMargin>
               There are no active memberships.
             </Paragraph>
           ),
@@ -124,7 +124,9 @@ const TeamInterestGroupsTabbedCard: React.FC<TeamGroupsTabbedCardProps> = ({
           truncateFrom: 2,
           disabled: inactiveInterestGroups.length === 0,
           empty: (
-            <Paragraph accent="lead">There are no past memberships.</Paragraph>
+            <Paragraph accent="tertiary">
+              There are no past memberships.
+            </Paragraph>
           ),
         },
       ]}
@@ -158,7 +160,7 @@ const TeamInterestGroupsTabbedCard: React.FC<TeamGroupsTabbedCardProps> = ({
                     )}
                   </div>
 
-                  <Paragraph noMargin accent="lead">
+                  <Paragraph noMargin accent="tertiary">
                     {description}
                   </Paragraph>
                   <span css={teamsStyles}>

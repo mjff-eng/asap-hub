@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 
 import { useValidation, styles, validationMessageStyles } from '../form';
 import { noop } from '../utils';
-import { ember, rose, fern, tin, lead, silver } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const containerStyles = css({
@@ -26,21 +26,21 @@ const textareaStyles = css({
   },
 
   '::placeholder': {
-    color: tin.rgb,
+    color: colour.foreground.disabled,
   },
 });
 const disabledStyles = css({
-  color: lead.rgb,
-  backgroundColor: silver.rgb,
+  color: colour.foreground.tertiary,
+  backgroundColor: colour.background.disabled,
 });
 const invalidStyles = css({
   ':invalid': {
-    color: ember.rgb,
-    borderColor: ember.rgb,
-    backgroundColor: rose.rgb,
+    color: colour.foreground.error,
+    borderColor: colour.border.error,
+    backgroundColor: colour.background.error,
 
     '::placeholder': {
-      color: ember.rgb,
+      color: colour.foreground.error,
       opacity: 0.4,
     },
     '~ div:last-of-type': {
@@ -119,16 +119,11 @@ const TextArea: React.FC<TextAreaProps> = ({
         onChange={({ currentTarget: { value: newValue } }) =>
           onChange(newValue)
         }
-        css={({ colors }) => [
+        css={[
           styles,
           textareaStyles,
           enabled || disabledStyles,
           validationMessage && invalidStyles,
-          colors?.primary500 && {
-            ':focus': {
-              borderColor: colors?.primary500.rgba,
-            },
-          },
         ]}
         {...(onBlur ? { onBlur } : {})}
       />
@@ -139,10 +134,14 @@ const TextArea: React.FC<TextAreaProps> = ({
 
         {maxLength !== undefined && (
           <div
-            css={({ colors: { primary500 = fern } = {} }) => [
+            css={[
               validationMessageStyles,
               limitStyles,
-              { color: reachedMaxLength ? ember.rgb : primary500.rgba },
+              {
+                color: reachedMaxLength
+                  ? colour.foreground.error
+                  : colour.foreground.brand,
+              },
             ]}
           >
             {value.length}/{maxLength}

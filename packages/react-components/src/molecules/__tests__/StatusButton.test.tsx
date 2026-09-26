@@ -1,13 +1,6 @@
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  info100,
-  info500,
-  success100,
-  success500,
-  warning100,
-  warning500,
-} from '../../colors';
+import { colour } from '../../colors';
 import { portalContainerId } from '../../utils/portal';
 
 import StatusButton, {
@@ -165,49 +158,51 @@ it('hides the menu on scroll', async () => {
 
 describe('statusButtonStyles', () => {
   it.each([
-    ['warning', true, warning100.rgba, warning500.rgba],
-    ['final', true, success100.rgba, success500.rgba],
-    ['default', true, info100.rgba, info500.rgba],
-    ['none', true, info100.rgba, info500.rgba],
+    ['warning', true, colour.background.warning, colour.foreground.warning],
+    ['final', true, colour.background.success, colour.foreground.success],
+    ['default', true, colour.background.info, colour.foreground.info],
+    ['none', true, colour.background.info, colour.foreground.info],
   ] as [StatusType, boolean, string, string][])(
     'applies correct styles for type %s and isComplianceReviewer %s',
     (type, isComplianceReviewer, expectedBackgroundColor, expectedColor) => {
       const { container } = render(
         <div css={statusButtonStyles(type, isComplianceReviewer)} />,
       );
-      expect(container.firstChild).toHaveStyle(
-        `backgroundColor: ${expectedBackgroundColor}`,
+      expect(container.firstChild).toHaveStyleRule(
+        'background',
+        expectedBackgroundColor,
       );
-      expect(container.firstChild).toHaveStyle(`color: ${expectedColor}`);
+      expect(container.firstChild).toHaveStyleRule('color', expectedColor);
     },
   );
 });
 
 describe('statusTagStyles', () => {
   it.each([
-    ['warning', info100.rgba, info500.rgba],
-    ['final', success100.rgba, success500.rgba],
-    ['default', warning100.rgba, warning500.rgba],
-    ['none', info100.rgba, info500.rgba],
+    ['warning', colour.background.info, colour.foreground.info],
+    ['final', colour.background.success, colour.foreground.success],
+    ['default', colour.background.warning, colour.foreground.warning],
+    ['none', colour.background.info, colour.foreground.info],
   ] as [StatusType, string, string][])(
     'applies correct styles for type %s',
     (type, expectedBackgroundColor, expectedColor) => {
       const { container } = render(<div css={statusTagStyles(type)}>Test</div>);
 
-      expect(container.firstChild).toHaveStyle(
-        `backgroundColor: ${expectedBackgroundColor}`,
+      expect(container.firstChild).toHaveStyleRule(
+        'background',
+        expectedBackgroundColor,
       );
-      expect(container.firstChild).toHaveStyle(`color: ${expectedColor}`);
+      expect(container.firstChild).toHaveStyleRule('color', expectedColor);
     },
   );
 });
 
 describe('iconStyles', () => {
   it.each([
-    ['warning', true, warning500.rgba],
-    ['final', true, success500.rgba],
-    ['final', false, success500.rgba],
-    ['default', false, warning500.rgba],
+    ['warning', true, colour.foreground.warning],
+    ['final', true, colour.foreground.success],
+    ['final', false, colour.foreground.success],
+    ['default', false, colour.foreground.warning],
   ] as [StatusType, boolean, string | null][])(
     'applies correct styles for icon with type %s and isComplianceReviewer %s',
     (type, isComplianceReviewer, iconExpectedColor) => {

@@ -8,3 +8,21 @@ it('applies global styles to the body', () => {
     /^Roboto/,
   );
 });
+
+it('defines the CAS theme colours as CSS variables for CRN by default', () => {
+  render(<GlobalStyles />);
+  expect(
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--colour-background-button-primary-default',
+    ),
+  ).toBe('#34A270');
+});
+
+it('defines the GP2 theme colours when rendered for GP2', () => {
+  render(<GlobalStyles product="gp2" />);
+  expect(
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--colour-background-button-primary-default',
+    ),
+  ).toBe('#0C8DC3');
+});

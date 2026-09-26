@@ -6,7 +6,7 @@ import {
   largeDesktopScreen,
   rem,
 } from '../pixels';
-import { paper } from '../colors';
+import { colour, colourWithAlpha } from '../colors';
 
 const shadowWidth = 18;
 
@@ -23,11 +23,17 @@ const containerStyles = css({
   },
   '::before': {
     left: 0,
-    background: `linear-gradient(to left, rgba(255, 255, 255, 0) 0%, ${paper.rgb} 100%)`,
+    background: `linear-gradient(to left, ${colourWithAlpha(
+      colour.background.primary,
+      0,
+    )} 0%, ${colour.background.primary} 100%)`,
   },
   '::after': {
     right: 0,
-    background: `linear-gradient(to right, rgba(255, 255, 255, 0) 0%, ${paper.rgb} 100%)`,
+    background: `linear-gradient(to right, ${colourWithAlpha(
+      colour.background.primary,
+      0,
+    )} 0%, ${colour.background.primary} 100%)`,
   },
 
   // Hide scrollbar on touch screens where our gradient indicator is sufficient.

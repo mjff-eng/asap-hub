@@ -12,7 +12,7 @@ import {
 } from '../icons';
 import { Avatar, Link } from '../atoms';
 import { rem } from '../pixels';
-import { lead, silver } from '../colors';
+import { colour } from '../colors';
 
 const containerStyles = css({
   display: 'flex',
@@ -26,10 +26,10 @@ const inlineContainerStyles = css({
 });
 
 const itemStyles = css({
-  borderBottom: `1px solid ${silver.rgb}`,
+  borderBottom: `1px solid ${colour.general.blue.cerulean[25]}`,
   paddingBottom: rem(24),
   paddingTop: rem(24),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 
   '&:first-of-type': {
     paddingTop: rem(18),

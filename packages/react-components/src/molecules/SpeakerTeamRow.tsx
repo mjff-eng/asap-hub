@@ -2,7 +2,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Link, Switch } from '../atoms';
-import { lead, steel } from '../colors';
+import { colour } from '../colors';
 import { chevronDownIcon, chevronUpIcon, InactiveBadgeIcon } from '../icons';
 import { EventTeamType, teamIcon } from '../organisms/shared-event-card';
 import { chevronButtonStyles } from '../organisms/shared-event-card-styles';
@@ -19,7 +19,7 @@ const wrapperStyles = css({
   flexDirection: 'column',
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   '&:first-of-type': {
     paddingTop: 0,
   },
@@ -64,7 +64,10 @@ const labelStyles = css({
   },
 });
 
-const leadTextStyles = css({ color: lead.rgb, fontWeight: 400 });
+const leadTextStyles = css({
+  color: colour.foreground.tertiary,
+  fontWeight: 400,
+});
 
 const teamNameStyles = css({ whiteSpace: 'nowrap', fontWeight: 400 });
 

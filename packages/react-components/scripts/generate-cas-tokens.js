@@ -1,0 +1,172 @@
+#!/usr/bin/env node
+// Turns the CAS Design System variable exports in ../cas-tokens (Figma:
+// variables panel > right-click a collection > export modes) into
+// ../src/cas-tokens.generated.ts. Run with `yarn cas-tokens:generate`.
+//
+// ASAP only uses the primitives "Value" mode, the mode "Light" mode and the
+// theme "CRN" and "GP2" modes; ARIA and Dark are left out on purpose.
+//
+// asap-overrides.json points a theme token at another CAS primitive until
+// design updates Figma, so the Hub keeps its current look. Each entry is a
+// change request for the CAS file; generation fails once Figma matches it.
+
+const { readFileSync, writeFileSync } = require('fs');
+const { resolve } = require('path');
+
+const tokensDir = resolve(__dirname, '../cas-tokens');
+const outputFile = resolve(__dirname, '../src/cas-tokens.generated.ts');
+
+const read = (name) =>
+  JSON.parse(readFileSync(resolve(tokensDir, `${name}.tokens.json`), 'utf8'));
+
+const isToken = (node) => node && typeof node === 'object' && '$type' in node;
+
+const walk = (node, path, visit) => {
+  if (isToken(node)) {
+    visit(path, node);
+    return;
+  }
+  Object.entries(node).forEach(([key, child]) => {
+    if (!key.startsWith('$')) walk(child, [...path, key], visit);
+  });
+};
+
+const channels = (hex) =>
+  [1, 3, 5].map((start) => parseInt(hex.slice(start, start + 2), 16));
+
+const roundAlpha = (alpha) => Math.round(alpha * 100) / 100;
+
+const colourTokens = (root) => {
+  const tokens = [];
+  walk(root, [], (path, token) => {
+    if (path[0] === 'colour' && token.$type === 'color') {
+      tokens.push({ path, token });
+    }
+  });
+  return tokens;
+};
+
+const setIn = (target, path, value) => {
+  const last = path[path.length - 1];
+  const parent = path.slice(0, -1).reduce((node, key) => {
+    if (typeof node[key] === 'string' || Array.isArray(node[key])) {
+      throw new Error(`Token path collides with a token: ${path.join('/')}`);
+    }
+    node[key] = node[key] || {};
+    return node[key];
+  }, target);
+  if (parent[last] !== undefined) {
+    throw new Error(`Duplicate token path: ${path.join('/')}`);
+  }
+  parent[last] = value;
+};
+
+const primitives = {};
+colourTokens(read('Value')).forEach(({ path, token }) => {
+  if (path[1] === 'brand' && path[2] === 'aria') return;
+  const alpha = roundAlpha(token.$value.alpha);
+  const rgb = channels(token.$value.hex);
+  setIn(primitives, path.slice(1), alpha === 1 ? rgb : [...rgb, alpha]);
+});
+
+// ASAP only uses the Light mode, which maps every ramp step to the primitive
+// with the same name, so theme values resolve straight to primitives.
+colourTokens(read('Light')).forEach(({ path, token }) => {
+  const alias = token.$extensions?.['com.figma.aliasData']?.targetVariableName;
+  if (alias !== path.join('/')) {
+    throw new Error(`Light mode no longer maps ${path.join('/')} to itself`);
+  }
+});
+
+const themeFor = (name) => {
+  const entries = {};
+  const raw = colourTokens(read(name));
+  const byName = new Map(raw.map(({ path, token }) => [path.join('/'), token]));
+  raw.forEach(({ path, token }) => {
+    let value = token.$value;
+    let alias = token.$extensions?.['com.figma.aliasData']?.targetVariableName;
+    if (typeof value === 'string') {
+      // a reference to another theme token, e.g. {colour.border.tertiary}
+      alias = value.replace(/[{}]/g, '').replace(/\./g, '/');
+      value = byName.get(alias).$value;
+    }
+    entries[path.join('/')] = {
+      hex: value.hex.toUpperCase(),
+      alpha: roundAlpha(value.alpha),
+      ...(alias ? { alias } : {}),
+    };
+  });
+  return entries;
+};
+
+const theme = { crn: themeFor('CRN'), gp2: themeFor('GP2') };
+
+const overrides = JSON.parse(
+  readFileSync(resolve(tokensDir, 'asap-overrides.json'), 'utf8'),
+);
+const primitiveAt = (name) =>
+  name
+    .split('/')
+    .slice(1)
+    .reduce((node, key) => (node ? node[key] : undefined), primitives);
+Object.entries(overrides).forEach(([product, entries]) => {
+  if (!theme[product])
+    throw new Error(`Unknown product in overrides: ${product}`);
+  Object.entries(entries).forEach(([name, { use, master }]) => {
+    const token = theme[product][name];
+    if (!token)
+      throw new Error(`Override for unknown token ${product} ${name}`);
+    const value = primitiveAt(use);
+    if (!Array.isArray(value)) {
+      throw new Error(
+        `Override ${product} ${name} uses unknown primitive ${use}`,
+      );
+    }
+    if (token.alias === use) {
+      throw new Error(
+        `Figma now sets ${product} ${name} to ${use}: remove it from asap-overrides.json`,
+      );
+    }
+    const [r, g, b, alpha = 1] = value;
+    theme[product][name] = {
+      hex: `#${[r, g, b]
+        .map((channel) => channel.toString(16).padStart(2, '0'))
+        .join('')
+        .toUpperCase()}`,
+      alpha,
+      alias: use,
+      figma: { hex: token.hex, alpha: token.alpha, alias: token.alias },
+      master,
+    };
+  });
+});
+
+const crnNames = Object.keys(theme.crn).sort().join();
+if (crnNames !== Object.keys(theme.gp2).sort().join()) {
+  throw new Error('CRN and GP2 theme exports do not define the same tokens');
+}
+
+const themeVariables = {};
+Object.keys(theme.crn).forEach((name) => {
+  const path = name.split('/');
+  setIn(themeVariables, path.slice(1), `var(--${path.join('-')})`);
+});
+
+const literal = (value) => JSON.stringify(value, null, 2);
+
+writeFileSync(
+  outputFile,
+  `// Generated by packages/react-components/scripts/generate-cas-tokens.js from
+// the CAS Design System Figma exports in packages/react-components/cas-tokens.
+// Do not edit by hand: re-export from Figma and run \`yarn cas-tokens:generate\`.
+
+/** Figma collection "primitives", mode "Value" (ARIA ramps left out). */
+export const casPrimitives = ${literal(primitives)} as const;
+
+/** Figma collection "theme", modes "CRN" and "GP2", resolved to values. */
+export const casTheme = ${literal(theme)} as const;
+
+/** CSS custom property for every theme token, named after its Figma path. */
+export const casThemeVariables = ${literal(themeVariables)} as const;
+`,
+);

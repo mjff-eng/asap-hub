@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
 
 import { formatDateToTimezone } from '../date';
-import { info100, info500, lead } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { calendarIcon, clockIcon } from '../icons';
 
@@ -17,7 +17,7 @@ const listStyles = css({
 });
 
 const listItemStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -43,8 +43,8 @@ const recurringPillStyles = css({
   flexShrink: 0,
   marginLeft: rem(8),
 
-  backgroundColor: info100.rgb,
-  color: info500.rgb,
+  backgroundColor: colour.background.info,
+  color: colour.foreground.info,
   borderRadius: rem(36),
   padding: `${rem(4)} ${rem(16)}`,
 });

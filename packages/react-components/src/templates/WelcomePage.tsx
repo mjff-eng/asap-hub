@@ -15,7 +15,7 @@ const defaultValues = {
     content: 'Activate your account and start exploring the ASAP CRN Network.',
     buttonText: 'Activate account',
     footer: () => (
-      <Paragraph accent="lead">
+      <Paragraph accent="tertiary">
         By proceeding you are agreeing to our{' '}
         <Link href="/terms-and-conditions">Terms and Conditions</Link> and{' '}
         <Link href="/privacy-notice">Privacy Notice</Link>.
@@ -28,7 +28,7 @@ const defaultValues = {
       'A private, invite-only network where the ASAP CRN community collaborates.',
     buttonText: 'Sign in',
     footer: () => (
-      <Paragraph accent="lead">
+      <Paragraph accent="tertiary">
         By signing in you are agreeing to our{' '}
         <Link href="/terms-and-conditions">Terms and Conditions</Link> and{' '}
         <Link href="/privacy-notice">Privacy Notice</Link>.

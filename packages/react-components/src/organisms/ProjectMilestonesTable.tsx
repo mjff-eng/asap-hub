@@ -10,7 +10,7 @@ import { ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { Card, Headline3, Paragraph } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 import Milestone from './Milestone';
-import { neutral1000, neutral200, steel } from '../colors';
+import { colour } from '../colors';
 import type { ResearchOutputOption } from '../utils';
 import { LabeledMultiSelect, PageControls } from '../molecules';
 import { NumericalSortingIcon, searchIcon } from '../icons';
@@ -57,7 +57,7 @@ const tableHeaderStyles = css({
 const headerLabelStyles = css({
   fontSize: rem(17),
   fontWeight: 'bold',
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const sortButtonStyles = css({
@@ -94,12 +94,13 @@ const milestoneRowWrapperStyles = (index: number, isLast: boolean) =>
     display: 'grid',
     gridColumn: '1 / -1',
     gridTemplateColumns: 'subgrid',
-    backgroundColor: index % 2 === 0 ? '#FFFFFF' : neutral200.rgb,
+    backgroundColor:
+      index % 2 === 0 ? colour.background.primary : colour.neutral[50],
     marginInline: rem(-24),
     paddingInline: rem(24),
     paddingTop: index === 0 ? 0 : rem(20),
     paddingBottom: rem(20),
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
     ...(isLast
       ? { paddingBottom: rem(WRAPPER_TOP_PADDING), borderBottom: 'none' }
       : {}),
@@ -109,7 +110,7 @@ const noMilestonesTextStyles = css({
   fontSize: rem(17),
   lineHeight: rem(24),
   fontWeight: 700,
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const pageControlsStyles = css({
@@ -127,7 +128,7 @@ const noResultsStyles = css({
   svg: {
     width: rem(48),
     height: rem(48),
-    stroke: neutral1000.rgb,
+    stroke: colour.foreground.primary,
   },
 });
 
@@ -207,7 +208,7 @@ const ProjectMilestonesTable: FC<ProjectMilestonesProps> = ({
   if (!milestones.length) {
     if (!hasAppliedSearch) {
       return (
-        <Paragraph accent="lead" noMargin styles={noMilestonesTextStyles}>
+        <Paragraph accent="tertiary" noMargin styles={noMilestonesTextStyles}>
           No milestones related to the {grantLabel} Grant have been added to
           this project yet.
         </Paragraph>
@@ -227,7 +228,7 @@ const ProjectMilestonesTable: FC<ProjectMilestonesProps> = ({
           <div>
             <Headline3 noMargin>No results found.</Headline3>
           </div>
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="tertiary">
             Please double-check your search for any typos or try a different
             search term.
           </Paragraph>

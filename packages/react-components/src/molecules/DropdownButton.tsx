@@ -7,21 +7,11 @@ import {
   MouseEventHandler,
   ComponentProps,
 } from 'react';
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { Anchor, Button } from '../atoms';
 import { rem, mobileScreen, formTargetWidth } from '../pixels';
 
-import {
-  paper,
-  steel,
-  colorWithTransparency,
-  tin,
-  mint,
-  lead,
-  pine,
-  silver,
-  neutral200,
-} from '../colors';
+import { colourWithAlpha, colour } from '../colors';
 
 const containerStyles = css({
   display: 'flex',
@@ -48,9 +38,9 @@ const menuContainerStyles = (customMenuWidth?: number) =>
     width: '100%',
     top: 0,
     right: 0,
-    backgroundColor: paper.rgb,
-    border: `1px solid ${steel.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+    backgroundColor: colour.background.primary,
+    border: `1px solid ${colour.border.tertiary}`,
+    boxShadow: `0 2px 6px 0 ${colourWithAlpha(colour.neutral[200], 0.34)}`,
 
     flexDirection: 'column',
 
@@ -108,23 +98,19 @@ const alignLeftStyles = css({
 
 export type ItemType = 'title' | 'inner' | 'default';
 
-const itemStyles = ({
-  primary100 = mint,
-  primary900 = pine,
-  type = 'default',
-}: { type?: ItemType } & Theme['colors']) =>
+const itemStyles = (type: ItemType = 'default') =>
   css({
-    color: lead.rgb,
+    color: colour.foreground.tertiary,
     backgroundColor:
       type === 'title'
-        ? silver.rgba
+        ? colour.background.tertiary
         : type === 'inner'
-          ? neutral200.rgba
+          ? colour.neutral[50]
           : 'none',
     ':hover': {
-      backgroundColor: primary100.rgba,
+      backgroundColor: colour.background['hover-brand'],
       span: {
-        color: primary900.rgba,
+        color: colour.foreground.brand,
       },
     },
   });
@@ -208,10 +194,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
           <ul css={listStyles}>
             {children.map(
               ({ item, type, href, onClick, closeOnClick = true }, index) => (
-                <li
-                  key={`drop-${index}`}
-                  css={({ colors }) => itemStyles({ ...colors, type })}
-                >
+                <li key={`drop-${index}`} css={itemStyles(type)}>
                   {href ? (
                     <Anchor href={href} onClick={() => setMenuShown(false)}>
                       <span css={itemContentStyles}>{item}</span>

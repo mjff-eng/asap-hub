@@ -7,28 +7,34 @@ it('renders the text in a <p>', () => {
   expect(container.textContent).toBe('text');
 });
 
-it('applies a default border and paper background', () => {
-  const { container } = render(<Card>text</Card>);
+it('uses the CAS card border and a white background by default', () => {
+  const { getByText } = render(<Card>text</Card>);
 
-  expect(container.firstElementChild).toBeDefined();
-  const { borderColor, backgroundColor } = getComputedStyle(
-    container.firstElementChild as Element,
+  expect(getByText('text')).toHaveStyleRule(
+    'border-color',
+    'var(--colour-border-card-default)',
   );
-
-  expect(borderColor).toMatchInlineSnapshot(`"rgb(223, 229, 234)"`);
-  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(255, 255, 255)"`);
+  expect(getByText('text')).toHaveStyleRule(
+    'background-color',
+    'var(--colour-background-primary)',
+  );
 });
 
-it('applies a ember border and rose background', () => {
-  const { container } = render(<Card accent="red">text</Card>);
+it('uses the CAS error colours for the red accent', () => {
+  const { getByText } = render(<Card accent="red">text</Card>);
 
-  expect(container.firstElementChild).toBeDefined();
-  const { borderColor, backgroundColor } = getComputedStyle(
-    container.firstElementChild as Element,
+  expect(getByText('text')).toHaveStyleRule(
+    'border-color',
+    'var(--colour-border-error)',
   );
-
-  expect(borderColor).toMatchInlineSnapshot(`"rgb(205, 20, 38)"`);
-  expect(backgroundColor).toMatchInlineSnapshot(`"rgb(247, 232, 234)"`);
+  expect(getByText('text')).toHaveStyleRule(
+    'background-color',
+    'var(--colour-background-error)',
+  );
+  expect(getByText('text')).toHaveStyleRule(
+    'color',
+    'var(--colour-foreground-error)',
+  );
 });
 
 it('omits the padding if requested', () => {

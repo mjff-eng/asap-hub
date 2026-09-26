@@ -4,7 +4,7 @@ import {
   LabeledDropdown,
   pixels,
   FormSection,
-  colors,
+  colour,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { ComponentProps, useState, Fragment } from 'react';
@@ -28,7 +28,7 @@ const thinLineStyles = css({
   height: '1px',
   marginTop: rem(48),
   marginBottom: rem(48),
-  borderTop: `1px solid ${colors.steel.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 const required = '(required)';

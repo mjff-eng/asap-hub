@@ -139,7 +139,7 @@ const EligibilityModal: React.FC<EligibilityModalProps> = ({
           >
             <>
               {isNotASAPFundedSelected ? (
-                <Paragraph accent="lead" noMargin>
+                <Paragraph accent="tertiary" noMargin>
                   The open science compliance review process is for manuscripts
                   that report on ASAP-funded work only. Since this manuscript
                   does not contain ASAP-funded work, it will not undergo a
@@ -151,7 +151,7 @@ const EligibilityModal: React.FC<EligibilityModalProps> = ({
                   .
                 </Paragraph>
               ) : (
-                <Paragraph accent="lead" noMargin>
+                <Paragraph accent="tertiary" noMargin>
                   The ASAP Open Science Team only conducts compliance reviews on
                   ASAP-funded work. If your manuscript does not contain
                   ASAP-funded work, do NOT mention ASAP as a funder in the

@@ -1,10 +1,9 @@
 import { StaticRouter, MemoryRouter } from 'react-router';
 import { render, fireEvent } from '@testing-library/react';
 import { network } from '@asap-hub/routing';
-import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import MainNavigation from '../MainNavigation';
-import { charcoal } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders the navigation items', () => {
   const { getAllByRole } = render(
@@ -46,9 +45,8 @@ describe('a navigation item', () => {
       </StaticRouter>,
     );
     expect(
-      findParentWithStyle(getByTitle(/network/i), 'backgroundColor')
-        ?.backgroundColor,
-    ).toBeFalsy();
+      getByTitle(/network/i).closest('a')?.firstElementChild,
+    ).not.toHaveStyleRule('background-color', colour.background.active);
 
     rerender(
       <StaticRouter key={2} location={network({}).$}>
@@ -56,9 +54,8 @@ describe('a navigation item', () => {
       </StaticRouter>,
     );
     expect(
-      findParentWithStyle(getByTitle(/network/i), 'backgroundColor')
-        ?.backgroundColor,
-    ).toMatchInlineSnapshot(`"rgba(122, 210, 169, 0.18)"`);
+      getByTitle(/network/i).closest('a')?.firstElementChild,
+    ).toHaveStyleRule('background-color', colour.background.active);
   });
 
   it('is highlighted when the current page is in the section it links to', () => {
@@ -68,9 +65,8 @@ describe('a navigation item', () => {
       </StaticRouter>,
     );
     expect(
-      findParentWithStyle(getByTitle(/network/i), 'backgroundColor')
-        ?.backgroundColor,
-    ).toBeFalsy();
+      getByTitle(/network/i).closest('a')?.firstElementChild,
+    ).not.toHaveStyleRule('background-color', colour.background.active);
 
     rerender(
       <StaticRouter key={2} location={network({}).interestGroups({}).$}>
@@ -78,9 +74,8 @@ describe('a navigation item', () => {
       </StaticRouter>,
     );
     expect(
-      findParentWithStyle(getByTitle(/network/i), 'backgroundColor')
-        ?.backgroundColor,
-    ).toMatchInlineSnapshot(`"rgba(122, 210, 169, 0.18)"`);
+      getByTitle(/network/i).closest('a')?.firstElementChild,
+    ).toHaveStyleRule('background-color', colour.background.active);
   });
 
   it('is disabled when the current user is not onboarded', () => {
@@ -102,9 +97,8 @@ describe('a navigation item', () => {
       </StaticRouter>,
     );
     expect(
-      findParentWithStyle(getByTitle(/network/i), 'backgroundColor')
-        ?.backgroundColor,
-    ).toMatchInlineSnapshot(`"rgba(122, 210, 169, 0.18)"`);
+      getByTitle(/network/i).closest('a')?.firstElementChild,
+    ).toHaveStyleRule('background-color', colour.background.active);
   });
 });
 
@@ -178,10 +172,10 @@ describe('the collapse toggle', () => {
         <MainNavigation userOnboarded={true} onToggleCollapse={jest.fn()} />
       </MemoryRouter>,
     );
-    // charcoal, matching the other sidebar labels (not the lighter lead grey).
+    // primary text colour, matching the other sidebar labels (not the lighter lead grey).
     expect(
       getByRole('button', { name: 'Collapse Menu', hidden: true }),
-    ).toHaveStyle(`color: ${charcoal.rgb}`);
+    ).toHaveStyleRule('color', colour.foreground.primary);
 
     rerender(
       <MemoryRouter>
@@ -192,9 +186,9 @@ describe('the collapse toggle', () => {
         />
       </MemoryRouter>,
     );
-    expect(getByRole('button', { name: 'Expand', hidden: true })).toHaveStyle(
-      `color: ${charcoal.rgb}`,
-    );
+    expect(
+      getByRole('button', { name: 'Expand', hidden: true }),
+    ).toHaveStyleRule('color', colour.foreground.primary);
   });
 
   it('keeps the toggle left-aligned in both states so the icon never shifts', () => {
@@ -216,7 +210,7 @@ describe('the collapse toggle', () => {
         />
       </MemoryRouter>,
     );
-    // Same alignment collapsed — the icon column position never changes.
+    // Same alignment collapsed: the icon column position never changes.
     expect(getByRole('button', { name: 'Expand', hidden: true })).toHaveStyle(
       'justify-content: flex-start',
     );

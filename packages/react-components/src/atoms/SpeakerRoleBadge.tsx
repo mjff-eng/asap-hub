@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 
-import { steel } from '../colors';
+import { colour } from '../colors';
 import Pill from './Pill';
 
 const disabledStyles = css({
-  '> span': { backgroundColor: steel.rgb },
+  '> span': { backgroundColor: colour.neutral[100] },
 });
 
 type SpeakerRoleBadgeProps = {

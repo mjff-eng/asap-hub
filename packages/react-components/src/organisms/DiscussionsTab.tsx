@@ -8,7 +8,7 @@ import { ComponentProps, useState } from 'react';
 
 import { DiscussionModal, DiscussionCard } from '.';
 import { Button } from '../atoms';
-import { fern } from '../colors';
+import { colour } from '../colors';
 import { replyIcon } from '../icons';
 import { InformationSection } from '../molecules';
 import { rem } from '../pixels';
@@ -22,7 +22,7 @@ const startButtonTextStyles = css({
   gap: rem(8),
   margin: `0 ${rem(8)} 0 0`,
   path: {
-    stroke: '#FFFFFF',
+    stroke: colour.foreground['primary-inverse'],
   },
 });
 
@@ -32,7 +32,7 @@ const showMoreButtonStyles = css({
   justifyContent: 'center',
   width: '100%',
   fontWeight: 'normal',
-  color: fern.rgba,
+  color: colour.foreground.brand,
   paddingTop: rem(24),
   paddingBottom: rem(24),
 

@@ -5,7 +5,7 @@ import { FC, useState } from 'react';
 import { Card, Headline3, Paragraph, Link, Button } from '../atoms';
 import { tabletScreen, rem } from '../pixels';
 import { CalendarLink } from '../molecules';
-import { steel } from '../colors';
+import { colour } from '../colors';
 
 const containerStyles = css({
   display: 'grid',
@@ -67,7 +67,7 @@ const orderList = css({
     [`@media (max-width: ${tabletScreen.min}px)`]: {
       marginTop: rem(12),
     },
-    borderTop: `1px solid ${steel.rgb}`,
+    borderTop: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -76,7 +76,7 @@ const showMoreStyles = css({
   justifyContent: 'center',
   paddingTop: rem(15),
   paddingBottom: rem(15),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 interface CalendarListProps {
@@ -103,7 +103,7 @@ const CalendarList: FC<CalendarListProps> = ({
         </div>
         {description && (
           <div css={subheaderStyles}>
-            <Paragraph accent="lead" noMargin>
+            <Paragraph accent="tertiary" noMargin>
               {description}
             </Paragraph>
           </div>
@@ -121,7 +121,7 @@ const CalendarList: FC<CalendarListProps> = ({
                 <li key={id}>
                   <div css={dataGrid}>
                     <div css={gridText}>
-                      <Paragraph accent="charcoal">
+                      <Paragraph accent="primary">
                         <span css={{ display: 'flex' }}>
                           <span css={{ color, paddingRight: rem(14) }}>●</span>
                           <span css={{ fontWeight: 'bold' }}>{name}</span>
@@ -145,7 +145,7 @@ const CalendarList: FC<CalendarListProps> = ({
         )}
       </Card>
       {!hideSupportText && (
-        <Paragraph accent="lead">
+        <Paragraph accent="tertiary">
           Having issues? Set up your calendar manually with these instructions
           for{' '}
           <Link href="https://support.apple.com/en-us/guide/calendar/icl1022/mac">

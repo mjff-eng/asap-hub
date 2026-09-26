@@ -3,6 +3,7 @@ import {
   BasicLayout,
   UnsupportedBrowserPage,
   GlobalStyles,
+  colour,
 } from '@asap-hub/react-components';
 
 const staticMarkup = renderToStaticMarkup(
@@ -20,7 +21,7 @@ const html = `
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#34A270" />
+    <meta name="theme-color" content="${colour.brand.crn[500]}" />
     <meta
       name="description"
       content="The Hub application by ASAP: Aligning Science Across Parkinson's"

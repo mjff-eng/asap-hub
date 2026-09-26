@@ -7,7 +7,7 @@ import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { Card } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, steel } from '../colors';
+import { colour } from '../colors';
 import { AlphabeticalSortingIcon, NumericalSortingIcon } from '../icons';
 import { OSChampionTableRow, PageControls } from '../molecules';
 import { rem } from '../pixels';
@@ -21,22 +21,22 @@ const container = css({
     paddingLeft: rem(24),
   },
   'th.team, td.team': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
     paddingLeft: 0,
     left: 0,
   },
   'td.collapsed': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
     paddingLeft: 0,
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
 const titleStyles = css({
   alignItems: 'center',
   fontWeight: 'bold',
-  color: charcoal.rgb,
-  background: '#fff',
+  color: colour.foreground.primary,
+  background: colour.background.primary,
   verticalAlign: 'top',
   paddingTop: rem(32),
   overflowWrap: 'break-word',

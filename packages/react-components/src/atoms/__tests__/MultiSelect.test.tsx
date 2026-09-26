@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { waitFor } from '@testing-library/dom';
 
-import { ember, fern, pine } from '../../colors';
+import { colour } from '../../colors';
 
 import MultiSelect from '../MultiSelect';
 import { searchIcon } from '../../icons';
@@ -131,7 +131,7 @@ it('does not allow non-suggested input', async () => {
   expect(handleChange).not.toHaveBeenCalled();
 });
 
-it('shows the focused suggestion in green', async () => {
+it('shows the focused suggestion in the brand colour', async () => {
   const { getByText, getByRole } = render(
     <MultiSelect
       suggestions={[
@@ -141,14 +141,16 @@ it('shows the focused suggestion in green', async () => {
     />,
   );
   await userEvent.click(getByRole('combobox'));
-  expect(
-    findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).not.toBe(pine.rgb.replace(/ /g, ''));
+  expect(getByText('LGW').closest('[id*="-option-"]')).not.toHaveStyleRule(
+    'color',
+    colour.foreground.brand,
+  );
 
   fireEvent.mouseOver(getByText('LGW'));
-  expect(
-    findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).toBe(pine.rgb.replace(/ /g, ''));
+  expect(getByText('LGW').closest('[id*="-option-"]')).toHaveStyleRule(
+    'color',
+    colour.foreground.brand,
+  );
 });
 
 describe('invalidity', () => {
@@ -168,8 +170,9 @@ describe('invalidity', () => {
     fireEvent.focusOut(input);
 
     expect(getByText('Nope.')).toBeDefined();
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-      ember.rgb,
+    expect(findParentWithStyle(input, 'borderStyle')!.element).toHaveStyleRule(
+      'border-color',
+      colour.border.error,
     );
   });
 
@@ -186,8 +189,9 @@ describe('invalidity', () => {
     fireEvent.focusIn(input);
 
     expect(queryByText('Nope.')).toBeNull();
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-      fern.rgba,
+    expect(findParentWithStyle(input, 'borderStyle')!.element).toHaveStyleRule(
+      'border-color',
+      colour.border.brand,
     );
   });
 
@@ -204,8 +208,9 @@ describe('invalidity', () => {
     fireEvent.focusIn(input);
 
     expect(queryByText('Nope.')).toBeNull();
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-      fern.rgba,
+    expect(findParentWithStyle(input, 'borderStyle')!.element).toHaveStyleRule(
+      'border-color',
+      colour.border.brand,
     );
 
     const parent = findParentWithStyle(input, 'flexBasis')?.element;

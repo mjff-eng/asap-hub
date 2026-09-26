@@ -1,10 +1,9 @@
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { ThemeProvider } from '@emotion/react';
 
 import Link from '../Link';
-import { color as colorConstructor, fern, paper, silver } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders the text in an anchor', () => {
   const { getByText } = render(<Link href="/">text</Link>);
@@ -14,8 +13,7 @@ it('renders the text in an anchor', () => {
 describe('the default theme', () => {
   it('applies the default link color', () => {
     const { getByRole } = render(<Link href="/">text</Link>);
-    const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(fern.rgb);
+    expect(getByRole('link')).toHaveStyleRule('color', colour.foreground.brand);
   });
 
   it('applies an invisible underline', () => {
@@ -36,8 +34,8 @@ it('applies an underline when requested', () => {
 });
 
 describe('theme with ThemeProvider', () => {
-  it('uses ThemeProvider theme primaryColor', () => {
-    const testColor = colorConstructor(12, 141, 195);
+  it('uses the primary500 hex override that email layouts rely on', () => {
+    const testColor = '#0C8DC3';
     const theme = {
       colors: {
         primary500: testColor,
@@ -48,8 +46,7 @@ describe('theme with ThemeProvider', () => {
         <Link href="/">text</Link>
       </ThemeProvider>,
     );
-    const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(testColor.rgb);
+    expect(getByRole('link')).toHaveStyle({ color: testColor });
   });
 });
 describe('the dark theme', () => {
@@ -59,8 +56,10 @@ describe('the dark theme', () => {
         text
       </Link>,
     );
-    const { color } = getComputedStyle(getByRole('link'));
-    expect(color).toBe(paper.rgb);
+    expect(getByRole('link')).toHaveStyleRule(
+      'color',
+      colour.foreground['primary-inverse'],
+    );
   });
 
   it('applies an invisible underline', () => {
@@ -147,8 +146,9 @@ describe('when button-styled', () => {
         text
       </Link>,
     );
-    expect(getComputedStyle(getByRole('link')).backgroundColor).not.toBe(
-      fern.rgb,
+    expect(getByRole('link')).not.toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
     );
 
     rerender(
@@ -156,7 +156,10 @@ describe('when button-styled', () => {
         text
       </Link>,
     );
-    expect(getComputedStyle(getByRole('link')).backgroundColor).toBe(fern.rgb);
+    expect(getByRole('link')).toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
+    );
   });
 
   it('supports small button styles', () => {
@@ -187,20 +190,20 @@ describe('when button-styled', () => {
         text
       </Link>,
     );
-    expect(
-      findParentWithStyle(getByText('text'), 'backgroundColor')!
-        .backgroundColor,
-    ).not.toBe(silver.rgb);
+    expect(getByText('text').closest('a')).not.toHaveStyleRule(
+      'background-color',
+      colour.background.disabled,
+    );
 
     rerender(
       <Link href="/" buttonStyle enabled={false}>
         text
       </Link>,
     );
-    expect(
-      findParentWithStyle(getByText('text'), 'backgroundColor')!
-        .backgroundColor,
-    ).toBe(silver.rgb);
+    expect(getByText('text').closest('a')).toHaveStyleRule(
+      'background-color',
+      colour.background.disabled,
+    );
   });
 
   it('removes the href when disabled', () => {

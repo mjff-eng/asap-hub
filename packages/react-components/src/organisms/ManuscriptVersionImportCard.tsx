@@ -4,7 +4,7 @@ import { network } from '@asap-hub/routing';
 
 import { Card, Headline3, Paragraph, Pill } from '../atoms';
 import { mobileScreen, rem } from '../pixels';
-import { fern, lead, neutral200, paper, pine } from '../colors';
+import { colour } from '../colors';
 import { ThemeVariant } from '../theme';
 import { contentSidePaddingWithNavigation } from '../layout';
 
@@ -15,7 +15,7 @@ const container = css({
 
 const descriptionStyles = css({
   margin: `${rem(24)} 0`,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const pillContainerStyles = css({
@@ -28,10 +28,16 @@ const pillContainerStyles = css({
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    stroke: fern.rgb,
+    stroke: colour.foreground.brand,
   }),
-  grey: css({ stroke: fern.rgb, ':active': { stroke: pine.rgb } }),
-  dark: css({ stroke: paper.rgb, ':active': { stroke: paper.rgb } }),
+  grey: css({
+    stroke: colour.foreground.brand,
+    ':active': { stroke: colour.border.brand },
+  }),
+  dark: css({
+    stroke: colour.foreground['primary-inverse'],
+    ':active': { stroke: colour.foreground['primary-inverse'] },
+  }),
 };
 const mainStyles = css({
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} 0`,
@@ -44,18 +50,18 @@ const wrapperStyles = css({
 });
 
 const cardStyles = css({
-  background: neutral200.rgb,
+  background: colour.background.secondary,
 });
 
 const titleStyles = css({
   margin: `${rem(8)} 0 ${rem(12)}`,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const linkStyles = css({
   textDecoration: 'underline solid transparent',
   transition: 'text-decoration 100ms ease-in-out, color 100ms ease-in-out',
-  color: fern.rgb,
+  color: colour.foreground.brand,
 
   ':hover': {
     textDecoration: 'underline',

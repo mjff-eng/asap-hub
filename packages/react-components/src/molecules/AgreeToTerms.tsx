@@ -6,7 +6,7 @@ interface AgreeToTermsProps {
   readonly appOrigin: string;
 }
 const AgreeToTerms: React.FC<AgreeToTermsProps> = ({ appOrigin }) => (
-  <Paragraph accent="lead">
+  <Paragraph accent="tertiary">
     By proceeding, you are agreeing to the{' '}
     <Link href={new URL(staticPages({}).terms({}).$, appOrigin).toString()}>
       Terms and Conditions

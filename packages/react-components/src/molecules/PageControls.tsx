@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 
 import {
   rem,
@@ -10,7 +10,7 @@ import {
   mobileScreen,
   largeDesktopScreen,
 } from '../pixels';
-import { steel, fern, tin, lead, mint, paper } from '../colors';
+import { colour } from '../colors';
 import {
   firstPageIcon,
   nextPageIcon,
@@ -26,7 +26,7 @@ const containerStyles = css({
 const listStyles = css({
   margin: 0,
   padding: rem(12),
-  border: `${rem(1)} solid ${steel.rgb}`,
+  border: `${rem(1)} solid ${colour.border.tertiary}`,
   borderRadius: rem(6),
 
   display: 'grid',
@@ -35,7 +35,7 @@ const listStyles = css({
   gridAutoColumns: rem(30),
   gridGap: vminLinearCalc(mobileScreen, 6, largeDesktopScreen, 12, 'px'),
 
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.background.primary,
 });
 
 const itemStyles = css({
@@ -45,7 +45,7 @@ const itemStyles = css({
     justifySelf: 'center',
     alignSelf: 'center',
 
-    color: lead.rgb,
+    color: colour.foreground.tertiary,
   },
 
   '&.follows-gap::before': {
@@ -62,30 +62,25 @@ const itemStyles = css({
   },
 });
 
-const textStyles = ({ primary500 = fern }: Theme['colors'] = {}) =>
-  css({
-    height: '100%',
-    display: 'grid',
-    justifyContent: 'center',
-    alignContent: 'center',
+const textStyles = css({
+  height: '100%',
+  display: 'grid',
+  justifyContent: 'center',
+  alignContent: 'center',
 
-    color: lead.rgb,
-    svg: {
-      stroke: primary500.rgba,
-      verticalAlign: 'middle',
-    },
-  });
-const activeTextStyles = ({
-  primary500 = fern,
-  primary100 = mint,
-}: Theme['colors'] = {}) =>
-  css({
-    backgroundColor: primary100.rgba,
-    color: primary500.rgba,
-  });
+  color: colour.foreground.tertiary,
+  svg: {
+    stroke: colour.foreground.brand,
+    verticalAlign: 'middle',
+  },
+});
+const activeTextStyles = css({
+  backgroundColor: colour.background.active,
+  color: colour.foreground.brand,
+});
 const disabledTextStyles = css({
   svg: {
-    stroke: tin.rgb,
+    stroke: colour.foreground.disabled,
   },
 });
 
@@ -223,24 +218,14 @@ const PageControls: React.FC<PageControlsProps> = ({
       <ol css={listStyles}>
         <li css={itemStyles}>
           <Anchor href={firstPageHref}>
-            <span
-              css={({ colors }) => [
-                textStyles(colors),
-                firstPageHref ?? disabledTextStyles,
-              ]}
-            >
+            <span css={[textStyles, firstPageHref ?? disabledTextStyles]}>
               {firstPageIcon}
             </span>
           </Anchor>
         </li>
         <li css={itemStyles}>
           <Anchor href={previousPageHref}>
-            <span
-              css={({ colors }) => [
-                textStyles(colors),
-                previousPageHref ?? disabledTextStyles,
-              ]}
-            >
+            <span css={[textStyles, previousPageHref ?? disabledTextStyles]}>
               {previousPageIcon}
             </span>
           </Anchor>
@@ -257,12 +242,7 @@ const PageControls: React.FC<PageControlsProps> = ({
               ].join(' ')}
             >
               <Anchor href={renderPageHref(index)}>
-                <span
-                  css={({ colors }) => [
-                    textStyles(colors),
-                    active && activeTextStyles(colors),
-                  ]}
-                >
+                <span css={[textStyles, active && activeTextStyles]}>
                   {index + 1}
                 </span>
               </Anchor>
@@ -271,24 +251,14 @@ const PageControls: React.FC<PageControlsProps> = ({
         })}
         <li css={itemStyles}>
           <Anchor href={nextPageHref}>
-            <span
-              css={({ colors }) => [
-                textStyles(colors),
-                nextPageHref ?? disabledTextStyles,
-              ]}
-            >
+            <span css={[textStyles, nextPageHref ?? disabledTextStyles]}>
               {nextPageIcon}
             </span>
           </Anchor>
         </li>
         <li css={itemStyles}>
           <Anchor href={lastPageHref}>
-            <span
-              css={({ colors }) => [
-                textStyles(colors),
-                lastPageHref ?? disabledTextStyles,
-              ]}
-            >
+            <span css={[textStyles, lastPageHref ?? disabledTextStyles]}>
               {lastPageIcon}
             </span>
           </Anchor>

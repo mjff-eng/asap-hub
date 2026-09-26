@@ -14,6 +14,11 @@
       "require": "./build-cjs/index.js",
       "types": "./build/index.d.ts"
     },
+    "./cas-tokens": {
+      "import": "./build/cas-tokens.generated.js",
+      "require": "./build-cjs/cas-tokens.generated.js",
+      "types": "./build/cas-tokens.generated.d.ts"
+    },
     "./manuscript-form": {
       "import": "./build/manuscript-form.js",
       "require": "./build-cjs/manuscript-form.js",

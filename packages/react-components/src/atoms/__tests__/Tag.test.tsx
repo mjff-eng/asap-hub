@@ -2,23 +2,23 @@ import { render, screen } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import userEvent from '@testing-library/user-event';
 import Tag from '../Tag';
-import { mint, neutral1000, paper, silver, steel } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders a tag with content', () => {
   const { container } = render(<Tag>Text</Tag>);
   expect(container.textContent).toEqual('Text');
 });
 
-it('renders a white tag with a mint background when highlighted', () => {
+it('renders a white tag with the brand background when highlighted', () => {
   const { getByText, rerender } = render(<Tag>Text</Tag>);
   expect(
-    findParentWithStyle(getByText('Text'), 'backgroundColor')?.backgroundColor,
-  ).toBe(paper.rgb);
+    findParentWithStyle(getByText('Text'), 'borderStyle')?.element,
+  ).toHaveStyleRule('background-color', colour.background.primary);
 
   rerender(<Tag highlight>Text</Tag>);
   expect(
-    findParentWithStyle(getByText('Text'), 'backgroundColor')?.backgroundColor,
-  ).toBe(mint.rgb);
+    findParentWithStyle(getByText('Text'), 'borderStyle')?.element,
+  ).toHaveStyleRule('background-color', colour.background.brand);
 });
 
 it('renders a tag with disabled styles when disabled', () => {
@@ -26,13 +26,28 @@ it('renders a tag with disabled styles when disabled', () => {
   const getParentStyle = (prop: keyof CSSStyleDeclaration) =>
     findParentWithStyle(getByText('Text'), prop);
 
-  expect(getParentStyle('backgroundColor')?.backgroundColor).toBe(paper.rgb);
+  expect(getParentStyle('borderStyle')?.element).toHaveStyleRule(
+    'background-color',
+    colour.background.primary,
+  );
 
   rerender(<Tag enabled={false}>Text</Tag>);
 
-  expect(getParentStyle('color')?.color).toBe(neutral1000.rgb);
-  expect(getParentStyle('borderColor')?.borderColor).toBe(steel.rgb);
-  expect(getParentStyle('backgroundColor')?.backgroundColor).toBe(silver.rgb);
+  const tag = getParentStyle('borderStyle')?.element;
+  expect(tag).toHaveStyleRule('color', colour.foreground.primary);
+  expect(tag).toHaveStyleRule('border-color', colour.border.tertiary);
+  expect(tag).toHaveStyleRule('background-color', colour.background.disabled);
+});
+
+it('uses the brand border and text on hover when it links somewhere', () => {
+  const { getByText } = render(<Tag href="/somewhere">Text</Tag>);
+  const tag = findParentWithStyle(getByText('Text'), 'borderStyle')?.element;
+  expect(tag).toHaveStyleRule('border-color', colour.border.brand, {
+    target: ':hover',
+  });
+  expect(tag).toHaveStyleRule('color', colour.foreground.brand, {
+    target: ':hover',
+  });
 });
 
 it('renders a tag with a title', () => {

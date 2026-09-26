@@ -2,7 +2,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Avatar, Button, Link, Paragraph, PillSelector } from '../atoms';
-import { fern, neutral1000, warning100, warning900 } from '../colors';
+import { colour } from '../colors';
 import { binIcon, plusIcon, WarningIcon } from '../icons';
 import { deleteButtonStyles } from '../organisms/shared-event-card-styles';
 import { mobileScreen, rem } from '../pixels';
@@ -27,9 +27,9 @@ const cardStyles = css({
   gap: rem(16),
   marginBottom: rem(16),
   padding: rem(16),
-  border: `1px solid ${warning900.rgb}`,
+  border: `1px solid ${colour.general.yellow[800]}`,
   borderRadius: rem(8),
-  backgroundColor: warning100.rgb,
+  backgroundColor: colour.background.warning,
 });
 
 const iconDesktopStyles = css([hideOnMobileStyles, { flexShrink: 0 }]);
@@ -93,7 +93,7 @@ const nameSlotStyles = css({
 });
 
 const nameStyles = css({
-  color: fern.rgb,
+  color: colour.foreground.brand,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -111,7 +111,7 @@ const dismissStyles = (enabled: boolean) =>
   ]);
 
 const warningTextStyles = css({
-  color: warning900.rgb,
+  color: colour.general.yellow[800],
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -125,7 +125,7 @@ const pillStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 type PendingSpeakerCardProps = {

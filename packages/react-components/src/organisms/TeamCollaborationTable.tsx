@@ -16,7 +16,7 @@ import {
 
 import { Card } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, steel } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const container = css({
@@ -44,7 +44,7 @@ const gridTitleStyles = css({
 
 const rowStyles = css({
   display: 'grid',
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
   },
@@ -58,13 +58,13 @@ const rowStyles = css({
     columnGap: rem(15),
     paddingTop: 0,
     paddingBottom: 0,
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
 const titleStyles = css({
   fontWeight: 'bold',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   display: 'flex',
   alignItems: 'center',
   gap: rem(8),

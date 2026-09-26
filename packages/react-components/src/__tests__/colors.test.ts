@@ -1,38 +1,26 @@
-import { color, colorWithTransparency } from '../colors';
+import { colour, colourWithAlpha, cssColour } from '../colors';
 
-describe('the color generator', () => {
-  describe('for an opaque color', () => {
-    it('sets the red, green, and blue values', () => {
-      expect(color(1, 2, 3)).toMatchObject({ r: 1, g: 2, b: 3 });
-    });
-
-    it('calculates the CSS rgb string', () => {
-      expect(color(1, 2, 3).rgb).toMatchInlineSnapshot(`"rgb(1, 2, 3)"`);
-    });
-
-    it('calculates the CSS hex string', () => {
-      expect(color(1, 2, 3).hex).toMatchInlineSnapshot(`"#010203"`);
-      expect(color(255, 255, 255).hex).toMatchInlineSnapshot(`"#ffffff"`);
-    });
+describe('cssColour', () => {
+  it('returns the hex value when opaque', () => {
+    expect(cssColour('#34A270')).toBe('#34A270');
   });
 
-  describe('for a transparent color', () => {
-    it('sets the red, green, blue, and alpha values', () => {
-      expect(color(1, 2, 3, 0.5)).toMatchObject({ r: 1, g: 2, b: 3, a: 0.5 });
-    });
-
-    it('calculates the CSS rgba string', () => {
-      expect(color(1, 2, 3, 0.5).rgba).toMatchInlineSnapshot(
-        `"rgba(1, 2, 3, 0.5)"`,
-      );
-    });
+  it('returns an rgba value with the given alpha', () => {
+    expect(cssColour('#34A270', 0.34)).toBe('rgba(52, 162, 112, 0.34)');
+    expect(cssColour('#34A270', 0)).toBe('rgba(52, 162, 112, 0)');
   });
 });
 
-describe('the color to color with transparency', () => {
-  it('calculates the CSS rgba string', () => {
-    expect(
-      colorWithTransparency(color(1, 2, 3), 0.5).rgba,
-    ).toMatchInlineSnapshot(`"rgba(1, 2, 3, 0.5)"`);
+describe('colourWithAlpha', () => {
+  it('mixes a theme token with transparency so it follows the token value', () => {
+    expect(colourWithAlpha(colour.border.secondary, 0.7)).toBe(
+      'color-mix(in srgb, var(--colour-border-secondary) 70%, transparent)',
+    );
+  });
+
+  it('accepts a primitive and rounds the percentage', () => {
+    expect(colourWithAlpha(colour.neutral[200], 0.34)).toBe(
+      `color-mix(in srgb, ${colour.neutral[200]} 34%, transparent)`,
+    );
   });
 });

@@ -2,9 +2,8 @@ import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { Paragraph, PillSelector } from '../atoms';
 import { validationMessageStyles } from '../form';
-import { lead, rose, silver, steel } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
-import { colors } from '..';
 
 const fieldsetStyles = css({
   border: 'none',
@@ -22,7 +21,7 @@ const subtitleStyles = css({
 });
 
 const descriptionStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   display: 'inline-block',
   [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
     display: 'unset',
@@ -32,10 +31,14 @@ const descriptionStyles = css({
 const containerStyles = (hasError: boolean, enabled: boolean) =>
   css({
     border: '1px solid',
-    borderColor: hasError ? colors.error500.rgba : steel.rgba,
+    borderColor: hasError ? colour.border.error : colour.border.tertiary,
     padding: `${rem(3)} ${rem(9)}`,
 
-    backgroundColor: enabled ? (hasError ? rose.rgba : '#fff') : silver.rgba,
+    backgroundColor: enabled
+      ? hasError
+        ? colour.background.error
+        : colour.background.primary
+      : colour.background.tertiary,
   });
 
 type LabeledPillSelectorProps = ComponentProps<typeof PillSelector> & {

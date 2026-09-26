@@ -10,16 +10,7 @@ import {
   MultiSelectOptionsType,
   Paragraph,
 } from '../atoms';
-import {
-  charcoal,
-  lead,
-  neutral1000,
-  pearl,
-  pine,
-  silver,
-  steel,
-  tin,
-} from '../colors';
+import { colour } from '../colors';
 import { crossIcon, plusIcon, searchIcon } from '../icons';
 import { ConfirmableModalFooter, Modal } from '../molecules';
 import PendingSpeakerCard from '../molecules/PendingSpeakerCard';
@@ -78,7 +69,7 @@ const titleStyles = css({
   fontSize: rem(26),
   fontWeight: 700,
   lineHeight: rem(32),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const bodyStyles = css({
@@ -97,7 +88,7 @@ const hideOnDesktopStyles = css({
   [`@media (min-width: ${mobileScreen.max + 1}px)`]: { display: 'none' },
 });
 
-const placeholderStyles = css({ color: tin.rgb });
+const placeholderStyles = css({ color: colour.foreground.disabled });
 
 const searchOptionStyles = css([
   flexRowGap8Styles,
@@ -105,14 +96,14 @@ const searchOptionStyles = css([
 ]);
 
 const searchUserNameStyles = css({
-  color: pine.rgb,
+  color: colour.foreground.brand,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
 });
 
 const searchExternalTextStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -144,7 +135,7 @@ const sectionTitleStyles = css({
   fontSize: rem(17),
   fontWeight: 700,
   lineHeight: rem(24),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 // Wraps the "Speakers" heading and the stat span — always stacked on
@@ -170,13 +161,13 @@ const statsGroupStyles = css({
 const statStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const separatorStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   padding: `0 ${rem(8)}`,
 });
 
@@ -190,9 +181,11 @@ const markAllSharedButtonStyles = css({
 
 const cardSurfaceStyles = (enabled: boolean) =>
   css({
-    border: `1px solid ${steel.rgb}`,
+    border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? pearl.rgb : silver.rgb,
+    backgroundColor: enabled
+      ? colour.background.secondary
+      : colour.background.disabled,
   });
 
 const groupsCardStyles = (enabled: boolean) =>
@@ -210,7 +203,7 @@ const groupsTableHeaderStyles = css({
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   paddingBottom: rem(16),
 });
 
@@ -576,10 +569,14 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
 
           {visibleGroups.length === 0 && !pendingSpeaker ? (
             <div css={emptyStateStyles(!isCancelling)} role="status">
-              <Paragraph noMargin accent="lead" styles={emptyStateTitleStyles}>
+              <Paragraph
+                noMargin
+                accent="tertiary"
+                styles={emptyStateTitleStyles}
+              >
                 Add speakers to this event
               </Paragraph>
-              <Paragraph noMargin accent="lead">
+              <Paragraph noMargin accent="tertiary">
                 Search for a person to add them to this event. Once the event
                 has taken place, you&apos;ll be able to mark whether each
                 speaker shared preliminary findings.

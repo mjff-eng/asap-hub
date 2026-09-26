@@ -131,7 +131,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
         </li>
       </ul>
       <div css={bottomLinksStyles}>
-        <Caption accent="lead" asParagraph>
+        <Caption accent="tertiary" asParagraph>
           <Anchor href={staticPages({}).terms({}).$}>Terms of Use</Anchor>
           {'  ·  '}
           <Anchor href={staticPages({}).privacyPolicy({}).$}>

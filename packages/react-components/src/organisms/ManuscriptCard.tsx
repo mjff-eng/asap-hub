@@ -14,7 +14,7 @@ import { ComponentProps, Suspense, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import {
   Button,
-  colors,
+  colour,
   Loading,
   minusRectIcon,
   Pill,
@@ -63,14 +63,14 @@ type ManuscriptCardProps = Pick<
 
 const manuscriptContainerStyles = css({
   marginTop: rem(12),
-  border: `1px solid ${colors.steel.rgb}`,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: `${rem(8)}`,
   boxSizing: 'border-box',
   width: '100%',
   borderWidth: 1,
   borderStyle: 'solid',
   display: 'block',
-  backgroundColor: colors.pearl.rgb,
+  backgroundColor: colour.background.secondary,
 });
 
 const toastStyles = css({

@@ -44,7 +44,7 @@ const TagsPageHeader: React.FC<TagsPageHeaderProps> = ({
     <PageInfoContainer>
       <Display styleAsHeading={2}>Tags Search</Display>
       <div css={textStyles}>
-        <Paragraph accent="lead">
+        <Paragraph accent="tertiary">
           Search for all CRN Hub areas that include selected tags (research
           outputs, events, people, projects, teams, tutorials, interest groups,
           working groups and news).

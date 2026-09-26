@@ -2,18 +2,7 @@ import { manuscriptStatus } from '@asap-hub/model';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {
-  info100,
-  info200,
-  info500,
-  lead,
-  steel,
-  success100,
-  success500,
-  warning100,
-  warning150,
-  warning500,
-} from '../../colors';
+import { colour } from '../../colors';
 import ManuscriptByStatus from '../ManuscriptByStatus';
 
 describe('ManuscriptByStatus', () => {
@@ -96,26 +85,51 @@ describe('ManuscriptByStatus', () => {
       .getByText('Review Compliance Report')
       .closest('button');
 
-    expect(selectedWarningButton).toHaveStyle({
-      backgroundColor: warning100.rgb,
-      borderColor: warning150.rgb,
-      color: warning500.rgb,
-    });
-    expect(selectedFinalButton).toHaveStyle({
-      backgroundColor: success100.rgb,
-      borderColor: info200.rgb,
-      color: success500.rgb,
-    });
-    expect(selectedDefaultButton).toHaveStyle({
-      backgroundColor: info100.rgb,
-      borderColor: info500.rgb,
-      color: info500.rgb,
-    });
-    expect(unselectedButton).toHaveStyle({
-      backgroundColor: 'white',
-      borderColor: steel.rgb,
-      color: lead.rgb,
-    });
+    expect(selectedWarningButton).toHaveStyleRule(
+      'background-color',
+      colour.background.warning,
+    );
+    expect(selectedWarningButton).toHaveStyleRule(
+      'border-color',
+      colour.border.warning,
+    );
+    expect(selectedWarningButton).toHaveStyleRule(
+      'color',
+      colour.foreground.warning,
+    );
+    expect(selectedFinalButton).toHaveStyleRule(
+      'background-color',
+      colour.background.success,
+    );
+    expect(selectedFinalButton).toHaveStyleRule(
+      'border-color',
+      colour.border.success,
+    );
+    expect(selectedFinalButton).toHaveStyleRule(
+      'color',
+      colour.foreground.success,
+    );
+    expect(selectedDefaultButton).toHaveStyleRule(
+      'background-color',
+      colour.background.info,
+    );
+    expect(selectedDefaultButton).toHaveStyleRule(
+      'border-color',
+      colour.border.info,
+    );
+    expect(selectedDefaultButton).toHaveStyleRule(
+      'color',
+      colour.foreground.info,
+    );
+    expect(unselectedButton).toHaveStyle({ backgroundColor: 'white' });
+    expect(unselectedButton).toHaveStyleRule(
+      'border-color',
+      colour.border.tertiary,
+    );
+    expect(unselectedButton).toHaveStyleRule(
+      'color',
+      colour.foreground.tertiary,
+    );
   });
 
   it('shows icons for warning and final status types', () => {

@@ -6,7 +6,7 @@ import { css, Theme } from '@emotion/react';
 import { layoutStyles } from '../text';
 import { useBlockedClick } from '../navigation';
 import { rem } from '../pixels';
-import { fern, neutral900, neutral1000 } from '../colors';
+import { colour } from '../colors';
 import { useHasRouter } from '../routing';
 import IconProps from '../icons/props';
 
@@ -16,18 +16,17 @@ const styles = css({
   display: 'inline-block',
   paddingBottom: rem(16 + borderBottomWidth),
 
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   textDecoration: 'none',
   whiteSpace: 'nowrap',
 });
-const activeStyles = ({ colors: { primary500 = fern } = {} }: Theme) =>
-  css({
-    paddingBottom: rem(16 + borderBottomWidth),
-    borderBottom: `solid ${rem(borderBottomWidth)} ${primary500.rgba}`,
+const activeStyles = css({
+  paddingBottom: rem(16 + borderBottomWidth),
+  borderBottom: `solid ${rem(borderBottomWidth)} ${colour.foreground.brand}`,
 
-    color: neutral1000.rgb,
-    fontWeight: 'bold',
-  });
+  color: colour.foreground.primary,
+  fontWeight: 'bold',
+});
 
 const iconStyles = css({
   display: 'inline-grid',
@@ -92,7 +91,7 @@ const TabLink: React.FC<TabLinkProps> = ({ href, children, Icon }) => {
     >
       {Icon && (
         <span css={iconStyles}>
-          <Icon color={isActive ? neutral1000.rgb : neutral900.rgb} />
+          <Icon color={isActive ? colour.neutral[900] : colour.neutral[600]} />
         </span>
       )}
       {children}
@@ -112,7 +111,7 @@ const TabLink: React.FC<TabLinkProps> = ({ href, children, Icon }) => {
           css={(theme: Theme) => [
             styles,
             theme.components?.TabLink?.styles,
-            active && activeStyles(theme),
+            active && activeStyles,
           ]}
         >
           {createInner(active)}
@@ -128,7 +127,7 @@ const TabLink: React.FC<TabLinkProps> = ({ href, children, Icon }) => {
       css={(theme: Theme) => [
         styles,
         theme.components?.TabLink?.styles,
-        active && activeStyles(theme),
+        active && activeStyles,
       ]}
     >
       {createInner(active)}

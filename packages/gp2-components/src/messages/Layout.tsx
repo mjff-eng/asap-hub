@@ -3,10 +3,10 @@ import {
   ceruleanFernGradientStyles,
   Link,
   pixels,
-  silver,
+  colour,
 } from '@asap-hub/react-components';
 import { staticPages } from '@asap-hub/routing';
-import { css } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
 import { ReactNode } from 'react';
 import { gp2Image } from '../images';
 
@@ -36,7 +36,7 @@ const contentContainerStyles = css({
 });
 
 const footerContainerStyles = css({
-  backgroundColor: silver.rgb,
+  backgroundColor: colour.general.blue.cerulean[25],
   padding: rem(12),
 });
 
@@ -52,8 +52,12 @@ interface LayoutProps {
   readonly appOrigin: string;
 }
 
+const emailTheme = {
+  colors: { primary500: colour.brand.gp2[500] },
+};
+
 const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (
-  <>
+  <ThemeProvider theme={emailTheme}>
     <div css={containerStyles}>
       <div
         role="presentation"
@@ -79,7 +83,7 @@ const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (
         </Link>
       </ul>
     </div>
-  </>
+  </ThemeProvider>
 );
 
 export default MessageLayout;

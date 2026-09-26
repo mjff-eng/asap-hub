@@ -19,7 +19,7 @@ import {
 import { mobileScreen, rem } from '../pixels';
 import { Title, Option } from './CheckboxGroup';
 import Toast from './Toast';
-import { colors } from '..';
+import { colour } from '..';
 
 const contentStyles = css({
   padding: `${rem(32)} ${rem(24)}`,
@@ -346,7 +346,7 @@ const ExportAnalyticsModal: React.FC<ExportAnalyticsModalProps> = ({
                       ? {}
                       : {
                           path: {
-                            fill: colors.neutral900.rgb,
+                            fill: colour.foreground.tertiary,
                           },
                         },
                 })}

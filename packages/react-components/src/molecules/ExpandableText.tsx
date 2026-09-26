@@ -4,9 +4,9 @@ import React, { useLayoutEffect, useState } from 'react';
 import {
   Button,
   chevronCircleDownIcon,
-  colorWithTransparency,
-  lead,
+  colourWithAlpha,
   pixels,
+  colour,
 } from '..';
 
 const { rem, lineHeight } = pixels;
@@ -22,18 +22,18 @@ const textStyles = css({
 const expandedTextStyles = css({
   maxHeight: rem(lineHeight * 500), // aproximation of possible max height (2500 characters)
   transition: 'max-height 300ms linear',
-  background: colorWithTransparency(lead, 0).rgba,
+  background: colourWithAlpha(colour.neutral[600], 0),
 });
 
 const expandableTextStyles = css({
   maxHeight: rem(expandableMaxHeight),
-  background: `linear-gradient(180deg, ${lead.rgb} 26.56%, ${
-    colorWithTransparency(lead, 0).rgba
-  } 100%)`,
+  background: `linear-gradient(180deg, ${
+    colour.neutral[600]
+  } 26.56%, ${colourWithAlpha(colour.neutral[600], 0)} 100%)`,
   WebkitBackgroundClip: 'text',
   backgroundClip: 'text',
-  maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))',
-  WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))',
+  maskImage: 'linear-gradient(to bottom, black, transparent)',
+  WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)',
 });
 
 const buttonContainerStyles = (marginTop: number) =>

@@ -2,7 +2,7 @@ import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import * as colors from '../../colors';
+import { colour } from '../../colors';
 
 import DeliverablesCard from '../DeliverablesCard';
 
@@ -72,11 +72,11 @@ describe('view more and less', () => {
 
 it.each`
   status           | textColor
-  ${'Complete'}    | ${colors.pine.rgb}
-  ${'In Progress'} | ${colors.info500.rgb}
-  ${'Not Started'} | ${colors.error500.rgb}
-  ${'Incomplete'}  | ${colors.warning500.rgb}
-  ${'Pending'}     | ${colors.neutral800.rgb}
+  ${'Complete'}    | ${colour.foreground.success}
+  ${'In Progress'} | ${colour.foreground.info}
+  ${'Not Started'} | ${colour.foreground.error}
+  ${'Incomplete'}  | ${colour.foreground.warning}
+  ${'Pending'}     | ${colour.foreground.quaternary}
 `(
   'uses the correct accent color for status $status',
   ({ status, textColor }) => {
@@ -87,7 +87,7 @@ it.each`
       />,
     );
     expect(
-      findParentWithStyle(screen.getByText(status), 'color')!.color,
-    ).toEqual(textColor);
+      findParentWithStyle(screen.getByText(status), 'borderStyle')!.element,
+    ).toHaveStyleRule('color', textColor);
   },
 );

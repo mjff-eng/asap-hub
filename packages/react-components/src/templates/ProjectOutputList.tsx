@@ -8,9 +8,9 @@ import {
 } from '../organisms';
 import type { ProjectOutput } from '../molecules';
 import { LibraryIcon } from '../icons';
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 
-const RESULT_LIST_ICON = <LibraryIcon color={charcoal.rgb} />;
+const RESULT_LIST_ICON = <LibraryIcon color={colour.neutral[900]} />;
 
 type ProjectOutputListProps = Omit<
   ComponentProps<typeof ResultList>,

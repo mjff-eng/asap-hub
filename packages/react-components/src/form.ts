@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { ember, fern, steel } from './colors';
+import { colour } from './colors';
 import { lineHeight, rem } from './pixels';
 import { themes } from './theme';
 
@@ -37,9 +37,9 @@ export const styles = {
 
   borderStyle: 'solid',
   borderWidth: rem(borderWidth),
-  borderColor: steel.rgb,
+  borderColor: colour.border.tertiary,
   ':focus': {
-    borderColor: fern.rgb,
+    borderColor: colour.border.brand,
   },
 } as const;
 
@@ -49,8 +49,8 @@ export const validationMessageStyles = {
   },
   whiteSpace: 'pre-wrap',
   paddingTop: rem(16),
-  color: ember.rgb,
-  borderColor: ember.rgb,
+  color: colour.foreground.error,
+  borderColor: colour.border.error,
 } as const;
 
 type ValidationTarget =

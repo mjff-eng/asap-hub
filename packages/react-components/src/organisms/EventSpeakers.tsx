@@ -11,7 +11,7 @@ import {
   Link,
   Paragraph,
 } from '../atoms';
-import { lead, neutral1000, steel } from '../colors';
+import { colour } from '../colors';
 import {
   chevronDownIcon,
   chevronUpIcon,
@@ -84,7 +84,7 @@ const shortFindingsLabel = css({
 const teamCellStyles = css({ paddingRight: rem(24) });
 
 const teamGroupStyles = css({
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   '&:last-of-type': {
     borderBottom: 'none',
   },
@@ -99,7 +99,7 @@ const membersCellStyles = css({
 });
 
 const leadTextStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const membersListStyles = css({
@@ -290,7 +290,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
           <Headline3 noMargin>Speakers</Headline3>
           {onAddSpeaker ? (
             <>
-              <Paragraph noMargin accent="lead">
+              <Paragraph noMargin accent="tertiary">
                 {editorEmptyMessage(hasFinished)}
               </Paragraph>
               <Button primary small noMargin onClick={onAddSpeaker}>
@@ -298,7 +298,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
               </Button>
             </>
           ) : (
-            <Paragraph noMargin accent="lead">
+            <Paragraph noMargin accent="tertiary">
               No speakers have been added for this event yet.
             </Paragraph>
           )}
@@ -366,7 +366,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
                 onClick={onEdit}
                 overrideStyles={editIconButtonStyles}
               >
-                <PencilIcon color={neutral1000.rgb} />
+                <PencilIcon color={colour.neutral[900]} />
               </Button>
             )}
           </div>

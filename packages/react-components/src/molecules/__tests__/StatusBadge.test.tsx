@@ -1,13 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { manuscriptStatus, ManuscriptStatus } from '@asap-hub/model';
-import {
-  info100,
-  info500,
-  success100,
-  success500,
-  warning100,
-  warning500,
-} from '../../colors';
+import { colour } from '../../colors';
 import StatusBadge from '../StatusBadge';
 
 // Replicate getStatusType logic locally in test
@@ -30,20 +23,20 @@ const getExpectedStyleType = (status: ManuscriptStatus) => {
 
 const styleMap = {
   warning: {
-    backgroundColor: warning100.rgba,
-    textColor: warning500.rgba,
+    backgroundColor: colour.background.warning,
+    textColor: colour.foreground.warning,
   },
   final: {
-    backgroundColor: success100.rgba,
-    textColor: success500.rgba,
+    backgroundColor: colour.background.success,
+    textColor: colour.foreground.success,
   },
   default: {
-    backgroundColor: info100.rgba,
-    textColor: info500.rgba,
+    backgroundColor: colour.background.info,
+    textColor: colour.foreground.info,
   },
   none: {
-    backgroundColor: info100.rgba,
-    textColor: info500.rgba,
+    backgroundColor: colour.background.info,
+    textColor: colour.foreground.info,
   },
 } as const;
 
@@ -59,8 +52,8 @@ describe('StatusBadge', () => {
       const type = getExpectedStyleType(status);
       const { backgroundColor, textColor } = styleMap[type];
 
-      expect(badge).toHaveStyle(`background-color: ${backgroundColor}`);
-      expect(badge).toHaveStyle(`color: ${textColor}`);
+      expect(badge).toHaveStyleRule('background-color', backgroundColor);
+      expect(badge).toHaveStyleRule('color', textColor);
     },
   );
 

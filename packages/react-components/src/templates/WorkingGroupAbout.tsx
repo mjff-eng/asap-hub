@@ -1,7 +1,7 @@
 import { WorkingGroupResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import { Card, Headline3, Paragraph, Subtitle } from '../atoms';
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 import { createMailTo } from '../mail';
 import { Collapsible, CtaContactSection, TagList } from '../molecules';
 import { DeliverablesCard, WorkingGroupMembers, RichText } from '../organisms';
@@ -64,7 +64,7 @@ const WorkingGroupAbout: React.FC<WorkingGroupAboutProps> = ({
       <Card>
         <Headline3>Tags</Headline3>
         <div css={tagListStyle}>
-          <Paragraph accent="lead">
+          <Paragraph accent="tertiary">
             Explore keywords related to skills, techniques, resources, and
             tools.
           </Paragraph>
@@ -75,11 +75,11 @@ const WorkingGroupAbout: React.FC<WorkingGroupAboutProps> = ({
     {showCollaborationCard && (
       <Card accent="green">
         <Headline3>
-          <span css={{ color: charcoal.rgb }}>
+          <span css={{ color: colour.foreground.primary }}>
             Would you like to collaborate with this Working Group?
           </span>
         </Headline3>
-        <Paragraph accent="lead">
+        <Paragraph accent="tertiary">
           We are always looking for new people to collaborate with our working
           group to find the best solutions for our goals.
         </Paragraph>

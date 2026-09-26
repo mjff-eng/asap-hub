@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 import { Button, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { neutral200, steel } from '../colors';
+import { colour } from '../colors';
 import { plusRectIcon, minusRectIcon, InactiveBadgeIcon } from '../icons';
 import { TeamCollaborationMetric } from '../organisms';
 import { rem, tabletScreen } from '../pixels';
@@ -17,9 +17,9 @@ import { getPerformanceIcon } from '../utils';
 const rowStyles = css({
   display: 'grid',
   padding: `${rem(20)} ${rem(24)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':nth-of-type(2n+3)': {
-    background: neutral200.rgb,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',
@@ -30,7 +30,7 @@ const rowStyles = css({
     columnGap: rem(15),
     paddingTop: 0,
     paddingBottom: rem(15),
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -57,14 +57,14 @@ const columnsStyles = (isWithinTeam: boolean) =>
 const collapsedRowStyles = css({
   display: 'grid',
   margin: `0 ${rem(24)} 0 ${rem(75)}`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':last-child': {
     borderBottom: 'none',
   },
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     paddingTop: 0,
     paddingBottom: rem(15),
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
     gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
     columnGap: rem(15),
   },
@@ -72,12 +72,12 @@ const collapsedRowStyles = css({
 
 const rowContainerStyles = css({
   display: 'grid',
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
   },
   ':nth-of-type(2n+3)': {
-    background: neutral200.rgb,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',
@@ -88,7 +88,7 @@ const rowContainerStyles = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     paddingTop: 0,
     paddingBottom: 0,
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 

@@ -14,7 +14,7 @@ import {
   Caption,
   CopyButton,
 } from '../atoms';
-import { pine } from '../colors';
+import { colour } from '../colors';
 import {
   Breadcrumbs,
   UserAvatarList,
@@ -120,7 +120,7 @@ const dropdownButtonStyling = css({
   display: 'flex',
   columnGap: rem(9),
   svg: {
-    color: pine.rgb,
+    color: colour.foreground.brand,
   },
 });
 
@@ -336,7 +336,7 @@ const WorkingGroupPageHeader: React.FC<WorkingGroupPageHeaderProps> = ({
             )}
           </div>
           <div css={lastUpdatedStyles}>
-            <Caption asParagraph accent="lead">
+            <Caption asParagraph accent="tertiary">
               Last updated:{' '}
               {formatDistance(new Date(), new Date(lastModifiedDate))} ago
             </Caption>

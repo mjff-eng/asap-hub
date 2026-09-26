@@ -1,23 +1,6 @@
 import { css, SerializedStyles } from '@emotion/react';
 
-import {
-  pine,
-  silver,
-  mint,
-  apricot,
-  clay,
-  info100,
-  denim,
-  azure,
-  space,
-  lilac,
-  berry,
-  lavender,
-  mauve,
-  paper,
-  lead,
-  steel,
-} from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { headlineStyles, fontStyles } from '../text';
 
@@ -53,13 +36,13 @@ const ringBorderStyle = css({
   borderWidth,
   borderStyle: 'solid',
   borderRadius: '50%',
-  borderColor: silver.rgb,
+  borderColor: colour.general.blue.cerulean[25],
 });
 const placeholderStyle = css({
   borderWidth: '1px',
   borderStyle: 'solid',
   borderRadius: '50%',
-  borderColor: steel.rgb,
+  borderColor: colour.border.tertiary,
 });
 
 const circleStyle = css({
@@ -86,17 +69,16 @@ const textStyle = css(fontStyles, headlineStyles[3], {
 });
 
 const placeholderColorStyle = css({
-  backgroundColor: paper.rgb,
-  fill: lead.rgb,
+  backgroundColor: colour.background.primary,
+  fill: colour.foreground.tertiary,
 });
 const colorStyles = [
-  css({ backgroundColor: mint.rgb, fill: pine.rgb }),
-  css({ backgroundColor: apricot.rgb, fill: clay.rgb }),
-  css({ backgroundColor: info100.rgb, fill: denim.rgb }),
-  css({ backgroundColor: azure.rgb, fill: space.rgb }),
-  css({ backgroundColor: lilac.rgb, fill: berry.rgb }),
-  css({ backgroundColor: lavender.rgb, fill: mauve.rgb }),
-];
+  [colour.background['color-yellow'], colour.foreground['color-yellow']],
+  [colour.background['color-green'], colour.foreground['color-green']],
+  [colour.background['color-lavender'], colour.foreground['color-lavender']],
+  [colour.background['color-blue'], colour.foreground['color-blue']],
+  [colour.background['color-brand'], colour.foreground['color-brand']],
+].map(([backgroundColor, fill]) => css({ backgroundColor, fill }));
 
 type RegularAvatarProps = {
   readonly imageUrl?: string;

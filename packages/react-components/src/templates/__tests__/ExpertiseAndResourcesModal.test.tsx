@@ -6,7 +6,7 @@ import { createUserResponse } from '@asap-hub/fixtures';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import ExpertiseAndResourcesModal from '../ExpertiseAndResourcesModal';
-import { ember, steel } from '../../colors';
+import { colour } from '../../colors';
 
 const mapTags = (tags: string[]) => tags.map((tag) => ({ name: tag, id: tag }));
 
@@ -124,12 +124,13 @@ describe('tags selection', () => {
       />,
     );
     const input = getByLabelText(/tags\s*\(required\)/i);
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).not.toEqual(
-      ember.rgb,
-    );
+    expect(
+      findParentWithStyle(input, 'borderStyle')?.element,
+    ).not.toHaveStyleRule('border-color', colour.utilitarian.red[600]);
     await userEvent.click(getByText(/save/i));
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toEqual(
-      steel.rgb,
+    expect(findParentWithStyle(input, 'borderStyle')?.element).toHaveStyleRule(
+      'border-color',
+      colour.border.tertiary,
     );
     expect(handleSave).not.toHaveBeenCalled();
   });
@@ -151,8 +152,9 @@ describe('tags selection', () => {
     await userEvent.type(input, `{enter}`);
     fireEvent.blur(input);
 
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toEqual(
-      ember.rgb,
+    expect(findParentWithStyle(input, 'borderStyle')?.element).toHaveStyleRule(
+      'border-color',
+      colour.border.error,
     );
     expect(getByText('Please add a minimum of 5 tags')).toBeVisible();
 
@@ -161,8 +163,9 @@ describe('tags selection', () => {
     await userEvent.type(input, `{enter}`);
     fireEvent.blur(input);
 
-    expect(findParentWithStyle(input, 'borderColor')?.borderColor).toEqual(
-      steel.rgb,
+    expect(findParentWithStyle(input, 'borderStyle')?.element).toHaveStyleRule(
+      'border-color',
+      colour.border.tertiary,
     );
     expect(
       queryByText('Please add a minimum of 5 tags'),

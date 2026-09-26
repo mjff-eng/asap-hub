@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { UserAwardWithTeam } from '@asap-hub/model';
 
 import { Button, Card, Headline2, Paragraph } from '../atoms';
-import { fern, lead, steel } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 export const badgesAnchorId = 'badges';
@@ -50,7 +50,7 @@ const iconStyles = css({
 });
 
 const teamNameStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   overflowWrap: 'anywhere',
 });
 
@@ -60,8 +60,8 @@ const showMoreButtonStyles = css({
   justifyContent: 'center',
   width: '100%',
   fontWeight: 'normal',
-  color: fern.rgba,
-  borderTop: `1px solid ${steel.rgb}`,
+  color: colour.foreground.brand,
+  borderTop: `1px solid ${colour.border.tertiary}`,
   marginTop: rem(32),
   paddingTop: rem(16),
   textDecoration: 'none',
@@ -137,7 +137,7 @@ const UserProfileBadges: React.FC<UserProfileBadgesProps> = ({ badges }) => {
           Badges
         </Headline2>
         <Paragraph
-          accent="lead"
+          accent="tertiary"
           noMargin
           styles={css({ margin: `${rem(24)} ${rem(24)} ${rem(32)}` })}
         >

@@ -3,7 +3,7 @@ import { ProjectStatus } from '@asap-hub/model';
 import { differenceInMonths } from 'date-fns';
 import { clockIcon } from '../icons';
 import { rem } from '../pixels';
-import { lead, neutral800 } from '../colors';
+import { colour } from '../colors';
 import { formatProjectDate } from '../date';
 
 const metadataRowStyles = css({
@@ -11,7 +11,7 @@ const metadataRowStyles = css({
   alignItems: 'flex-start',
   gap: rem(8),
   fontSize: rem(17),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const iconStyles = css({
@@ -26,7 +26,7 @@ const iconStyles = css({
 });
 
 const durationStyles = css({
-  color: neutral800.rgb,
+  color: colour.foreground.quaternary,
 });
 
 export const calculateDuration = (

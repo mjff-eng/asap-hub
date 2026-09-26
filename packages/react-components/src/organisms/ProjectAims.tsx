@@ -4,7 +4,7 @@ import { FC, useState } from 'react';
 import { Headline3, Card, Button, TabButton, Link, Paragraph } from '../atoms';
 import { TabNav } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
-import { neutral1000, steel } from '../colors';
+import { colour } from '../colors';
 import Aim from './Aim';
 
 const contentStyles = css({
@@ -13,7 +13,7 @@ const contentStyles = css({
 
 const tabContainerStyles = css({
   marginBottom: rem(24),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 const aimsGridStyles = css({
@@ -38,14 +38,14 @@ const headerRowStyles = css({
 const headerLabelStyles = css({
   fontSize: rem(17),
   fontWeight: 'bold',
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const viewMoreContainerStyles = (hasMore: boolean) =>
   css({
     marginTop: hasMore ? rem(32) : 0,
     paddingTop: rem(16),
-    borderTop: hasMore ? `1px solid ${steel.rgb}` : 'none',
+    borderTop: hasMore ? `1px solid ${colour.border.tertiary}` : 'none',
     textAlign: 'center',
   });
 
@@ -136,7 +136,7 @@ const ProjectAims: FC<ProjectAimsProps> = ({
         <Headline3 noMargin>Aims</Headline3>
         <Paragraph
           noMargin
-          accent="lead"
+          accent="tertiary"
           styles={css({
             marginTop: rem(24),
             marginBottom: rem(

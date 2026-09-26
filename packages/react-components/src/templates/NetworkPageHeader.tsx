@@ -246,7 +246,7 @@ const NetworkPageHeader: React.FC<NetworkPageHeaderProps> = ({
       >
         <Display styleAsHeading={2}>Network</Display>
         <div css={textStyles}>
-          <Paragraph accent="lead">
+          <Paragraph accent="tertiary">
             Explore the ASAP Network and collaborate!
           </Paragraph>
         </div>

@@ -1,9 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ThemeProvider } from '@emotion/react';
 
-import { silver, fern, charcoal, color } from '../../colors';
+import { colour } from '../../colors';
 import { OrcidIcon } from '../../icons';
-import { activePrimaryBackgroundColorDefault } from '../../button';
 
 import Button from '../Button';
 
@@ -83,72 +81,90 @@ it('renders a button without margin', () => {
   expect(iconOnlyPaddingLeft).toBeLessThan(normalPaddingLeft);
 });
 describe('primary button', () => {
-  it('renders a primary button', () => {
+  it('renders a primary button with the primary button roles', () => {
     const { getByRole, rerender } = render(<Button />);
-    expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
-      fern.rgb,
+    expect(getByRole('button')).not.toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
     );
     rerender(<Button primary />);
-    expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
-      fern.rgb,
+    expect(getByRole('button')).toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.default,
+    );
+    expect(getByRole('button')).toHaveStyleRule(
+      'color',
+      colour.foreground.button.primary.default,
+    );
+    expect(getByRole('button')).toHaveStyleRule(
+      'border-color',
+      colour.border.button.primary.default,
     );
   });
 
-  it('uses ThemeProvider theme primaryColor', () => {
-    const testBorderColor = color(12, 141, 195);
-    const testBackgroundColor = color(0, 106, 146);
-    const theme = {
-      colors: {
-        primary500: testBackgroundColor,
-        primary900: testBorderColor,
-      },
-    };
-    const { getByRole } = render(
-      <ThemeProvider theme={theme}>
-        <Button primary />
-      </ThemeProvider>,
+  it('uses the primary button hover roles', () => {
+    const { getByRole } = render(<Button primary />);
+    expect(getByRole('button')).toHaveStyleRule(
+      'background-color',
+      colour.background.button.primary.hover,
+      { target: ':hover' },
     );
-    const { backgroundColor, borderColor } = getComputedStyle(
-      getByRole('button'),
+    expect(getByRole('button')).toHaveStyleRule(
+      'border-color',
+      colour.border.button.primary.hover,
+      { target: ':hover' },
     );
-    expect(borderColor).toBe(testBorderColor.rgba);
-    expect(backgroundColor).toBe(testBackgroundColor.rgb);
   });
 });
 
 it('renders an active secondary button', () => {
   const { getByRole, rerender } = render(<Button />);
-  expect(getComputedStyle(getByRole('button')).borderColor).not.toBe(
-    charcoal.rgb,
-  );
+  expect(getByRole('button')).not.toHaveStyle({
+    borderColor: colour.neutral[900],
+  });
 
   rerender(<Button active />);
-  expect(getComputedStyle(getByRole('button')).borderColor).toBe(charcoal.rgb);
+  expect(getByRole('button')).toHaveStyle({
+    borderColor: colour.neutral[900],
+  });
 });
 
 it('renders an active primary button', () => {
   const { getByRole, rerender } = render(<Button primary />);
-  expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
-    activePrimaryBackgroundColorDefault.rgba,
+  expect(getByRole('button')).not.toHaveStyleRule(
+    'background-color',
+    colour.background.active,
   );
 
   rerender(<Button primary active />);
-  expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
-    activePrimaryBackgroundColorDefault.rgba,
+  expect(getByRole('button')).toHaveStyleRule(
+    'background-color',
+    colour.background.active,
+  );
+  expect(getByRole('button')).toHaveStyleRule('color', colour.foreground.brand);
+});
+
+it('renders a warning button with inverse text', () => {
+  const { getByRole } = render(<Button primary warning />);
+  expect(getByRole('button')).toHaveStyleRule(
+    'color',
+    colour.foreground['primary-inverse'],
   );
 });
 
 it('renders a disabled button', () => {
   const { getByRole, rerender } = render(<Button />);
   expect((getByRole('button') as HTMLButtonElement).disabled).toBeFalsy();
-  expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
-    silver.rgb,
+  expect(getByRole('button')).not.toHaveStyleRule(
+    'background-color',
+    colour.background.disabled,
   );
 
   rerender(<Button enabled={false} />);
   expect((getByRole('button') as HTMLButtonElement).disabled).toBe(true);
-  expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
-    silver.rgb,
+  expect(getByRole('button')).toHaveStyleRule(
+    'background-color',
+    colour.background.disabled,
   );
 });
 
@@ -191,8 +207,8 @@ describe('the type', () => {
 
 it('renders a link-styled button', () => {
   const { getByRole } = render(<Button linkStyle />);
-  const { color: buttonColor, padding } = getComputedStyle(getByRole('button'));
-  expect(buttonColor).toBe(fern.rgb);
+  expect(getByRole('button')).toHaveStyleRule('color', colour.foreground.brand);
+  const { padding } = getComputedStyle(getByRole('button'));
   expect(padding).toMatchInlineSnapshot(`"0px"`);
 });
 

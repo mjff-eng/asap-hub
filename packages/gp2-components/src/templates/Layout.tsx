@@ -1,7 +1,7 @@
 import {
+  colour,
   crossQuery,
   Loading,
-  navigationGrey,
   Overlay,
   ToastStack,
   usePrevious,
@@ -21,9 +21,6 @@ import {
 import { useLocation } from 'react-router';
 import UserMenu from '../molecules/UserMenu';
 import { NavigationHeader } from '../organisms';
-import colors from './colors';
-
-const { neutral000 } = colors;
 
 const MainNavigation = lazy(
   () =>
@@ -66,7 +63,7 @@ const overlayMenuShownStyles = css({
 });
 
 const menuStyles = css({
-  backgroundColor: neutral000.rgb,
+  backgroundColor: colour.background.primary,
   gridColumnStart: '1',
   overflowY: 'auto',
   display: 'flex',
@@ -90,7 +87,7 @@ const mainMenuStyles = css({
   gridArea: 'main-menu',
 });
 const userMenuStyles = css({
-  backgroundColor: navigationGrey.rgb,
+  backgroundColor: colour.background.tertiary,
   gridArea: 'user-menu',
   flexGrow: 1,
 });

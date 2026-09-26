@@ -1,21 +1,8 @@
-import { Theme } from '@emotion/react';
 import { CSSObject } from '@emotion/serialize';
 import { GroupBase, InputProps, StylesConfig } from 'react-select';
 import { ellipsisStyles } from './atoms/Ellipsis';
 import { MultiSelectOptionsType } from './atoms/MultiSelect';
-import {
-  charcoal,
-  ember,
-  fern,
-  lead,
-  mint,
-  paper,
-  pine,
-  rose,
-  silver,
-  steel,
-  tin,
-} from './colors';
+import { colour } from './colors';
 import {
   borderWidth,
   indicatorPadding,
@@ -36,11 +23,11 @@ export type OptionsType<T> = readonly T[];
 const { ...baseStyles } = styles;
 
 const disabledStyles = {
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   svg: {
-    fill: lead.rgb,
+    fill: colour.foreground.tertiary,
   },
-  backgroundColor: silver.rgb,
+  backgroundColor: colour.background.disabled,
 };
 
 const baseSelectStyles = {
@@ -49,10 +36,10 @@ const baseSelectStyles = {
     padding: 0,
     margin: '0 2px',
     width: '100%',
-    color: charcoal.rgb,
+    color: colour.foreground.primary,
     input: {
       width: '100% !important',
-      color: `${charcoal.rgb} !important`,
+      color: `${colour.foreground.primary} !important`,
     },
   }),
   indicatorSeparator: () => ({
@@ -76,14 +63,14 @@ const baseSelectStyles = {
     paddingTop: rem(9),
 
     borderRadius: 0,
-    boxShadow: `0px 2px 4px ${steel.rgb}`,
+    boxShadow: `0px 2px 4px ${colour.neutral[100]}`,
   }),
   menuList: (provided: CSSObject) => ({
     ...provided,
 
     borderStyle: 'solid',
     borderWidth: rem(borderWidth),
-    borderColor: steel.rgb,
+    borderColor: colour.border.tertiary,
   }),
 
   noOptionsMessage: () => ({
@@ -96,9 +83,6 @@ export const reactSelectStyles = <
   T extends { value: string; label: string } = { value: string; label: string },
   M extends boolean = boolean,
 >(
-  {
-    colors: { primary100 = mint, primary500 = fern, primary900 = pine } = {},
-  }: Theme,
   isInvalid: boolean,
 ): StylesConfig<T, M, GroupBase<T>> =>
   ({
@@ -108,8 +92,8 @@ export const reactSelectStyles = <
 
       padding: `${rem(12)} ${rem(paddingLeftRight)}`,
 
-      backgroundColor: isFocused ? primary100.rgba : 'unset',
-      color: isFocused ? primary900.rgba : 'unset',
+      backgroundColor: isFocused ? colour.background['hover-brand'] : 'unset',
+      color: isFocused ? colour.foreground.brand : 'unset',
       ':active': undefined,
     }),
     control: (_provided, { isFocused, isDisabled }) => ({
@@ -118,12 +102,12 @@ export const reactSelectStyles = <
       justifyContent: 'space-between',
       alignItems: 'center',
 
-      ...(isFocused ? { borderColor: primary500.rgba } : {}),
+      ...(isFocused ? { borderColor: colour.border.brand } : {}),
       ...(isInvalid
         ? {
-            color: ember.rgb,
-            borderColor: ember.rgb,
-            backgroundColor: rose.rgb,
+            color: colour.foreground.error,
+            borderColor: colour.border.error,
+            backgroundColor: colour.background.error,
           }
         : {}),
       ...(isDisabled ? disabledStyles : {}),
@@ -133,7 +117,7 @@ export const reactSelectStyles = <
       margin: 0,
       color: getValue()?.some((option) => option.value !== '')
         ? 'unset'
-        : tin.rgb,
+        : colour.foreground.disabled,
     }),
     valueContainer: (provided) => ({
       ...provided,
@@ -142,7 +126,7 @@ export const reactSelectStyles = <
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: isInvalid ? ember.rgb : lead.rgb,
+      color: isInvalid ? colour.foreground.error : colour.foreground.tertiary,
       opacity: isInvalid ? 0.4 : provided.opacity,
     }),
     menu: (provided: CSSObject) => ({
@@ -156,9 +140,6 @@ export const reactMultiSelectStyles = <
   T extends MultiSelectOptionsType,
   M extends boolean = true,
 >(
-  {
-    colors: { primary100 = mint, primary500 = fern, primary900 = pine } = {},
-  }: Theme,
   isInvalid: boolean,
   isMulti: boolean,
 ): StylesConfig<T, M, GroupBase<T>> =>
@@ -169,8 +150,8 @@ export const reactMultiSelectStyles = <
 
       padding: `${rem(12)} ${rem(paddingLeftRight)}`,
 
-      backgroundColor: isFocused ? primary100.rgba : 'unset',
-      color: isFocused ? primary900.rgba : 'unset',
+      backgroundColor: isFocused ? colour.background['hover-brand'] : 'unset',
+      color: isFocused ? colour.foreground.brand : 'unset',
       ':active': undefined,
     }),
     control: (_provided, { isFocused, isDisabled }) => ({
@@ -184,11 +165,13 @@ export const reactMultiSelectStyles = <
       // Ensure single-select has same height as multi-select with chips
       ...(!isMulti ? { minHeight: rem(54) } : {}),
 
-      ...(isFocused ? { borderColor: primary500.rgba } : {}),
+      ...(isFocused ? { borderColor: colour.border.brand } : {}),
       ...(isInvalid
         ? {
-            borderColor: isFocused ? primary900.rgba : ember.rgb,
-            backgroundColor: isFocused ? paper.rgb : rose.rgb,
+            borderColor: isFocused ? colour.border.brand : colour.border.error,
+            backgroundColor: isFocused
+              ? colour.background.primary
+              : colour.background.error,
             svg: { fill: 'unset' },
           }
         : {}),
@@ -203,15 +186,15 @@ export const reactMultiSelectStyles = <
 
       borderStyle: 'solid',
       borderWidth: `${borderWidth}px`,
-      borderColor: isInvalid ? tin.rgba : steel.rgb,
+      borderColor: isInvalid ? colour.border.secondary : colour.neutral[100],
       borderRadius: rem(18),
-      backgroundColor: paper.rgb,
+      backgroundColor: colour.background.primary,
     }),
     multiValueLabel: (provided) => ({
       ...provided,
       ...ellipsisStyles,
       padding: 0,
-      color: charcoal.rgb,
+      color: colour.foreground.primary,
       fontSize: 'unset',
     }),
     multiValueRemove: (provided, state) =>
@@ -249,7 +232,7 @@ export const reactMultiSelectStyles = <
     },
     placeholder: (provided) => ({
       ...provided,
-      color: isInvalid ? ember.rgb : provided.color,
+      color: isInvalid ? colour.foreground.error : provided.color,
       opacity: isInvalid ? 0.4 : provided.opacity,
       marginLeft: rem(6),
     }),

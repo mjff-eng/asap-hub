@@ -3,16 +3,7 @@ import { css } from '@emotion/react';
 import { useRef, useState } from 'react';
 
 import { Button, Headline2, Link, Paragraph, Tag } from '../atoms';
-import {
-  error500,
-  error900,
-  fern,
-  lead,
-  neutral1000,
-  pearl,
-  silver,
-  steel,
-} from '../colors';
+import { colour } from '../colors';
 import {
   binIcon,
   chevronDownIcon,
@@ -104,7 +95,7 @@ const titleStyles = css({
   fontSize: rem(26),
   fontWeight: 700,
   lineHeight: rem(32),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const headerIconStyles = css({
@@ -163,7 +154,7 @@ const addButtonStyles = css({
 
 const errorStyles = css({
   margin: 0,
-  color: error500.rgb,
+  color: colour.foreground.error,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -176,12 +167,12 @@ const summaryStyles = css({
   flexWrap: 'wrap',
   fontSize: rem(17),
   lineHeight: rem(24),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const summaryStrongStyles = css({
   fontWeight: 700,
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const summarySeparatorStyles = css({
@@ -191,9 +182,11 @@ const summarySeparatorStyles = css({
 
 const resultCardStyles = (enabled: boolean) =>
   css({
-    border: `1px solid ${steel.rgb}`,
+    border: `1px solid ${colour.border.tertiary}`,
     borderRadius: rem(8),
-    backgroundColor: enabled ? pearl.rgb : silver.rgb,
+    backgroundColor: enabled
+      ? colour.background.secondary
+      : colour.background.disabled,
     overflow: 'hidden',
   });
 
@@ -210,7 +203,7 @@ const sectionHeaderStyles = css({
   fontSize: rem(17),
   lineHeight: rem(24),
   textAlign: 'left',
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const sectionHeaderLabelStyles = css({
@@ -225,7 +218,7 @@ const sectionHeaderLabelStyles = css({
 });
 
 const matchedLabelStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontWeight: 400,
   gap: rem(8),
   strong: {
@@ -234,10 +227,10 @@ const matchedLabelStyles = css({
 });
 
 const notMatchedLabelStyles = css({
-  color: error900.rgb,
+  color: colour.utilitarian.red[700],
   gap: rem(8),
   '> svg': {
-    fill: error900.rgb,
+    fill: colour.utilitarian.red[700],
   },
 });
 
@@ -253,7 +246,7 @@ const chevronStyles = (open: boolean) =>
   });
 
 const dividerStyles = css({
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 const sectionBodyStyles = css({
@@ -274,7 +267,7 @@ const matchedTeamStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: rem(8),
-  color: fern.rgb,
+  color: colour.foreground.brand,
   '> svg': {
     width: rem(24),
     height: rem(24),
@@ -283,7 +276,7 @@ const matchedTeamStyles = css({
 });
 
 const matchedTeamNameStyles = css({
-  color: fern.rgb,
+  color: colour.foreground.brand,
   fontWeight: 400,
 });
 
@@ -303,15 +296,15 @@ const unmatchedRowStyles = css({
 const unmatchedTextStyles = css({
   fontSize: rem(17),
   lineHeight: rem(24),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const unmatchedMetaStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const suggestionLinkStyles = css({
-  color: fern.rgb,
+  color: colour.foreground.brand,
 });
 
 const addSuggestionButtonStyles = css({
@@ -320,7 +313,7 @@ const addSuggestionButtonStyles = css({
   alignItems: 'center',
   gap: rem(8),
   lineHeight: rem(24),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   '> svg': {
     width: rem(24),
     height: rem(24),
@@ -332,7 +325,7 @@ const addSuggestionButtonStyles = css({
 
 const emptyResultStyles = css({
   margin: 0,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -352,7 +345,7 @@ const formatTooltipStyles = css({
 
 const unmatchedHelpStyles = css({
   margin: 0,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(14),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -624,7 +617,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
       </header>
 
       <div css={bodyStyles}>
-        <Paragraph noMargin accent="lead">
+        <Paragraph noMargin accent="tertiary">
           Add teams from a list. Matched teams are added and marked attended. If
           a team is already in your list, their attendance will be updated to
           match the file. CSV or XLSX files only. What format does the file
@@ -633,7 +626,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
             openOnHover
             floating
             width={296}
-            background={neutral1000.rgb}
+            background={colour.neutral[900]}
             overrideTooltipStyles={formatTooltipStyles}
           >
             <span>Your file needs two columns.</span>

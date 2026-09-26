@@ -15,14 +15,13 @@ import {
   Divider,
   ExpandableText,
   formatDate,
-  lead,
   Link,
   minusRectIcon,
   Pill,
   PencilIcon,
   plusRectIcon,
   Subtitle,
-  colors,
+  colour,
 } from '..';
 import { paddingStyles } from '../card';
 import ManuscriptFileSection from '../molecules/ManuscriptFileSection';
@@ -115,7 +114,7 @@ const quickCheckStyles = css({
 });
 
 const quickCheckDetailsStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const additionalInformationListStyles = css({
@@ -134,7 +133,7 @@ const additionalInformationEntryStyles = css({
 });
 const additionalInformationValueStyles = css({
   textAlign: 'right',
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   overflowWrap: 'anywhere',
 
   [`@media (max-width: ${mobileScreen.max}px)`]: {
@@ -237,8 +236,8 @@ const ManuscriptVersionCard: React.FC<ManuscriptVersionCardProps> = ({
     <>
       <div
         css={{
-          borderBottom: `1px solid ${colors.steel.rgb}`,
-          backgroundColor: colors.paper.rgb,
+          borderBottom: `1px solid ${colour.border.tertiary}`,
+          backgroundColor: colour.background.primary,
           ':first-of-type': {
             borderRadius: `${rem(8)} ${rem(8)} 0 0`,
           },
@@ -273,7 +272,7 @@ const ManuscriptVersionCard: React.FC<ManuscriptVersionCardProps> = ({
               <Subtitle noMargin>Manuscript #{version.count}</Subtitle>
 
               <div css={updatedByAndEditContainerStyles}>
-                <Caption accent="lead" noMargin>
+                <Caption accent="tertiary" noMargin>
                   <div css={updatedByContainerStyles}>
                     <span css={updatedByTextStyles}>
                       Last Update:
@@ -491,7 +490,7 @@ const ManuscriptVersionCard: React.FC<ManuscriptVersionCardProps> = ({
                   </ol>
                 </div>
               )}
-              <Caption accent="lead" noMargin>
+              <Caption accent="tertiary" noMargin>
                 <div css={userContainerStyles}>
                   Date created:
                   <span>{formatDate(new Date(version.createdDate))}</span>

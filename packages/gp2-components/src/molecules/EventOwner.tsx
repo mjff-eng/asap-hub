@@ -44,7 +44,7 @@ const EventOwner: React.FC<EventOwnerProps> = ({ project, workingGroup }) => {
       {href ? (
         <Link href={href}>{title}</Link>
       ) : (
-        <Paragraph noMargin accent="lead">
+        <Paragraph noMargin accent="tertiary">
           {title}
         </Paragraph>
       )}

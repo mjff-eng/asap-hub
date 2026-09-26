@@ -3,7 +3,7 @@ import { css, keyframes, Theme } from '@emotion/react';
 import { PropsWithChildren } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import { activePrimaryStyles } from '../button';
-import { charcoal, lead, silver } from '../colors';
+import { colour } from '../colors';
 import { crossQuery } from '../layout';
 import { useBlockedClick } from '../navigation';
 import { lineHeight, rem } from '../pixels';
@@ -16,16 +16,16 @@ const styles = css({
   color: 'unset',
   cursor: 'pointer',
   padding: rem(16),
-  stroke: lead.rgb,
+  stroke: colour.foreground.tertiary,
   svg: {
-    stroke: charcoal.rgb,
+    stroke: colour.foreground.primary,
   },
   textDecoration: 'none',
   outline: 'none',
   borderRadius: rem(6),
   transition: 'background-color 100ms ease-in-out, color 100ms ease-in-out',
   ':hover, :focus': {
-    backgroundColor: silver.rgb,
+    backgroundColor: colour.background.tertiary,
   },
 });
 
@@ -151,10 +151,10 @@ export const Navigation: React.FC<NavigationProps & PropsWithChildren> = ({
         onClick={blockedClick}
       >
         <div
-          css={({ colors, components }: Theme) => [
+          css={({ components }: Theme) => [
             styles,
             squareBorder && squareBorderStyles,
-            enabled && isActive && activePrimaryStyles(colors),
+            enabled && isActive && activePrimaryStyles,
             !enabled && disableStyles,
             components?.NavigationLink?.styles,
           ]}
@@ -171,10 +171,10 @@ export const Navigation: React.FC<NavigationProps & PropsWithChildren> = ({
     <a
       href={url}
       className={active ? 'active' : undefined}
-      css={({ colors, components }: Theme) => [
+      css={({ components }: Theme) => [
         styles,
         squareBorder && squareBorderStyles,
-        active && activePrimaryStyles(colors),
+        active && activePrimaryStyles,
         !enabled && disableStyles,
         components?.NavigationLink?.styles,
       ]}

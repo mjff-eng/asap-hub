@@ -5,7 +5,7 @@ import { ComponentProps } from 'react';
 
 import { EventDateBlock, EventTime, LinkHeadline, TagList } from '.';
 import { Headline3 } from '..';
-import { neutral900, steel } from '../colors';
+import { colour } from '../colors';
 import { largeDesktopScreen, rem } from '../pixels';
 
 const TITLE_LIMIT = 55;
@@ -26,7 +26,7 @@ const thumbnailStyles = css({
 
   borderStyle: 'solid',
   borderWidth: 1,
-  borderColor: steel.rgb,
+  borderColor: colour.border.tertiary,
   borderRadius: rem(8),
 });
 
@@ -39,7 +39,7 @@ const contentStyles = css({
 
 const tagContainerStyles = css({
   marginTop: rem(8),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
 });
 

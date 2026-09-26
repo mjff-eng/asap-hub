@@ -2,13 +2,13 @@ import { gp2 as gp2Model } from '@asap-hub/model';
 import {
   Card,
   ceruleanFernGradientStyles,
-  lead,
   LinkHeadline,
   Paragraph,
   pixels,
   Subtitle,
   TagList,
   utils,
+  colour,
 } from '@asap-hub/react-components';
 import { gp2 } from '@asap-hub/routing';
 import { css } from '@emotion/react';
@@ -47,7 +47,7 @@ const bottomBorderStyles = css({
 });
 const textStyles = css({
   maxWidth: rem(610),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const tagListContainerStyles = css({
@@ -84,7 +84,7 @@ const WorkingGroupCard: React.FC<WorkingGroupCardProps> = ({
             {getCounterString(members.length, 'Member')}
           </IconWithLabel>
         </span>
-        <Subtitle noMargin accent="lead">
+        <Subtitle noMargin accent="tertiary">
           {shortDescription}
         </Subtitle>
         {tags.length > 0 && (
@@ -93,7 +93,7 @@ const WorkingGroupCard: React.FC<WorkingGroupCardProps> = ({
           </div>
         )}
         {leadingMembers === undefined || (
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="tertiary">
             {leadingMembers}
           </Paragraph>
         )}

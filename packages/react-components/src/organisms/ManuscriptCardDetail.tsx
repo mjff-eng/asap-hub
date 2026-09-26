@@ -6,20 +6,17 @@ import {
   ManuscriptVersion,
 } from '@asap-hub/model';
 import { projectRouteByType } from '@asap-hub/routing';
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { ComponentProps, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { DiscussionsTab } from '.';
 import {
   Button,
-  charcoal,
-  colors,
   complianceReportIcon,
-  fern,
-  neutral900,
   NotificationDotIcon,
   resubmitManuscriptIcon,
   Tooltip,
+  colour,
 } from '..';
 import { rem, smallDesktopScreen } from '../pixels';
 import DiscussionCard from './DiscussionCard';
@@ -58,7 +55,7 @@ type ManuscriptCardDetailProps = Pick<
 };
 
 const buttonsContainerStyles = css({
-  borderBottom: `1px solid ${colors.steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
 const buttonsStyles = css({
@@ -90,12 +87,12 @@ const notificationDotStyles = css({
 
 const manuscriptDetailsContainerStyles = css({
   margin: `0 ${rem(16)} ${rem(16)}`,
-  border: `1px solid ${colors.steel.rgb}`,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: `${rem(8)}`,
   boxSizing: 'border-box',
   borderWidth: 1,
   borderStyle: 'solid',
-  backgroundColor: colors.paper.rgb,
+  backgroundColor: colour.background.primary,
 });
 
 const showMoreContainerStyles = css({
@@ -117,21 +114,20 @@ type VersionUserProps = {
   user: User | null;
 };
 
-const tabButtonStyles = ({ colors: { primary500 = fern } = {} }: Theme) =>
-  css({
-    paddingLeft: rem(0),
-    paddingRight: rem(0),
-    paddingBottom: rem(20),
-    color: neutral900.rgb,
-    backgroundColor: 'transparent',
-    border: 'none',
-    '&.active': {
-      paddingBottom: rem(16),
-      color: charcoal.rgb,
-      fontWeight: 'bold',
-      borderBottom: `${rem(4)} solid ${primary500.rgba}`,
-    },
-  });
+const tabButtonStyles = css({
+  paddingLeft: rem(0),
+  paddingRight: rem(0),
+  paddingBottom: rem(20),
+  color: colour.foreground.tertiary,
+  backgroundColor: 'transparent',
+  border: 'none',
+  '&.active': {
+    paddingBottom: rem(16),
+    color: colour.foreground.primary,
+    fontWeight: 'bold',
+    borderBottom: `${rem(4)} solid ${colour.foreground.brand}`,
+  },
+});
 
 const isManuscriptLead = ({ version, user }: VersionUserProps) =>
   user &&

@@ -1,4 +1,4 @@
-import { css, SerializedStyles, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import {
   Anchor,
@@ -10,15 +10,14 @@ import {
   Headline6,
 } from '../atoms';
 import { styles } from '../atoms/Link';
-import { fern } from '../colors';
+import { colour } from '../colors';
 import { headlineStyles } from '../text';
 
-export const hover = (colors: Theme['colors']): SerializedStyles =>
-  css({
-    ':hover': {
-      color: colors?.primary500?.rgba || fern.rgb,
-    },
-  });
+export const hover = css({
+  ':hover': {
+    color: colour.foreground.brand,
+  },
+});
 
 const headlineMap: Record<
   keyof typeof headlineStyles,
@@ -61,7 +60,7 @@ const LinkHeadline: React.FC<LinkHeadlineProps> = ({
   const Heading = headlineMap[level];
   return (
     <Heading noMargin={noMargin} styleAsHeading={styleAsHeading} id={id}>
-      <Anchor {...anchorProps} css={({ colors }) => [styles, hover(colors)]}>
+      <Anchor {...anchorProps} css={[styles, hover]}>
         {children}
       </Anchor>
     </Heading>

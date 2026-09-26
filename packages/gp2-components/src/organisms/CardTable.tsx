@@ -1,9 +1,8 @@
-import { Subtitle, pixels } from '@asap-hub/react-components';
+import { Subtitle, pixels, colour } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { CollapsibleTable } from '../molecules';
 
 import { mobileQuery, nonMobileQuery } from '../layout';
-import colors from '../templates/colors';
 
 import { CollapsibleTableRow } from '../molecules/CollapsibleTable';
 
@@ -11,7 +10,7 @@ const { rem } = pixels;
 
 const rowStyles = css({
   display: 'grid',
-  borderBottom: `1px solid ${colors.neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   padding: `${rem(16)} 0 ${rem(12)}`,
   rowGap: rem(32),
   [nonMobileQuery]: {
@@ -91,7 +90,9 @@ const CardTable = ({
                     <Subtitle noMargin>{headings[idx]}</Subtitle>
                   </div>
                   <span
-                    css={idx !== 0 ? { color: colors.greyscale1000.rgb } : null}
+                    css={
+                      idx !== 0 ? { color: colour.foreground.tertiary } : null
+                    }
                   >
                     {value}
                   </span>

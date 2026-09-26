@@ -1,10 +1,9 @@
 import { gp2 as gp2Model } from '@asap-hub/model';
 import { css } from '@emotion/react';
-import { Link, pixels, colors } from '@asap-hub/react-components';
+import { Link, pixels, colour } from '@asap-hub/react-components';
 import { socialIconsMap } from '../utils';
 
 const { rem } = pixels;
-const { tin, lead } = colors;
 
 const ROW_GAP = 12;
 
@@ -24,7 +23,12 @@ const iconStyles = css({
   },
 });
 
-const inactiveStyles = css({ svg: { fill: tin.rgb, stroke: tin.rgb } });
+const inactiveStyles = css({
+  svg: {
+    fill: colour.foreground.disabled,
+    stroke: colour.foreground.disabled,
+  },
+});
 
 type SocialIconsProps = gp2Model.UserSocial;
 
@@ -40,7 +44,7 @@ const SocialIcons: React.FC<SocialIconsProps> = ({
   researchGate,
   blog,
 }) => {
-  const iconProps = { color: lead.hex };
+  const iconProps = { color: colour.neutral[600] };
 
   const socialLinks = [
     { key: 'orcid', link: orcid, Icon: socialIconsMap.orcid },

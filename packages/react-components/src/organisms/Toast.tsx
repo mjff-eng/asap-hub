@@ -18,19 +18,7 @@ import {
   mobileScreen,
   largeDesktopScreen,
 } from '../pixels';
-import {
-  rose,
-  ember,
-  apricot,
-  warning900,
-  info100,
-  info900,
-  info500,
-  warning500,
-  success100,
-  success900,
-  success500,
-} from '../colors';
+import { colour } from '../colors';
 
 const SIDE_PADDING = 24;
 
@@ -99,37 +87,21 @@ const accentIcons: Record<ToastAccents, EmotionJSX.Element> = {
   successLarge: successLargeIcon,
 };
 
+const statusStyles = (
+  status: 'error' | 'info' | 'warning' | 'success',
+): CSSObject => ({
+  backgroundColor: colour.background[status],
+  borderColor: colour.border[status],
+  color: colour.foreground[status],
+  svg: { stroke: colour.foreground[status] },
+});
+
 const accentStyles: Record<ToastAccents, CSSObject> = {
-  error: {
-    backgroundColor: rose.rgb,
-    borderColor: ember.rgb,
-    color: ember.rgb,
-    svg: { stroke: ember.rgb },
-  },
-  info: {
-    backgroundColor: info100.rgb,
-    borderColor: info900.rgb,
-    color: info900.rgb,
-    svg: { stroke: info500.rgb },
-  },
-  warning: {
-    backgroundColor: apricot.rgb,
-    borderColor: warning900.rgb,
-    color: warning900.rgb,
-    svg: { stroke: warning500.rgb },
-  },
-  success: {
-    backgroundColor: success100.rgb,
-    borderColor: success900.rgb,
-    color: success900.rgb,
-    svg: { stroke: success500.rgb },
-  },
-  successLarge: {
-    backgroundColor: success100.rgb,
-    borderColor: success900.rgb,
-    color: success900.rgb,
-    svg: { stroke: success500.rgb },
-  },
+  error: statusStyles('error'),
+  info: statusStyles('info'),
+  warning: statusStyles('warning'),
+  success: statusStyles('success'),
+  successLarge: statusStyles('success'),
 };
 
 const roundedStyles = css({

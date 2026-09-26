@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { steel } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { clampPercentage } from '../utils';
 
@@ -21,7 +21,7 @@ const GradientProgressBar: React.FC<GradientProgressBarProps> = ({
         width: '100%',
         height: rem(8),
         borderRadius: rem(4),
-        backgroundColor: steel.rgb,
+        backgroundColor: colour.neutral[100],
         overflow: 'hidden',
       }}
       role="progressbar"
