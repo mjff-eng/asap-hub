@@ -951,7 +951,7 @@ __metadata:
     react: "npm:18.3.1"
     react-app-polyfill: "npm:3.0.0"
     react-dom: "npm:18.3.1"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     typescript: "npm:4.9.5"
     vite: "npm:5.4.21"
     webpack: "npm:5.104.1"
@@ -1021,7 +1021,7 @@ __metadata:
     react-dom: "npm:18.3.1"
     react-error-boundary: "npm:4.1.2"
     react-hook-form: "npm:7.53.2"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     react-test-renderer: "npm:18.3.1"
     stream: "npm:stream-browserify@3.0.0"
     typescript: "npm:4.9.5"
@@ -1185,7 +1185,7 @@ __metadata:
     parse-data-url: "npm:3.0.0"
     postmark: "npm:^4.0.5"
     pump: "npm:3.0.3"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     serverless: "npm:3.38.0"
     serverless-esbuild: "npm:^1.57.2"
     serverless-http: "npm:2.7.0"
@@ -1312,7 +1312,7 @@ __metadata:
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     react-error-boundary: "npm:4.1.2"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     react-test-renderer: "npm:18.3.1"
     react-titled: "npm:1.1.1"
     streamsaver: "npm:2.0.6"
@@ -1325,7 +1325,7 @@ __metadata:
     "@tanstack/react-query": ^5.0.0
     core-js: 3.34.0
     react-error-boundary: 4.1.2
-    react-router: 7.13.0
+    react-router: 7.18.2
   languageName: unknown
   linkType: soft
 
@@ -1360,7 +1360,7 @@ __metadata:
     react: "npm:18.3.1"
     react-app-polyfill: "npm:3.0.0"
     react-dom: "npm:18.3.1"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     typescript: "npm:4.9.5"
     util: "npm:0.12.5"
     vite: "npm:5.4.21"
@@ -1410,14 +1410,14 @@ __metadata:
     playwright-core: "npm:^1.40.0"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     react-test-renderer: "npm:18.3.1"
   peerDependencies:
     "@asap-hub/react-context": "workspace:*"
     "@emotion/react": ^11
     react: ^18.3.0
     react-dom: ^18.3.0
-    react-router: 7.13.0
+    react-router: 7.18.2
   languageName: unknown
   linkType: soft
 
@@ -1476,7 +1476,7 @@ __metadata:
     react-app-polyfill: "npm:3.0.0"
     react-dom: "npm:18.3.1"
     react-error-boundary: "npm:4.1.2"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     react-test-renderer: "npm:18.3.1"
     serialize-error: "npm:7.0.1"
     typescript: "npm:4.9.5"
@@ -1599,7 +1599,7 @@ __metadata:
     openai: "npm:^4.49.0"
     p-throttle: "npm:4.1.1"
     parse-data-url: "npm:3.0.0"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     serverless: "npm:3.38.0"
     serverless-esbuild: "npm:^1.57.2"
     serverless-http: "npm:2.7.0"
@@ -1736,7 +1736,7 @@ __metadata:
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     react-hook-form: "npm:7.53.2"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     react-select: "npm:5.8.0"
     react-test-renderer: "npm:18.3.1"
     regenerator-runtime: "npm:0.14.1"
@@ -1759,7 +1759,7 @@ __metadata:
     "@asap-hub/react-context": "*"
     react: ^18.3.0
     react-dom: ^18.3.0
-    react-router: 7.13.0
+    react-router: 7.18.2
   languageName: unknown
   linkType: soft
 
@@ -1785,11 +1785,11 @@ __metadata:
     core-js: "npm:3.34.0"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     react-test-renderer: "npm:18.3.1"
   peerDependencies:
     react: ^18.3.0
-    react-router: 7.13.0
+    react-router: 7.18.2
   languageName: unknown
   linkType: soft
 
@@ -1801,11 +1801,11 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.28.6"
     "@types/qs": "npm:6.14.0"
     qs: "npm:6.14.2"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     typesafe-routes: "npm:10.0.6"
     typescript: "npm:4.9.5"
   peerDependencies:
-    react-router: 7.13.0
+    react-router: 7.18.2
   languageName: unknown
   linkType: soft
 
@@ -1946,7 +1946,7 @@ __metadata:
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     react-hook-form: "npm:7.53.2"
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.18.2"
     storybook: "npm:^9.1.13"
     storybook-addon-designs: "npm:6.3.1"
     typescript: "npm:4.9.5"
@@ -36727,9 +36727,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:7.13.0":
-  version: 7.13.0
-  resolution: "react-router@npm:7.13.0"
+"react-router@npm:7.18.2":
+  version: 7.18.2
+  resolution: "react-router@npm:7.18.2"
   dependencies:
     cookie: "npm:^1.0.1"
     set-cookie-parser: "npm:^2.6.0"
@@ -36739,7 +36739,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10/8bc0a1eebf37136851ee345e53b137b5a7ec0de10c842861a06810bb54c0a389826734a7454f4afe8731daf39499948ba73657e60a6bd2acb93b3e567fd79127
+  checksum: 10/e68aa655e5ec2d4143f66ab3b745c50b8588152d89e4ec66c099625357c6a16dfaee5a7e963a9f4f9fbe0adaa37cf9731d63a108a2c4abfaa00124a06da16c24
   languageName: node
   linkType: hard
 
