@@ -79,7 +79,7 @@ it('gets greyed out when disabled', () => {
   // In react-select v5, the control element has the color/background styles
   const disabledControl = container.querySelector('[aria-disabled="true"]');
   expect(disabledControl).not.toBeNull();
-  expect(disabledControl).toHaveStyleRule('color', colour.foreground.disabled);
+  expect(disabledControl).toHaveStyleRule('color', colour.foreground.tertiary);
   expect(disabledControl).toHaveStyleRule(
     'background-color',
     colour.background.disabled,
@@ -95,7 +95,7 @@ it('gets greyed out when disabled', () => {
   expect(enabledControl).not.toBeNull();
   expect(enabledControl).not.toHaveStyleRule(
     'color',
-    colour.foreground.disabled,
+    colour.foreground.tertiary,
   );
   expect(enabledControl).not.toHaveStyleRule(
     'background-color',
