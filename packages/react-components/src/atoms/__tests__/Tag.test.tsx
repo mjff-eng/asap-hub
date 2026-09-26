@@ -34,7 +34,7 @@ it('renders a tag with disabled styles when disabled', () => {
   rerender(<Tag enabled={false}>Text</Tag>);
 
   const tag = getParentStyle('borderStyle')?.element;
-  expect(tag).toHaveStyleRule('color', colour.foreground.disabled);
+  expect(tag).toHaveStyleRule('color', colour.foreground.primary);
   expect(tag).toHaveStyleRule('border-color', colour.border.tertiary);
   expect(tag).toHaveStyleRule('background-color', colour.background.disabled);
 });

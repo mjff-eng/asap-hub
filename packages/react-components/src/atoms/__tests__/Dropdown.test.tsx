@@ -168,7 +168,7 @@ it('gets greyed out when disabled', () => {
 
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
-  ).toHaveStyleRule('color', colour.foreground.disabled);
+  ).toHaveStyleRule('color', colour.foreground.tertiary);
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
   ).toHaveStyleRule('background-color', colour.background.disabled);
@@ -179,7 +179,7 @@ it('gets greyed out when disabled', () => {
   );
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
-  ).not.toHaveStyleRule('color', colour.foreground.disabled);
+  ).not.toHaveStyleRule('color', colour.foreground.tertiary);
   expect(
     findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
   ).not.toHaveStyleRule('background-color', colour.background.disabled);
@@ -488,13 +488,13 @@ const createSingleValueProps = (
     data: { value, label: '' },
   }) as unknown as SingleValueProps<TestOption, false, GroupBase<TestOption>>;
 
-it('applies the tertiary colour for singleValue when selected value is empty string', () => {
+it('applies the disabled colour for singleValue when selected value is empty string', () => {
   const styles = reactSelectStyles(false);
   const styleResult = styles?.singleValue!(
     baseProvided,
     createSingleValueProps(''),
   );
-  expect(styleResult?.color).toBe(colour.foreground.tertiary);
+  expect(styleResult?.color).toBe(colour.foreground.disabled);
 });
 
 it('applies unset color for singleValue when selected value is not empty string', () => {

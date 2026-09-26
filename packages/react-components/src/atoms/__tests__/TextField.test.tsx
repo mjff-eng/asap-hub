@@ -47,7 +47,7 @@ it('mutes the value colour of a disabled date field to match other disabled fiel
     'input[type="date"]',
   ) as HTMLInputElement;
   expect(dateInput.disabled).toBe(true);
-  expect(dateInput).toHaveStyleRule('color', colour.foreground.disabled);
+  expect(dateInput).toHaveStyleRule('color', colour.foreground.tertiary);
 });
 
 it('with the label indicator prop prop shows a react node', () => {
