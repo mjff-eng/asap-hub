@@ -62,7 +62,7 @@ it('disables its tags when disabled', () => {
 
   expect(
     findParentWithStyle(getByText(/tag 1/i), 'borderStyle')?.element,
-  ).toHaveStyleRule('color', colour.foreground.disabled);
+  ).toHaveStyleRule('background-color', colour.background.disabled);
 });
 
 describe('when capped', () => {
