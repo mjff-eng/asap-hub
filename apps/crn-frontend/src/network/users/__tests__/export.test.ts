@@ -58,14 +58,32 @@ describe('userToCSV', () => {
       Role: user.teams.map((t) => t.role).join(', '),
       'Website 1': 'https://jane.example.com',
       'Website 2': 'https://lab.example.com',
-      'Research ID': 'A-1234-2020',
-      LinkedIn: 'janedoe',
-      BlueSky: 'jane.bsky.social',
-      Twitter: 'janedoe',
-      GitHub: 'jane-doe',
-      'Google Scholar': 'scholar-id',
-      'Research Gate': 'Jane_Doe',
+      'Research ID': 'https://publons.com/researcher/A-1234-2020',
+      LinkedIn: 'https://www.linkedin.com/in/janedoe',
+      BlueSky: 'https://bsky.app/profile/jane.bsky.social',
+      Twitter: 'https://twitter.com/janedoe',
+      GitHub: 'https://github.com/jane-doe',
+      'Google Scholar':
+        'https://scholar.google.co.uk/citations?user=scholar-id',
+      'Research Gate': 'https://www.researchgate.net/profile/Jane_Doe',
     });
+  });
+
+  it('leaves website columns as stored and does not link empty socials', () => {
+    const user = {
+      ...createUserListItemResponse({}, 0),
+      social: {
+        website1: 'https://jane.example.com',
+        researcherId: undefined,
+        linkedIn: '',
+      },
+    };
+
+    const csv = userToCSV(user);
+    expect(csv['Website 1']).toBe('https://jane.example.com');
+    expect(csv['Website 2']).toBe('');
+    expect(csv['Research ID']).toBe('');
+    expect(csv.LinkedIn).toBe('');
   });
 
   it('handles missing optional fields', () => {
