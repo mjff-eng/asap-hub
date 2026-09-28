@@ -98,6 +98,17 @@ const createWrapper =
 
 const wrapper = createWrapper();
 
+const projectManagerWrapper = createWrapper({
+  interestGroups: [
+    {
+      id: createInterestGroupResponse().id,
+      name: 'Group 1',
+      active: true,
+      role: 'Project Manager',
+    },
+  ],
+});
+
 it('displays the event with given id', async () => {
   mockGetEvent.mockResolvedValue({
     ...createEventResponse(),
@@ -356,7 +367,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(await findByText('Show 6 more')).toBeVisible();
     });
 
-    it('shows the empty state for a non project manager when no teams attended', async () => {
+    it('shows the read-only empty state for a non tech support member when no teams attended', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
@@ -895,7 +906,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(await findByText('View More Speakers')).toBeVisible();
     });
 
-    it('shows the non project manager empty state when there are no speakers', async () => {
+    it('shows the read-only empty state when there are no speakers', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
@@ -908,15 +919,14 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(queryByText('Add Speakers')).not.toBeInTheDocument();
     });
 
-    it('shows the editor empty state with an add speakers button for a tech support user', async () => {
+    it('shows the editor empty state with an add speakers button for the interest group project manager', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
         speakers: [],
       });
-      const techSupportWrapper = createWrapper({ techSupport: true });
       const { findByText, findByRole } = render(<Event />, {
-        wrapper: techSupportWrapper,
+        wrapper: projectManagerWrapper,
       });
       expect(
         await findByText(/Marking who shared preliminary findings/),
@@ -926,7 +936,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
       ).toBeVisible();
     });
 
-    it('saves speaker changes for a tech support user', async () => {
+    it('saves speaker changes for the interest group project manager', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
@@ -938,9 +948,8 @@ describe('the NEW_EVENT_PAGE flag', () => {
         ...createEventResponse(),
         id,
       });
-      const techSupportWrapper = createWrapper({ techSupport: true });
       const { findByRole, getByRole } = render(<Event />, {
-        wrapper: techSupportWrapper,
+        wrapper: projectManagerWrapper,
       });
 
       await userEvent.click(
@@ -972,9 +981,8 @@ describe('the NEW_EVENT_PAGE flag', () => {
         endDate: pastEndDate,
         speakers: [teamSpeaker('t1', 'Team One', 'u1')],
       });
-      const techSupportWrapper = createWrapper({ techSupport: true });
       const { findByRole, getByRole, findByText } = render(<Event />, {
-        wrapper: techSupportWrapper,
+        wrapper: projectManagerWrapper,
       });
 
       await userEvent.click(
@@ -994,9 +1002,8 @@ describe('the NEW_EVENT_PAGE flag', () => {
         endDate: pastEndDate,
         speakers: [teamSpeaker('t1', 'Team One', 'u1')],
       });
-      const techSupportWrapper = createWrapper({ techSupport: true });
       const { findByRole, getByRole, queryByRole } = render(<Event />, {
-        wrapper: techSupportWrapper,
+        wrapper: projectManagerWrapper,
       });
 
       await userEvent.click(
@@ -1008,6 +1015,23 @@ describe('the NEW_EVENT_PAGE flag', () => {
         queryByRole('heading', { name: 'Edit Speakers' }),
       ).not.toBeInTheDocument();
       expect(mockPatchEvent).not.toHaveBeenCalled();
+    });
+
+    it('hides the speaker editor from a tech support member who is not the interest group project manager', async () => {
+      mockGetEvent.mockResolvedValue({
+        ...createEventResponse(),
+        id,
+        endDate: pastEndDate,
+        speakers: [teamSpeaker('t1', 'Team One', 'u1')],
+      });
+      const { findByLabelText, queryByRole } = render(<Event />, {
+        wrapper: createWrapper({ techSupport: true }),
+      });
+
+      expect(await findByLabelText('Download speakers')).toBeVisible();
+      expect(
+        queryByRole('button', { name: 'Edit speakers' }),
+      ).not.toBeInTheDocument();
     });
   });
 

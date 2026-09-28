@@ -9,6 +9,7 @@ import {
   getEventResponse,
   getListEventResponse,
 } from '../fixtures/events.fixtures';
+import { getInterestGroupResponse } from '../fixtures/interest-groups.fixtures';
 import { eventControllerMock } from '../mocks/event.controller.mock';
 import { loggerMock } from '../mocks/logger.mock';
 
@@ -280,6 +281,7 @@ describe('/events/ routes', () => {
         { attendance: [{ teamId: 'team-1', attended: true }] },
       );
       expect(response.body).toEqual(getEventResponse());
+      expect(eventControllerMock.fetchById).not.toHaveBeenCalled();
     });
 
     test('Should return 403 when the logged in user is not a tech support user', async () => {
@@ -307,27 +309,68 @@ describe('/events/ routes', () => {
       expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
     });
 
-    test('Should update speakers and preliminary data sharing for a tech support user', async () => {
+    describe('speakers', () => {
+      const speakersPayload = {
+        speakersToRemove: ['speaker-1'],
+        preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+      };
+
+      test('Should update speakers and preliminary data sharing for a project manager of the hosting interest group', async () => {
+        userMockFactory.mockReturnValueOnce({
+          ...createUserResponse(),
+          interestGroups: [
+            {
+              id: getInterestGroupResponse().id,
+              name: 'Group 1',
+              active: true,
+              role: 'Project Manager',
+            },
+          ],
+        });
+        eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
+        eventControllerMock.updateEventDetails.mockResolvedValueOnce(
+          getEventResponse(),
+        );
+
+        const response = await supertest(app)
+          .patch('/events/123')
+          .send(speakersPayload);
+
+        expect(response.status).toBe(200);
+        expect(eventControllerMock.updateEventDetails).toHaveBeenCalledWith(
+          '123',
+          speakersPayload,
+        );
+        expect(response.body).toEqual(getEventResponse());
+      });
+
+      test('Should return 403 for a tech support user who is not the project manager of the hosting interest group', async () => {
+        userMockFactory.mockReturnValueOnce({
+          ...createUserResponse(),
+          techSupport: true,
+        });
+        eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
+
+        const response = await supertest(app)
+          .patch('/events/123')
+          .send(speakersPayload);
+
+        expect(response.status).toBe(403);
+        expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
+      });
+    });
+
+    test('Should return 403 for a payload that touches neither attendance nor speakers', async () => {
       userMockFactory.mockReturnValueOnce({
         ...createUserResponse(),
         techSupport: true,
       });
-      eventControllerMock.updateEventDetails.mockResolvedValueOnce(
-        getEventResponse(),
-      );
 
-      const payload = {
-        speakersToRemove: ['speaker-1'],
-        preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
-      };
-      const response = await supertest(app).patch('/events/123').send(payload);
+      const response = await supertest(app).patch('/events/123').send({});
 
-      expect(response.status).toBe(200);
-      expect(eventControllerMock.updateEventDetails).toHaveBeenCalledWith(
-        '123',
-        payload,
-      );
-      expect(response.body).toEqual(getEventResponse());
+      expect(response.status).toBe(403);
+      expect(eventControllerMock.fetchById).not.toHaveBeenCalled();
+      expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
     });
 
     test('Should return a validation error for an unknown property', async () => {
