@@ -66,6 +66,8 @@ import {
   getFilterOutputBySharingStatus,
   getRangeFilterParams,
   isAsapFundedResearchOutput,
+  isNotCancelledEventStatus,
+  isPastEvent,
   isTeamOutputDocumentType,
 } from '../../utils/analytics/common';
 import { getEngagementItems } from '../../utils/analytics/engagement';
@@ -592,10 +594,7 @@ const getPreliminaryDataSharingItems = (
       teamItem.linkedFrom?.eventSpeakersCollection?.items;
 
     if (eventSpeakersItems?.length) {
-      const byEvent = new Map<
-        string,
-        { anyShared: boolean; startDate?: string }
-      >();
+      const byEvent = new Map<string, boolean>();
 
       eventSpeakersItems.forEach((speaker) => {
         if (!speaker || speaker.preliminaryDataShared === null) {
@@ -603,24 +602,29 @@ const getPreliminaryDataSharingItems = (
         }
         const event = speaker.linkedFrom?.eventsCollection?.items[0];
         const eventId = event?.sys.id;
-        if (!eventId) {
+        if (
+          !eventId ||
+          !isPastEvent(event?.endDate) ||
+          !isNotCancelledEventStatus(event?.status)
+        ) {
+          return;
+        }
+        if (
+          rangeKey === 'last-year' &&
+          filter &&
+          (!event.startDate || event.startDate <= filter)
+        ) {
           return;
         }
 
-        const prev = byEvent.get(eventId);
-        byEvent.set(eventId, {
-          anyShared:
-            (prev?.anyShared ?? false) ||
+        byEvent.set(
+          eventId,
+          (byEvent.get(eventId) ?? false) ||
             speaker.preliminaryDataShared === true,
-          startDate: event?.startDate ?? prev?.startDate,
-        });
+        );
       });
 
-      Array.from(byEvent.values()).forEach(({ anyShared, startDate }) => {
-        if (rangeKey === 'last-year' && filter) {
-          if (!startDate || startDate <= filter) return;
-        }
-
+      byEvent.forEach((anyShared) => {
         preliminaryDataSharedTotalCount += 1;
         if (anyShared) preliminaryDataSharedYesCount += 1;
       });

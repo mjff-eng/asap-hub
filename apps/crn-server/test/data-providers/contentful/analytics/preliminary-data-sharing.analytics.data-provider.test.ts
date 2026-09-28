@@ -113,6 +113,8 @@ test('Should filter by time range when last-year filter is applied', async () =>
                             id: 'event-1',
                           },
                           startDate: '2024-05-07T00:00:00.000Z',
+                          endDate: '2024-05-07T00:00:00.000Z',
+                          status: 'Confirmed',
                         },
                       ],
                     },
@@ -128,6 +130,8 @@ test('Should filter by time range when last-year filter is applied', async () =>
                             id: 'event-2',
                           },
                           startDate: '2024-02-20T00:00:00.000Z',
+                          endDate: '2024-02-20T00:00:00.000Z',
+                          status: 'Confirmed',
                         },
                       ],
                     },
@@ -143,6 +147,8 @@ test('Should filter by time range when last-year filter is applied', async () =>
                             id: 'event-3',
                           },
                           startDate: '2024-10-03T00:00:00.000Z',
+                          endDate: '2024-10-03T00:00:00.000Z',
+                          status: 'Confirmed',
                         },
                       ],
                     },
@@ -158,6 +164,8 @@ test('Should filter by time range when last-year filter is applied', async () =>
                             id: 'event-4',
                           },
                           startDate: '2022-12-30T00:00:00.000Z',
+                          endDate: '2022-12-30T00:00:00.000Z',
+                          status: 'Confirmed',
                         },
                       ],
                     },
@@ -193,7 +201,12 @@ test('Should filter by time range when last-year filter is applied', async () =>
 
 const speaker = (
   preliminaryDataShared: boolean | null,
-  event: { sys: { id: string }; startDate: string | null } | null,
+  event: {
+    sys: { id: string };
+    startDate?: string | null;
+    endDate: string | null;
+    status?: string | null;
+  } | null,
 ) => ({
   preliminaryDataShared,
   linkedFrom: {
@@ -228,10 +241,14 @@ test('Should ignore speakers that are not linked to any event', async () => {
       speaker(true, {
         sys: { id: 'event-1' },
         startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
       }),
       speaker(false, {
         sys: { id: 'event-2' },
         startDate: '2024-10-03T00:00:00.000Z',
+        endDate: '2024-10-03T00:00:00.000Z',
+        status: 'Confirmed',
       }),
       speaker(true, null),
     ]),
@@ -252,6 +269,8 @@ test('Should return zero percent shared and limited data when every speaker is s
       speaker(null, {
         sys: { id: 'event-1' },
         startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
       }),
       speaker(true, null),
     ]),
@@ -270,12 +289,21 @@ test('Should exclude events without a start date from the last-year range', asyn
       speaker(true, {
         sys: { id: 'event-1' },
         startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
       }),
       speaker(false, {
         sys: { id: 'event-2' },
         startDate: '2024-10-03T00:00:00.000Z',
+        endDate: '2024-10-03T00:00:00.000Z',
+        status: 'Confirmed',
       }),
-      speaker(true, { sys: { id: 'event-3' }, startDate: null }),
+      speaker(true, {
+        sys: { id: 'event-3' },
+        startDate: null,
+        endDate: '2024-06-01T00:00:00.000Z',
+        status: 'Confirmed',
+      }),
     ]),
   );
 
@@ -294,12 +322,21 @@ test('Should keep events without a start date when no time range is applied', as
       speaker(true, {
         sys: { id: 'event-1' },
         startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
       }),
       speaker(false, {
         sys: { id: 'event-2' },
         startDate: '2024-10-03T00:00:00.000Z',
+        endDate: '2024-10-03T00:00:00.000Z',
+        status: 'Confirmed',
       }),
-      speaker(true, { sys: { id: 'event-3' }, startDate: null }),
+      speaker(true, {
+        sys: { id: 'event-3' },
+        startDate: null,
+        endDate: '2024-06-01T00:00:00.000Z',
+        status: 'Confirmed',
+      }),
     ]),
   );
 
@@ -309,6 +346,115 @@ test('Should keep events without a start date when no time range is applied', as
 
   expect(result.items[0]).toEqual(
     expect.objectContaining({ percentShared: 67, limitedData: false }),
+  );
+});
+
+test('Should exclude events without an end date', async () => {
+  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+    teamWithSpeakers([
+      speaker(true, {
+        sys: { id: 'event-1' },
+        startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
+      }),
+      speaker(false, {
+        sys: { id: 'event-2' },
+        startDate: '2024-10-03T00:00:00.000Z',
+        endDate: '2024-10-03T00:00:00.000Z',
+        status: 'Confirmed',
+      }),
+      speaker(true, { sys: { id: 'event-3' }, endDate: null }),
+    ]),
+  );
+
+  const result = await analyticsDataProvider.fetchPreliminaryDataSharing({
+    filter: { timeRange: 'all' },
+  });
+
+  expect(result.items[0]).toEqual(
+    expect.objectContaining({ percentShared: 50, limitedData: false }),
+  );
+});
+
+test('Should exclude upcoming events', async () => {
+  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+    teamWithSpeakers([
+      speaker(true, {
+        sys: { id: 'event-1' },
+        startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
+      }),
+      speaker(false, {
+        sys: { id: 'event-2' },
+        startDate: '2025-01-15T00:00:00.000Z',
+        endDate: '2025-01-15T00:00:00.000Z',
+        status: 'Confirmed',
+      }),
+      speaker(false, {
+        sys: { id: 'event-3' },
+        startDate: '2024-12-30T23:30:00.000Z',
+        endDate: '2024-12-30T23:30:00.000Z',
+        status: 'Confirmed',
+      }),
+    ]),
+  );
+
+  const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
+
+  expect(result.items[0]).toEqual(
+    expect.objectContaining({ percentShared: 100, limitedData: false }),
+  );
+});
+
+test('Should exclude cancelled events', async () => {
+  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+    teamWithSpeakers([
+      speaker(true, {
+        sys: { id: 'event-1' },
+        startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
+      }),
+      speaker(false, {
+        sys: { id: 'event-2' },
+        startDate: '2024-10-03T00:00:00.000Z',
+        endDate: '2024-10-03T00:00:00.000Z',
+        status: 'Cancelled',
+      }),
+    ]),
+  );
+
+  const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
+
+  expect(result.items[0]).toEqual(
+    expect.objectContaining({ percentShared: 100, limitedData: false }),
+  );
+});
+
+test('Should return zero percent shared and limited data when a team only has upcoming or cancelled events', async () => {
+  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+    teamWithSpeakers([
+      speaker(false, {
+        sys: { id: 'event-1' },
+        startDate: '2025-03-01T00:00:00.000Z',
+        endDate: '2025-03-01T00:00:00.000Z',
+        status: 'Confirmed',
+      }),
+      speaker(false, {
+        sys: { id: 'event-2' },
+        startDate: '2024-10-03T00:00:00.000Z',
+        endDate: '2024-10-03T00:00:00.000Z',
+        status: 'Cancelled',
+      }),
+    ]),
+  );
+
+  const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
+
+  expect(result.items[0]).toEqual(
+    expect.objectContaining({ percentShared: 0, limitedData: true }),
   );
 });
 
@@ -337,6 +483,8 @@ test('Should group speakers by event and count an event as shared when any of it
                             id: 'event-1',
                           },
                           startDate: '2024-01-15T00:00:00.000Z',
+                          endDate: '2024-01-15T00:00:00.000Z',
+                          status: 'Confirmed',
                         },
                       ],
                     },
@@ -352,6 +500,8 @@ test('Should group speakers by event and count an event as shared when any of it
                             id: 'event-1',
                           },
                           startDate: '2024-01-15T00:00:00.000Z',
+                          endDate: '2024-01-15T00:00:00.000Z',
+                          status: 'Confirmed',
                         },
                       ],
                     },
@@ -367,6 +517,8 @@ test('Should group speakers by event and count an event as shared when any of it
                             id: 'event-2',
                           },
                           startDate: '2024-02-20T00:00:00.000Z',
+                          endDate: '2024-02-20T00:00:00.000Z',
+                          status: 'Confirmed',
                         },
                       ],
                     },
@@ -409,7 +561,14 @@ test('Should drain remaining event speakers when a team overflows the nested pag
       preliminaryDataShared: true,
       linkedFrom: {
         eventsCollection: {
-          items: [{ sys: { id: 'event-1' }, startDate: '2024-01-15' }],
+          items: [
+            {
+              sys: { id: 'event-1' },
+              startDate: '2024-01-15',
+              endDate: '2024-01-15',
+              status: 'Confirmed',
+            },
+          ],
         },
       },
     },
@@ -423,7 +582,14 @@ test('Should drain remaining event speakers when a team overflows the nested pag
           preliminaryDataShared: true,
           linkedFrom: {
             eventsCollection: {
-              items: [{ sys: { id: 'event-1' }, startDate: '2024-01-15' }],
+              items: [
+                {
+                  sys: { id: 'event-1' },
+                  startDate: '2024-01-15',
+                  endDate: '2024-01-15',
+                  status: 'Confirmed',
+                },
+              ],
             },
           },
         },
@@ -431,7 +597,14 @@ test('Should drain remaining event speakers when a team overflows the nested pag
           preliminaryDataShared: true,
           linkedFrom: {
             eventsCollection: {
-              items: [{ sys: { id: 'event-2' }, startDate: '2024-02-20' }],
+              items: [
+                {
+                  sys: { id: 'event-2' },
+                  startDate: '2024-02-20',
+                  endDate: '2024-02-20',
+                  status: 'Confirmed',
+                },
+              ],
             },
           },
         },
@@ -439,7 +612,14 @@ test('Should drain remaining event speakers when a team overflows the nested pag
           preliminaryDataShared: false,
           linkedFrom: {
             eventsCollection: {
-              items: [{ sys: { id: 'event-3' }, startDate: '2023-06-10' }],
+              items: [
+                {
+                  sys: { id: 'event-3' },
+                  startDate: '2023-06-10',
+                  endDate: '2023-06-10',
+                  status: 'Confirmed',
+                },
+              ],
             },
           },
         },
@@ -517,6 +697,8 @@ test('Should bound the number of concurrent speaker requests when several teams 
     speaker(index % 2 === 0, {
       sys: { id: `${teamId}-event-${index}` },
       startDate: '2024-05-07T00:00:00.000Z',
+      endDate: '2024-05-07T00:00:00.000Z',
+      status: 'Confirmed',
     });
 
   const mainResponse = {

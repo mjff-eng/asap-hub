@@ -407,6 +407,8 @@ export const preliminaryDataSharingSpeakerFragment = gql`
             id
           }
           startDate
+          endDate
+          status
         }
       }
     }

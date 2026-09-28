@@ -53,7 +53,7 @@ const documents = {
     types.FetchEngagementDocument,
   '\n  query FetchOsChampion($limit: Int, $skip: Int, $dateFilter: DateTime) {\n    teamsCollection(order: sys_id_ASC, limit: $limit, skip: $skip) {\n      total\n      items {\n        sys {\n          id\n        }\n        displayName\n        inactiveSince\n        linkedFrom {\n          teamMembershipCollection(limit: 100) {\n            items {\n              linkedFrom {\n                usersCollection(limit: 1) {\n                  items {\n                    sys {\n                      id\n                    }\n                    firstName\n                    middleName\n                    nickname\n                    lastName\n                  }\n                }\n              }\n              awardsCollection(\n                limit: 10\n                where: {\n                  date_exists: true\n                  awardType: { name: "Open Science Champion" }\n                  date_gte: $dateFilter\n                }\n              ) {\n                total\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n':
     types.FetchOsChampionDocument,
-  '\n  fragment PreliminaryDataSharingSpeaker on EventSpeakers {\n    preliminaryDataShared\n    linkedFrom {\n      eventsCollection(limit: 1) {\n        items {\n          sys {\n            id\n          }\n          startDate\n        }\n      }\n    }\n  }\n':
+  '\n  fragment PreliminaryDataSharingSpeaker on EventSpeakers {\n    preliminaryDataShared\n    linkedFrom {\n      eventsCollection(limit: 1) {\n        items {\n          sys {\n            id\n          }\n          startDate\n          endDate\n          status\n        }\n      }\n    }\n  }\n':
     types.PreliminaryDataSharingSpeakerFragmentDoc,
   '\n  query FetchPreliminaryDataSharing($limit: Int, $skip: Int) {\n    teamsCollection(order: sys_id_ASC, limit: $limit, skip: $skip) {\n      total\n      items {\n        sys {\n          id\n        }\n        displayName\n        inactiveSince\n        linkedFrom {\n          eventSpeakersCollection(limit: 100) {\n            total\n            items {\n              ...PreliminaryDataSharingSpeaker\n            }\n          }\n        }\n      }\n    }\n  }\n  \n':
     types.FetchPreliminaryDataSharingDocument,
@@ -413,8 +413,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  fragment PreliminaryDataSharingSpeaker on EventSpeakers {\n    preliminaryDataShared\n    linkedFrom {\n      eventsCollection(limit: 1) {\n        items {\n          sys {\n            id\n          }\n          startDate\n        }\n      }\n    }\n  }\n',
-): (typeof documents)['\n  fragment PreliminaryDataSharingSpeaker on EventSpeakers {\n    preliminaryDataShared\n    linkedFrom {\n      eventsCollection(limit: 1) {\n        items {\n          sys {\n            id\n          }\n          startDate\n        }\n      }\n    }\n  }\n'];
+  source: '\n  fragment PreliminaryDataSharingSpeaker on EventSpeakers {\n    preliminaryDataShared\n    linkedFrom {\n      eventsCollection(limit: 1) {\n        items {\n          sys {\n            id\n          }\n          startDate\n          endDate\n          status\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  fragment PreliminaryDataSharingSpeaker on EventSpeakers {\n    preliminaryDataShared\n    linkedFrom {\n      eventsCollection(limit: 1) {\n        items {\n          sys {\n            id\n          }\n          startDate\n          endDate\n          status\n        }\n      }\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

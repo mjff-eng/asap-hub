@@ -1,11 +1,13 @@
 import { Maybe, ResearchOutputs, Sys } from '@asap-hub/contentful';
 import {
   DocumentCategoryOption,
+  EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT,
   TeamOutputDocumentType,
   teamOutputDocumentTypes,
   TimeRangeOption,
   OutputTypeOption,
 } from '@asap-hub/model';
+import { DateTime } from 'luxon';
 
 type AnalyticOutput = Maybe<
   Pick<
@@ -47,6 +49,15 @@ export const getRangeFilterParams = (
   }
   return options.all;
 };
+
+export const isPastEvent = (endDate?: Maybe<string>): endDate is string =>
+  !!endDate &&
+  DateTime.fromISO(endDate).plus({
+    hours: EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT,
+  }) < DateTime.now();
+
+export const isNotCancelledEventStatus = (status?: Maybe<string>): boolean =>
+  status !== 'Cancelled';
 
 export const getFilterOutputByRange =
   (rangeKey?: TimeRangeOption) => (item: AnalyticOutput) => {

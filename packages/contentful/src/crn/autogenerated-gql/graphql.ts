@@ -27538,7 +27538,13 @@ export type PreliminaryDataSharingSpeakerFragment = Pick<
 > & {
   linkedFrom?: Maybe<{
     eventsCollection?: Maybe<{
-      items: Array<Maybe<Pick<Events, 'startDate'> & { sys: Pick<Sys, 'id'> }>>;
+      items: Array<
+        Maybe<
+          Pick<Events, 'startDate' | 'endDate' | 'status'> & {
+            sys: Pick<Sys, 'id'>;
+          }
+        >
+      >;
     }>;
   }>;
 };
@@ -27565,9 +27571,10 @@ export type FetchPreliminaryDataSharingQuery = {
                           eventsCollection?: Maybe<{
                             items: Array<
                               Maybe<
-                                Pick<Events, 'startDate'> & {
-                                  sys: Pick<Sys, 'id'>;
-                                }
+                                Pick<
+                                  Events,
+                                  'startDate' | 'endDate' | 'status'
+                                > & { sys: Pick<Sys, 'id'> }
                               >
                             >;
                           }>;
@@ -27600,7 +27607,11 @@ export type FetchPreliminaryDataSharingByTeamQuery = {
             linkedFrom?: Maybe<{
               eventsCollection?: Maybe<{
                 items: Array<
-                  Maybe<Pick<Events, 'startDate'> & { sys: Pick<Sys, 'id'> }>
+                  Maybe<
+                    Pick<Events, 'startDate' | 'endDate' | 'status'> & {
+                      sys: Pick<Sys, 'id'>;
+                    }
+                  >
                 >;
               }>;
             }>;
@@ -41618,6 +41629,14 @@ export const PreliminaryDataSharingSpeakerFragmentDoc = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'startDate' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'endDate' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'status' },
                             },
                           ],
                         },
