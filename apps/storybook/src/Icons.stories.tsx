@@ -17,6 +17,7 @@ export const ChevronDown = () => components.chevronDownIcon;
 export const ChevronLeft = () => components.chevronLeftIcon;
 export const ChevronRight = () => components.chevronRightIcon;
 export const ChevronUp = () => components.chevronUpIcon;
+export const CircleInfo = () => <components.CircleInfoIcon />;
 export const Clock = () => components.clockIcon;
 export const Confidential = () => components.confidentialIcon;
 export const CRNReport = () => components.crnReportIcon;

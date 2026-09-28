@@ -27,6 +27,7 @@ export { default as chevronDownIcon } from './chevron-down';
 export { default as chevronLeftIcon } from './chevron-left';
 export { default as chevronRightIcon } from './chevron-right';
 export { default as chevronUpIcon } from './chevron-up';
+export { default as CircleInfoIcon } from './circle-info';
 export { default as clockIcon } from './clock';
 export { default as collapseMenuIcon } from './collapse-menu';
 export { default as complianceReportIcon } from './compliance-report';

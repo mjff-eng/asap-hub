@@ -2,13 +2,7 @@ import {
   EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
   EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT,
 } from '@asap-hub/model';
-import {
-  parseISO,
-  addHours,
-  subMinutes,
-  differenceInCalendarDays,
-} from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
+import { parseISO, addHours, subMinutes } from 'date-fns';
 
 import { formatDateToTimezone, useDateHasPassed } from '../date';
 
@@ -32,15 +26,35 @@ export const useEventLiveStatus = (
   return { hasStarted, hasFinished };
 };
 
-export const getMultiDayCount = (
+export const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+export const getEventDurationMs = (
   startDate: string,
   endDate: string,
-  timezone: string,
-): number =>
-  differenceInCalendarDays(
-    utcToZonedTime(endDate, timezone),
-    utcToZonedTime(startDate, timezone),
-  ) + 1;
+): number => new Date(endDate).getTime() - new Date(startDate).getTime();
+
+// Rounded up, eg: a 26-hour event reads as 2 days".
+export const getMultiDayCount = (startDate: string, endDate: string): number =>
+  Math.ceil(getEventDurationMs(startDate, endDate) / ONE_DAY_IN_MS);
+
+// An end time of exactly midnight is treated as still belonging to the start
+// day (e.g. "10:00 PM - 12:00 AM" reads fine without a date range); anything
+// past midnight counts as crossing into a new day.
+export const eventCrossesCalendarDay = (
+  startDate: string,
+  endDate: string,
+): boolean => {
+  const endsExactlyAtMidnight =
+    formatDateToTimezone(endDate, 'HH:mm') === '00:00';
+  const comparisonEndDate = endsExactlyAtMidnight
+    ? new Date(new Date(endDate).getTime() - 1).toISOString()
+    : endDate;
+
+  return (
+    formatDateToTimezone(startDate, 'yyyy-MM-dd') !==
+    formatDateToTimezone(comparisonEndDate, 'yyyy-MM-dd')
+  );
+};
 
 export const getMultiDayDateRange = (
   startDate: string,
@@ -61,7 +75,7 @@ export const getMultiDayDateRange = (
   return `${formatDateToTimezone(
     startDate,
     startFormat,
-  )} - ${formatDateToTimezone(endDate, 'EEEE d MMMM yyyy')}`;
+  )} – ${formatDateToTimezone(endDate, 'EEEE d MMMM yyyy')}`;
 };
 
 export const pluralize = (count: number, noun: string): string =>
