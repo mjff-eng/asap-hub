@@ -11,6 +11,7 @@ export const containerStyles = css({
   justifyContent: 'center',
   gap: rem(12),
   width: '100%',
+  maxWidth: rem(380),
   padding: rem(24),
   backgroundColor: neutral200.rgb,
   borderRadius: rem(8),
