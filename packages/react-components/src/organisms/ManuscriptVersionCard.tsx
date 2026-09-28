@@ -270,7 +270,7 @@ const ManuscriptVersionCard: React.FC<ManuscriptVersionCardProps> = ({
             </span>
             <span css={iconStyles}>{article}</span>
             <div css={titleContainerStyles}>
-              <Subtitle noMargin>Manuscript #{version.count}</Subtitle>
+              <Subtitle noMargin>Version #{version.count}</Subtitle>
 
               <div css={updatedByAndEditContainerStyles}>
                 <Caption accent="lead" noMargin>

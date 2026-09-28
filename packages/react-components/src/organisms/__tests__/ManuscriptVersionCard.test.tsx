@@ -514,6 +514,20 @@ it('displays compliance report when complianceReport is provided', () => {
   expect(getByRole('heading', { name: /Compliance Report/i })).toBeVisible();
 });
 
+it('displays the version count in the title', () => {
+  const { getByText, queryByText } = render(
+    <MemoryRouter>
+      <ManuscriptVersionCard
+        {...props}
+        version={{ ...baseVersion, count: 3 }}
+      />
+    </MemoryRouter>,
+  );
+
+  expect(getByText('Version #3')).toBeVisible();
+  expect(queryByText('Manuscript #3')).not.toBeInTheDocument();
+});
+
 it('displays manuscript description', async () => {
   const shortDescription = 'A nice short description';
   const longDescription = 'A veeery long description.'.repeat(200);
