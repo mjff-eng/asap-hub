@@ -16,6 +16,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import { createTestQueryClient } from '@asap-hub/frontend-utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { getEvents } from '../../../events/api';
+import { getTeamCoProduction } from '../../../analytics/collaboration/api';
 import { getTeamLeadershipMetrics } from '../../../analytics/leadership/api';
 import { getTeamHubResearchOutputs } from '../../../analytics/productivity/api';
 import { getTeam } from '../api';
@@ -48,6 +49,7 @@ jest.mock('../../../shared-research/api');
 jest.mock('../../../events/api');
 jest.mock('../../../analytics/productivity/api');
 jest.mock('../../../analytics/leadership/api');
+jest.mock('../../../analytics/collaboration/api');
 
 const mockGetEventsFromAlgolia = getEvents as jest.MockedFunction<
   typeof getEvents
@@ -322,6 +324,9 @@ describe('the metrics tab', () => {
     getTeamLeadershipMetrics as jest.MockedFunction<
       typeof getTeamLeadershipMetrics
     >;
+  const mockGetTeamCoProduction = getTeamCoProduction as jest.MockedFunction<
+    typeof getTeamCoProduction
+  >;
   const team = createTeamResponse();
   const teamMember = {
     teams: [{ id: team.id, role: 'Project Manager' as const }],
@@ -333,6 +338,9 @@ describe('the metrics tab', () => {
     mockGetTeamLeadershipMetrics.mockResolvedValue({
       workingGroupLead: false,
       interestGroupLead: false,
+    });
+    mockGetTeamCoProduction.mockResolvedValue({
+      coProducedArticles: undefined,
     });
   });
 
@@ -346,6 +354,21 @@ describe('the metrics tab', () => {
     await renderPage(team, {}, { role: 'Staff' });
 
     expect(screen.getByText('Metrics')).toBeVisible();
+  });
+
+  it('shows the collaboration card to staff who are not on the team', async () => {
+    // The role gate lives here, not in TeamMetrics or TeamMetricsPage, so this
+    // is the only file where a staff-versus-member assertion proves anything.
+    await renderPage(
+      team,
+      {},
+      { role: 'Staff' },
+      network({}).teams({}).team({ teamId: team.id }).metrics({}).$,
+    );
+
+    expect(
+      await screen.findByText('Within Team Co-Production of Research Outputs'),
+    ).toBeVisible();
   });
 
   it('is hidden from a user who is neither staff nor on the team', async () => {

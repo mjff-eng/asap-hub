@@ -5,11 +5,13 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import { Suspense } from 'react';
 
 import { Auth0Provider, WhenReady } from '../../../auth/test-utils';
+import { getTeamCoProduction } from '../../../analytics/collaboration/api';
 import { getTeamLeadershipMetrics } from '../../../analytics/leadership/api';
 import { getTeamHubResearchOutputs } from '../../../analytics/productivity/api';
 import { getTeamAwardMetrics } from '../api';
 import TeamMetrics from '../TeamMetrics';
 
+jest.mock('../../../analytics/collaboration/api');
 jest.mock('../../../analytics/productivity/api');
 jest.mock('../../../analytics/leadership/api');
 jest.mock('../api');
@@ -24,6 +26,9 @@ const mockGetTeamLeadershipMetrics =
   >;
 const mockGetTeamAwardMetrics = getTeamAwardMetrics as jest.MockedFunction<
   typeof getTeamAwardMetrics
+>;
+const mockGetTeamCoProduction = getTeamCoProduction as jest.MockedFunction<
+  typeof getTeamCoProduction
 >;
 
 const createDocument = (
@@ -48,6 +53,10 @@ beforeEach(() => {
     interestGroupLead: false,
   });
   mockGetTeamAwardMetrics.mockResolvedValue({ total: 0, items: [] });
+  mockGetTeamCoProduction.mockResolvedValue({
+    coProducedArticles: undefined,
+    totalArticles: undefined,
+  });
 });
 
 afterEach(jest.clearAllMocks);
@@ -190,4 +199,48 @@ it('renders a row per award type with its status', async () => {
   expect(within(championRow!).getByText('Y')).toBeVisible();
   const spotlightRow = screen.getByText('Network Spotlight').closest('article');
   expect(within(spotlightRow!).getByText('N')).toBeVisible();
+});
+
+describe('collaboration section', () => {
+  it('Should request the co-production figure for the team on the route', async () => {
+    mockGetTeamHubResearchOutputs.mockResolvedValue({});
+
+    await renderTab('t42');
+
+    expect(mockGetTeamCoProduction).toHaveBeenCalledWith(expect.anything(), {
+      teamId: 't42',
+    });
+  });
+
+  it('Should show the band the percentage falls into', async () => {
+    mockGetTeamHubResearchOutputs.mockResolvedValue({});
+    mockGetTeamCoProduction.mockResolvedValue({
+      coProducedArticles: 9,
+      totalArticles: 10,
+    });
+
+    await renderTab();
+
+    const row = screen
+      .getByText('Within Team Co-Production of Research Outputs')
+      .closest('article');
+    expect(within(row!).getByLabelText(/outstanding job/i)).toBeInTheDocument();
+  });
+
+  it('Should show limited data when no co-production figure is available', async () => {
+    mockGetTeamHubResearchOutputs.mockResolvedValue({});
+    mockGetTeamCoProduction.mockResolvedValue({
+      coProducedArticles: undefined,
+      totalArticles: 10,
+    });
+
+    await renderTab();
+
+    const row = screen
+      .getByText('Within Team Co-Production of Research Outputs')
+      .closest('article');
+    expect(
+      within(row!).getByLabelText(/limited available data/i),
+    ).toBeInTheDocument();
+  });
 });

@@ -430,7 +430,28 @@ export type TeamCollaborationDataObject = {
   inactiveSince?: string;
   outputsCoProducedWithin: TeamCollaborationWithinOutputData;
   outputsCoProducedAcross: TeamCollaborationAcrossOutputData;
+  totalOutputs: TeamCollaborationWithinOutputData;
 };
+export type TeamCollaborationOpensearchDocument =
+  TeamCollaborationWithinOutputData & {
+    id: string;
+    name: string;
+    isInactive: boolean;
+    inactiveSince?: string;
+    timeRange: TimeRangeOption;
+    outputType: OutputTypeOption;
+    ArticleAcross: number;
+    BioinformaticsAcross: number;
+    DatasetAcross: number;
+    'Lab Material Across': number;
+    ProtocolAcross: number;
+    ArticleTotal: number;
+    BioinformaticsTotal: number;
+    DatasetTotal: number;
+    'Lab Material Total': number;
+    ProtocolTotal: number;
+  };
+
 export type ListTeamCollaborationDataObject =
   ListResponse<TeamCollaborationDataObject>;
 export type TeamCollaborationResponse = TeamCollaborationDataObject;

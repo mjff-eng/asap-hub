@@ -186,6 +186,13 @@ const teamData: ListTeamCollaborationResponse = {
         'Lab Material': 0,
         Protocol: 1,
       },
+      totalOutputs: {
+        Article: 100,
+        Bioinformatics: 0,
+        Dataset: 0,
+        'Lab Material': 0,
+        Protocol: 1,
+      },
       outputsCoProducedAcross: {
         byDocumentType: {
           Article: 1,
@@ -440,6 +447,13 @@ describe('team collaboration', () => {
             ...teamData.items[0]!,
             id: '1-team-collaboration-all-public',
             outputsCoProducedWithin: {
+              Article: 50,
+              Bioinformatics: 0,
+              Dataset: 0,
+              'Lab Material': 0,
+              Protocol: 1,
+            },
+            totalOutputs: {
               Article: 50,
               Bioinformatics: 0,
               Dataset: 0,

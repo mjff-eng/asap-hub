@@ -25,6 +25,7 @@ describe('TeamMetricsPage', () => {
         metricDefinition: 'Recognition for Network Spotlight awards.',
       },
     ],
+    collaborationMetrics: { withinTeamCoProduction: 62 },
   };
 
   it('renders the heading and the introduction', () => {
@@ -91,5 +92,62 @@ describe('TeamMetricsPage', () => {
       .getByText('Network Spotlight')
       .closest('article');
     expect(within(spotlightRow!).getByText('N')).toBeVisible();
+  });
+
+  it('renders the collaboration section after the awards section', () => {
+    render(<TeamMetricsPage {...props} />);
+
+    const subtitles = screen
+      .getAllByText(/^(Hub Research Outputs|Leadership|Awards|Collaboration)$/)
+      .map((node) => node.textContent);
+    expect(subtitles).toEqual([
+      'Hub Research Outputs',
+      'Leadership',
+      'Awards',
+      'Collaboration',
+    ]);
+  });
+
+  it('renders exactly one collaboration metric row, carrying its copy', () => {
+    render(<TeamMetricsPage {...props} />);
+
+    const row = screen
+      .getByText('Within Team Co-Production of Research Outputs')
+      .closest('article');
+    expect(row).toBeVisible();
+
+    const mobileDetails = within(row!).getByTestId(
+      'metrics-card-details-mobile',
+    );
+    expect(
+      within(mobileDetails).getByText(/facilitation of collaboration/i),
+    ).toBeInTheDocument();
+    expect(
+      within(mobileDetails).getByText(
+        /assesses whether teams are working together/i,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('renders the limited-data status when there is no percentage', () => {
+    render(
+      <TeamMetricsPage
+        {...props}
+        collaborationMetrics={{ withinTeamCoProduction: null }}
+      />,
+    );
+
+    const row = screen
+      .getByText('Within Team Co-Production of Research Outputs')
+      .closest('article');
+    expect(
+      within(row!).getByLabelText(/limited available data/i),
+    ).toBeInTheDocument();
+    const mobileDetails = within(row!).getByTestId(
+      'metrics-card-details-mobile',
+    );
+    expect(
+      within(mobileDetails).getByText(/facilitation of collaboration/i),
+    ).toBeInTheDocument();
   });
 });

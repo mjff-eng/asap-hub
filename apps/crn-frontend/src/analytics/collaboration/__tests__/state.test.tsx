@@ -8,6 +8,7 @@ import { useAnalyticsOpensearch } from '../../../hooks/opensearch';
 import {
   getPreliminaryDataSharing,
   getTeamCollaboration,
+  getTeamCoProduction,
   getUserCollaboration,
 } from '../api';
 import {
@@ -15,6 +16,7 @@ import {
   useAnalyticsSharingPrelimFindings,
   useAnalyticsTeamCollaboration,
   useAnalyticsUserCollaboration,
+  useTeamCoProduction,
 } from '../state';
 
 jest.mock('../api');
@@ -67,6 +69,7 @@ const options = {
   tags: [],
   timeRange: 'all',
   sort: 'team_asc',
+  teamId: 'team-id-1',
 } as unknown as Parameters<typeof useAnalyticsUserCollaboration>[0];
 
 beforeEach(() => {
@@ -167,6 +170,7 @@ describe('Error rejections propagate to the error boundary', () => {
     ['user', getUserCollaboration, useAnalyticsUserCollaboration],
     ['team', getTeamCollaboration, useAnalyticsTeamCollaboration],
     ['prelim', getPreliminaryDataSharing, useAnalyticsSharingPrelimFindings],
+    ['co-production', getTeamCoProduction, useTeamCoProduction],
   ])('re-throws Error rejections for %s', async (_name, getter, hook) => {
     const consoleErrorSpy = jest
       .spyOn(console, 'error')
@@ -193,5 +197,26 @@ describe('Error rejections propagate to the error boundary', () => {
 
     await waitFor(() => expect(getByText('errored')).toBeInTheDocument());
     consoleErrorSpy.mockRestore();
+  });
+});
+
+describe('useTeamCoProduction', () => {
+  const mockGetTeamCoProduction = getTeamCoProduction as jest.MockedFunction<
+    typeof getTeamCoProduction
+  >;
+
+  it('Should return the team co-production figure', async () => {
+    mockGetTeamCoProduction.mockResolvedValue({ coProducedArticles: 4 });
+
+    const { result } = renderStateHook(() =>
+      useTeamCoProduction({ teamId: 'team-id-1' }),
+    );
+
+    await waitFor(() =>
+      expect(result.current).toEqual({ coProducedArticles: 4 }),
+    );
+    expect(mockGetTeamCoProduction).toHaveBeenCalledWith(expect.anything(), {
+      teamId: 'team-id-1',
+    });
   });
 });

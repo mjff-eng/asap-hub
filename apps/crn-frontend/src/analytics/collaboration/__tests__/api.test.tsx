@@ -9,6 +9,7 @@ import {
   PreliminaryDataSharingDataObject,
   SortTeamCollaboration,
   SortUserCollaboration,
+  TeamCollaborationOpensearchDocument,
   TeamCollaborationPerformance,
   TeamCollaborationResponse,
   UserCollaborationResponse,
@@ -18,6 +19,7 @@ import { AnalyticsSearchOptionsWithFiltering } from '../../utils/analytics-optio
 import { OpensearchClient } from '../../utils/opensearch';
 
 import {
+  getTeamCoProduction,
   getTeamCollaboration,
   getTeamCollaborationPerformance,
   getUserCollaboration,
@@ -399,5 +401,64 @@ describe('getPreliminaryDataSharing', () => {
         },
       ],
     });
+  });
+});
+
+describe('getTeamCoProduction', () => {
+  const buildClient = (items: unknown[]) => {
+    const client = new OpensearchClient<TeamCollaborationOpensearchDocument>(
+      'team-collaboration',
+      'Bearer test-token',
+    );
+    const search = jest
+      .spyOn(client, 'search')
+      .mockResolvedValue({ items, total: items.length } as Awaited<
+        ReturnType<typeof client.search>
+      >);
+    return { client, search };
+  };
+
+  it('Should select the all-time, all-outputs document for the team', async () => {
+    const { client, search } = buildClient([]);
+
+    await getTeamCoProduction(client, { teamId: 'team-id-1' });
+
+    expect(search).toHaveBeenCalledWith({
+      searchTags: [],
+      searchScope: 'flat',
+      sort: [],
+      currentPage: 0,
+      pageSize: 1,
+      timeRange: 'all',
+      outputType: 'all',
+      teamId: 'team-id-1',
+    });
+  });
+
+  it('Should take both sides of the ratio from the same document', async () => {
+    const { client } = buildClient([{ Article: 7, ArticleTotal: 12 }]);
+
+    await expect(
+      getTeamCoProduction(client, { teamId: 'team-id-1' }),
+    ).resolves.toEqual({ coProducedArticles: 7, totalArticles: 12 });
+  });
+
+  it('Should report no figure when the index holds no document for the team', async () => {
+    const { client } = buildClient([]);
+
+    await expect(
+      getTeamCoProduction(client, { teamId: 'team-id-1' }),
+    ).resolves.toEqual({
+      coProducedArticles: undefined,
+      totalArticles: undefined,
+    });
+  });
+
+  it('Should distinguish a document counting zero from an absent document', async () => {
+    const { client } = buildClient([{ Article: 0, ArticleTotal: 5 }]);
+
+    await expect(
+      getTeamCoProduction(client, { teamId: 'team-id-1' }),
+    ).resolves.toEqual({ coProducedArticles: 0, totalArticles: 5 });
   });
 });

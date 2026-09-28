@@ -1229,6 +1229,13 @@ describe('downloadAnalyticsXLSX', () => {
             'Lab Material': 1,
             Protocol: 2,
           },
+          totalOutputs: {
+            Article: 3,
+            Bioinformatics: 1,
+            Dataset: 0,
+            'Lab Material': 1,
+            Protocol: 2,
+          },
           outputsCoProducedAcross: {
             byDocumentType: {
               Article: 4,

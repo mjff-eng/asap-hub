@@ -65,6 +65,13 @@ export const teamCollaborationResponse: ListTeamCollaborationResponse = {
         'Lab Material': 0,
         Protocol: 1,
       },
+      totalOutputs: {
+        Article: 2,
+        Bioinformatics: 0,
+        Dataset: 0,
+        'Lab Material': 0,
+        Protocol: 2,
+      },
       outputsCoProducedAcross: {
         byDocumentType: {
           Article: 1,
