@@ -22,6 +22,17 @@ const TeamTitle = ({ id }: { id: string }) => {
     </>
   );
 };
+const ProjectTitle = ({ id }: { id: string }) => {
+  const { data: project } = useEntity<Entry>('Entry', id);
+  if (!project) {
+    return null;
+  }
+  return (
+    <>
+      {project.fields?.title?.['en-US']} <Badge>Project</Badge>
+    </>
+  );
+};
 const UserTitle = ({ id }: { id: string }) => {
   const { data: user } = useEntity<Entry>('Entry', id);
   const contentType = user?.sys?.contentType?.sys?.id;
@@ -49,6 +60,9 @@ const Card = ({ entity, onEdit, onRemove }: CustomEntryCardProps) => {
   const { fields, sys } = entity;
   const teamId = fields.team?.['en-US'].sys.id;
   const userId = fields.user?.['en-US'].sys.id;
+  const projectId = fields.project?.['en-US'].sys.id;
+  const preliminaryDataShared: boolean | null | undefined =
+    fields.preliminaryDataShared?.['en-US'];
 
   const removeSpeaker = async () => {
     if (sys.publishedVersion) {
@@ -88,6 +102,21 @@ const Card = ({ entity, onEdit, onRemove }: CustomEntryCardProps) => {
           <UserTitle id={userId} />
         </Text>
       )}
+      {projectId && (
+        <Text>
+          <ProjectTitle id={projectId} />
+        </Text>
+      )}
+      {(teamId || projectId || userId) &&
+        typeof preliminaryDataShared === 'boolean' && (
+          <Text>
+            <Badge variant={preliminaryDataShared ? 'positive' : 'secondary'}>
+              {preliminaryDataShared
+                ? 'Preliminary Data Shared'
+                : 'Preliminary Data Not Shared'}
+            </Badge>
+          </Text>
+        )}
     </EntryCard>
   );
 };
