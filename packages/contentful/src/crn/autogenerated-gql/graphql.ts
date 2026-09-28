@@ -3525,6 +3525,8 @@ export type EventSpeakers = Entry &
     _id: Scalars['ID'];
     contentfulMetadata: ContentfulMetadata;
     linkedFrom?: Maybe<EventSpeakersLinkingCollections>;
+    preliminaryDataShared?: Maybe<Scalars['Boolean']>;
+    project?: Maybe<Projects>;
     sys: Sys;
     team?: Maybe<Teams>;
     user?: Maybe<EventSpeakersUser>;
@@ -3533,6 +3535,20 @@ export type EventSpeakers = Entry &
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/eventSpeakers) */
 export type EventSpeakersLinkedFromArgs = {
   allowedLocales?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/eventSpeakers) */
+export type EventSpeakersPreliminaryDataSharedArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/eventSpeakers) */
+export type EventSpeakersProjectArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<ProjectsFilter>;
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/eventSpeakers) */
@@ -3568,6 +3584,11 @@ export type EventSpeakersFilter = {
   AND?: InputMaybe<Array<InputMaybe<EventSpeakersFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<EventSpeakersFilter>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  preliminaryDataShared?: InputMaybe<Scalars['Boolean']>;
+  preliminaryDataShared_exists?: InputMaybe<Scalars['Boolean']>;
+  preliminaryDataShared_not?: InputMaybe<Scalars['Boolean']>;
+  project?: InputMaybe<CfProjectsNestedFilter>;
+  project_exists?: InputMaybe<Scalars['Boolean']>;
   sys?: InputMaybe<SysFilter>;
   team?: InputMaybe<CfTeamsNestedFilter>;
   team_exists?: InputMaybe<Scalars['Boolean']>;
@@ -3727,6 +3748,8 @@ export enum EventSpeakersLinkingCollectionsEventsCursorCollectionOrder {
 }
 
 export enum EventSpeakersOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -4738,6 +4761,8 @@ export type EventsSpeakersCollection = {
 };
 
 export enum EventsSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -4755,6 +4780,8 @@ export type EventsSpeakersCursorCollection = {
 };
 
 export enum EventsSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -5022,6 +5049,8 @@ export type ExternalAuthorsLinkingCollectionsTutorialsCursorCollectionArgs = {
 };
 
 export enum ExternalAuthorsLinkingCollectionsEventSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -5033,6 +5062,8 @@ export enum ExternalAuthorsLinkingCollectionsEventSpeakersCollectionOrder {
 }
 
 export enum ExternalAuthorsLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -12537,6 +12568,8 @@ export type ProjectsFilter = {
 export type ProjectsLinkingCollections = {
   entryCollection?: Maybe<EntryCollection>;
   entryCursorCollection?: Maybe<EntryCursorCollection>;
+  eventSpeakersCollection?: Maybe<EventSpeakersCollection>;
+  eventSpeakersCursorCollection?: Maybe<EventSpeakersCursorCollection>;
   manuscriptsCollection?: Maybe<ManuscriptsCollection>;
   manuscriptsCursorCollection?: Maybe<ManuscriptsCursorCollection>;
   researchOutputsCollection?: Maybe<ResearchOutputsCollection>;
@@ -12554,6 +12587,31 @@ export type ProjectsLinkingCollectionsEntryCollectionArgs = {
 export type ProjectsLinkingCollectionsEntryCursorCollectionArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   locale?: InputMaybe<Scalars['String']>;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ProjectsLinkingCollectionsEventSpeakersCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<ProjectsLinkingCollectionsEventSpeakersCollectionOrder>>
+  >;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ProjectsLinkingCollectionsEventSpeakersCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<
+      InputMaybe<ProjectsLinkingCollectionsEventSpeakersCursorCollectionOrder>
+    >
+  >;
   pageNext?: InputMaybe<Scalars['String']>;
   pagePrev?: InputMaybe<Scalars['String']>;
   preview?: InputMaybe<Scalars['Boolean']>;
@@ -12609,6 +12667,32 @@ export type ProjectsLinkingCollectionsResearchOutputsCursorCollectionArgs = {
   preview?: InputMaybe<Scalars['Boolean']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
+
+export enum ProjectsLinkingCollectionsEventSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export enum ProjectsLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
 
 export enum ProjectsLinkingCollectionsManuscriptsCollectionOrder {
   ApcAmountPaidAsc = 'apcAmountPaid_ASC',
@@ -19940,6 +20024,8 @@ export enum TeamsLinkingCollectionsDiscoverCursorCollectionOrder {
 }
 
 export enum TeamsLinkingCollectionsEventSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -19951,6 +20037,8 @@ export enum TeamsLinkingCollectionsEventSpeakersCollectionOrder {
 }
 
 export enum TeamsLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -22571,6 +22659,8 @@ export enum UsersLinkingCollectionsDiscussionsCursorCollectionOrder {
 }
 
 export enum UsersLinkingCollectionsEventSpeakersCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -22582,6 +22672,8 @@ export enum UsersLinkingCollectionsEventSpeakersCollectionOrder {
 }
 
 export enum UsersLinkingCollectionsEventSpeakersCursorCollectionOrder {
+  PreliminaryDataSharedAsc = 'preliminaryDataShared_ASC',
+  PreliminaryDataSharedDesc = 'preliminaryDataShared_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -24614,6 +24706,10 @@ export type CfEventSpeakersNestedFilter = {
   AND?: InputMaybe<Array<InputMaybe<CfEventSpeakersNestedFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<CfEventSpeakersNestedFilter>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  preliminaryDataShared?: InputMaybe<Scalars['Boolean']>;
+  preliminaryDataShared_exists?: InputMaybe<Scalars['Boolean']>;
+  preliminaryDataShared_not?: InputMaybe<Scalars['Boolean']>;
+  project_exists?: InputMaybe<Scalars['Boolean']>;
   sys?: InputMaybe<SysFilter>;
   team_exists?: InputMaybe<Scalars['Boolean']>;
   user_exists?: InputMaybe<Scalars['Boolean']>;
@@ -40198,6 +40294,16 @@ export type UserListItemContentFragment = Pick<
 > & {
   avatar?: Maybe<Pick<Asset, 'url'>>;
   sys: Pick<Sys, 'id'>;
+  labsCollection?: Maybe<{
+    items: Array<
+      Maybe<
+        Pick<Labs, 'name'> & {
+          sys: Pick<Sys, 'id'>;
+          labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+        }
+      >
+    >;
+  }>;
   userSocials?: Maybe<
     Pick<
       Socials,
@@ -40212,16 +40318,6 @@ export type UserListItemContentFragment = Pick<
       | 'website2'
     >
   >;
-  labsCollection?: Maybe<{
-    items: Array<
-      Maybe<
-        Pick<Labs, 'name'> & {
-          sys: Pick<Sys, 'id'>;
-          labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-        }
-      >
-    >;
-  }>;
   researchTagsCollection?: Maybe<{
     items: Array<Maybe<Pick<ResearchTags, 'name'> & { sys: Pick<Sys, 'id'> }>>;
   }>;
@@ -40287,6 +40383,16 @@ export type FetchUsersQuery = {
           > & {
             avatar?: Maybe<Pick<Asset, 'url'>>;
             sys: Pick<Sys, 'id'>;
+            labsCollection?: Maybe<{
+              items: Array<
+                Maybe<
+                  Pick<Labs, 'name'> & {
+                    sys: Pick<Sys, 'id'>;
+                    labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+                  }
+                >
+              >;
+            }>;
             userSocials?: Maybe<
               Pick<
                 Socials,
@@ -40301,16 +40407,6 @@ export type FetchUsersQuery = {
                 | 'website2'
               >
             >;
-            labsCollection?: Maybe<{
-              items: Array<
-                Maybe<
-                  Pick<Labs, 'name'> & {
-                    sys: Pick<Sys, 'id'>;
-                    labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-                  }
-                >
-              >;
-            }>;
             researchTagsCollection?: Maybe<{
               items: Array<
                 Maybe<Pick<ResearchTags, 'name'> & { sys: Pick<Sys, 'id'> }>
@@ -40388,6 +40484,16 @@ export type FetchUsersByTeamIdQuery = {
                   > & {
                     avatar?: Maybe<Pick<Asset, 'url'>>;
                     sys: Pick<Sys, 'id'>;
+                    labsCollection?: Maybe<{
+                      items: Array<
+                        Maybe<
+                          Pick<Labs, 'name'> & {
+                            sys: Pick<Sys, 'id'>;
+                            labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+                          }
+                        >
+                      >;
+                    }>;
                     userSocials?: Maybe<
                       Pick<
                         Socials,
@@ -40402,16 +40508,6 @@ export type FetchUsersByTeamIdQuery = {
                         | 'website2'
                       >
                     >;
-                    labsCollection?: Maybe<{
-                      items: Array<
-                        Maybe<
-                          Pick<Labs, 'name'> & {
-                            sys: Pick<Sys, 'id'>;
-                            labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-                          }
-                        >
-                      >;
-                    }>;
                     researchTagsCollection?: Maybe<{
                       items: Array<
                         Maybe<
@@ -40497,6 +40593,16 @@ export type FetchUsersByTeamMembershipIdQuery = {
                   > & {
                     avatar?: Maybe<Pick<Asset, 'url'>>;
                     sys: Pick<Sys, 'id'>;
+                    labsCollection?: Maybe<{
+                      items: Array<
+                        Maybe<
+                          Pick<Labs, 'name'> & {
+                            sys: Pick<Sys, 'id'>;
+                            labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+                          }
+                        >
+                      >;
+                    }>;
                     userSocials?: Maybe<
                       Pick<
                         Socials,
@@ -40511,16 +40617,6 @@ export type FetchUsersByTeamMembershipIdQuery = {
                         | 'website2'
                       >
                     >;
-                    labsCollection?: Maybe<{
-                      items: Array<
-                        Maybe<
-                          Pick<Labs, 'name'> & {
-                            sys: Pick<Sys, 'id'>;
-                            labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-                          }
-                        >
-                      >;
-                    }>;
                     researchTagsCollection?: Maybe<{
                       items: Array<
                         Maybe<
@@ -40608,6 +40704,16 @@ export type FetchUsersByLabIdQuery = {
                       > & {
                         avatar?: Maybe<Pick<Asset, 'url'>>;
                         sys: Pick<Sys, 'id'>;
+                        labsCollection?: Maybe<{
+                          items: Array<
+                            Maybe<
+                              Pick<Labs, 'name'> & {
+                                sys: Pick<Sys, 'id'>;
+                                labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+                              }
+                            >
+                          >;
+                        }>;
                         userSocials?: Maybe<
                           Pick<
                             Socials,
@@ -40622,16 +40728,6 @@ export type FetchUsersByLabIdQuery = {
                             | 'website2'
                           >
                         >;
-                        labsCollection?: Maybe<{
-                          items: Array<
-                            Maybe<
-                              Pick<Labs, 'name'> & {
-                                sys: Pick<Sys, 'id'>;
-                                labPi?: Maybe<{ sys: Pick<Sys, 'id'> }>;
-                              }
-                            >
-                          >;
-                        }>;
                         researchTagsCollection?: Maybe<{
                           items: Array<
                             Maybe<
@@ -40711,7 +40807,6 @@ export type FetchUserByIdForAlgoliaListQuery = {
       | 'onboarded'
     > & {
       sys: Pick<Sys, 'id'>;
-      avatar?: Maybe<Pick<Asset, 'url'>>;
       userSocials?: Maybe<
         Pick<
           Socials,
@@ -40726,6 +40821,7 @@ export type FetchUserByIdForAlgoliaListQuery = {
           | 'website2'
         >
       >;
+      avatar?: Maybe<Pick<Asset, 'url'>>;
       teamsCollection?: Maybe<{
         items: Array<
           Maybe<
