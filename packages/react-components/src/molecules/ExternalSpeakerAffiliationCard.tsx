@@ -6,6 +6,7 @@ import { Button, MultiSelect, Paragraph, Pill } from '../atoms';
 import { lead, neutral700, neutral1000, warning100 } from '../colors';
 import { crossIcon, externalUserAvatarIcon, searchIcon } from '../icons';
 import { EventTeamType } from '../organisms/shared-event-card';
+import { statePillStyles } from '../atoms/SpeakerRoleBadge';
 import { mobileScreen, rem } from '../pixels';
 import {
   flexRowGap8Styles,
@@ -150,9 +151,11 @@ const ExternalSpeakerAffiliationCard: React.FC<
           <span css={placeholderAvatarStyles}>{externalUserAvatarIcon}</span>
           <span css={nameStyles}>{displayName}</span>
         </span>
-        <Pill accent="gray" noMargin>
-          Non CRN
-        </Pill>
+        <span css={statePillStyles}>
+          <Pill accent="gray" noMargin>
+            Non CRN
+          </Pill>
+        </span>
       </div>
       <Button
         noMargin

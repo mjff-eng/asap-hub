@@ -10,6 +10,7 @@ import {
   success100,
   success500,
 } from '../colors';
+import { statePillStyles } from '../atoms/SpeakerRoleBadge';
 import {
   alumniBadgeIcon,
   binIcon,
@@ -228,9 +229,11 @@ const SpeakerUserRow: React.FC<SpeakerUserRowProps> = ({
           {isAlumni && <span css={alumniStyles}>{alumniBadgeIcon}</span>}
         </span>
         {isExternal && (
-          <Pill accent="gray" noMargin>
-            Non CRN
-          </Pill>
+          <span css={statePillStyles}>
+            <Pill accent="gray" noMargin>
+              Non CRN
+            </Pill>
+          </span>
         )}
         {roles && <SpeakerRoleBadge roles={roles} enabled={enabled} />}
       </div>
