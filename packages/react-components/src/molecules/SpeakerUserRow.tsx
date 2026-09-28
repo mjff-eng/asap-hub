@@ -111,6 +111,7 @@ export const flexRowGap8Styles = css({
 const rowStyles = css([
   flexRowGap8Styles,
   {
+    columnGap: actionsGap,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       display: 'grid',
       gridTemplateColumns: '1fr auto',
