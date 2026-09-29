@@ -242,6 +242,30 @@ export const casPrimitives = {
       '800': [145, 32, 24],
       '900': [131, 27, 20],
     },
+    yellow: {
+      '50': [255, 245, 219],
+      '100': [254, 242, 205],
+      '200': [255, 235, 184],
+      '300': [255, 227, 153],
+      '400': [255, 220, 128],
+      '500': [255, 213, 102],
+      '600': [255, 200, 54],
+      '700': [240, 174, 0],
+      '800': [184, 133, 0],
+      '900': [128, 93, 0],
+    },
+    aqua: {
+      '50': [222, 238, 240],
+      '100': [205, 229, 233],
+      '200': [188, 220, 225],
+      '300': [171, 211, 218],
+      '400': [155, 203, 211],
+      '500': [138, 194, 203],
+      '600': [121, 185, 196],
+      '700': [105, 177, 188],
+      '800': [88, 168, 181],
+      '900': [62, 103, 126],
+    },
   },
 } as const;
 
@@ -390,6 +414,11 @@ export const casTheme = {
       hex: '#D92D20',
       alpha: 1,
       alias: 'colour/utilitarian/red/600',
+    },
+    'colour/foreground/neutral': {
+      hex: '#4B5359',
+      alpha: 1,
+      alias: 'colour/neutral/700',
     },
     'colour/foreground/button/primary/default': {
       hex: '#FFFFFF',
@@ -594,15 +623,15 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/utilitarian/red/600',
     },
-    'colour/background/input/default': {
-      hex: '#FFFFFF',
+    'colour/background/neutral': {
+      hex: '#D1E9FF',
       alpha: 1,
-      alias: 'colour/neutral/0',
+      alias: 'colour/utilitarian/blue/100',
     },
-    'colour/background/input/hover': {
-      hex: '#FFFFFF',
-      alpha: 1,
-      alias: 'colour/neutral/0',
+    'colour/background/overlay': {
+      hex: '#1C1F21',
+      alpha: 0.2,
+      alias: 'colour/neutral/900-A20',
     },
     'colour/background/button/primary/default': {
       hex: '#34A270',
@@ -682,6 +711,16 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/utilitarian/orange/700',
     },
+    'colour/background/input/default': {
+      hex: '#FFFFFF',
+      alpha: 1,
+      alias: 'colour/neutral/0',
+    },
+    'colour/background/input/hover': {
+      hex: '#FFFFFF',
+      alpha: 1,
+      alias: 'colour/neutral/0',
+    },
     'colour/border/primary': {
       hex: '#A6AEB4',
       alpha: 1,
@@ -756,6 +795,11 @@ export const casTheme = {
       hex: '#D92D20',
       alpha: 1,
       alias: 'colour/utilitarian/red/600',
+    },
+    'colour/border/neutral': {
+      hex: '#1570EF',
+      alpha: 1,
+      alias: 'colour/utilitarian/blue/600',
     },
     'colour/border/button/primary/default': {
       hex: '#287953',
@@ -941,6 +985,11 @@ export const casTheme = {
       hex: '#D92D20',
       alpha: 1,
       alias: 'colour/utilitarian/red/600',
+    },
+    'colour/foreground/neutral': {
+      hex: '#4B5359',
+      alpha: 1,
+      alias: 'colour/neutral/700',
     },
     'colour/foreground/button/primary/default': {
       hex: '#FFFFFF',
@@ -1157,15 +1206,15 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/utilitarian/red/600',
     },
-    'colour/background/input/default': {
-      hex: '#FFFFFF',
+    'colour/background/neutral': {
+      hex: '#D1E9FF',
       alpha: 1,
-      alias: 'colour/neutral/0',
+      alias: 'colour/utilitarian/blue/100',
     },
-    'colour/background/input/hover': {
-      hex: '#FFFFFF',
-      alpha: 1,
-      alias: 'colour/neutral/0',
+    'colour/background/overlay': {
+      hex: '#1C1F21',
+      alpha: 0.2,
+      alias: 'colour/neutral/900-A20',
     },
     'colour/background/button/primary/default': {
       hex: '#0C8DC3',
@@ -1238,6 +1287,16 @@ export const casTheme = {
       hex: '#B54708',
       alpha: 1,
       alias: 'colour/utilitarian/orange/700',
+    },
+    'colour/background/input/default': {
+      hex: '#FFFFFF',
+      alpha: 1,
+      alias: 'colour/neutral/0',
+    },
+    'colour/background/input/hover': {
+      hex: '#FFFFFF',
+      alpha: 1,
+      alias: 'colour/neutral/0',
     },
     'colour/border/primary': {
       hex: '#A6AEB4',
@@ -1314,6 +1373,11 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/utilitarian/red/600',
     },
+    'colour/border/neutral': {
+      hex: '#1570EF',
+      alpha: 1,
+      alias: 'colour/utilitarian/blue/600',
+    },
     'colour/border/button/primary/default': {
       hex: '#006A92',
       alpha: 1,
@@ -1379,6 +1443,7 @@ export const casThemeVariables = {
     success: 'var(--colour-foreground-success)',
     warning: 'var(--colour-foreground-warning)',
     error: 'var(--colour-foreground-error)',
+    neutral: 'var(--colour-foreground-neutral)',
     button: {
       primary: {
         default: 'var(--colour-foreground-button-primary-default)',
@@ -1420,10 +1485,8 @@ export const casThemeVariables = {
     'warning-inverse': 'var(--colour-background-warning-inverse)',
     error: 'var(--colour-background-error)',
     'error-inverse': 'var(--colour-background-error-inverse)',
-    input: {
-      default: 'var(--colour-background-input-default)',
-      hover: 'var(--colour-background-input-hover)',
-    },
+    neutral: 'var(--colour-background-neutral)',
+    overlay: 'var(--colour-background-overlay)',
     button: {
       primary: {
         default: 'var(--colour-background-button-primary-default)',
@@ -1460,6 +1523,10 @@ export const casThemeVariables = {
         },
       },
     },
+    input: {
+      default: 'var(--colour-background-input-default)',
+      hover: 'var(--colour-background-input-hover)',
+    },
   },
   border: {
     primary: 'var(--colour-border-primary)',
@@ -1471,6 +1538,7 @@ export const casThemeVariables = {
     success: 'var(--colour-border-success)',
     warning: 'var(--colour-border-warning)',
     error: 'var(--colour-border-error)',
+    neutral: 'var(--colour-border-neutral)',
     button: {
       primary: {
         default: 'var(--colour-border-button-primary-default)',
