@@ -63,8 +63,7 @@ describe('userToCSV', () => {
       BlueSky: 'https://bsky.app/profile/jane.bsky.social',
       Twitter: 'https://twitter.com/janedoe',
       GitHub: 'https://github.com/jane-doe',
-      'Google Scholar':
-        'https://scholar.google.co.uk/citations?user=scholar-id',
+      'Google Scholar': 'https://scholar.google.com/citations?user=scholar-id',
       'Research Gate': 'https://www.researchgate.net/profile/Jane_Doe',
     });
   });

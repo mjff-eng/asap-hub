@@ -438,6 +438,6 @@ export type {
   GroupedProjectMember,
   GroupedTeamMember,
   GroupedUserTeam,
-  UserSocialProfileType,
+  UserSocialType,
 } from './utils';
 export type { MetricOption } from './templates/AnalyticsLeadershipPageBody';

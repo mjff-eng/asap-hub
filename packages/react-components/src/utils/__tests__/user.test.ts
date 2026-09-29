@@ -36,18 +36,18 @@ describe('formatUserSocial', () => {
 
 describe('toUserSocialUrl', () => {
   it.each`
-    social                                 | type               | result
-    ${'dnvs97'}                            | ${'linkedIn'}      | ${'https://www.linkedin.com/in/dnvs97'}
-    ${'fritzsedlazeck'}                    | ${'github'}        | ${'https://github.com/fritzsedlazeck'}
-    ${'aimeuramin.bsky.social'}            | ${'blueSky'}       | ${'https://bsky.app/profile/aimeuramin.bsky.social'}
-    ${'E-4548-2018'}                       | ${'researcherId'}  | ${'https://publons.com/researcher/E-4548-2018'}
-    ${'2722514'}                           | ${'researcherId'}  | ${'https://publons.com/researcher/2722514'}
-    ${'2MAOoaIAAAAJ'}                      | ${'googleScholar'} | ${'https://scholar.google.co.uk/citations?user=2MAOoaIAAAAJ'}
-    ${'https://Linkedin.com'}              | ${'linkedIn'}      | ${'https://Linkedin.com'}
-    ${'/NeuroBioMed'}                      | ${'twitter'}       | ${'https://twitter.com/NeuroBioMed'}
-    ${'/profile/Benjamin_Hobson'}          | ${'researchGate'}  | ${'https://www.researchgate.net/profile/Benjamin_Hobson'}
-    ${'citations?user=_N6YhZUAAAAJ&hl=en'} | ${'googleScholar'} | ${'https://scholar.google.co.uk/citations?user=_N6YhZUAAAAJ&hl=en'}
-    ${'1410134/guillermo-arango-duque/'}   | ${'researcherId'}  | ${'https://publons.com/researcher/1410134/guillermo-arango-duque/'}
+    social                                  | type               | result
+    ${'dnvs97'}                             | ${'linkedIn'}      | ${'https://www.linkedin.com/in/dnvs97'}
+    ${'fritzsedlazeck'}                     | ${'github'}        | ${'https://github.com/fritzsedlazeck'}
+    ${'aimeuramin.bsky.social'}             | ${'blueSky'}       | ${'https://bsky.app/profile/aimeuramin.bsky.social'}
+    ${'E-4548-2018'}                        | ${'researcherId'}  | ${'https://publons.com/researcher/E-4548-2018'}
+    ${'2722514'}                            | ${'researcherId'}  | ${'https://publons.com/researcher/2722514'}
+    ${'2MAOoaIAAAAJ'}                       | ${'googleScholar'} | ${'https://scholar.google.com/citations?user=2MAOoaIAAAAJ'}
+    ${'https://Linkedin.com'}               | ${'linkedIn'}      | ${'https://Linkedin.com'}
+    ${'/NeuroBioMed'}                       | ${'twitter'}       | ${'https://twitter.com/NeuroBioMed'}
+    ${'/profile/Benjamin_Hobson'}           | ${'researchGate'}  | ${'https://www.researchgate.net/profile/Benjamin_Hobson'}
+    ${'citations?user=_N6YhZUAAAAJ&hl=en'}  | ${'googleScholar'} | ${'https://scholar.google.com/citations?user=_N6YhZUAAAAJ&hl=en'}
+    ${'1410134/guillermo-arango-duque/'}    | ${'researcherId'}  | ${'https://publons.com/researcher/1410134/guillermo-arango-duque/'}
     ${'www.linkedin.com/in/mind23'}         | ${'linkedIn'}      | ${'https://www.linkedin.com/in/mind23'}
     ${'linkedin.com/in/priya14929'}         | ${'linkedIn'}      | ${'https://www.linkedin.com/in/priya14929'}
     ${'researchgate.net/profile/Xu-Qingru'} | ${'researchGate'}  | ${'https://www.researchgate.net/profile/Xu-Qingru'}

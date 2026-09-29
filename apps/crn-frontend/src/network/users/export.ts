@@ -1,16 +1,11 @@
 import { htmlToCsvText } from '@asap-hub/frontend-utils';
 import { UserListItemResponse } from '@asap-hub/model';
-import {
-  toUserSocialUrl,
-  UserSocialProfileType,
-} from '@asap-hub/react-components';
+import { toUserSocialUrl, UserSocialType } from '@asap-hub/react-components';
 
 export const MAX_ALGOLIA_RESULTS = 1000;
 
-const socialUrl = (
-  value: string | undefined,
-  type: UserSocialProfileType,
-): string => (value ? toUserSocialUrl(value, type) : '');
+const socialUrl = (value: string | undefined, type: UserSocialType): string =>
+  value ? toUserSocialUrl(value, type) : '';
 
 export const userToCSV = (user: UserListItemResponse) => ({
   'First Name': user.firstName,
