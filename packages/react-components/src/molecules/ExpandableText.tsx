@@ -22,14 +22,14 @@ const textStyles = css({
 const expandedTextStyles = css({
   maxHeight: rem(lineHeight * 500), // aproximation of possible max height (2500 characters)
   transition: 'max-height 300ms linear',
-  background: colourWithAlpha(colour.neutral[600], 0),
+  background: colourWithAlpha(colour.foreground.tertiary, 0),
 });
 
 const expandableTextStyles = css({
   maxHeight: rem(expandableMaxHeight),
   background: `linear-gradient(180deg, ${
-    colour.neutral[600]
-  } 26.56%, ${colourWithAlpha(colour.neutral[600], 0)} 100%)`,
+    colour.foreground.tertiary
+  } 26.56%, ${colourWithAlpha(colour.foreground.tertiary, 0)} 100%)`,
   WebkitBackgroundClip: 'text',
   backgroundClip: 'text',
   maskImage: 'linear-gradient(to bottom, black, transparent)',
