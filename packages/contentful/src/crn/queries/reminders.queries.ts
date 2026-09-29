@@ -6,7 +6,6 @@ export const FETCH_REMINDERS = gql`
   query FetchReminders(
     $researchOutputFilter: ResearchOutputsFilter
     $eventFilter: EventsFilter
-    $userId: String!
     $researchOutputVersionsFilter: ResearchOutputVersionsFilter
     $manuscriptFilter: ManuscriptsFilter
   ) {
@@ -208,72 +207,6 @@ export const FETCH_REMINDERS = gql`
         }
       }
     }
-    users(id: $userId) {
-      role
-      openScienceTeamMember
-      teamsCollection {
-        items {
-          team {
-            sys {
-              id
-            }
-            displayName
-          }
-          role
-        }
-      }
-      linkedFrom {
-        workingGroupMembersCollection(limit: 10) {
-          items {
-            linkedFrom {
-              workingGroupsCollection(limit: 1) {
-                items {
-                  sys {
-                    id
-                  }
-                  title
-                }
-              }
-            }
-          }
-        }
-        workingGroupLeadersCollection(limit: 10) {
-          items {
-            role
-            linkedFrom {
-              workingGroupsCollection(limit: 1) {
-                items {
-                  sys {
-                    id
-                  }
-                  title
-                }
-              }
-            }
-          }
-        }
-        eventSpeakersCollection(limit: 100) {
-          items {
-            team {
-              sys {
-                id
-              }
-            }
-            linkedFrom {
-              eventsCollection(limit: 1) {
-                items {
-                  sys {
-                    id
-                  }
-                  title
-                  endDate
-                }
-              }
-            }
-          }
-        }
-      }
-    }
     researchOutputVersionsCollection(where: $researchOutputVersionsFilter) {
       items {
         sys {
@@ -323,6 +256,93 @@ export const FETCH_REMINDERS = gql`
                   id
                 }
                 title
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const FETCH_REMINDERS_USER = gql`
+  query FetchRemindersUser($userId: String!) {
+    users(id: $userId) {
+      role
+      openScienceTeamMember
+      teamsCollection {
+        items {
+          team {
+            sys {
+              id
+            }
+            displayName
+          }
+          role
+        }
+      }
+      linkedFrom {
+        workingGroupMembersCollection(limit: 10) {
+          items {
+            linkedFrom {
+              workingGroupsCollection(limit: 1) {
+                items {
+                  sys {
+                    id
+                  }
+                  title
+                }
+              }
+            }
+          }
+        }
+        workingGroupLeadersCollection(limit: 10) {
+          items {
+            role
+            linkedFrom {
+              workingGroupsCollection(limit: 1) {
+                items {
+                  sys {
+                    id
+                  }
+                  title
+                }
+              }
+            }
+          }
+        }
+        projectMembershipCollection(limit: 10) {
+          items {
+            role
+            linkedFrom {
+              projectsCollection(limit: 1) {
+                items {
+                  sys {
+                    id
+                  }
+                  title
+                  projectType
+                }
+              }
+            }
+          }
+        }
+        eventSpeakersCollection(limit: 100) {
+          items {
+            team {
+              sys {
+                id
+              }
+            }
+            linkedFrom {
+              eventsCollection(limit: 1) {
+                items {
+                  sys {
+                    id
+                  }
+                  title
+                  endDate
+                }
               }
             }
           }

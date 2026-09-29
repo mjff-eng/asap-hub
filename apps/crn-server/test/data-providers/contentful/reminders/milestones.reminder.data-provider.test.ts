@@ -2,7 +2,7 @@ import { FetchRemindersOptions } from '@asap-hub/model';
 import {
   FETCH_MILESTONE_REMINDER_PROJECTS,
   FETCH_MILESTONE_REMINDERS,
-  FetchRemindersQuery,
+  FetchRemindersUserQuery,
 } from '@asap-hub/contentful';
 import { getReferenceDates } from '@asap-hub/server-common';
 import { DateTime } from 'luxon';
@@ -60,7 +60,7 @@ describe('Reminders data provider', () => {
       timezone,
     });
 
-    const getUserInTeam = (role: string): FetchRemindersQuery['users'] => {
+    const getUserInTeam = (role: string): FetchRemindersUserQuery['users'] => {
       const user = getContentfulReminderUsersContent();
       user!.teamsCollection = {
         items: [{ role, team: { sys: { id: 'reminder-team' } } }],
@@ -75,8 +75,9 @@ describe('Reminders data provider', () => {
     }: {
       milestones?: (MilestoneItem | null)[];
       projects?: (MilestoneProjectItem | null)[];
-      user?: FetchRemindersQuery['users'];
+      user?: FetchRemindersUserQuery['users'];
     } = {}) => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({});
       contentfulGraphqlClientMock.request.mockResolvedValueOnce({
         users: user,
       });
@@ -127,7 +128,7 @@ describe('Reminders data provider', () => {
 
         const { last7DaysISO } = getReferenceDates(timezone);
         expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
-          4,
+          5,
           FETCH_MILESTONE_REMINDERS,
           {
             milestoneFilter: {
@@ -168,7 +169,7 @@ describe('Reminders data provider', () => {
         await remindersDataProvider.fetch(fetchOptions('user-id'));
 
         expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
-          5,
+          6,
           FETCH_MILESTONE_REMINDER_PROJECTS,
           {
             limit: 100,
@@ -197,6 +198,7 @@ describe('Reminders data provider', () => {
             id: 'milestone-id-2',
           },
         };
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({});
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: getUserInTeam('Project Manager'),
         });
@@ -227,11 +229,11 @@ describe('Reminders data provider', () => {
         );
 
         expect(contentfulGraphqlClientMock.request).toHaveBeenNthCalledWith(
-          5,
+          6,
           FETCH_MILESTONE_REMINDERS,
           expect.objectContaining({ limit: 100, skip: 1 }),
         );
-        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(6);
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(7);
         expect(result.items.map((reminder) => reminder.id)).toEqual([
           'milestone-created-milestone-id-1',
           'milestone-created-milestone-id-2',
@@ -246,10 +248,11 @@ describe('Reminders data provider', () => {
         );
 
         expect(result.items).toEqual([]);
-        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(4);
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(5);
       });
 
       test('surfaces milestone query failures', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({});
         contentfulGraphqlClientMock.request.mockResolvedValueOnce({
           users: getUserInTeam('Project Manager'),
         });
