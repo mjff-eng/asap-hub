@@ -24,5 +24,5 @@ it('defines the GP2 theme colours when rendered for GP2', () => {
     getComputedStyle(document.documentElement).getPropertyValue(
       '--colour-background-button-primary-default',
     ),
-  ).toBe('#0C8DC3');
+  ).toBe('#0375A2');
 });
