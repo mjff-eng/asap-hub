@@ -218,13 +218,19 @@ export const StartHere = () => (
           Replace the files in {code('packages/react-components/cas-tokens')}.
         </li>
         <li>
-          Run {code('yarn cas-tokens:generate')} and commit the result. Never
-          edit {code('cas-tokens.generated.ts')} by hand.
+          Run {code('yarn cas-tokens:generate')}. It formats the exports and
+          regenerates {code('cas-tokens.generated.ts')}; commit both together
+          and never edit the generated file by hand.
         </li>
         <li>
           If it stops with &quot;Figma now sets ... remove it from
           asap-overrides.json&quot;, design has fixed that name: delete the
           entry from {code('cas-tokens/asap-overrides.json')} and run it again.
+        </li>
+        <li>
+          If it stops with &quot;Light mode no longer maps ... to itself&quot;,
+          Figma changed what an existing primitive means in Light mode. Check
+          with design before adjusting the script.
         </li>
       </ol>
       <p style={muted}>
