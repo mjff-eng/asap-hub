@@ -60,12 +60,22 @@ export const toUserSocialUrl = (
   type: UserSocialProfileType,
 ): string => {
   const value = social.trim();
+  if (!value) {
+    return '';
+  }
   if (/^https?:\/\//i.test(value)) {
     return value;
   }
   const base = socialProfileUrls[type];
+  const host = base.replace(/^https?:\/\/(www\.)?/, '').replace(/\/.*$/, '');
   const path = base.replace(/^https?:\/\/[^/]+\//, '');
-  const handle = value.replace(/^\/+/, '');
+  const prefix = [`www.${host}`, host].find((candidate) =>
+    value.toLowerCase().startsWith(candidate),
+  );
+  const handle = (prefix ? value.slice(prefix.length) : value).replace(
+    /^\/+/,
+    '',
+  );
   return `${base}${
     handle.startsWith(path) ? handle.slice(path.length) : handle
   }`;

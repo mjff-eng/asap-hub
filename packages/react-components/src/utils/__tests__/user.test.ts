@@ -48,6 +48,11 @@ describe('toUserSocialUrl', () => {
     ${'/profile/Benjamin_Hobson'}          | ${'researchGate'}  | ${'https://www.researchgate.net/profile/Benjamin_Hobson'}
     ${'citations?user=_N6YhZUAAAAJ&hl=en'} | ${'googleScholar'} | ${'https://scholar.google.co.uk/citations?user=_N6YhZUAAAAJ&hl=en'}
     ${'1410134/guillermo-arango-duque/'}   | ${'researcherId'}  | ${'https://publons.com/researcher/1410134/guillermo-arango-duque/'}
+    ${'www.linkedin.com/in/mind23'}         | ${'linkedIn'}      | ${'https://www.linkedin.com/in/mind23'}
+    ${'linkedin.com/in/priya14929'}         | ${'linkedIn'}      | ${'https://www.linkedin.com/in/priya14929'}
+    ${'researchgate.net/profile/Xu-Qingru'} | ${'researchGate'}  | ${'https://www.researchgate.net/profile/Xu-Qingru'}
+    ${'fraserlab.com'}                      | ${'blueSky'}       | ${'https://bsky.app/profile/fraserlab.com'}
+    ${'   '}                                | ${'twitter'}       | ${''}
   `('builds the profile url for "$social"', ({ social, type, result }) => {
     expect(toUserSocialUrl(social, type)).toEqual(result);
   });
