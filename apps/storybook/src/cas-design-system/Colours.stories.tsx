@@ -1191,7 +1191,7 @@ export const DesignQuestions = () => {
         <p style={{ marginTop: 0 }}>
           Figma added {code('foreground/neutral')} <Colour value="#4B5359" />,{' '}
           {code('background/neutral')} <Colour value="#D1E9FF" /> and{' '}
-          {code('border/neutral')} <Colour value="#1570EF" />. Grey text on a
+          {code('border/neutral')} <Colour value="#175CD3" />. Grey text on a
           blue background and border reads like an info style: what are they
           for? The new {code('utilitarian/yellow')} and{' '}
           {code('utilitarian/aqua')} ramps repeat the general yellow and green
