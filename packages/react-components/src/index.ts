@@ -183,11 +183,13 @@ export {
   EventCard,
   EventConversation,
   EventMaterials,
+  EventMonthFilter,
   EventSearch,
   EventSpeakers,
   EventSupport,
   ExportAnalyticsModal,
   Filter,
+  FilterDropdown,
   GoogleCalendar,
   groupFindings,
   groupLabel,
@@ -436,6 +438,14 @@ export type {
   TeamCollaborationMetric,
   ResearchOutputConfirmModalType,
 } from './organisms';
+export {
+  hasSelectionInYear,
+  monthKey,
+  toggleMonth,
+  toggleYear,
+  yearKey,
+} from './organisms';
+export type { EventMonthFilterSelection } from './organisms';
 export type { ResearchOutputOption } from './utils';
 export type {
   GroupedProjectMember,
