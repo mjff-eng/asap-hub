@@ -1158,6 +1158,18 @@ export const DesignQuestions = () => {
         </p>
       </Section>
 
+      <Section title="7. New names to explain">
+        <p style={{ marginTop: 0 }}>
+          Figma added {code('foreground/neutral')} <Colour value="#4B5359" />,{' '}
+          {code('background/neutral')} <Colour value="#D1E9FF" /> and{' '}
+          {code('border/neutral')} <Colour value="#1570EF" />. Grey text on a
+          blue background and border reads like an info style: what are they
+          for? The new {code('utilitarian/yellow')} and{' '}
+          {code('utilitarian/aqua')} ramps repeat the general yellow and green
+          colours; is that on purpose?
+        </p>
+      </Section>
+
       <Section title="Fixes we ask of the CAS Figma file">
         <ol style={{ paddingLeft: '20px', marginTop: 0 }}>
           {figmaFixes.map((fix) => (
