@@ -382,9 +382,9 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/brand/gp2/500',
       figma: {
-        hex: '#1570EF',
+        hex: '#175CD3',
         alpha: 1,
-        alias: 'colour/utilitarian/blue/600',
+        alias: 'colour/utilitarian/blue/700',
       },
       master: '#0C8DC3',
     },
@@ -393,9 +393,9 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/brand/crn/500',
       figma: {
-        hex: '#079455',
+        hex: '#067647',
         alpha: 1,
-        alias: 'colour/utilitarian/green/600',
+        alias: 'colour/utilitarian/green/700',
       },
       master: '#34A270',
     },
@@ -404,16 +404,16 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/general/yellow/800',
       figma: {
-        hex: '#DC6803',
+        hex: '#B54708',
         alpha: 1,
-        alias: 'colour/utilitarian/orange/600',
+        alias: 'colour/utilitarian/orange/700',
       },
       master: '#CE801A',
     },
     'colour/foreground/error': {
-      hex: '#D92D20',
+      hex: '#B42318',
       alpha: 1,
-      alias: 'colour/utilitarian/red/600',
+      alias: 'colour/utilitarian/red/700',
     },
     'colour/foreground/neutral': {
       hex: '#4B5359',
@@ -638,9 +638,9 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/brand/crn/500',
       figma: {
-        hex: '#309466',
+        hex: '#2C865C',
         alpha: 1,
-        alias: 'colour/brand/crn/600',
+        alias: 'colour/brand/crn/700',
       },
       master: '#34A270',
     },
@@ -672,44 +672,44 @@ export const casTheme = {
       alpha: 0,
     },
     'colour/background/button/utilitarian/error/default': {
-      hex: '#D92D20',
-      alpha: 1,
-      alias: 'colour/utilitarian/red/600',
-    },
-    'colour/background/button/utilitarian/error/hover': {
       hex: '#B42318',
       alpha: 1,
       alias: 'colour/utilitarian/red/700',
     },
-    'colour/background/button/utilitarian/info/default': {
-      hex: '#1570EF',
+    'colour/background/button/utilitarian/error/hover': {
+      hex: '#912018',
       alpha: 1,
-      alias: 'colour/utilitarian/blue/600',
+      alias: 'colour/utilitarian/red/800',
     },
-    'colour/background/button/utilitarian/info/hover': {
+    'colour/background/button/utilitarian/info/default': {
       hex: '#175CD3',
       alpha: 1,
       alias: 'colour/utilitarian/blue/700',
     },
-    'colour/background/button/utilitarian/success/default': {
-      hex: '#079455',
+    'colour/background/button/utilitarian/info/hover': {
+      hex: '#1849A9',
       alpha: 1,
-      alias: 'colour/utilitarian/green/600',
+      alias: 'colour/utilitarian/blue/800',
     },
-    'colour/background/button/utilitarian/success/hover': {
+    'colour/background/button/utilitarian/success/default': {
       hex: '#067647',
       alpha: 1,
       alias: 'colour/utilitarian/green/700',
     },
-    'colour/background/button/utilitarian/warning/default': {
-      hex: '#DC6803',
+    'colour/background/button/utilitarian/success/hover': {
+      hex: '#085D3A',
       alpha: 1,
-      alias: 'colour/utilitarian/orange/600',
+      alias: 'colour/utilitarian/green/800',
     },
-    'colour/background/button/utilitarian/warning/hover': {
+    'colour/background/button/utilitarian/warning/default': {
       hex: '#B54708',
       alpha: 1,
       alias: 'colour/utilitarian/orange/700',
+    },
+    'colour/background/button/utilitarian/warning/hover': {
+      hex: '#93370D',
+      alpha: 1,
+      alias: 'colour/utilitarian/orange/800',
     },
     'colour/background/input/default': {
       hex: '#FFFFFF',
@@ -774,9 +774,9 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/brand/crn/800',
       figma: {
-        hex: '#079455',
+        hex: '#067647',
         alpha: 1,
-        alias: 'colour/utilitarian/green/600',
+        alias: 'colour/utilitarian/green/700',
       },
       master: '#287953',
     },
@@ -785,21 +785,21 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/general/yellow/800',
       figma: {
-        hex: '#DC6803',
+        hex: '#B54708',
         alpha: 1,
-        alias: 'colour/utilitarian/orange/600',
+        alias: 'colour/utilitarian/orange/700',
       },
       master: '#CE801A',
     },
     'colour/border/error': {
-      hex: '#D92D20',
+      hex: '#B42318',
       alpha: 1,
-      alias: 'colour/utilitarian/red/600',
+      alias: 'colour/utilitarian/red/700',
     },
     'colour/border/neutral': {
-      hex: '#1570EF',
+      hex: '#175CD3',
       alpha: 1,
-      alias: 'colour/utilitarian/blue/600',
+      alias: 'colour/utilitarian/blue/700',
     },
     'colour/border/button/primary/default': {
       hex: '#287953',
@@ -807,9 +807,9 @@ export const casTheme = {
       alias: 'colour/brand/crn/800',
     },
     'colour/border/button/primary/hover': {
-      hex: '#287953',
+      hex: '#246C4A',
       alpha: 1,
-      alias: 'colour/brand/crn/800',
+      alias: 'colour/brand/crn/900',
     },
     'colour/border/button/secondary/default': {
       hex: '#E3E6E8',
@@ -827,9 +827,9 @@ export const casTheme = {
       alias: 'colour/utilitarian/red/700',
     },
     'colour/border/button/tertiary/hover': {
-      hex: '#B42318',
+      hex: '#912018',
       alpha: 1,
-      alias: 'colour/utilitarian/red/700',
+      alias: 'colour/utilitarian/red/800',
     },
     'colour/border/card/default': {
       hex: '#E3E6E8',
@@ -953,9 +953,9 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/brand/gp2/500',
       figma: {
-        hex: '#1570EF',
+        hex: '#175CD3',
         alpha: 1,
-        alias: 'colour/utilitarian/blue/600',
+        alias: 'colour/utilitarian/blue/700',
       },
       master: '#0C8DC3',
     },
@@ -964,9 +964,9 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/brand/crn/500',
       figma: {
-        hex: '#079455',
+        hex: '#067647',
         alpha: 1,
-        alias: 'colour/utilitarian/green/600',
+        alias: 'colour/utilitarian/green/700',
       },
       master: '#34A270',
     },
@@ -975,16 +975,16 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/general/yellow/800',
       figma: {
-        hex: '#DC6803',
+        hex: '#B54708',
         alpha: 1,
-        alias: 'colour/utilitarian/orange/600',
+        alias: 'colour/utilitarian/orange/700',
       },
       master: '#CE801A',
     },
     'colour/foreground/error': {
-      hex: '#D92D20',
+      hex: '#B42318',
       alpha: 1,
-      alias: 'colour/utilitarian/red/600',
+      alias: 'colour/utilitarian/red/700',
     },
     'colour/foreground/neutral': {
       hex: '#4B5359',
@@ -1217,9 +1217,9 @@ export const casTheme = {
       alias: 'colour/neutral/900-A20',
     },
     'colour/background/button/primary/default': {
-      hex: '#0C8DC3',
+      hex: '#0375A2',
       alpha: 1,
-      alias: 'colour/brand/gp2/500',
+      alias: 'colour/brand/gp2/700',
     },
     'colour/background/button/primary/hover': {
       hex: '#006A92',
@@ -1249,44 +1249,44 @@ export const casTheme = {
       alpha: 0,
     },
     'colour/background/button/utilitarian/error/default': {
-      hex: '#D92D20',
-      alpha: 1,
-      alias: 'colour/utilitarian/red/600',
-    },
-    'colour/background/button/utilitarian/error/hover': {
       hex: '#B42318',
       alpha: 1,
       alias: 'colour/utilitarian/red/700',
     },
-    'colour/background/button/utilitarian/info/default': {
-      hex: '#1570EF',
+    'colour/background/button/utilitarian/error/hover': {
+      hex: '#912018',
       alpha: 1,
-      alias: 'colour/utilitarian/blue/600',
+      alias: 'colour/utilitarian/red/800',
     },
-    'colour/background/button/utilitarian/info/hover': {
+    'colour/background/button/utilitarian/info/default': {
       hex: '#175CD3',
       alpha: 1,
       alias: 'colour/utilitarian/blue/700',
     },
-    'colour/background/button/utilitarian/success/default': {
-      hex: '#079455',
+    'colour/background/button/utilitarian/info/hover': {
+      hex: '#1849A9',
       alpha: 1,
-      alias: 'colour/utilitarian/green/600',
+      alias: 'colour/utilitarian/blue/800',
     },
-    'colour/background/button/utilitarian/success/hover': {
+    'colour/background/button/utilitarian/success/default': {
       hex: '#067647',
       alpha: 1,
       alias: 'colour/utilitarian/green/700',
     },
-    'colour/background/button/utilitarian/warning/default': {
-      hex: '#DC6803',
+    'colour/background/button/utilitarian/success/hover': {
+      hex: '#085D3A',
       alpha: 1,
-      alias: 'colour/utilitarian/orange/600',
+      alias: 'colour/utilitarian/green/800',
     },
-    'colour/background/button/utilitarian/warning/hover': {
+    'colour/background/button/utilitarian/warning/default': {
       hex: '#B54708',
       alpha: 1,
       alias: 'colour/utilitarian/orange/700',
+    },
+    'colour/background/button/utilitarian/warning/hover': {
+      hex: '#93370D',
+      alpha: 1,
+      alias: 'colour/utilitarian/orange/800',
     },
     'colour/background/input/default': {
       hex: '#FFFFFF',
@@ -1351,9 +1351,9 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/brand/crn/800',
       figma: {
-        hex: '#079455',
+        hex: '#067647',
         alpha: 1,
-        alias: 'colour/utilitarian/green/600',
+        alias: 'colour/utilitarian/green/700',
       },
       master: '#287953',
     },
@@ -1362,21 +1362,21 @@ export const casTheme = {
       alpha: 1,
       alias: 'colour/general/yellow/800',
       figma: {
-        hex: '#DC6803',
+        hex: '#B54708',
         alpha: 1,
-        alias: 'colour/utilitarian/orange/600',
+        alias: 'colour/utilitarian/orange/700',
       },
       master: '#CE801A',
     },
     'colour/border/error': {
-      hex: '#D92D20',
+      hex: '#B42318',
       alpha: 1,
-      alias: 'colour/utilitarian/red/600',
+      alias: 'colour/utilitarian/red/700',
     },
     'colour/border/neutral': {
-      hex: '#1570EF',
+      hex: '#175CD3',
       alpha: 1,
-      alias: 'colour/utilitarian/blue/600',
+      alias: 'colour/utilitarian/blue/700',
     },
     'colour/border/button/primary/default': {
       hex: '#006A92',
@@ -1384,9 +1384,9 @@ export const casTheme = {
       alias: 'colour/brand/gp2/800',
     },
     'colour/border/button/primary/hover': {
-      hex: '#006A92',
+      hex: '#005F83',
       alpha: 1,
-      alias: 'colour/brand/gp2/800',
+      alias: 'colour/brand/gp2/900',
     },
     'colour/border/button/secondary/default': {
       hex: '#E3E6E8',
@@ -1404,9 +1404,9 @@ export const casTheme = {
       alias: 'colour/utilitarian/red/700',
     },
     'colour/border/button/tertiary/hover': {
-      hex: '#B42318',
+      hex: '#912018',
       alpha: 1,
-      alias: 'colour/utilitarian/red/700',
+      alias: 'colour/utilitarian/red/800',
     },
     'colour/border/card/default': {
       hex: '#E3E6E8',
