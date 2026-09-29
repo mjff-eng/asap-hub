@@ -1003,44 +1003,59 @@ export const getPreliminaryDataSharingQuery =
           displayName: 'Team A',
           inactiveSince: null,
           linkedFrom: {
-            preliminaryDataSharingCollection: {
+            eventSpeakersCollection: {
               total: 3,
               items: [
                 {
+                  preliminaryDataShared: true,
                   linkedFrom: {
                     eventsCollection: {
                       items: [
                         {
+                          sys: {
+                            id: 'event-1',
+                          },
                           startDate: '2024-01-15',
+                          endDate: '2024-01-15',
+                          status: 'Confirmed',
                         },
                       ],
                     },
                   },
-                  preliminaryDataShared: true,
                 },
                 {
+                  preliminaryDataShared: true,
                   linkedFrom: {
                     eventsCollection: {
                       items: [
                         {
+                          sys: {
+                            id: 'event-2',
+                          },
                           startDate: '2024-02-20',
+                          endDate: '2024-02-20',
+                          status: 'Confirmed',
                         },
                       ],
                     },
                   },
-                  preliminaryDataShared: true,
                 },
                 {
+                  preliminaryDataShared: false,
                   linkedFrom: {
                     eventsCollection: {
                       items: [
                         {
+                          sys: {
+                            id: 'event-3',
+                          },
                           startDate: '2023-06-10',
+                          endDate: '2023-06-10',
+                          status: 'Confirmed',
                         },
                       ],
                     },
                   },
-                  preliminaryDataShared: false,
                 },
               ],
             },

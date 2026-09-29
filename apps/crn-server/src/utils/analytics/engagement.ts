@@ -1,12 +1,11 @@
 import { FetchEngagementQuery } from '@asap-hub/contentful';
-import {
-  EngagementDataObject,
-  EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT,
-  TimeRangeOption,
-} from '@asap-hub/model';
+import { EngagementDataObject, TimeRangeOption } from '@asap-hub/model';
 import { cleanArray } from '@asap-hub/server-common';
-import { DateTime } from 'luxon';
-import { getRangeFilterParams } from './common';
+import {
+  getRangeFilterParams,
+  isNotCancelledEventStatus,
+  isPastEvent,
+} from './common';
 
 type Membership = NonNullable<
   NonNullable<
@@ -105,14 +104,9 @@ export const getFilterEventByRange =
     return isPastEvent(endDate) && (!filter || endDate >= filter);
   };
 
-const isPastEvent = (endDate: string) =>
-  endDate &&
-  DateTime.fromISO(endDate).plus({
-    hours: EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT,
-  }) < DateTime.now();
-
 export const isNotCancelledEvent = (
   eventSpeakerItem: EventSpeakersCollectionItem,
 ) =>
-  eventSpeakerItem?.linkedFrom?.eventsCollection?.items[0]?.status !==
-  'Cancelled';
+  isNotCancelledEventStatus(
+    eventSpeakerItem?.linkedFrom?.eventsCollection?.items[0]?.status,
+  );

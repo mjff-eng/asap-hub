@@ -27532,6 +27532,23 @@ export type FetchOsChampionQuery = {
   >;
 };
 
+export type PreliminaryDataSharingSpeakerFragment = Pick<
+  EventSpeakers,
+  'preliminaryDataShared'
+> & {
+  linkedFrom?: Maybe<{
+    eventsCollection?: Maybe<{
+      items: Array<
+        Maybe<
+          Pick<Events, 'startDate' | 'endDate' | 'status'> & {
+            sys: Pick<Sys, 'id'>;
+          }
+        >
+      >;
+    }>;
+  }>;
+};
+
 export type FetchPreliminaryDataSharingQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -27545,14 +27562,21 @@ export type FetchPreliminaryDataSharingQuery = {
           Pick<Teams, 'displayName' | 'inactiveSince'> & {
             sys: Pick<Sys, 'id'>;
             linkedFrom?: Maybe<{
-              preliminaryDataSharingCollection?: Maybe<
-                Pick<PreliminaryDataSharingCollection, 'total'> & {
+              eventSpeakersCollection?: Maybe<
+                Pick<EventSpeakersCollection, 'total'> & {
                   items: Array<
                     Maybe<
-                      Pick<PreliminaryDataSharing, 'preliminaryDataShared'> & {
+                      Pick<EventSpeakers, 'preliminaryDataShared'> & {
                         linkedFrom?: Maybe<{
                           eventsCollection?: Maybe<{
-                            items: Array<Maybe<Pick<Events, 'startDate'>>>;
+                            items: Array<
+                              Maybe<
+                                Pick<
+                                  Events,
+                                  'startDate' | 'endDate' | 'status'
+                                > & { sys: Pick<Sys, 'id'> }
+                              >
+                            >;
                           }>;
                         }>;
                       }
@@ -27560,6 +27584,36 @@ export type FetchPreliminaryDataSharingQuery = {
                   >;
                 }
               >;
+            }>;
+          }
+        >
+      >;
+    }
+  >;
+};
+
+export type FetchPreliminaryDataSharingByTeamQueryVariables = Exact<{
+  teamId: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type FetchPreliminaryDataSharingByTeamQuery = {
+  eventSpeakersCollection?: Maybe<
+    Pick<EventSpeakersCollection, 'total'> & {
+      items: Array<
+        Maybe<
+          Pick<EventSpeakers, 'preliminaryDataShared'> & {
+            linkedFrom?: Maybe<{
+              eventsCollection?: Maybe<{
+                items: Array<
+                  Maybe<
+                    Pick<Events, 'startDate' | 'endDate' | 'status'> & {
+                      sys: Pick<Sys, 'id'>;
+                    }
+                  >
+                >;
+              }>;
             }>;
           }
         >
@@ -41542,6 +41596,87 @@ export type FetchWorkingGroupsQuery = {
   >;
 };
 
+export const PreliminaryDataSharingSpeakerFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'PreliminaryDataSharingSpeaker' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'EventSpeakers' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'preliminaryDataShared' },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'linkedFrom' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'eventsCollection' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'limit' },
+                      value: { kind: 'IntValue', value: '1' },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'items' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'sys' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'id' },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'startDate' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'endDate' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'status' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<PreliminaryDataSharingSpeakerFragment, unknown>;
 export const CalendarsContentFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -58148,7 +58283,7 @@ export const FetchPreliminaryDataSharingDocument = {
                               kind: 'Field',
                               name: {
                                 kind: 'Name',
-                                value: 'preliminaryDataSharingCollection',
+                                value: 'eventSpeakersCollection',
                               },
                               arguments: [
                                 {
@@ -58171,67 +58306,11 @@ export const FetchPreliminaryDataSharingDocument = {
                                       kind: 'SelectionSet',
                                       selections: [
                                         {
-                                          kind: 'Field',
+                                          kind: 'FragmentSpread',
                                           name: {
                                             kind: 'Name',
-                                            value: 'linkedFrom',
-                                          },
-                                          selectionSet: {
-                                            kind: 'SelectionSet',
-                                            selections: [
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'eventsCollection',
-                                                },
-                                                arguments: [
-                                                  {
-                                                    kind: 'Argument',
-                                                    name: {
-                                                      kind: 'Name',
-                                                      value: 'limit',
-                                                    },
-                                                    value: {
-                                                      kind: 'IntValue',
-                                                      value: '1',
-                                                    },
-                                                  },
-                                                ],
-                                                selectionSet: {
-                                                  kind: 'SelectionSet',
-                                                  selections: [
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'items',
-                                                      },
-                                                      selectionSet: {
-                                                        kind: 'SelectionSet',
-                                                        selections: [
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value:
-                                                                'startDate',
-                                                            },
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  ],
-                                                },
-                                              },
-                                            ],
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'preliminaryDataShared',
+                                            value:
+                                              'PreliminaryDataSharingSpeaker',
                                           },
                                         },
                                       ],
@@ -58252,10 +58331,143 @@ export const FetchPreliminaryDataSharingDocument = {
         ],
       },
     },
+    ...PreliminaryDataSharingSpeakerFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<
   FetchPreliminaryDataSharingQuery,
   FetchPreliminaryDataSharingQueryVariables
+>;
+export const FetchPreliminaryDataSharingByTeamDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchPreliminaryDataSharingByTeam' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'teamId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'eventSpeakersCollection' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'team' },
+                      value: {
+                        kind: 'ObjectValue',
+                        fields: [
+                          {
+                            kind: 'ObjectField',
+                            name: { kind: 'Name', value: 'sys' },
+                            value: {
+                              kind: 'ObjectValue',
+                              fields: [
+                                {
+                                  kind: 'ObjectField',
+                                  name: { kind: 'Name', value: 'id' },
+                                  value: {
+                                    kind: 'Variable',
+                                    name: { kind: 'Name', value: 'teamId' },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'order' },
+                value: { kind: 'EnumValue', value: 'sys_id_ASC' },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'limit' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: {
+                          kind: 'Name',
+                          value: 'PreliminaryDataSharingSpeaker',
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...PreliminaryDataSharingSpeakerFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<
+  FetchPreliminaryDataSharingByTeamQuery,
+  FetchPreliminaryDataSharingByTeamQueryVariables
 >;
 export const FetchAttendanceDocument = {
   kind: 'Document',
