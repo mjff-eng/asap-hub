@@ -16,6 +16,7 @@
     "import:keywords": "ts-node ./scripts/import-keywords.ts",
     "migrate:entity-outputs": "CONTENTFUL_ACCESS_TOKEN=$GP2_CONTENTFUL_ACCESS_TOKEN CONTENTFUL_SPACE_ID=$GP2_CONTENTFUL_SPACE_ID CONTENTFUL_ENV_ID=$GP2_CONTENTFUL_ENV_ID ts-node ./scripts/migrate-entity-outputs.ts",
     "user:invitations": "ts-node ./scripts/user-invitations.ts",
+    "export:entity": "ts-node ./scripts/cli.ts export",
     "subscribe": "ts-node ./scripts/subscribe-calendar.ts",
     "test": "WORKSPACE_PATH=apps/gp2-server yarn workspace asap-hub test:workspace",
     "test:coverage": "WORKSPACE_PATH=apps/gp2-server; yarn workspace asap-hub test:workspace --coverage --coverageDirectory=./$WORKSPACE_PATH/coverage/"
