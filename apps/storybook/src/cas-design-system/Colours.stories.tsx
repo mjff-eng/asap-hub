@@ -835,12 +835,6 @@ const noCloseMatch: {
       'The Hub text is a dark blue-grey; CAS text is neutral black. Add #00222C as a primitive, or accept neutral/900.',
   },
   {
-    use: 'Error text and borders',
-    hub: '#CD1426',
-    figma: 'foreground/error: utilitarian/red/600 #D92D20',
-    suggestion: 'Add #CD1426, or accept red/600.',
-  },
-  {
     use: 'Hover in dropdowns, selects and tags (CRN)',
     hub: '#E4F5EE',
     figma: 'background/hover-brand: brand/crn/25 #E2EEED',
@@ -915,6 +909,35 @@ export const DesignQuestions = () => {
         </>
       }
     >
+      <Section title="Answered by design">
+        <p style={{ marginTop: 0 }}>
+          The Figma update of 30 September made these colours darker. We follow
+          Figma for them, so they now differ from production on purpose:
+        </p>
+        <ul style={{ paddingLeft: '20px' }}>
+          <li>
+            Error text and borders: production <Colour value="#CD1426" />, now{' '}
+            {code('utilitarian/red/700')} <Colour value="#B42318" />.
+          </li>
+          <li>
+            Warning button: production <Colour value="#CD1426" />, hover{' '}
+            <Colour value="#B00A1A" />; now {code('utilitarian/red/700')}{' '}
+            <Colour value="#B42318" />, hover {code('utilitarian/red/800')}{' '}
+            <Colour value="#912018" />.
+          </li>
+          <li>
+            GP2 primary button: production <Colour value="#0C8DC3" />, now{' '}
+            {code('brand/gp2/700')} <Colour value="#0375A2" />, hover border{' '}
+            {code('brand/gp2/900')} <Colour value="#005F83" />.
+          </li>
+          <li>
+            CRN primary button hover border: production{' '}
+            <Colour value="#287953" />, now {code('brand/crn/900')}{' '}
+            <Colour value="#246C4A" />.
+          </li>
+        </ul>
+      </Section>
+
       <Section title="1. Point these names at the Hub's colours">
         <p style={{ marginTop: 0 }}>
           In every row, the name&apos;s colour in Figma today differs from
@@ -1127,9 +1150,15 @@ export const DesignQuestions = () => {
         </p>
         <ul style={{ paddingLeft: '20px' }}>
           <li>
-            Links and the white text on the main button: CRN{' '}
+            Links: CRN{' '}
             <ContrastBadge foreground="#34A270" background="#FFFFFF" />, GP2{' '}
             <ContrastBadge foreground="#0C8DC3" background="#FFFFFF" />.
+          </li>
+          <li>
+            White text on the CRN main button{' '}
+            <ContrastBadge foreground="#FFFFFF" background="#34A270" />. The GP2
+            button now uses brand/gp2/700 and passes{' '}
+            <ContrastBadge foreground="#FFFFFF" background="#0375A2" />.
           </li>
           <li>
             Hint text:{' '}
