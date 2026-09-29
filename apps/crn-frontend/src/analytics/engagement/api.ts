@@ -9,6 +9,7 @@ import {
   EngagementResponse,
   ListEngagementResponse,
 } from '@asap-hub/model';
+import { TeamEngagementMetricsProps } from '@asap-hub/react-components';
 import {
   AnalyticsPerformanceOptions,
   AnalyticsSearchOptions,
@@ -16,6 +17,10 @@ import {
 } from '../utils/analytics-options';
 import { OpensearchClient } from '../utils/opensearch';
 import { OpensearchSortMap } from '../utils/opensearch/types';
+import {
+  TeamMetricsOptions,
+  teamMetricsSearchOptions,
+} from '../utils/team-metrics';
 
 export type EngagementListOptions = AnalyticsSearchOptions & {
   timeRange: TimeRangeOption;
@@ -117,3 +122,30 @@ export const getMeetingRepAttendance = async (
     searchScope: 'flat',
     sort: sort ? meetingRepAttendanceOpensearchSort[sort] : undefined,
   });
+
+export type TeamEngagementMetrics = TeamEngagementMetricsProps;
+
+export const getTeamEngagementMetrics = async (
+  presenterClient: OpensearchClient<EngagementResponse>,
+  attendanceClient: OpensearchClient<MeetingRepAttendanceResponse>,
+  { teamId }: TeamMetricsOptions,
+): Promise<TeamEngagementMetrics> => {
+  const searchOptions = teamMetricsSearchOptions(teamId);
+  const [presenters, attendance] = await Promise.all([
+    presenterClient.search(searchOptions),
+    attendanceClient.search(searchOptions),
+  ]);
+  const presenterItem = presenters.items[0];
+  const speakers =
+    presenterItem && presenterItem.memberCount > 0 ? presenterItem : undefined;
+  const attendanceItem = attendance.items[0];
+
+  return {
+    speakerDiversity: speakers?.uniqueAllRolesCountPercentage ?? null,
+    traineePresentations: speakers?.uniqueKeyPersonnelCountPercentage ?? null,
+    meetingRepAttendance: {
+      percentage: attendanceItem?.attendancePercentage ?? null,
+      limitedData: attendanceItem?.limitedData ?? true,
+    },
+  };
+};

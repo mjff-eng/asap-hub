@@ -9,6 +9,7 @@ import {
   TeamAward,
   TeamAwardMetrics,
   TeamCollaborationMetrics,
+  TeamEngagementMetrics,
   TeamLeadershipMetrics,
 } from '../organisms';
 
@@ -40,6 +41,7 @@ type TeamMetricsPageProps = {
   readonly collaborationMetrics: ComponentProps<
     typeof TeamCollaborationMetrics
   >;
+  readonly engagementMetrics: ComponentProps<typeof TeamEngagementMetrics>;
 };
 
 const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
@@ -47,6 +49,7 @@ const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
   leadershipMetrics,
   awards,
   collaborationMetrics,
+  engagementMetrics,
 }) => (
   <div css={containerStyles}>
     <Headline3 noMargin>Metrics</Headline3>
@@ -66,6 +69,9 @@ const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
 
     <MetricsSubtitle>Collaboration</MetricsSubtitle>
     <TeamCollaborationMetrics {...collaborationMetrics} />
+
+    <MetricsSubtitle>Engagement</MetricsSubtitle>
+    <TeamEngagementMetrics {...engagementMetrics} />
   </div>
 );
 

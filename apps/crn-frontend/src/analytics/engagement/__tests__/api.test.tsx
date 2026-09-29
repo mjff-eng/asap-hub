@@ -13,6 +13,7 @@ import {
   getEngagement,
   getEngagementPerformance,
   getMeetingRepAttendance,
+  getTeamEngagementMetrics,
   MeetingRepAttendanceOptions,
 } from '../api';
 import { OpensearchClient } from '../../utils/opensearch';
@@ -620,5 +621,137 @@ describe('getMeetingRepAttendance', () => {
         total: 1,
       }),
     );
+  });
+});
+
+describe('getTeamEngagementMetrics', () => {
+  let presenterClient: OpensearchClient<EngagementResponse>;
+  let attendanceClient: OpensearchClient<MeetingRepAttendanceResponse>;
+  let presenterSearch: jest.SpyInstance;
+  let attendanceSearch: jest.SpyInstance;
+
+  const emptyResponse = { items: [], total: 0 };
+  const presenterResponse = (overrides: Partial<EngagementResponse>) => ({
+    items: [{ ...listEngagementResponse.items[0]!, ...overrides }],
+    total: 1,
+  });
+  const attendanceResponse = (
+    overrides: Partial<MeetingRepAttendanceResponse>,
+  ) => ({
+    items: [
+      {
+        teamId: 'team-id-1',
+        teamName: 'Team 1',
+        isTeamInactive: false,
+        attendancePercentage: 75,
+        limitedData: false,
+        timeRange: 'all' as const,
+        ...overrides,
+      },
+    ],
+    total: 1,
+  });
+
+  beforeEach(() => {
+    presenterClient = new OpensearchClient('presenter-representation', 'token');
+    attendanceClient = new OpensearchClient('attendance', 'token');
+    presenterSearch = jest
+      .spyOn(presenterClient, 'search')
+      .mockResolvedValue(emptyResponse);
+    attendanceSearch = jest
+      .spyOn(attendanceClient, 'search')
+      .mockResolvedValue(emptyResponse);
+  });
+
+  it('searches both indices for the all-time record of the team', async () => {
+    await getTeamEngagementMetrics(presenterClient, attendanceClient, {
+      teamId: 'team-id-1',
+    });
+
+    const expectedOptions = {
+      searchTags: [],
+      searchScope: 'flat',
+      sort: [],
+      currentPage: 0,
+      pageSize: 1,
+      timeRange: 'all',
+      teamId: 'team-id-1',
+    };
+    expect(presenterSearch).toHaveBeenCalledWith(expectedOptions);
+    expect(attendanceSearch).toHaveBeenCalledWith(expectedOptions);
+  });
+
+  it('reports limited data when the team is not indexed', async () => {
+    const result = await getTeamEngagementMetrics(
+      presenterClient,
+      attendanceClient,
+      { teamId: 'team-id-1' },
+    );
+
+    expect(result).toEqual({
+      speakerDiversity: null,
+      traineePresentations: null,
+      meetingRepAttendance: { percentage: null, limitedData: true },
+    });
+  });
+
+  it('maps the speaker percentages and the attendance record', async () => {
+    presenterSearch.mockResolvedValue(
+      presenterResponse({
+        uniqueAllRolesCountPercentage: 67,
+        uniqueKeyPersonnelCountPercentage: 33,
+      }),
+    );
+    attendanceSearch.mockResolvedValue(
+      attendanceResponse({ attendancePercentage: 75, limitedData: false }),
+    );
+
+    const result = await getTeamEngagementMetrics(
+      presenterClient,
+      attendanceClient,
+      { teamId: 'team-id-1' },
+    );
+
+    expect(result).toEqual({
+      speakerDiversity: 67,
+      traineePresentations: 33,
+      meetingRepAttendance: { percentage: 75, limitedData: false },
+    });
+  });
+
+  it('reports limited speaker data for a team without onboarded members', async () => {
+    presenterSearch.mockResolvedValue(
+      presenterResponse({
+        memberCount: 0,
+        uniqueAllRolesCountPercentage: 0,
+        uniqueKeyPersonnelCountPercentage: 0,
+      }),
+    );
+
+    const result = await getTeamEngagementMetrics(
+      presenterClient,
+      attendanceClient,
+      { teamId: 'team-id-1' },
+    );
+
+    expect(result.speakerDiversity).toBeNull();
+    expect(result.traineePresentations).toBeNull();
+  });
+
+  it('keeps the limited data flag of the attendance record', async () => {
+    attendanceSearch.mockResolvedValue(
+      attendanceResponse({ attendancePercentage: null, limitedData: true }),
+    );
+
+    const result = await getTeamEngagementMetrics(
+      presenterClient,
+      attendanceClient,
+      { teamId: 'team-id-1' },
+    );
+
+    expect(result.meetingRepAttendance).toEqual({
+      percentage: null,
+      limitedData: true,
+    });
   });
 });

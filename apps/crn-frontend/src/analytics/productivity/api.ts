@@ -21,6 +21,7 @@ import {
   OpensearchClient,
 } from '../utils/opensearch';
 import { OpensearchSortMap } from '../utils/opensearch/types';
+import { TeamMetricsOptions } from '../utils/team-metrics';
 
 const userProductivyOpensearchSort: OpensearchSortMap<SortUserProductivity> = {
   user_asc: [
@@ -166,10 +167,6 @@ export const getTeamProductivity = (
   });
 };
 
-export type TeamHubResearchOutputsOptions = {
-  teamId: string;
-};
-
 export type TeamHubResearchOutputs = {
   all?: TeamProductivityOpensearchDocument;
   public?: TeamProductivityOpensearchDocument;
@@ -179,7 +176,7 @@ const HUB_RESEARCH_OUTPUTS_TIME_RANGE: TimeRangeOption = 'all';
 
 export const getTeamHubResearchOutputs = async (
   client: OpensearchClient<TeamProductivityOpensearchDocument>,
-  { teamId }: TeamHubResearchOutputsOptions,
+  { teamId }: TeamMetricsOptions,
 ): Promise<TeamHubResearchOutputs> => {
   const { items } = await client.search({
     searchTags: [],
