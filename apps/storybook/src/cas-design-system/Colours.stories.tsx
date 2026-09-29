@@ -761,7 +761,8 @@ const missingNames: {
         alpha: 0.5,
       },
     ],
-    suggestion: 'Add background/overlay.',
+    suggestion:
+      'CAS now has background/overlay, but at 20% (neutral/900-A20). Point it at 50% to match production, or accept the lighter overlay.',
   },
   {
     name: 'Focus ring on status dropdowns',
