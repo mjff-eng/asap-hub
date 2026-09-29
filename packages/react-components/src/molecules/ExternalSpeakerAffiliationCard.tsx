@@ -67,7 +67,7 @@ const bodyStyles = css({
 const disclaimerStyles = css({
   color: lead.rgb,
   fontSize: rem(14),
-  lineHeight: rem(16),
+  lineHeight: 16 / 14,
 });
 
 const actionsStyles = css({

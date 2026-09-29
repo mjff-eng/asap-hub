@@ -25,8 +25,6 @@ const toastStyles = (accent: 'success' | 'error', hasUndo: boolean) =>
     fontSize: rem(17),
     lineHeight: 24 / 17,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
-      fontSize: rem(14),
-      lineHeight: 16 / 14,
       // A grid, not flex-wrap: the icon has to stay on the message's first
       // line however far the message wraps.
       ...(hasUndo
@@ -49,9 +47,17 @@ const iconStyles = css({
   height: rem(24),
 });
 
+const mobileTextStyles = {
+  [`@media (max-width: ${mobileScreen.max}px)`]: {
+    fontSize: rem(14),
+    lineHeight: 16 / 14,
+  },
+};
+
 const messageStyles = css({
   flexGrow: 1,
   minWidth: 0,
+  ...mobileTextStyles,
 });
 
 const actionsStyles = css({
@@ -67,6 +73,7 @@ const undoStyles = css({
   fontSize: 'inherit',
   lineHeight: 'inherit',
   color: toastText,
+  ...mobileTextStyles,
 });
 
 const ruleStyles = css({

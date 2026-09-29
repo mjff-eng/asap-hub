@@ -66,7 +66,8 @@ const labelStyles = css({
   fontSize: rem(17),
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     fontSize: rem(14),
-    lineHeight: rem(16),
+    lineHeight: 16 / 14,
+    gap: `${8 / 14}em`,
     '> svg': { display: 'none' },
   },
   '> svg': {

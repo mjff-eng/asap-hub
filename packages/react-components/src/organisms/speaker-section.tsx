@@ -15,13 +15,13 @@ import {
 const sectionStyles = css({
   display: 'flex',
   flexDirection: 'column',
+  paddingTop: rem(16),
 });
 
 // A ratio, not `rem`: line-height in `em` resolves against the element's own
 // font size.
 const headingStyles = css({
   margin: 0,
-  padding: `${rem(16)} 0 0`,
   color: neutral1000.rgb,
   fontSize: rem(14),
   fontWeight: 700,

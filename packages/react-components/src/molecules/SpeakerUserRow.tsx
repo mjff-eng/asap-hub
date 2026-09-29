@@ -82,24 +82,29 @@ export const squareIconButtonStyles = (enabled: boolean) =>
   ]);
 
 // Not the Pill atom: it brings a border and its own <small> type scale.
+const findingsPillFontSize = 14;
+// `rem` resolves against the element's own font size, so inside the 14px pill
+// it would shrink every dimension to 14/17.
+const pillEm = (px: number) => `${px / findingsPillFontSize}em`;
+
 export const findingsPillStyles = (shared: boolean) =>
   css({
     boxSizing: 'border-box',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: rem(4),
-    width: rem(findingsColumnWidth),
-    height: rem(24),
-    padding: `0 ${rem(4)}`,
-    borderRadius: rem(24),
+    gap: pillEm(4),
+    width: pillEm(findingsColumnWidth),
+    height: pillEm(24),
+    padding: `0 ${pillEm(4)}`,
+    borderRadius: pillEm(24),
     backgroundColor: shared ? success100.rgb : silver.rgb,
     color: shared ? success500.rgb : lead.rgb,
-    fontSize: rem(14),
-    lineHeight: 16 / 14,
+    fontSize: rem(findingsPillFontSize),
+    lineHeight: 16 / findingsPillFontSize,
     whiteSpace: 'nowrap',
     // The icons ship at 20x20, which is the size they keep outside the pill.
-    '> span > svg': { width: rem(14), height: rem(14) },
+    '> span > svg': { width: pillEm(14), height: pillEm(14) },
   });
 
 export const flexRowGap8Styles = css({
@@ -111,10 +116,11 @@ export const flexRowGap8Styles = css({
 const rowStyles = css([
   flexRowGap8Styles,
   {
-    columnGap: actionsGap,
+    columnGap: rem(16),
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       display: 'grid',
       gridTemplateColumns: '1fr auto',
+      columnGap: rem(8),
       '> :first-child': { gridRow: '1 / 3', gridColumn: 1 },
       '> :not(:first-child)': { gridRow: 2, gridColumn: 2 },
     },
@@ -125,9 +131,11 @@ const userInfoStyles = css([
   flexRowGap8Styles,
   {
     flexGrow: 1,
+    flexWrap: 'wrap',
     minWidth: 0,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       flexDirection: 'column',
+      flexWrap: 'nowrap',
       alignItems: 'flex-start',
     },
   },
@@ -142,15 +150,19 @@ export const avatar24Styles = css({
 
 const nameStyles = css({
   display: 'block',
-  whiteSpace: 'nowrap',
   [`@media (max-width: ${mobileScreen.max}px)`]: {
+    whiteSpace: 'nowrap',
     fontSize: rem(14),
-    lineHeight: rem(16),
+    lineHeight: 16 / 14,
     fontWeight: 400,
   },
 });
 
-const externalNameStyles = css([nameStyles, { color: neutral1000.rgb }]);
+const externalNameStyles = css({
+  display: 'block',
+  color: neutral1000.rgb,
+  [`@media (max-width: ${mobileScreen.max}px)`]: { whiteSpace: 'nowrap' },
+});
 
 export const placeholderAvatarStyles = css({
   display: 'inline-flex',

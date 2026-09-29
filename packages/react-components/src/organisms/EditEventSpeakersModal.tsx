@@ -82,7 +82,7 @@ const headerStyles = css({
 const titleStyles = css({
   fontSize: rem(26),
   fontWeight: 700,
-  lineHeight: rem(32),
+  lineHeight: 32 / 26,
   color: neutral1000.rgb,
 });
 

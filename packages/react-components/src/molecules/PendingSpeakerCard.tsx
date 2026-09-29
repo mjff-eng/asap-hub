@@ -41,7 +41,7 @@ const nameStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  [mobileQuery]: { fontSize: rem(14), lineHeight: rem(16) },
+  [mobileQuery]: { fontSize: rem(14), lineHeight: 16 / 14 },
 });
 
 const dismissStyles = (enabled: boolean) =>
@@ -70,8 +70,8 @@ const pillStyles = css({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    [mobileQuery]: { fontSize: rem(14), lineHeight: 16 / 14 },
   },
-  [mobileQuery]: { fontSize: rem(14), lineHeight: rem(16) },
 });
 
 const affiliationIconStyles = css({
