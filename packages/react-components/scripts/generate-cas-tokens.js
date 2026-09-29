@@ -69,13 +69,23 @@ colourTokens(read('Value')).forEach(({ path, token }) => {
   setIn(primitives, path.slice(1), alpha === 1 ? rgb : [...rgb, alpha]);
 });
 
-// ASAP only uses the Light mode, which maps every ramp step to the primitive
-// with the same name, so theme values resolve straight to primitives.
+const valueNames = new Set(
+  colourTokens(read('Value')).map(({ path }) => path.join('/')),
+);
+
+// ASAP only uses the Light mode. It maps every primitive to itself and adds
+// ramps that alias other primitives (utilitarian/yellow is general/yellow),
+// which become primitives under their own name.
 colourTokens(read('Light')).forEach(({ path, token }) => {
+  const name = path.join('/');
   const alias = token.$extensions?.['com.figma.aliasData']?.targetVariableName;
-  if (alias !== path.join('/')) {
-    throw new Error(`Light mode no longer maps ${path.join('/')} to itself`);
+  if (alias === name) return;
+  if (valueNames.has(name) || !valueNames.has(alias)) {
+    throw new Error(`Light mode no longer maps ${name} to itself`);
   }
+  const alpha = roundAlpha(token.$value.alpha);
+  const rgb = channels(token.$value.hex);
+  setIn(primitives, path.slice(1), alpha === 1 ? rgb : [...rgb, alpha]);
 });
 
 const themeFor = (name) => {
