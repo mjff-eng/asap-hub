@@ -227,10 +227,10 @@ const matchedLabelStyles = css({
 });
 
 const notMatchedLabelStyles = css({
-  color: colour.utilitarian.red[700],
+  color: colour.foreground.error,
   gap: rem(8),
   '> svg': {
-    fill: colour.utilitarian.red[700],
+    fill: colour.foreground.error,
   },
 });
 
