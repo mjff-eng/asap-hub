@@ -1,8 +1,15 @@
-import { TeamType } from '@asap-hub/model';
+import { ProjectType, TeamType } from '@asap-hub/model';
 
-import { DiscoveryTeamIcon, ResourceTeamIcon, TeamIcon } from '../icons';
+import {
+  DiscoveryTeamIcon,
+  ProjectIcon,
+  ResourceTeamIcon,
+  TeamIcon,
+} from '../icons';
+import { getProjectIcon } from '../utils';
 
-export const defaultVisibleTeams = 10;
+export const defaultVisibleRows = 5;
+export const defaultVisibleSpeakers = 5;
 
 export type EventTeamType = TeamType;
 
@@ -16,3 +23,6 @@ export const teamIcon = (teamType?: EventTeamType) => {
       return <TeamIcon />;
   }
 };
+
+export const projectIcon = (projectType?: ProjectType) =>
+  projectType ? getProjectIcon(projectType) : <ProjectIcon />;

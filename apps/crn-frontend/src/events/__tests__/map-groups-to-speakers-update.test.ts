@@ -1,35 +1,64 @@
-import { SpeakerGroup } from '@asap-hub/react-components';
+import {
+  SpeakerGroup,
+  SpeakerGroupExternalUser,
+  SpeakerGroupUser,
+  SpeakerTeamGroup,
+} from '@asap-hub/react-components';
 
 import { mapGroupsToSpeakersUpdate } from '../map-groups-to-speakers-update';
 
+const speaker = (
+  overrides: Partial<SpeakerGroupUser> = {},
+): SpeakerGroupUser => ({
+  id: 'user-1',
+  speakerIds: ['speaker-1'],
+  displayName: 'User One',
+  roles: ['Lead'],
+  preliminaryFindingsShared: false,
+  ...overrides,
+});
+
 const teamGroup = (
-  overrides: Partial<Extract<SpeakerGroup, { variant: 'team' }>> = {},
+  overrides: Partial<SpeakerTeamGroup> = {},
 ): SpeakerGroup => ({
   id: 'team-1',
   variant: 'team',
   teamName: 'Team One',
-  preliminaryFindingsShared: false,
-  users: [
-    {
-      id: 'user-1',
-      speakerIds: ['speaker-1'],
-      displayName: 'User One',
-      roles: ['Lead'],
-    },
-  ],
+  users: [speaker()],
   ...overrides,
 });
 
-const externalGroup = (
-  users: Array<{ id: string; speakerIds?: string[]; displayName: string }>,
-): SpeakerGroup => ({
+const externalGroup = (users: SpeakerGroupExternalUser[]): SpeakerGroup => ({
   id: 'external',
   variant: 'external',
-  preliminaryFindingsShared: false,
   users,
 });
 
 describe('mapGroupsToSpeakersUpdate', () => {
+  test('Should ignore a session guest when folding team findings', () => {
+    // The guest never reaches the backend, so their toggle must not set the
+    // team flag — which on the next read seeds every real member as shared.
+    const groups = [
+      teamGroup({
+        users: [
+          speaker({ preliminaryFindingsShared: false }),
+          speaker({
+            id: 'external-1-Guest',
+            speakerIds: [],
+            displayName: 'Guest',
+            roles: [],
+            isExternal: true,
+            preliminaryFindingsShared: true,
+          }),
+        ],
+      }),
+    ];
+
+    expect(
+      mapGroupsToSpeakersUpdate(groups, groups, true).preliminaryDataShared,
+    ).toEqual([{ teamId: 'team-1', shared: false }]);
+  });
+
   test('Should mark removed CRN speaker entry ids in speakersToRemove', () => {
     const original = [teamGroup()];
     const saved = [teamGroup({ users: [] })];
@@ -43,12 +72,10 @@ describe('mapGroupsToSpeakersUpdate', () => {
     const original = [
       teamGroup({
         users: [
-          {
-            id: 'user-1',
+          speaker({
             speakerIds: ['speaker-1', 'speaker-2'],
-            displayName: 'User One',
             roles: ['Lead', 'Co-PI'],
-          },
+          }),
         ],
       }),
     ];
@@ -62,7 +89,12 @@ describe('mapGroupsToSpeakersUpdate', () => {
   test('Should mark removed external speaker entry ids', () => {
     const original = [
       externalGroup([
-        { id: 'external-0', speakerIds: ['ext-1'], displayName: 'Jane' },
+        {
+          id: 'external-0',
+          speakerIds: ['ext-1'],
+          displayName: 'Jane',
+          preliminaryFindingsShared: false,
+        },
       ]),
     ];
     const saved = [externalGroup([])];
@@ -80,11 +112,21 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ).toEqual([]);
   });
 
-  test('Should map preliminary findings per team, excluding the external group', () => {
+  test('Should mark a team as shared when exactly one of its speakers shared', () => {
     const saved = [
-      teamGroup({ preliminaryFindingsShared: true }),
+      teamGroup({
+        users: [
+          speaker({ id: 'user-1', preliminaryFindingsShared: false }),
+          speaker({ id: 'user-2', preliminaryFindingsShared: true }),
+        ],
+      }),
       externalGroup([
-        { id: 'external-0', speakerIds: ['ext-1'], displayName: 'Jane' },
+        {
+          id: 'external-0',
+          speakerIds: ['ext-1'],
+          displayName: 'Jane',
+          preliminaryFindingsShared: true,
+        },
       ]),
     ];
 
@@ -93,8 +135,41 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ).toEqual([{ teamId: 'team-1', shared: true }]);
   });
 
+  test('Should mark a team as not shared when none of its speakers shared', () => {
+    const saved = [
+      teamGroup({
+        users: [
+          speaker({ id: 'user-1' }),
+          speaker({ id: 'user-2', preliminaryFindingsShared: false }),
+        ],
+      }),
+    ];
+
+    expect(
+      mapGroupsToSpeakersUpdate(saved, saved, true).preliminaryDataShared,
+    ).toEqual([{ teamId: 'team-1', shared: false }]);
+  });
+
+  test('Should exclude project groups from preliminary findings', () => {
+    const saved: SpeakerGroup[] = [
+      teamGroup(),
+      {
+        id: 'project-1',
+        variant: 'project',
+        projectName: 'Project One',
+        users: [speaker({ id: 'user-2', preliminaryFindingsShared: true })],
+      },
+    ];
+
+    expect(
+      mapGroupsToSpeakersUpdate(saved, saved, true).preliminaryDataShared,
+    ).toEqual([{ teamId: 'team-1', shared: false }]);
+  });
+
   test('Should omit preliminary findings for an upcoming event', () => {
-    const saved = [teamGroup({ preliminaryFindingsShared: true })];
+    const saved = [
+      teamGroup({ users: [speaker({ preliminaryFindingsShared: true })] }),
+    ];
 
     expect(mapGroupsToSpeakersUpdate(saved, saved, false)).not.toHaveProperty(
       'preliminaryDataShared',
@@ -103,9 +178,7 @@ describe('mapGroupsToSpeakersUpdate', () => {
 
   test('Should tolerate users without speakerIds', () => {
     const original = [
-      teamGroup({
-        users: [{ id: 'user-1', displayName: 'User One', roles: ['Lead'] }],
-      }),
+      teamGroup({ users: [speaker({ speakerIds: undefined })] }),
     ];
 
     expect(

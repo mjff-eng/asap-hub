@@ -61,11 +61,11 @@ export const editIconButtonStyles = css([
 
 export const metricsStyles = css({
   display: 'grid',
-  gridTemplateColumns: '1fr',
+  gridTemplateColumns: `minmax(0, ${rem(380)})`,
   gap: rem(24),
   marginTop: rem(24),
   [`@media (min-width: ${tabletScreen.min}px)`]: {
-    gridTemplateColumns: '1fr 1fr',
+    gridTemplateColumns: `repeat(2, minmax(0, ${rem(380)}))`,
   },
 });
 

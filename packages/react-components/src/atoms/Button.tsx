@@ -41,7 +41,10 @@ interface NormalButtonProps {
 }
 interface LinkStyleButtonProps {
   readonly linkStyle: true;
-  readonly enabled?: undefined;
+  // Only the link colours are unaffected by `enabled` — the button itself is
+  // still rendered `disabled`, which link-styled actions inside a disabled
+  // surface need.
+  readonly enabled?: boolean;
   readonly primary?: undefined;
   readonly warning?: boolean;
   readonly active?: undefined;

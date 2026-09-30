@@ -57,7 +57,6 @@ describe('mapSpeakersToGroups', () => {
         variant: 'team',
         teamName: 'Alpha',
         isTeamInactive: false,
-        preliminaryFindingsShared: false,
         users: [
           {
             id: 'u1',
@@ -66,6 +65,7 @@ describe('mapSpeakersToGroups', () => {
             avatarUrl: 'https://example.com/a.png',
             isAlumni: true,
             roles: ['Chair'],
+            preliminaryFindingsShared: false,
           },
         ],
       },
@@ -111,7 +111,53 @@ describe('mapSpeakersToGroups', () => {
     });
   });
 
-  it('attaches preliminaryFindingsShared per team and orders shared teams first then alphabetically', () => {
+  it('seeds every member of a shared team with preliminaryFindingsShared', () => {
+    const groups = mapSpeakersToGroups(
+      makeEvent(
+        [
+          teamSpeaker('t1', 'Alpha', 'u1', 'Chair'),
+          teamSpeaker('t1', 'Alpha', 'u2', 'Speaker'),
+          teamSpeaker('t2', 'Bravo', 'u3', 'Chair'),
+        ],
+        [
+          { team: { id: 't1' }, shared: true },
+          { team: { id: 't2' }, shared: false },
+        ],
+      ),
+    );
+
+    const sharedByUserId = Object.fromEntries(
+      groups.flatMap(({ users }) =>
+        users.map(({ id, preliminaryFindingsShared }) => [
+          id,
+          preliminaryFindingsShared,
+        ]),
+      ),
+    );
+
+    expect(sharedByUserId).toEqual({ u1: true, u2: true, u3: false });
+  });
+
+  it('keeps every speaker of a team in its team group', () => {
+    const groups = mapSpeakersToGroups(
+      makeEvent([
+        teamSpeaker('t1', 'Alpha', 'u1', 'Chair'),
+        teamSpeaker('t1', 'Alpha', 'u2', 'Speaker'),
+      ]),
+    );
+
+    expect(groups).toEqual([
+      expect.objectContaining({
+        variant: 'team',
+        users: [
+          expect.objectContaining({ id: 'u1' }),
+          expect.objectContaining({ id: 'u2' }),
+        ],
+      }),
+    ]);
+  });
+
+  it('orders groups with a shared speaker first, then alphabetically', () => {
     const groups = mapSpeakersToGroups(
       makeEvent(
         [
@@ -132,11 +178,6 @@ describe('mapSpeakersToGroups', () => {
       't-charlie',
       't-alpha',
     ]);
-    expect(groups.map((group) => group.preliminaryFindingsShared)).toEqual([
-      true,
-      true,
-      false,
-    ]);
   });
 
   it('collects external speakers into a single trailing external group', () => {
@@ -151,17 +192,18 @@ describe('mapSpeakersToGroups', () => {
     expect(groups[groups.length - 1]).toEqual({
       id: 'external',
       variant: 'external',
-      preliminaryFindingsShared: false,
       users: [
         {
           id: 'external-1',
           speakerIds: ['es-ext-1'],
           displayName: 'Jane External',
+          preliminaryFindingsShared: false,
         },
         {
           id: 'external-2',
           speakerIds: ['es-ext-2'],
           displayName: 'John External',
+          preliminaryFindingsShared: false,
         },
       ],
     });

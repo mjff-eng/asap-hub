@@ -12,8 +12,10 @@ import Select, {
   ActionMeta,
   components as reactAsyncComponents,
   GroupBase,
+  mergeStyles,
   Props,
   SelectInstance,
+  StylesConfig,
 } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import type { AsyncProps } from 'react-select/async';
@@ -103,6 +105,7 @@ export type MultiSelectProps<
   readonly leftIndicator?: ReactNode;
   readonly noMargin?: boolean;
   readonly isMulti?: M;
+  readonly styles?: StylesConfig<T, M, GroupBase<T>>;
 } & (
   | (Pick<Props<T, true, GroupBase<T>>, 'noOptionsMessage' | 'components'> & {
       readonly suggestions: ReadonlyArray<T>;
@@ -156,6 +159,7 @@ const MultiSelect = <
   noMargin = false,
   isMulti = true as M,
   values = getValues<T, M>(isMulti),
+  styles,
 }: MultiSelectProps<T, M>): ReactElement => {
   const theme = useTheme();
   let inputRef: RefType<T, M> = null;
@@ -224,7 +228,10 @@ const MultiSelect = <
       ...components,
     } as Props<T, M, GroupBase<T>>['components'],
     noOptionsMessage,
-    styles: reactMultiSelectStyles(theme, !!validationMessage, isMulti),
+    styles: mergeStyles(
+      reactMultiSelectStyles(theme, !!validationMessage, isMulti),
+      styles,
+    ),
     onFocus: () => {
       onFocus();
     },

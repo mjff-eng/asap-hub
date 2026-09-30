@@ -5,9 +5,12 @@ import {
   EventSpeakerUser,
 } from '@asap-hub/model';
 import {
+  groupFindings,
+  groupLabel,
   SpeakerGroup,
   SpeakerGroupExternalUser,
   SpeakerGroupUser,
+  SpeakerTeamGroup,
 } from '@asap-hub/react-components';
 
 const isExternalSpeaker = (
@@ -21,7 +24,6 @@ type MutableTeamGroup = {
   id: string;
   teamName: string;
   isTeamInactive: boolean;
-  preliminaryFindingsShared: boolean;
   users: Map<
     string,
     SpeakerGroupUser & { roles: string[]; speakerIds: string[] }
@@ -45,6 +47,7 @@ export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
         id: `external-${index}`,
         speakerIds: speaker.id ? [speaker.id] : [],
         displayName: speaker.externalUser.name,
+        preliminaryFindingsShared: false,
       });
       return;
     }
@@ -58,7 +61,6 @@ export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
       id: team.id,
       teamName: team.displayName,
       isTeamInactive: !!team.inactiveSince,
-      preliminaryFindingsShared: sharedByTeamId.get(team.id) ?? false,
       users: new Map(),
     };
 
@@ -78,39 +80,42 @@ export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
         avatarUrl: user.avatarUrl,
         isAlumni: !!user.alumniSinceDate,
         roles: role ? [role] : [],
+        preliminaryFindingsShared: sharedByTeamId.get(team.id) ?? false,
       });
     }
 
     teamGroups.set(team.id, group);
   });
 
-  const teams: SpeakerGroup[] = Array.from(teamGroups.values())
-    .map((group) => ({
+  const teams: SpeakerTeamGroup[] = Array.from(teamGroups.values()).map(
+    (group) => ({
       id: group.id,
       variant: 'team' as const,
       teamName: group.teamName,
       isTeamInactive: group.isTeamInactive,
-      preliminaryFindingsShared: group.preliminaryFindingsShared,
       users: Array.from(group.users.values()),
-    }))
-    .sort((a, b) => {
-      if (a.preliminaryFindingsShared !== b.preliminaryFindingsShared) {
-        return a.preliminaryFindingsShared ? -1 : 1;
-      }
-      return a.teamName.localeCompare(b.teamName);
-    });
+    }),
+  );
+
+  const crnGroups = teams.sort((a, b) => {
+    const aShared = groupFindings(a).hasAnyShared;
+    const bShared = groupFindings(b).hasAnyShared;
+    if (aShared !== bShared) {
+      return aShared ? -1 : 1;
+    }
+    return groupLabel(a).localeCompare(groupLabel(b));
+  });
 
   if (externalUsers.length > 0) {
     return [
-      ...teams,
+      ...crnGroups,
       {
         id: 'external',
         variant: 'external',
-        preliminaryFindingsShared: false,
         users: externalUsers,
       },
     ];
   }
 
-  return teams;
+  return crnGroups;
 };

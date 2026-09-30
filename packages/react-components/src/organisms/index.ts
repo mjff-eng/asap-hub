@@ -30,11 +30,13 @@ export type {
   SpeakerSearchOption,
   SpeakerTeamOption,
 } from './EditEventSpeakersModal';
+export { groupFindings, groupLabel } from './speaker-group';
 export type {
   SpeakerExternalGroup,
   SpeakerGroup,
   SpeakerGroupExternalUser,
   SpeakerGroupUser,
+  SpeakerProjectGroup,
   SpeakerTeamGroup,
 } from './speaker-group';
 export { default as EventAttendance } from './EventAttendance';
