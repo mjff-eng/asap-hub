@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ReactElement } from 'react';
 
 import { Button } from '../atoms';
-import { neutral1000, steel } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { defaultVisibleRows } from './shared-event-card';
 import {
@@ -22,7 +22,7 @@ const sectionStyles = css({
 // font size.
 const headingStyles = css({
   margin: 0,
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   fontSize: rem(14),
   fontWeight: 700,
   lineHeight: 16 / 14,
@@ -32,7 +32,7 @@ const headingStyles = css({
 const showMoreStyles = css({
   display: 'flex',
   padding: `${rem(16)} 0`,
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 const externalRowsStyles = css({
@@ -41,7 +41,7 @@ const externalRowsStyles = css({
   '> *': {
     paddingTop: rem(16),
     paddingBottom: rem(16),
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
   '> *:last-of-type': { borderBottom: 'none' },
 });

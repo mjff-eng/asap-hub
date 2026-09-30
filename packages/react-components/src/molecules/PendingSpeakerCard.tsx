@@ -2,7 +2,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Avatar, Button, Link, Paragraph, PillSelector } from '../atoms';
-import { fern, neutral700, neutral1000, paper, warning100 } from '../colors';
+import { colour } from '../colors';
 import { crossIcon, plusIcon } from '../icons';
 import { projectIcon, teamIcon } from '../organisms/shared-event-card';
 import { mobileScreen, rem } from '../pixels';
@@ -22,7 +22,7 @@ const cardStyles = css({
   marginBottom: rem(16),
   padding: rem(16),
   borderRadius: rem(8),
-  backgroundColor: warning100.rgb,
+  backgroundColor: colour.background.warning,
 });
 
 const headerStyles = css({
@@ -33,11 +33,11 @@ const headerStyles = css({
 
 const avatarStyles = css([
   avatar24Styles,
-  { borderRadius: '50%', boxShadow: `0 0 0 1px ${paper.rgb}` },
+  { borderRadius: '50%', boxShadow: `0 0 0 1px ${colour.background.primary}` },
 ]);
 
 const nameStyles = css({
-  color: fern.rgb,
+  color: colour.foreground.brand,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -48,7 +48,7 @@ const dismissStyles = (enabled: boolean) =>
   css([squareIconButtonStyles(enabled), { marginLeft: 'auto' }]);
 
 const messageStyles = css({
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -58,11 +58,11 @@ const pillStyles = css({
   maxWidth: '100%',
   height: rem(40),
   padding: `0 ${rem(16)}`,
-  borderColor: neutral700.rgb,
+  borderColor: colour.border.secondary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   // PillSelector only sizes and colours its direct svg children.
   '> span > svg': { width: rem(24), height: rem(24) },
   '> span > svg [fill]:not([fill="none"])': { fill: 'currentColor' },

@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { StylesConfig } from 'react-select';
 
 import { Button, MultiSelect, Paragraph, Pill } from '../atoms';
-import { lead, neutral700, neutral1000, warning100 } from '../colors';
+import { colour } from '../colors';
 import { crossIcon, externalUserAvatarIcon, searchIcon } from '../icons';
 import { EventTeamType } from '../organisms/shared-event-card';
 import { statePillStyles } from '../atoms/SpeakerRoleBadge';
@@ -22,7 +22,7 @@ const cardStyles = css({
   gap: rem(12),
   padding: rem(16),
   borderRadius: rem(8),
-  backgroundColor: warning100.rgb,
+  backgroundColor: colour.background.warning,
 });
 
 const headerStyles = css({
@@ -42,7 +42,7 @@ const identityStyles = css([
 ]);
 
 const nameStyles = css({
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -58,14 +58,14 @@ const messageStyles = css({
 });
 
 const bodyStyles = css({
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
 });
 
 const disclaimerStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(14),
   lineHeight: 16 / 14,
 });
@@ -93,12 +93,12 @@ const searchSelectStyles: StylesConfig<SearchOption, false> = {
     paddingTop: 0,
     paddingBottom: 0,
     borderRadius: rem(4),
-    ...(isFocused ? {} : { borderColor: neutral700.rgb }),
+    ...(isFocused ? {} : { borderColor: colour.border.secondary }),
   }),
   input: (base) => ({ ...base, margin: `0 ${rem(6)}`, padding: 0 }),
   placeholder: (base) => ({
     ...base,
-    color: neutral700.rgb,
+    color: colour.foreground.disabled,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
@@ -109,7 +109,7 @@ const keepAsGuestStyles = css({
   flexGrow: 0,
   minHeight: rem(40),
   alignItems: 'center',
-  borderColor: neutral700.rgb,
+  borderColor: colour.border.secondary,
 });
 
 export type AffiliationOption = {

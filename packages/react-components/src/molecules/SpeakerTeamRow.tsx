@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button, Link } from '../atoms';
-import { lead, steel } from '../colors';
+import { colour } from '../colors';
 import { chevronDownIcon, chevronUpIcon, InactiveBadgeIcon } from '../icons';
 import {
   defaultVisibleSpeakers,
@@ -27,7 +27,7 @@ const wrapperStyles = css({
   flexDirection: 'column',
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   // Padding stays: it is half of the 32 between sections.
   '&:last-of-type': {
     borderBottom: 'none',
@@ -77,7 +77,10 @@ const labelStyles = css({
   },
 });
 
-const leadTextStyles = css({ color: lead.rgb, fontWeight: 400 });
+const leadTextStyles = css({
+  color: colour.foreground.tertiary,
+  fontWeight: 400,
+});
 
 const teamNameStyles = css({ whiteSpace: 'nowrap', fontWeight: 400 });
 
@@ -198,7 +201,7 @@ const SpeakerTeamRow: React.FC<SpeakerTeamRowProps> = ({
           {showShared && (
             <span css={findingsColumnStyles}>
               <span css={findingsPillStyles(hasAnyShared)}>
-                {findingsIcon(hasAnyShared, lead.rgb)}
+                {findingsIcon(hasAnyShared, colour.foreground.tertiary)}
                 {`${shared} of ${total} shared`}
               </span>
             </span>
