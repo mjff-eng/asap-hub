@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button, Card, Headline3, Paragraph } from '../atoms';
-import { neutral900, neutral1000, steel } from '../colors';
+import { colour } from '../colors';
 import { ExportIcon, PencilIcon, plusIcon } from '../icons';
 import EventAttendanceMetric, {
   captionCountStyles,
@@ -54,7 +54,7 @@ const columnHeaderStyles = css({
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const fullFindingsLabel = css({ [mobileQuery]: { display: 'none' } });
@@ -68,14 +68,14 @@ const breakdownDividerStyles = css({
   height: rem(1),
   border: 0,
   margin: 0,
-  backgroundColor: steel.rgb,
+  backgroundColor: colour.border.tertiary,
 });
 
 const breakdownStyles = css({
   display: 'grid',
   gridTemplateColumns: '1fr auto',
   columnGap: rem(8),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   '> p': { margin: 0, fontSize: rem(14), lineHeight: 16 / 14 },
 });
 
@@ -254,7 +254,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
                 onClick={onEdit}
                 overrideStyles={editIconButtonStyles}
               >
-                <PencilIcon color={neutral1000.rgb} />
+                <PencilIcon color={colour.foreground.primary} />
               </Button>
             )}
           </div>
