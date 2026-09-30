@@ -167,7 +167,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
           <Headline3 noMargin>Speakers</Headline3>
           {onAddSpeaker ? (
             <>
-              <Paragraph noMargin accent="lead">
+              <Paragraph noMargin accent="tertiary">
                 {editorEmptyMessage(hasFinished)}
               </Paragraph>
               <Button primary small noMargin onClick={onAddSpeaker}>
@@ -175,7 +175,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
               </Button>
             </>
           ) : (
-            <Paragraph noMargin accent="lead">
+            <Paragraph noMargin accent="tertiary">
               No speakers have been added for this event yet.
             </Paragraph>
           )}
