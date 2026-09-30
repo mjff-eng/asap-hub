@@ -320,7 +320,7 @@ const MultiSelect = <
               : typeof values === 'object' &&
                   values !== null &&
                   'label' in values
-                ? (values.label ?? '')
+                ? values.label ?? ''
                 : ''
           }
           required={required}
