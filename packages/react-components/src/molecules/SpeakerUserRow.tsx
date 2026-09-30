@@ -94,15 +94,15 @@ export const findingsPillStyles = (shared: boolean) =>
     alignItems: 'center',
     justifyContent: 'center',
     gap: pillEm(4),
-    width: pillEm(findingsColumnWidth),
     height: pillEm(24),
-    padding: `0 ${pillEm(4)}`,
+    padding: `0 ${pillEm(8)} 0 ${pillEm(4)}`,
     borderRadius: pillEm(24),
     backgroundColor: shared ? success100.rgb : silver.rgb,
     color: shared ? success500.rgb : lead.rgb,
     fontSize: rem(findingsPillFontSize),
     lineHeight: 16 / findingsPillFontSize,
     whiteSpace: 'nowrap',
+    '> span': { width: pillEm(24), height: pillEm(24) },
     // The icons ship at 20x20, which is the size they keep outside the pill.
     '> span > svg': { width: pillEm(14), height: pillEm(14) },
   });
