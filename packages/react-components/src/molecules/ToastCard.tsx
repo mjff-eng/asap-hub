@@ -69,7 +69,7 @@ const toastContentStyles = css({
 type Type = 'alert' | 'attachment' | 'live' | 'info';
 
 const iconMap: Record<Type, ReactNode> = {
-  alert: <WarningIcon color={colour.general.yellow[800]} />,
+  alert: <WarningIcon color={colour.foreground.warning} />,
   attachment: paperClipIcon,
   live: liveIcon,
   info: infoInfoIcon,
