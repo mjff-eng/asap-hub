@@ -63,8 +63,10 @@ const pillStyles = css({
   fontWeight: 400,
   lineHeight: rem(24),
   color: neutral1000.rgb,
-  // PillSelector only sizes its direct svg children.
+  // PillSelector only sizes and colours its direct svg children.
   '> span > svg': { width: rem(24), height: rem(24) },
+  '> span > svg [fill]:not([fill="none"])': { fill: 'currentColor' },
+  '> span > svg [stroke]:not([stroke="none"])': { stroke: 'currentColor' },
   '> span:last-of-type': {
     minWidth: 0,
     overflow: 'hidden',
