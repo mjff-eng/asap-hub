@@ -342,15 +342,9 @@ export const casTheme = {
       master: '#C2C9CE',
     },
     'colour/foreground/brand': {
-      hex: '#34A270',
+      hex: '#2C865C',
       alpha: 1,
-      alias: 'colour/brand/crn/500',
-      figma: {
-        hex: '#2C865C',
-        alpha: 1,
-        alias: 'colour/brand/crn/700',
-      },
-      master: '#34A270',
+      alias: 'colour/brand/crn/700',
     },
     'colour/foreground/color-yellow': {
       hex: '#805D00',
@@ -378,37 +372,19 @@ export const casTheme = {
       alias: 'colour/general/blue/classic/800',
     },
     'colour/foreground/info': {
-      hex: '#0C8DC3',
+      hex: '#0681B2',
       alpha: 1,
-      alias: 'colour/brand/gp2/500',
-      figma: {
-        hex: '#0681B2',
-        alpha: 1,
-        alias: 'colour/brand/gp2/600',
-      },
-      master: '#0C8DC3',
+      alias: 'colour/brand/gp2/600',
     },
     'colour/foreground/success': {
-      hex: '#34A270',
+      hex: '#309466',
       alpha: 1,
-      alias: 'colour/brand/crn/500',
-      figma: {
-        hex: '#309466',
-        alpha: 1,
-        alias: 'colour/brand/crn/600',
-      },
-      master: '#34A270',
+      alias: 'colour/brand/crn/600',
     },
     'colour/foreground/warning': {
-      hex: '#B88500',
+      hex: '#805D00',
       alpha: 1,
-      alias: 'colour/general/yellow/800',
-      figma: {
-        hex: '#805D00',
-        alpha: 1,
-        alias: 'colour/utilitarian/yellow/900',
-      },
-      master: '#CE801A',
+      alias: 'colour/utilitarian/yellow/900',
     },
     'colour/foreground/error': {
       hex: '#B42318',
@@ -488,15 +464,9 @@ export const casTheme = {
       alias: 'colour/brand/crn/25',
     },
     'colour/background/active': {
-      hex: '#E2EEED',
+      hex: '#D1ECE1',
       alpha: 1,
-      alias: 'colour/brand/crn/25',
-      figma: {
-        hex: '#D1ECE1',
-        alpha: 1,
-        alias: 'colour/brand/crn/50',
-      },
-      master: '#E7F7F0',
+      alias: 'colour/brand/crn/50',
     },
     'colour/background/hover': {
       hex: '#E3E6E8',
@@ -560,15 +530,9 @@ export const casTheme = {
       alias: 'colour/general/blue/classic/50',
     },
     'colour/background/info': {
-      hex: '#E6F3F9',
+      hex: '#D3E9F3',
       alpha: 1,
-      alias: 'colour/brand/gp2/25',
-      figma: {
-        hex: '#D3E9F3',
-        alpha: 1,
-        alias: 'colour/brand/gp2/50',
-      },
-      master: '#E6F3F9',
+      alias: 'colour/brand/gp2/50',
     },
     'colour/background/info-inverse': {
       hex: '#0375A2',
@@ -576,15 +540,9 @@ export const casTheme = {
       alias: 'colour/brand/gp2/700',
     },
     'colour/background/success': {
-      hex: '#F1FCF6',
+      hex: '#D1ECE1',
       alpha: 1,
-      alias: 'colour/utilitarian/green/50',
-      figma: {
-        hex: '#D1ECE1',
-        alpha: 1,
-        alias: 'colour/brand/crn/50',
-      },
-      master: '#E4F5EE',
+      alias: 'colour/brand/crn/50',
     },
     'colour/background/success-inverse': {
       hex: '#2C865C',
@@ -592,15 +550,9 @@ export const casTheme = {
       alias: 'colour/brand/crn/700',
     },
     'colour/background/warning': {
-      hex: '#FCF8EE',
+      hex: '#FFEBB8',
       alpha: 1,
-      alias: 'colour/utilitarian/orange/50',
-      figma: {
-        hex: '#FFEBB8',
-        alpha: 1,
-        alias: 'colour/utilitarian/yellow/200',
-      },
-      master: '#F8EDDE',
+      alias: 'colour/utilitarian/yellow/200',
     },
     'colour/background/warning-inverse': {
       hex: '#B88500',
@@ -608,15 +560,9 @@ export const casTheme = {
       alias: 'colour/utilitarian/yellow/800',
     },
     'colour/background/error': {
-      hex: '#FEF3F2',
+      hex: '#FEE4E2',
       alpha: 1,
-      alias: 'colour/utilitarian/red/50',
-      figma: {
-        hex: '#FEE4E2',
-        alpha: 1,
-        alias: 'colour/utilitarian/red/100',
-      },
-      master: '#F7E8EA',
+      alias: 'colour/utilitarian/red/100',
     },
     'colour/background/error-inverse': {
       hex: '#D92D20',
@@ -634,15 +580,9 @@ export const casTheme = {
       alias: 'colour/neutral/900-A20',
     },
     'colour/background/button/primary/default': {
-      hex: '#34A270',
+      hex: '#309466',
       alpha: 1,
-      alias: 'colour/brand/crn/500',
-      figma: {
-        hex: '#309466',
-        alpha: 1,
-        alias: 'colour/brand/crn/600',
-      },
-      master: '#34A270',
+      alias: 'colour/brand/crn/600',
     },
     'colour/background/button/primary/hover': {
       hex: '#2C865C',
@@ -748,48 +688,24 @@ export const casTheme = {
       master: '#DFE5EA',
     },
     'colour/border/brand': {
-      hex: '#34A270',
+      hex: '#2C865C',
       alpha: 1,
-      alias: 'colour/brand/crn/500',
-      figma: {
-        hex: '#2C865C',
-        alpha: 1,
-        alias: 'colour/brand/crn/700',
-      },
-      master: '#34A270',
+      alias: 'colour/brand/crn/700',
     },
     'colour/border/info': {
-      hex: '#0C8DC3',
+      hex: '#0375A2',
       alpha: 1,
-      alias: 'colour/brand/gp2/500',
-      figma: {
-        hex: '#0375A2',
-        alpha: 1,
-        alias: 'colour/brand/gp2/700',
-      },
-      master: '#0C8DC3',
+      alias: 'colour/brand/gp2/700',
     },
     'colour/border/success': {
-      hex: '#287953',
+      hex: '#2C865C',
       alpha: 1,
-      alias: 'colour/brand/crn/800',
-      figma: {
-        hex: '#2C865C',
-        alpha: 1,
-        alias: 'colour/brand/crn/700',
-      },
-      master: '#287953',
+      alias: 'colour/brand/crn/700',
     },
     'colour/border/warning': {
-      hex: '#B88500',
+      hex: '#805D00',
       alpha: 1,
-      alias: 'colour/general/yellow/800',
-      figma: {
-        hex: '#805D00',
-        alpha: 1,
-        alias: 'colour/utilitarian/yellow/900',
-      },
-      master: '#CE801A',
+      alias: 'colour/utilitarian/yellow/900',
     },
     'colour/border/error': {
       hex: '#B42318',
@@ -913,15 +829,9 @@ export const casTheme = {
       master: '#C2C9CE',
     },
     'colour/foreground/brand': {
-      hex: '#0C8DC3',
+      hex: '#0375A2',
       alpha: 1,
-      alias: 'colour/brand/gp2/500',
-      figma: {
-        hex: '#0375A2',
-        alpha: 1,
-        alias: 'colour/brand/gp2/700',
-      },
-      master: '#0C8DC3',
+      alias: 'colour/brand/gp2/700',
     },
     'colour/foreground/color-yellow': {
       hex: '#805D00',
@@ -949,37 +859,19 @@ export const casTheme = {
       alias: 'colour/general/blue/classic/800',
     },
     'colour/foreground/info': {
-      hex: '#0C8DC3',
+      hex: '#0681B2',
       alpha: 1,
-      alias: 'colour/brand/gp2/500',
-      figma: {
-        hex: '#0681B2',
-        alpha: 1,
-        alias: 'colour/brand/gp2/600',
-      },
-      master: '#0C8DC3',
+      alias: 'colour/brand/gp2/600',
     },
     'colour/foreground/success': {
-      hex: '#34A270',
+      hex: '#309466',
       alpha: 1,
-      alias: 'colour/brand/crn/500',
-      figma: {
-        hex: '#309466',
-        alpha: 1,
-        alias: 'colour/brand/crn/600',
-      },
-      master: '#34A270',
+      alias: 'colour/brand/crn/600',
     },
     'colour/foreground/warning': {
-      hex: '#B88500',
+      hex: '#805D00',
       alpha: 1,
-      alias: 'colour/general/yellow/800',
-      figma: {
-        hex: '#805D00',
-        alpha: 1,
-        alias: 'colour/utilitarian/yellow/900',
-      },
-      master: '#CE801A',
+      alias: 'colour/utilitarian/yellow/900',
     },
     'colour/foreground/error': {
       hex: '#B42318',
@@ -1059,15 +951,9 @@ export const casTheme = {
       alias: 'colour/brand/gp2/25',
     },
     'colour/background/active': {
-      hex: '#E6F3F9',
+      hex: '#D3E9F3',
       alpha: 1,
-      alias: 'colour/brand/gp2/25',
-      figma: {
-        hex: '#D3E9F3',
-        alpha: 1,
-        alias: 'colour/brand/gp2/50',
-      },
-      master: '#E6F3F9',
+      alias: 'colour/brand/gp2/50',
     },
     'colour/background/hover': {
       hex: '#E3E6E8',
@@ -1080,15 +966,9 @@ export const casTheme = {
       alias: 'colour/brand/gp2/25',
     },
     'colour/background/hover-brand-inverse': {
-      hex: '#006A92',
+      hex: '#0681B2',
       alpha: 1,
-      alias: 'colour/brand/gp2/800',
-      figma: {
-        hex: '#0681B2',
-        alpha: 1,
-        alias: 'colour/brand/gp2/600',
-      },
-      master: '#006A92',
+      alias: 'colour/brand/gp2/600',
     },
     'colour/background/disabled': {
       hex: '#EEF3F6',
@@ -1107,15 +987,9 @@ export const casTheme = {
       alias: 'colour/brand/gp2/25',
     },
     'colour/background/brand-inverse': {
-      hex: '#0C8DC3',
+      hex: '#006A92',
       alpha: 1,
-      alias: 'colour/brand/gp2/500',
-      figma: {
-        hex: '#006A92',
-        alpha: 1,
-        alias: 'colour/brand/gp2/800',
-      },
-      master: '#0C8DC3',
+      alias: 'colour/brand/gp2/800',
     },
     'colour/background/color-yellow': {
       hex: '#FFEBB8',
@@ -1143,15 +1017,9 @@ export const casTheme = {
       alias: 'colour/general/blue/classic/50',
     },
     'colour/background/info': {
-      hex: '#E6F3F9',
+      hex: '#D3E9F3',
       alpha: 1,
-      alias: 'colour/brand/gp2/25',
-      figma: {
-        hex: '#D3E9F3',
-        alpha: 1,
-        alias: 'colour/brand/gp2/50',
-      },
-      master: '#E6F3F9',
+      alias: 'colour/brand/gp2/50',
     },
     'colour/background/info-inverse': {
       hex: '#0375A2',
@@ -1159,15 +1027,9 @@ export const casTheme = {
       alias: 'colour/brand/gp2/700',
     },
     'colour/background/success': {
-      hex: '#F1FCF6',
+      hex: '#D1ECE1',
       alpha: 1,
-      alias: 'colour/utilitarian/green/50',
-      figma: {
-        hex: '#D1ECE1',
-        alpha: 1,
-        alias: 'colour/brand/crn/50',
-      },
-      master: '#E4F5EE',
+      alias: 'colour/brand/crn/50',
     },
     'colour/background/success-inverse': {
       hex: '#2C865C',
@@ -1175,15 +1037,9 @@ export const casTheme = {
       alias: 'colour/brand/crn/700',
     },
     'colour/background/warning': {
-      hex: '#FCF8EE',
+      hex: '#FFEBB8',
       alpha: 1,
-      alias: 'colour/utilitarian/orange/50',
-      figma: {
-        hex: '#FFEBB8',
-        alpha: 1,
-        alias: 'colour/utilitarian/yellow/200',
-      },
-      master: '#F8EDDE',
+      alias: 'colour/utilitarian/yellow/200',
     },
     'colour/background/warning-inverse': {
       hex: '#B88500',
@@ -1191,15 +1047,9 @@ export const casTheme = {
       alias: 'colour/utilitarian/yellow/800',
     },
     'colour/background/error': {
-      hex: '#FEF3F2',
+      hex: '#FEE4E2',
       alpha: 1,
-      alias: 'colour/utilitarian/red/50',
-      figma: {
-        hex: '#FEE4E2',
-        alpha: 1,
-        alias: 'colour/utilitarian/red/100',
-      },
-      master: '#F7E8EA',
+      alias: 'colour/utilitarian/red/100',
     },
     'colour/background/error-inverse': {
       hex: '#D92D20',
@@ -1325,48 +1175,24 @@ export const casTheme = {
       master: '#DFE5EA',
     },
     'colour/border/brand': {
-      hex: '#0C8DC3',
+      hex: '#0375A2',
       alpha: 1,
-      alias: 'colour/brand/gp2/500',
-      figma: {
-        hex: '#0375A2',
-        alpha: 1,
-        alias: 'colour/brand/gp2/700',
-      },
-      master: '#0C8DC3',
+      alias: 'colour/brand/gp2/700',
     },
     'colour/border/info': {
-      hex: '#0C8DC3',
+      hex: '#0375A2',
       alpha: 1,
-      alias: 'colour/brand/gp2/500',
-      figma: {
-        hex: '#0375A2',
-        alpha: 1,
-        alias: 'colour/brand/gp2/700',
-      },
-      master: '#0C8DC3',
+      alias: 'colour/brand/gp2/700',
     },
     'colour/border/success': {
-      hex: '#287953',
+      hex: '#2C865C',
       alpha: 1,
-      alias: 'colour/brand/crn/800',
-      figma: {
-        hex: '#2C865C',
-        alpha: 1,
-        alias: 'colour/brand/crn/700',
-      },
-      master: '#287953',
+      alias: 'colour/brand/crn/700',
     },
     'colour/border/warning': {
-      hex: '#B88500',
+      hex: '#805D00',
       alpha: 1,
-      alias: 'colour/general/yellow/800',
-      figma: {
-        hex: '#805D00',
-        alpha: 1,
-        alias: 'colour/utilitarian/yellow/900',
-      },
-      master: '#CE801A',
+      alias: 'colour/utilitarian/yellow/900',
     },
     'colour/border/error': {
       hex: '#B42318',
