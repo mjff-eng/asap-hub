@@ -652,11 +652,11 @@ const HubSwatch = ({ hex, label }: { hex: string; label?: string }) => (
 );
 
 const figmaFixes = [
-  'color-brand, one of the five avatar pairs, is a theme token, but its CRN and GP2 values point at the ARIA primitives brand/aria/2/200 and 2/900, so avatars show the ARIA green in every Hub.',
+  'color-brand, one of the five avatar pairs: its background now uses brand/crn/50 and brand/gp2/50, but its text still points at the ARIA primitive brand/aria/2/900, so avatar initials stay ARIA green.',
   'In the Navigation component, the hover and active fills of the Menu, Close and Account buttons are bound straight to the primitive brand/aria/1/900-A32 instead of a theme token, so they stay ARIA green in the CRN and GP2 modes.',
   'Some layers use raw hex instead of variables: the Checkbox and Radio label (#000000), the event live indicator, Icon Badge and the legacy Top Nav GP2 frame.',
   'The 48px icon-only Warning button hover is bound to the default variable, and the Search input placeholder uses a different token at each size.',
-  'In GP2, background/brand-inverse (gp2/800) is darker than background/hover-brand-inverse (gp2/600). In CRN it is the other way round.',
+  'In CRN, background/brand-inverse and background/hover-brand-inverse are both brand/crn/800, so checked checkboxes, radios and switches do not change on hover. In GP2 the hover (gp2/600) is lighter than the checked colour (gp2/800).',
   'background/brand, background/hover-brand and background/highlight all resolve to brand/25: three names for one value.',
   'No variable has a description or WEB code syntax. With code syntax set, Dev Mode shows engineers exactly what to type, for example colour.foreground.brand.',
 ];
@@ -699,7 +699,8 @@ const missingNames: {
         product: 'gp2',
       },
     ],
-    suggestion: 'Add foreground/brand-strong pointing at brand/800.',
+    suggestion:
+      'foreground/brand is now brand/700; production used brand/800 here. Add foreground/brand-strong, or is foreground/brand enough?',
   },
   {
     name: 'Tooltip background',
@@ -741,7 +742,7 @@ const missingNames: {
       { label: 'foreground/warning', code: 'foreground.warning' },
     ],
     suggestion:
-      'Add foreground/{status}-strong, which would also fix readability.',
+      'Figma darkened foreground/{status}, but success and info are still lighter than production here and below 4.5:1 on their backgrounds. Add foreground/{status}-strong?',
   },
   {
     name: 'Warning button border',
@@ -898,42 +899,56 @@ export const DesignQuestions = () => {
       title="Questions for design"
       intro={
         <>
-          The goal: the Hub looks exactly as it does in production, the code
-          uses the CAS names from Figma, and Figma holds the right colour for
-          each name. The code already uses the names. Where a name&apos;s CRN or
-          GP2 value in Figma differs from production, the code temporarily
-          points the name at the closest CAS colour (
-          {code('asap-overrides.json')}). Each entry below is a change we ask of
-          the CAS file; once Figma matches, the override is removed and nothing
-          else changes.
+          The code uses the CAS names from Figma. Where design has reworked a
+          colour, the Hub follows Figma (see <i>Answered by design</i>). Where
+          Figma still holds a value design has not reviewed, the code keeps the
+          closest CAS colour to production ({code('asap-overrides.json')}). Each
+          of those is a change we ask of the CAS file; once Figma is updated,
+          the override is removed.
         </>
       }
     >
       <Section title="Answered by design">
         <p style={{ marginTop: 0 }}>
-          The Figma update of 30 September made these colours darker. We follow
-          Figma for them, so they now differ from production on purpose:
+          Design reworked these colours on 30 September to pass accessibility
+          checks, starting from the ASAP brand colours. The Hub follows Figma
+          for them, so they differ slightly from production on purpose:
         </p>
         <ul style={{ paddingLeft: '20px' }}>
           <li>
-            Error text and borders: production <Colour value="#CD1426" />, now{' '}
-            {code('utilitarian/red/700')} <Colour value="#B42318" />.
+            Links and brand text: CRN {code('brand/crn/700')}{' '}
+            <Colour value="#2C865C" />, GP2 {code('brand/gp2/700')}{' '}
+            <Colour value="#0375A2" /> (production <Colour value="#34A270" />,{' '}
+            <Colour value="#0C8DC3" />
+            ).
           </li>
           <li>
-            Warning button: production <Colour value="#CD1426" />, hover{' '}
-            <Colour value="#B00A1A" />; now {code('utilitarian/red/700')}{' '}
+            Primary button: CRN {code('brand/crn/600')}{' '}
+            <Colour value="#309466" />, GP2 {code('brand/gp2/600')}{' '}
+            <Colour value="#0681B2" />, one shade darker on hover, with a faint{' '}
+            {code('neutral/900-A4')} border.
+          </li>
+          <li>
+            Checked checkbox, radio and switch: CRN {code('brand/crn/800')}{' '}
+            <Colour value="#287953" />, GP2 {code('brand/gp2/800')}{' '}
+            <Colour value="#006A92" />.
+          </li>
+          <li>
+            Status messages: success {code('brand/crn/600')} on{' '}
+            {code('brand/crn/50')}, info {code('brand/gp2/600')} on{' '}
+            {code('brand/gp2/50')}, warning {code('utilitarian/yellow/900')} on{' '}
+            {code('utilitarian/yellow/200')}, error{' '}
+            {code('utilitarian/red/700')} on {code('utilitarian/red/100')}.
+          </li>
+          <li>
+            Warning (destructive) button: {code('utilitarian/red/700')}{' '}
             <Colour value="#B42318" />, hover {code('utilitarian/red/800')}{' '}
             <Colour value="#912018" />.
           </li>
           <li>
-            GP2 primary button: production <Colour value="#0C8DC3" />, now{' '}
-            {code('brand/gp2/700')} <Colour value="#0375A2" />, hover border{' '}
-            {code('brand/gp2/900')} <Colour value="#005F83" />.
-          </li>
-          <li>
-            CRN primary button hover border: production{' '}
-            <Colour value="#287953" />, now {code('brand/crn/900')}{' '}
-            <Colour value="#246C4A" />.
+            Selected menu item: {code('brand/crn/50')}{' '}
+            <Colour value="#D1ECE1" />, {code('brand/gp2/50')}{' '}
+            <Colour value="#D3E9F3" />.
           </li>
         </ul>
       </Section>
@@ -1117,9 +1132,9 @@ export const DesignQuestions = () => {
           Production has six colour pairs, including a pink and a purple. CAS
           has five pairs (color-*) and nothing close to the pink{' '}
           <Colour value="#9A2386" /> or the purple <Colour value="#693B77" />,
-          and color-brand is the ARIA green. The code keeps the five CAS pairs.
-          Should CAS add ASAP pairs that match production, or is the CAS set
-          fine?
+          and color-brand keeps the ARIA green text. The code keeps the five CAS
+          pairs. Should CAS add ASAP pairs that match production, or is the CAS
+          set fine?
         </p>
         <div style={{ ...muted, marginBottom: '6px' }}>Production</div>
         <AvatarRow
@@ -1145,57 +1160,58 @@ export const DesignQuestions = () => {
 
       <Section title="5. Readability">
         <p style={{ marginTop: 0 }}>
-          Matching production keeps some colours below the readability minimum
-          (4.5:1 for normal text):
+          With design&apos;s new colours, these now pass (4.5:1 for normal
+          text): links, CRN{' '}
+          <ContrastBadge foreground="#2C865C" background="#FFFFFF" /> and GP2{' '}
+          <ContrastBadge foreground="#0375A2" background="#FFFFFF" />; warning
+          text <ContrastBadge foreground="#805D00" background="#FFEBB8" />; and
+          error text <ContrastBadge foreground="#B42318" background="#FEE4E2" />
+          .
         </p>
+        <p>Still below the minimum:</p>
         <ul style={{ paddingLeft: '20px' }}>
           <li>
-            Links: CRN{' '}
-            <ContrastBadge foreground="#34A270" background="#FFFFFF" />, GP2{' '}
-            <ContrastBadge foreground="#0C8DC3" background="#FFFFFF" />.
+            White text on the primary button: CRN{' '}
+            <ContrastBadge foreground="#FFFFFF" background="#309466" />, GP2{' '}
+            <ContrastBadge foreground="#FFFFFF" background="#0681B2" />. Button
+            labels are 14px bold, which counts as normal text.
           </li>
           <li>
-            White text on the CRN main button{' '}
-            <ContrastBadge foreground="#FFFFFF" background="#34A270" />. The GP2
-            button now uses brand/gp2/700 and passes{' '}
-            <ContrastBadge foreground="#FFFFFF" background="#0375A2" />.
+            Status text on its background: success{' '}
+            <ContrastBadge foreground="#309466" background="#D1ECE1" />, info{' '}
+            <ContrastBadge foreground="#0681B2" background="#D3E9F3" />.
           </li>
           <li>
             Hint text:{' '}
             <ContrastBadge foreground="#C5CACE" background="#FFFFFF" />.
           </li>
-          <li>
-            Status text on its light background, e.g. success{' '}
-            <ContrastBadge foreground="#34A270" background="#F1FCF6" /> and
-            warning <ContrastBadge foreground="#B88500" background="#FCF8EE" />.
-          </li>
         </ul>
         <p>
-          Keep production&apos;s look, or move these to darker shades (for
-          example brand/800: CRN{' '}
-          <ContrastBadge foreground="#287953" background="#FFFFFF" />, GP2{' '}
-          <ContrastBadge foreground="#006A92" background="#FFFFFF" />
-          )?
+          Move these one shade darker (brand/700 passes on white: CRN{' '}
+          <ContrastBadge foreground="#FFFFFF" background="#2C865C" />, GP2{' '}
+          <ContrastBadge foreground="#FFFFFF" background="#0375A2" />
+          ), or accept them?
         </p>
       </Section>
 
       <Section title="6. One deliberate difference from production">
         <p style={{ marginTop: 0 }}>
           In GP2, checked radio buttons showed the CRN green{' '}
-          <Colour value="#34A270" /> (a bug). They now use the GP2 blue{' '}
-          <Colour value="#0C8DC3" />, like GP2 checkboxes and switches.
+          <Colour value="#34A270" /> (a bug). They now use the GP2 checked
+          colour {code('brand/gp2/800')} <Colour value="#006A92" />, like GP2
+          checkboxes and switches.
         </p>
       </Section>
 
       <Section title="7. New names to explain">
         <p style={{ marginTop: 0 }}>
-          Figma added {code('foreground/neutral')} <Colour value="#4B5359" />,{' '}
-          {code('background/neutral')} <Colour value="#D1E9FF" /> and{' '}
-          {code('border/neutral')} <Colour value="#175CD3" />. Grey text on a
-          blue background and border reads like an info style: what are they
-          for? The new {code('utilitarian/yellow')} and{' '}
-          {code('utilitarian/aqua')} ramps repeat the general yellow and green
-          colours; is that on purpose?
+          The neutral names are now grey: {code('foreground/neutral')}{' '}
+          <Colour value="#4B5359" />, {code('background/neutral')}{' '}
+          <Colour value="#E3E6E8" /> and {code('border/neutral')}{' '}
+          <Colour value="#687883" />, which reads as a neutral status style.
+          Please confirm. The {code('utilitarian/yellow')} ramp is now used for
+          warning; {code('utilitarian/aqua')} still repeats the general green
+          colours: is that on purpose?
         </p>
       </Section>
 
