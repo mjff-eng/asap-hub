@@ -659,10 +659,10 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
 
           {visibleGroups.length === 0 && !pendingSpeaker ? (
             <div css={emptyStateStyles(!isCancelling)} role="status">
-              <Paragraph noMargin accent="lead" styles={emptyStateTitleStyles}>
+              <Paragraph noMargin accent="tertiary" styles={emptyStateTitleStyles}>
                 Add speakers to this event
               </Paragraph>
-              <Paragraph noMargin accent="lead">
+              <Paragraph noMargin accent="tertiary">
                 Search for a person to add them to this event. Once the event
                 has taken place, you&apos;ll be able to mark whether each
                 speaker shared preliminary findings.
