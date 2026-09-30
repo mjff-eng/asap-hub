@@ -361,8 +361,8 @@ export const oldNames: OldName[] = [
   {
     name: 'warning900',
     before: '#B56B0B',
-    now: 'general.yellow[800]',
-    where: 'darker warning text',
+    now: 'foreground.warning',
+    where: 'darker warning text, icons and borders',
   },
   {
     name: 'error100 (rose)',
