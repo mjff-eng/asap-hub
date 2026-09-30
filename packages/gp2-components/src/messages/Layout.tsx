@@ -53,7 +53,7 @@ interface LayoutProps {
 }
 
 const emailTheme = {
-  colors: { primary500: colour.brand.gp2[500] },
+  colors: { primary500: colour.brand.gp2[600] },
 };
 
 const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (
