@@ -659,7 +659,11 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
 
           {visibleGroups.length === 0 && !pendingSpeaker ? (
             <div css={emptyStateStyles(!isCancelling)} role="status">
-              <Paragraph noMargin accent="tertiary" styles={emptyStateTitleStyles}>
+              <Paragraph
+                noMargin
+                accent="tertiary"
+                styles={emptyStateTitleStyles}
+              >
                 Add speakers to this event
               </Paragraph>
               <Paragraph noMargin accent="tertiary">
