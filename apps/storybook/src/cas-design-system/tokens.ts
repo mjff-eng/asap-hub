@@ -17,8 +17,7 @@ export interface ThemeValue {
   hex: string;
   alpha: number;
   alias?: string;
-  figma?: { hex: string; alpha: number; alias?: string };
-  master?: string;
+  production?: string;
 }
 
 export interface Primitive {
@@ -86,32 +85,97 @@ export const themeTokens: ThemeToken[] = Object.entries(casTheme.crn).map(
   },
 );
 
-export interface FigmaChange {
+const toLab = (hex: string): [number, number, number] => {
+  const [r, g, b] = [1, 3, 5].map((start) => {
+    const channel = parseInt(hex.slice(start, start + 2), 16) / 255;
+    return channel > 0.04045
+      ? ((channel + 0.055) / 1.055) ** 2.4
+      : channel / 12.92;
+  }) as [number, number, number];
+  const f = (value: number) =>
+    value > 0.008856 ? Math.cbrt(value) : 7.787 * value + 16 / 116;
+  const x = f((r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047);
+  const y = f(r * 0.2126 + g * 0.7152 + b * 0.0722);
+  const z = f((r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883);
+  return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
+};
+
+// CIE76 colour difference: below 1 looks the same, 8 and above is clearly different
+export const colourDistance = (a: string, b: string): number => {
+  const [l1, a1, b1] = toLab(a);
+  const [l2, a2, b2] = toLab(b);
+  return Math.hypot(l1 - l2, a1 - a2, b1 - b2);
+};
+
+// what a see-through colour looks like on a white page, to compare like for like
+export const onWhite = (hex: string, alpha = 1): string =>
+  `#${[1, 3, 5]
+    .map((start) =>
+      Math.round(
+        255 - (255 - parseInt(hex.slice(start, start + 2), 16)) * alpha,
+      )
+        .toString(16)
+        .padStart(2, '0'),
+    )
+    .join('')
+    .toUpperCase()}`;
+
+export type Distance = 'same' | 'close' | 'noticeable' | 'far';
+
+export const distanceOf = (difference: number): Distance => {
+  if (difference < 1) return 'same';
+  if (difference < 3) return 'close';
+  if (difference < 8) return 'noticeable';
+  return 'far';
+};
+
+// the opaque CAS primitive nearest to a colour, to suggest a fix to design
+export const closestPrimitive = (
+  hex: string,
+): { primitive: Primitive; difference: number } =>
+  primitives
+    .filter((primitive) => primitive.alpha === 1)
+    .map((primitive) => ({
+      primitive,
+      difference: colourDistance(hex, primitive.hex),
+    }))
+    .reduce((best, candidate) =>
+      candidate.difference < best.difference ? candidate : best,
+    );
+
+export interface ProductionGap {
   figmaName: string;
   product: Product;
-  figma: { hex: string; alias?: string };
-  use: { hex: string; alias?: string };
-  master: string;
+  hex: string;
+  alpha: number;
+  alias?: string;
+  production: string;
+  difference: number;
+  distance: Distance;
 }
 
-// every theme token that asap-overrides.json points somewhere else until design
-// updates Figma, generated so this list can never drift from the code
-export const figmaChanges: FigmaChange[] = themeTokens.flatMap((token) =>
-  (['crn', 'gp2'] as const).flatMap((product) => {
-    const value = token[product];
-    return value.figma && value.master
-      ? [
-          {
-            figmaName: token.figmaName,
-            product,
-            figma: value.figma,
-            use: { hex: value.hex, alias: value.alias },
-            master: value.master,
-          },
-        ]
-      : [];
-  }),
-);
+// every theme token with a known production colour, furthest first
+export const productionGaps: ProductionGap[] = themeTokens
+  .flatMap((token) =>
+    (['crn', 'gp2'] as const).flatMap((product) => {
+      const { hex, alpha, alias, production } = token[product];
+      if (!production) return [];
+      const difference = colourDistance(onWhite(hex, alpha), production);
+      return [
+        {
+          figmaName: token.figmaName,
+          product,
+          hex,
+          alpha,
+          alias,
+          production,
+          difference,
+          distance: distanceOf(difference),
+        },
+      ];
+    }),
+  )
+  .sort((first, second) => second.difference - first.difference);
 
 export const themeTokensByPrimitive = themeTokens.reduce<Map<string, string[]>>(
   (byPrimitive, token) => {
@@ -159,7 +223,7 @@ export const casHex = (codePath: string, product: Product = 'crn'): string => {
     .replace(/\./g, '/');
   return /^(foreground|background|border)\//.test(path)
     ? themeHex(`colour/${path}`, product)
-    : primitiveHexByPath.get(`colour/${path}`) ?? '';
+    : (primitiveHexByPath.get(`colour/${path}`) ?? '');
 };
 
 export interface OldName {

@@ -3,7 +3,12 @@ import { colour } from '@asap-hub/react-components';
 import {
   casHex,
   cssColour,
-  figmaChanges,
+  closestPrimitive,
+  colourDistance,
+  Distance,
+  distanceOf,
+  onWhite,
+  productionGaps,
   oldNames,
   Primitive,
   primitiveRamps,
@@ -26,6 +31,13 @@ import {
   Swatch,
   useCopy,
 } from './ui';
+
+const distanceChip: Record<Distance, 'green' | 'amber' | 'red'> = {
+  same: 'green',
+  close: 'green',
+  noticeable: 'amber',
+  far: 'red',
+};
 
 export default {
   title: 'CAS Design System / Colours',
@@ -223,21 +235,20 @@ export const StartHere = () => (
           and never edit the generated file by hand.
         </li>
         <li>
-          If it stops with &quot;Figma now sets ... remove it from
-          asap-overrides.json&quot;, design has fixed that name: delete the
-          entry from {code('cas-tokens/asap-overrides.json')} and run it again.
-        </li>
-        <li>
           If it stops with &quot;Light mode no longer maps ... to itself&quot;,
           Figma changed what an existing primitive means in Light mode. Check
           with design before adjusting the script.
         </li>
+        <li>
+          Check <i>Design Questions</i>: its distance table shows which names
+          moved closer to or further from production, to report back to design.
+        </li>
       </ol>
       <p style={muted}>
-        {code('asap-overrides.json')} keeps the Hub looking like production
-        while Figma still holds different values for some names. It only points
-        a name at another CAS primitive, never at a typed colour, and each entry
-        is listed in <i>Design Questions</i> as a change we ask of the CAS file.
+        The Hub uses Figma&apos;s values as they are; nothing in the code
+        changes them. {code('production-reference.json')} only records the
+        colour production showed for each name, so Storybook can measure the
+        gap.
       </p>
     </Section>
   </Page>
@@ -340,26 +351,21 @@ export const ThemeTokens = () => {
                         <div style={muted}>var({token.cssVariable})</div>
                       </td>
                       <td style={{ ...cell, ...muted }}>
-                        {(['crn', 'gp2'] as const).map(
-                          (product) =>
-                            token[product].figma && (
-                              <div key={product}>
-                                <Chip kind="amber">
-                                  {product.toUpperCase()} overridden
-                                </Chip>{' '}
-                                Figma{' '}
-                                <Colour
-                                  value={token[product].figma?.hex ?? ''}
-                                  label={`${
-                                    token[product].figma?.alias?.replace(
-                                      'colour/',
-                                      '',
-                                    ) ?? ''
-                                  } ${token[product].figma?.hex}`}
-                                />
-                              </div>
-                            ),
-                        )}
+                        {(['crn', 'gp2'] as const).map((product) => {
+                          const { hex, alpha, production } = token[product];
+                          if (!production) return null;
+                          const distance = distanceOf(
+                            colourDistance(onWhite(hex, alpha), production),
+                          );
+                          return distance === 'same' ? null : (
+                            <div key={product}>
+                              <Chip kind={distanceChip[distance]}>
+                                {product.toUpperCase()} {distance}
+                              </Chip>{' '}
+                              production <Colour value={production} />
+                            </div>
+                          );
+                        })}
                         {token.gp2.hex === token.crn.hex ? (
                           <div>
                             <Colour
@@ -891,7 +897,9 @@ export const DesignQuestions = () => {
   const [changesQuery, setChangesQuery] = useState('');
   const [noMatchQuery, setNoMatchQuery] = useState('');
   const [namesQuery, setNamesQuery] = useState('');
-  const changes = figmaChanges.filter((row) => matches(row, changesQuery));
+  const gaps = productionGaps.filter(
+    (row) => row.distance !== 'same' && matches(row, changesQuery),
+  );
   const noClose = noCloseMatch.filter((row) => matches(row, noMatchQuery));
   const names = missingNames.filter((row) => matches(row, namesQuery));
   return (
@@ -899,12 +907,11 @@ export const DesignQuestions = () => {
       title="Questions for design"
       intro={
         <>
-          The code uses the CAS names from Figma. Where design has reworked a
-          colour, the Hub follows Figma (see <i>Answered by design</i>). Where
-          Figma still holds a value design has not reviewed, the code keeps the
-          closest CAS colour to production ({code('asap-overrides.json')}). Each
-          of those is a change we ask of the CAS file; once Figma is updated,
-          the override is removed.
+          The Hub shows exactly what Figma defines. Production&apos;s colours
+          are kept only as a reference ({code('production-reference.json')}), to
+          show how far each name is from what users see today. Anything
+          noticeably or clearly different is a question for design; once Figma
+          changes, a re-export brings the new value in.
         </>
       }
     >
@@ -953,92 +960,75 @@ export const DesignQuestions = () => {
         </ul>
       </Section>
 
-      <Section title="1. Point these names at the Hub's colours">
+      <Section title="1. Distance from production">
         <p style={{ marginTop: 0 }}>
-          In every row, the name&apos;s colour in Figma today differs from
-          production. <b>Hub uses now</b> is what the code shows until Figma is
-          updated (from {code('asap-overrides.json')}); <b>Ask design</b> is the
-          change we request in Figma. <b>Colour exists in CAS</b>: the palette
-          already has production&apos;s colour, so the fix is to point the name
-          at it. <b>Colour missing from CAS</b>: the palette has no exact match;
-          either add production&apos;s colour or accept the closest one.
+          Every name with a known production colour that the Hub now shows
+          differently, furthest first. <b>Close</b> is hard to tell apart,{' '}
+          <b>noticeable</b> is visible side by side, <b>far</b> is clearly
+          different. <b>Closest CAS colour</b> is the palette colour nearest to
+          production, for when design wants to match it.
         </p>
         <TableSearch
           value={changesQuery}
           onChange={setChangesQuery}
-          placeholder="Search a name, product or hex"
+          placeholder="Search a name, product or distance"
         />
         <table style={table}>
           <thead>
             <tr>
               <th style={headCell}>Name</th>
               <th style={headCell}>Product</th>
-              <th style={headCell}>Figma today</th>
+              <th style={headCell}>Hub (Figma)</th>
               <th style={headCell}>Production</th>
-              <th style={headCell}>Hub uses now</th>
-              <th style={headCell}>Ask design</th>
+              <th style={headCell}>Distance</th>
+              <th style={headCell}>Closest CAS colour</th>
             </tr>
           </thead>
           <tbody>
-            {changes.length === 0 && (
-              <NoMatch columns={6} query={changesQuery} />
+            {gaps.length === 0 && <NoMatch columns={6} query={changesQuery} />}
+            {gaps.map(
+              ({
+                figmaName,
+                product,
+                hex,
+                alpha,
+                alias,
+                production,
+                distance,
+              }) => {
+                const closest = closestPrimitive(production);
+                return (
+                  <tr key={`${figmaName}-${product}`}>
+                    <td style={cell}>{code(figmaName)}</td>
+                    <td style={cell}>{product.toUpperCase()}</td>
+                    <td style={cell}>
+                      <HubSwatch
+                        hex={cssColour(hex, alpha)}
+                        label={`${alias?.replace('colour/', '') ?? ''} ${hex}${
+                          alpha === 1 ? '' : ` at ${Math.round(alpha * 100)}%`
+                        }`}
+                      />
+                    </td>
+                    <td style={cell}>
+                      <HubSwatch hex={production} />
+                    </td>
+                    <td style={cell}>
+                      <Chip kind={distanceChip[distance]}>{distance}</Chip>
+                    </td>
+                    <td style={{ ...cell, ...muted }}>
+                      <Colour
+                        value={closest.primitive.hex}
+                        label={`${closest.primitive.figmaName.replace(
+                          'colour/',
+                          '',
+                        )} ${closest.primitive.hex}`}
+                      />
+                      {closest.difference < 1 && <div>exact match in CAS</div>}
+                    </td>
+                  </tr>
+                );
+              },
             )}
-            {changes.map(({ figmaName, product, figma, use, master }) => {
-              const exact = use.hex.toUpperCase() === master.toUpperCase();
-              return (
-                <tr key={`${figmaName}-${product}`}>
-                  <td style={cell}>{code(figmaName)}</td>
-                  <td style={cell}>{product.toUpperCase()}</td>
-                  <td style={cell}>
-                    <HubSwatch
-                      hex={figma.hex}
-                      label={`${figma.alias?.replace('colour/', '') ?? ''} ${
-                        figma.hex
-                      }`}
-                    />
-                  </td>
-                  <td style={cell}>
-                    <HubSwatch hex={master} />
-                  </td>
-                  <td style={cell}>
-                    <HubSwatch
-                      hex={use.hex}
-                      label={`${use.alias?.replace('colour/', '') ?? ''} ${
-                        use.hex
-                      }`}
-                    />
-                  </td>
-                  <td style={cell}>
-                    {exact ? (
-                      <Chip kind="green">colour exists in CAS</Chip>
-                    ) : (
-                      <Chip kind="amber">colour missing from CAS</Chip>
-                    )}
-                    <div style={muted}>
-                      {exact ? (
-                        <>
-                          Point to{' '}
-                          <Colour
-                            value={use.hex}
-                            label={use.alias?.replace('colour/', '')}
-                          />
-                        </>
-                      ) : (
-                        <>
-                          Add <Colour value={master} />, or accept{' '}
-                          <Colour
-                            value={use.hex}
-                            label={`${use.alias?.replace('colour/', '')} ${
-                              use.hex
-                            }`}
-                          />
-                        </>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
           </tbody>
         </table>
       </Section>
