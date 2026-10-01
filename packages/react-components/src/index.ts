@@ -397,6 +397,7 @@ export {
   noop,
   getIconForDocumentType,
   formatUserLocation,
+  toUserSocialUrl,
   considerEndedAfter,
   getMemberHref,
   withMemberHref,
@@ -441,5 +442,6 @@ export type {
   GroupedProjectMember,
   GroupedTeamMember,
   GroupedUserTeam,
+  UserSocialType,
 } from './utils';
 export type { MetricOption } from './templates/AnalyticsLeadershipPageBody';

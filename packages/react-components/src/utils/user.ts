@@ -32,9 +32,38 @@ const baseUrls = {
   github: 'https://github.com/',
   googleScholar: 'https://scholar.google.com/citations?user=',
   researchGate: 'https://www.researchgate.net/profile/',
+  // Only publons.com translates a legacy numeric id to its ResearcherID;
+  // webofscience.com reads it as someone else's profile.
+  researcherId: 'https://publons.com/researcher/',
 };
 
 export type UserSocialType = keyof typeof baseUrls;
 
 export const formatUserSocial = (social: string, type: UserSocialType) =>
   social.startsWith(baseUrls[type]) ? social.split(baseUrls[type])[1] : social;
+
+export const toUserSocialUrl = (
+  social: string,
+  type: UserSocialType,
+): string => {
+  const value = social.trim();
+  if (!value) {
+    return '';
+  }
+  if (/^https?:\/\//i.test(value)) {
+    return value;
+  }
+  const base = baseUrls[type];
+  const host = base.replace(/^https?:\/\/(www\.)?/, '').replace(/\/.*$/, '');
+  const path = base.replace(/^https?:\/\/[^/]+\//, '');
+  const prefix = [`www.${host}`, host].find((candidate) =>
+    value.toLowerCase().startsWith(candidate),
+  );
+  const handle = (prefix ? value.slice(prefix.length) : value).replace(
+    /^\/+/,
+    '',
+  );
+  return `${base}${
+    handle.startsWith(path) ? handle.slice(path.length) : handle
+  }`;
+};

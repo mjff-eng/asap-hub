@@ -146,7 +146,7 @@ export default class UserController {
       orcid: user.orcid,
       role: user.role,
       degree: user.degree,
-
+      social: user.social,
       stateOrProvince: user.stateOrProvince,
       tags: user.tags,
     } as UserResponse;

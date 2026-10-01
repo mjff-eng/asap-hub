@@ -24,6 +24,17 @@ describe('userToCSV', () => {
       biography: 'A researcher focused on neuroscience.',
       openScienceTeamMember: true,
       alumniSinceDate: '2024-01-15T00:00:00.000Z',
+      social: {
+        website1: 'https://jane.example.com',
+        website2: 'https://lab.example.com',
+        researcherId: 'A-1234-2020',
+        linkedIn: 'janedoe',
+        blueSky: 'jane.bsky.social',
+        twitter: 'janedoe',
+        github: 'jane-doe',
+        googleScholar: 'scholar-id',
+        researchGate: 'Jane_Doe',
+      },
     };
 
     expect(userToCSV(user)).toEqual({
@@ -45,7 +56,33 @@ describe('userToCSV', () => {
       'Alumni Since Date': '2024-01-15T00:00:00.000Z',
       'Team Name': user.teams.map((t) => t.displayName).join(', '),
       Role: user.teams.map((t) => t.role).join(', '),
+      'Website 1': 'https://jane.example.com',
+      'Website 2': 'https://lab.example.com',
+      'Research ID': 'https://publons.com/researcher/A-1234-2020',
+      LinkedIn: 'https://www.linkedin.com/in/janedoe',
+      BlueSky: 'https://bsky.app/profile/jane.bsky.social',
+      Twitter: 'https://twitter.com/janedoe',
+      GitHub: 'https://github.com/jane-doe',
+      'Google Scholar': 'https://scholar.google.com/citations?user=scholar-id',
+      'Research Gate': 'https://www.researchgate.net/profile/Jane_Doe',
     });
+  });
+
+  it('leaves website columns as stored and does not link empty socials', () => {
+    const user = {
+      ...createUserListItemResponse({}, 0),
+      social: {
+        website1: 'https://jane.example.com',
+        researcherId: undefined,
+        linkedIn: '',
+      },
+    };
+
+    const csv = userToCSV(user);
+    expect(csv['Website 1']).toBe('https://jane.example.com');
+    expect(csv['Website 2']).toBe('');
+    expect(csv['Research ID']).toBe('');
+    expect(csv.LinkedIn).toBe('');
   });
 
   it('handles missing optional fields', () => {
@@ -57,6 +94,7 @@ describe('userToCSV', () => {
       contactEmail: undefined,
       biography: undefined,
       alumniSinceDate: undefined,
+      social: undefined,
     };
 
     const csv = userToCSV(user);
@@ -67,6 +105,15 @@ describe('userToCSV', () => {
     expect(csv.Biography).toBe('');
     expect(csv['Alumni Since Date']).toBe('');
     expect(csv['Open Science Member']).toBe('No');
+    expect(csv['Website 1']).toBe('');
+    expect(csv['Website 2']).toBe('');
+    expect(csv['Research ID']).toBe('');
+    expect(csv.LinkedIn).toBe('');
+    expect(csv.BlueSky).toBe('');
+    expect(csv.Twitter).toBe('');
+    expect(csv.GitHub).toBe('');
+    expect(csv['Google Scholar']).toBe('');
+    expect(csv['Research Gate']).toBe('');
   });
 
   it('handles multiple teams', () => {

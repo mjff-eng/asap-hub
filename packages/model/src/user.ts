@@ -207,6 +207,7 @@ export type UserListItemDataObject = Pick<
   | 'role'
   | 'openScienceTeamMember'
   | 'techSupport'
+  | 'social'
   | 'tags'
 > & {
   _tags: string[];
@@ -371,6 +372,7 @@ export const toUserListItem = (user: UserResponse): UserListItemResponse => {
     role,
     openScienceTeamMember,
     techSupport,
+    social,
     teams,
   } = user;
 
@@ -403,6 +405,7 @@ export const toUserListItem = (user: UserResponse): UserListItemResponse => {
     role,
     openScienceTeamMember,
     techSupport,
+    social,
     teams: teams.map((teamItem) => ({
       id: teamItem.id,
       role: teamItem.role,

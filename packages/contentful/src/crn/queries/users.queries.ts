@@ -441,6 +441,17 @@ export const userListItemContentQueryFragment = gql`
     openScienceTeamMember
     techSupport
     orcid
+    userSocials {
+      github
+      googleScholar
+      linkedIn
+      researcherId
+      researchGate
+      twitter
+      blueSky
+      website1
+      website2
+    }
     researchTagsCollection(limit: 20) {
       items {
         sys {
@@ -575,6 +586,17 @@ export const FETCH_USER_BY_ID_FOR_ALGOLIA_LIST = gql`
       openScienceTeamMember
       techSupport
       orcid
+      userSocials {
+        github
+        googleScholar
+        linkedIn
+        researcherId
+        researchGate
+        twitter
+        blueSky
+        website1
+        website2
+      }
       avatar {
         url
       }

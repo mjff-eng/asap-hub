@@ -51,6 +51,7 @@ describe('User index handler', () => {
         biography: 'some bio',
         contactEmail: 'T@rdy.io',
         orcid: '123-456-789',
+        social: { orcid: '123-456-789' },
       },
       type: 'user',
     });
