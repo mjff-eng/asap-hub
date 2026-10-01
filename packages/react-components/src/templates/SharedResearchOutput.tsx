@@ -14,6 +14,11 @@ import { createMailTo, mailToSupport, TECH_SUPPORT_EMAIL } from '../mail';
 import { CtaCard } from '../molecules';
 import {
   ConfirmModal,
+  GrantDocumentGrantsCard,
+  GrantDocumentHeaderCard,
+  GrantDocumentOverviewCard,
+  GrantDocumentPdfCard,
+  GrantDocumentTagsCard,
   OutputVersions,
   RelatedEventsCard,
   RelatedResearchCard,
@@ -37,6 +42,10 @@ import PageConstraints from './PageConstraints';
 const cardsStyles = css({
   display: 'grid',
   rowGap: rem(36),
+});
+
+const grantCardsStyles = css({
+  rowGap: rem(32),
 });
 
 type SharedResearchOutputProps = Pick<
@@ -64,11 +73,13 @@ type SharedResearchOutputProps = Pick<
   | 'relatedManuscriptVersion'
   | 'publishingEntity'
   | 'project'
+  | 'grantDocument'
 > &
   ComponentProps<typeof SharedResearchOutputHeaderCard> & {
     backHref: string;
   } & ComponentProps<typeof SharedResearchAdditionalInformationCard> & {
     toast?: ResearchOutputToast;
+    grantEnded?: boolean;
     projectHasLead?: boolean;
     onRequestReview?: (
       shouldReview: boolean,
@@ -139,6 +150,8 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
   relatedManuscript,
   checkForNewVersion,
   projectHasLead = false,
+  grantDocument,
+  grantEnded = false,
   ...props
 }) => {
   const navigate = useNavigate();
@@ -146,9 +159,19 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
 
   const permissions = useContext(ResearchOutputPermissionsContext);
 
-  const isGrantDocument = ['Grant Document', 'Presentation'].includes(
-    props.documentType,
-  );
+  const isGrantDocumentPage = !!grantDocument;
+  const isGrantDocument =
+    isGrantDocumentPage ||
+    ['Grant Document', 'Presentation'].includes(props.documentType);
+  const supplementOutputId =
+    grantDocument?.grantType === 'original'
+      ? grantDocument.supplement?.researchOutputId
+      : undefined;
+  const supplementGrantHref =
+    supplementOutputId &&
+    sharedResearch({}).researchOutput({ researchOutputId: supplementOutputId })
+      .$;
+  const grantOverview = grantDocument?.[grantDocument.grantType]?.description;
 
   const duplicateLink = getDuplicateLink({ id, ...props });
 
@@ -209,6 +232,20 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
     setDisplayPublishModal(false);
   };
 
+  const tagsCard = (displayDescription || !!tags.length) && (
+    <SharedResearchDetailsTagsCard
+      tags={tags}
+      displayDescription={!!displayDescription}
+      description={description}
+      descriptionMD={descriptionMD}
+      shortDescription={shortDescription}
+      changelog={changelog}
+    />
+  );
+  const versionsCard = versions.length > 0 && (
+    <OutputVersions versions={versions} />
+  );
+
   const checkForNewerManuscriptVersion = async () => {
     const hasNewerVersion = await checkForNewVersion();
     if (hasNewerVersion) {
@@ -235,6 +272,8 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
         isInReview={isInReview}
         projectHasLead={projectHasLead}
         isTeamBasedProject={isTeamBasedProjectOutput}
+        supplementGrantHref={supplementGrantHref}
+        grantEnded={grantEnded}
       />
       <PageConstraints>
         {!isGrantDocument && (
@@ -326,23 +365,28 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
             }}
           />
         )}
-        <div css={cardsStyles}>
-          <SharedResearchOutputHeaderCard
-            {...props}
-            published={published}
-            isInReview={isInReview}
-            isProjectOutput={isProjectOutput}
-          />
-          {(displayDescription || !!tags.length) && (
-            <SharedResearchDetailsTagsCard
-              tags={tags}
-              displayDescription={!!displayDescription}
-              description={description}
-              descriptionMD={descriptionMD}
-              shortDescription={shortDescription}
-              changelog={changelog}
+        <div css={[cardsStyles, isGrantDocumentPage && grantCardsStyles]}>
+          {grantDocument ? (
+            <GrantDocumentHeaderCard
+              title={props.title}
+              documentType={props.documentType}
+              link={props.link}
+              teams={props.teams}
+              addedDate={props.addedDate}
+              created={props.created}
+              lastUpdatedPartial={props.lastUpdatedPartial}
+              grantType={grantDocument.grantType}
+              project={grantDocument.project}
+            />
+          ) : (
+            <SharedResearchOutputHeaderCard
+              {...props}
+              published={published}
+              isInReview={isInReview}
+              isProjectOutput={isProjectOutput}
             />
           )}
+          {!isGrantDocumentPage && tagsCard}
           {!isGrantDocument && hasUsageNotes && (
             <Card>
               <div css={{ paddingBottom: rem(12) }}>
@@ -359,18 +403,43 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
               getIconForDocumentType={getIconForDocumentTypeCRN}
             />
           )}
-          {versions.length > 0 && <OutputVersions versions={versions} />}
+          {!isGrantDocumentPage && versionsCard}
           {!isGrantDocument && (
             <RelatedEventsCard relatedEvents={relatedEvents} truncateFrom={3} />
           )}
           {!isGrantDocument && (
             <SharedResearchAdditionalInformationCard {...props} />
           )}
-          {hasDescription && isGrantDocument && (
-            <Card>
-              <Markdown value={descriptionMD} toc></Markdown>
-              {!descriptionMD && <RichText toc text={description} />}
-            </Card>
+          {grantOverview ? (
+            <GrantDocumentOverviewCard text={grantOverview} />
+          ) : (
+            hasDescription &&
+            isGrantDocument &&
+            (grantDocument ? (
+              <GrantDocumentOverviewCard
+                description={description}
+                descriptionMD={descriptionMD}
+              />
+            ) : (
+              <Card>
+                <Markdown value={descriptionMD} toc></Markdown>
+                {!descriptionMD && <RichText toc text={description} />}
+              </Card>
+            ))
+          )}
+          {grantDocument && (
+            <>
+              {props.link && <GrantDocumentPdfCard link={props.link} />}
+              {grantDocument.supplement && (
+                <GrantDocumentGrantsCard
+                  grantType={grantDocument.grantType}
+                  original={grantDocument.original}
+                  supplement={grantDocument.supplement}
+                />
+              )}
+              {!!tags.length && <GrantDocumentTagsCard tags={tags} />}
+              {versionsCard}
+            </>
           )}
           {!!contactEmails.length && (
             <CtaCard
