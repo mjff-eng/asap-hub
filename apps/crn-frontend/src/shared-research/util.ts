@@ -167,5 +167,5 @@ export const isGrantEnded = (
 ): boolean => {
   const endDate = (grantDocument?.supplement ?? grantDocument?.original)
     ?.endDate;
-  return !!endDate && isAfter(now, endOfDay(parseISO(endDate)));
+  return !!endDate && isAfter(now, endOfDay(parseISO(endDate.slice(0, 10))));
 };

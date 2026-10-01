@@ -7,14 +7,14 @@ const props = {
   original: {
     researchOutputId: 'original-id',
     title: 'Original grant proposal',
-    startDate: '2024-01-01',
-    endDate: '2024-04-01',
+    startDate: '2024-01-01T00:00:00.000Z',
+    endDate: '2024-04-01T00:00:00.000Z',
   },
   supplement: {
     researchOutputId: 'supplement-id',
     title: 'Supplement grant proposal',
-    startDate: '2025-02-01',
-    endDate: '2026-05-01',
+    startDate: '2025-02-01T00:00:00.000-08:00',
+    endDate: '2026-05-01T00:00:00.000-08:00',
   },
 };
 

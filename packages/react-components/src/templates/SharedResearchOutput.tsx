@@ -3,7 +3,12 @@ import {
   getVisibleResearchOutputActions,
   ResearchOutputPermissionsContext,
 } from '@asap-hub/react-context';
-import { network, projectRouteByType, sharedResearch } from '@asap-hub/routing';
+import {
+  dashboard,
+  network,
+  projectRouteByType,
+  sharedResearch,
+} from '@asap-hub/routing';
 import { getResearchOutputEntityType } from '@asap-hub/validation';
 import { css } from '@emotion/react';
 import React, { ComponentProps, useContext, useState } from 'react';
@@ -11,7 +16,7 @@ import { useNavigate } from 'react-router';
 
 import { Card, Headline2, Link, Markdown } from '../atoms';
 import { createMailTo, mailToSupport, TECH_SUPPORT_EMAIL } from '../mail';
-import { CtaCard } from '../molecules';
+import { Breadcrumbs, CtaCard } from '../molecules';
 import {
   ConfirmModal,
   GrantDocumentGrantsCard,
@@ -38,6 +43,7 @@ import {
   getResearchOutputAssociationName,
 } from '../utils';
 import PageConstraints from './PageConstraints';
+import PageInfoContainer from './PageInfoContainer';
 
 const cardsStyles = css({
   display: 'grid',
@@ -275,6 +281,33 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
         supplementGrantHref={supplementGrantHref}
         grantEnded={grantEnded}
       />
+      {grantDocument && (
+        <header>
+          <PageInfoContainer
+            breadcrumbs={
+              <Breadcrumbs
+                homeHref={dashboard({}).$}
+                items={[
+                  { label: 'Shared Research', href: sharedResearch({}).$ },
+                  { label: props.title },
+                ]}
+              />
+            }
+          >
+            <GrantDocumentHeaderCard
+              title={props.title}
+              documentType={props.documentType}
+              link={props.link}
+              teams={props.teams}
+              addedDate={props.addedDate}
+              created={props.created}
+              lastUpdatedPartial={props.lastUpdatedPartial}
+              grantType={grantDocument.grantType}
+              project={grantDocument.project}
+            />
+          </PageInfoContainer>
+        </header>
+      )}
       <PageConstraints>
         {!isGrantDocument && (
           <SharedResearchOutputButtons
@@ -366,19 +399,7 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
           />
         )}
         <div css={[cardsStyles, isGrantDocumentPage && grantCardsStyles]}>
-          {grantDocument ? (
-            <GrantDocumentHeaderCard
-              title={props.title}
-              documentType={props.documentType}
-              link={props.link}
-              teams={props.teams}
-              addedDate={props.addedDate}
-              created={props.created}
-              lastUpdatedPartial={props.lastUpdatedPartial}
-              grantType={grantDocument.grantType}
-              project={grantDocument.project}
-            />
-          ) : (
+          {!grantDocument && (
             <SharedResearchOutputHeaderCard
               {...props}
               published={published}

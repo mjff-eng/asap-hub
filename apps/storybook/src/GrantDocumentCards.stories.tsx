@@ -41,14 +41,14 @@ export const Grants = () => (
     original={{
       researchOutputId: 'original-output',
       title: 'Original grant proposal',
-      startDate: '2021-01-01',
-      endDate: '2024-12-31',
+      startDate: '2021-01-01T00:00:00.000Z',
+      endDate: '2024-12-31T00:00:00.000Z',
     }}
     supplement={{
       researchOutputId: 'supplement-output',
       title: 'Supplement grant proposal',
-      startDate: '2025-01-01',
-      endDate: '2026-12-31',
+      startDate: '2025-01-01T00:00:00.000-08:00',
+      endDate: '2026-12-31T00:00:00.000-08:00',
     }}
   />
 );

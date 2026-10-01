@@ -24,8 +24,8 @@ const originalGrant = {
   title: 'Understanding the molecular mechanisms of Parkinson’s disease',
   description:
     'We hypothesize that the functions of multiple Parkinson’s disease genes converge on common biochemical pathways involving endocytic organelles and/or mitochondria within vulnerable cell types.',
-  startDate: '2021-01-01',
-  endDate: '2024-12-31',
+  startDate: '2021-01-01T00:00:00.000Z',
+  endDate: '2024-12-31T00:00:00.000Z',
 };
 
 const supplementGrant = {
@@ -33,8 +33,8 @@ const supplementGrant = {
   title: 'Supplement grant title',
   description:
     'The supplement extends the original aims to patient-derived neurons.',
-  startDate: '2025-01-01',
-  endDate: '2099-12-31',
+  startDate: '2025-01-01T00:00:00.000-08:00',
+  endDate: '2099-12-31T00:00:00.000-08:00',
 };
 
 const props = (): ComponentProps<typeof SharedResearchOutput> => ({

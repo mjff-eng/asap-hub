@@ -106,12 +106,9 @@ const datesStyles = css({
   marginTop: rem(32),
   color: neutral800.rgb,
   '& > span': smallTextStyles,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
-    flexDirection: 'column',
-  },
 });
 
-const dateSeparatorStyles = css({
+const desktopOnlyStyles = css({
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     display: 'none',
   },
@@ -195,8 +192,10 @@ const GrantDocumentHeaderCard: React.FC<GrantDocumentHeaderCardProps> = ({
       </div>
       <div css={datesStyles}>
         <span>Date Added: {formatDate(new Date(addedDate || created))}</span>
-        <span css={dateSeparatorStyles}>•</span>
-        <span>Last Updated: {formatDate(new Date(lastUpdatedPartial))}</span>
+        <span css={desktopOnlyStyles}>•</span>
+        <span css={desktopOnlyStyles}>
+          Last updated: {formatDate(new Date(lastUpdatedPartial))}
+        </span>
       </div>
     </Card>
   );

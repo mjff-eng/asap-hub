@@ -274,7 +274,10 @@ describe('a grant document with grant data', () => {
         title: 'Grant Project',
         projectType: 'Discovery Project',
       },
-      original: { title: 'Original grant', endDate: '2020-01-01' },
+      original: {
+        title: 'Original grant',
+        endDate: '2020-01-01T00:00:00.000Z',
+      },
     },
   };
 

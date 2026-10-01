@@ -36,7 +36,7 @@ describe('GrantDocumentHeaderCard', () => {
     );
     expect(screen.getByRole('link', { name: 'Team Alpha' })).toBeVisible();
     expect(screen.getByText('Date Added: 10th March 2024')).toBeVisible();
-    expect(screen.getByText('Last Updated: 20th June 2024')).toBeVisible();
+    expect(screen.getByText('Last updated: 20th June 2024')).toBeVisible();
   });
 
   it('links to the output', () => {

@@ -1,5 +1,11 @@
 import { ComponentProps, useEffect } from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createResearchOutputResponse } from '@asap-hub/fixtures';
 import { ResearchOutputPermissionsContext } from '@asap-hub/react-context';
@@ -236,6 +242,18 @@ describe('Grant Document page', () => {
     expect(screen.getByRole('link', { name: 'Project title' })).toHaveAttribute(
       'href',
       '/projects/discovery/project-id',
+    );
+  });
+
+  it('renders breadcrumbs to shared research above the header', () => {
+    renderGrantPage();
+    const breadcrumbs = screen.getByRole('navigation', { name: 'breadcrumbs' });
+    expect(
+      within(breadcrumbs).getByRole('link', { name: 'Shared Research' }),
+    ).toHaveAttribute('href', '/shared-research');
+    expect(within(breadcrumbs).getByText('Grant title')).toHaveAttribute(
+      'aria-current',
+      'page',
     );
   });
 
