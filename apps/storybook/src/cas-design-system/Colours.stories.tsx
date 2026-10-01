@@ -1163,9 +1163,9 @@ export const DesignQuestions = () => {
         <p>Still below the minimum:</p>
         <ul style={{ paddingLeft: '20px' }}>
           <li>
-            White text on the primary button: CRN{' '}
-            <ContrastBadge foreground="#FFFFFF" background="#309466" />, GP2{' '}
-            <ContrastBadge foreground="#FFFFFF" background="#0681B2" />. Button
+            Button text ({code('neutral/25')}) on the primary button: CRN{' '}
+            <ContrastBadge foreground="#FCFCFD" background="#309466" />, GP2{' '}
+            <ContrastBadge foreground="#FCFCFD" background="#0681B2" />. Button
             labels are 14px bold, which counts as normal text.
           </li>
           <li>
@@ -1174,15 +1174,19 @@ export const DesignQuestions = () => {
             <ContrastBadge foreground="#0681B2" background="#D3E9F3" />.
           </li>
           <li>
-            Hint text:{' '}
-            <ContrastBadge foreground="#C5CACE" background="#FFFFFF" />.
+            Hint and disabled text ({code('neutral/300')}):{' '}
+            <ContrastBadge foreground="#A6AEB4" background="#FFFFFF" />.
           </li>
         </ul>
         <p>
-          Move these one shade darker (brand/700 passes on white: CRN{' '}
-          <ContrastBadge foreground="#FFFFFF" background="#2C865C" />, GP2{' '}
-          <ContrastBadge foreground="#FFFFFF" background="#0375A2" />
-          ), or accept them?
+          Move these darker, or accept them? For the buttons, GP2 passes one
+          shade darker ({code('brand/gp2/700')}{' '}
+          <ContrastBadge foreground="#FCFCFD" background="#0375A2" />
+          ), while CRN needs two ({code('brand/crn/700')}{' '}
+          <ContrastBadge foreground="#FCFCFD" background="#2C865C" />,{' '}
+          {code('brand/crn/800')}{' '}
+          <ContrastBadge foreground="#FCFCFD" background="#287953" />
+          ).
         </p>
       </Section>
 
