@@ -1023,7 +1023,9 @@ export const DesignQuestions = () => {
                           '',
                         )} ${closest.primitive.hex}`}
                       />
-                      {closest.difference < 1 && <div>exact match in CAS</div>}
+                      {closest.primitive.hex === production.toUpperCase() && (
+                        <div>exact match in CAS</div>
+                      )}
                     </td>
                   </tr>
                 );
