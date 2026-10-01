@@ -300,7 +300,7 @@ type AssociationRowProps = {
   separator?: string;
 };
 
-const AssociationRow: React.FC<AssociationRowProps> = ({
+export const AssociationRow: React.FC<AssociationRowProps> = ({
   icon,
   items,
   max,
