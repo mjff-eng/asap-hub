@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import TagList from '../TagList';
@@ -104,4 +104,11 @@ describe('when capped', () => {
       'Adult Neurology',
     ]);
   });
+});
+
+it('lays out a fixed number of tags per line', () => {
+  render(
+    <TagList tags={['One', 'Two']} large perLine={{ desktop: 4, mobile: 2 }} />,
+  );
+  expect(screen.getByRole('list')).toHaveStyle({ display: 'grid' });
 });
