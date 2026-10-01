@@ -1707,7 +1707,7 @@ describe('Events Contentful Data Provider', () => {
         },
       });
 
-      test('updates the speakers of each team whose value changed', async () => {
+      test('updates each requested speaker whose value changed', async () => {
         const eventEntry = getEntry(
           {
             speakers: {
@@ -1764,8 +1764,9 @@ describe('Events Contentful Data Provider', () => {
 
         await eventDataProvider.updateEventDetails('123', {
           preliminaryDataShared: [
-            { teamId: 'team-1', shared: true },
-            { teamId: 'team-2', shared: false },
+            { speakerId: 'speaker-1', shared: true },
+            { speakerId: 'speaker-2', shared: true },
+            { speakerId: 'speaker-3', shared: false },
           ],
         });
 
@@ -1807,7 +1808,7 @@ describe('Events Contentful Data Provider', () => {
           .mockResolvedValueOnce(graphqlSpeakers([['speaker-1', true]]));
 
         await eventDataProvider.updateEventDetails('123', {
-          preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+          preliminaryDataShared: [{ speakerId: 'speaker-1', shared: true }],
         });
 
         expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(3);
@@ -1838,14 +1839,14 @@ describe('Events Contentful Data Provider', () => {
           );
 
         await eventDataProvider.updateEventDetails('123', {
-          preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+          preliminaryDataShared: [{ speakerId: 'speaker-1', shared: true }],
         });
 
         expect(patchAndPublish).not.toHaveBeenCalled();
         expect(contentfulGraphqlClientMock.request).not.toHaveBeenCalled();
       });
 
-      test('leaves speakers of teams not in the request and speakers without a team untouched', async () => {
+      test('leaves speakers not in the request untouched and ignores ids not linked to the event', async () => {
         const eventEntry = getEntry(
           {
             speakers: {
@@ -1878,10 +1879,13 @@ describe('Events Contentful Data Provider', () => {
           );
 
         await eventDataProvider.updateEventDetails('123', {
-          preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+          preliminaryDataShared: [{ speakerId: 'speaker-9', shared: true }],
         });
 
         expect(patchAndPublish).not.toHaveBeenCalled();
+        expect(environmentMock.getEntry).not.toHaveBeenCalledWith('speaker-1');
+        expect(environmentMock.getEntry).not.toHaveBeenCalledWith('speaker-2');
+        expect(environmentMock.getEntry).not.toHaveBeenCalledWith('speaker-9');
       });
 
       test('does not update speakers that are being removed', async () => {
@@ -1923,7 +1927,10 @@ describe('Events Contentful Data Provider', () => {
 
         await eventDataProvider.updateEventDetails('123', {
           speakersToRemove: ['speaker-1'],
-          preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+          preliminaryDataShared: [
+            { speakerId: 'speaker-1', shared: true },
+            { speakerId: 'speaker-2', shared: true },
+          ],
         });
 
         expect(patchAndPublish).toHaveBeenCalledWith(speakerToKeep, {
@@ -1953,7 +1960,7 @@ describe('Events Contentful Data Provider', () => {
           .mockRejectedValue(new Error('gone'));
 
         await eventDataProvider.updateEventDetails('123', {
-          preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+          preliminaryDataShared: [{ speakerId: 'speaker-1', shared: true }],
         });
 
         expect(warnSpy).toHaveBeenCalled();
@@ -1968,7 +1975,7 @@ describe('Events Contentful Data Provider', () => {
           .mockResolvedValue(eventEntry);
 
         await eventDataProvider.updateEventDetails('123', {
-          preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+          preliminaryDataShared: [{ speakerId: 'speaker-1', shared: true }],
         });
 
         expect(patchAndPublish).not.toHaveBeenCalled();

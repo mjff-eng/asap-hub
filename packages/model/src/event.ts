@@ -144,7 +144,7 @@ export type EventAttendanceUpdateItem = {
 };
 
 export type EventPreliminaryDataSharingUpdateItem = {
-  teamId: string;
+  speakerId: string;
   shared: boolean;
 };
 

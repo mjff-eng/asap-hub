@@ -1,9 +1,5 @@
 import { EventUpdateDetailsRequest } from '@asap-hub/model';
-import {
-  groupFindings,
-  SpeakerGroup,
-  SpeakerTeamGroup,
-} from '@asap-hub/react-components';
+import { SpeakerGroup, SpeakerTeamGroup } from '@asap-hub/react-components';
 
 const collectSpeakerIds = (groups: SpeakerGroup[]): Set<string> =>
   new Set(
@@ -27,15 +23,20 @@ export const mapGroupsToSpeakersUpdate = (
   }
 
   const preliminaryDataShared = saved
-    .filter((group): group is SpeakerTeamGroup => group.variant === 'team')
-    .map((group) => ({
-      teamId: group.id,
-      // A guest is never persisted, and the flag re-seeds onto every real
-      // member on the next read.
-      shared: groupFindings({
-        users: group.users.filter((user) => !user.isExternal),
-      }).hasAnyShared,
-    }));
+    .filter(
+      (group): group is SpeakerTeamGroup =>
+        group.variant === 'team' || group.variant === 'project',
+    )
+    .flatMap((group) =>
+      group.users
+        .filter((user) => !user.isExternal)
+        .flatMap((user) =>
+          (user.speakerIds ?? []).map((speakerId) => ({
+            speakerId,
+            shared: user.preliminaryFindingsShared,
+          })),
+        ),
+    );
 
   return { speakersToRemove, preliminaryDataShared };
 };

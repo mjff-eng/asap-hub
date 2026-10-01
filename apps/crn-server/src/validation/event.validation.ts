@@ -85,10 +85,10 @@ const eventUpdateDetailsValidationSchema: JSONSchemaType<EventUpdateDetailsReque
         items: {
           type: 'object',
           properties: {
-            teamId: { type: 'string' },
+            speakerId: { type: 'string' },
             shared: { type: 'boolean' },
           },
-          required: ['teamId', 'shared'],
+          required: ['speakerId', 'shared'],
           additionalProperties: false,
         },
       },

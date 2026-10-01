@@ -531,13 +531,16 @@ export class EventContentfulDataProvider implements EventDataProvider {
     >,
     speakersToRemove: string[],
   ): Promise<SpeakerPreliminaryDataSharedUpdate[]> {
-    const sharedByTeamId = new Map(
-      preliminaryDataShared.map(({ teamId, shared }) => [teamId, shared]),
+    const sharedBySpeakerId = new Map(
+      preliminaryDataShared.map(({ speakerId, shared }) => [speakerId, shared]),
     );
     const removeSet = new Set(speakersToRemove);
     const speakerLinks: Link<'Entry'>[] = (
       event.fields.speakers?.['en-US'] || []
-    ).filter((link: Link<'Entry'>) => !removeSet.has(link.sys.id));
+    ).filter(
+      (link: Link<'Entry'>) =>
+        !removeSet.has(link.sys.id) && sharedBySpeakerId.has(link.sys.id),
+    );
 
     const updates = await Promise.all(
       speakerLinks.map(
@@ -553,8 +556,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
             return null;
           }
 
-          const teamId = speakerEntry.fields.team?.['en-US']?.sys?.id;
-          const shared = teamId ? sharedByTeamId.get(teamId) : undefined;
+          const shared = sharedBySpeakerId.get(link.sys.id);
           if (
             shared === undefined ||
             speakerEntry.fields.preliminaryDataShared?.['en-US'] === shared

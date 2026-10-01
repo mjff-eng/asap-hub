@@ -984,7 +984,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
           id,
           {
             speakersToRemove: [],
-            preliminaryDataShared: [{ teamId: 't1', shared: true }],
+            preliminaryDataShared: [{ speakerId: 'es-1', shared: true }],
           },
           expect.anything(),
         ),
