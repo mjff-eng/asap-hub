@@ -1,5 +1,5 @@
 import { ComponentProps, useEffect } from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createResearchOutputResponse } from '@asap-hub/fixtures';
 import { ResearchOutputPermissionsContext } from '@asap-hub/react-context';
@@ -177,6 +177,222 @@ describe('Grant Documents', () => {
       />,
     );
     expect(queryByText(/additional information/i)).not.toBeInTheDocument();
+  });
+});
+
+describe('Grant Document page', () => {
+  const originalGrant = {
+    researchOutputId: 'original-id',
+    title: 'Original grant',
+    description: 'Original grant overview',
+  };
+  const supplementGrant = {
+    researchOutputId: 'supplement-id',
+    title: 'Supplement grant',
+    description: 'Supplement grant overview',
+  };
+  const project = {
+    id: 'project-id',
+    title: 'Project title',
+    projectType: 'Discovery Project' as const,
+  };
+  const grantProps: ComponentProps<typeof SharedResearchOutput> = {
+    ...props,
+    id: 'original-id',
+    documentType: 'Grant Document',
+    type: 'Proposal',
+    title: 'Grant title',
+    description: 'Output description',
+    link: 'https://example.com/grant.pdf',
+    grantDocument: {
+      grantType: 'original',
+      project,
+      original: originalGrant,
+    },
+  };
+  const supplementToastText = /This is an original grant proposal/;
+  const renderGrantPage = (
+    overrides: Partial<ComponentProps<typeof SharedResearchOutput>> = {},
+  ) =>
+    renderWithRouter(<SharedResearchOutput {...grantProps} {...overrides} />);
+
+  it('keeps the current layout for a grant document without grant data', () => {
+    renderGrantPage({ grantDocument: undefined });
+    expect(screen.getByText('Output description')).toBeVisible();
+    expect(screen.queryByText('Project Output')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Overview' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders the project output header from the grant document', () => {
+    renderGrantPage();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Grant title' }),
+    ).toBeVisible();
+    expect(screen.getByText('Project Output')).toBeVisible();
+    expect(screen.getByText('Original')).toBeVisible();
+    expect(screen.queryByText('Proposal')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Project title' })).toHaveAttribute(
+      'href',
+      '/projects/discovery/project-id',
+    );
+  });
+
+  it('uses the grant page layout for any output linked as a grant proposal', () => {
+    renderGrantPage({
+      documentType: 'Article',
+    });
+    expect(screen.getByText('Project Output')).toBeVisible();
+    expect(
+      screen.queryByRole('heading', { name: 'Additional Information' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders the overview from the current grant description', () => {
+    const { rerender } = renderGrantPage();
+    expect(screen.getByText('Original grant overview')).toBeVisible();
+    expect(screen.queryByText('Output description')).not.toBeInTheDocument();
+
+    rerender(
+      <MemoryRouter>
+        <SharedResearchOutput
+          {...grantProps}
+          id="supplement-id"
+          grantDocument={{
+            grantType: 'supplement',
+            project,
+            original: originalGrant,
+            supplement: supplementGrant,
+          }}
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('Supplement grant overview')).toBeVisible();
+  });
+
+  it('falls back to the output description without a grant description', () => {
+    renderGrantPage({
+      grantDocument: {
+        grantType: 'original',
+        project,
+        original: { ...originalGrant, description: undefined },
+      },
+    });
+    expect(screen.getByRole('heading', { name: 'Overview' })).toBeVisible();
+    expect(screen.getByText('Output description')).toBeVisible();
+  });
+
+  it('renders only the tags in the tags card', () => {
+    renderGrantPage({
+      keywords: ['tag1'],
+      shortDescription: 'Short description',
+      changelog: 'Changelog entry',
+    });
+    expect(screen.getByText('tag1')).toBeVisible();
+    expect(screen.queryByText('Short description')).not.toBeInTheDocument();
+    expect(screen.queryByText('Changelog entry')).not.toBeInTheDocument();
+  });
+
+  it('renders the cards in the design order', () => {
+    renderGrantPage({
+      keywords: ['tag1'],
+      versions: [
+        { id: 'v1', documentType: 'Grant Document', title: 'Old version' },
+      ],
+      grantDocument: {
+        grantType: 'original',
+        project,
+        original: originalGrant,
+        supplement: supplementGrant,
+      },
+    });
+    const headings = screen
+      .getAllByRole('heading', { level: 2 })
+      .map(({ textContent }) => textContent);
+    expect(headings).toEqual([
+      'Overview',
+      'Grant Document PDF',
+      'Grants',
+      'Tags',
+      'Version History',
+    ]);
+  });
+
+  it('embeds the output link as a PDF only when there is a link', () => {
+    const { rerender } = renderGrantPage();
+    expect(screen.getByTitle('Grant Document PDF')).toHaveAttribute(
+      'src',
+      'https://example.com/grant.pdf',
+    );
+
+    rerender(
+      <MemoryRouter>
+        <SharedResearchOutput {...grantProps} link={undefined} />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByTitle('Grant Document PDF')).not.toBeInTheDocument();
+  });
+
+  it('renders the grants card only when there is a supplement grant', () => {
+    const { rerender } = renderGrantPage();
+    expect(
+      screen.queryByRole('heading', { name: 'Grants' }),
+    ).not.toBeInTheDocument();
+
+    rerender(
+      <MemoryRouter>
+        <SharedResearchOutput
+          {...grantProps}
+          grantDocument={{
+            grantType: 'original',
+            project,
+            original: originalGrant,
+            supplement: supplementGrant,
+          }}
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.getByRole('heading', { name: 'Grants' })).toBeVisible();
+  });
+
+  it('shows the supplement toast only on the original grant with a supplement output', () => {
+    const grantDocument = {
+      grantType: 'original' as const,
+      project,
+      original: originalGrant,
+      supplement: supplementGrant,
+    };
+    const { rerender } = renderGrantPage({
+      grantDocument,
+    });
+    expect(screen.getByText(supplementToastText)).toBeVisible();
+    expect(
+      screen.getByRole('link', { name: 'supplement version' }),
+    ).toHaveAttribute('href', '/shared-research/supplement-id');
+
+    rerender(
+      <MemoryRouter>
+        <SharedResearchOutput
+          {...grantProps}
+          grantDocument={{ ...grantDocument, grantType: 'supplement' }}
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByText(supplementToastText)).not.toBeInTheDocument();
+
+    rerender(
+      <MemoryRouter>
+        <SharedResearchOutput
+          {...grantProps}
+          grantDocument={{
+            ...grantDocument,
+            supplement: { ...supplementGrant, researchOutputId: undefined },
+          }}
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByText(supplementToastText)).not.toBeInTheDocument();
   });
 });
 
