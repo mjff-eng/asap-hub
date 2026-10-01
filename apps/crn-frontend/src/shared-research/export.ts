@@ -36,6 +36,7 @@ type ResearchOutputCSV = Record<
       | 'versions'
       | 'relatedManuscriptVersion'
       | 'relatedManuscript'
+      | 'grantDocument'
     > &
       FirstVersionCSV)
   | 'projectId',
