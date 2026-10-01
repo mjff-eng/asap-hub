@@ -12,6 +12,7 @@ import {
   ResearchOutputPermissions,
   ResearchOutputPermissionsContext,
   useCurrentUserCRN,
+  useFlags,
 } from '@asap-hub/react-context';
 import { sharedResearch, useRouteParams } from '@asap-hub/routing';
 import { getResearchOutputEntityType } from '@asap-hub/validation';
@@ -39,6 +40,7 @@ import {
   useResearchOutputPermissions,
   useTeamOutputPermissions,
 } from './state';
+import { isGrantEnded } from './util';
 
 const ProjectOutputPermissionsGate: React.FC<{
   projectId: string;
@@ -126,6 +128,10 @@ const ResearchOutput: React.FC = () => {
   ]);
 
   const researchOutputData = useResearchOutputById(researchOutputId);
+  const { isEnabled } = useFlags();
+  const grantDocument = isEnabled('STAGING_MODE')
+    ? researchOutputData?.grantDocument
+    : undefined;
 
   const backHref = useBackHref() ?? sharedResearch({}).$;
 
@@ -234,6 +240,8 @@ const ResearchOutput: React.FC = () => {
         {toast === 'published' && <ScrollToTop />}
         <SharedResearchOutput
           {...researchOutputData}
+          grantDocument={grantDocument}
+          grantEnded={isGrantEnded(grantDocument)}
           projectHasLead={hasLead}
           backHref={backHref}
           onRequestReview={(shouldReview) =>
