@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { tags as tagsRoute } from '@asap-hub/routing';
 
-import { rem, tabletScreen } from '../pixels';
+import { mobileScreen, rem, tabletScreen } from '../pixels';
 import { Tag } from '../atoms';
 
 const listStyles = css({
@@ -58,6 +58,27 @@ const summarizedListItemStyles = (min: number, max: number) =>
     },
   });
 
+type TagsPerLine = { desktop: number; mobile: number };
+
+const perLineListStyles = ({ desktop, mobile }: TagsPerLine) =>
+  css({
+    display: 'grid',
+    gridTemplateColumns: `repeat(${desktop}, minmax(0, max-content))`,
+    justifyItems: 'start',
+    columnGap: rem(8),
+    rowGap: rem(16),
+    // let tags shrink into their column and truncate instead of overflowing it
+    '& > li, & > li a': {
+      minWidth: 0,
+    },
+    '& > li': {
+      maxWidth: '100%',
+    },
+    [`@media (max-width: ${mobileScreen.max}px)`]: {
+      gridTemplateColumns: `repeat(${mobile}, minmax(0, max-content))`,
+    },
+  });
+
 const overflowContentStyles = css({
   '::after': {
     content: '"+" counter(tags)',
@@ -72,6 +93,8 @@ interface TagListProps {
   max?: number;
   centerContent?: boolean;
   noMargin?: boolean;
+  large?: boolean;
+  perLine?: TagsPerLine;
 }
 
 const TagList: React.FC<TagListProps> = ({
@@ -81,6 +104,8 @@ const TagList: React.FC<TagListProps> = ({
   enabled = true,
   centerContent = false,
   noMargin = false,
+  large = false,
+  perLine,
 }) =>
   tags.length ? (
     <ul
@@ -89,18 +114,24 @@ const TagList: React.FC<TagListProps> = ({
         { counterReset: `tags ${tags.length}` },
         centerContent && centerListStyles,
         noMargin && { margin: 0 },
+        perLine && perLineListStyles(perLine),
       ]}
     >
       {tags.map((tag, index) => (
         <li
           key={index}
           css={[
-            normalListItemStyles,
+            !perLine && normalListItemStyles,
             summarizedListItemStyles(min, max),
             centerContent && centredItemStyles,
           ]}
         >
-          <Tag title={tag} href={tagsRoute({ tag }).$} enabled={enabled}>
+          <Tag
+            title={tag}
+            href={tagsRoute({ tag }).$}
+            enabled={enabled}
+            large={large}
+          >
             {tag}
           </Tag>
         </li>
