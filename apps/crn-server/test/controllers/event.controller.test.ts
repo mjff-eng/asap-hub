@@ -134,7 +134,7 @@ describe('Event controller', () => {
 
       const payload = {
         speakersToRemove: ['speaker-1'],
-        preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+        preliminaryDataShared: [{ speakerId: 'speaker-2', shared: true }],
       };
       const result = await eventController.updateEventDetails('7', payload);
 

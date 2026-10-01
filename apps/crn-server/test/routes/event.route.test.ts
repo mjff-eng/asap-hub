@@ -312,7 +312,7 @@ describe('/events/ routes', () => {
     describe('speakers', () => {
       const speakersPayload = {
         speakersToRemove: ['speaker-1'],
-        preliminaryDataShared: [{ teamId: 'team-1', shared: true }],
+        preliminaryDataShared: [{ speakerId: 'speaker-2', shared: true }],
       };
 
       test('Should update speakers and preliminary data sharing for a project manager of the hosting interest group', async () => {
@@ -392,7 +392,7 @@ describe('/events/ routes', () => {
     test('Should return a validation error when a preliminary data sharing item is missing required fields', async () => {
       const response = await supertest(app)
         .patch('/events/123')
-        .send({ preliminaryDataShared: [{ teamId: 'team-1' }] });
+        .send({ preliminaryDataShared: [{ speakerId: 'speaker-1' }] });
 
       expect(response.status).toBe(400);
     });
