@@ -171,7 +171,7 @@
     "serverless-offline-aws-eventbridge": "2.2.4",
     "serverless-offline-ssm": "^6.2.0",
     "serverless-s3-sync": "3.2.0",
-    "stream-json": "1.8.0",
+    "stream-json": "3.5.0",
     "supertest": "6.3.3",
     "yargs": "17.3.1"
   },
