@@ -223,7 +223,7 @@ export const casHex = (codePath: string, product: Product = 'crn'): string => {
     .replace(/\./g, '/');
   return /^(foreground|background|border)\//.test(path)
     ? themeHex(`colour/${path}`, product)
-    : (primitiveHexByPath.get(`colour/${path}`) ?? '');
+    : primitiveHexByPath.get(`colour/${path}`) ?? '';
 };
 
 export interface OldName {
