@@ -274,6 +274,7 @@ export const appFactory = (libs: Libs = {}): Express => {
     new EventContentfulDataProvider(
       contentfulGraphQLClient,
       getContentfulRestClientFactory,
+      new AlertsSentry(Sentry.captureException.bind(Sentry)),
     );
 
   const tutorialDataProvider =

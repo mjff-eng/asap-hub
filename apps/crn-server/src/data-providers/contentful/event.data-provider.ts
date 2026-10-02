@@ -51,7 +51,7 @@ import {
   isTeamType,
   ListEventDataObject,
 } from '@asap-hub/model';
-import { parseUserDisplayName } from '@asap-hub/server-common';
+import { Alerts, parseUserDisplayName } from '@asap-hub/server-common';
 import { DateTime } from 'luxon';
 
 import { parseCalendarDataObjectToResponse } from '../../controllers/calendar.controller';
@@ -88,7 +88,14 @@ export class EventContentfulDataProvider implements EventDataProvider {
   constructor(
     private contentfulClient: GraphQLClient,
     private getRestClient: () => Promise<Environment>,
+    private alerts?: Alerts,
   ) {}
+
+  private reportEventWithoutCalendar = (id: string) => {
+    const message = `Event (${id}) skipped because it has no published calendar`;
+    logger.error(message);
+    void this.alerts?.error(new Error(message));
+  };
 
   private fetchEventById(id: string) {
     return this.contentfulClient.request<
@@ -105,6 +112,12 @@ export class EventContentfulDataProvider implements EventDataProvider {
     }
 
     const event = parseGraphQLEvent(events);
+
+    if (!event) {
+      this.reportEventWithoutCalendar(id);
+      return null;
+    }
+
     const previousEventAttendance =
       await this.fetchPreviousEventAttendance(events);
 
@@ -173,7 +186,10 @@ export class EventContentfulDataProvider implements EventDataProvider {
         users?.linkedFrom?.eventSpeakersCollection?.items[0]?.linkedFrom
           ?.eventsCollection;
 
-      return getEventDataObject(eventsCollection);
+      return getEventDataObject(
+        eventsCollection,
+        this.reportEventWithoutCalendar,
+      );
     }
 
     if (filter?.externalAuthorId) {
@@ -190,7 +206,10 @@ export class EventContentfulDataProvider implements EventDataProvider {
         externalAuthors?.linkedFrom?.eventSpeakersCollection?.items[0]
           ?.linkedFrom?.eventsCollection;
 
-      return getEventDataObject(eventsCollection);
+      return getEventDataObject(
+        eventsCollection,
+        this.reportEventWithoutCalendar,
+      );
     }
 
     if (filter?.teamId) {
@@ -207,7 +226,10 @@ export class EventContentfulDataProvider implements EventDataProvider {
         teams?.linkedFrom?.eventSpeakersCollection?.items[0]?.linkedFrom
           ?.eventsCollection;
 
-      return getEventDataObject(eventsCollection);
+      return getEventDataObject(
+        eventsCollection,
+        this.reportEventWithoutCalendar,
+      );
     }
 
     const getOrderFilter = () => {
@@ -288,7 +310,10 @@ export class EventContentfulDataProvider implements EventDataProvider {
       },
     });
 
-    return getEventDataObject(eventsCollection);
+    return getEventDataObject(
+      eventsCollection,
+      this.reportEventWithoutCalendar,
+    );
   }
 
   async create(create: EventCreateDataObject): Promise<string> {
@@ -731,9 +756,9 @@ export const parseGraphQLPreliminaryDataShared = (
     [],
   );
 
-export const parseGraphQLEvent = (item: EventItem): EventDataObject => {
+export const parseGraphQLEvent = (item: EventItem): EventDataObject | null => {
   if (!item.calendar) {
-    throw new Error(`Event (${item.sys.id}) doesn't have a calendar"`);
+    return null;
   }
 
   if (item.status && !isEventStatus(item.status)) {
@@ -907,6 +932,7 @@ export const parseGraphQLEvent = (item: EventItem): EventDataObject => {
 
 const getEventDataObject = (
   eventsCollection: FetchEventsQuery['eventsCollection'],
+  onEventWithoutCalendar: (id: string) => void,
 ) => {
   if (!eventsCollection?.items) {
     return {
@@ -915,10 +941,18 @@ const getEventDataObject = (
     };
   }
 
+  const items = eventsCollection.items.filter(
+    (x): x is EventItem => x !== null,
+  );
+
+  items
+    .filter((item) => !item.calendar)
+    .forEach((item) => onEventWithoutCalendar(item.sys.id));
+
   return {
     total: eventsCollection.total,
-    items: eventsCollection.items
-      .filter((x): x is EventItem => x !== null)
-      .map(parseGraphQLEvent),
+    items: items
+      .map(parseGraphQLEvent)
+      .filter((event): event is EventDataObject => event !== null),
   };
 };
