@@ -209,11 +209,18 @@ const rowStyles = css(resetButtonStyles, selectableStyles, {
   padding: rem(2),
 });
 
+const yearListWrapperStyles = css({
+  padding: `${rem(12)} 0`,
+});
+
 const yearListStyles = css(listResetStyles, {
   display: 'flex',
   flexDirection: 'column',
-  padding: `${rem(12)} 0`,
   gap: rem(8),
+  maxHeight: rem(216),
+  overflowY: 'auto',
+  marginRight: rem(-16),
+  paddingRight: rem(16),
 });
 
 const selectionMarkerStyles = css({
@@ -321,45 +328,47 @@ const EventMonthFilter: React.FC<EventMonthFilterProps> = ({
 
       {isYearView ? (
         <>
-          <ul css={yearListStyles}>
-            {years.map((listYear) => {
-              const count = yearCounts[listYear] ?? 0;
-              return (
-                <li key={listYear}>
-                  <button
-                    type="button"
-                    css={rowStyles}
-                    disabled={count === 0}
-                    onClick={() => {
-                      onChangeYear(listYear);
-                      setView('months');
-                    }}
-                  >
-                    <span css={[labelStyles, yearLabelStyles]}>
-                      {hasSelectionInYear(selection, listYear) && (
-                        <span
-                          css={selectionMarkerStyles}
-                          aria-label="Has selection"
-                        >
-                          ●
-                        </span>
-                      )}
-                      <span>{listYear}</span>
-                    </span>
-                    <span
-                      css={[
-                        countStyles,
-                        hasSelectionInYear(selection, listYear) &&
-                          yearSelectedCountStyles,
-                      ]}
+          <div css={yearListWrapperStyles}>
+            <ul css={yearListStyles}>
+              {years.map((listYear) => {
+                const count = yearCounts[listYear] ?? 0;
+                return (
+                  <li key={listYear}>
+                    <button
+                      type="button"
+                      css={rowStyles}
+                      disabled={count === 0}
+                      onClick={() => {
+                        onChangeYear(listYear);
+                        setView('months');
+                      }}
                     >
-                      {formatCount(count)}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                      <span css={[labelStyles, yearLabelStyles]}>
+                        {hasSelectionInYear(selection, listYear) && (
+                          <span
+                            css={selectionMarkerStyles}
+                            aria-label="Has selection"
+                          >
+                            ●
+                          </span>
+                        )}
+                        <span>{listYear}</span>
+                      </span>
+                      <span
+                        css={[
+                          countStyles,
+                          hasSelectionInYear(selection, listYear) &&
+                            yearSelectedCountStyles,
+                        ]}
+                      >
+                        {formatCount(count)}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
           <div css={[footerStyles, clearAllStyles]}>
             <Button linkStyle onClick={() => onChangeSelection(new Set())}>
               <span css={css({ fontWeight: 'bold' })}>Clear all</span>

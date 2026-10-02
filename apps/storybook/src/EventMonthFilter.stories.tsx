@@ -29,10 +29,19 @@ const monthCountsByYear: Record<number, MonthCounts> = {
   2026: { 0: 7, 1: 1, 3: 10, 4: 5, 5: 3, 8: 1 },
 };
 
+const manyYearCounts: Record<number, number> = Object.fromEntries(
+  Array.from({ length: 15 }, (_, index) => {
+    const listYear = 2012 + index;
+    return [listYear, yearCounts[listYear as keyof typeof yearCounts] ?? 9];
+  }),
+);
+
 const Template = ({
   initialSelection = [],
+  yearCounts: templateYearCounts = yearCounts,
 }: {
   initialSelection?: string[];
+  yearCounts?: Record<number, number>;
 }) => {
   const [year, setYear] = useState(2026);
   const [selection, setSelection] = useState<EventMonthFilterSelection>(
@@ -50,8 +59,11 @@ const Template = ({
     >
       <EventMonthFilter
         year={year}
-        yearCounts={yearCounts}
-        monthCounts={monthCountsByYear[year] ?? {}}
+        yearCounts={templateYearCounts}
+        monthCounts={
+          monthCountsByYear[year] ??
+          (year in yearCounts ? {} : { 1: 2, 5: 3, 9: 4 })
+        }
         selection={selection}
         onChangeYear={setYear}
         onChangeSelection={setSelection}
@@ -72,3 +84,5 @@ export const SelectedYear = () => <Template initialSelection={['2026']} />;
 export const SelectedAcrossYears = () => (
   <Template initialSelection={['2026-01', '2026-04', '2025-03']} />
 );
+
+export const ManyYears = () => <Template yearCounts={manyYearCounts} />;
