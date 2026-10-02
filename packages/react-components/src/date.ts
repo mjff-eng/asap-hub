@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { parseISO } from 'date-fns';
 import { format, utcToZonedTime } from 'date-fns-tz';
 
 import { getLocalTimezone } from './localization';
@@ -23,8 +24,7 @@ export const formatDateToTimezone = (
 // Format date string to MMM YYYY format for project dates
 export const formatProjectDate = (dateString: string): string => {
   try {
-    const date = new Date(dateString);
-    return format(date, 'MMM yyyy');
+    return format(parseISO(dateString.slice(0, 10)), 'MMM yyyy');
   } catch {
     return dateString; // Return original if parsing fails
   }

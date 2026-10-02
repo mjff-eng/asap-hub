@@ -115,6 +115,9 @@ describe('Date Formatting', () => {
       { input: '2023-01-15', expected: 'Jan 2023' },
       { input: '2025-12-31', expected: 'Dec 2025' },
       { input: '2022-06-01', expected: 'Jun 2022' },
+      { input: '2024-10-01T00:00:00.000Z', expected: 'Oct 2024' },
+      { input: '2024-10-01T00:00:00.000+01:00', expected: 'Oct 2024' },
+      { input: '2024-10-01T00:00:00.000-08:00', expected: 'Oct 2024' },
     ])('formats $input to $expected', ({ input, expected }) => {
       expect(formatProjectDate(input)).toBe(expected);
     });
