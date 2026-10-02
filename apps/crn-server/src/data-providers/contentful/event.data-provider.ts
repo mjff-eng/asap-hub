@@ -943,18 +943,18 @@ const getEventDataObject = (
     };
   }
 
+  const items = eventsCollection.items.filter(
+    (x): x is EventItem => x !== null,
+  );
+
+  items
+    .filter((item) => !item.calendar)
+    .forEach((item) => onEventWithoutCalendar(item.sys.id));
+
   return {
     total: eventsCollection.total,
-    items: eventsCollection.items
-      .filter((x): x is EventItem => x !== null)
-      .reduce<EventDataObject[]>((events, item) => {
-        const event = parseGraphQLEvent(item);
-        if (event) {
-          events.push(event);
-        } else {
-          onEventWithoutCalendar(item.sys.id);
-        }
-        return events;
-      }, []),
+    items: items
+      .map(parseGraphQLEvent)
+      .filter((event): event is EventDataObject => event !== null),
   };
 };
