@@ -44,7 +44,7 @@ const panelStyles = css({
   maxWidth: `calc(100vw - ${rem(32)})`,
   padding: rem(16),
   border: `1px solid ${charcoal.rgb}`,
-  borderRadius: `4px 0 4px  4px`,
+  borderRadius: `4px 0 4px 4px`,
 });
 
 const resetButtonStyles = css({
