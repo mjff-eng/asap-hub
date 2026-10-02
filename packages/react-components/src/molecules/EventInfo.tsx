@@ -6,7 +6,7 @@ import { ComponentProps } from 'react';
 import { EventDateBlock, EventTime, LinkHeadline, TagList } from '.';
 import { Headline3 } from '..';
 import { neutral900, steel } from '../colors';
-import { largeDesktopScreen, rem } from '../pixels';
+import { largeDesktopScreen, mobileScreen, rem } from '../pixels';
 
 const TITLE_LIMIT = 55;
 const TAG_LIMIT = 3;
@@ -35,6 +35,9 @@ const contentStyles = css({
   flexDirection: 'column',
   gap: rem(16),
   minWidth: 0,
+  [`@media (max-width: ${mobileScreen.max}px)`]: {
+    width: '100%',
+  },
 });
 
 const tagContainerStyles = css({
@@ -66,6 +69,11 @@ const cardStyles = css({
   flexDirection: 'row',
 
   gap: rem(24),
+
+  [`@media (max-width: ${mobileScreen.max}px)`]: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
 });
 
 type EventInfoProps = ComponentProps<typeof EventTime> &
