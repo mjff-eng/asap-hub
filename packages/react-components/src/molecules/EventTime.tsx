@@ -69,9 +69,8 @@ const dayCountPillStyles = css({
 
   backgroundColor: silver.rgb,
   color: lead.rgb,
-  fontWeight: 'bold',
-  borderRadius: rem(12),
-  padding: `${rem(4)} ${rem(8)}`,
+  borderRadius: rem(36),
+  padding: `${rem(4)} ${rem(16)}`,
 });
 
 type EventTimeProps = Pick<

@@ -18,8 +18,6 @@ const containerStyles = css({
 
   svg: {
     flexShrink: 0,
-    width: rem(16),
-    height: rem(16),
   },
 });
 
