@@ -136,8 +136,11 @@ export const getTeamEngagementMetrics = async (
     attendanceClient.search(searchOptions),
   ]);
   const presenterItem = presenters.items[0];
-  const speakers =
-    presenterItem && presenterItem.memberCount > 0 ? presenterItem : undefined;
+  const hasSpeakerData =
+    presenterItem !== undefined &&
+    presenterItem.memberCount > 0 &&
+    presenterItem.eventCount > 0;
+  const speakers = hasSpeakerData ? presenterItem : undefined;
   const attendanceItem = attendance.items[0];
 
   return {
