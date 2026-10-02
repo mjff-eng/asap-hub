@@ -943,9 +943,10 @@ export const DesignQuestions = () => {
           <li>
             Status messages: success {code('brand/crn/600')} on{' '}
             {code('brand/crn/50')}, info {code('brand/gp2/600')} on{' '}
-            {code('brand/gp2/50')}, warning {code('utilitarian/yellow/900')} on{' '}
-            {code('utilitarian/yellow/200')}, error{' '}
-            {code('utilitarian/red/700')} on {code('utilitarian/red/100')}.
+            {code('brand/gp2/50')}, warning {code('utilitarian/orange/2/600')}{' '}
+            on {code('utilitarian/orange/2/100')} (production&apos;s peach),
+            error {code('utilitarian/red/700')} on {code('utilitarian/red/100')}
+            .
           </li>
           <li>
             Warning (destructive) button: {code('utilitarian/red/700')}{' '}
@@ -953,9 +954,9 @@ export const DesignQuestions = () => {
             <Colour value="#912018" />.
           </li>
           <li>
-            Selected menu item: {code('brand/crn/50')}{' '}
-            <Colour value="#D1ECE1" />, {code('brand/gp2/50')}{' '}
-            <Colour value="#D3E9F3" />.
+            Selected menu item: {code('background/color-brand')}, as design
+            asked: {code('brand/crn/50')} <Colour value="#D1ECE1" />,{' '}
+            {code('brand/gp2/50')} <Colour value="#D3E9F3" />.
           </li>
         </ul>
       </Section>
@@ -1155,10 +1156,8 @@ export const DesignQuestions = () => {
           With design&apos;s new colours, these now pass (4.5:1 for normal
           text): links, CRN{' '}
           <ContrastBadge foreground="#2C865C" background="#FFFFFF" /> and GP2{' '}
-          <ContrastBadge foreground="#0375A2" background="#FFFFFF" />; warning
-          text <ContrastBadge foreground="#805D00" background="#FFEBB8" />; and
-          error text <ContrastBadge foreground="#B42318" background="#FEE4E2" />
-          .
+          <ContrastBadge foreground="#0375A2" background="#FFFFFF" />; and error
+          text <ContrastBadge foreground="#B42318" background="#FEE4E2" />.
         </p>
         <p>Still below the minimum:</p>
         <ul style={{ paddingLeft: '20px' }}>
@@ -1171,7 +1170,10 @@ export const DesignQuestions = () => {
           <li>
             Status text on its background: success{' '}
             <ContrastBadge foreground="#309466" background="#D1ECE1" />, info{' '}
-            <ContrastBadge foreground="#0681B2" background="#D3E9F3" />.
+            <ContrastBadge foreground="#0681B2" background="#D3E9F3" />, and the
+            new orange warning{' '}
+            <ContrastBadge foreground="#C36533" background="#F8EDDE" /> (the
+            previous yellow passed at 5.12:1).
           </li>
           <li>
             Hint and disabled text ({code('neutral/300')}):{' '}
@@ -1205,9 +1207,12 @@ export const DesignQuestions = () => {
           <Colour value="#4B5359" />, {code('background/neutral')}{' '}
           <Colour value="#E3E6E8" /> and {code('border/neutral')}{' '}
           <Colour value="#687883" />, which reads as a neutral status style.
-          Please confirm. The {code('utilitarian/yellow')} ramp is now used for
-          warning; {code('utilitarian/aqua')} still repeats the general green
-          colours: is that on purpose?
+          Please confirm. Warning now uses the new{' '}
+          {code('utilitarian/orange/2')} ramp, which repeats{' '}
+          {code('general/orange')}; {code('utilitarian/yellow')} and{' '}
+          {code('utilitarian/aqua')} likewise repeat general yellow and green.
+          Are these aliases meant to stay, and is {code('orange/2')} the final
+          name?
         </p>
       </Section>
 
