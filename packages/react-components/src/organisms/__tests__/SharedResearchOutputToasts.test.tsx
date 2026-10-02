@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import SharedResearchOutputToasts, {
@@ -294,4 +294,38 @@ describe('project outputs', () => {
       ),
     ).toBeInTheDocument();
   });
+});
+
+it('should render the supplement grant toast with a link to the supplement', async () => {
+  const user = userEvent.setup();
+  render(
+    <SharedResearchOutputToasts
+      {...defaultProps}
+      published
+      supplementGrantHref="/shared-research/supplement-id"
+    />,
+  );
+
+  expect(screen.getByText(/This is an original grant proposal/)).toBeVisible();
+  expect(
+    screen.getByRole('link', { name: 'supplement version' }),
+  ).toHaveAttribute('href', '/shared-research/supplement-id');
+
+  await user.click(screen.getByRole('button', { name: 'Close' }));
+
+  expect(
+    screen.queryByText(/This is an original grant proposal/),
+  ).not.toBeInTheDocument();
+});
+
+it('should render the grant ended toast', async () => {
+  const user = userEvent.setup();
+  const toastText = 'The funding period for this grant has closed.';
+  render(<SharedResearchOutputToasts {...defaultProps} published grantEnded />);
+
+  expect(screen.getByText(toastText)).toBeVisible();
+
+  await user.click(screen.getByRole('button', { name: 'Close' }));
+
+  expect(screen.queryByText(toastText)).not.toBeInTheDocument();
 });

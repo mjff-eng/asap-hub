@@ -262,6 +262,56 @@ describe('a grant document research output', () => {
   });
 });
 
+describe('a grant document with grant data', () => {
+  const grantDocumentOutput: ResearchOutputResponse = {
+    ...createResearchOutputResponse(),
+    id,
+    documentType: 'Grant Document',
+    grantDocument: {
+      grantType: 'original',
+      project: {
+        id: 'project-1',
+        title: 'Grant Project',
+        projectType: 'Discovery Project',
+      },
+      original: {
+        title: 'Original grant',
+        endDate: '2020-01-01T00:00:00.000Z',
+      },
+    },
+  };
+
+  beforeEach(() => {
+    mockGetResearchOutput.mockResolvedValue(grantDocumentOutput);
+  });
+
+  it('keeps the current layout while STAGING_MODE is disabled', async () => {
+    flags.disable('STAGING_MODE');
+    await renderComponent(researchOutputRoute.$);
+
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: grantDocumentOutput.title,
+      }),
+    ).toBeVisible();
+    expect(screen.queryByText('Project Output')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('The funding period for this grant has closed.'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders the grant layout and the closed toast when STAGING_MODE is enabled', async () => {
+    flags.enable('STAGING_MODE');
+    await renderComponent(researchOutputRoute.$);
+
+    expect(screen.getByText('Project Output')).toBeVisible();
+    expect(
+      screen.getByText('The funding period for this grant has closed.'),
+    ).toBeVisible();
+  });
+});
+
 describe('a not-grant-document research output', () => {
   it('renders with keywords', async () => {
     mockGetResearchOutput.mockResolvedValue({
