@@ -2040,6 +2040,67 @@ describe('Events Contentful Data Provider', () => {
     });
   });
 
+  describe('Events without a calendar', () => {
+    const alerts = { error: jest.fn() };
+    const alertingDataProvider = new EventContentfulDataProvider(
+      contentfulGraphqlClientMock,
+      contentfulRestClientMock,
+      alerts,
+    );
+    const expectedMessage =
+      'Event (event-without-calendar) skipped because it has no published calendar';
+
+    const getEventWithoutCalendar = () => {
+      const event = getContentfulGraphqlEvent(true);
+      event.sys.id = 'event-without-calendar';
+      event.calendar = null;
+      return event;
+    };
+
+    test('Should log and alert for each event skipped from a list', async () => {
+      const loggerErrorSpy = jest.spyOn(logger, 'error');
+      const contentfulGraphQLResponse = getContentfulGraphqlEventsResponse();
+      contentfulGraphQLResponse.eventsCollection!.items.push(
+        getEventWithoutCalendar(),
+      );
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+        contentfulGraphQLResponse,
+      );
+
+      const result = await alertingDataProvider.fetch({});
+
+      expect(result.items).toEqual(getContentfulListEventDataObject().items);
+      expect(loggerErrorSpy).toHaveBeenCalledWith(expectedMessage);
+      expect(alerts.error).toHaveBeenCalledTimes(1);
+      expect(alerts.error).toHaveBeenCalledWith(new Error(expectedMessage));
+    });
+
+    test('Should log and alert when fetching a skipped event by id', async () => {
+      const loggerErrorSpy = jest.spyOn(logger, 'error');
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        events: getEventWithoutCalendar(),
+      });
+
+      const result = await alertingDataProvider.fetchById(
+        'event-without-calendar',
+      );
+
+      expect(result).toBeNull();
+      expect(loggerErrorSpy).toHaveBeenCalledWith(expectedMessage);
+      expect(alerts.error).toHaveBeenCalledWith(new Error(expectedMessage));
+    });
+
+    test('Should not alert when every event has a calendar', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+        getContentfulGraphqlEventsResponse(),
+      );
+
+      await alertingDataProvider.fetch({});
+
+      expect(alerts.error).not.toHaveBeenCalled();
+    });
+  });
+
   describe('parseGraphQLEvent', () => {
     test(`returns null when provided event doesn't have a calendar`, () => {
       const graphqlEvent = getContentfulGraphqlEvent();
