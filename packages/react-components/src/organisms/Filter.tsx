@@ -1,58 +1,12 @@
-import { css } from '@emotion/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
 import { CheckboxGroup } from '.';
 import { FILTERS_KEY, FILTER_EVENT, FILTER_TITLE_KEY } from '../analytics';
-import { Button } from '../atoms';
-import { paper, steel, colorWithTransparency, tin } from '../colors';
-import { filterIcon } from '../icons';
-import {
-  tabletScreen,
-  rem,
-  vminLinearCalc,
-  mobileScreen,
-  largeDesktopScreen,
-} from '../pixels';
 import { Option } from '../select';
 import { noop } from '../utils';
 import { Title } from './CheckboxGroup';
-
-const buttonTextStyles = css({
-  display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    display: 'unset',
-  },
-});
-
-const dropdownContainer = css({
-  position: 'absolute',
-  width: rem(295),
-  right: rem(0),
-  top: rem(8),
-  zIndex: 1000,
-
-  backgroundColor: paper.rgb,
-  border: `1px solid ${steel.rgb}`,
-  boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
-
-  display: 'none',
-  flexDirection: 'column',
-
-  boxSizing: 'border-box',
-  padding: `${rem(6)} ${rem(18)} ${vminLinearCalc(
-    mobileScreen,
-    6,
-    largeDesktopScreen,
-    12,
-    'px',
-  )}`,
-});
-
-const showMenuStyles = css({
-  display: 'flex',
-  zIndex: 10,
-});
+import FilterDropdown from './FilterDropdown';
 
 export interface FilterProps<V extends string> {
   readonly filters?: Set<V>;
@@ -67,29 +21,11 @@ export default function Filter<V extends string>({
   buttonText = 'Filters',
 }: FilterProps<V>): ReturnType<React.FC> {
   const [menuShown, setMenuShown] = useState(false);
-  const filterRef = useRef<HTMLDivElement>(null);
+  const closeMenu = useCallback(() => setMenuShown(false), []);
 
   useEffect(() => {
     setMenuShown(false);
   }, [filterOptions]);
-
-  // Handle click outside to close the filter dropdown
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        filterRef.current &&
-        !filterRef.current.contains(event.target as Node)
-      ) {
-        setMenuShown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const [debouncedFilters] = useDebounce(filters, 5000);
   useEffect(() => {
@@ -109,28 +45,17 @@ export default function Filter<V extends string>({
   }, [debouncedFilters, filters]);
 
   return (
-    <div ref={filterRef}>
-      <Button
-        noMargin
-        active={menuShown}
-        onClick={() => setMenuShown(!menuShown)}
-      >
-        {filterIcon}
-        <span css={buttonTextStyles}>{buttonText}</span>
-      </Button>
-      <div
-        css={{
-          position: 'relative',
-        }}
-      >
-        <div css={[dropdownContainer, menuShown && showMenuStyles]}>
-          <CheckboxGroup<V>
-            onChange={onChangeFilter}
-            options={filterOptions}
-            values={filters}
-          />
-        </div>
-      </div>
-    </div>
+    <FilterDropdown
+      menuShown={menuShown}
+      onToggle={() => setMenuShown(!menuShown)}
+      onClose={closeMenu}
+      buttonText={buttonText}
+    >
+      <CheckboxGroup<V>
+        onChange={onChangeFilter}
+        options={filterOptions}
+        values={filters}
+      />
+    </FilterDropdown>
   );
 }

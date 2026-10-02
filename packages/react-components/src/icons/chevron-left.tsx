@@ -1,7 +1,13 @@
 /* istanbul ignore file */
 
 const chevronLeft = (
-  <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="#4D646B">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="#4D646B"
+  >
     <title>Chevron Left</title>
     <path
       fillRule="evenodd"
