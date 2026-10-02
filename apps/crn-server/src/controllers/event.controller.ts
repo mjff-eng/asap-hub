@@ -53,6 +53,15 @@ export default class EventController {
     });
 
     const [event] = events.items;
+
+    // A match skipped by the data provider (its calendar is unpublished) must
+    // not read as missing, or the Google Calendar sync creates a duplicate.
+    if (!event && events.total > 0) {
+      throw new Error(
+        `Event with google id ${googleId} exists but could not be parsed`,
+      );
+    }
+
     return event || null;
   }
 }

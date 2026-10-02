@@ -168,5 +168,12 @@ describe('Event controller', () => {
       });
       expect(result).toEqual(null);
     });
+    test('it should throw when the matching event was skipped by the data provider', async () => {
+      eventDataProviderMock.fetch.mockResolvedValue({ total: 1, items: [] });
+
+      await expect(eventController.fetchByGoogleId(googleId)).rejects.toThrow(
+        `Event with google id ${googleId} exists but could not be parsed`,
+      );
+    });
   });
 });
