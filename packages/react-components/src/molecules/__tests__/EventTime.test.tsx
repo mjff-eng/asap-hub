@@ -27,7 +27,7 @@ it("the time is shown in the user's local timezone", () => {
 });
 
 describe('the date', () => {
-  it('is shown only once if start and end date are the same', () => {
+  it('is shown only once for a same-day event', () => {
     const { container } = render(
       <EventTime
         startDate={new Date('2021-01-25T00:00:00Z').toISOString()}
@@ -40,17 +40,108 @@ describe('the date', () => {
     expect(container).not.toHaveTextContent(/\D25\D.*\D25\D/);
   });
 
-  it('is shown for start and end day for a multi-day event', () => {
-    mockGetLocalTimezone.mockReturnValue('America/New_York');
+  it('is shown only once for an event that ends exactly at midnight', () => {
+    const { container, queryByText } = render(
+      <EventTime
+        startDate={new Date('2021-01-25T22:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2021-01-26T00:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+      />,
+    );
+    expect(container).toHaveTextContent(/\D25\D/);
+    expect(container).not.toHaveTextContent(/\D25\D.*\D26\D/);
+    expect(container).toHaveTextContent(/10:00\s*PM.*12:00\s*AM/);
+    expect(queryByText(/^Mon$/)).not.toBeInTheDocument();
+    expect(queryByText(/^Tue$/)).not.toBeInTheDocument();
+  });
+
+  it('shows a range for an event that crosses into a new day, even under 24 hours', () => {
     const { container } = render(
       <EventTime
-        startDate={new Date('2021-01-26T00:00:00Z').toISOString()}
+        startDate={new Date('2021-01-25T22:00:00Z').toISOString()}
         startDateTimeZone="UTC"
-        endDate={new Date('2021-01-26T10:00:00Z').toISOString()}
+        endDate={new Date('2021-01-26T02:00:00Z').toISOString()}
         endDateTimeZone="UTC"
       />,
     );
     expect(container).toHaveTextContent(/\D25\D.*\D26\D/);
+    expect(container).toHaveTextContent(/10:00\s*PM\s*Mon.*2:00\s*AM\s*Tue/);
+  });
+
+  it('includes both months for a multi-day event spanning two months', () => {
+    const { container } = render(
+      <EventTime
+        startDate={new Date('2021-01-31T09:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2021-02-01T10:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+      />,
+    );
+    expect(container).toHaveTextContent(/January.*February 2021/);
+  });
+
+  it('includes both years for a multi-day event spanning two years', () => {
+    const { container } = render(
+      <EventTime
+        startDate={new Date('2021-12-31T09:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2022-01-01T10:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+      />,
+    );
+    expect(container).toHaveTextContent(/December 2021.*January 2022/);
+  });
+});
+
+describe('the day count pill', () => {
+  it('is not shown for an event under 24 hours, even if it crosses into a new day', () => {
+    const { queryByText } = render(
+      <EventTime
+        startDate={new Date('2021-01-25T22:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2021-01-26T02:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+      />,
+    );
+    expect(queryByText(/^\d+ days?$/)).not.toBeInTheDocument();
+  });
+
+  it('shows "1 day" for an event of exactly 24 hours', () => {
+    const { getByText } = render(
+      <EventTime
+        startDate={new Date('2021-01-25T01:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2021-01-26T01:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+      />,
+    );
+    expect(getByText('1 day')).toBeVisible();
+  });
+
+  it('shows "2 days" for a 26-hour event', () => {
+    const { getByText } = render(
+      <EventTime
+        startDate={new Date('2021-01-25T11:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2021-01-26T13:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+      />,
+    );
+    expect(getByText('2 days')).toBeVisible();
+  });
+
+  it('rounds up 47 hours to "2 days", not the 3 calendar dates it touches', () => {
+    const { getByText, queryByText } = render(
+      <EventTime
+        startDate={new Date('2021-01-25T09:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2021-01-27T08:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+      />,
+    );
+    expect(getByText('2 days')).toBeVisible();
+    expect(queryByText('3 days')).not.toBeInTheDocument();
   });
 });
 
@@ -103,5 +194,19 @@ describe('the recurring badge', () => {
   it('is not shown for non-recurring events', () => {
     const { queryByText } = render(<EventTime {...props} recurring={false} />);
     expect(queryByText('Recurring')).not.toBeInTheDocument();
+  });
+
+  it('is shown alongside the day count for a recurring multi-day event', () => {
+    const { getByText } = render(
+      <EventTime
+        startDate={new Date('2021-01-25T09:00:00Z').toISOString()}
+        startDateTimeZone="UTC"
+        endDate={new Date('2021-01-26T10:00:00Z').toISOString()}
+        endDateTimeZone="UTC"
+        recurring
+      />,
+    );
+    expect(getByText('Recurring')).toBeVisible();
+    expect(getByText('2 days')).toBeVisible();
   });
 });

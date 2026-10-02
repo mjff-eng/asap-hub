@@ -31,12 +31,18 @@ export const formatProjectDate = (dateString: string): string => {
 };
 
 const UPDATE_INTERVAL_SECONDS = 10;
-export const useDateHasPassed = (date: string | Date): boolean => {
+export const useDateHasPassed = (
+  date: string | Date,
+  enabled = true,
+): boolean => {
   const [hasPassed, setPassed] = useState(new Date() > new Date(date));
 
-  useInterval(() => {
-    setPassed(new Date() > new Date(date));
-  }, UPDATE_INTERVAL_SECONDS * 1000);
+  useInterval(
+    () => {
+      setPassed(new Date() > new Date(date));
+    },
+    enabled ? UPDATE_INTERVAL_SECONDS * 1000 : null,
+  );
 
   return hasPassed;
 };

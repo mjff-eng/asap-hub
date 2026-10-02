@@ -2,9 +2,17 @@ import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
 
 import { formatDateToTimezone } from '../date';
-import { info100, info500, lead } from '../colors';
+import { info100, info500, lead, silver } from '../colors';
 import { rem } from '../pixels';
-import { calendarIcon, clockIcon } from '../icons';
+import { calendarIcon, clockIcon, CircleInfoIcon } from '../icons';
+import {
+  eventCrossesCalendarDay,
+  getEventDurationMs,
+  getMultiDayCount,
+  getMultiDayDateRange,
+  ONE_DAY_IN_MS,
+  pluralize,
+} from '../utils';
 
 import { Info } from '.';
 
@@ -16,35 +24,51 @@ const listStyles = css({
   padding: 0,
 });
 
-const listItemStyles = css({
+const rowStyles = css({
   color: lead.rgb,
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-});
-
-const iconStyles = css({
-  paddingRight: rem(8),
-  lineHeight: 0,
-  height: 'fit-content',
-});
-
-const dateStyles = css({
   overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis',
+  lineHeight: rem(32),
 });
 
-const tzStyles = css({
-  paddingLeft: rem(8),
+const rowIconStyles = css({
+  float: 'left',
+  marginRight: rem(8),
+  marginTop: rem(4),
+  lineHeight: 0,
+});
+
+const gapStyles = css({
+  wordSpacing: rem(8),
+});
+
+const dayAbbreviationStyles = css({
+  fontWeight: 'bold',
+});
+
+const infoTriggerStyles = css({
+  button: {
+    verticalAlign: 'middle',
+  },
 });
 
 const recurringPillStyles = css({
-  flexShrink: 0,
-  marginLeft: rem(8),
+  display: 'inline-flex',
+  alignItems: 'center',
+  verticalAlign: 'middle',
 
   backgroundColor: info100.rgb,
   color: info500.rgb,
+  borderRadius: rem(36),
+  padding: `${rem(4)} ${rem(16)}`,
+});
+
+const dayCountPillStyles = css({
+  display: 'inline-flex',
+  alignItems: 'center',
+  verticalAlign: 'middle',
+
+  backgroundColor: silver.rgb,
+  color: lead.rgb,
   borderRadius: rem(36),
   padding: `${rem(4)} ${rem(16)}`,
 });
@@ -64,14 +88,19 @@ const EventTime: React.FC<EventTimeProps> = ({
   endDateTimeZone,
   recurring,
 }) => {
-  const formattedStartDay = formatDateToTimezone(
-    startDate,
-    'E, d MMM y',
-  ).toUpperCase();
-  const formattedEndDay = formatDateToTimezone(
-    endDate,
-    'E, d MMM y',
-  ).toUpperCase();
+  const crossesDay = eventCrossesCalendarDay(startDate, endDate);
+  const isMultiDay = getEventDurationMs(startDate, endDate) >= ONE_DAY_IN_MS;
+  const dayCount = getMultiDayCount(startDate, endDate);
+
+  const dateDisplay = crossesDay
+    ? getMultiDayDateRange(startDate, endDate)
+    : formatDateToTimezone(startDate, 'EEEE, d MMMM yyyy');
+
+  const startTime = formatDateToTimezone(startDate, 'h:mm a');
+  const endTime = formatDateToTimezone(endDate, 'h:mm a');
+  const endTz = formatDateToTimezone(endDate, '(z)').toUpperCase();
+  const startDayAbbreviation = formatDateToTimezone(startDate, 'EEE');
+  const endDayAbbreviation = formatDateToTimezone(endDate, 'EEE');
 
   const formattedStartDateTimeZone = formatDateToTimezone(
     startDate,
@@ -86,18 +115,43 @@ const EventTime: React.FC<EventTimeProps> = ({
 
   return (
     <ul css={listStyles}>
-      <li css={listItemStyles}>
-        <div css={iconStyles}>{calendarIcon}</div>
-        <span css={dateStyles}>{formattedStartDay}</span>
-        {recurring && <span css={recurringPillStyles}>Recurring</span>}
+      <li css={rowStyles}>
+        <div css={rowIconStyles}>{calendarIcon}</div>
+        {dateDisplay}
+        {isMultiDay && (
+          <>
+            <span css={gapStyles}> </span>
+            <span css={dayCountPillStyles}>{pluralize(dayCount, 'day')}</span>
+          </>
+        )}
+        {recurring && (
+          <>
+            <span css={gapStyles}> </span>
+            <span css={recurringPillStyles}>Recurring</span>
+          </>
+        )}
       </li>
-      <li css={listItemStyles}>
-        <div css={iconStyles}>{clockIcon}</div>
-        {formatDateToTimezone(startDate, 'h:mm a')} -{' '}
-        {formatDateToTimezone(endDate, 'h:mm a (z)').toUpperCase()}
-        {formattedEndDay !== formattedStartDay && ` - ${formattedEndDay} ∙ `}
-        <div css={tzStyles}>
-          <Info>
+      <li css={rowStyles}>
+        <div css={rowIconStyles}>{clockIcon}</div>
+        {startTime}
+        {crossesDay && (
+          <>
+            {' '}
+            <span css={dayAbbreviationStyles}>{startDayAbbreviation}</span>
+          </>
+        )}
+        {' – '}
+        {endTime}
+        {crossesDay && (
+          <>
+            {' '}
+            <span css={dayAbbreviationStyles}>{endDayAbbreviation}</span>
+          </>
+        )}{' '}
+        {endTz}
+        <span css={gapStyles}> </span>
+        <span css={infoTriggerStyles}>
+          <Info floating icon={<CircleInfoIcon size={20} />}>
             The meeting is at{' '}
             {formatDateToTimezone(startDate, 'h:mm a', startDateTimeZone)}
             {formattedStartDateTimeZone !== formattedEndDateTimeZone &&
@@ -107,7 +161,7 @@ const EventTime: React.FC<EventTimeProps> = ({
             {formattedEndDateTimeZone}. It is converted to your time zone for
             your convenience.
           </Info>
-        </div>
+        </span>
       </li>
     </ul>
   );
