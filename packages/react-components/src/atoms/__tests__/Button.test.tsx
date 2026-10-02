@@ -133,13 +133,13 @@ it('renders an active primary button', () => {
   const { getByRole, rerender } = render(<Button primary />);
   expect(getByRole('button')).not.toHaveStyleRule(
     'background-color',
-    colour.background.active,
+    colour.background['color-brand'],
   );
 
   rerender(<Button primary active />);
   expect(getByRole('button')).toHaveStyleRule(
     'background-color',
-    colour.background.active,
+    colour.background['color-brand'],
   );
   expect(getByRole('button')).toHaveStyleRule('color', colour.foreground.brand);
 });

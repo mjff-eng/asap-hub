@@ -178,7 +178,7 @@ const disabledStyles = css({
 });
 
 export const activePrimaryStyles = css({
-  backgroundColor: colour.background.active,
+  backgroundColor: colour.background['color-brand'],
   borderColor: 'transparent',
   color: colour.foreground.brand,
   svg: {
@@ -188,7 +188,7 @@ export const activePrimaryStyles = css({
     },
   },
   ':hover, :focus': {
-    backgroundColor: colour.background.active,
+    backgroundColor: colour.background['color-brand'],
     color: colour.foreground.brand,
   },
 });

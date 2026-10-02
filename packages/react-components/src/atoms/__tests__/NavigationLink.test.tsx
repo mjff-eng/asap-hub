@@ -68,11 +68,11 @@ describe.each`
     );
     expect(screen.getByText('Target').parentElement).toHaveStyleRule(
       'background-color',
-      colour.background.active,
+      colour.background['color-brand'],
     );
     expect(screen.getByText('Other').parentElement).not.toHaveStyleRule(
       'background-color',
-      colour.background.active,
+      colour.background['color-brand'],
     );
   });
 
@@ -138,15 +138,15 @@ describe('with a router', () => {
     expect(currentPathname).toEqual('/location');
     expect(screen.getByText('Target').parentElement).toHaveStyleRule(
       'background-color',
-      colour.background.active,
+      colour.background['color-brand'],
     );
     expect(screen.getByText('Other').parentElement).not.toHaveStyleRule(
       'background-color',
-      colour.background.active,
+      colour.background['color-brand'],
     );
     expect(screen.getByText('Default').parentElement).not.toHaveStyleRule(
       'background-color',
-      colour.background.active,
+      colour.background['color-brand'],
     );
   });
 });
@@ -197,7 +197,7 @@ describe('without a router (external link with matching pathname)', () => {
     // Should have active styles applied
     expect(screen.getByText('Active Link').parentElement).toHaveStyleRule(
       'background-color',
-      colour.background.active,
+      colour.background['color-brand'],
     );
   });
 });
@@ -240,7 +240,7 @@ describe('when active', () => {
     );
     expect(screen.getByRole('link')).toHaveStyleRule(
       'background-color',
-      colour.background.active,
+      colour.background['color-brand'],
     );
   });
 });

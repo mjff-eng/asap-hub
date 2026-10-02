@@ -46,7 +46,7 @@ describe('a navigation item', () => {
     );
     expect(
       getByTitle(/network/i).closest('a')?.firstElementChild,
-    ).not.toHaveStyleRule('background-color', colour.background.active);
+    ).not.toHaveStyleRule('background-color', colour.background['color-brand']);
 
     rerender(
       <StaticRouter key={2} location={network({}).$}>
@@ -55,7 +55,7 @@ describe('a navigation item', () => {
     );
     expect(
       getByTitle(/network/i).closest('a')?.firstElementChild,
-    ).toHaveStyleRule('background-color', colour.background.active);
+    ).toHaveStyleRule('background-color', colour.background['color-brand']);
   });
 
   it('is highlighted when the current page is in the section it links to', () => {
@@ -66,7 +66,7 @@ describe('a navigation item', () => {
     );
     expect(
       getByTitle(/network/i).closest('a')?.firstElementChild,
-    ).not.toHaveStyleRule('background-color', colour.background.active);
+    ).not.toHaveStyleRule('background-color', colour.background['color-brand']);
 
     rerender(
       <StaticRouter key={2} location={network({}).interestGroups({}).$}>
@@ -75,7 +75,7 @@ describe('a navigation item', () => {
     );
     expect(
       getByTitle(/network/i).closest('a')?.firstElementChild,
-    ).toHaveStyleRule('background-color', colour.background.active);
+    ).toHaveStyleRule('background-color', colour.background['color-brand']);
   });
 
   it('is disabled when the current user is not onboarded', () => {
@@ -98,7 +98,7 @@ describe('a navigation item', () => {
     );
     expect(
       getByTitle(/network/i).closest('a')?.firstElementChild,
-    ).toHaveStyleRule('background-color', colour.background.active);
+    ).toHaveStyleRule('background-color', colour.background['color-brand']);
   });
 });
 
