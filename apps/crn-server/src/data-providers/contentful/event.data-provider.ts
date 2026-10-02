@@ -105,6 +105,11 @@ export class EventContentfulDataProvider implements EventDataProvider {
     }
 
     const event = parseGraphQLEvent(events);
+
+    if (!event) {
+      return null;
+    }
+
     const previousEventAttendance =
       await this.fetchPreviousEventAttendance(events);
 
@@ -723,9 +728,11 @@ export const parseGraphQLAttendance = (
     return list;
   }, []);
 
-export const parseGraphQLEvent = (item: EventItem): EventDataObject => {
+export const parseGraphQLEvent = (
+  item: EventItem,
+): EventDataObject | null => {
   if (!item.calendar) {
-    throw new Error(`Event (${item.sys.id}) doesn't have a calendar"`);
+    return null;
   }
 
   if (item.status && !isEventStatus(item.status)) {
@@ -900,6 +907,7 @@ const getEventDataObject = (
     total: eventsCollection.total,
     items: eventsCollection.items
       .filter((x): x is EventItem => x !== null)
-      .map(parseGraphQLEvent),
+      .map(parseGraphQLEvent)
+      .filter((event): event is EventDataObject => event !== null),
   };
 };

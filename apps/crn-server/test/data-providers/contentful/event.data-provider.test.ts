@@ -144,6 +144,27 @@ describe('Events Contentful Data Provider', () => {
       expect(result).toEqual(getContentfulListEventDataObject());
     });
 
+    test('Should skip events without a calendar and keep the Contentful total', async () => {
+      const eventWithoutCalendar = getContentfulGraphqlEvent(true);
+      eventWithoutCalendar.sys.id = 'event-without-calendar';
+      eventWithoutCalendar.calendar = null;
+      const contentfulGraphQLResponse = getContentfulGraphqlEventsResponse();
+      contentfulGraphQLResponse.eventsCollection!.items.push(
+        eventWithoutCalendar,
+      );
+      contentfulGraphQLResponse.eventsCollection!.total = 2;
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+        contentfulGraphQLResponse,
+      );
+
+      const result = await eventDataProvider.fetch({});
+
+      expect(result).toEqual({
+        ...getContentfulListEventDataObject(),
+        total: 2,
+      });
+    });
+
     test('Should apply the filter to remove hidden events by default', async () => {
       const contentfulGraphQLResponse = getContentfulGraphqlEventsResponse();
       contentfulGraphqlClientMock.request.mockResolvedValueOnce(
@@ -440,6 +461,19 @@ describe('Events Contentful Data Provider', () => {
 
       const result = await eventDataProvider.fetchById('not-found');
       expect(result).toEqual(null);
+    });
+
+    test('Should return null when the event does not have a calendar', async () => {
+      const contentfulGraphQLResponse = getContentfulGraphqlEvent();
+      contentfulGraphQLResponse.calendar = null;
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        events: contentfulGraphQLResponse,
+      });
+
+      const result = await eventDataProvider.fetchById(eventId);
+
+      expect(result).toEqual(null);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(1);
     });
 
     test('Should return the event when it finds it', async () => {
@@ -2103,14 +2137,12 @@ describe('Events Contentful Data Provider', () => {
   });
 
   describe('parseGraphQLEvent', () => {
-    test(`throws when provided event doesn't have a calendar`, () => {
+    test(`returns null when provided event doesn't have a calendar`, () => {
       const graphqlEvent = getContentfulGraphqlEvent();
       graphqlEvent.sys.id = 'example';
       graphqlEvent.calendar = null;
 
-      expect(() => parseGraphQLEvent(graphqlEvent)).toThrowError(
-        `Event (example) doesn't have a calendar`,
-      );
+      expect(parseGraphQLEvent(graphqlEvent)).toBeNull();
     });
 
     test('throws when provided an invalid event status', () => {
@@ -2130,7 +2162,7 @@ describe('Events Contentful Data Provider', () => {
       graphqlEvent.linkedFrom!.researchOutputsCollection!.items[0]!.workingGroup =
         null;
 
-      expect(parseGraphQLEvent(graphqlEvent).relatedResearch[0]).toEqual(
+      expect(parseGraphQLEvent(graphqlEvent)?.relatedResearch[0]).toEqual(
         expect.objectContaining({ workingGroups: [] }),
       );
     });
@@ -2138,10 +2170,10 @@ describe('Events Contentful Data Provider', () => {
     test('parses the recurring flag and defaults it to false when null', () => {
       const graphqlEvent = getContentfulGraphqlEvent();
       graphqlEvent.recurring = true;
-      expect(parseGraphQLEvent(graphqlEvent).recurring).toBe(true);
+      expect(parseGraphQLEvent(graphqlEvent)?.recurring).toBe(true);
 
       graphqlEvent.recurring = null;
-      expect(parseGraphQLEvent(graphqlEvent).recurring).toBe(false);
+      expect(parseGraphQLEvent(graphqlEvent)?.recurring).toBe(false);
     });
   });
 });
