@@ -38,7 +38,7 @@
     "prettier": "3.1.1",
     "pump": "3.0.3",
     "through2-concurrent": "2.0.0",
-    "uuid": "8.3.2",
+    "uuid": "11.1.1",
     "yargs": "17.3.1"
   },
   "devDependencies": {
