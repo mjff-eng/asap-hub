@@ -748,9 +748,7 @@ export const parseGraphQLAttendance = (
     return list;
   }, []);
 
-export const parseGraphQLEvent = (
-  item: EventItem,
-): EventDataObject | null => {
+export const parseGraphQLEvent = (item: EventItem): EventDataObject | null => {
   if (!item.calendar) {
     return null;
   }
