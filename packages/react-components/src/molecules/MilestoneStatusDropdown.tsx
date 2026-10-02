@@ -4,21 +4,7 @@ import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { Pill, Spinner } from '../atoms';
-import {
-  paper,
-  steel,
-  colorWithTransparency,
-  tin,
-  neutral200,
-  neutral300,
-  neutral800,
-  info100,
-  info500,
-  success100,
-  success500,
-  error100,
-  error500,
-} from '../colors';
+import { colourWithAlpha, colour } from '../colors';
 import { chevronDownIcon, chevronUpIcon } from '../icons';
 import { rem } from '../pixels';
 import { Portal } from '../utils/portal';
@@ -38,17 +24,25 @@ const accentPalette: Record<
   { bg: string; fg: string; border: string }
 > = {
   success: {
-    bg: success100.rgb,
-    fg: success500.rgb,
-    border: success500.rgb,
+    bg: colour.background.success,
+    fg: colour.foreground.success,
+    border: colour.border.success,
   },
-  info: { bg: info100.rgb, fg: info500.rgb, border: info500.rgb },
+  info: {
+    bg: colour.background.info,
+    fg: colour.foreground.info,
+    border: colour.border.info,
+  },
   neutral: {
-    bg: neutral300.rgb,
-    fg: neutral800.rgb,
-    border: neutral800.rgb,
+    bg: colour.background.tertiary,
+    fg: colour.foreground.quaternary,
+    border: colour.neutral[400],
   },
-  error: { bg: error100.rgb, fg: error500.rgb, border: error500.rgb },
+  error: {
+    bg: colour.background.error,
+    fg: colour.foreground.error,
+    border: colour.border.error,
+  },
 };
 
 const triggerStyles = (accent: StatusAccent) => {
@@ -68,7 +62,7 @@ const triggerStyles = (accent: StatusAccent) => {
     lineHeight: 1.2,
     margin: 0,
     ':focus-visible': {
-      outline: `2px solid ${colorWithTransparency(tin, 0.7).rgba}`,
+      outline: `2px solid ${colourWithAlpha(colour.border.secondary, 0.7)}`,
       outlineOffset: rem(2),
     },
     '& svg': {
@@ -96,9 +90,9 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     left,
     zIndex: 1,
     minWidth: rem(160),
-    backgroundColor: paper.rgb,
-    border: `1px solid ${steel.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+    backgroundColor: colour.background.primary,
+    border: `1px solid ${colour.border.tertiary}`,
+    boxShadow: `0 2px 6px 0 ${colourWithAlpha(colour.neutral[200], 0.34)}`,
     padding: `${rem(8)} 0`,
     display: 'flex',
     flexDirection: 'column',
@@ -113,7 +107,7 @@ const menuItemStyles = css({
   textAlign: 'left',
   cursor: 'pointer',
   ':hover, :focus-visible': {
-    backgroundColor: neutral200.rgba,
+    backgroundColor: colour.background.secondary,
     outline: 'none',
   },
 });

@@ -1,6 +1,5 @@
 import { css, SerializedStyles } from '@emotion/react';
-import { colors } from '..';
-import { lead, paper, steel, tin } from '../colors';
+import { colour } from '../colors';
 import { borderWidth } from '../form';
 import { mobileScreen, rem } from '../pixels';
 
@@ -24,8 +23,8 @@ const fullWidthOnMobilePillStyles = css({
 });
 
 const disabledStyles = css({
-  borderColor: tin.rgb,
-  color: tin.rgb,
+  borderColor: colour.border.secondary,
+  color: colour.foreground.disabled,
   cursor: 'not-allowed',
 });
 
@@ -40,12 +39,18 @@ const pillStyles = (selected: boolean, error: boolean) =>
 
     borderStyle: 'solid',
     borderWidth: `${borderWidth}px`,
-    borderColor: error ? tin.rgb : selected ? colors.info150.rgba : steel.rgb,
+    borderColor: error
+      ? colour.border.secondary
+      : selected
+        ? colour.border.info
+        : colour.border.tertiary,
     borderRadius: rem(24),
     cursor: 'pointer',
     userSelect: 'none',
-    backgroundColor: selected ? colors.info100.rgba : paper.rgb,
-    color: selected ? colors.info500.rgba : lead.rgba,
+    backgroundColor: selected
+      ? colour.background.info
+      : colour.background.primary,
+    color: selected ? colour.foreground.info : colour.foreground.tertiary,
     '> svg': {
       width: rem(24),
       height: rem(24),
@@ -55,9 +60,9 @@ const pillStyles = (selected: boolean, error: boolean) =>
 
 const hoverStyles = css({
   ':hover': {
-    backgroundColor: colors.info100.rgba,
-    borderColor: colors.info500.rgba,
-    color: colors.info500.rgba,
+    backgroundColor: colour.background.info,
+    borderColor: colour.border.info,
+    color: colour.foreground.info,
   },
 });
 

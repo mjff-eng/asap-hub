@@ -26,7 +26,7 @@ const TeamProfileTags: React.FC<TeamProfileTagsProps> = ({ tags }) => (
       <Divider />
     </div>
     <Headline3 noMargin>Tags</Headline3>
-    <Paragraph accent="lead" noMargin styles={css({ marginTop: rem(24) })}>
+    <Paragraph accent="tertiary" noMargin styles={css({ marginTop: rem(24) })}>
       Explore keywords related to skills, techniques, resources, and tools.
     </Paragraph>
     <div css={contentStyles}>

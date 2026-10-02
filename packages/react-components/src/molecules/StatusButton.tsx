@@ -19,20 +19,7 @@ import {
 import { rem, mobileScreen, formTargetWidth } from '../pixels';
 import { Portal } from '../utils/portal';
 
-import {
-  paper,
-  steel,
-  colorWithTransparency,
-  tin,
-  lead,
-  neutral200,
-  info100,
-  info500,
-  warning100,
-  warning500,
-  success100,
-  success500,
-} from '../colors';
+import { colourWithAlpha, colour } from '../colors';
 
 const containerStyles = css({
   display: 'flex',
@@ -59,9 +46,9 @@ const menuContainerStyles = ({ top, left }: MenuPosition) =>
     maxWidth: rem(formTargetWidth),
     top,
     left,
-    backgroundColor: paper.rgb,
-    border: `1px solid ${steel.rgb}`,
-    boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+    backgroundColor: colour.background.primary,
+    border: `1px solid ${colour.border.tertiary}`,
+    boxShadow: `0 2px 6px 0 ${colourWithAlpha(colour.neutral[200], 0.34)}`,
     flexDirection: 'column',
     padding: `${rem(6)} 0`,
   });
@@ -92,16 +79,21 @@ export const itemContentStyles = (type: StatusType = 'default') =>
     fontWeight: 'normal',
     fontSize: '14px',
     margin: `${rem(8)} ${rem(16)} !important`,
-    backgroundColor: info100.rgba,
-    color: info500.rgba,
+    backgroundColor: colour.background.info,
+    color: colour.foreground.info,
     borderRadius: rem(24),
     alignSelf: 'initial',
     maxWidth: 'fit-content',
     ...(type === 'warning' || type === 'final'
       ? {
-          color: type === 'warning' ? warning500.rgba : success500.rgba,
+          color:
+            type === 'warning'
+              ? colour.foreground.warning
+              : colour.foreground.success,
           backgroundColor:
-            type === 'warning' ? warning100.rgba : success100.rgba,
+            type === 'warning'
+              ? colour.background.warning
+              : colour.background.success,
           columnGap: rem(6),
           padding: `${rem(4)} ${rem(16)} ${rem(4)} ${rem(8)}`,
         }
@@ -122,6 +114,11 @@ const resetButtonStyles = css({
   },
 });
 
+const statusColours = (status: 'info' | 'warning' | 'success') => ({
+  background: colour.background[status],
+  color: colour.foreground[status],
+});
+
 export const statusButtonStyles = (
   type: StatusType,
   isComplianceReviewer: boolean,
@@ -131,24 +128,14 @@ export const statusButtonStyles = (
     borderRadius: rem(24),
     fontWeight: 400,
     border: 'none',
-    background: info100.rgba,
-    color: info500.rgba,
-    ...(type === 'warning'
-      ? {
-          background: warning100.rgba,
-          color: warning500.rgba,
-        }
-      : type === 'final'
-        ? {
-            background: success100.rgba,
-            color: success500.rgba,
-          }
-        : {}),
+    ...statusColours(
+      type === 'warning' ? 'warning' : type === 'final' ? 'success' : 'info',
+    ),
     'svg #Group-7': {
-      stroke: info500.rgba,
+      stroke: colour.foreground.info,
       ...([isComplianceReviewer ? 'warning' : 'default', 'final'].includes(type)
         ? {
-            stroke: warning500.rgba,
+            stroke: colour.foreground.warning,
           }
         : {}),
     },
@@ -166,19 +153,9 @@ export const statusTagStyles = (type: StatusType, noWrap: boolean = true) =>
     borderRadius: rem(24),
     fontWeight: 400,
     border: 'none',
-    background: info100.rgba,
-    color: info500.rgba,
-    ...(type === 'default'
-      ? {
-          background: warning100.rgba,
-          color: warning500.rgba,
-        }
-      : type === 'final'
-        ? {
-            background: success100.rgba,
-            color: success500.rgba,
-          }
-        : {}),
+    ...statusColours(
+      type === 'default' ? 'warning' : type === 'final' ? 'success' : 'info',
+    ),
     paddingLeft: rem(16),
     paddingRight: rem(16),
     ...(noWrap ? { textWrap: 'nowrap' } : {}),
@@ -189,10 +166,10 @@ export const statusTagStyles = (type: StatusType, noWrap: boolean = true) =>
   });
 
 const itemStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   backgroundColor: 'none',
   ':hover': {
-    backgroundColor: neutral200.rgba,
+    backgroundColor: colour.background.secondary,
   },
 });
 
@@ -210,16 +187,16 @@ export const iconStyles = (type: string, isComplianceReviewer: boolean) =>
       (type === 'default' && !isComplianceReviewer)
         ? {
             '& > g > path': {
-              fill: warning500.rgba,
+              fill: colour.foreground.warning,
             },
           }
         : {}),
       '& > rect:first-of-type': {
-        ...(type === 'final' ? { fill: success500.rgba } : {}),
+        ...(type === 'final' ? { fill: colour.foreground.success } : {}),
       },
       '& > rect:last-of-type': {
-        stroke: info500.rgba,
-        ...(type === 'final' ? { stroke: success500.rgba } : {}),
+        stroke: colour.foreground.info,
+        ...(type === 'final' ? { stroke: colour.foreground.success } : {}),
       },
     },
   });

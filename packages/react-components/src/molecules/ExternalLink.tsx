@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { css, CSSObject, Theme } from '@emotion/react';
+import { css, CSSObject } from '@emotion/react';
 
 import { Anchor } from '../atoms';
 import { ExternalLinkIcon } from '../icons';
-import { fern, pine } from '../colors';
+import { colour } from '../colors';
 import { mobileScreen, rem } from '../pixels';
 import { getLinkColors } from '../atoms/Link';
 
@@ -11,12 +11,7 @@ const containerStyles = css({
   display: 'flex',
 });
 const borderWidth = 1;
-const styles = (
-  colors: Theme['colors'],
-  withLabel: boolean,
-  noMargin: boolean,
-  full: boolean,
-) =>
+const styles = (withLabel: boolean, noMargin: boolean, full: boolean) =>
   css({
     display: 'flex',
     alignItems: 'center',
@@ -24,23 +19,16 @@ const styles = (
     width: 'max-content',
     borderRadius: rem(36),
     minWidth: '24px',
-    color: colors?.primary500?.rgba || fern.rgb,
+    color: colour.foreground.brand,
     boxSizing: 'border-box',
-    border: `${borderWidth}px solid ${colors?.primary500?.rgba || fern.rgb}`,
+    border: `${borderWidth}px solid ${colour.border.brand}`,
     margin: noMargin ? '0' : `${rem(12)} 0`,
     padding: withLabel ? `0 ${rem(12 - borderWidth)}` : rem(3),
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       padding: full ? `0 ${rem(12 - borderWidth)}` : rem(3),
     },
     svg: {
-      stroke: colors?.primary500?.rgba || fern.rgb,
-    },
-    ':hover, :focus': {
-      color: colors?.primary500?.rgba || pine.rgb,
-      borderColor: colors?.primary500?.rgba || pine.rgb,
-      svg: {
-        stroke: colors?.primary500?.rgba || pine.rgb,
-      },
+      stroke: colour.foreground.brand,
     },
   });
 
@@ -99,8 +87,8 @@ const ExternalLink: React.FC<ExternalLinkProps> = ({
   <div css={[containerStyles, containerSizes[size]]}>
     <Anchor href={href}>
       <span
-        css={({ colors, components }) => [
-          styles(colors, !!label, noMargin, full),
+        css={({ components }) => [
+          styles(!!label, noMargin, full),
           components?.ExternalLink?.styles,
         ]}
       >

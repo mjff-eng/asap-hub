@@ -15,7 +15,7 @@ import {
 } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
 import { ExternalLinkIcon, OrcidIcon } from '../icons';
-import { charcoal, lead } from '../colors';
+import { colour } from '../colors';
 import { mailToSupport } from '../mail';
 import { LinkHeadline } from '../molecules';
 
@@ -87,7 +87,10 @@ const listStyles = css({
   gridRowGap: rem(12),
 });
 
-const titleStyle = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyle = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 type UserProfileRecentWorkProps = Omit<OrcidWork, 'id'>;
 
@@ -111,7 +114,7 @@ const UserProfileRecentWork: React.FC<UserProfileRecentWorkProps> = ({
     );
 
     publishDateComponent = (
-      <Paragraph accent="lead">
+      <Paragraph accent="tertiary">
         Originally Published:{' '}
         {format(
           date,
@@ -154,13 +157,15 @@ const UserProfileRecentWorks: React.FC<UserProfileRecentWorksProps> = ({
         <Headline2 styleAsHeading={3}>
           Recent Publications ({orcidWorks.length})
         </Headline2>
-        <Paragraph accent="lead">Via ORCID</Paragraph>
-        <span css={{ display: 'grid', svg: { fill: lead.rgb } }}>
+        <Paragraph accent="tertiary">Via ORCID</Paragraph>
+        <span
+          css={{ display: 'grid', svg: { fill: colour.foreground.tertiary } }}
+        >
           <OrcidIcon />
         </span>
       </div>
       {orcidWorks.length === 0 && isOwnProfile ? (
-        <Paragraph accent="lead">
+        <Paragraph accent="tertiary">
           <span css={titleStyle}>No works available on your ORCID.</span>
           <br />
           To complete this section, please add works to your ORCID.{' '}

@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import Avatar from '../Avatar';
-import { paper } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders the profile picture', () => {
   const { getByRole } = render(<Avatar imageUrl="/avatar.png" />);
@@ -32,23 +32,25 @@ it('shows a placeholder on white background', () => {
 
   expect(getByText('+1')).toBeVisible();
 
-  const { backgroundColor } = findParentWithStyle(
-    getByText('+1'),
-    'backgroundColor',
-  )!;
-  expect(backgroundColor).toBe(paper.rgb);
+  expect(getByText('+1').closest('svg')!.parentElement).toHaveStyleRule(
+    'background-color',
+    colour.background.primary,
+  );
 });
 
 it("shows the initials 'JD' on colored background", () => {
-  const { getByText } = render(<Avatar firstName="John" lastName="Doe" />);
+  const { getByText, getByRole } = render(
+    <Avatar firstName="John" lastName="Doe" />,
+  );
 
   expect(getByText('JD')).toBeVisible();
 
-  const { backgroundColor } = findParentWithStyle(
-    getByText('JD'),
-    'backgroundColor',
-  )!;
-  expect(backgroundColor).not.toBe(paper.rgb);
+  expect(getByRole('img')).toHaveStyleRule(
+    'background-color',
+    expect.stringMatching(
+      /^var\(--colour-background-color-(yellow|green|lavender|blue|brand)\)$/,
+    ),
+  );
 });
 
 it('does not show the initials if there is an image', () => {

@@ -1,9 +1,8 @@
-import { ThemeProvider } from '@emotion/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 
-import { color, error500 } from '../../colors';
+import { colour } from '../../colors';
 import Switch from '../Switch';
 
 const props: ComponentProps<typeof Switch> = {
@@ -68,47 +67,19 @@ describe('Switch', () => {
     render(<Switch {...props} uncheckedColor="error" />);
 
     const switchElement = screen.getByRole('checkbox');
-    expect(getComputedStyle(switchElement).backgroundColor).toBe(error500.rgb);
+    expect(switchElement).toHaveStyleRule(
+      'background-color',
+      colour.background['error-inverse'],
+    );
   });
 
-  it('uses ThemeProvider theme primaryColor', () => {
-    // Mock getComputedStyle to avoid jsdom "Not implemented: window.computedStyle(elt, pseudoElt)" error
-    const originalGetComputedStyle = window.getComputedStyle;
-    const mockGetComputedStyle = jest.fn(
-      (elt: Element, pseudoElt?: string | null) => {
-        if (pseudoElt) {
-          // Return a mock CSSStyleDeclaration for pseudo-elements
-          return {
-            backgroundColor: 'rgb(0, 106, 146)',
-          } as unknown as CSSStyleDeclaration;
-        }
-        return originalGetComputedStyle(elt);
-      },
+  it('fills the on state with the brand inverse background', () => {
+    render(<Switch {...props} checked />);
+
+    expect(screen.getByRole('checkbox')).toHaveStyleRule(
+      'background-color',
+      colour.background['brand-inverse'],
+      { target: ':checked' },
     );
-    window.getComputedStyle = mockGetComputedStyle;
-
-    const testCheckedBackgroundColor = color(0, 106, 146);
-    const theme = {
-      colors: {
-        primary500: testCheckedBackgroundColor,
-      },
-    };
-    render(
-      <ThemeProvider theme={theme}>
-        <Switch {...props} checked />
-      </ThemeProvider>,
-    );
-
-    const switchElement = screen.getByLabelText('Toggle switch');
-
-    const { backgroundColor: checkedBackgroundColor } = getComputedStyle(
-      switchElement,
-      ':checked',
-    );
-
-    expect(checkedBackgroundColor).toBe(testCheckedBackgroundColor.rgb);
-
-    // Restore original getComputedStyle
-    window.getComputedStyle = originalGetComputedStyle;
   });
 });

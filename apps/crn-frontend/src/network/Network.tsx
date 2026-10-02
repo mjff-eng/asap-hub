@@ -86,7 +86,7 @@ const Network: FC<Record<string, never>> = () => {
               filters={filters}
               onChangeFilter={toggleFilter}
               pageDescription={
-                <Paragraph noMargin accent="lead">
+                <Paragraph noMargin accent="tertiary">
                   Members of our research community who contribute to
                   Parkinson's disease research as part of the Collaborative
                   Research Network (CRN).
@@ -121,7 +121,7 @@ const Network: FC<Record<string, never>> = () => {
               onChangeFilter={toggleFilter}
               researchThemes={researchThemes}
               pageDescription={
-                <Paragraph noMargin accent="lead">
+                <Paragraph noMargin accent="tertiary">
                   Discovery Teams conduct collaborative research projects
                   focused on advancing scientific understanding within a defined
                   theme or area of inquiry.
@@ -149,7 +149,7 @@ const Network: FC<Record<string, never>> = () => {
               researchThemes={researchThemes}
               resourceTypes={resourceTypes}
               pageDescription={
-                <Paragraph noMargin accent="lead">
+                <Paragraph noMargin accent="tertiary">
                   Resource Teams support the development of tools, services, and
                   shared resources to enable the CRN and ultimately strengthen
                   the broader research community.
@@ -183,7 +183,7 @@ const Network: FC<Record<string, never>> = () => {
               filters={filters}
               onChangeFilter={toggleFilter}
               pageDescription={
-                <Paragraph noMargin accent="lead">
+                <Paragraph noMargin accent="tertiary">
                   Interest Groups serve as a forum for exchanging ideas, sharing
                   preliminary findings, and fostering collaboration across teams
                   working on related scientific themes.
@@ -217,7 +217,7 @@ const Network: FC<Record<string, never>> = () => {
               filters={filters}
               onChangeFilter={toggleFilter}
               pageDescription={
-                <Paragraph noMargin accent="lead">
+                <Paragraph noMargin accent="tertiary">
                   Working Groups are time-bound, ad hoc groups formed by CRN
                   members to address specific needs in the PD field.Their work
                   includes due diligence, scoping, and thought leadership aimed

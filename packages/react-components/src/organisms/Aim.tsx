@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { info100, info500, steel } from '../colors';
+import { colour } from '../colors';
 import { useTextTruncation } from '../hooks';
 import {
   descriptionContainerStyles,
@@ -21,7 +21,7 @@ const aimRowStyles = css({
   gridColumn: '1 / -1',
   gridTemplateColumns: 'subgrid',
   paddingBottom: rem(20),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   marginBottom: rem(20),
   [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
     gridColumn: 'auto',
@@ -52,8 +52,8 @@ const aimNumberBadgeStyles = css({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: info100.rgb,
-  color: info500.rgb,
+  backgroundColor: colour.background.info,
+  color: colour.foreground.info,
   fontSize: rem(14),
   borderRadius: rem(12),
   height: rem(24),

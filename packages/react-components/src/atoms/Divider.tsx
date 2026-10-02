@@ -1,7 +1,7 @@
 import { ReactText } from 'react';
 import { css } from '@emotion/react';
 
-import { lead, steel, paper } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -16,7 +16,7 @@ const hrStyles = css({
   margin: 0,
 
   border: 'none',
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 const textStyles = css({
   ':empty': {
@@ -32,8 +32,8 @@ const textStyles = css({
   justifySelf: 'center',
   textAlign: 'center',
 
-  backgroundColor: paper.rgb,
-  color: lead.rgb,
+  backgroundColor: colour.background.primary,
+  color: colour.foreground.tertiary,
   textTransform: 'uppercase',
   fontWeight: 'bold',
   fontSize: rem(13.6),

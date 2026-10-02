@@ -2,15 +2,39 @@ import { GlobalStyles, pixels } from '@asap-hub/react-components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Preview } from '@storybook/react-vite';
 
-const preview = {
+const preview: Preview = {
   decorators: [
-    (Story) => (
-      <>
-        <GlobalStyles />
-        <Story />
-      </>
-    ),
+    (Story, { globals, title }) => {
+      const product =
+        globals.product === 'crn' || globals.product === 'gp2'
+          ? globals.product
+          : title.startsWith('GP2')
+            ? 'gp2'
+            : 'crn';
+      return (
+        <>
+          <GlobalStyles product={product} />
+          <Story />
+        </>
+      );
+    },
   ],
+
+  globalTypes: {
+    product: {
+      description: 'Product whose CAS theme colours are applied',
+      toolbar: {
+        title: 'Product',
+        icon: 'paintbrush',
+        items: [
+          { value: 'auto', title: 'Auto (GP2 stories use GP2)' },
+          { value: 'crn', title: 'CRN' },
+          { value: 'gp2', title: 'GP2' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
 
   parameters: {
     controls: {
@@ -54,6 +78,7 @@ const preview = {
   },
 
   initialGlobals: {
+    product: 'auto',
     viewport: {
       value: 'smallDesktop',
       isRotated: false,

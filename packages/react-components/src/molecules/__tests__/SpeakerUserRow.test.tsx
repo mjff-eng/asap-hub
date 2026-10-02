@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
+import { colour } from '../../colors';
 import SpeakerUserRow from '../SpeakerUserRow';
 
 const defaultProps = {
@@ -37,12 +38,12 @@ it('renders a standalone findings icon when there is no toggle callback', () => 
   expect(screen.getByLabelText('No preliminary findings')).toBeVisible();
 });
 
-it('draws the not-shared cross in the light steel grey', () => {
+it('draws the not-shared cross in the light grey', () => {
   render(<SpeakerUserRow {...defaultProps} showShared />);
 
   expect(
     screen.getByLabelText('No preliminary findings').querySelector('circle'),
-  ).toHaveAttribute('stroke', 'rgb(223, 229, 234)');
+  ).toHaveAttribute('stroke', colour.neutral[100]);
 });
 
 it('renders no findings affordance at all when showShared is false', () => {

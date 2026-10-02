@@ -10,7 +10,7 @@ import {
 } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { Display, Pill, Link, CopyButton, TabLink } from '../atoms';
-import { lead } from '../colors';
+import { colour } from '../colors';
 import {
   googleDriveIcon,
   DiscoveryTeamIcon,
@@ -92,7 +92,7 @@ const metadataRowStyles = css({
   alignItems: 'flex-start',
   gap: rem(8),
   fontSize: rem(17),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 const iconContainerStyles = css({
   display: 'flex',
@@ -112,7 +112,7 @@ const iconStyles = css({
 });
 
 const teamLinkStyles = css({
-  color: '#00A650',
+  color: colour.foreground.brand,
   fontWeight: 500,
   textDecoration: 'none',
   '&:hover': {

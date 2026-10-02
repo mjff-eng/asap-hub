@@ -1,124 +1,48 @@
-export interface OpaqueColor {
-  r: number;
-  g: number;
-  b: number;
-  rgb: string;
-  rgba: string;
-  hex: string;
-}
-export interface TransparentColor {
-  r: number;
-  g: number;
-  b: number;
-  a: number;
-  rgba: string;
-}
+import { casPrimitives, casThemeVariables } from './cas-tokens.generated';
 
-export function color(r: number, g: number, b: number): OpaqueColor;
-export function color(
-  r: number,
-  g: number,
-  b: number,
-  a: number,
-): TransparentColor;
-export function color(
-  r: number,
-  g: number,
-  b: number,
-  a?: number,
-): OpaqueColor | TransparentColor {
-  return typeof a === 'number'
-    ? {
-        r,
-        g,
-        b,
-        a,
-        rgba: `rgba(${r}, ${g}, ${b}, ${a})`,
-      }
-    : {
-        r,
-        g,
-        b,
-        rgb: `rgb(${r}, ${g}, ${b})`,
-        rgba: `rgba(${r}, ${g}, ${b}, 1)`,
-        hex:
-          // eslint-disable-next-line prefer-template
-          '#' +
-          r.toString(16).padStart(2, '0') +
-          g.toString(16).padStart(2, '0') +
-          b.toString(16).padStart(2, '0'),
-      };
-}
+export const cssColour = (hex: string, alpha = 1): string =>
+  alpha === 1
+    ? hex
+    : `rgba(${[1, 3, 5]
+        .map((start) => parseInt(hex.slice(start, start + 2), 16))
+        .join(', ')}, ${alpha})`;
 
-export const colorWithTransparency = (
-  opaqueColor: OpaqueColor,
-  a: number,
-): TransparentColor => color(opaqueColor.r, opaqueColor.g, opaqueColor.b, a);
+export const colourWithAlpha = (value: string, alpha: number): string =>
+  `color-mix(in srgb, ${value} ${Math.round(alpha * 1000) / 10}%, transparent)`;
 
-// Monochrome
-export const paper = color(255, 255, 255);
-export const pearl = color(252, 253, 254);
-export const silver = color(237, 241, 243);
-export const steel = color(223, 229, 234);
-export const tin = color(194, 201, 206);
-export const lead = color(77, 100, 107);
-export const charcoal = color(0, 34, 44);
+type PrimitiveValues<T> = T extends readonly number[]
+  ? string
+  : { readonly [K in keyof T]: PrimitiveValues<T[K]> };
 
-// Accent
-export const ember = color(205, 20, 38);
-export const pepper = color(176, 10, 26);
-export const rose = color(247, 232, 234);
+const toCss = (channels: readonly number[]): string =>
+  channels.length === 4
+    ? `rgba(${channels.join(', ')})`
+    : `#${channels
+        .map((channel) => channel.toString(16).padStart(2, '0'))
+        .join('')
+        .toUpperCase()}`;
 
-export const sandstone = color(233, 166, 76);
-export const clay = color(206, 128, 26);
-export const apricot = color(248, 237, 222);
+const toValues = <T>(node: T): PrimitiveValues<T> =>
+  (Array.isArray(node)
+    ? toCss(node)
+    : Object.fromEntries(
+        Object.entries(node as Record<string, unknown>).map(([key, child]) => [
+          key,
+          toValues(child),
+        ]),
+      )) as PrimitiveValues<T>;
 
-export const fern = color(52, 162, 112);
-export const pine = color(40, 121, 83);
-export const mint = color(228, 245, 238);
+export const colour = {
+  ...toValues(casPrimitives),
+  ...casThemeVariables,
+};
 
-export const cerulean = color(0, 140, 198);
-export const denim = color(0, 106, 146);
-
-export const prussian = color(0, 93, 129);
-export const space = color(0, 69, 97);
-export const azure = color(231, 247, 254);
-
-export const magenta = color(207, 47, 179);
-export const berry = color(154, 35, 134);
-export const lilac = color(248, 234, 247);
-
-export const iris = color(140, 78, 159);
-export const mauve = color(105, 59, 119);
-export const lavender = color(242, 237, 245);
-
-export const error100 = color(247, 232, 234);
-export const error500 = color(205, 20, 38);
-export const error900 = color(176, 10, 26);
-
-export const info100 = color(230, 243, 249);
-export const info150 = color(192, 223, 237);
-export const info200 = color(191, 227, 211);
-export const info500 = color(12, 141, 195);
-export const info900 = color(0, 106, 146);
-
-export const information100 = color(230, 243, 249);
-export const information500 = color(12, 141, 195);
-export const information900 = color(0, 106, 146);
-
-export const neutral200 = color(246, 249, 251);
-export const neutral300 = color(237, 241, 243);
-export const neutral500 = color(223, 229, 234);
-export const neutral700 = color(194, 201, 206);
-export const neutral800 = color(146, 153, 158);
-export const neutral900 = color(77, 100, 107);
-export const neutral1000 = color(0, 32, 44);
-
-export const success100 = color(228, 245, 238);
-export const success500 = color(52, 162, 112);
-export const success900 = color(40, 121, 83);
-
-export const warning100 = color(248, 237, 222);
-export const warning150 = color(242, 225, 203);
-export const warning500 = color(206, 128, 26);
-export const warning900 = color(181, 107, 11);
+// Accent colours with no CAS equivalent yet; design question 3 decides their future.
+/** @deprecated not in CAS; waiting on a design decision (see the CAS colours Notion doc). */
+export const magenta = '#CF2FB3';
+/** @deprecated not in CAS; waiting on a design decision (see the CAS colours Notion doc). */
+export const iris = '#8C4E9F';
+/** @deprecated not in CAS; a stop of the preliminary findings gradient, waiting on the gradient design question. */
+export const findingsTeal = '#1491B2';
+/** @deprecated not in CAS; a stop of the preliminary findings gradient, waiting on the gradient design question. */
+export const findingsGreen = '#299C86';

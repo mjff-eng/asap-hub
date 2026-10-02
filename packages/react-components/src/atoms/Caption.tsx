@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import * as colors from '../colors';
+import { colour } from '../colors';
 import { layoutStyles, AccentColorName, captionStyles } from '../text';
 
 const figStyles = css({
@@ -28,7 +28,7 @@ const Caption: React.FC<CaptionProps> = ({
   const styles = [
     layoutStyles,
     captionStyles,
-    accent ? { color: colors[accent].rgb } : null,
+    accent ? { color: colour.foreground[accent] } : null,
     bold ? boldStyles : null,
     noMargin ? { margin: 0 } : null,
   ];

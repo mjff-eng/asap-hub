@@ -1,14 +1,6 @@
 import { css } from '@emotion/react';
 
-import {
-  charcoal,
-  lead,
-  neutral1000,
-  paper,
-  silver,
-  steel,
-  tin,
-} from '../colors';
+import { colourWithAlpha, colour } from '../colors';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
 
 export const contentStyles = css({
@@ -36,9 +28,9 @@ export const iconButtonStyles = css({
   width: rem(40),
   height: rem(40),
   alignItems: 'center',
-  borderColor: tin.rgb,
+  borderColor: colour.border.secondary,
   ':hover, :focus': {
-    borderColor: tin.rgb,
+    borderColor: colour.border.secondary,
   },
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     // Button re-asserts flexGrow:1 at this breakpoint; re-declare it so the
@@ -74,7 +66,7 @@ export const viewMoreStyles = css({
   alignItems: 'center',
   justifyContent: 'center',
   height: rem(56),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
 export const emptyStateStyles = css({
@@ -117,7 +109,7 @@ export const tableWrapperStyles = css({
 
 export const headerCellStyles = css({
   textAlign: 'left',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   fontSize: rem(17),
   fontWeight: 'bold',
   lineHeight: rem(24),
@@ -147,8 +139,12 @@ export const deleteButtonStyles = (
   enabled: boolean,
   disabledPalette: 'default' | 'light' = 'default',
 ) => {
-  const disabledBorder = disabledPalette === 'light' ? steel : tin;
-  const disabledBackground = disabledPalette === 'light' ? silver : steel;
+  const disabledBorder =
+    disabledPalette === 'light' ? colour.neutral[100] : colour.neutral[200];
+  const disabledBackground =
+    disabledPalette === 'light'
+      ? colour.general.blue.cerulean[25]
+      : colour.neutral[100];
   return css({
     flexGrow: 0,
     flexShrink: 0,
@@ -160,18 +156,22 @@ export const deleteButtonStyles = (
     height: rem(24),
     minHeight: rem(24),
     padding: 0,
-    border: `1px solid ${enabled ? steel.rgb : disabledBorder.rgb}`,
+    border: `1px solid ${enabled ? colour.border.tertiary : disabledBorder}`,
     borderRadius: rem(4),
-    backgroundColor: enabled ? paper.rgb : disabledBackground.rgb,
-    boxShadow: enabled ? undefined : `0 2px 4px rgba(223, 229, 234, 0.3)`,
-    color: enabled ? neutral1000.rgb : lead.rgb,
+    backgroundColor: enabled ? colour.background.primary : disabledBackground,
+    boxShadow: enabled
+      ? undefined
+      : `0 2px 4px ${colourWithAlpha(colour.neutral[100], 0.3)}`,
+    color: enabled ? colour.foreground.primary : colour.foreground.tertiary,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       minWidth: rem(24),
     },
     '> svg': {
       width: rem(14.4),
       height: rem(14.4),
-      ...(enabled ? {} : { filter: 'none', stroke: lead.rgb }),
+      ...(enabled
+        ? {}
+        : { filter: 'none', stroke: colour.foreground.tertiary }),
     },
   });
 };

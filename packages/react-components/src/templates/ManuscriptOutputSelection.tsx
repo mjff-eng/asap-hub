@@ -10,8 +10,8 @@ import {
   LabeledMultiSelect,
   LabeledRadioButtonGroup,
   MultiSelectOptionsType,
-  paper,
   Pill,
+  colour,
 } from '..';
 import { mobileScreen, rem } from '../pixels';
 
@@ -86,7 +86,7 @@ const singleValueStyles = css({
   flexFlow: 'column',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.background.primary,
 });
 
 const pillContainerStyles = (isFocused?: boolean) =>
@@ -98,12 +98,12 @@ const pillContainerStyles = (isFocused?: boolean) =>
       flexDirection: 'column',
     },
     '& > *:nth-of-type(1), & > *:nth-of-type(2)': {
-      backgroundColor: isFocused ? '#DFE5EA' : undefined,
-      color: isFocused ? '#4D646B' : undefined,
+      backgroundColor: isFocused ? colour.neutral[100] : undefined,
+      color: isFocused ? colour.foreground.tertiary : undefined,
     },
     '& > *:nth-of-type(3)': {
-      backgroundColor: isFocused ? '#CFEDFB' : undefined,
-      color: isFocused ? '#006A92' : undefined,
+      backgroundColor: isFocused ? colour.brand.gp2[50] : undefined,
+      color: isFocused ? colour.brand.gp2[800] : undefined,
     },
   });
 

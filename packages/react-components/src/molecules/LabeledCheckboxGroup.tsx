@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { rem } from '../pixels';
 import { validationMessageStyles } from '../form';
 import { CheckboxGroup } from '../organisms';
-import { lead } from '../colors';
+import { colour } from '../colors';
 
 export type LabeledCheckboxGroupProps = ComponentProps<typeof CheckboxGroup> & {
   readonly title?: string;
@@ -29,7 +29,7 @@ const subtitleStyles = css({
 
 const descriptionStyles = css({
   display: 'inline-block',
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   lineHeight: `${24 / 17}em`,
   marginBottom: rem(12),

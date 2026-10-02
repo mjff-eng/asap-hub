@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { formatDateToTimezone } from '../date';
-import { charcoal, mint, paper, steel } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -15,10 +15,10 @@ const containerStyles = css({
 
   textAlign: 'center',
 
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.background.primary,
   borderStyle: 'solid',
   borderWidth: 1,
-  borderColor: steel.rgb,
+  borderColor: colour.border.tertiary,
   borderRadius: rem(8),
 });
 
@@ -26,8 +26,8 @@ const monthStyles = css({
   display: 'block',
   padding: `${rem(8)} 0`,
 
-  backgroundColor: mint.rgb,
-  color: charcoal.rgb,
+  backgroundColor: colour.background.brand,
+  color: colour.foreground.primary,
 
   fontSize: rem(17),
   fontWeight: 'bold',
@@ -41,7 +41,7 @@ const dayStyles = css({
   alignItems: 'center',
   justifyContent: 'center',
 
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
 
   fontSize: rem(30),
   fontWeight: 'bold',

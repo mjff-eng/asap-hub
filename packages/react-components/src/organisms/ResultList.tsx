@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { ExportButton, ListControls, PageControls } from '../molecules';
 import { Headline3, Paragraph } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 
 const headerStyles = css({
   display: 'flex',
@@ -53,7 +53,7 @@ const pageControlsStyles = css({
 });
 
 const iconStyles = css({
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   display: 'inline-flex',
   svg: {
     width: rem(48),
@@ -129,7 +129,7 @@ const ResultList: React.FC<ResultListProps> = ({
           <main css={{ textAlign: 'center' }}>
             {icon && <span css={iconStyles}>{icon}</span>}
             <Headline3>No results have been found.</Headline3>
-            <Paragraph accent="lead">
+            <Paragraph accent="tertiary">
               Please double-check your search for any typos or try a different
               search term.
             </Paragraph>

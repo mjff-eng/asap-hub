@@ -27,7 +27,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({
 }) => (
   <section>
     <Headline2 styleAsHeading={3}>{title}</Headline2>
-    {subtitle && <Paragraph accent="lead">{subtitle}</Paragraph>}
+    {subtitle && <Paragraph accent="tertiary">{subtitle}</Paragraph>}
     <div css={styles}>
       {news.map((newsItem) => (
         <NewsCard key={newsItem.id} {...newsItem} type={type} />

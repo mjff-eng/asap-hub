@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
+import { colour } from '../../colors';
 import SpeakerTeamRow, { SpeakerTeamRowUser } from '../SpeakerTeamRow';
 
 const getUser = (
@@ -304,5 +305,5 @@ it('draws the cross inside a not-shared group pill in the pill text colour', () 
 
   expect(
     screen.getByLabelText('No preliminary findings').querySelector('circle'),
-  ).toHaveAttribute('stroke', 'rgb(77, 100, 107)');
+  ).toHaveAttribute('stroke', colour.foreground.tertiary);
 });

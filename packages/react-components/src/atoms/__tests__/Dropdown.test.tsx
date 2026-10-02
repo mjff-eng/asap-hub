@@ -1,11 +1,10 @@
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Theme } from '@emotion/react';
 import { matchers } from '@emotion/jest';
 import { GroupBase, SingleValueProps } from 'react-select';
 
-import { ember, fern, lead, pine, silver, tin } from '../../colors';
+import { colour } from '../../colors';
 import Dropdown from '../Dropdown';
 import { Option, reactSelectStyles } from '../../select';
 
@@ -30,7 +29,10 @@ it('shows a placeholder without a selection', () => {
     />,
   );
   expect(screen.getByText('Select')).toBeVisible();
-  expect(getComputedStyle(screen.getByText('Select')).color).toBe(lead.rgb);
+  expect(screen.getByText('Select')).toHaveStyleRule(
+    'color',
+    colour.foreground.tertiary,
+  );
 
   rerender(
     <Dropdown
@@ -41,8 +43,9 @@ it('shows a placeholder without a selection', () => {
   );
 
   expect(screen.getByText('Choose something')).toBeVisible();
-  expect(getComputedStyle(screen.getByText('Choose something')).color).toBe(
-    lead.rgb,
+  expect(screen.getByText('Choose something')).toHaveStyleRule(
+    'color',
+    colour.foreground.tertiary,
   );
 });
 
@@ -108,7 +111,7 @@ it('only shows valid options', async () => {
   expect(screen.queryByText('-')).toBeNull();
 });
 
-it('shows the focused option in green', async () => {
+it('shows the focused option in the brand colour', async () => {
   render(
     <Dropdown
       placeholder="Select"
@@ -124,22 +127,16 @@ it('shows the focused option in green', async () => {
 
   await userEvent.hover(screen.getByText('Gatwick'));
   expect(
-    findParentWithStyle(screen.getByText('Gatwick'), 'color')?.color.replace(
-      / /g,
-      '',
-    ),
-  ).toBe(pine.rgb.replace(/ /g, ''));
+    screen.getByText('Gatwick').closest('[id*="-option-"]'),
+  ).toHaveStyleRule('color', colour.foreground.brand);
 
   await userEvent.hover(screen.getByText('Heathrow'));
   expect(
-    findParentWithStyle(screen.getByText('Gatwick'), 'color')?.color.replace(
-      / /g,
-      '',
-    ),
-  ).not.toBe(pine.rgb.replace(/ /g, ''));
+    screen.getByText('Gatwick').closest('[id*="-option-"]'),
+  ).not.toHaveStyleRule('color', colour.foreground.brand);
 });
 
-it('gets a green border when focused', async () => {
+it('gets a brand border when focused', async () => {
   render(
     <Dropdown
       placeholder="Select"
@@ -150,13 +147,13 @@ it('gets a green border when focused', async () => {
 
   await userEvent.click(screen.getByText('Select'));
   expect(
-    findParentWithStyle(screen.getByText('Select'), 'borderColor')?.borderColor,
-  ).toBe(fern.rgba);
+    findParentWithStyle(screen.getByText('Select'), 'borderStyle')?.element,
+  ).toHaveStyleRule('border-color', colour.border.brand);
 
   await userEvent.tab();
   expect(
-    findParentWithStyle(screen.getByText('Select'), 'borderColor')?.borderColor,
-  ).not.toBe(fern.rgb);
+    findParentWithStyle(screen.getByText('Select'), 'borderStyle')?.element,
+  ).not.toHaveStyleRule('border-color', colour.border.brand);
 });
 
 it('gets greyed out when disabled', () => {
@@ -170,22 +167,22 @@ it('gets greyed out when disabled', () => {
   );
 
   expect(
-    findParentWithStyle(screen.getByText('Heathrow'), 'color')?.color,
-  ).toBe(lead.rgb);
+    findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
+  ).toHaveStyleRule('color', colour.foreground.tertiary);
   expect(
-    findParentWithStyle(screen.getByText('Heathrow'), 'background')?.background,
-  ).toBe(silver.rgb);
+    findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
+  ).toHaveStyleRule('background-color', colour.background.disabled);
   expect(screen.getByRole('combobox', { hidden: true })).toBeDisabled();
 
   rerender(
     <Dropdown options={[{ value: 'LHR', label: 'Heathrow' }]} value="LHR" />,
   );
   expect(
-    findParentWithStyle(screen.getByText('Heathrow'), 'color')?.color,
-  ).not.toBe(lead.rgb);
+    findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
+  ).not.toHaveStyleRule('color', colour.foreground.tertiary);
   expect(
-    findParentWithStyle(screen.getByText('Heathrow'), 'background')?.background,
-  ).not.toBe(silver.rgb);
+    findParentWithStyle(screen.getByText('Heathrow'), 'borderStyle')?.element,
+  ).not.toHaveStyleRule('background-color', colour.background.disabled);
   expect(screen.getByRole('combobox', { hidden: true })).not.toBeDisabled();
 });
 
@@ -290,14 +287,15 @@ it('shows the field in red when required field not filled', async () => {
     />,
   );
   const input = screen.getByRole('combobox', { hidden: false });
-  expect(findParentWithStyle(input, 'borderColor')?.borderColor).not.toBe(
-    ember.rgb,
-  );
+  expect(
+    findParentWithStyle(input, 'borderStyle')?.element,
+  ).not.toHaveStyleRule('border-color', colour.border.error);
 
   await userEvent.click(input);
   await userEvent.tab();
-  expect(findParentWithStyle(input, 'borderColor')?.borderColor).toBe(
-    ember.rgb,
+  expect(findParentWithStyle(input, 'borderStyle')?.element).toHaveStyleRule(
+    'border-color',
+    colour.border.error,
   );
 
   await userEvent.click(input);
@@ -313,7 +311,9 @@ it('shows the field in red when required field not filled', async () => {
       required={false}
     />,
   );
-  expect(findParentWithStyle(input, 'color')?.color).not.toBe(ember.rgb);
+  expect(
+    findParentWithStyle(input, 'borderStyle')?.element,
+  ).not.toHaveStyleRule('color', colour.foreground.error);
 });
 
 it('shows an error message when required field not filled', async () => {
@@ -475,8 +475,6 @@ it('applies the correct styles for the custom rendered value', () => {
   expect(customValue.parentElement).toHaveStyleRule('pointer-events', 'none');
 });
 
-const mockTheme = {} as Theme;
-
 const baseProvided = { color: '' };
 
 const createSingleValueProps = (
@@ -490,17 +488,17 @@ const createSingleValueProps = (
     data: { value, label: '' },
   }) as unknown as SingleValueProps<TestOption, false, GroupBase<TestOption>>;
 
-it('applies tin color for singleValue when selected value is empty string', () => {
-  const styles = reactSelectStyles(mockTheme, false);
+it('applies the disabled colour for singleValue when selected value is empty string', () => {
+  const styles = reactSelectStyles(false);
   const styleResult = styles?.singleValue!(
     baseProvided,
     createSingleValueProps(''),
   );
-  expect(styleResult?.color).toBe(tin.rgb);
+  expect(styleResult?.color).toBe(colour.foreground.disabled);
 });
 
 it('applies unset color for singleValue when selected value is not empty string', () => {
-  const styles = reactSelectStyles(mockTheme, false);
+  const styles = reactSelectStyles(false);
   const styleResult = styles?.singleValue!(
     baseProvided,
     createSingleValueProps('LHR'),

@@ -3,7 +3,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import React, { Fragment } from 'react';
 import { Divider, Link } from '../atoms';
-import { lead } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const titleStyle = css({
@@ -11,7 +11,7 @@ const titleStyle = css({
 });
 
 const roleStyle = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const containerStyles = css({

@@ -1,23 +1,22 @@
 /* istanbul ignore file */
 
-import { charcoal } from '../colors';
-import type { OpaqueColor } from '../colors';
+import { colour } from '../colors';
 
 type ExternalLinkIconProps = {
   size?: number;
-  color?: OpaqueColor;
+  color?: string;
 };
 
 const ExternalLinkIcon: React.FC<ExternalLinkIconProps> = ({
   size = 24,
-  color = charcoal,
+  color = colour.neutral[900],
 }) => (
   <svg
     width={size}
     height={size}
     viewBox="0 0 24 24"
     fill="none"
-    stroke={color.rgba}
+    stroke={color}
     xmlns="http://www.w3.org/2000/svg"
   >
     <title>External Link</title>

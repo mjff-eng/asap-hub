@@ -98,7 +98,7 @@ const ConfirmStatusChangeModal: React.FC<ConfirmStatusChangeModalProps> = ({
         <Headline3>{title}</Headline3>
       </header>
       <div css={[paddingStyles, { paddingTop: 0 }]}>
-        <Paragraph accent="lead">{content}</Paragraph>
+        <Paragraph accent="tertiary">{content}</Paragraph>
 
         <div css={buttonContainerStyles}>
           <div css={dismissButtonStyles}>

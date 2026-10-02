@@ -31,7 +31,7 @@ import {
 } from '@lexical/markdown';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import { $nodesOfType, EditorState } from 'lexical';
-import { ember, lead, rose, silver } from '../colors';
+import { colour } from '../colors';
 import { styles, useValidation, validationMessageStyles } from '../form';
 import { noop } from '../utils';
 import ToolbarPlugin from './TextEditorToolbar';
@@ -69,7 +69,7 @@ const containerStyles = css({
   margin: '0px auto',
   borderRadius: '2px',
   width: '100%',
-  color: '#000',
+  color: colour.foreground.primary,
   position: 'relative',
   lineHeight: '20px',
   fontWeight: 400,
@@ -79,7 +79,7 @@ const containerStyles = css({
 
   // editor styles
   '& .editor-link': {
-    color: 'rgb(33, 111, 219)',
+    color: colour.foreground.brand,
     textDecoration: 'none',
   },
 
@@ -129,7 +129,7 @@ const containerStyles = css({
   },
   '& .editor-heading-h1': {
     fontSize: '24px',
-    color: 'rgb(5, 5, 5)',
+    color: colour.foreground.primary,
     fontWeight: 400,
     margin: 0,
     marginBottom: '12px',
@@ -138,20 +138,20 @@ const containerStyles = css({
 });
 
 const innerStyles = css({
-  background: '#fff',
+  background: colour.background.primary,
   position: 'relative',
 });
 const inputStyles = {
   minHeight: '150px',
   fontSize: '15px',
-  caretColor: 'rgb(5, 5, 5)',
+  caretColor: colour.foreground.primary,
   tabSize: 1,
   outline: 0,
   padding: '15px 10px',
 };
 
 const placeholderStyles = css({
-  color: '#999',
+  color: colour.foreground.quaternary,
   overflow: 'hidden',
   position: 'absolute',
   textOverflow: 'ellipsis',
@@ -330,23 +330,18 @@ const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                   id={id}
                   required={required}
                   data-testid={isMarkdown ? 'markdown-test-id' : 'editor'}
-                  css={({ colors }) =>
+                  css={
                     !isMarkdown
                       ? [
                           styles,
                           inputStyles,
                           (validationMessage || hasError) && {
-                            backgroundColor: rose.rgb,
-                            borderColor: `${ember.rgb}!important`,
-                          },
-                          colors?.primary500 && {
-                            ':focus': {
-                              borderColor: colors?.primary500.rgba,
-                            },
+                            backgroundColor: colour.background.error,
+                            borderColor: `${colour.border.error}!important`,
                           },
                           !enabled && {
-                            color: lead.rgb,
-                            backgroundColor: silver.rgb,
+                            color: colour.foreground.tertiary,
+                            backgroundColor: colour.background.tertiary,
                           },
                         ]
                       : [markdownStyles]
@@ -362,7 +357,7 @@ const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                   css={[
                     placeholderStyles,
                     validationMessage && {
-                      color: ember.rgb,
+                      color: colour.foreground.error,
                       opacity: 0.4,
                     },
                   ]}

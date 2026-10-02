@@ -13,7 +13,7 @@ import { CaptionCard, CaptionItem, PageControls } from '..';
 
 import { Card, Link, Paragraph } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, neutral200, steel } from '../colors';
+import { colour } from '../colors';
 import {
   AlphabeticalSortingIcon,
   alumniBadgeIcon,
@@ -47,12 +47,12 @@ const rowTitleStyles = css({
 const rowStyles = css({
   display: 'grid',
   padding: `${rem(20)} ${rem(24)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
   },
   ':nth-of-type(2n+3)': {
-    background: neutral200.rgb,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',
@@ -65,7 +65,7 @@ const rowStyles = css({
     columnGap: rem(15),
     paddingTop: 0,
     paddingBottom: 0,
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -80,7 +80,7 @@ const teamRowStyles = css({
 
 const titleStyles = css({
   fontWeight: 'bold',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   display: 'flex',
   alignItems: 'center',
   gap: rem(8),

@@ -1,11 +1,11 @@
 import { EventResponse, EventSpeakerTeam } from '@asap-hub/model';
 import { css } from '@emotion/react';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import AssociationList from './AssociationList';
 
 const listItemStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   whiteSpace: 'break-spaces',
   overflow: 'hidden',
   textOverflow: 'ellipsis',

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { rem } from '../pixels';
-import { fern, lead, paper, pine, steel } from '../colors';
+import { colour } from '../colors';
 import { noop } from '../utils';
 
 const styles = css({
@@ -16,29 +16,30 @@ const styles = css({
   borderRadius: '12px',
   borderStyle: 'solid',
   borderWidth: rem(1),
-  borderColor: steel.rgb,
+  borderColor: colour.border.tertiary,
   // inner circle
   padding: rem(6),
   backgroundClip: 'content-box',
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.background.primary,
 
   ':disabled': {
-    borderColor: steel.rgb,
+    borderColor: colour.border.disabled,
+    backgroundColor: colour.background.disabled,
     ':hover, :focus': {
-      borderColor: steel.rgb,
+      borderColor: colour.border.disabled,
     },
   },
 
   ':hover, :focus': {
-    borderColor: lead.rgb,
+    borderColor: colour.neutral[600],
   },
   ':checked': {
-    borderColor: fern.rgb,
-    backgroundColor: fern.rgb,
+    borderColor: colour.background['brand-inverse'],
+    backgroundColor: colour.background['brand-inverse'],
 
     ':hover, :focus': {
-      borderColor: pine.rgb,
-      backgroundColor: pine.rgb,
+      borderColor: colour.background['hover-brand-inverse'],
+      backgroundColor: colour.background['hover-brand-inverse'],
     },
   },
 });

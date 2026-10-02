@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 
 import TagList from '../TagList';
-import { neutral1000 } from '../../colors';
+import { colour } from '../../colors';
 
 it('shows all tags by default', () => {
   const { getAllByRole } = render(
@@ -60,9 +60,9 @@ it('hides tags when there are none', () => {
 it('disables its tags when disabled', () => {
   const { getByText } = render(<TagList tags={['tag 1']} enabled={false} />);
 
-  expect(findParentWithStyle(getByText(/tag 1/i), 'color')?.color).toEqual(
-    neutral1000.rgb,
-  );
+  expect(
+    findParentWithStyle(getByText(/tag 1/i), 'borderStyle')?.element,
+  ).toHaveStyleRule('background-color', colour.background.disabled);
 });
 
 describe('when capped', () => {

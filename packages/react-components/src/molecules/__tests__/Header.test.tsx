@@ -2,6 +2,7 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
+import { colour } from '../../colors';
 
 import Header from '../Header';
 
@@ -26,10 +27,10 @@ it('links back to the home page', async () => {
 
 it('does not render an opaque background when set to transparent', () => {
   const { getByTitle, rerender } = render(<Header />);
-  expect(
-    findParentWithStyle(getByTitle('CRN Logo'), 'backgroundColor')
-      ?.backgroundColor,
-  ).toMatchInlineSnapshot(`"rgb(255, 255, 255)"`);
+  expect(getByTitle('CRN Logo').closest('header')).toHaveStyleRule(
+    'background-color',
+    colour.background.primary,
+  );
 
   rerender(<Header transparent />);
   expect(findParentWithStyle(getByTitle('CRN Logo'), 'backgroundColor')).toBe(

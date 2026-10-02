@@ -5,7 +5,7 @@ import { sharedResearch } from '@asap-hub/routing';
 import { mobileScreen, rem } from '../pixels';
 import { Link, Button } from '../atoms';
 import { editIcon, duplicateIcon, actionIcon, VersionIcon } from '../icons';
-import { steel } from '../colors';
+import { colour } from '../colors';
 
 const commonStyles = {
   display: 'flex',
@@ -47,7 +47,7 @@ const reviewButton = css({
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     marginTop: rem(12),
     paddingTop: rem(28),
-    borderTop: `1px solid ${steel.rgb}`,
+    borderTop: `1px solid ${colour.border.tertiary}`,
   },
 });
 

@@ -13,7 +13,7 @@ import {
   CopyButton,
   Spinner,
 } from '../atoms';
-import { paper, tin } from '../colors';
+import { colour, colourWithAlpha } from '../colors';
 import { editIcon, uploadIcon, alumniBadgeIcon } from '../icons';
 import { createMailTo } from '../mail';
 import {
@@ -158,7 +158,7 @@ const uploadOverlayStyles = css({
   borderRadius: '50%',
   cursor: 'pointer',
   opacity: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: colourWithAlpha(colour.neutral[900], 0.5),
   transition: 'opacity 150ms ease-in-out',
   ':hover, :focus-within': {
     opacity: 1,
@@ -172,7 +172,7 @@ const savingOverlayStyles = css({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '50%',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: colourWithAlpha(colour.neutral[900], 0.5),
 });
 const badgeSize = 48;
 const badgeStyles = css({
@@ -345,7 +345,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                       {degree ? (
                         <Display styleAsHeading={2}>, {degree}</Display>
                       ) : isOwnProfile ? (
-                        <div css={{ color: tin.rgb }}>
+                        <div css={{ color: colour.foreground.disabled }}>
                           <Display styleAsHeading={2}>, Degree</Display>
                         </div>
                       ) : null}
@@ -393,8 +393,8 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                     <div css={savingOverlayStyles}>
                       <Spinner
                         size={24}
-                        color={paper.rgb}
-                        trackColor="rgba(255, 255, 255, 0.4)"
+                        color={colour.neutral[0]}
+                        trackColor={colourWithAlpha(colour.neutral[0], 0.4)}
                         ariaLabel="Saving avatar"
                         ariaBusy
                       />

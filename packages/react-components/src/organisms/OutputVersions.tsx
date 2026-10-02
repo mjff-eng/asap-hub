@@ -4,15 +4,7 @@ import { useState } from 'react';
 
 import { Button, Card, Headline2, Link, Paragraph, Pill } from '../atoms';
 import { rem, tabletScreen } from '../pixels';
-import {
-  charcoal,
-  fern,
-  lead,
-  neutral200,
-  paper,
-  pine,
-  steel,
-} from '../colors';
+import { colour } from '../colors';
 import { formatDateToTimezone } from '../date';
 import { ExternalLinkIcon } from '../icons';
 import { contentSidePaddingWithNavigation } from '../layout';
@@ -30,7 +22,7 @@ const descriptionStyles = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     marginBottom: rem(32),
   },
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const gridTitleStyles = css({
@@ -52,7 +44,7 @@ const rowStyles = css({
   display: 'grid',
   paddingTop: rem(20),
   paddingBottom: rem(20),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':last-child': {
     borderBottom: 'none',
     marginBottom: 0,
@@ -74,7 +66,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const showMoreStyles = css({
@@ -83,17 +75,26 @@ const showMoreStyles = css({
   marginTop: rem(32),
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
-const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyles = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   light: css({
-    stroke: fern.rgb,
+    stroke: colour.foreground.brand,
   }),
-  grey: css({ stroke: fern.rgb, ':active': { stroke: pine.rgb } }),
-  dark: css({ stroke: paper.rgb, ':active': { stroke: paper.rgb } }),
+  grey: css({
+    stroke: colour.foreground.brand,
+    ':active': { stroke: colour.border.brand },
+  }),
+  dark: css({
+    stroke: colour.foreground['primary-inverse'],
+    ':active': { stroke: colour.foreground['primary-inverse'] },
+  }),
 };
 
 const mainStyles = css({
@@ -107,7 +108,7 @@ const createVersionWrapperStyles = css({
 });
 
 const createVersionCardStyles = css({
-  background: neutral200.rgb,
+  background: colour.background.secondary,
 });
 
 type Version = Omit<ResearchOutputVersion, 'documentType' | 'type'> & {

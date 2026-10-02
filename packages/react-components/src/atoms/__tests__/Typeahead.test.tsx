@@ -3,7 +3,7 @@ import { waitFor } from '@testing-library/dom';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { ember, lead, pine, silver } from '../../colors';
+import { colour } from '../../colors';
 import Typeahead from '../Typeahead';
 
 it('shows the selected value', () => {
@@ -55,19 +55,21 @@ it('allows non-suggested input', async () => {
   expect(handleChange).toHaveBeenLastCalledWith('LTN');
 });
 
-it('shows the focused suggestion in green', async () => {
+it('shows the focused suggestion in the brand colour', async () => {
   const { getByText, getByDisplayValue } = render(
     <Typeahead suggestions={['LHR', 'LGW']} value="" />,
   );
   await userEvent.click(getByDisplayValue(''));
-  expect(
-    findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).not.toBe(pine.rgb.replace(/ /g, ''));
+  expect(getByText('LGW').closest('[id*="-option-"]')).not.toHaveStyleRule(
+    'color',
+    colour.foreground.brand,
+  );
 
   fireEvent.mouseOver(getByText('LGW'));
-  expect(
-    findParentWithStyle(getByText('LGW'), 'color')?.color.replace(/ /g, ''),
-  ).toBe(pine.rgb.replace(/ /g, ''));
+  expect(getByText('LGW').closest('[id*="-option-"]')).toHaveStyleRule(
+    'color',
+    colour.foreground.brand,
+  );
 });
 
 it('gets greyed out when disabled', () => {
@@ -77,8 +79,11 @@ it('gets greyed out when disabled', () => {
   // In react-select v5, the control element has the color/background styles
   const disabledControl = container.querySelector('[aria-disabled="true"]');
   expect(disabledControl).not.toBeNull();
-  expect(getComputedStyle(disabledControl!).color).toBe(lead.rgb);
-  expect(getComputedStyle(disabledControl!).backgroundColor).toBe(silver.rgb);
+  expect(disabledControl).toHaveStyleRule('color', colour.foreground.tertiary);
+  expect(disabledControl).toHaveStyleRule(
+    'background-color',
+    colour.background.disabled,
+  );
   const disabledInput = container.querySelector('input');
   expect(disabledInput).toBeDisabled();
 
@@ -88,9 +93,13 @@ it('gets greyed out when disabled', () => {
     '[class*="-container"] > div:not([aria-disabled])',
   );
   expect(enabledControl).not.toBeNull();
-  expect(getComputedStyle(enabledControl!).color).not.toBe(lead.rgb);
-  expect(getComputedStyle(enabledControl!).backgroundColor).not.toBe(
-    silver.rgb,
+  expect(enabledControl).not.toHaveStyleRule(
+    'color',
+    colour.foreground.tertiary,
+  );
+  expect(enabledControl).not.toHaveStyleRule(
+    'background-color',
+    colour.background.disabled,
   );
   const enabledInput = container.querySelector('input');
   expect(enabledInput).not.toBeDisabled();
@@ -104,8 +113,8 @@ describe('invalidity', () => {
     // In react-select v5, use findParentWithStyle from the input to check invalid state via borderColor
     const inputBefore = container.querySelector('input')!;
     expect(
-      findParentWithStyle(inputBefore, 'borderColor')?.borderColor,
-    ).not.toBe(ember.rgb);
+      findParentWithStyle(inputBefore, 'borderStyle')?.element,
+    ).not.toHaveStyleRule('border-color', colour.border.error);
 
     rerender(
       <Typeahead
@@ -114,11 +123,11 @@ describe('invalidity', () => {
         customValidationMessage="Nope."
       />,
     );
-    // After rerender with validation message, control should have ember color
+    // After rerender with validation message, control should have the error border
     const inputAfter = container.querySelector('input')!;
-    expect(findParentWithStyle(inputAfter, 'borderColor')?.borderColor).toBe(
-      ember.rgb,
-    );
+    expect(
+      findParentWithStyle(inputAfter, 'borderStyle')?.element,
+    ).toHaveStyleRule('border-color', colour.border.error);
   });
 
   it('is caused by being empty when required', async () => {
@@ -131,8 +140,8 @@ describe('invalidity', () => {
       // In react-select v5, use findParentWithStyle from the input to check invalid state via borderColor
       const inputElement = container.querySelector('input')!;
       expect(
-        findParentWithStyle(inputElement, 'borderColor')?.borderColor,
-      ).toBe(ember.rgb);
+        findParentWithStyle(inputElement, 'borderStyle')?.element,
+      ).toHaveStyleRule('border-color', colour.border.error);
     });
   });
 });

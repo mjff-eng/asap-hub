@@ -8,13 +8,13 @@ import {
 import { news } from '@asap-hub/routing';
 import { Display, Link, Paragraph } from '../atoms';
 import { rem } from '../pixels';
-import { paper, steel } from '../colors';
+import { colour } from '../colors';
 import { contentSidePaddingWithNavigation } from '../layout';
 
 const headerStyles = css({
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(60)}`,
-  background: paper.rgb,
-  boxShadow: `0 2px 4px -2px ${steel.rgb}`,
+  background: colour.background.primary,
+  boxShadow: `0 2px 4px -2px ${colour.neutral[100]}`,
   marginBottom: rem(30),
   display: 'flex',
   justifyContent: 'center',
@@ -134,7 +134,7 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
       </Display>
       <div>
         {subheaderRecord[documentType] && (
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="tertiary">
             {subheaderRecord[documentType]}
           </Paragraph>
         )}
