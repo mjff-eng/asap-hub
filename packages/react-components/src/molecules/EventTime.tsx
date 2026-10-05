@@ -5,6 +5,7 @@ import { formatDateToTimezone } from '../date';
 import { info100, info500, lead, silver } from '../colors';
 import { rem } from '../pixels';
 import { calendarIcon, clockIcon, CircleInfoIcon } from '../icons';
+import { pillStyles } from '../pill';
 import {
   eventCrossesCalendarDay,
   getEventDurationMs,
@@ -51,27 +52,21 @@ const infoTriggerStyles = css({
   },
 });
 
-const recurringPillStyles = css({
-  display: 'inline-flex',
-  alignItems: 'center',
-  verticalAlign: 'middle',
+const recurringPillStyles = css([
+  pillStyles,
+  {
+    backgroundColor: info100.rgb,
+    color: info500.rgb,
+  },
+]);
 
-  backgroundColor: info100.rgb,
-  color: info500.rgb,
-  borderRadius: rem(36),
-  padding: `${rem(4)} ${rem(16)}`,
-});
-
-const dayCountPillStyles = css({
-  display: 'inline-flex',
-  alignItems: 'center',
-  verticalAlign: 'middle',
-
-  backgroundColor: silver.rgb,
-  color: lead.rgb,
-  borderRadius: rem(36),
-  padding: `${rem(4)} ${rem(16)}`,
-});
+const dayCountPillStyles = css([
+  pillStyles,
+  {
+    backgroundColor: silver.rgb,
+    color: lead.rgb,
+  },
+]);
 
 type EventTimeProps = Pick<
   EventResponse,

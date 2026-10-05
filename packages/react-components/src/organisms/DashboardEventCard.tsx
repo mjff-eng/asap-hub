@@ -7,6 +7,7 @@ import { EventInfo, EventMaterialsList } from '../molecules';
 import { Link } from '../atoms';
 import { ember, silver, lead } from '../colors';
 import { EventsUpcomingIcon, LiveIcon, MapPinIcon } from '../icons';
+import { pillStyles } from '../pill';
 import { rem, mobileScreen, largeDesktopScreen } from '../pixels';
 import { useEventLiveStatus } from '../utils';
 
@@ -38,18 +39,13 @@ const buttonContentStyles = css({
   gap: rem(8),
 });
 
-const inPersonPillStyles = css({
-  display: 'inline-flex',
-  alignItems: 'center',
-  flexShrink: 0,
-  gap: rem(8),
-  padding: `${rem(4)} ${rem(8)}`,
-  borderRadius: rem(12),
-  backgroundColor: silver.rgb,
-  color: lead.rgb,
-  fontSize: rem(14),
-  fontWeight: 'bold',
-});
+const inPersonPillStyles = css([
+  pillStyles,
+  {
+    backgroundColor: silver.rgb,
+    color: lead.rgb,
+  },
+]);
 
 type DashboardEventCardProps = Pick<
   BasicEvent,
