@@ -16,6 +16,7 @@
     "migrate-project-data": "ts-node ./scripts/migrate-project-data.ts",
     "migrate-preliminary-data-sharing": "ts-node ./scripts/migrate-preliminary-data-sharing.ts",
     "migrate-event-speakers-preliminary-data-shared": "ts-node ./scripts/migrate-event-speakers-preliminary-data-shared.ts",
+    "migrate-event-attendance-interest-group-teams": "ts-node ./scripts/migrate-event-attendance-interest-group-teams.ts",
     "migrate-impact-categories": "ts-node ./scripts/migrate-impact-categories.ts",
     "migrate-external-tools-to-projects": "ts-node ./scripts/migrate-external-tools-to-projects.ts",
     "transform-privacy-policy": "ts-node ./scripts/transform-privacy-policy.ts",
