@@ -126,6 +126,20 @@ export const asyncFunctions: AWS['functions'] = {
       SENTRY_DSN: sentryDsnHandlers,
     },
   },
+  syncInterestGroupEventAttendance: {
+    handler:
+      './src/handlers/event/sync-interest-group-event-attendance-handler.handler',
+    name: '${self:service}-${self:provider.stage}-syncIGEventAttendance',
+    timeout: 300,
+    reservedConcurrency: 1,
+    events: contentfulEventBridge([
+      'InterestGroupsPublished',
+      'InterestGroupsTeamsPublished',
+    ]),
+    environment: {
+      SENTRY_DSN: sentryDsnHandlers,
+    },
+  },
   ...(isProd && {
     complianceSpreadsheetEntryHandler: {
       handler:
