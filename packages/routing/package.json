@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.28.6",
-    "qs": "6.14.2",
+    "qs": "6.16.0",
     "typesafe-routes": "10.0.6",
     "typescript": "4.9.5"
   },
