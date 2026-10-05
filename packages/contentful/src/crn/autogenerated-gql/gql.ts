@@ -103,6 +103,10 @@ const documents = {
     types.FetchWorkingGroupCalendarDocument,
   '\n  query FetchInterestGroupCalendar($id: String!) {\n    interestGroups(id: $id) {\n      calendar {\n        sys {\n          id\n        }\n      }\n    }\n  }\n':
     types.FetchInterestGroupCalendarDocument,
+  '\n  query FetchInterestGroupTeamsByCalendarId($id: String!) {\n    calendars(id: $id) {\n      linkedFrom {\n        interestGroupsCollection(limit: 1) {\n          items {\n            teamsCollection(limit: 50) {\n              items {\n                startDate\n                endDate\n                team {\n                  sys {\n                    id\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n':
+    types.FetchInterestGroupTeamsByCalendarIdDocument,
+  '\n  query FetchUpcomingEventsByCalendarId(\n    $calendarId: String!\n    $now: DateTime!\n    $limit: Int\n    $skip: Int\n  ) {\n    eventsCollection(\n      limit: $limit\n      skip: $skip\n      order: [sys_id_ASC]\n      where: { calendar: { sys: { id: $calendarId } }, endDate_gt: $now }\n    ) {\n      total\n      items {\n        sys {\n          id\n        }\n        endDate\n        attendanceCollection(limit: 50) {\n          items {\n            sys {\n              id\n            }\n            attended\n            team {\n              sys {\n                id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n':
+    types.FetchUpcomingEventsByCalendarIdDocument,
   '\n  fragment ExternalAuthorsContent on ExternalAuthors {\n    sys {\n      id\n    }\n    name\n    orcid\n  }\n':
     types.ExternalAuthorsContentFragmentDoc,
   '\n  query FetchExternalAuthorById($id: String!) {\n    externalAuthors(id: $id) {\n      ...ExternalAuthorsContent\n    }\n  }\n  \n':
@@ -121,6 +125,8 @@ const documents = {
     types.FetchInterestGroupsDocument,
   '\n  query FetchInterestGroupsByUserId($id: String!, $limit: Int, $skip: Int) {\n    interestGroupLeadersCollection(\n      limit: $limit\n      skip: $skip\n      where: { user: { sys: { id: $id } } }\n    ) {\n      total\n      items {\n        linkedFrom {\n          interestGroupsCollection(limit: 1) {\n            items {\n              ...InterestGroupsContent\n            }\n          }\n        }\n      }\n    }\n  }\n  \n':
     types.FetchInterestGroupsByUserIdDocument,
+  '\n  query FetchInterestGroupIdByInterestGroupTeamId($id: String!) {\n    interestGroupsTeams(id: $id) {\n      linkedFrom {\n        interestGroupsCollection(limit: 1) {\n          items {\n            sys {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n':
+    types.FetchInterestGroupIdByInterestGroupTeamIdDocument,
   '\n  query FetchInterestGroupsByTeamId($id: String!) {\n    interestGroupsTeamsCollection(where: { team: { sys: { id: $id } } }) {\n      total\n      items {\n        linkedFrom {\n          interestGroupsCollection(limit: 1) {\n            total\n            items {\n              ...InterestGroupsContent\n            }\n          }\n        }\n      }\n    }\n  }\n  \n':
     types.FetchInterestGroupsByTeamIdDocument,
   '\n  query FetchLabs($limit: Int, $skip: Int, $where: LabsFilter) {\n    labsCollection(limit: $limit, skip: $skip, where: $where, order: name_ASC) {\n      total\n      items {\n        sys {\n          id\n        }\n        name\n        labPi {\n          sys {\n            id\n          }\n          teamsCollection(limit: 50) {\n            items {\n              inactiveSinceDate\n              team {\n                sys {\n                  id\n                }\n                inactiveSince\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n':
@@ -565,6 +571,18 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
+  source: '\n  query FetchInterestGroupTeamsByCalendarId($id: String!) {\n    calendars(id: $id) {\n      linkedFrom {\n        interestGroupsCollection(limit: 1) {\n          items {\n            teamsCollection(limit: 50) {\n              items {\n                startDate\n                endDate\n                team {\n                  sys {\n                    id\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query FetchInterestGroupTeamsByCalendarId($id: String!) {\n    calendars(id: $id) {\n      linkedFrom {\n        interestGroupsCollection(limit: 1) {\n          items {\n            teamsCollection(limit: 50) {\n              items {\n                startDate\n                endDate\n                team {\n                  sys {\n                    id\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query FetchUpcomingEventsByCalendarId(\n    $calendarId: String!\n    $now: DateTime!\n    $limit: Int\n    $skip: Int\n  ) {\n    eventsCollection(\n      limit: $limit\n      skip: $skip\n      order: [sys_id_ASC]\n      where: { calendar: { sys: { id: $calendarId } }, endDate_gt: $now }\n    ) {\n      total\n      items {\n        sys {\n          id\n        }\n        endDate\n        attendanceCollection(limit: 50) {\n          items {\n            sys {\n              id\n            }\n            attended\n            team {\n              sys {\n                id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query FetchUpcomingEventsByCalendarId(\n    $calendarId: String!\n    $now: DateTime!\n    $limit: Int\n    $skip: Int\n  ) {\n    eventsCollection(\n      limit: $limit\n      skip: $skip\n      order: [sys_id_ASC]\n      where: { calendar: { sys: { id: $calendarId } }, endDate_gt: $now }\n    ) {\n      total\n      items {\n        sys {\n          id\n        }\n        endDate\n        attendanceCollection(limit: 50) {\n          items {\n            sys {\n              id\n            }\n            attended\n            team {\n              sys {\n                id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
   source: '\n  fragment ExternalAuthorsContent on ExternalAuthors {\n    sys {\n      id\n    }\n    name\n    orcid\n  }\n',
 ): (typeof documents)['\n  fragment ExternalAuthorsContent on ExternalAuthors {\n    sys {\n      id\n    }\n    name\n    orcid\n  }\n'];
 /**
@@ -615,6 +633,12 @@ export function gql(
 export function gql(
   source: '\n  query FetchInterestGroupsByUserId($id: String!, $limit: Int, $skip: Int) {\n    interestGroupLeadersCollection(\n      limit: $limit\n      skip: $skip\n      where: { user: { sys: { id: $id } } }\n    ) {\n      total\n      items {\n        linkedFrom {\n          interestGroupsCollection(limit: 1) {\n            items {\n              ...InterestGroupsContent\n            }\n          }\n        }\n      }\n    }\n  }\n  \n',
 ): (typeof documents)['\n  query FetchInterestGroupsByUserId($id: String!, $limit: Int, $skip: Int) {\n    interestGroupLeadersCollection(\n      limit: $limit\n      skip: $skip\n      where: { user: { sys: { id: $id } } }\n    ) {\n      total\n      items {\n        linkedFrom {\n          interestGroupsCollection(limit: 1) {\n            items {\n              ...InterestGroupsContent\n            }\n          }\n        }\n      }\n    }\n  }\n  \n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query FetchInterestGroupIdByInterestGroupTeamId($id: String!) {\n    interestGroupsTeams(id: $id) {\n      linkedFrom {\n        interestGroupsCollection(limit: 1) {\n          items {\n            sys {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query FetchInterestGroupIdByInterestGroupTeamId($id: String!) {\n    interestGroupsTeams(id: $id) {\n      linkedFrom {\n        interestGroupsCollection(limit: 1) {\n          items {\n            sys {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
