@@ -4,6 +4,8 @@ import {
   FETCH_INTEREST_GROUPS,
   FETCH_INTEREST_GROUPS_BY_USER_ID,
   FETCH_INTEREST_GROUPS_BY_TEAM_ID,
+  FETCH_INTEREST_GROUP_CALENDAR,
+  FETCH_INTEREST_GROUP_ID_BY_INTEREST_GROUP_TEAM_ID,
 } from '@asap-hub/contentful';
 import {
   getContentfulGraphql,
@@ -369,6 +371,83 @@ describe('Interest group data provider', () => {
       let result = await dataProvider.fetch({ filter: { teamId } });
       expect(result.total).toBe(0);
       expect(result.items).toEqual([]);
+    });
+  });
+
+  describe('fetchCalendarId', () => {
+    test('returns the id of the interest group calendar', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        interestGroups: { calendar: { sys: { id: 'calendar-1' } } },
+      });
+
+      const result = await dataProvider.fetchCalendarId('group-id-1');
+
+      expect(result).toBe('calendar-1');
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+        FETCH_INTEREST_GROUP_CALENDAR,
+        { id: 'group-id-1' },
+      );
+    });
+
+    test('returns null when the interest group has no calendar', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        interestGroups: { calendar: null },
+      });
+
+      expect(await dataProvider.fetchCalendarId('group-id-1')).toBeNull();
+    });
+
+    test('returns null when the interest group is not found', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        interestGroups: null,
+      });
+
+      expect(await dataProvider.fetchCalendarId('group-id-1')).toBeNull();
+    });
+  });
+
+  describe('fetchIdByInterestGroupTeamId', () => {
+    test('returns the id of the interest group the interest group team belongs to', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        interestGroupsTeams: {
+          linkedFrom: {
+            interestGroupsCollection: {
+              items: [{ sys: { id: 'group-id-1' } }],
+            },
+          },
+        },
+      });
+
+      const result =
+        await dataProvider.fetchIdByInterestGroupTeamId('ig-team-1');
+
+      expect(result).toBe('group-id-1');
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+        FETCH_INTEREST_GROUP_ID_BY_INTEREST_GROUP_TEAM_ID,
+        { id: 'ig-team-1' },
+      );
+    });
+
+    test('returns null when the interest group team is not linked to an interest group', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        interestGroupsTeams: {
+          linkedFrom: { interestGroupsCollection: { items: [] } },
+        },
+      });
+
+      expect(
+        await dataProvider.fetchIdByInterestGroupTeamId('ig-team-1'),
+      ).toBeNull();
+    });
+
+    test('returns null when the interest group team is not found', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        interestGroupsTeams: null,
+      });
+
+      expect(
+        await dataProvider.fetchIdByInterestGroupTeamId('ig-team-1'),
+      ).toBeNull();
     });
   });
 });
