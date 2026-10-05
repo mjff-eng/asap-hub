@@ -3,15 +3,6 @@ import { render } from '@testing-library/react';
 
 import UserProfileResearch from '../UserProfileResearch';
 
-const mockIsEnabled = jest.fn();
-jest.mock('@asap-hub/react-context', () => ({
-  ...jest.requireActual('@asap-hub/react-context'),
-  useFlags: () => ({ isEnabled: mockIsEnabled }),
-}));
-beforeEach(() => {
-  mockIsEnabled.mockReturnValue(true);
-});
-
 const commonProps: ComponentProps<typeof UserProfileResearch> = {
   firstName: 'Phillip',
   displayName: 'Phillip Winter',
@@ -253,30 +244,6 @@ describe('badges card', () => {
   it('does not render the Badges card when the user has no awards', () => {
     const { queryByRole } = render(
       <UserProfileResearch {...commonProps} teams={[]} />,
-    );
-    expect(queryByRole('heading', { name: 'Badges' })).not.toBeInTheDocument();
-  });
-
-  it('does not render the Badges card when STAGING_MODE is disabled', () => {
-    mockIsEnabled.mockReturnValue(false);
-    const { queryByRole } = render(
-      <UserProfileResearch
-        {...commonProps}
-        teams={[
-          {
-            id: 'team-1',
-            displayName: 'Team 1',
-            role: 'Project Manager',
-            awards: [
-              {
-                name: 'Open Science Champion',
-                date: '2024-01-01',
-                iconUrl: 'https://example.com/badge.png',
-              },
-            ],
-          },
-        ]}
-      />,
     );
     expect(queryByRole('heading', { name: 'Badges' })).not.toBeInTheDocument();
   });

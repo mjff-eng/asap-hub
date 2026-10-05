@@ -1,5 +1,5 @@
 import { getLatestUserAward, UserResponse } from '@asap-hub/model';
-import { UserProfileContext, useFlags } from '@asap-hub/react-context';
+import { UserProfileContext } from '@asap-hub/react-context';
 import { dashboard, network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { useCallback, useContext } from 'react';
@@ -263,10 +263,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
 }) => {
   const tabRoutes = network({}).users({}).user({ userId: id });
   const { isOwnProfile } = useContext(UserProfileContext);
-  const { isEnabled } = useFlags();
-  const latestAward = isEnabled('STAGING_MODE')
-    ? getLatestUserAward(teams)
-    : undefined;
+  const latestAward = getLatestUserAward(teams);
 
   const scrollHandler = useCallback(() => {
     // scroll imperatively too: re-clicking when the hash is

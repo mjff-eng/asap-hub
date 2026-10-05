@@ -9,15 +9,6 @@ import { dashboard, network } from '@asap-hub/routing';
 
 import UserProfileHeader from '../UserProfileHeader';
 
-const mockIsEnabled = jest.fn();
-jest.mock('@asap-hub/react-context', () => ({
-  ...jest.requireActual('@asap-hub/react-context'),
-  useFlags: () => ({ isEnabled: mockIsEnabled }),
-}));
-beforeEach(() => {
-  mockIsEnabled.mockReturnValue(true);
-});
-
 const boilerplateProps: ComponentProps<typeof UserProfileHeader> = {
   ...createUserResponse(),
   role: 'Grantee',
@@ -377,23 +368,6 @@ describe('award badge', () => {
     render(
       <StaticRouter location="/">
         <UserProfileHeader {...boilerplateProps} teams={[]} />
-      </StaticRouter>,
-    );
-
-    expect(
-      screen.queryByRole('link', { name: /badge/i }),
-    ).not.toBeInTheDocument();
-  });
-
-  it('hides the award badge when STAGING_MODE is disabled', () => {
-    mockIsEnabled.mockReturnValue(false);
-    render(
-      <StaticRouter location="/">
-        <UserProfileHeader
-          {...boilerplateProps}
-          id="u1"
-          teams={teamsWithAwards}
-        />
       </StaticRouter>,
     );
 

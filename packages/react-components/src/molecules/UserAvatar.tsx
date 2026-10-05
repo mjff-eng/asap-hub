@@ -1,5 +1,4 @@
 import { SerializedStyles } from '@emotion/react';
-import { useFlags } from '@asap-hub/react-context';
 import { Avatar } from '../atoms';
 import AvatarWithBadge from './AvatarWithBadge';
 
@@ -23,10 +22,8 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
   avatarSize,
   badgeSize,
   overrideBadgeStyles,
-}) => {
-  const { isEnabled } = useFlags();
-
-  return isEnabled('STAGING_MODE') && badgeUrl ? (
+}) =>
+  badgeUrl ? (
     <AvatarWithBadge
       imageUrl={imageUrl}
       firstName={firstName}
@@ -40,6 +37,5 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
   ) : (
     <Avatar imageUrl={imageUrl} firstName={firstName} lastName={lastName} />
   );
-};
 
 export default UserAvatar;
