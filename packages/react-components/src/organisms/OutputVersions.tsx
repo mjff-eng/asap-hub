@@ -108,7 +108,7 @@ const createVersionWrapperStyles = css({
 });
 
 const createVersionCardStyles = css({
-  background: colour.background.secondary,
+  background: colour.background.tertiary,
 });
 
 type Version = Omit<ResearchOutputVersion, 'documentType' | 'type'> & {
