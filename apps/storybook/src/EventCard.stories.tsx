@@ -31,7 +31,7 @@ const cardProps = (
   return eventMapper({
     ...event,
     speakers: event.speakers.map((speaker) =>
-      'team' in speaker
+      'team' in speaker && speaker.team
         ? { ...speaker, team: namedTeam(speaker.team) }
         : speaker,
     ),
