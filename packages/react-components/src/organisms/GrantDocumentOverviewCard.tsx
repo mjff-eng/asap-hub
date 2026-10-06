@@ -14,7 +14,8 @@ const formattedStyles = css({
 });
 
 type GrantDocumentOverviewCardProps =
-  { text: string } | { description: string; descriptionMD: string };
+  | { text: string }
+  | { description: string; descriptionMD: string };
 
 const GrantDocumentOverviewCard: React.FC<GrantDocumentOverviewCardProps> = (
   props,
