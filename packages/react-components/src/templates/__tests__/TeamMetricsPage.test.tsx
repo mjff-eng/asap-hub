@@ -165,13 +165,13 @@ describe('TeamMetricsPage', () => {
     expect(screen.getByText('Engagement')).toBeVisible();
     const speakerRow = screen.getByText('Speaker Diversity').closest('article');
     expect(
-      within(speakerRow!).getByLabelText(/doing an outstanding job/i),
+      within(speakerRow!).getByLabelText(/outstanding: 90% – 100%/i),
     ).toBeVisible();
     const traineeRow = screen
       .getByText('Trainee Presentations')
       .closest('article');
     expect(
-      within(traineeRow!).getByLabelText(/doing an adequate job/i),
+      within(traineeRow!).getByLabelText(/adequate: 80% – 89%/i),
     ).toBeVisible();
     const attendanceRow = screen
       .getByText('Meeting Rep Attendance')

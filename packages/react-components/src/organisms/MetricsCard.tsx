@@ -135,6 +135,7 @@ export const BooleanStatus: React.FC<{ value: boolean }> = ({ value }) => (
 const moodLabelStyles = css({
   display: 'flex',
   maxWidth: 'unset',
+  whiteSpace: 'pre-line',
   [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
     maxWidth: rem(90),
   },

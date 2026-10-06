@@ -237,7 +237,9 @@ describe('collaboration section', () => {
     const row = screen
       .getByText('Within Team Co-Production of Research Outputs')
       .closest('article');
-    expect(within(row!).getByLabelText(/outstanding job/i)).toBeInTheDocument();
+    expect(
+      within(row!).getByLabelText(/outstanding: 90% – 100%/i),
+    ).toBeInTheDocument();
   });
 
   it('Should show limited data when no co-production figure is available', async () => {
@@ -283,15 +285,13 @@ it('renders the engagement statuses', async () => {
   expect(screen.getByText('Engagement')).toBeVisible();
   const speakerRow = screen.getByText('Speaker Diversity').closest('article');
   expect(
-    within(speakerRow!).getByLabelText(/doing an outstanding job/i),
+    within(speakerRow!).getByLabelText(/outstanding: 90% – 100%/i),
   ).toBeVisible();
   const traineeRow = screen
     .getByText('Trainee Presentations')
     .closest('article');
   expect(
-    within(traineeRow!).getByLabelText(
-      /encourage your team to work to improve/i,
-    ),
+    within(traineeRow!).getByLabelText(/needs improvement: 0% – 79%/i),
   ).toBeVisible();
   const attendanceRow = screen
     .getByText('Meeting Rep Attendance')

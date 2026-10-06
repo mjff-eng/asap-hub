@@ -124,7 +124,7 @@ describe('MoodStatus', () => {
 
     expect(
       screen.getByRole('button', {
-        name: 'Your team is doing an outstanding job! Keep up the good work!',
+        name: 'Outstanding: 90% – 100%\nKeep up the good work!',
       }),
     ).toBeInTheDocument();
   });

@@ -69,10 +69,10 @@ export const getPerformanceMoodLabel = (
     return 'There is limited available data to calculate this metric at this time.';
   }
   if (percentage >= 90) {
-    return 'Your team is doing an outstanding job! Keep up the good work!';
+    return 'Outstanding: 90% – 100%\nKeep up the good work!';
   }
   if (percentage >= 80) {
-    return 'Your team is doing an adequate job for this metric.';
+    return 'Adequate: 80% – 89%';
   }
-  return 'We encourage your team to work to improve.';
+  return 'Needs Improvement: 0% – 79%';
 };
