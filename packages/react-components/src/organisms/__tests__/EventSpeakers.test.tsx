@@ -196,6 +196,20 @@ describe('EventSpeakers', () => {
       expect(getAllByText('2').length).toBeGreaterThan(0);
     });
 
+    it('Should count a speaker listed under a team and a project once in the total', () => {
+      const [sharedUser] = makeUsers('shared', 1);
+      const { getByText } = renderCard({
+        groups: [
+          teamGroup({ users: [sharedUser!, ...makeUsers('team-0', 2)] }),
+          projectGroup({ users: [sharedUser!] }),
+        ],
+        hasFinished: false,
+      });
+      expect(getByText('total speakers').previousSibling).toHaveTextContent(
+        '3',
+      );
+    });
+
     it('Should count shared CRN speakers, not groups, and leave externals out', () => {
       const { getByText } = renderCard({
         groups: [
