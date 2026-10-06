@@ -4,6 +4,7 @@ import {
   createResearchOutputResponse,
 } from '@asap-hub/fixtures';
 import {
+  isGrantEnded,
   mapManuscriptVersionToResearchOutput,
   ResolveFlowIdParams,
   resolveResearchOutputFlowId,
@@ -317,5 +318,73 @@ describe('toResearchOutputVersion', () => {
       link: undefined,
       addedDate: undefined,
     });
+  });
+});
+
+describe('isGrantEnded', () => {
+  const project = {
+    id: 'project-1',
+    title: 'Project',
+    projectType: 'Discovery Project' as const,
+  };
+  const original = {
+    title: 'Original',
+    endDate: '2024-06-30T00:00:00.000Z',
+  };
+
+  it('is false without grant data or an end date', () => {
+    expect(isGrantEnded(undefined)).toBe(false);
+    expect(
+      isGrantEnded({
+        grantType: 'original',
+        project,
+        original: { title: 'Original' },
+      }),
+    ).toBe(false);
+  });
+
+  it('treats the end date as inclusive in local time', () => {
+    const grantDocument = {
+      grantType: 'original' as const,
+      project,
+      original,
+    };
+    expect(isGrantEnded(grantDocument, new Date(2024, 5, 30, 23, 59))).toBe(
+      false,
+    );
+    expect(isGrantEnded(grantDocument, new Date(2024, 6, 1, 0, 0))).toBe(true);
+  });
+
+  it.each([
+    '2024-06-30T00:00:00.000Z',
+    '2024-06-30T00:00:00.000+01:00',
+    '2024-06-30T00:00:00.000-08:00',
+  ])('uses the calendar date of %s regardless of its offset', (endDate) => {
+    const grantDocument = {
+      grantType: 'original' as const,
+      project,
+      original: { title: 'Original', endDate },
+    };
+    expect(isGrantEnded(grantDocument, new Date(2024, 5, 30, 23, 59))).toBe(
+      false,
+    );
+    expect(isGrantEnded(grantDocument, new Date(2024, 6, 1, 0, 0))).toBe(true);
+  });
+
+  it('uses the supplement end date when there is a supplement', () => {
+    expect(
+      isGrantEnded(
+        {
+          grantType: 'original',
+          project,
+          original,
+          supplement: {
+            title: 'Supplement',
+            endDate: '2025-06-30T00:00:00.000-08:00',
+          },
+        },
+        new Date(2025, 0, 1),
+      ),
+    ).toBe(false);
   });
 });

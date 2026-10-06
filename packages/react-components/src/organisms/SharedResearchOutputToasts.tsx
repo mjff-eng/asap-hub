@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ResearchOutputResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import Toast from './Toast';
+import { Anchor } from '../atoms';
 import { rem } from '../pixels';
 
 export type ResearchOutputToast = 'published' | 'draftCreated';
@@ -21,6 +22,8 @@ export interface SharedResearchOutputToastsProps {
   isInReview: boolean;
   projectHasLead?: boolean;
   isTeamBasedProject?: boolean;
+  supplementGrantHref?: string;
+  grantEnded?: boolean;
 }
 
 const capitalizeAssociation = (association: string): string => {
@@ -33,6 +36,8 @@ const capitalizeAssociation = (association: string): string => {
       return 'Team';
   }
 };
+
+const underlineStyles = css({ textDecoration: 'underline' });
 
 const toastContainer = css({
   display: 'flex',
@@ -51,9 +56,14 @@ const SharedResearchOutputToasts: React.FC<SharedResearchOutputToastsProps> = ({
   isInReview,
   projectHasLead = false,
   isTeamBasedProject = false,
+  supplementGrantHref,
+  grantEnded = false,
 }) => {
   const isProject = association === 'project';
   const [flashToast, setFlashToast] = useState(toast);
+  const [showSupplementGrantToast, setShowSupplementGrantToast] =
+    useState(true);
+  const [showGrantEndedToast, setShowGrantEndedToast] = useState(true);
   const [reviewToastState, setReviewToastState] = useState(
     reviewToggled ? (isInReview ? 'requested' : 'dismissed') : null,
   );
@@ -117,6 +127,23 @@ const SharedResearchOutputToasts: React.FC<SharedResearchOutputToastsProps> = ({
                       : 'Any project member can publish this output.'
                     : 'Only PMs can publish this output.'
                 }`}</Toast>
+      )}
+      {supplementGrantHref && showSupplementGrantToast && (
+        <Toast
+          accent="warning"
+          onClose={() => setShowSupplementGrantToast(false)}
+        >
+          This is an original grant proposal. A{' '}
+          <span css={underlineStyles}>
+            <Anchor href={supplementGrantHref}>supplement version</Anchor>
+          </span>{' '}
+          is now available.
+        </Toast>
+      )}
+      {grantEnded && showGrantEndedToast && (
+        <Toast accent="warning" onClose={() => setShowGrantEndedToast(false)}>
+          The funding period for this grant has closed.
+        </Toast>
       )}
     </div>
   );

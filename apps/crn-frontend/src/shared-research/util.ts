@@ -9,7 +9,9 @@ import {
   RESEARCH_OUTPUT_FLOW_IDS,
   ResearchOutputVersion,
   ResearchOutputEntityType,
+  ResearchOutputGrantDocument,
 } from '@asap-hub/model';
+import { endOfDay, isAfter, parseISO } from 'date-fns';
 
 export const mapManuscriptVersionToResearchOutput = (
   output: ResearchOutputResponse | undefined,
@@ -158,3 +160,12 @@ export const toResearchOutputVersion = (
   link: output?.link,
   addedDate: output?.addedDate,
 });
+
+export const isGrantEnded = (
+  grantDocument: ResearchOutputGrantDocument | undefined,
+  now = new Date(),
+): boolean => {
+  const endDate = (grantDocument?.supplement ?? grantDocument?.original)
+    ?.endDate;
+  return !!endDate && isAfter(now, endOfDay(parseISO(endDate.slice(0, 10))));
+};

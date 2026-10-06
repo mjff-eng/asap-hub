@@ -4,7 +4,7 @@ import { EventDataObject } from './event';
 import { ExternalAuthorResponse } from './external-author';
 import { ImpactResponse } from './impact';
 import { LabResponse } from './lab';
-import { ProjectDataObject } from './project';
+import { GrantType, ProjectDataObject } from './project';
 import { TeamResponse, TeamType } from './team';
 import { UserDataObject, UserResponse } from './user';
 import { WorkingGroupResponse } from './working-group';
@@ -251,6 +251,21 @@ export type ResearchOutputVersion = ResearchOutputVersionCoreObject & {
   id: string;
 };
 
+export type ResearchOutputGrant = {
+  researchOutputId?: string;
+  title: string;
+  description?: string;
+  startDate?: string;
+  endDate?: string;
+};
+
+export type ResearchOutputGrantDocument = {
+  grantType: GrantType;
+  project: Pick<ProjectDataObject, 'id' | 'title' | 'projectType'>;
+  original: ResearchOutputGrant;
+  supplement?: ResearchOutputGrant;
+};
+
 export type ResearchOutputDataObject = ResearchOutputCoreObject & {
   authors: (
     | Pick<
@@ -304,6 +319,7 @@ export type ResearchOutputDataObject = ResearchOutputCoreObject & {
   statusChangedBy?: Pick<UserDataObject, 'id' | 'firstName' | 'lastName'>;
   statusChangedAt?: string;
   publishingEntity: ResearchOutputPublishingEntities;
+  grantDocument?: ResearchOutputGrantDocument;
 };
 
 export type ResearchOutputDraftDataObject = Omit<

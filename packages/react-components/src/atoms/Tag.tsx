@@ -35,6 +35,11 @@ const styles = css({
   borderRadius: rem(18),
 });
 
+const largeStyles = css({
+  padding: `${rem(7)} ${rem(15)}`,
+  borderRadius: rem(24),
+});
+
 const highlightStyles = css({
   backgroundColor: mint.rgb,
 });
@@ -79,6 +84,7 @@ const iconDisabledStyles = css({
 type TagProps = {
   readonly enabled?: boolean;
   readonly highlight?: boolean;
+  readonly large?: boolean;
   readonly children?: React.ReactNode;
   readonly title?: string;
 } & (RemoveTagProps | TagWithHrefProps);
@@ -110,6 +116,7 @@ const ConditionalLinkWrapper: React.FC<{
 const Tag: React.FC<TagProps> = ({
   children,
   highlight = false,
+  large = false,
   enabled = true,
   href,
   onRemove,
@@ -120,6 +127,7 @@ const Tag: React.FC<TagProps> = ({
       <div
         css={({ colors }) => [
           styles,
+          large && largeStyles,
           ...(enabled
             ? [highlight && highlightStyles, !!href && hoverStyles(colors)]
             : [disabledStyles]),
