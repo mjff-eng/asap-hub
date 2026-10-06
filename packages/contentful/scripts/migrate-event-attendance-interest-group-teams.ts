@@ -5,10 +5,16 @@
  * it is a member of the interest group at the point the event ends.
  * Existing attendance entries are never modified or removed.
  *
+ * Events are read with the preview API so draft events are included and
+ * their latest draft attendance is used. Draft events are updated but not
+ * published. Interest group memberships are read from published content
+ * only, since publishing a membership triggers the attendance sync handler.
+ *
  * Usage:
  *   CONTENTFUL_SPACE_ID=<spaceId> \
  *   CONTENTFUL_MANAGEMENT_ACCESS_TOKEN=<cma token> \
  *   CONTENTFUL_ACCESS_TOKEN=<delivery token> \
+ *   CONTENTFUL_PREVIEW_ACCESS_TOKEN=<preview token> \
  *   CONTENTFUL_ENV_ID=<environmentId> \
  *   DRY_RUN=true \
  *   yarn workspace @asap-hub/contentful migrate-event-attendance-interest-group-teams
@@ -18,7 +24,10 @@ import { resolve } from 'path';
 import { RateLimiter } from 'limiter';
 import { gql, GraphQLClient } from 'graphql-request';
 import * as contentful from 'contentful-management';
-import { getInterestGroupTeamIdsForEvent } from '@asap-hub/model';
+import {
+  getInterestGroupTeamIdsForEvent,
+  InterestGroupTeamMembership,
+} from '@asap-hub/model';
 import { addLocaleToFields, createLink } from '../src/utils/parse-fields';
 
 const spaceId = process.env.CONTENTFUL_SPACE_ID!;
@@ -26,18 +35,24 @@ const contentfulManagementAccessToken =
   process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN!;
 const environmentId = process.env.CONTENTFUL_ENV_ID!;
 const contentfulAccessToken = process.env.CONTENTFUL_ACCESS_TOKEN!;
+const contentfulPreviewAccessToken =
+  process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN!;
 const dryRun = process.env.DRY_RUN === 'true';
 
 const PAGE_SIZE = 20;
 const NESTED_LIMIT = 50;
 
-const graphQLClient = new GraphQLClient(
-  `https://graphql.contentful.com/content/v1/spaces/${spaceId}/environments/${environmentId}`,
-  {
-    errorPolicy: 'ignore',
-    headers: { authorization: `Bearer ${contentfulAccessToken}` },
-  },
-);
+const createGraphQLClient = (accessToken: string) =>
+  new GraphQLClient(
+    `https://graphql.contentful.com/content/v1/spaces/${spaceId}/environments/${environmentId}`,
+    {
+      errorPolicy: 'ignore',
+      headers: { authorization: `Bearer ${accessToken}` },
+    },
+  );
+
+const graphQLClient = createGraphQLClient(contentfulAccessToken);
+const previewGraphQLClient = createGraphQLClient(contentfulPreviewAccessToken);
 
 const client = contentful.createClient({
   accessToken: contentfulManagementAccessToken,
@@ -59,6 +74,7 @@ const FETCH_EVENTS = gql`
       skip: $skip
       where: { calendar_exists: true }
       order: sys_id_ASC
+      preview: true
     ) {
       total
       items {
@@ -77,18 +93,31 @@ const FETCH_EVENTS = gql`
           }
         }
         calendar {
-          linkedFrom {
-            interestGroupsCollection(limit: 1) {
+          sys {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
+const FETCH_INTEREST_GROUP_TEAMS = gql`
+  query FetchInterestGroupTeamsForAttendanceMigration(
+    $calendarId: String!
+    $nestedLimit: Int!
+  ) {
+    calendars(id: $calendarId) {
+      linkedFrom {
+        interestGroupsCollection(limit: 1) {
+          items {
+            teamsCollection(limit: $nestedLimit) {
               items {
-                teamsCollection(limit: $nestedLimit) {
-                  items {
-                    startDate
-                    endDate
-                    team {
-                      sys {
-                        id
-                      }
-                    }
+                startDate
+                endDate
+                team {
+                  sys {
+                    id
                   }
                 }
               }
@@ -113,7 +142,11 @@ type EventItem = {
   attendanceCollection: {
     items: ({ team: { sys: { id: string } } | null } | null)[];
   } | null;
-  calendar: {
+  calendar: { sys: { id: string } } | null;
+};
+
+type FetchInterestGroupTeamsResult = {
+  calendars: {
     linkedFrom: {
       interestGroupsCollection: {
         items: ({
@@ -141,26 +174,50 @@ const errors: UpdateError[] = [];
 
 const stats = { scanned: 0, updated: 0, attendanceCreated: 0 };
 
-const getMissingTeamIds = (event: EventItem): string[] => {
-  const interestGroup =
-    event.calendar?.linkedFrom?.interestGroupsCollection?.items[0];
+const membershipsByCalendarId = new Map<
+  string,
+  Promise<InterestGroupTeamMembership[]>
+>();
 
-  if (!interestGroup || !event.endDate) {
+const fetchMemberships = async (
+  calendarId: string,
+): Promise<InterestGroupTeamMembership[]> => {
+  const { calendars } =
+    await graphQLClient.request<FetchInterestGroupTeamsResult>(
+      FETCH_INTEREST_GROUP_TEAMS,
+      { calendarId, nestedLimit: NESTED_LIMIT },
+    );
+  const interestGroup =
+    calendars?.linkedFrom?.interestGroupsCollection?.items[0];
+
+  return (interestGroup?.teamsCollection?.items ?? []).flatMap((item) =>
+    item?.team && item.startDate
+      ? [
+          {
+            teamId: item.team.sys.id,
+            startDate: item.startDate,
+            endDate: item.endDate,
+          },
+        ]
+      : [],
+  );
+};
+
+const getMemberships = (calendarId: string) => {
+  if (!membershipsByCalendarId.has(calendarId)) {
+    membershipsByCalendarId.set(calendarId, fetchMemberships(calendarId));
+  }
+  return membershipsByCalendarId.get(calendarId)!;
+};
+
+const getMissingTeamIds = async (event: EventItem): Promise<string[]> => {
+  const calendarId = event.calendar?.sys.id;
+
+  if (!calendarId || !event.endDate) {
     return [];
   }
 
-  const memberships = (interestGroup.teamsCollection?.items ?? []).flatMap(
-    (item) =>
-      item?.team && item.startDate
-        ? [
-            {
-              teamId: item.team.sys.id,
-              startDate: item.startDate,
-              endDate: item.endDate,
-            },
-          ]
-        : [],
-  );
+  const memberships = await getMemberships(calendarId);
 
   const existingTeamIds = new Set(
     (event.attendanceCollection?.items ?? []).flatMap((item) =>
@@ -217,7 +274,7 @@ const processEvent = async (
   event: EventItem,
 ) => {
   stats.scanned += 1;
-  const teamIds = getMissingTeamIds(event);
+  const teamIds = await getMissingTeamIds(event);
 
   if (teamIds.length === 0) {
     return;
@@ -251,7 +308,7 @@ const processEvent = async (
 };
 
 const fetchEventsPage = (skip: number) =>
-  graphQLClient.request<FetchEventsResult>(FETCH_EVENTS, {
+  previewGraphQLClient.request<FetchEventsResult>(FETCH_EVENTS, {
     limit: PAGE_SIZE,
     skip,
     nestedLimit: NESTED_LIMIT,

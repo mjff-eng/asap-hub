@@ -366,32 +366,29 @@ describe('ProjectMilestones', () => {
 
     await userEvent.click(addNewMilestoneButton);
 
+    const createModal = within(screen.getByRole('dialog'));
+
     await userEvent.type(
-      screen.getByRole('textbox', { name: /Description/i }),
+      createModal.getByRole('textbox', { name: /Description/i }),
       'Some description',
     );
 
-    await userEvent.click(screen.getByRole('button', { name: '#1' }));
+    await userEvent.click(createModal.getByText('#1'));
 
-    const relatedArticlesLabel = screen
+    const relatedArticlesLabel = createModal
       .getByText('Related Articles')
       .closest('div')!;
 
     const articlesInput = within(relatedArticlesLabel!).getByRole('combobox');
     await userEvent.click(articlesInput);
 
-    const option = await screen.findByText(/Project Article 1/i);
+    const option = await createModal.findByText(/Project Article 1/i);
     await userEvent.click(option);
 
-    const submitButton = await screen.findByRole('button', {
-      name: 'Confirm',
-    });
-    await userEvent.click(submitButton);
+    await userEvent.click(createModal.getByText('Confirm'));
 
-    const confirmButton = await screen.findByRole('button', {
-      name: /confirm and notify/i,
-    });
-    await userEvent.click(confirmButton);
+    const confirmModal = within(await screen.findByRole('dialog'));
+    await userEvent.click(confirmModal.getByText(/confirm and notify/i));
 
     await waitFor(() => {
       expect(mockCreateProjectMilestone).toHaveBeenCalledWith(
@@ -408,9 +405,7 @@ describe('ProjectMilestones', () => {
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByRole('button', { name: /confirm and notify/i }),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText(/confirm and notify/i)).not.toBeInTheDocument();
     });
     expect(
       screen.getByText(/Milestone added successfully./i),
@@ -427,32 +422,29 @@ describe('ProjectMilestones', () => {
 
     await userEvent.click(addNewMilestoneButton);
 
+    const createModal = within(screen.getByRole('dialog'));
+
     await userEvent.type(
-      screen.getByRole('textbox', { name: /Description/i }),
+      createModal.getByRole('textbox', { name: /Description/i }),
       'Some description',
     );
 
-    await userEvent.click(screen.getByRole('button', { name: '#1' }));
+    await userEvent.click(createModal.getByText('#1'));
 
-    const relatedArticlesLabel = screen
+    const relatedArticlesLabel = createModal
       .getByText('Related Articles')
       .closest('div')!;
 
     const articlesInput = within(relatedArticlesLabel!).getByRole('combobox');
     await userEvent.click(articlesInput);
 
-    const option = await screen.findByText(/Project Article 1/i);
+    const option = await createModal.findByText(/Project Article 1/i);
     await userEvent.click(option);
 
-    const submitButton = await screen.findByRole('button', {
-      name: 'Confirm',
-    });
-    await userEvent.click(submitButton);
+    await userEvent.click(createModal.getByText('Confirm'));
 
-    const confirmButton = await screen.findByRole('button', {
-      name: /confirm and notify/i,
-    });
-    await userEvent.click(confirmButton);
+    const confirmModal = within(await screen.findByRole('dialog'));
+    await userEvent.click(confirmModal.getByText(/confirm and notify/i));
 
     await waitFor(() => {
       expect(
