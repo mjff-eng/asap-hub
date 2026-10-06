@@ -499,7 +499,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       label={groupLabel(group)}
       users={group.users}
       showShared={isPastEvent}
-      showCount={false}
+      showCount={!isPastEvent}
       expanded={expandedIds.has(group.id)}
       onToggleExpanded={() => toggleExpanded(group.id)}
       onToggleUserShared={(userId, shared) =>
