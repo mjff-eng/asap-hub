@@ -42,12 +42,15 @@ import {
   EventDataObject,
   EventSpeaker,
   EventSpeakerExternalUserData,
+  EventSpeakerProjectData,
+  EventSpeakerTeam,
   EventSpeakerUserData,
   EventTeamAttendance,
   EventUpdateDataObject,
   EventUpdateDetailsRequest,
   FetchEventsOptions,
   isEventStatus,
+  isProjectType,
   isTeamType,
   ListEventDataObject,
 } from '@asap-hub/model';
@@ -633,21 +636,64 @@ export const parseEventSpeakerExternalUser = (
   name: user?.name || '',
 });
 
+type SpeakerTeam = NonNullable<SpeakerItem['team']>;
+type SpeakerProject = NonNullable<SpeakerItem['project']>;
+
+const parseSpeakerTeam = (team: SpeakerTeam): EventSpeakerTeam['team'] => ({
+  id: team.sys.id,
+  displayName: team.displayName ?? '',
+  inactiveSince: team.inactiveSince ?? undefined,
+});
+
+const parseSpeakerProject = (
+  project: SpeakerProject,
+): EventSpeakerProjectData => ({
+  id: project.sys.id,
+  title: project.title ?? '',
+  projectType: isProjectType(project.projectType)
+    ? project.projectType
+    : undefined,
+});
+
+const findProjectRole = (project: SpeakerProject, userId: string) =>
+  project.membersCollection?.items.find(
+    (member) =>
+      member?.role &&
+      member.projectMember &&
+      'sys' in member.projectMember &&
+      member.projectMember.sys.id === userId,
+  )?.role ?? undefined;
+
 export const parseGraphQLSpeakers = (speakers: SpeakerItem[]): EventSpeaker[] =>
   (speakers || []).reduce((speakerList: EventSpeaker[], speaker) => {
-    const { sys, team, user } = speaker;
+    const { sys, team, project, user } = speaker;
     const speakerId = sys.id;
 
     if (user?.__typename === 'ExternalAuthors') {
       speakerList.push({
         id: speakerId,
         externalUser: parseEventSpeakerExternalUser(user),
+        ...(team ? { team: parseSpeakerTeam(team) } : {}),
+        ...(project ? { project: parseSpeakerProject(project) } : {}),
       });
       return speakerList;
     }
 
+    if (project && user?.__typename === 'Users' && user.onboarded === true) {
+      const role = findProjectRole(project, user.sys.id);
+      if (role) {
+        speakerList.push({
+          id: speakerId,
+          project: parseSpeakerProject(project),
+          user: parseEventSpeakerUser(user),
+          role,
+          preliminaryDataShared: !!speaker.preliminaryDataShared,
+        });
+      }
+    }
+
     if (!team) {
-      if (user?.__typename === 'Users' && user.onboarded === true) {
+      if (!project && user?.__typename === 'Users' && user.onboarded === true) {
         speakerList.push({
           user: parseEventSpeakerUser(user),
         });
@@ -656,13 +702,7 @@ export const parseGraphQLSpeakers = (speakers: SpeakerItem[]): EventSpeaker[] =>
     }
 
     if (!user) {
-      speakerList.push({
-        team: {
-          id: team.sys.id,
-          displayName: team.displayName ?? '',
-          inactiveSince: team.inactiveSince ?? undefined,
-        },
-      });
+      speakerList.push({ team: parseSpeakerTeam(team) });
       return speakerList;
     }
 
@@ -673,23 +713,13 @@ export const parseGraphQLSpeakers = (speakers: SpeakerItem[]): EventSpeaker[] =>
           .filter((s) => s?.role)[0]?.role || undefined;
 
       if (!role || user.onboarded !== true) {
-        speakerList.push({
-          team: {
-            id: team.sys.id,
-            displayName: team.displayName ?? '',
-            inactiveSince: team.inactiveSince ?? undefined,
-          },
-        });
+        speakerList.push({ team: parseSpeakerTeam(team) });
         return speakerList;
       }
 
       speakerList.push({
         id: speakerId,
-        team: {
-          id: team.sys.id,
-          displayName: team.displayName ?? '',
-          inactiveSince: team.inactiveSince ?? undefined,
-        },
+        team: parseSpeakerTeam(team),
         user: parseEventSpeakerUser(user),
         role,
         preliminaryDataShared: !!speaker.preliminaryDataShared,

@@ -666,6 +666,11 @@ describe('Events Contentful Data Provider', () => {
             externalUser: {
               name: 'Jane Doe',
             },
+            team: {
+              id: 'team-id-3',
+              displayName: 'The team three',
+              inactiveSince: '2022-10-24T11:00:00Z',
+            },
           },
         ]);
       });
@@ -698,6 +703,154 @@ describe('Events Contentful Data Provider', () => {
             },
           },
         ]);
+      });
+
+      describe('Project speakers', () => {
+        const speakerProject = (
+          members: { userId: string; role: string | null }[] = [
+            { userId: 'user-id-3', role: 'Independent Project - Lead' },
+          ],
+        ) => ({
+          sys: { id: 'project-id-1' },
+          title: 'Project One',
+          projectType: 'Trainee Project',
+          membersCollection: {
+            items: members.map(({ userId, role }) => ({
+              role,
+              projectMember: { sys: { id: userId } },
+            })),
+          },
+        });
+
+        const expectedUser = {
+          alumniSinceDate: undefined,
+          avatarUrl: undefined,
+          displayName: 'Adam (Ad) Brown',
+          firstName: 'Adam',
+          id: 'user-id-3',
+          lastName: 'Brown',
+        };
+
+        const fetchWithSpeaker = async (
+          overrides: Partial<
+            NonNullable<
+              NonNullable<
+                ReturnType<
+                  typeof getContentfulGraphqlEvent
+                >['speakersCollection']
+              >['items'][number]
+            >
+          >,
+        ) => {
+          const contentfulGraphQLResponse = getContentfulGraphqlEvent();
+          contentfulGraphQLResponse.speakersCollection!.items = [
+            {
+              ...contentfulGraphQLResponse.speakersCollection!.items[0]!,
+              ...overrides,
+            },
+          ];
+          contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+            events: contentfulGraphQLResponse,
+          });
+          const result = await eventDataProvider.fetchById(eventId);
+          return result!.speakers;
+        };
+
+        test('Should return a project speaker with their project role', async () => {
+          const speakers = await fetchWithSpeaker({
+            team: null,
+            project: speakerProject(),
+          });
+
+          expect(speakers).toEqual([
+            {
+              id: 'event-speaker-id-3',
+              project: {
+                id: 'project-id-1',
+                title: 'Project One',
+                projectType: 'Trainee Project',
+              },
+              user: expectedUser,
+              role: 'Independent Project - Lead',
+              preliminaryDataShared: true,
+            },
+          ]);
+        });
+
+        test('Should return the speaker under both the project and the team when both are set', async () => {
+          const speakers = await fetchWithSpeaker({
+            project: speakerProject(),
+          });
+
+          expect(speakers).toEqual([
+            expect.objectContaining({
+              id: 'event-speaker-id-3',
+              project: expect.objectContaining({ id: 'project-id-1' }),
+              role: 'Independent Project - Lead',
+            }),
+            expect.objectContaining({
+              id: 'event-speaker-id-3',
+              team: expect.objectContaining({ id: 'team-id-3' }),
+              role: 'Lead PI (Core Leadership)',
+            }),
+          ]);
+        });
+
+        test('Should skip a project speaker without a role in the project', async () => {
+          const speakers = await fetchWithSpeaker({
+            team: null,
+            project: speakerProject([
+              { userId: 'another-user', role: 'Independent Project - Lead' },
+              { userId: 'user-id-3', role: null },
+            ]),
+          });
+
+          expect(speakers).toEqual([]);
+        });
+
+        test('Should skip a project speaker when project members are not fetched', async () => {
+          const speakers = await fetchWithSpeaker({
+            team: null,
+            project: { ...speakerProject(), membersCollection: undefined },
+          });
+
+          expect(speakers).toEqual([]);
+        });
+
+        test('Should leave the project type undefined when it is not a known type', async () => {
+          const speakers = await fetchWithSpeaker({
+            team: null,
+            project: { ...speakerProject(), projectType: 'Unknown' },
+          });
+
+          expect(speakers[0]).toMatchObject({
+            project: { id: 'project-id-1', projectType: undefined },
+          });
+        });
+
+        test('Should return the team and project an external speaker represents', async () => {
+          const speakers = await fetchWithSpeaker({
+            project: speakerProject(),
+            user: { __typename: 'ExternalAuthors', name: 'Jane Doe' },
+          });
+
+          expect(speakers).toEqual([
+            {
+              id: 'event-speaker-id-3',
+              externalUser: { name: 'Jane Doe' },
+              team: {
+                id: 'team-id-3',
+                displayName: 'The team three',
+                inactiveSince: '2022-10-24T11:00:00Z',
+              },
+              project: {
+                id: 'project-id-1',
+                title: 'Project One',
+                projectType: 'Trainee Project',
+              },
+            },
+          ]);
+        });
       });
 
       test('Should return only the team when speaker of type user does not belong to this team', async () => {

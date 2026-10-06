@@ -6,6 +6,7 @@ import {
   ResearchOutputResponse,
   ResearchOutputWorkingGroupResponse,
 } from './research-output';
+import { ProjectType } from './project';
 import { ResearchTagDataObject } from './research-tag';
 import { TeamResponse, TeamType } from './team';
 import { TutorialsDataObject } from './tutorials';
@@ -28,10 +29,24 @@ export type EventSpeakerTeam = {
   team: Pick<TeamResponse, 'displayName' | 'id' | 'inactiveSince'>;
 };
 
+export type EventSpeakerProjectData = {
+  id: string;
+  title: string;
+  projectType?: ProjectType;
+};
+
 export type EventSpeakerUser = {
   // Contentful eventSpeakers entry id; optional as only the CRN read path sets it.
   id?: string;
   team: Pick<TeamResponse, 'displayName' | 'id' | 'inactiveSince'>;
+  user: EventSpeakerUserData;
+  role: string;
+  preliminaryDataShared?: boolean;
+};
+
+export type EventSpeakerProjectUser = {
+  id?: string;
+  project: EventSpeakerProjectData;
   user: EventSpeakerUserData;
   role: string;
   preliminaryDataShared?: boolean;
@@ -44,11 +59,14 @@ export type EventSpeakerUserWithoutTeam = {
 export type EventSpeakerExternalUser = {
   id?: string;
   externalUser: EventSpeakerExternalUserData;
+  team?: Pick<TeamResponse, 'displayName' | 'id' | 'inactiveSince'>;
+  project?: EventSpeakerProjectData;
 };
 
 export type EventSpeaker =
   | EventSpeakerTeam
   | EventSpeakerUser
+  | EventSpeakerProjectUser
   | EventSpeakerUserWithoutTeam
   | EventSpeakerExternalUser;
 
