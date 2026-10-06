@@ -43,7 +43,7 @@ export const accents: Record<AccentVariant, CSSObject> = {
     borderRadius: 0,
   },
   neutral200: {
-    backgroundColor: colour.background.secondary,
+    backgroundColor: colour.background.tertiary,
     borderColor: colour.border.card.default,
     boxShadow: `0px 2px 4px ${colour.neutral[100]}`,
   },
