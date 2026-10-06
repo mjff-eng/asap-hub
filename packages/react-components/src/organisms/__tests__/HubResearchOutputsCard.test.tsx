@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { neutral1000 } from '../../colors';
 import HubResearchOutputsCard, {
   HubResearchOutputRow,
 } from '../HubResearchOutputsCard';
@@ -105,6 +106,19 @@ describe('HubResearchOutputsCard', () => {
 
     expect(within(table).getByTitle('Info')).toBeInTheDocument();
     expect(within(mobileList).getAllByTitle('Info')).toHaveLength(rows.length);
+  });
+
+  it('shows the public outputs explanation in a dark tooltip', async () => {
+    render(<HubResearchOutputsCard rows={rows} />);
+    const table = screen.getByTestId('hub-research-outputs-table');
+
+    await userEvent.click(within(table).getByTitle('Info'));
+
+    const tooltip = within(table).getByRole('tooltip');
+    expect(tooltip).toHaveTextContent(
+      'This percentage is calculated based on the number of outputs shared (ASAP funded).',
+    );
+    expect(tooltip).toHaveStyle({ backgroundColor: neutral1000.rgb });
   });
 
   it('renders the metric details', () => {

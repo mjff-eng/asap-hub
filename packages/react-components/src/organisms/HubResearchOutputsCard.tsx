@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Card, Paragraph, Subtitle } from '../atoms';
-import { charcoal, lead, steel } from '../colors';
+import { charcoal, lead, neutral1000, steel } from '../colors';
 import { ExpandableText, TooltipInfo } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
 
@@ -18,6 +18,15 @@ type HubResearchOutputsCardProps = {
 
 const PUBLIC_OUTPUTS_TOOLTIP =
   'This percentage is calculated based on the number of outputs shared (ASAP funded).';
+
+const tooltipTextStyles = css({
+  paddingTop: 0,
+  paddingBottom: 0,
+  textAlign: 'center',
+  fontSize: rem(14),
+  lineHeight: rem(16),
+  fontWeight: 'normal',
+});
 
 const tableStyles = css({
   width: '100%',
@@ -131,7 +140,13 @@ const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
               % Public Outputs
               <br />
               (ASAP-Funded)
-              <TooltipInfo>{PUBLIC_OUTPUTS_TOOLTIP}</TooltipInfo>
+              <TooltipInfo
+                width={296}
+                background={neutral1000.rgb}
+                overrideTooltipStyles={tooltipTextStyles}
+              >
+                {PUBLIC_OUTPUTS_TOOLTIP}
+              </TooltipInfo>
             </span>
           </th>
         </tr>
@@ -162,11 +177,14 @@ const HubResearchOutputsCard: React.FC<HubResearchOutputsCardProps> = ({
             <div css={mobileLabelStyles}>
               % Public Outputs (ASAP-Funded){' '}
               <TooltipInfo
+                background={neutral1000.rgb}
                 overrideWrapperStyles={css({
                   marginTop: rem(4),
                   paddingLeft: 0,
                 })}
-                overrideTooltipStyles={css({ maxWidth: rem(100) })}
+                overrideTooltipStyles={css(tooltipTextStyles, {
+                  maxWidth: rem(100),
+                })}
               >
                 {PUBLIC_OUTPUTS_TOOLTIP}
               </TooltipInfo>

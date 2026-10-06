@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
 
 import { Button, Card, Paragraph, Subtitle } from '../atoms';
-import { charcoal, lead, steel } from '../colors';
+import { charcoal, lead, neutral1000, steel } from '../colors';
 import { minusRectIcon, plusRectIcon } from '../icons';
 import { ExpandableText, Info } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
@@ -134,8 +134,12 @@ export const BooleanStatus: React.FC<{ value: boolean }> = ({ value }) => (
 
 const moodLabelStyles = css({
   display: 'flex',
+  justifyContent: 'center',
   maxWidth: 'unset',
   whiteSpace: 'pre-line',
+  textAlign: 'center',
+  fontSize: rem(14),
+  lineHeight: rem(16),
   [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
     maxWidth: rem(90),
   },
@@ -149,7 +153,8 @@ export const MoodStatus: React.FC<{
   return (
     <Info
       label={label}
-      width={180}
+      width={296}
+      background={neutral1000.rgb}
       icon={getPerformanceMoodIcon(percentage, limitedData)}
     >
       <span css={moodLabelStyles}>{label}</span>
