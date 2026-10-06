@@ -173,8 +173,8 @@ export const StartHere = () => (
             <li>colours that must stay the same in both products.</li>
           </ul>
           If a colour has a meaning but no token fits, use the nearest primitive
-          and add it to <i>Design Questions</i> so CAS can add a token. See{' '}
-          <i>Primitives</i>.
+          and add it to <i>Design status and questions</i> so CAS can add a
+          token. See <i>Primitives</i>.
         </li>
         <li>
           <b>Never a hard-coded value.</b> Lint rejects hex, {code('rgb()')} and{' '}
@@ -209,8 +209,8 @@ export const StartHere = () => (
           story between the CRN and GP2 colours. GP2 stories use GP2 by default.
         </li>
         <li>
-          Some colours still wait on design decisions. See{' '}
-          <i>Design Questions</i>.
+          A few small questions remain for design. See{' '}
+          <i>Design status and questions</i>.
         </li>
         <li>
           Typography, spacing and radius variables also exist in Figma. They are
@@ -240,7 +240,7 @@ export const StartHere = () => (
           with design before adjusting the script.
         </li>
         <li>
-          Check <i>Design Questions</i>: its distance table shows which names
+          Check <i>Design status and questions</i>: its table shows which names
           moved closer to or further from production, to report back to design.
         </li>
       </ol>
@@ -579,12 +579,10 @@ export const Primitives = () => {
   );
 };
 
-const statusChip = (before: string, after: string) =>
-  before.toUpperCase() === after.toUpperCase() ? (
-    <Chip kind="green">same colour</Chip>
-  ) : (
-    <Chip kind="amber">closest CAS colour</Chip>
-  );
+const statusChip = (before: string, after: string) => {
+  const distance = distanceOf(colourDistance(before, after));
+  return <Chip kind={distanceChip[distance]}>{distance}</Chip>;
+};
 
 const BeforeAfter = ({ before, after }: { before: string; after: string }) => (
   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
@@ -606,12 +604,12 @@ export const LegacyNames = () => (
     intro={
       <>
         The colour names the code used before CAS, the colour production shows,
-        and the CAS name used in its place today (CRN values). None of the old
-        names are used any more, except {code('magenta')} and {code('iris')},
-        which have no CAS equivalent. <b>Same colour</b>: only the name changed.{' '}
-        <b>Closest CAS colour</b>: CAS has no exact match, so the Hub uses the
-        nearest one until design decides (see <i>Design Questions</i>
-        ).
+        and the CAS name used in its place today (CRN values, as Figma defines
+        them). None of the old names are used any more, except {code('magenta')}{' '}
+        and {code('iris')}, which have no CAS equivalent. The distance shows how
+        close today&apos;s colour is to production: <b>same</b>, <b>close</b>,{' '}
+        <b>noticeable</b> or <b>far</b>. Most differences are design&apos;s
+        choice (see <i>Design status and questions</i>).
       </>
     }
   >
@@ -621,7 +619,7 @@ export const LegacyNames = () => (
           <tr>
             <th style={headCell}>Old name</th>
             <th style={headCell}>Production → now (CRN)</th>
-            <th style={headCell}>Match</th>
+            <th style={headCell}>Distance</th>
             <th style={headCell}>Now called</th>
           </tr>
         </thead>
@@ -736,21 +734,6 @@ const missingNames: {
       'Add border/hover, or use border/brand as the Figma components do.',
   },
   {
-    name: 'Darker status text (toasts, status pills and cards)',
-    hub: [
-      { label: 'success', hex: '#287953' },
-      { label: 'info', hex: '#006A92' },
-      { label: 'warning', hex: '#B56B0B' },
-    ],
-    now: [
-      { label: 'foreground/success', code: 'foreground.success' },
-      { label: 'foreground/info', code: 'foreground.info' },
-      { label: 'foreground/warning', code: 'foreground.warning' },
-    ],
-    suggestion:
-      'Figma darkened foreground/{status}, but success and info are still lighter than production here and below 4.5:1 on their backgrounds. Add foreground/{status}-strong?',
-  },
-  {
     name: 'Warning button border',
     hub: [{ hex: '#B00A1A' }],
     now: [
@@ -828,33 +811,6 @@ const ShadeList = ({ shades }: { shades: Shade[] }) => (
   </div>
 );
 
-const noCloseMatch: {
-  use: string;
-  hub: string;
-  figma: string;
-  suggestion: string;
-}[] = [
-  {
-    use: 'Main text',
-    hub: '#00222C',
-    figma: 'foreground/primary: neutral/900 #1C1F21',
-    suggestion:
-      'The Hub text is a dark blue-grey; CAS text is neutral black. Add #00222C as a primitive, or accept neutral/900.',
-  },
-  {
-    use: 'Hover in dropdowns, selects and tags (CRN)',
-    hub: '#E4F5EE',
-    figma: 'background/hover-brand: brand/crn/25 #E2EEED',
-    suggestion: 'Close enough to keep; or add #E4F5EE.',
-  },
-  {
-    use: 'Borders and dividers',
-    hub: '#DFE5EA',
-    figma: 'border/tertiary: neutral/100 #E3E6E8',
-    suggestion: 'Close enough to keep.',
-  },
-];
-
 const TableSearch = ({
   value,
   onChange,
@@ -895,79 +851,70 @@ const NoMatch = ({ columns, query }: { columns: number; query: string }) => (
 
 export const DesignQuestions = () => {
   const [changesQuery, setChangesQuery] = useState('');
-  const [noMatchQuery, setNoMatchQuery] = useState('');
   const [namesQuery, setNamesQuery] = useState('');
   const gaps = productionGaps.filter(
     (row) => row.distance !== 'same' && matches(row, changesQuery),
   );
-  const noClose = noCloseMatch.filter((row) => matches(row, noMatchQuery));
   const names = missingNames.filter((row) => matches(row, namesQuery));
+  const count = (distances: Distance[]) =>
+    productionGaps.filter((row) => distances.includes(row.distance)).length;
   return (
     <Page
-      title="Questions for design"
+      title="Design status and questions"
       intro={
         <>
-          The Hub shows exactly what Figma defines. Production&apos;s colours
-          are kept only as a reference ({code('production-reference.json')}), to
-          show how far each name is from what users see today. Anything
-          noticeably or clearly different is a question for design; once Figma
-          changes, a re-export brings the new value in.
+          Where the CAS colours stand in the Hub, what still differs from
+          production and why, and the few questions left for design. The Hub
+          shows exactly what Figma defines; production&apos;s colours are kept
+          only as a reference ({code('production-reference.json')}).
         </>
       }
     >
-      <Section title="Answered by design">
-        <p style={{ marginTop: 0 }}>
-          Design reworked these colours on 30 September to pass accessibility
-          checks, starting from the ASAP brand colours. The Hub follows Figma
-          for them, so they differ slightly from production on purpose:
-        </p>
-        <ul style={{ paddingLeft: '20px' }}>
+      <Section title="Where we are">
+        <ul style={{ paddingLeft: '20px', marginTop: 0 }}>
           <li>
-            Links and brand text: CRN {code('brand/crn/700')}{' '}
-            <Colour value="#2C865C" />, GP2 {code('brand/gp2/700')}{' '}
-            <Colour value="#0375A2" /> (production <Colour value="#34A270" />,{' '}
-            <Colour value="#0C8DC3" />
-            ).
+            Every colour in CRN and GP2 comes from the CAS file by name, and
+            nothing in the code changes a Figma value.
           </li>
           <li>
-            Primary button: CRN {code('brand/crn/600')}{' '}
-            <Colour value="#309466" />, GP2 {code('brand/gp2/600')}{' '}
-            <Colour value="#0681B2" />, one shade darker on hover, with a faint{' '}
-            {code('neutral/900-A4')} border.
+            Shared components show the CRN greens in CRN and the GP2 blues in
+            GP2: links, primary buttons, checked checkboxes, radios and
+            switches, focus borders and the selected menu item.
           </li>
           <li>
-            Checked checkbox, radio and switch: CRN {code('brand/crn/800')}{' '}
-            <Colour value="#287953" />, GP2 {code('brand/gp2/800')}{' '}
-            <Colour value="#006A92" />.
+            Design reworked the brand, status and border colours for
+            readability: links and error text now pass, the warning background
+            is production&apos;s peach <Colour value="#F8EDDE" />, the success
+            border matches production, and disabled and button borders are light
+            greys again.
           </li>
           <li>
-            Status messages: success {code('brand/crn/600')} on{' '}
-            {code('brand/crn/50')}, info {code('brand/gp2/600')} on{' '}
-            {code('brand/gp2/50')}, warning {code('utilitarian/orange/2/600')}{' '}
-            on {code('utilitarian/orange/2/100')} (production&apos;s peach),
-            error {code('utilitarian/red/700')} on {code('utilitarian/red/100')}
-            .
+            The selected menu item uses {code('background/color-brand')}, as
+            design asked.
           </li>
           <li>
-            Warning (destructive) button: {code('utilitarian/red/700')}{' '}
-            <Colour value="#B42318" />, hover {code('utilitarian/red/800')}{' '}
-            <Colour value="#912018" />.
-          </li>
-          <li>
-            Selected menu item: {code('background/color-brand')}, as design
-            asked: {code('brand/crn/50')} <Colour value="#D1ECE1" />,{' '}
-            {code('brand/gp2/50')} <Colour value="#D3E9F3" />.
+            GP2 radio buttons no longer show the CRN green (a production bug).
           </li>
         </ul>
+        <p>
+          Of the {productionGaps.length} name and product pairs we can compare
+          with production, <b>{count(['same', 'close'])}</b> look the same or
+          close and <b>{count(['noticeable'])}</b> are a shade darker or
+          lighter, mostly the brand and status colours design chose for
+          readability. <b>{count(['far'])}</b> are clearly different: they are
+          at the top of the table below, and the ones that need an answer are in
+          the open questions.
+        </p>
       </Section>
 
-      <Section title="1. Distance from production">
+      <Section title="Differences from production">
         <p style={{ marginTop: 0 }}>
-          Every name with a known production colour that the Hub now shows
-          differently, furthest first. <b>Close</b> is hard to tell apart,{' '}
-          <b>noticeable</b> is visible side by side, <b>far</b> is clearly
-          different. <b>Closest CAS colour</b> is the palette colour nearest to
-          production, for when design wants to match it.
+          Every name the Hub now shows differently from production, furthest
+          first. Most are intentional; they are listed so nothing changes by
+          surprise. <b>Close</b> is hard to tell apart, <b>noticeable</b> is
+          visible side by side, <b>far</b> is clearly different.{' '}
+          <b>Closest CAS colour</b> is the palette colour nearest to production,
+          in case design wants to match it.
         </p>
         <TableSearch
           value={changesQuery}
@@ -1036,55 +983,112 @@ export const DesignQuestions = () => {
         </table>
       </Section>
 
-      <Section title="2. Hub colours with no close CAS colour">
-        <p style={{ marginTop: 0 }}>
-          For these, Figma&apos;s current value is already the closest CAS
-          colour, so the Hub uses it as is and looks slightly different from
-          production.
-        </p>
-        <TableSearch
-          value={noMatchQuery}
-          onChange={setNoMatchQuery}
-          placeholder="Search a use, name or hex"
-        />
-        <table style={table}>
-          <thead>
-            <tr>
-              <th style={headCell}>Used for</th>
-              <th style={headCell}>Production</th>
-              <th style={headCell}>Figma today</th>
-              <th style={headCell}>Suggestion</th>
-            </tr>
-          </thead>
-          <tbody>
-            {noClose.length === 0 && (
-              <NoMatch columns={4} query={noMatchQuery} />
-            )}
-            {noClose.map(({ use, hub, figma, suggestion }) => (
-              <tr key={use}>
-                <td style={cell}>{use}</td>
-                <td style={cell}>
-                  <HubSwatch hex={hub} />
-                </td>
-                <td style={cell}>
-                  <HubSwatch
-                    hex={figma.split(' ').pop() as string}
-                    label={figma}
-                  />
-                </td>
-                <td style={{ ...cell, ...muted }}>
-                  <Rich text={suggestion} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <Section title="Open question 1: a few pairs below 4.5:1">
+        <ul style={{ paddingLeft: '20px', marginTop: 0 }}>
+          <li>
+            Warning text on its background{' '}
+            <ContrastBadge foreground="#C36533" background="#F8EDDE" />.{' '}
+            {code('utilitarian/orange/2/700')} would pass{' '}
+            <ContrastBadge foreground="#A24F2C" background="#F8EDDE" />.
+          </li>
+          <li>
+            Button text on the primary button: CRN{' '}
+            <ContrastBadge foreground="#FCFCFD" background="#309466" />, GP2{' '}
+            <ContrastBadge foreground="#FCFCFD" background="#0681B2" />. GP2
+            passes at {code('brand/gp2/700')}{' '}
+            <ContrastBadge foreground="#FCFCFD" background="#0375A2" />; CRN
+            needs {code('brand/crn/800')}{' '}
+            <ContrastBadge foreground="#FCFCFD" background="#287953" />.
+          </li>
+          <li>
+            Success text on its background{' '}
+            <ContrastBadge foreground="#309466" background="#D1ECE1" /> and info{' '}
+            <ContrastBadge foreground="#0681B2" background="#D3E9F3" />. Info
+            passes at {code('brand/gp2/800')}{' '}
+            <ContrastBadge foreground="#006A92" background="#D3E9F3" />; success
+            needs {code('brand/crn/900')}{' '}
+            <ContrastBadge foreground="#246C4A" background="#D1ECE1" />.
+          </li>
+          <li>
+            Hint text ({code('foreground/disabled')}, neutral/300){' '}
+            <ContrastBadge foreground="#A6AEB4" background="#FFFFFF" />.
+            Disabled text has no minimum, but hints do; neutral/500 passes{' '}
+            <ContrastBadge foreground="#687883" background="#FFFFFF" />.
+          </li>
+        </ul>
       </Section>
 
-      <Section title="3. Names CAS does not have yet">
+      <Section title="Open question 2: text or borders?">
         <p style={{ marginTop: 0 }}>
-          The Hub uses these colours, but no CAS name fits, so the code uses the
-          nearest name or a primitive for now.
+          Design&apos;s note said brand, info and success text move from 700 to
+          800. In the export only their <b>borders</b> moved; the text is still{' '}
+          {code('brand/crn/700')}, {code('brand/gp2/700')} and{' '}
+          {code('brand/*/600')}. Was the text meant to change too?
+        </p>
+      </Section>
+
+      <Section title="Open question 3: primary button border">
+        <p style={{ marginTop: 0 }}>
+          The primary button border is light grey ({code('neutral/100')}{' '}
+          <Colour value="#E3E6E8" />
+          ). Production had a border in the brand colour (
+          <Colour value="#287953" />, <Colour value="#006A92" />
+          ). Is the grey intended?
+        </p>
+      </Section>
+
+      <Section title="Open question 4: avatars without a photo">
+        <p style={{ marginTop: 0 }}>
+          Production has six colour pairs, including a pink{' '}
+          <Colour value="#9A2386" /> and a purple <Colour value="#693B77" />;
+          CAS has five, and the {code('color-brand')} initials still use the
+          ARIA green. Add ASAP pairs, or keep the CAS set?
+        </p>
+        <div style={{ ...muted, marginBottom: '6px' }}>Production</div>
+        <AvatarRow
+          pairs={[
+            ['#E4F5EE', '#287953'],
+            ['#F8EDDE', '#CE801A'],
+            ['#E6F3F9', '#006A92'],
+            ['#E7F7FE', '#004561'],
+            ['#F8EAF7', '#9A2386'],
+            ['#F2EDF5', '#693B77'],
+          ]}
+        />
+        <div style={{ ...muted, margin: '12px 0 6px' }}>CAS (Hub now)</div>
+        <AvatarRow
+          pairs={['yellow', 'green', 'lavender', 'blue', 'brand'].map(
+            (name) => [
+              casHex(`background['color-${name}']`),
+              casHex(`foreground['color-${name}']`),
+            ],
+          )}
+        />
+      </Section>
+
+      <Section title="Open question 5: names to confirm">
+        <ul style={{ paddingLeft: '20px', marginTop: 0 }}>
+          <li>
+            The neutral names are grey ({code('foreground/neutral')}{' '}
+            <Colour value="#4B5359" />, {code('background/neutral')}{' '}
+            <Colour value="#E3E6E8" />, {code('border/neutral')}{' '}
+            <Colour value="#687883" />
+            ): a neutral status style?
+          </li>
+          <li>
+            Is {code('utilitarian/orange/2')} the final name for the warning
+            ramp? It repeats {code('general/orange')}, as{' '}
+            {code('utilitarian/yellow')} and {code('utilitarian/aqua')} repeat
+            general yellow and green.
+          </li>
+        </ul>
+      </Section>
+
+      <Section title="Open question 6: names CAS does not have yet">
+        <p style={{ marginTop: 0 }}>
+          A few Hub colours have no CAS name, so the code uses the nearest name
+          or a palette colour. Small, but a name for each would let design
+          control them.
         </p>
         <TableSearch
           value={namesQuery}
@@ -1120,104 +1124,11 @@ export const DesignQuestions = () => {
         </table>
       </Section>
 
-      <Section title="4. Avatars without a photo">
+      <Section title="Figma housekeeping (not blocking)">
         <p style={{ marginTop: 0 }}>
-          Production has six colour pairs, including a pink and a purple. CAS
-          has five pairs (color-*) and nothing close to the pink{' '}
-          <Colour value="#9A2386" /> or the purple <Colour value="#693B77" />,
-          and color-brand keeps the ARIA green text. The code keeps the five CAS
-          pairs. Should CAS add ASAP pairs that match production, or is the CAS
-          set fine?
+          Tidy-ups in the CAS file that do not change what the Hub shows today:
         </p>
-        <div style={{ ...muted, marginBottom: '6px' }}>Production</div>
-        <AvatarRow
-          pairs={[
-            ['#E4F5EE', '#287953'],
-            ['#F8EDDE', '#CE801A'],
-            ['#E6F3F9', '#006A92'],
-            ['#E7F7FE', '#004561'],
-            ['#F8EAF7', '#9A2386'],
-            ['#F2EDF5', '#693B77'],
-          ]}
-        />
-        <div style={{ ...muted, margin: '12px 0 6px' }}>CAS (code now)</div>
-        <AvatarRow
-          pairs={['yellow', 'green', 'lavender', 'blue', 'brand'].map(
-            (name) => [
-              casHex(`background['color-${name}']`),
-              casHex(`foreground['color-${name}']`),
-            ],
-          )}
-        />
-      </Section>
-
-      <Section title="5. Readability">
-        <p style={{ marginTop: 0 }}>
-          With design&apos;s new colours, these now pass (4.5:1 for normal
-          text): links, CRN{' '}
-          <ContrastBadge foreground="#2C865C" background="#FFFFFF" /> and GP2{' '}
-          <ContrastBadge foreground="#0375A2" background="#FFFFFF" />; and error
-          text <ContrastBadge foreground="#B42318" background="#FEE4E2" />.
-        </p>
-        <p>Still below the minimum:</p>
-        <ul style={{ paddingLeft: '20px' }}>
-          <li>
-            Button text ({code('neutral/25')}) on the primary button: CRN{' '}
-            <ContrastBadge foreground="#FCFCFD" background="#309466" />, GP2{' '}
-            <ContrastBadge foreground="#FCFCFD" background="#0681B2" />. Button
-            labels are 14px bold, which counts as normal text.
-          </li>
-          <li>
-            Status text on its background: success{' '}
-            <ContrastBadge foreground="#309466" background="#D1ECE1" />, info{' '}
-            <ContrastBadge foreground="#0681B2" background="#D3E9F3" />, and the
-            new orange warning{' '}
-            <ContrastBadge foreground="#C36533" background="#F8EDDE" /> (the
-            previous yellow passed at 5.12:1).
-          </li>
-          <li>
-            Hint and disabled text ({code('neutral/300')}):{' '}
-            <ContrastBadge foreground="#A6AEB4" background="#FFFFFF" />.
-          </li>
-        </ul>
-        <p>
-          Move these darker, or accept them? For the buttons, GP2 passes one
-          shade darker ({code('brand/gp2/700')}{' '}
-          <ContrastBadge foreground="#FCFCFD" background="#0375A2" />
-          ), while CRN needs two ({code('brand/crn/700')}{' '}
-          <ContrastBadge foreground="#FCFCFD" background="#2C865C" />,{' '}
-          {code('brand/crn/800')}{' '}
-          <ContrastBadge foreground="#FCFCFD" background="#287953" />
-          ).
-        </p>
-      </Section>
-
-      <Section title="6. One deliberate difference from production">
-        <p style={{ marginTop: 0 }}>
-          In GP2, checked radio buttons showed the CRN green{' '}
-          <Colour value="#34A270" /> (a bug). They now use the GP2 checked
-          colour {code('brand/gp2/800')} <Colour value="#006A92" />, like GP2
-          checkboxes and switches.
-        </p>
-      </Section>
-
-      <Section title="7. New names to explain">
-        <p style={{ marginTop: 0 }}>
-          The neutral names are now grey: {code('foreground/neutral')}{' '}
-          <Colour value="#4B5359" />, {code('background/neutral')}{' '}
-          <Colour value="#E3E6E8" /> and {code('border/neutral')}{' '}
-          <Colour value="#687883" />, which reads as a neutral status style.
-          Please confirm. Warning now uses the new{' '}
-          {code('utilitarian/orange/2')} ramp, which repeats{' '}
-          {code('general/orange')}; {code('utilitarian/yellow')} and{' '}
-          {code('utilitarian/aqua')} likewise repeat general yellow and green.
-          Are these aliases meant to stay, and is {code('orange/2')} the final
-          name?
-        </p>
-      </Section>
-
-      <Section title="Fixes we ask of the CAS Figma file">
-        <ol style={{ paddingLeft: '20px', marginTop: 0 }}>
+        <ol style={{ paddingLeft: '20px' }}>
           {figmaFixes.map((fix) => (
             <li key={fix}>
               <Rich text={fix} />
@@ -1314,3 +1225,5 @@ export const DesignQuestions = () => {
     </Page>
   );
 };
+
+DesignQuestions.storyName = 'Design Status and Questions';

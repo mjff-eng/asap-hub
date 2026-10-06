@@ -100,7 +100,7 @@ const toLab = (hex: string): [number, number, number] => {
   return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
 };
 
-// CIE76 colour difference: below 1 looks the same, 8 and above is clearly different
+// CIE76 colour difference: below 2 looks the same, 12 and above is clearly different
 export const colourDistance = (a: string, b: string): number => {
   const [l1, a1, b1] = toLab(a);
   const [l2, a2, b2] = toLab(b);
@@ -123,9 +123,9 @@ export const onWhite = (hex: string, alpha = 1): string =>
 export type Distance = 'same' | 'close' | 'noticeable' | 'far';
 
 export const distanceOf = (difference: number): Distance => {
-  if (difference < 1) return 'same';
-  if (difference < 3) return 'close';
-  if (difference < 8) return 'noticeable';
+  if (difference < 2) return 'same';
+  if (difference < 6) return 'close';
+  if (difference < 12) return 'noticeable';
   return 'far';
 };
 
@@ -223,7 +223,7 @@ export const casHex = (codePath: string, product: Product = 'crn'): string => {
     .replace(/\./g, '/');
   return /^(foreground|background|border)\//.test(path)
     ? themeHex(`colour/${path}`, product)
-    : primitiveHexByPath.get(`colour/${path}`) ?? '';
+    : (primitiveHexByPath.get(`colour/${path}`) ?? '');
 };
 
 export interface OldName {
