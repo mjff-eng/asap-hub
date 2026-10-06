@@ -73,7 +73,9 @@ const toSortedGroups = <T extends SpeakerTeamGroup | SpeakerProjectGroup>(
   groups: Map<string, MutableGroup>,
 ): T[] =>
   Array.from(groups.values())
-    .map((group) => ({ ...group, users: Array.from(group.users.values()) }) as T)
+    .map(
+      (group) => ({ ...group, users: Array.from(group.users.values()) }) as T,
+    )
     .sort((a, b) => {
       const aShared = groupFindings(a).hasAnyShared;
       const bShared = groupFindings(b).hasAnyShared;

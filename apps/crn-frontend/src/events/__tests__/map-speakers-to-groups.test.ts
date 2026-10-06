@@ -260,7 +260,12 @@ describe('mapSpeakersToGroups', () => {
   it('groups project speakers by project after the team groups', () => {
     const groups = mapSpeakersToGroups(
       makeEvent([
-        projectSpeaker('p1', 'Zeta Project', 'u2', 'Independent Project - Lead'),
+        projectSpeaker(
+          'p1',
+          'Zeta Project',
+          'u2',
+          'Independent Project - Lead',
+        ),
         teamSpeaker('t1', 'Alpha', 'u1', 'Chair'),
       ]),
     );
@@ -291,7 +296,12 @@ describe('mapSpeakersToGroups', () => {
     const groups = mapSpeakersToGroups(
       makeEvent([
         teamSpeaker('t1', 'Alpha', 'u1', 'Lead PI'),
-        projectSpeaker('p1', 'Project One', 'u1', 'Independent Project - Mentor'),
+        projectSpeaker(
+          'p1',
+          'Project One',
+          'u1',
+          'Independent Project - Mentor',
+        ),
       ]),
     );
 

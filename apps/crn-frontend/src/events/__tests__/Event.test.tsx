@@ -945,7 +945,11 @@ describe('the NEW_EVENT_PAGE flag', () => {
           getAllByRole('heading', { level: 4 }).map(
             (heading) => heading.textContent,
           ),
-        ).toEqual(['From Team Projects', 'From Individual Projects', 'External']);
+        ).toEqual([
+          'From Team Projects',
+          'From Individual Projects',
+          'External',
+        ]);
         expect(getByText('total speakers').previousSibling).toHaveTextContent(
           '4',
         );
