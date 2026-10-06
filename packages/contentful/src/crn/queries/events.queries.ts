@@ -40,16 +40,6 @@ export const eventsContentQueryFragment = gql`
         }
       }
     }
-    preliminaryDataSharedCollection(limit: 50) @include(if: $singleEvent) {
-      items {
-        preliminaryDataShared
-        team {
-          sys {
-            id
-          }
-        }
-      }
-    }
     notesPermanentlyUnavailable
     notes {
       json
@@ -222,6 +212,7 @@ export const eventsContentQueryFragment = gql`
         sys {
           id
         }
+        preliminaryDataShared
         team {
           sys {
             id

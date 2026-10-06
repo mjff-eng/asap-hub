@@ -102,6 +102,7 @@ export class ContentfulFixture implements Fixture {
                   fields: addLocaleToFields({
                     team: getLinkEntity(speaker.team[0]),
                     user: getLinkEntity(speaker.user[0]),
+                    preliminaryDataShared: false,
                   }),
                 },
               );

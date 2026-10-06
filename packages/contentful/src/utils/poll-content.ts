@@ -25,6 +25,13 @@ type DataContent = {
 type Data = {
   [K in Entity]?: DataContent | null;
 };
+const retryOptions = {
+  minTimeout: 200,
+  maxRetryTime: 60_000,
+  factor: 2,
+  randomize: false,
+};
+
 const pollContentful = async <T extends EntrySkeletonType<FieldsType, string>>(
   fetchEntry:
     | (() => Promise<CDAEntry<T> | undefined>)
@@ -67,12 +74,7 @@ const pollContentful = async <T extends EntrySkeletonType<FieldsType, string>>(
         }
       }
     },
-    {
-      minTimeout: 200,
-      maxRetryTime: 60_000,
-      factor: 2,
-      randomize: false,
-    },
+    retryOptions,
   );
 
 export const pollContentfulDeliveryApi = async <
@@ -87,3 +89,25 @@ export const pollContentfulGql = async <FetchType extends Data>(
   fetchData: () => Promise<FetchType | undefined>,
   entity: Entity,
 ) => pollContentful(fetchData, version, entity) as Promise<void>;
+
+export const pollContentfulGqlUntil = async <FetchType>(
+  fetchData: () => Promise<FetchType | undefined>,
+  isSynced: (data: FetchType) => boolean,
+  description: string,
+): Promise<void> => {
+  await retry(
+    // eslint-disable-next-line consistent-return
+    async (bail) => {
+      const data = await fetchData();
+
+      if (!data) {
+        return bail(new Error('Not found'));
+      }
+
+      if (!isSynced(data)) {
+        throw new Error(`${description} not synced.`);
+      }
+    },
+    retryOptions,
+  );
+};
