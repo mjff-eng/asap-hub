@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { neutral1000 } from '../../colors';
+import { colour } from '../../colors';
 import HubResearchOutputsCard, {
   HubResearchOutputRow,
 } from '../HubResearchOutputsCard';
@@ -118,7 +118,7 @@ describe('HubResearchOutputsCard', () => {
     expect(tooltip).toHaveTextContent(
       'This percentage is calculated based on the number of outputs shared (ASAP funded).',
     );
-    expect(tooltip).toHaveStyle({ backgroundColor: neutral1000.rgb });
+    expect(tooltip).toHaveStyle({ backgroundColor: colour.neutral[900] });
   });
 
   it('renders the metric details', () => {

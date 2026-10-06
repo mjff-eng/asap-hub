@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { neutral1000 } from '../../colors';
+import { colour } from '../../colors';
 import MetricsCard, { Metric, MoodStatus } from '../MetricsCard';
 
 const metrics: Metric[] = [
@@ -149,6 +149,6 @@ describe('MoodStatus', () => {
 
     const tooltip = screen.getByRole('tooltip');
     expect(tooltip).toHaveTextContent('Adequate: 80% – 89%');
-    expect(tooltip).toHaveStyle({ backgroundColor: neutral1000.rgb });
+    expect(tooltip).toHaveStyle({ backgroundColor: colour.neutral[900] });
   });
 });
