@@ -53,7 +53,7 @@ const subtextStyles = css({
 });
 
 const timeElapsedStyles = css({
-  color: colour.brand.gp2[500],
+  color: colour.foreground.info,
 });
 
 const iconMap: Record<ReminderEntity, React.ReactElement> = {

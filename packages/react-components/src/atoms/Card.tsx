@@ -90,7 +90,7 @@ const Card: React.FC<CardProps> = ({
   padding = true,
   stroke = false,
   shadow = true,
-  strokeColor = colour.brand.gp2[500],
+  strokeColor = colour.foreground.info,
   strokeSize = borderRadius,
   overrideStyles,
   title,
