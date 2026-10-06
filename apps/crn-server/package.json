@@ -61,7 +61,7 @@
     "@babel/runtime-corejs3": "7.28.6",
     "@hapi/boom": "9.1.4",
     "@hapi/bourne": "2.1.0",
-    "@hapi/joi": "17.1.1",
+    "joi": "17.1.1",
     "@opensearch-project/opensearch": "^3.5.1",
     "@sentry/serverless": "6.19.7",
     "@slack/webhook": "^6.1.0",
