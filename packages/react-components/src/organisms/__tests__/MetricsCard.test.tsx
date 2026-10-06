@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { neutral1000 } from '../../colors';
 import MetricsCard, { Metric, MoodStatus } from '../MetricsCard';
 
 const metrics: Metric[] = [
@@ -124,7 +125,7 @@ describe('MoodStatus', () => {
 
     expect(
       screen.getByRole('button', {
-        name: 'Your team is doing an outstanding job! Keep up the good work!',
+        name: 'Outstanding: 90% – 100%\nKeep up the good work!',
       }),
     ).toBeInTheDocument();
   });
@@ -137,5 +138,17 @@ describe('MoodStatus', () => {
         name: 'There is limited available data to calculate this metric at this time.',
       }),
     ).toBeInTheDocument();
+  });
+
+  it('shows the mood label in a dark tooltip when the icon is clicked', async () => {
+    render(<MoodStatus percentage={85} />);
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Adequate: 80% – 89%' }),
+    );
+
+    const tooltip = screen.getByRole('tooltip');
+    expect(tooltip).toHaveTextContent('Adequate: 80% – 89%');
+    expect(tooltip).toHaveStyle({ backgroundColor: neutral1000.rgb });
   });
 });

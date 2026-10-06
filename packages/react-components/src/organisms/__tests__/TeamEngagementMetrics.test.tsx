@@ -2,9 +2,9 @@ import { render, screen, within } from '@testing-library/react';
 
 import TeamEngagementMetrics from '../TeamEngagementMetrics';
 
-const outstanding = /doing an outstanding job/i;
-const adequate = /doing an adequate job/i;
-const improve = /encourage your team to work to improve/i;
+const outstanding = /outstanding: 90% – 100%/i;
+const adequate = /adequate: 80% – 89%/i;
+const improve = /needs improvement: 0% – 79%/i;
 const limited = /limited available data/i;
 
 const renderCard = (

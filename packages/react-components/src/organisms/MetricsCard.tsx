@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
 
 import { Button, Card, Paragraph, Subtitle } from '../atoms';
-import { charcoal, lead, steel } from '../colors';
+import { charcoal, lead, neutral1000, steel } from '../colors';
 import { minusRectIcon, plusRectIcon } from '../icons';
 import { ExpandableText, Info } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
@@ -132,9 +132,18 @@ export const BooleanStatus: React.FC<{ value: boolean }> = ({ value }) => (
   <>{value ? 'Y' : 'N'}</>
 );
 
+const moodTooltipFontSize = 14;
+const moodTooltipMaxTextWidth = 296 - 2 * 12;
+
 const moodLabelStyles = css({
   display: 'flex',
-  maxWidth: 'unset',
+  justifyContent: 'center',
+  // em here is relative to this element's own 14px font, not the 17px rem base
+  maxWidth: `${moodTooltipMaxTextWidth / moodTooltipFontSize}em`,
+  whiteSpace: 'pre-line',
+  textAlign: 'center',
+  fontSize: rem(moodTooltipFontSize),
+  lineHeight: 16 / moodTooltipFontSize,
   [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
     maxWidth: rem(90),
   },
@@ -148,7 +157,8 @@ export const MoodStatus: React.FC<{
   return (
     <Info
       label={label}
-      width={180}
+      width="max-content"
+      background={neutral1000.rgb}
       icon={getPerformanceMoodIcon(percentage, limitedData)}
     >
       <span css={moodLabelStyles}>{label}</span>

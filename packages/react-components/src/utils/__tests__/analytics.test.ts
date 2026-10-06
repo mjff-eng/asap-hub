@@ -67,37 +67,33 @@ describe('getPerformanceMoodLabel', () => {
 
   it('returns outstanding message when percentage is 90 or above', () => {
     expect(getPerformanceMoodLabel(95, false)).toBe(
-      'Your team is doing an outstanding job! Keep up the good work!',
+      'Outstanding: 90% – 100%\nKeep up the good work!',
     );
     expect(getPerformanceMoodLabel(90, false)).toBe(
-      'Your team is doing an outstanding job! Keep up the good work!',
+      'Outstanding: 90% – 100%\nKeep up the good work!',
     );
   });
 
   it('returns adequate message when percentage is between 80 and 89', () => {
-    expect(getPerformanceMoodLabel(85, false)).toBe(
-      'Your team is doing an adequate job for this metric.',
-    );
-    expect(getPerformanceMoodLabel(80, false)).toBe(
-      'Your team is doing an adequate job for this metric.',
-    );
+    expect(getPerformanceMoodLabel(85, false)).toBe('Adequate: 80% – 89%');
+    expect(getPerformanceMoodLabel(80, false)).toBe('Adequate: 80% – 89%');
   });
 
   it('returns improvement message when percentage is below 80', () => {
     expect(getPerformanceMoodLabel(50, false)).toBe(
-      'We encourage your team to work to improve.',
+      'Needs Improvement: 0% – 79%',
     );
     expect(getPerformanceMoodLabel(1, false)).toBe(
-      'We encourage your team to work to improve.',
+      'Needs Improvement: 0% – 79%',
     );
     expect(getPerformanceMoodLabel(0, false)).toBe(
-      'We encourage your team to work to improve.',
+      'Needs Improvement: 0% – 79%',
     );
   });
 
   it('defaults isLimitedData to false', () => {
     expect(getPerformanceMoodLabel(95)).toBe(
-      'Your team is doing an outstanding job! Keep up the good work!',
+      'Outstanding: 90% – 100%\nKeep up the good work!',
     );
     expect(getPerformanceMoodLabel(null)).toBe(
       'There is limited available data to calculate this metric at this time.',
