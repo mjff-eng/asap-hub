@@ -53,7 +53,36 @@ describe('/reminders/ route', () => {
         timezone,
       });
 
-      expect(reminderControllerMock.fetch).toBeCalledWith({ userId, timezone });
+      expect(reminderControllerMock.fetch).toHaveBeenCalledWith({
+        userId,
+        timezone,
+        isNewEventPageEnabled: false,
+      });
+    });
+
+    test('Should pass the isNewEventPageEnabled parameter to the controller', async () => {
+      const userId = 'some-user-id';
+      getLoggedUser.mockReturnValueOnce({ ...createAuthUser(), id: userId });
+
+      await supertest(app).get('/reminders').query({
+        timezone: 'Europe/London',
+        isNewEventPageEnabled: true,
+      });
+
+      expect(reminderControllerMock.fetch).toHaveBeenCalledWith({
+        userId,
+        timezone: 'Europe/London',
+        isNewEventPageEnabled: true,
+      });
+    });
+
+    test('Should return 400 when isNewEventPageEnabled is not a boolean', async () => {
+      const response = await supertest(app).get('/reminders').query({
+        timezone: 'Europe/London',
+        isNewEventPageEnabled: 'abc',
+      });
+
+      expect(response.status).toBe(400);
     });
 
     test('Should return the results correctly', async () => {

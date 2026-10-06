@@ -10,10 +10,12 @@ import { ReminderContentfulDataProvider } from '../../../../src/data-providers/c
 import { getContentfulGraphqlClientMock } from '../../../mocks/contentful-graphql-client.mock';
 import { getContentfulGraphqlEvent } from '../../../fixtures/events.fixtures';
 import {
+  getAddSpeakersReminder,
   getContentfulReminderEventsCollectionItem,
   getContentfulReminderUsersContent,
   getEventHappeningNowReminder,
   getEventHappeningTodayReminder,
+  getMarkAttendanceReminder,
   getNotesUpdatedReminder,
   getPresentationUpdatedReminder,
   getPublishMaterialReminder,
@@ -60,6 +62,10 @@ describe('Reminders data provider', () => {
     const userId = 'user-id';
     const timezone = 'Europe/London';
     const fetchRemindersOptions: FetchRemindersOptions = { userId, timezone };
+    const newEventPageOptions: FetchRemindersOptions = {
+      ...fetchRemindersOptions,
+      isNewEventPageEnabled: true,
+    };
 
     const setContentfulMock = (
       systemTime: string,
@@ -282,10 +288,10 @@ describe('Reminders data provider', () => {
         );
       });
 
-      it('Should fetch the reminder up until 72 hours of the end of the event', async () => {
+      it('Should fetch the reminder up until 7 days of the end of the event', async () => {
         const startDate = '2023-01-01T08:00:00Z';
         const endDate = '2023-01-01T10:00:00Z';
-        const systemTime = '2023-01-04T09:58:00Z';
+        const systemTime = '2023-01-08T09:58:00Z';
         const users = getContentfulReminderUsersContent();
 
         setContentfulMock(systemTime, users, startDate, endDate);
@@ -305,11 +311,11 @@ describe('Reminders data provider', () => {
         });
       });
 
-      it('Should not fetch the reminder when it passed more than 72 hours of the end of the event', async () => {
+      it('Should not fetch the reminder when it passed more than 7 days of the end of the event', async () => {
         const users = getContentfulReminderUsersContent();
         const startDate = '2023-01-01T08:00:00Z';
         const endDate = '2023-01-01T10:00:00Z';
-        const systemTime = '2023-01-04T10:01:00Z';
+        const systemTime = '2023-01-08T10:01:00Z';
 
         setContentfulMock(systemTime, users, startDate, endDate);
 
@@ -396,9 +402,9 @@ describe('Reminders data provider', () => {
         },
       );
 
-      it('Should fetch the reminder up until 72 hours of the end of the event', async () => {
+      it('Should fetch the reminder up until 7 days of the end of the event', async () => {
         const endDate = '2023-01-01T10:00:00Z';
-        const systemTime = '2023-01-04T09:58:00Z';
+        const systemTime = '2023-01-08T09:58:00Z';
 
         const users = getContentfulReminderUsersContent();
         users!.role = 'Staff';
@@ -418,8 +424,8 @@ describe('Reminders data provider', () => {
         });
       });
 
-      it('Should not fetch the reminder when it passed more than 72 hours of the end of the event', async () => {
-        const systemTime = '2023-01-04T10:01:00Z';
+      it('Should not fetch the reminder when it passed more than 7 days of the end of the event', async () => {
+        const systemTime = '2023-01-08T10:01:00Z';
 
         const users = getContentfulReminderUsersContent();
         users!.role = 'Staff';
@@ -460,6 +466,447 @@ describe('Reminders data provider', () => {
         expect(result.items.map((r) => r.type)).not.toContain(
           'Publish Material',
         );
+      });
+    });
+
+    describe('Mark Attendance Reminder', () => {
+      it('Should not fetch the reminder when the new event page is not enabled', async () => {
+        const users = getContentfulReminderUsersContent();
+        users!.techSupport = true;
+
+        setContentfulMock('2023-01-02T09:00:00Z', users);
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(fetchRemindersOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain(
+          'Mark Attendance',
+        );
+      });
+
+      it('Should fetch the reminder if the user has tech support', async () => {
+        const endDate = '2023-01-01T10:00:00Z';
+        const systemTime = '2023-01-02T09:00:00Z';
+
+        const users = getContentfulReminderUsersContent();
+        users!.techSupport = true;
+
+        setContentfulMock(systemTime, users);
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        const markAttendanceReminder = getMarkAttendanceReminder();
+        markAttendanceReminder.data.endDate = endDate;
+
+        expect(result.items).toContainEqual(markAttendanceReminder);
+      });
+
+      it('Should not fetch the reminder if the user does not have tech support even if the asap role is Staff', async () => {
+        const systemTime = '2023-01-02T09:00:00Z';
+
+        const users = getContentfulReminderUsersContent();
+        users!.role = 'Staff';
+        users!.techSupport = false;
+
+        setContentfulMock(systemTime, users);
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).toContain('Publish Material');
+        expect(result.items.map((r) => r.type)).not.toContain(
+          'Mark Attendance',
+        );
+      });
+
+      it('Should not fetch the reminder before the event is considered ended (1 hour after the end date)', async () => {
+        const systemTime = '2023-01-01T10:30:00Z';
+
+        const users = getContentfulReminderUsersContent();
+        users!.techSupport = true;
+
+        setContentfulMock(systemTime, users);
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain(
+          'Mark Attendance',
+        );
+      });
+
+      it('Should fetch the reminder once the event is considered ended (1 hour after the end date)', async () => {
+        const endDate = '2023-01-01T10:00:00Z';
+        const systemTime = '2023-01-01T11:01:00Z';
+
+        const users = getContentfulReminderUsersContent();
+        users!.techSupport = true;
+
+        setContentfulMock(systemTime, users);
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        const markAttendanceReminder = getMarkAttendanceReminder();
+        markAttendanceReminder.data.endDate = endDate;
+
+        expect(result.items).toContainEqual(markAttendanceReminder);
+      });
+
+      it('Should fetch the reminder up until 7 days of the end of the event', async () => {
+        const endDate = '2023-01-01T10:00:00Z';
+        const systemTime = '2023-01-08T09:58:00Z';
+
+        const users = getContentfulReminderUsersContent();
+        users!.techSupport = true;
+
+        setContentfulMock(systemTime, users);
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        const markAttendanceReminder = getMarkAttendanceReminder();
+        markAttendanceReminder.data.endDate = endDate;
+
+        expect(result.items).toContainEqual(markAttendanceReminder);
+      });
+
+      it('Should not fetch the reminder when it passed more than 7 days of the end of the event', async () => {
+        const systemTime = '2023-01-08T10:01:00Z';
+
+        const users = getContentfulReminderUsersContent();
+        users!.techSupport = true;
+
+        setContentfulMock(systemTime, users);
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain(
+          'Mark Attendance',
+        );
+      });
+
+      it('Should not fetch the reminder when the event is a future event', async () => {
+        const systemTime = '2022-12-31T10:00:00Z';
+
+        const users = getContentfulReminderUsersContent();
+        users!.techSupport = true;
+
+        setContentfulMock(systemTime, users);
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain(
+          'Mark Attendance',
+        );
+      });
+
+      it('Should not fetch the reminder if the event has not ended', async () => {
+        const systemTime = '2023-01-01T09:00:00Z';
+
+        const users = getContentfulReminderUsersContent();
+        users!.techSupport = true;
+
+        setContentfulMock(systemTime, users);
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain(
+          'Mark Attendance',
+        );
+      });
+    });
+
+    describe('Add Speakers Reminder', () => {
+      const getInterestGroupLeadership = ({
+        groupId = 'interest-group-1',
+        role = 'Project Manager',
+        active = true,
+        inactiveSinceDate = null,
+      }: {
+        groupId?: string;
+        role?: string;
+        active?: boolean;
+        inactiveSinceDate?: string | null;
+      } = {}) => ({
+        items: [
+          {
+            role,
+            inactiveSinceDate,
+            linkedFrom: {
+              interestGroupsCollection: {
+                items: [
+                  {
+                    sys: { id: groupId },
+                    active,
+                    name: 'Interest Group 1',
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      });
+
+      const getInterestGroupProjectManager = (
+        leadership = getInterestGroupLeadership(),
+      ) => {
+        const users = getContentfulReminderUsersContent();
+        users!.linkedFrom!.interestGroupLeadersCollection = leadership;
+        return users;
+      };
+
+      it('Should not fetch the reminder when the new event page is not enabled', async () => {
+        setContentfulMock(
+          '2023-01-02T09:00:00Z',
+          getInterestGroupProjectManager(),
+        );
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(fetchRemindersOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
+      });
+
+      it('Should fetch the reminder if the user is a Project Manager of the event interest group', async () => {
+        const endDate = '2023-01-01T10:00:00Z';
+        const systemTime = '2023-01-02T09:00:00Z';
+
+        setContentfulMock(systemTime, getInterestGroupProjectManager());
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        const addSpeakersReminder = getAddSpeakersReminder();
+        addSpeakersReminder.data.endDate = endDate;
+
+        expect(result.items).toContainEqual(addSpeakersReminder);
+      });
+
+      it('Should not fetch the reminder if the user leadership of the interest group is inactive', async () => {
+        const systemTime = '2023-01-02T09:00:00Z';
+
+        setContentfulMock(
+          systemTime,
+          getInterestGroupProjectManager(
+            getInterestGroupLeadership({
+              inactiveSinceDate: '2022-12-01T00:00:00Z',
+            }),
+          ),
+        );
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
+      });
+
+      it('Should not fetch the reminder if the event interest group is inactive', async () => {
+        const systemTime = '2023-01-02T09:00:00Z';
+
+        setContentfulMock(
+          systemTime,
+          getInterestGroupProjectManager(
+            getInterestGroupLeadership({ active: false }),
+          ),
+        );
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
+      });
+
+      it('Should not fetch the reminder if the user is a Project Manager of another interest group', async () => {
+        const systemTime = '2023-01-02T09:00:00Z';
+
+        setContentfulMock(
+          systemTime,
+          getInterestGroupProjectManager(
+            getInterestGroupLeadership({ groupId: 'interest-group-2' }),
+          ),
+        );
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
+      });
+
+      it('Should not fetch the reminder if the event does not have an interest group', async () => {
+        const systemTime = '2023-01-02T09:00:00Z';
+
+        const eventResponse = getContentfulReminderEventsCollectionItem();
+        eventResponse!.calendar = null;
+
+        setContentfulMock(
+          systemTime,
+          getInterestGroupProjectManager(),
+          undefined,
+          undefined,
+          eventResponse,
+        );
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
+      });
+
+      it('Should not fetch the reminder if the user is a Project Manager of a team but not a leader of the event interest group', async () => {
+        const systemTime = '2023-01-02T09:00:00Z';
+
+        const users = getContentfulReminderUsersContent();
+        users!.teamsCollection!.items[0]!.role = 'Project Manager';
+
+        setContentfulMock(systemTime, users);
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).toContain(
+          'Upload Presentation',
+        );
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
+      });
+
+      it('Should fetch the reminder even when the event does not have speakers', async () => {
+        const endDate = '2023-01-01T10:00:00Z';
+        const systemTime = '2023-01-02T09:00:00Z';
+
+        const eventResponse = getContentfulReminderEventsCollectionItem();
+        eventResponse!.speakersCollection = { items: [] };
+
+        setContentfulMock(
+          systemTime,
+          getInterestGroupProjectManager(),
+          undefined,
+          undefined,
+          eventResponse,
+        );
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        const addSpeakersReminder = getAddSpeakersReminder();
+        addSpeakersReminder.data.endDate = endDate;
+
+        expect(result.items).toContainEqual(addSpeakersReminder);
+      });
+
+      it('Should not fetch the reminder before the event is considered ended (1 hour after the end date)', async () => {
+        const systemTime = '2023-01-01T10:30:00Z';
+
+        setContentfulMock(systemTime, getInterestGroupProjectManager());
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
+      });
+
+      it('Should fetch the reminder once the event is considered ended (1 hour after the end date)', async () => {
+        const endDate = '2023-01-01T10:00:00Z';
+        const systemTime = '2023-01-01T11:01:00Z';
+
+        setContentfulMock(systemTime, getInterestGroupProjectManager());
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        const addSpeakersReminder = getAddSpeakersReminder();
+        addSpeakersReminder.data.endDate = endDate;
+
+        expect(result.items).toContainEqual(addSpeakersReminder);
+      });
+
+      it('Should fetch the reminder up until 7 days of the end of the event', async () => {
+        const endDate = '2023-01-01T10:00:00Z';
+        const systemTime = '2023-01-08T09:58:00Z';
+
+        setContentfulMock(systemTime, getInterestGroupProjectManager());
+
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          getTeamProjectManagerResponse(),
+        );
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        const addSpeakersReminder = getAddSpeakersReminder();
+        addSpeakersReminder.data.endDate = endDate;
+
+        expect(result.items).toContainEqual(addSpeakersReminder);
+      });
+
+      it('Should not fetch the reminder when it passed more than 7 days of the end of the event', async () => {
+        const systemTime = '2023-01-08T10:01:00Z';
+
+        setContentfulMock(systemTime, getInterestGroupProjectManager());
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
+      });
+
+      it('Should not fetch the reminder when the event is a future event', async () => {
+        const systemTime = '2022-12-31T10:00:00Z';
+
+        setContentfulMock(systemTime, getInterestGroupProjectManager());
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
+      });
+
+      it('Should not fetch the reminder if the event has not ended', async () => {
+        const systemTime = '2023-01-01T09:00:00Z';
+
+        setContentfulMock(systemTime, getInterestGroupProjectManager());
+
+        const result = await remindersDataProvider.fetch(newEventPageOptions);
+
+        expect(result.items.map((r) => r.type)).not.toContain('Add Speakers');
       });
     });
 
@@ -637,7 +1084,7 @@ describe('Reminders data provider', () => {
         );
       });
 
-      it('Should fetch the reminder up until 72 hours of the end of the event', async () => {
+      it('Should fetch the reminder up until 7 days of the end of the event', async () => {
         const eventMockResponse = getContentfulReminderEventsCollectionItem();
         const startDate = '2023-01-01T08:00:00Z';
         const endDate = '2023-01-01T10:00:00Z';
@@ -648,7 +1095,7 @@ describe('Reminders data provider', () => {
         users!.role = 'Grantee';
         users!.teamsCollection!.items[0]!.role = 'Project Manager';
 
-        setContentfulMock('2023-01-04T09:58:00Z', users, startDate, endDate);
+        setContentfulMock('2023-01-08T09:58:00Z', users, startDate, endDate);
 
         const result = await remindersDataProvider.fetch(fetchRemindersOptions);
 
@@ -665,9 +1112,9 @@ describe('Reminders data provider', () => {
         });
       });
 
-      it('Should not fetch the reminder when it passed more than 72 hours of the end of the event', async () => {
+      it('Should not fetch the reminder when it passed more than 7 days of the end of the event', async () => {
         const endDate = '2023-01-01T10:00:00Z';
-        const systemTime = '2023-01-04T10:01:00Z';
+        const systemTime = '2023-01-08T10:01:00Z';
 
         const users = getContentfulReminderUsersContent();
         users!.role = 'Grantee';

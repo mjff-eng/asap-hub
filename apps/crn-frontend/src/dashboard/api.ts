@@ -22,12 +22,14 @@ export const getDashboard = async (
 
 export const getReminders = async (
   authorization: string,
+  { isNewEventPageEnabled }: { isNewEventPageEnabled: boolean },
 ): Promise<ListReminderResponse> => {
   const timezone =
     Intl.DateTimeFormat().resolvedOptions().timeZone || getTimezone(new Date());
   const resp = await fetch(
     `${API_BASE_URL}/reminders?${new URLSearchParams({
       timezone,
+      isNewEventPageEnabled: String(isNewEventPageEnabled),
     })}`,
     {
       headers: {

@@ -65,21 +65,35 @@ describe('getReminders', () => {
     };
     nock(API_BASE_URL, { reqheaders: { authorization: 'Bearer x' } })
       .get('/reminders')
-      .query({ timezone: 'UTC' })
+      .query({ timezone: 'UTC', isNewEventPageEnabled: 'false' })
       .reply(200, reminderResponse);
 
-    const result = await getReminders('Bearer x');
+    const result = await getReminders('Bearer x', {
+      isNewEventPageEnabled: false,
+    });
     expect(result).toEqual(reminderResponse);
+  });
+
+  it('sends the isNewEventPageEnabled parameter when enabled', async () => {
+    nock(API_BASE_URL, { reqheaders: { authorization: 'Bearer x' } })
+      .get('/reminders')
+      .query({ timezone: 'UTC', isNewEventPageEnabled: 'true' })
+      .reply(200, { items: [], total: 0 });
+
+    const result = await getReminders('Bearer x', {
+      isNewEventPageEnabled: true,
+    });
+    expect(result).toEqual({ items: [], total: 0 });
   });
 
   it('errors for error status', async () => {
     nock(API_BASE_URL, { reqheaders: { authorization: 'Bearer x' } })
       .get('/reminders')
-      .query({ timezone: 'UTC' })
+      .query({ timezone: 'UTC', isNewEventPageEnabled: 'false' })
       .reply(500);
 
     await expect(
-      getReminders('Bearer x'),
+      getReminders('Bearer x', { isNewEventPageEnabled: false }),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"Failed to fetch reminders. Expected status 2xx. Received status 500."`,
     );

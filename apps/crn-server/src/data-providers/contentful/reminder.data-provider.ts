@@ -32,9 +32,11 @@ import {
   ProjectsFilter,
 } from '@asap-hub/contentful';
 import {
+  AddSpeakersReminder,
   DiscussionCreatedReminder,
   DiscussionReminder,
   DiscussionRepliedToReminder,
+  EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT,
   EventHappeningNowReminder,
   EventHappeningTodayReminder,
   EventNotesReminder,
@@ -48,6 +50,7 @@ import {
   ManuscriptResubmittedReminder,
   ManuscriptStatus,
   ManuscriptStatusUpdatedReminder,
+  MarkAttendanceReminder,
   MilestoneCreatedReminder,
   MilestoneOutputsLinkedReminder,
   MilestoneReminder,
@@ -81,9 +84,13 @@ import {
   getUserName,
 } from '@asap-hub/server-common';
 import { DateTime } from 'luxon';
-import { isCMSAdministrator } from '@asap-hub/validation';
+import {
+  isCMSAdministrator,
+  isEventProjectManager,
+} from '@asap-hub/validation';
 import { ReminderDataProvider } from '../types';
 import logger from '../../utils/logger';
+import { parseLeadersToInterestGroups } from './user.data-provider';
 
 type EventCollection = FetchRemindersQuery['eventsCollection'];
 type EventItem = NonNullable<NonNullable<EventCollection>['items'][number]>;
@@ -178,7 +185,7 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
   }
 
   async fetch(options: FetchRemindersOptions): Promise<ListReminderDataObject> {
-    const { timezone, userId } = options;
+    const { timezone, userId, isNewEventPageEnabled = false } = options;
     const eventFilter = getEventFilter(timezone);
     const researchOutputFilter = getResearchOutputFilter(timezone);
     const manuscriptFilter = getManuscriptFilter(timezone);
@@ -308,26 +315,37 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
         timezone,
       );
 
-    const eventsEndedInLast72Hours = eventsCollectionItems.filter((event) =>
-      hasEventEndedInLast72hours(event, timezone),
+    const eventsConsideredEndedInLast7Days = eventsCollectionItems.filter(
+      (event) => isEventConsideredEndedInLast7Days(event, timezone),
     );
 
     const sharePresentationReminders =
       await getSharePresentationRemindersFromQuery(
-        eventsEndedInLast72Hours,
+        eventsConsideredEndedInLast7Days,
         user,
         fetchTeamProjectManager,
       );
 
     const publishPresentationReminders = getPublishMaterialRemindersFromQuery(
-      eventsEndedInLast72Hours,
+      eventsConsideredEndedInLast7Days,
       user,
     );
 
     const uploadPresentationReminders = getUploadPresentationRemindersFromQuery(
-      eventsEndedInLast72Hours,
+      eventsConsideredEndedInLast7Days,
       user,
     );
+
+    const markAttendanceReminders = isNewEventPageEnabled
+      ? getMarkAttendanceRemindersFromQuery(
+          eventsConsideredEndedInLast7Days,
+          user,
+        )
+      : [];
+
+    const addSpeakersReminders = isNewEventPageEnabled
+      ? getAddSpeakersRemindersFromQuery(eventsConsideredEndedInLast7Days, user)
+      : [];
 
     const eventMaterialsReminders = getEventMaterialsRemindersFromQuery(
       eventsCollectionItems,
@@ -381,6 +399,8 @@ export class ReminderContentfulDataProvider implements ReminderDataProvider {
       ...sharePresentationReminders,
       ...publishPresentationReminders,
       ...uploadPresentationReminders,
+      ...markAttendanceReminders,
+      ...addSpeakersReminders,
       ...eventMaterialsReminders,
       ...manuscriptReminders,
       ...discussionReminders,
@@ -510,6 +530,8 @@ export const getSortDate = (reminder: ReminderDataObject): DateTime => {
       'Share Presentation': 'endDate',
       'Publish Material': 'endDate',
       'Upload Presentation': 'endDate',
+      'Mark Attendance': 'endDate',
+      'Add Speakers': 'endDate',
     },
   };
 
@@ -648,7 +670,7 @@ export const getEventFilter = (zone: string): EventsFilter => {
     lastMidnightISO,
     todayMidnightISO,
     last24HoursISO,
-    last72HoursISO,
+    last7DaysISO,
     now,
   } = getReferenceDates(zone);
   return {
@@ -664,7 +686,7 @@ export const getEventFilter = (zone: string): EventsFilter => {
         ],
       },
       {
-        AND: [{ endDate_gte: last72HoursISO }, { endDate_lte: now }],
+        AND: [{ endDate_gte: last7DaysISO }, { endDate_lte: now }],
       },
     ],
   };
@@ -673,15 +695,37 @@ export const getEventFilter = (zone: string): EventsFilter => {
 const convertEventDate = (date: string, zone: string) =>
   DateTime.fromISO(date, { zone }).toUTC();
 
-const hasEventEndedInLast72hours = (event: EventItem, zone: string) => {
+const isEventConsideredEndedInLast7Days = (event: EventItem, zone: string) => {
   const eventEndDate = convertEventDate(event.endDate, zone);
-  const { last72HoursISO, now } = getReferenceDates(zone);
+  const { last7DaysISO, now } = getReferenceDates(zone);
 
-  const eventHasEnded = eventEndDate < now;
-  const endedInLast72Hours = eventEndDate >= last72HoursISO;
+  const eventIsConsideredEnded =
+    eventEndDate.plus({ hours: EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT }) < now;
+  const endedInLast7Days = eventEndDate >= last7DaysISO;
 
-  return eventHasEnded && endedInLast72Hours;
+  return eventIsConsideredEnded && endedInLast7Days;
 };
+
+const getEventInterestGroup = (
+  event: EventItem,
+): { id: string } | undefined => {
+  const id =
+    event.calendar?.linkedFrom?.interestGroupsCollection?.items[0]?.sys.id;
+  return id ? { id } : undefined;
+};
+
+const isInterestGroupProjectManagerOfEvent = (
+  user: NonNullable<User>,
+  event: EventItem,
+): boolean =>
+  isEventProjectManager(
+    {
+      interestGroups: parseLeadersToInterestGroups(
+        cleanArray(user.linkedFrom?.interestGroupLeadersCollection?.items),
+      ),
+    },
+    { interestGroup: getEventInterestGroup(event) },
+  );
 
 const getEventHappeningNowOrTodayRemindersFromQuery = (
   eventsCollection: EventItem[],
@@ -739,7 +783,7 @@ const getEventHappeningNowOrTodayRemindersFromQuery = (
 };
 
 const getSharePresentationRemindersFromQuery = async (
-  eventsEndedInLast72Hours: EventItem[],
+  eventsConsideredEndedInLast7Days: EventItem[],
   users: User,
   fetchTeamProjectManager: (
     teamId: string,
@@ -756,7 +800,7 @@ const getSharePresentationRemindersFromQuery = async (
 
   const eventIds = eventsIAmASpeaker?.map((e) => e.eventId);
 
-  const reminderEvents = eventsEndedInLast72Hours.filter(
+  const reminderEvents = eventsConsideredEndedInLast7Days.filter(
     (event) => eventIds?.includes(event.sys.id),
   );
 
@@ -800,25 +844,27 @@ const getSharePresentationRemindersFromQuery = async (
   return sharePresentationReminders;
 };
 
+const toEventEndedReminderData = (event: EventItem) => ({
+  eventId: event.sys.id,
+  title: event.title || '',
+  endDate: event.endDate,
+});
+
 const getPublishMaterialRemindersFromQuery = (
-  eventsEndedInLast72Hours: EventItem[],
+  eventsConsideredEndedInLast7Days: EventItem[],
   users: User,
 ): PublishMaterialReminder[] =>
   isCMSAdministrator(users?.role as Role)
-    ? eventsEndedInLast72Hours.map((event) => ({
+    ? eventsConsideredEndedInLast7Days.map((event) => ({
         id: `publish-material-${event.sys.id}`,
         entity: 'Event',
         type: 'Publish Material',
-        data: {
-          eventId: event.sys.id,
-          title: event.title || '',
-          endDate: event.endDate,
-        },
+        data: toEventEndedReminderData(event),
       }))
     : [];
 
 const getUploadPresentationRemindersFromQuery = (
-  eventsEndedInLast72Hours: EventItem[],
+  eventsConsideredEndedInLast7Days: EventItem[],
   user: User,
 ): UploadPresentationReminder[] => {
   const uploadPresentationReminders: UploadPresentationReminder[] = [];
@@ -835,7 +881,7 @@ const getUploadPresentationRemindersFromQuery = (
     })
     .filter(Boolean);
 
-  eventsEndedInLast72Hours.forEach((event) => {
+  eventsConsideredEndedInLast7Days.forEach((event) => {
     const speakerTeams = event.speakersCollection?.items.map(
       (speaker) => speaker?.team?.sys.id,
     );
@@ -849,16 +895,41 @@ const getUploadPresentationRemindersFromQuery = (
         id: `upload-presentation-${event.sys.id}`,
         entity: 'Event',
         type: 'Upload Presentation',
-        data: {
-          eventId: event.sys.id,
-          title: event.title || '',
-          endDate: event.endDate,
-        },
+        data: toEventEndedReminderData(event),
       });
     }
   });
 
   return uploadPresentationReminders;
+};
+
+const getMarkAttendanceRemindersFromQuery = (
+  eventsConsideredEndedInLast7Days: EventItem[],
+  user: User,
+): MarkAttendanceReminder[] =>
+  user?.techSupport
+    ? eventsConsideredEndedInLast7Days.map((event) => ({
+        id: `mark-attendance-${event.sys.id}`,
+        entity: 'Event',
+        type: 'Mark Attendance',
+        data: toEventEndedReminderData(event),
+      }))
+    : [];
+
+const getAddSpeakersRemindersFromQuery = (
+  eventsConsideredEndedInLast7Days: EventItem[],
+  user: User,
+): AddSpeakersReminder[] => {
+  if (!user) return [];
+
+  return eventsConsideredEndedInLast7Days
+    .filter((event) => isInterestGroupProjectManagerOfEvent(user, event))
+    .map((event) => ({
+      id: `add-speakers-${event.sys.id}`,
+      entity: 'Event',
+      type: 'Add Speakers',
+      data: toEventEndedReminderData(event),
+    }));
 };
 
 const getEventMaterialsRemindersFromQuery = (

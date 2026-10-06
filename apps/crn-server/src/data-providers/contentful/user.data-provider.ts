@@ -1072,7 +1072,7 @@ const parseToInterestGroups = (
     }));
   });
 
-const parseLeadersToInterestGroups = (
+export const parseLeadersToInterestGroups = (
   leaders: InterestGroupLeaderItem[],
 ): InterestGroupMembership[] =>
   leaders.reduce(
