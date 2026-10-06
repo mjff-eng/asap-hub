@@ -707,10 +707,28 @@ const missingNames: {
       'foreground/brand is now brand/700; production used brand/800 here. Add foreground/brand-strong, or is foreground/brand enough?',
   },
   {
-    name: 'Tooltip background',
-    hub: [{ hex: '#004561' }],
+    name: 'Tooltip, rail tooltip and utility bar background (CRN and GP2)',
+    hub: [
+      { label: 'tooltip', hex: '#004561' },
+      { label: 'utility bar', hex: '#035C81' },
+    ],
     now: [{ label: 'primitive brand/gp2/900', code: 'brand.gp2[900]' }],
-    suggestion: 'Add background/tooltip.',
+    suggestion:
+      'Colour approved by design. Shared by both products, so it needs a product-neutral name: add background/tooltip pointing at brand/gp2/900.',
+  },
+  {
+    name: 'Light brand border (accordion, contact call to action)',
+    hub: [{ hex: '#BFE3D3' }],
+    now: [{ label: 'primitive brand/crn/100', code: 'brand.crn[100]' }],
+    suggestion:
+      'The accordion is shared with GP2. Add border/brand-light (brand/crn/100 in CRN, brand/gp2/100 in GP2), or a product-neutral name for this green.',
+  },
+  {
+    name: 'Muted cards, panels and light hovers (inactive cards, welcome accordion, reminder and status menus)',
+    hub: [{ hex: '#F6F9FB' }],
+    now: [{ label: 'primitive neutral/50', code: 'neutral[50]' }],
+    suggestion:
+      'background/secondary blends into the page, so the code uses the nearest palette colour. Add background/muted.',
   },
   {
     name: 'Hint and placeholder text',
