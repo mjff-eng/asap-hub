@@ -107,7 +107,7 @@ const menuItemStyles = css({
   textAlign: 'left',
   cursor: 'pointer',
   ':hover, :focus-visible': {
-    backgroundColor: colour.background.secondary,
+    backgroundColor: colour.background.hover,
     outline: 'none',
   },
 });
