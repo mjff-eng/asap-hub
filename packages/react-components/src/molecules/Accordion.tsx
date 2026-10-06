@@ -67,7 +67,7 @@ const buttonStyles = css({
 
   cursor: 'pointer',
   ':hover': {
-    background: colour.background.hover,
+    background: colour.background.tertiary,
     borderRadius: rem(4),
   },
 });

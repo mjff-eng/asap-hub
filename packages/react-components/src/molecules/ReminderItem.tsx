@@ -35,7 +35,7 @@ const iconStyles = css({
 const linkStyles = css({
   ':hover': {
     borderRadius: rem(3),
-    background: colour.background.hover,
+    background: colour.neutral[50],
   },
 });
 

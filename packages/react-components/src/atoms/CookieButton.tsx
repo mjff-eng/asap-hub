@@ -12,7 +12,7 @@ const iconStyles = css({
   justifyContent: 'center',
   alignItems: 'center',
   padding: '0.5em',
-  backgroundColor: colour.background.tertiary,
+  backgroundColor: colour.neutral[50],
   borderRadius: '4px',
   cursor: 'pointer',
   border: `1.5px solid ${colourWithAlpha(colour.border.tertiary, 0.3)}`,

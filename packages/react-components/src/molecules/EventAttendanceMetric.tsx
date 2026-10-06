@@ -13,7 +13,7 @@ export const containerStyles = css({
   width: '100%',
   maxWidth: rem(380),
   padding: rem(24),
-  backgroundColor: colour.background.tertiary,
+  backgroundColor: colour.neutral[50],
   borderRadius: rem(8),
 });
 

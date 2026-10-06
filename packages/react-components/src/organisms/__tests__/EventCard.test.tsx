@@ -158,7 +158,7 @@ describe('past events', () => {
     );
     expect(
       findParentWithStyle(screen.getByRole('heading'), 'borderStyle')?.element,
-    ).toHaveStyleRule('background-color', colour.background.tertiary);
+    ).toHaveStyleRule('background-color', colour.neutral[50]);
     unmount();
 
     render(
@@ -171,7 +171,7 @@ describe('past events', () => {
     );
     expect(
       findParentWithStyle(screen.getByRole('heading'), 'borderStyle')?.element,
-    ).not.toHaveStyleRule('background-color', colour.background.tertiary);
+    ).not.toHaveStyleRule('background-color', colour.neutral[50]);
   });
   it('lists every material greyed out and non-clickable while they are still pending', () => {
     render(

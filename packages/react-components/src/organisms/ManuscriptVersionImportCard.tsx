@@ -50,7 +50,7 @@ const wrapperStyles = css({
 });
 
 const cardStyles = css({
-  background: colour.background.tertiary,
+  background: colour.neutral[50],
 });
 
 const titleStyles = css({

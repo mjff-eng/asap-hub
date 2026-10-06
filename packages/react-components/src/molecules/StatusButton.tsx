@@ -169,7 +169,7 @@ const itemStyles = css({
   color: colour.foreground.tertiary,
   backgroundColor: 'none',
   ':hover': {
-    backgroundColor: colour.background.hover,
+    backgroundColor: colour.neutral[50],
   },
 });
 
