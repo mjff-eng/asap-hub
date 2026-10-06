@@ -14,8 +14,7 @@ const formattedStyles = css({
 });
 
 type GrantDocumentOverviewCardProps =
-  | { text: string }
-  | { description: string; descriptionMD: string };
+  { text: string } | { description: string; descriptionMD: string };
 
 const GrantDocumentOverviewCard: React.FC<GrantDocumentOverviewCardProps> = (
   props,
@@ -26,7 +25,7 @@ const GrantDocumentOverviewCard: React.FC<GrantDocumentOverviewCardProps> = (
     </Headline2>
     {'text' in props ? (
       <div css={textStyles}>
-        <Paragraph noMargin accent="lead">
+        <Paragraph noMargin accent="tertiary">
           {props.text}
         </Paragraph>
       </div>

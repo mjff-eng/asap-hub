@@ -7,7 +7,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Card, Display, Pill } from '../atoms';
-import { neutral700, neutral800, pearl } from '../colors';
+import { colour } from '../colors';
 import { formatDate } from '../date';
 import { TeamIcon } from '../icons';
 import { AssociationRow, ExternalLink } from '../molecules';
@@ -15,7 +15,7 @@ import { mobileScreen, rem } from '../pixels';
 import { getProjectConfig, titleCase } from '../utils';
 
 const cardStyles = css({
-  backgroundColor: pearl.rgb,
+  backgroundColor: colour.background.secondary,
 });
 
 const metadataStyles = css({
@@ -53,7 +53,7 @@ const smallTextStyles = {
 const labelStyles = css({
   '& > span': {
     padding: `0 ${rem(7)}`,
-    borderColor: neutral700.rgb,
+    borderColor: colour.border.secondary,
     borderRadius: rem(4),
   },
   '& small': smallTextStyles,
@@ -104,7 +104,7 @@ const datesStyles = css({
   columnGap: rem(12),
   rowGap: rem(8),
   marginTop: rem(32),
-  color: neutral800.rgb,
+  color: colour.foreground.quaternary,
   '& > span': smallTextStyles,
 });
 

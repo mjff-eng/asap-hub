@@ -24,7 +24,7 @@ const GrantDocumentTagsCard: React.FC<GrantDocumentTagsCardProps> = ({
       Tags
     </Headline2>
     <div css={subtitleStyles}>
-      <Paragraph noMargin accent="lead">
+      <Paragraph noMargin accent="tertiary">
         Explore keywords related to skills, techniques, resources, and tools.
       </Paragraph>
     </div>
