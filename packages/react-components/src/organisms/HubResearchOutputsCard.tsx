@@ -24,7 +24,7 @@ const tooltipTextStyles = css({
   paddingBottom: 0,
   textAlign: 'center',
   fontSize: rem(14),
-  lineHeight: rem(16),
+  lineHeight: 16 / 14,
   fontWeight: 'normal',
 });
 

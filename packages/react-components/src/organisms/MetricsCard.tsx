@@ -139,7 +139,7 @@ const moodLabelStyles = css({
   whiteSpace: 'pre-line',
   textAlign: 'center',
   fontSize: rem(14),
-  lineHeight: rem(16),
+  lineHeight: 16 / 14,
   [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
     maxWidth: rem(90),
   },
