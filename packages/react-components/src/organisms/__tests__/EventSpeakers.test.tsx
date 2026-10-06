@@ -260,6 +260,11 @@ describe('EventSpeakers', () => {
       ).not.toBeInTheDocument();
     });
 
+    it('Should not render the speakers column header', () => {
+      const { getAllByText } = renderCard({ hasFinished: false });
+      expect(getAllByText('Speakers')).toHaveLength(1);
+    });
+
     it('Should expand the first group of the first non-empty section', () => {
       const { getByText, queryByText } = renderCard({ hasFinished: false });
       expect(getByText('team-0 user 0')).toBeVisible();

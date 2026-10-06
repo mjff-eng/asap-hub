@@ -289,9 +289,9 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
         </div>
 
         <div css={rowsWrapperStyles}>
-          <div css={columnHeaderStyles}>
-            <span>Speakers</span>
-            {showFindings && (
+          {showFindings && (
+            <div css={columnHeaderStyles}>
+              <span>Speakers</span>
               <span css={trailingColumnsStyles}>
                 <span css={findingsColumnStyles}>
                   <span css={fullFindingsLabel}>Preliminary Findings</span>
@@ -299,8 +299,8 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
                 </span>
                 <span css={chevronSpacerStyles} />
               </span>
-            )}
-          </div>
+            </div>
+          )}
           {(['team', 'project'] as const).map((variant) => (
             <SpeakerSection
               key={variant}
