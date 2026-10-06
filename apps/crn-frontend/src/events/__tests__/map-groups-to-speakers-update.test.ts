@@ -102,6 +102,28 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ).toEqual(['ext-1']);
   });
 
+  test('Should only send removed project and affiliated external speakers for an upcoming event', () => {
+    const projectGroup = (users: SpeakerGroupUser[]): SpeakerGroup => ({
+      id: 'project-1',
+      variant: 'project',
+      projectName: 'Project One',
+      users,
+    });
+    const projectUser = speaker({ id: 'user-2', speakerIds: ['speaker-2'] });
+    const affiliatedExternal = speaker({
+      id: 'external-3',
+      speakerIds: ['speaker-3'],
+      roles: [],
+      isExternal: true,
+    });
+    const original = [projectGroup([projectUser, affiliatedExternal])];
+    const saved = [projectGroup([])];
+
+    expect(mapGroupsToSpeakersUpdate(original, saved, false)).toEqual({
+      speakersToRemove: ['speaker-2', 'speaker-3'],
+    });
+  });
+
   test('Should not mark anything for removal when nothing was removed', () => {
     const groups = [teamGroup()];
 
