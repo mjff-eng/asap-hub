@@ -132,14 +132,18 @@ export const BooleanStatus: React.FC<{ value: boolean }> = ({ value }) => (
   <>{value ? 'Y' : 'N'}</>
 );
 
+const moodTooltipFontSize = 14;
+const moodTooltipMaxTextWidth = 296 - 2 * 12;
+
 const moodLabelStyles = css({
   display: 'flex',
   justifyContent: 'center',
-  maxWidth: 'unset',
+  // em here is relative to this element's own 14px font, not the 17px rem base
+  maxWidth: `${moodTooltipMaxTextWidth / moodTooltipFontSize}em`,
   whiteSpace: 'pre-line',
   textAlign: 'center',
-  fontSize: rem(14),
-  lineHeight: 16 / 14,
+  fontSize: rem(moodTooltipFontSize),
+  lineHeight: 16 / moodTooltipFontSize,
   [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
     maxWidth: rem(90),
   },
@@ -153,7 +157,7 @@ export const MoodStatus: React.FC<{
   return (
     <Info
       label={label}
-      width={296}
+      width="max-content"
       background={neutral1000.rgb}
       icon={getPerformanceMoodIcon(percentage, limitedData)}
     >
