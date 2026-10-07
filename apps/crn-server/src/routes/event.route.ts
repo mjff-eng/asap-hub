@@ -40,6 +40,7 @@ export const eventRouteFactory = (eventController: EventController): Router => {
       const isAttendanceWrite = payload.attendance !== undefined;
       const isSpeakerWrite =
         payload.speakersToRemove !== undefined ||
+        payload.speakersToUnlink !== undefined ||
         payload.preliminaryDataShared !== undefined;
 
       if (!isAttendanceWrite && !isSpeakerWrite) {

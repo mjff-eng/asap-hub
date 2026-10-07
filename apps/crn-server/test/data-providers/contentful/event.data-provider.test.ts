@@ -11,6 +11,7 @@ import { when } from 'jest-when';
 
 import {
   areSpeakersPreliminaryDataSharedSynced,
+  areSpeakersUnlinked,
   EventContentfulDataProvider,
   parseGraphQLEvent,
 } from '../../../src/data-providers/contentful/event.data-provider';
@@ -2133,6 +2134,151 @@ describe('Events Contentful Data Provider', () => {
 
         expect(patchAndPublish).not.toHaveBeenCalled();
       });
+    });
+
+    describe('Unlinking speakers', () => {
+      const speakerLink = (id: string) => ({
+        sys: { type: 'Link', linkType: 'Entry', id },
+      });
+      const entityLink = (id: string) => ({ sys: { id } });
+      const graphqlSpeaker = (fields: Record<string, unknown>) => ({
+        events: {
+          sys: { publishedVersion: 2 },
+          speakersCollection: {
+            items: [{ sys: { id: 'speaker-1' }, ...fields }],
+          },
+        },
+      });
+      const mockEventWithSpeaker = (fields: Record<string, unknown>) => {
+        const eventEntry = getEntry(
+          { speakers: { 'en-US': [speakerLink('speaker-1')] } },
+          { id: '123' },
+        );
+        const speakerEntry = getEntry(fields, { id: 'speaker-1' });
+        when(environmentMock.getEntry)
+          .calledWith('123')
+          .mockResolvedValue(eventEntry);
+        when(environmentMock.getEntry)
+          .calledWith('speaker-1')
+          .mockResolvedValue(speakerEntry);
+        return { eventEntry, speakerEntry };
+      };
+
+      test('clears only the requested link and keeps the speaker on the event', async () => {
+        const { eventEntry, speakerEntry } = mockEventWithSpeaker({
+          team: { 'en-US': entityLink('team-1') },
+          project: { 'en-US': entityLink('project-1') },
+        });
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+          graphqlSpeaker({ team: { sys: { id: 'team-1' } }, project: null }),
+        );
+
+        await eventDataProvider.updateEventDetails('123', {
+          speakersToUnlink: [{ speakerId: 'speaker-1', field: 'project' }],
+        });
+
+        expect(patchAndPublish).toHaveBeenCalledTimes(1);
+        expect(patchAndPublish).toHaveBeenCalledWith(speakerEntry, {
+          project: null,
+        });
+        expect(patchAndPublish).not.toHaveBeenCalledWith(
+          eventEntry,
+          expect.anything(),
+        );
+      });
+
+      test('waits until the GraphQL API no longer returns the link', async () => {
+        mockEventWithSpeaker({
+          team: { 'en-US': entityLink('team-1') },
+          project: { 'en-US': entityLink('project-1') },
+        });
+        contentfulGraphqlClientMock.request
+          .mockResolvedValueOnce(
+            graphqlSpeaker({ team: { sys: { id: 'team-1' } } }),
+          )
+          .mockResolvedValueOnce(graphqlSpeaker({ team: null }));
+
+        await eventDataProvider.updateEventDetails('123', {
+          speakersToUnlink: [{ speakerId: 'speaker-1', field: 'team' }],
+        });
+
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(2);
+      }, 10_000);
+
+      test('skips speakers that are being removed, not on the event or already unlinked', async () => {
+        mockEventWithSpeaker({ team: { 'en-US': entityLink('team-1') } });
+
+        await eventDataProvider.updateEventDetails('123', {
+          speakersToUnlink: [
+            { speakerId: 'speaker-1', field: 'project' },
+            { speakerId: 'speaker-9', field: 'team' },
+          ],
+        });
+
+        expect(patchAndPublish).not.toHaveBeenCalled();
+        expect(contentfulGraphqlClientMock.request).not.toHaveBeenCalled();
+      });
+
+      test('warns and continues when a speaker entry cannot be fetched', async () => {
+        const warnSpy = jest.spyOn(logger, 'warn').mockImplementation(() => {});
+        const eventEntry = getEntry(
+          { speakers: { 'en-US': [speakerLink('speaker-1')] } },
+          { id: '123' },
+        );
+        when(environmentMock.getEntry)
+          .calledWith('123')
+          .mockResolvedValue(eventEntry);
+        when(environmentMock.getEntry)
+          .calledWith('speaker-1')
+          .mockRejectedValue(new Error('gone'));
+
+        await eventDataProvider.updateEventDetails('123', {
+          speakersToUnlink: [{ speakerId: 'speaker-1', field: 'team' }],
+        });
+
+        expect(warnSpy).toHaveBeenCalled();
+        expect(patchAndPublish).not.toHaveBeenCalled();
+        warnSpy.mockRestore();
+      });
+    });
+  });
+
+  describe('areSpeakersUnlinked', () => {
+    const response = (items: (Record<string, unknown> | null)[]) =>
+      ({
+        events: { speakersCollection: { items } },
+      }) as unknown as FetchEventByIdQuery;
+
+    test('is synced once the unlinked field is empty', () => {
+      expect(
+        areSpeakersUnlinked(
+          response([{ sys: { id: 's1' }, team: { sys: {} }, project: null }]),
+          [{ speakerId: 's1', field: 'project' }],
+        ),
+      ).toBe(true);
+    });
+
+    test('is not synced while the field is still linked', () => {
+      expect(
+        areSpeakersUnlinked(
+          response([{ sys: { id: 's1' }, project: { sys: {} } }]),
+          [{ speakerId: 's1', field: 'project' }],
+        ),
+      ).toBe(false);
+    });
+
+    test('ignores speakers missing from the response and null items', () => {
+      expect(
+        areSpeakersUnlinked(response([null]), [
+          { speakerId: 's1', field: 'team' },
+        ]),
+      ).toBe(true);
+      expect(
+        areSpeakersUnlinked(
+          { events: null } as unknown as FetchEventByIdQuery,
+          [{ speakerId: 's1', field: 'team' }],
+        ),
+      ).toBe(true);
     });
   });
 

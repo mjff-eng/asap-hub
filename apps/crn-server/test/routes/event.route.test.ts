@@ -358,6 +358,37 @@ describe('/events/ routes', () => {
         expect(response.status).toBe(403);
         expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
       });
+
+      test('Should unlink speakers for a project manager of the hosting interest group', async () => {
+        const unlinkPayload = {
+          speakersToUnlink: [{ speakerId: 'speaker-1', field: 'project' }],
+        };
+        userMockFactory.mockReturnValueOnce({
+          ...createUserResponse(),
+          interestGroups: [
+            {
+              id: getInterestGroupResponse().id,
+              name: 'Group 1',
+              active: true,
+              role: 'Project Manager',
+            },
+          ],
+        });
+        eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
+        eventControllerMock.updateEventDetails.mockResolvedValueOnce(
+          getEventResponse(),
+        );
+
+        const response = await supertest(app)
+          .patch('/events/123')
+          .send(unlinkPayload);
+
+        expect(response.status).toBe(200);
+        expect(eventControllerMock.updateEventDetails).toHaveBeenCalledWith(
+          '123',
+          unlinkPayload,
+        );
+      });
     });
 
     test('Should return 403 for a payload that touches neither attendance nor speakers', async () => {
@@ -393,6 +424,16 @@ describe('/events/ routes', () => {
       const response = await supertest(app)
         .patch('/events/123')
         .send({ preliminaryDataShared: [{ speakerId: 'speaker-1' }] });
+
+      expect(response.status).toBe(400);
+    });
+
+    test('Should return a validation error when a speaker unlink item has an unknown field', async () => {
+      const response = await supertest(app)
+        .patch('/events/123')
+        .send({
+          speakersToUnlink: [{ speakerId: 'speaker-1', field: 'user' }],
+        });
 
       expect(response.status).toBe(400);
     });

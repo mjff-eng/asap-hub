@@ -44,6 +44,7 @@ import {
   EventSpeakerExternalUserData,
   EventSpeakerProjectData,
   EventSpeakerTeam,
+  EventSpeakerUnlinkItem,
   EventSpeakerUserData,
   EventTeamAttendance,
   EventUpdateDataObject,
@@ -357,6 +358,16 @@ export class EventContentfulDataProvider implements EventDataProvider {
       );
     }
 
+    let unlinkedSpeakers: EventSpeakerUnlinkItem[] = [];
+    if (data.speakersToUnlink && data.speakersToUnlink.length > 0) {
+      unlinkedSpeakers = await this.unlinkSpeakers(
+        environment,
+        event,
+        data.speakersToUnlink,
+        data.speakersToRemove ?? [],
+      );
+    }
+
     let updatedSpeakers: SpeakerPreliminaryDataSharedUpdate[] = [];
     if (data.preliminaryDataShared && data.preliminaryDataShared.length > 0) {
       updatedSpeakers = await this.updateSpeakersPreliminaryDataShared(
@@ -375,6 +386,14 @@ export class EventContentfulDataProvider implements EventDataProvider {
         result.sys.publishedVersion || Infinity,
         fetchEventById,
         'events',
+      );
+    }
+
+    if (unlinkedSpeakers.length > 0) {
+      await pollContentfulGqlUntil<FetchEventByIdQuery>(
+        fetchEventById,
+        (result) => areSpeakersUnlinked(result, unlinkedSpeakers),
+        `Event ${id} speakers unlinked`,
       );
     }
 
@@ -526,6 +545,57 @@ export class EventContentfulDataProvider implements EventDataProvider {
       .map((link) => createLink(link.sys.id));
   }
 
+  private async unlinkSpeakers(
+    environment: Environment,
+    event: Entry,
+    speakersToUnlink: EventSpeakerUnlinkItem[],
+    speakersToRemove: string[],
+  ): Promise<EventSpeakerUnlinkItem[]> {
+    const removeSet = new Set(speakersToRemove);
+    const linkedIds = new Set(
+      (event.fields.speakers?.['en-US'] || []).map(
+        (link: Link<'Entry'>) => link.sys.id,
+      ),
+    );
+    const fieldsBySpeakerId = speakersToUnlink.reduce(
+      (map, { speakerId, field }) =>
+        linkedIds.has(speakerId) && !removeSet.has(speakerId)
+          ? map.set(speakerId, [...(map.get(speakerId) ?? []), field])
+          : map,
+      new Map<string, EventSpeakerUnlinkItem['field'][]>(),
+    );
+
+    const updates = await Promise.all(
+      [...fieldsBySpeakerId].map(async ([speakerId, fields]) => {
+        let speakerEntry: Entry;
+        try {
+          speakerEntry = await environment.getEntry(speakerId);
+        } catch (error) {
+          logger.warn(
+            { error, speakerId },
+            `Error fetching speaker entry with id: ${speakerId}`,
+          );
+          return [];
+        }
+
+        const linkedFields = fields.filter(
+          (field) => speakerEntry.fields[field]?.['en-US'],
+        );
+        if (linkedFields.length === 0) {
+          return [];
+        }
+
+        await patchAndPublish(
+          speakerEntry,
+          Object.fromEntries(linkedFields.map((field) => [field, null])),
+        );
+        return linkedFields.map((field) => ({ speakerId, field }));
+      }),
+    );
+
+    return updates.flat();
+  }
+
   private async updateSpeakersPreliminaryDataShared(
     environment: Environment,
     event: Entry,
@@ -600,6 +670,22 @@ export const areSpeakersPreliminaryDataSharedSynced = (
   return updates.every(({ speakerId, shared }) => {
     const current = sharedBySpeakerId.get(speakerId);
     return current === undefined || current === shared;
+  });
+};
+
+export const areSpeakersUnlinked = (
+  result: FetchEventByIdQuery,
+  unlinked: EventSpeakerUnlinkItem[],
+): boolean => {
+  const speakersById = new Map(
+    (result.events?.speakersCollection?.items ?? []).flatMap((item) =>
+      item ? [[item.sys.id, item] as const] : [],
+    ),
+  );
+
+  return unlinked.every(({ speakerId, field }) => {
+    const speaker = speakersById.get(speakerId);
+    return !speaker || !speaker[field];
   });
 };
 

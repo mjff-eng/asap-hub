@@ -166,9 +166,15 @@ export type EventPreliminaryDataSharingUpdateItem = {
   shared: boolean;
 };
 
+export type EventSpeakerUnlinkItem = {
+  speakerId: string;
+  field: 'team' | 'project';
+};
+
 export type EventUpdateDetailsRequest = {
   attendance?: EventAttendanceUpdateItem[];
   speakersToRemove?: string[];
+  speakersToUnlink?: EventSpeakerUnlinkItem[];
   preliminaryDataShared?: EventPreliminaryDataSharingUpdateItem[];
 };
 
