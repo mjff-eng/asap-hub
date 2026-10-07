@@ -709,23 +709,6 @@ const missingNames: {
       'foreground/brand is now brand/700; production used brand/800 here. Add foreground/brand-strong, or is foreground/brand enough?',
   },
   {
-    name: 'Tooltip, rail tooltip and utility bar background (CRN and GP2)',
-    hub: [
-      { label: 'tooltip', hex: '#004561' },
-      { label: 'utility bar', hex: '#035C81' },
-    ],
-    now: [{ label: 'primitive brand/gp2/900', code: 'brand.gp2[900]' }],
-    suggestion:
-      'Colour approved by design. Shared by both products, so it needs a product-neutral name: add background/tooltip pointing at brand/gp2/900.',
-  },
-  {
-    name: 'Light brand border (accordion, contact call to action)',
-    hub: [{ hex: '#BFE3D3' }],
-    now: [{ label: 'primitive brand/crn/100', code: 'brand.crn[100]' }],
-    suggestion:
-      'The accordion is shared with GP2. Add border/brand-light (brand/crn/100 in CRN, brand/gp2/100 in GP2), or a product-neutral name for this green.',
-  },
-  {
     name: 'Muted panels and light hovers (welcome accordion, event materials, reminder and status menus)',
     hub: [{ hex: '#F6F9FB' }],
     now: [{ label: 'primitive neutral/50', code: 'neutral[50]' }],
@@ -826,15 +809,15 @@ const codeChoices: {
     what: 'Tooltip, rail tooltip and utility bar background',
     uses: 'colour.brand.gp2[900]',
     file: 'atoms/Tooltip.tsx, atoms/RailTooltip.tsx, molecules/UtilityBar.tsx',
-    why: 'Colour approved by design; no product-neutral name yet.',
-    next: 'When a name such as background/tooltip exists, use it in these files.',
+    why: 'Colour approved by design. Design confirmed that CRN and GP2 share both brand palettes (all ASAP branding), so a GP2 palette name in CRN is intended.',
+    next: 'Nothing to do; Figma will not add a separate name.',
   },
   {
     what: 'Light brand border',
     uses: 'colour.brand.crn[100]',
     file: 'molecules/Accordion.tsx, molecules/CtaContactSection.tsx',
-    why: 'Production colour; no light brand border name yet.',
-    next: 'When a name such as border/brand-light exists, use it in these files.',
+    why: 'Production colour. Design confirmed that sharing brand palettes across CRN and GP2 is intended.',
+    next: 'Nothing to do unless design adds a name.',
   },
 ];
 
