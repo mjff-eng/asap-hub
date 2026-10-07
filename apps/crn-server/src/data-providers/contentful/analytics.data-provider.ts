@@ -671,8 +671,17 @@ const getAttendanceItems = (
       const attendanceItems = teamItem.linkedFrom?.attendanceCollection?.items;
 
       attendanceItems.forEach((item) => {
-        const eventStartDate =
-          item?.linkedFrom?.eventsCollection?.items[0]?.startDate;
+        const event = item?.linkedFrom?.eventsCollection?.items[0];
+        const eventStartDate = event?.startDate;
+
+        if (
+          !event ||
+          event.hidden ||
+          !isPastEvent(event.endDate) ||
+          !isNotCancelledEventStatus(event.status)
+        ) {
+          return;
+        }
 
         if (
           rangeKey === 'last-year' &&
@@ -694,9 +703,10 @@ const getAttendanceItems = (
         teamId: teamItem.sys.id,
         teamName: teamItem.displayName || '',
         isTeamInactive: !!teamItem.inactiveSince,
-        attendancePercentage: Math.round(
-          (attendanceYesCount / attendanceTotalCount) * 100,
-        ),
+        attendancePercentage:
+          attendanceTotalCount === 0
+            ? 0
+            : Math.round((attendanceYesCount / attendanceTotalCount) * 100),
         limitedData: attendanceTotalCount === 0,
       };
     }

@@ -479,6 +479,9 @@ export const FETCH_ATTENDANCE = gql`
                 eventsCollection(limit: 1) {
                   items {
                     startDate
+                    endDate
+                    hidden
+                    status
                   }
                 }
               }

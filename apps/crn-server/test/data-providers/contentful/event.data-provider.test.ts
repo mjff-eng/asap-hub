@@ -3,6 +3,8 @@ import {
   Entry,
   Environment,
   FetchEventByIdQuery,
+  FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID,
+  FETCH_UPCOMING_EVENTS_BY_CALENDAR_ID,
   getContentfulGraphqlClientMockServer,
   patchAndPublish,
 } from '@asap-hub/contentful';
@@ -2043,7 +2045,15 @@ describe('Events Contentful Data Provider', () => {
   });
 
   describe('Create method', () => {
+    afterEach(() => {
+      contentfulGraphqlClientMock.request.mockReset();
+      environmentMock.createEntry.mockReset();
+    });
+
     test('Should create an event', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        calendars: null,
+      });
       const eventEntryMock = getEntry({
         sys: {
           id: 'event-1',
@@ -2098,6 +2108,429 @@ describe('Events Contentful Data Provider', () => {
             'en-US': 'Event Tittle',
           },
         },
+      });
+    });
+
+    test('creates an attendance entry for each team that is a member of the calendar interest group when the event ends', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        calendars: {
+          linkedFrom: {
+            interestGroupsCollection: {
+              items: [
+                {
+                  teamsCollection: {
+                    items: [
+                      {
+                        startDate: '2020-01-01T00:00:00.000Z',
+                        endDate: null,
+                        team: { sys: { id: 'team-1' } },
+                      },
+                      {
+                        startDate: '2020-01-01T00:00:00.000Z',
+                        endDate: '2021-01-01T00:00:00.000Z',
+                        team: { sys: { id: 'team-2' } },
+                      },
+                      {
+                        startDate: null,
+                        endDate: null,
+                        team: { sys: { id: 'team-3' } },
+                      },
+                      {
+                        startDate: '2020-01-01T00:00:00.000Z',
+                        endDate: null,
+                        team: null,
+                      },
+                      null,
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+      const eventEntryMock = getEntry({}, { id: 'event-1' });
+      eventEntryMock.publish = jest.fn().mockResolvedValueOnce(eventEntryMock);
+      const attendanceEntryMock = getEntry({}, { id: 'attendance-1' });
+      attendanceEntryMock.publish = jest
+        .fn()
+        .mockResolvedValueOnce(attendanceEntryMock);
+      environmentMock.createEntry.mockImplementation(async (contentType) =>
+        contentType === 'attendance' ? attendanceEntryMock : eventEntryMock,
+      );
+
+      await eventDataProvider.create(getEventCreateDataObject());
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+        FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID,
+        { id: 'calendar-id' },
+      );
+      expect(environmentMock.createEntry).toHaveBeenCalledTimes(2);
+      expect(environmentMock.createEntry).toHaveBeenCalledWith('attendance', {
+        fields: {
+          team: {
+            'en-US': { sys: { type: 'Link', linkType: 'Entry', id: 'team-1' } },
+          },
+          attended: { 'en-US': false },
+        },
+      });
+      expect(attendanceEntryMock.publish).toHaveBeenCalled();
+      expect(environmentMock.createEntry).toHaveBeenCalledWith(
+        'events',
+        expect.objectContaining({
+          fields: expect.objectContaining({
+            attendance: {
+              'en-US': [
+                {
+                  sys: { type: 'Link', linkType: 'Entry', id: 'attendance-1' },
+                },
+              ],
+            },
+          }),
+        }),
+      );
+    });
+  });
+
+  describe('fetchUpcomingEventsByCalendarId', () => {
+    const now = new Date('2025-10-01T00:00:00.000Z');
+    const getUpcomingEventItem = (id: string) => ({
+      sys: { id },
+      endDate: '2025-10-02T10:00:00.000Z',
+      attendanceCollection: {
+        items: [
+          {
+            sys: { id: `${id}-attendance-1` },
+            attended: null,
+            team: { sys: { id: 'team-1' } },
+          },
+          {
+            sys: { id: `${id}-attendance-2` },
+            attended: true,
+            team: null,
+          },
+          null,
+        ],
+      },
+    });
+
+    afterEach(() => {
+      contentfulGraphqlClientMock.request.mockReset();
+    });
+
+    test('returns the events that have not ended with their attendance', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        eventsCollection: {
+          total: 1,
+          items: [getUpcomingEventItem('event-1'), null],
+        },
+      });
+
+      const result = await eventDataProvider.fetchUpcomingEventsByCalendarId(
+        'calendar-1',
+        now,
+      );
+
+      expect(result).toEqual([
+        {
+          id: 'event-1',
+          endDate: '2025-10-02T10:00:00.000Z',
+          attendance: [
+            { id: 'event-1-attendance-1', teamId: 'team-1', attended: false },
+          ],
+        },
+      ]);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+        FETCH_UPCOMING_EVENTS_BY_CALENDAR_ID,
+        {
+          calendarId: 'calendar-1',
+          now: now.toISOString(),
+          limit: 50,
+          skip: 0,
+        },
+      );
+    });
+
+    test('fetches all pages', async () => {
+      contentfulGraphqlClientMock.request
+        .mockResolvedValueOnce({
+          eventsCollection: {
+            total: 51,
+            items: [getUpcomingEventItem('event-1')],
+          },
+        })
+        .mockResolvedValueOnce({
+          eventsCollection: {
+            total: 51,
+            items: [getUpcomingEventItem('event-2')],
+          },
+        });
+
+      const result = await eventDataProvider.fetchUpcomingEventsByCalendarId(
+        'calendar-1',
+        now,
+      );
+
+      expect(result.map(({ id }) => id)).toEqual(['event-1', 'event-2']);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(2);
+      expect(contentfulGraphqlClientMock.request).toHaveBeenLastCalledWith(
+        FETCH_UPCOMING_EVENTS_BY_CALENDAR_ID,
+        expect.objectContaining({ skip: 50 }),
+      );
+    });
+
+    test('returns an empty list when there are no events', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        eventsCollection: null,
+      });
+
+      expect(
+        await eventDataProvider.fetchUpcomingEventsByCalendarId(
+          'calendar-1',
+          now,
+        ),
+      ).toEqual([]);
+    });
+  });
+
+  describe('fetchInterestGroupMembershipsByCalendarId', () => {
+    afterEach(() => {
+      contentfulGraphqlClientMock.request.mockReset();
+    });
+
+    test('returns the memberships of the calendar interest group', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        calendars: {
+          linkedFrom: {
+            interestGroupsCollection: {
+              items: [
+                {
+                  teamsCollection: {
+                    items: [
+                      {
+                        startDate: '2020-01-01T00:00:00.000Z',
+                        endDate: '2021-01-01T00:00:00.000Z',
+                        team: {
+                          sys: { id: 'team-1' },
+                          inactiveSince: '2020-06-01T00:00:00.000Z',
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+
+      expect(
+        await eventDataProvider.fetchInterestGroupMembershipsByCalendarId(
+          'calendar-1',
+        ),
+      ).toEqual([
+        {
+          teamId: 'team-1',
+          startDate: '2020-01-01T00:00:00.000Z',
+          endDate: '2021-01-01T00:00:00.000Z',
+          inactiveSince: '2020-06-01T00:00:00.000Z',
+        },
+      ]);
+    });
+
+    test('returns an empty list when the calendar has no interest group', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        calendars: { linkedFrom: { interestGroupsCollection: { items: [] } } },
+      });
+
+      expect(
+        await eventDataProvider.fetchInterestGroupMembershipsByCalendarId(
+          'calendar-1',
+        ),
+      ).toEqual([]);
+    });
+  });
+
+  describe('Update attendance', () => {
+    const futureEndDate = '2030-01-01T10:00:00.000Z';
+    const getLink = (id: string) => ({
+      sys: { type: 'Link', linkType: 'Entry', id },
+    });
+    const getEventEntry = (fields = {}) =>
+      getEntry(
+        {
+          endDate: { 'en-US': futureEndDate },
+          calendar: { 'en-US': getLink('calendar-1') },
+          attendance: { 'en-US': [getLink('attendance-1')] },
+          ...fields,
+        },
+        { id: 'event-1' },
+      );
+    // responds to the interest group memberships query with the given teams
+    // and to the event query with the event's current attendance (team-1)
+    const mockMemberships = (teamIds: string[]) =>
+      contentfulGraphqlClientMock.request.mockImplementation(((
+        query: unknown,
+      ) =>
+        Promise.resolve(
+          query === FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID
+            ? {
+                calendars: {
+                  linkedFrom: {
+                    interestGroupsCollection: {
+                      items: [
+                        {
+                          teamsCollection: {
+                            items: teamIds.map((id) => ({
+                              startDate: '2020-01-01T00:00:00.000Z',
+                              endDate: null,
+                              team: { sys: { id } },
+                            })),
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              }
+            : {
+                events: {
+                  sys: { publishedVersion: 2 },
+                  attendanceCollection: {
+                    items: [
+                      {
+                        sys: { id: 'attendance-1' },
+                        attended: false,
+                        team: { sys: { id: 'team-1' }, displayName: 'Team 1' },
+                      },
+                    ],
+                  },
+                },
+              },
+        )) as unknown as Parameters<
+        typeof contentfulGraphqlClientMock.request.mockImplementation
+      >[0]);
+
+    let eventEntry: Entry;
+    let attendanceEntry: Entry;
+
+    beforeEach(() => {
+      (
+        patchAndPublish as jest.MockedFunction<typeof patchAndPublish>
+      ).mockResolvedValue({ sys: { publishedVersion: 2 } } as Entry);
+
+      eventEntry = getEventEntry();
+      attendanceEntry = getEntry(
+        { attended: { 'en-US': false }, team: { 'en-US': getLink('team-1') } },
+        { id: 'attendance-1' },
+      );
+      (attendanceEntry.isPublished as jest.Mock).mockReturnValue(true);
+      when(environmentMock.getEntry)
+        .calledWith('event-1')
+        .mockResolvedValue(eventEntry);
+      when(environmentMock.getEntry)
+        .calledWith('attendance-1')
+        .mockResolvedValue(attendanceEntry);
+
+      const newAttendanceEntry = getEntry({}, { id: 'attendance-new' });
+      newAttendanceEntry.publish = jest
+        .fn()
+        .mockResolvedValue(getEntry({}, { id: 'attendance-new' }));
+      environmentMock.createEntry.mockResolvedValue(newAttendanceEntry);
+    });
+
+    afterEach(() => {
+      contentfulGraphqlClientMock.request.mockReset();
+      environmentMock.getEntry.mockReset();
+      environmentMock.createEntry.mockReset();
+    });
+
+    test('recalculates the attendance when the end date of an event that has not ended changes', async () => {
+      mockMemberships(['team-1', 'team-2']);
+
+      await eventDataProvider.update('event-1', {
+        endDate: '2030-02-01T10:00:00.000Z',
+      });
+
+      expect(environmentMock.createEntry).toHaveBeenCalledWith('attendance', {
+        fields: {
+          team: { 'en-US': getLink('team-2') },
+          attended: { 'en-US': false },
+        },
+      });
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        endDate: '2030-02-01T10:00:00.000Z',
+        attendance: [getLink('attendance-1'), getLink('attendance-new')],
+      });
+    });
+
+    test('recalculates the attendance with the new calendar when the calendar changes', async () => {
+      mockMemberships([]);
+
+      await eventDataProvider.update('event-1', { calendar: 'calendar-2' });
+
+      expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+        FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID,
+        { id: 'calendar-2' },
+      );
+      expect(attendanceEntry.unpublish).toHaveBeenCalled();
+      expect(attendanceEntry.delete).toHaveBeenCalled();
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        calendar: getLink('calendar-2'),
+        attendance: [],
+      });
+    });
+
+    test('does not change the attendance of an event that had already ended', async () => {
+      eventEntry = getEventEntry({
+        endDate: { 'en-US': '2020-01-01T10:00:00.000Z' },
+      });
+      when(environmentMock.getEntry)
+        .calledWith('event-1')
+        .mockResolvedValue(eventEntry);
+      mockMemberships(['team-2']);
+
+      await eventDataProvider.update('event-1', { endDate: futureEndDate });
+
+      expect(contentfulGraphqlClientMock.request).not.toHaveBeenCalledWith(
+        FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID,
+        expect.anything(),
+      );
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        endDate: futureEndDate,
+      });
+    });
+
+    test('does not change the attendance when the end date and calendar are unchanged', async () => {
+      mockMemberships(['team-2']);
+
+      await eventDataProvider.update('event-1', {
+        title: 'New title',
+        endDate: '2030-01-01T10:00:00Z',
+        calendar: 'calendar-1',
+      });
+
+      expect(contentfulGraphqlClientMock.request).not.toHaveBeenCalledWith(
+        FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID,
+        expect.anything(),
+      );
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        title: 'New title',
+        endDate: '2030-01-01T10:00:00Z',
+        calendar: getLink('calendar-1'),
+      });
+    });
+
+    test('does not change the attendance when it already matches the interest group teams', async () => {
+      mockMemberships(['team-1']);
+
+      await eventDataProvider.update('event-1', {
+        endDate: '2030-02-01T10:00:00.000Z',
+      });
+
+      expect(environmentMock.createEntry).not.toHaveBeenCalled();
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        endDate: '2030-02-01T10:00:00.000Z',
       });
     });
   });

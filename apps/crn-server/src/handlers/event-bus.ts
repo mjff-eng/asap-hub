@@ -19,6 +19,12 @@ export type InterestGroupContentfulPayload = WebhookDetail<
 
 export type InterestGroupPayload = InterestGroupContentfulPayload;
 
+export type InterestGroupTeamContentfulPayload = WebhookDetail<
+  ContentfulWebhookPayload<'interestGroupsTeams'>
+>;
+
+export type InterestGroupTeamPayload = InterestGroupTeamContentfulPayload;
+
 export type LabContentfulPayload = WebhookDetail<
   ContentfulWebhookPayload<'labs'>
 >;

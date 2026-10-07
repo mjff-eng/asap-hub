@@ -18,8 +18,12 @@ import {
   FetchEventsQueryVariables,
   FetchInterestGroupCalendarQuery,
   FetchInterestGroupCalendarQueryVariables,
+  FetchInterestGroupTeamsByCalendarIdQuery,
+  FetchInterestGroupTeamsByCalendarIdQueryVariables,
   FetchPreviousEventAttendanceQuery,
   FetchPreviousEventAttendanceQueryVariables,
+  FetchUpcomingEventsByCalendarIdQuery,
+  FetchUpcomingEventsByCalendarIdQueryVariables,
   FetchWorkingGroupCalendarQuery,
   FetchWorkingGroupCalendarQueryVariables,
   FETCH_EVENTS,
@@ -28,7 +32,9 @@ import {
   FETCH_EVENTS_BY_USER_ID,
   FETCH_EVENT_BY_ID,
   FETCH_INTEREST_GROUP_CALENDAR,
+  FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID,
   FETCH_PREVIOUS_EVENT_ATTENDANCE,
+  FETCH_UPCOMING_EVENTS_BY_CALENDAR_ID,
   FETCH_WORKING_GROUP_CALENDAR,
   GraphQLClient,
   Link,
@@ -47,16 +53,19 @@ import {
   EventUpdateDataObject,
   EventUpdateDetailsRequest,
   FetchEventsOptions,
+  getInterestGroupTeamIdsForEvent,
+  InterestGroupTeamMembership,
   isEventStatus,
   isTeamType,
   ListEventDataObject,
 } from '@asap-hub/model';
-import { parseUserDisplayName } from '@asap-hub/server-common';
+import { cleanArray, parseUserDisplayName } from '@asap-hub/server-common';
 import { DateTime } from 'luxon';
 
 import { parseCalendarDataObjectToResponse } from '../../controllers/calendar.controller';
+import { getAttendanceToSync } from '../../utils/event-attendance';
 import logger from '../../utils/logger';
-import { EventDataProvider } from '../types';
+import { UpcomingEvent, EventDataProvider } from '../types';
 import {
   getContentfulEventMaterial,
   MeetingMaterial,
@@ -295,12 +304,27 @@ export class EventContentfulDataProvider implements EventDataProvider {
     const environment = await this.getRestClient();
 
     const { calendar, ...otherCreateFields } = create;
+
+    const memberships =
+      await this.fetchInterestGroupMembershipsByCalendarId(calendar);
+    const attendanceEntries = await Promise.all(
+      getInterestGroupTeamIdsForEvent(memberships, create.endDate).map(
+        (teamId) => this.createAttendanceEntry(environment, teamId, false),
+      ),
+    );
+    const attendanceLinks = attendanceEntries.map((entry) =>
+      createLink(entry.sys.id),
+    );
+
     const newEntry = await environment.createEntry('events', {
       fields: {
         ...addLocaleToFields(otherCreateFields),
         calendar: {
           'en-US': createLink(calendar),
         },
+        ...(attendanceLinks.length > 0
+          ? { attendance: { 'en-US': attendanceLinks } }
+          : {}),
       },
     });
 
@@ -308,14 +332,82 @@ export class EventContentfulDataProvider implements EventDataProvider {
     return newEntry.sys.id;
   }
 
+  async fetchInterestGroupMembershipsByCalendarId(
+    calendarId: string,
+  ): Promise<InterestGroupTeamMembership[]> {
+    const { calendars } = await this.contentfulClient.request<
+      FetchInterestGroupTeamsByCalendarIdQuery,
+      FetchInterestGroupTeamsByCalendarIdQueryVariables
+    >(FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID, { id: calendarId });
+
+    return parseGraphQLInterestGroupMemberships(
+      calendars?.linkedFrom?.interestGroupsCollection?.items[0],
+    );
+  }
+
+  private async createAttendanceEntry(
+    environment: Environment,
+    teamId: string,
+    attended: boolean,
+  ) {
+    try {
+      const newEntry = await environment.createEntry('attendance', {
+        fields: addLocaleToFields({
+          team: createLink(teamId),
+          attended,
+        }),
+      });
+      return await newEntry.publish();
+    } catch (e) {
+      throw new Error(`Error creating attendance entry: ${e}`);
+    }
+  }
+
+  async fetchUpcomingEventsByCalendarId(
+    calendarId: string,
+    now: Date,
+  ): Promise<UpcomingEvent[]> {
+    const take = 50;
+    const events: UpcomingEvent[] = [];
+    let skip = 0;
+    let total = 0;
+
+    do {
+      const { eventsCollection } = await this.contentfulClient.request<
+        FetchUpcomingEventsByCalendarIdQuery,
+        FetchUpcomingEventsByCalendarIdQueryVariables
+      >(FETCH_UPCOMING_EVENTS_BY_CALENDAR_ID, {
+        calendarId,
+        now: now.toISOString(),
+        limit: take,
+        skip,
+      });
+
+      total = eventsCollection?.total ?? 0;
+      skip += take;
+      events.push(
+        ...cleanArray(eventsCollection?.items).map(parseGraphQLUpcomingEvent),
+      );
+    } while (skip < total);
+
+    return events;
+  }
+
   async update(id: string, update: EventUpdateDataObject): Promise<void> {
     const environment = await this.getRestClient();
     const event = await environment.getEntry(id);
     const { calendar, ...otherUpdateFields } = update;
 
+    const attendanceLinks = await this.getAttendanceLinksForUpdate(
+      environment,
+      event,
+      update,
+    );
+
     const updateWithCalendarLink = {
       ...(calendar ? { calendar: createLink(calendar) } : {}),
       ...otherUpdateFields,
+      ...(attendanceLinks ? { attendance: attendanceLinks } : {}),
     };
 
     const result = await patchAndPublish(event, updateWithCalendarLink);
@@ -327,6 +419,59 @@ export class EventContentfulDataProvider implements EventDataProvider {
       fetchEventById,
       'events',
     );
+  }
+
+  /**
+   * Recalculates the attendance when the end date or calendar of an event
+   * that hasn't ended changes. Events that had already ended are left as
+   * they are since their attendance may have been edited.
+   */
+  private async getAttendanceLinksForUpdate(
+    environment: Environment,
+    event: Entry,
+    update: EventUpdateDataObject,
+  ) {
+    const currentEndDate: string | undefined = event.fields.endDate?.['en-US'];
+    const currentCalendarId: string | undefined =
+      event.fields.calendar?.['en-US']?.sys.id;
+
+    const hasEnded = !!currentEndDate && new Date(currentEndDate) <= new Date();
+    const endDateChanged =
+      !!update.endDate &&
+      new Date(update.endDate).getTime() !==
+        new Date(currentEndDate ?? 0).getTime();
+    const calendarChanged =
+      !!update.calendar && update.calendar !== currentCalendarId;
+
+    const endDate = update.endDate ?? currentEndDate;
+    const calendarId = update.calendar ?? currentCalendarId;
+
+    if (
+      hasEnded ||
+      !(endDateChanged || calendarChanged) ||
+      !endDate ||
+      !calendarId
+    ) {
+      return null;
+    }
+
+    const [memberships, { events: currentEvent }] = await Promise.all([
+      this.fetchInterestGroupMembershipsByCalendarId(calendarId),
+      this.fetchEventById(event.sys.id),
+    ]);
+
+    const currentAttendance = parseGraphQLAttendance(
+      cleanArray(currentEvent?.attendanceCollection?.items),
+    ).map(({ id, team, attended }) => ({ id, teamId: team.id, attended }));
+
+    const attendance = getAttendanceToSync(
+      currentAttendance,
+      getInterestGroupTeamIdsForEvent(memberships, endDate),
+    );
+
+    return attendance
+      ? this.buildAttendanceLinks(environment, event, attendance)
+      : null;
   }
 
   async updateEventDetails(
@@ -457,17 +602,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
           return updatedEntry.publish();
         }
 
-        try {
-          const newEntry = await environment.createEntry('attendance', {
-            fields: addLocaleToFields({
-              team: createLink(teamId),
-              attended,
-            }),
-          });
-          return await newEntry.publish();
-        } catch (e) {
-          throw new Error(`Error creating attendance entry: ${e}`);
-        }
+        return this.createAttendanceEntry(environment, teamId, attended);
       }),
     );
 
@@ -722,6 +857,54 @@ export const parseGraphQLAttendance = (
     });
     return list;
   }, []);
+
+type InterestGroupTeamsItem = NonNullable<
+  NonNullable<
+    NonNullable<
+      NonNullable<
+        FetchInterestGroupTeamsByCalendarIdQuery['calendars']
+      >['linkedFrom']
+    >['interestGroupsCollection']
+  >['items'][number]
+>;
+
+const parseGraphQLInterestGroupMemberships = (
+  interestGroup: InterestGroupTeamsItem | null | undefined,
+): InterestGroupTeamMembership[] =>
+  cleanArray(interestGroup?.teamsCollection?.items).flatMap(
+    ({ team, startDate, endDate }) =>
+      team && startDate
+        ? [
+            {
+              teamId: team.sys.id,
+              startDate,
+              endDate,
+              inactiveSince: team.inactiveSince,
+            },
+          ]
+        : [],
+  );
+
+type UpcomingEventItem = NonNullable<
+  NonNullable<
+    FetchUpcomingEventsByCalendarIdQuery['eventsCollection']
+  >['items'][number]
+>;
+
+const parseGraphQLUpcomingEvent = ({
+  sys,
+  endDate,
+  attendanceCollection,
+}: UpcomingEventItem): UpcomingEvent => ({
+  id: sys.id,
+  endDate,
+  attendance: cleanArray(attendanceCollection?.items).flatMap(
+    ({ sys: attendanceSys, attended, team }) =>
+      team
+        ? [{ id: attendanceSys.id, teamId: team.sys.id, attended: !!attended }]
+        : [],
+  ),
+});
 
 export const parseGraphQLEvent = (item: EventItem): EventDataObject => {
   if (!item.calendar) {
