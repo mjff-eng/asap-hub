@@ -240,8 +240,10 @@ export const StartHere = () => (
           with design before adjusting the script.
         </li>
         <li>
-          Check <i>Design status and questions</i>: its table shows which names
-          moved closer to or further from production, to report back to design.
+          Check <i>Design status and questions</i>: the distance table shows
+          which names moved closer to or further from production, to report back
+          to design, and <i>Choices made in code</i> lists the spots to switch
+          when Figma adds a name or changes a value.
         </li>
       </ol>
       <p style={muted}>
@@ -724,11 +726,11 @@ const missingNames: {
       'The accordion is shared with GP2. Add border/brand-light (brand/crn/100 in CRN, brand/gp2/100 in GP2), or a product-neutral name for this green.',
   },
   {
-    name: 'Muted cards, panels and light hovers (inactive cards, welcome accordion, reminder and status menus)',
+    name: 'Muted panels and light hovers (welcome accordion, event materials, reminder and status menus)',
     hub: [{ hex: '#F6F9FB' }],
     now: [{ label: 'primitive neutral/50', code: 'neutral[50]' }],
     suggestion:
-      'background/secondary blends into the page, so the code uses the nearest palette colour. Add background/muted.',
+      'background/secondary blends into the page and background/tertiary is too strong here, so the code uses the nearest palette colour. Add background/muted. Inactive cards use background/tertiary, as design specified.',
   },
   {
     name: 'Hint and placeholder text',
@@ -789,6 +791,50 @@ const missingNames: {
       },
     ],
     suggestion: 'Add border/focus.',
+  },
+];
+
+const codeChoices: {
+  what: string;
+  uses: string;
+  file: string;
+  why: string;
+  next: string;
+}[] = [
+  {
+    what: 'Inactive cards (working and interest groups, projects, unpublished outputs, alumni, past cancelled events)',
+    uses: 'colour.background.tertiary',
+    file: "Card accent 'inactive' (atoms/Card.tsx)",
+    why: 'Design chose background/tertiary for inactive cards; Figma has no card-specific name.',
+    next: 'Follows Figma automatically. Only revisit if design adds a dedicated name.',
+  },
+  {
+    what: 'Primary button border',
+    uses: 'colour.background.button.primary.hover',
+    file: 'primaryStyles (button.tsx)',
+    why: 'border/button/primary is neutral/100 and draws a pale outline; production used the darker hover shade.',
+    next: 'When border/button/primary points at brand/700, switch back to colour.border.button.primary.*.',
+  },
+  {
+    what: 'Muted panels and light hovers',
+    uses: 'colour.neutral[50]',
+    file: "Card accent 'neutral200', Accordion, ReminderItem, StatusButton, MilestoneStatusDropdown, CookieButton, EventAttendanceMetric, ManuscriptVersionImportCard, OutputVersions",
+    why: 'No theme name between the page colour and background/tertiary.',
+    next: 'When a name such as background/muted exists, replace colour.neutral[50] in these files.',
+  },
+  {
+    what: 'Tooltip, rail tooltip and utility bar background',
+    uses: 'colour.brand.gp2[900]',
+    file: 'atoms/Tooltip.tsx, atoms/RailTooltip.tsx, molecules/UtilityBar.tsx',
+    why: 'Colour approved by design; no product-neutral name yet.',
+    next: 'When a name such as background/tooltip exists, use it in these files.',
+  },
+  {
+    what: 'Light brand border',
+    uses: 'colour.brand.crn[100]',
+    file: 'molecules/Accordion.tsx, molecules/CtaContactSection.tsx',
+    why: 'Production colour; no light brand border name yet.',
+    next: 'When a name such as border/brand-light exists, use it in these files.',
   },
 ];
 
@@ -1156,6 +1202,38 @@ export const DesignQuestions = () => {
             </li>
           ))}
         </ol>
+      </Section>
+
+      <Section title="For engineers: choices made in code">
+        <p style={{ marginTop: 0 }}>
+          Every place where the code picks a colour that is not the
+          component&apos;s own Figma name. Review this list after each export:
+          when Figma adds the missing name or changes the value, switch the code
+          and remove the row.
+        </p>
+        <table style={table}>
+          <thead>
+            <tr>
+              <th style={headCell}>What</th>
+              <th style={headCell}>Code uses</th>
+              <th style={headCell}>Why</th>
+              <th style={headCell}>When Figma changes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {codeChoices.map(({ what, uses, file, why, next }) => (
+              <tr key={what}>
+                <td style={cell}>{what}</td>
+                <td style={cell}>
+                  {code(uses)}
+                  <div style={muted}>{file}</div>
+                </td>
+                <td style={{ ...cell, ...muted }}>{why}</td>
+                <td style={{ ...cell, ...muted }}>{next}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </Section>
 
       <Section title="How to read the readability badges">
