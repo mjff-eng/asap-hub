@@ -109,6 +109,91 @@ describe('Sync interest group event attendance handler', () => {
     expect(eventDataProviderMock.updateEventDetails).not.toHaveBeenCalled();
   });
 
+  describe('team published', () => {
+    const teamPublishedEvent = createEventBridgeEventMock(
+      getInterestGroupContentfulWebhookDetail('team-1'),
+      'TeamsPublished' as const,
+      'team-1',
+    );
+
+    test('syncs the events of each interest group the team belongs to', async () => {
+      interestGroupDataProviderMock.fetchIdsByTeamId.mockResolvedValue([
+        'group-id-1',
+        'group-id-2',
+      ]);
+      interestGroupDataProviderMock.fetchCalendarId
+        .mockResolvedValueOnce('calendar-1')
+        .mockResolvedValueOnce('calendar-2');
+      eventDataProviderMock.fetchUpcomingEventsByCalendarId.mockResolvedValue(
+        [],
+      );
+
+      await handler(teamPublishedEvent);
+
+      expect(
+        interestGroupDataProviderMock.fetchIdsByTeamId,
+      ).toHaveBeenCalledWith('team-1');
+      expect(
+        interestGroupDataProviderMock.fetchCalendarId,
+      ).toHaveBeenCalledWith('group-id-1');
+      expect(
+        interestGroupDataProviderMock.fetchCalendarId,
+      ).toHaveBeenCalledWith('group-id-2');
+      expect(
+        eventDataProviderMock.fetchUpcomingEventsByCalendarId,
+      ).toHaveBeenCalledWith('calendar-1', expect.any(Date));
+      expect(
+        eventDataProviderMock.fetchUpcomingEventsByCalendarId,
+      ).toHaveBeenCalledWith('calendar-2', expect.any(Date));
+    });
+
+    test('removes a team that became inactive before the event ends', async () => {
+      interestGroupDataProviderMock.fetchIdsByTeamId.mockResolvedValue([
+        'group-id-1',
+      ]);
+      eventDataProviderMock.fetchInterestGroupMembershipsByCalendarId.mockResolvedValue(
+        [
+          { teamId: 'team-1', startDate: '2025-01-01T00:00:00.000Z' },
+          {
+            teamId: 'team-2',
+            startDate: '2025-01-01T00:00:00.000Z',
+            inactiveSince: '2029-12-01T00:00:00.000Z',
+          },
+        ],
+      );
+      eventDataProviderMock.fetchUpcomingEventsByCalendarId.mockResolvedValue([
+        getUpcomingEvent({
+          attendance: [
+            { id: 'attendance-1', teamId: 'team-1', attended: false },
+            { id: 'attendance-2', teamId: 'team-2', attended: false },
+          ],
+        }),
+      ]);
+
+      await handler(teamPublishedEvent);
+
+      expect(eventDataProviderMock.updateEventDetails).toHaveBeenCalledWith(
+        'event-1',
+        {
+          attendance: [
+            { id: 'attendance-1', teamId: 'team-1', attended: false },
+          ],
+        },
+      );
+    });
+
+    test('does nothing when the team is not in any interest group', async () => {
+      interestGroupDataProviderMock.fetchIdsByTeamId.mockResolvedValue([]);
+
+      await handler(teamPublishedEvent);
+
+      expect(
+        interestGroupDataProviderMock.fetchCalendarId,
+      ).not.toHaveBeenCalled();
+      expect(eventDataProviderMock.updateEventDetails).not.toHaveBeenCalled();
+    });
+  });
+
   test('does nothing when the interest group has no calendar', async () => {
     interestGroupDataProviderMock.fetchCalendarId.mockResolvedValue(null);
 

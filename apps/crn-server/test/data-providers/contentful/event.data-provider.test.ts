@@ -2310,7 +2310,10 @@ describe('Events Contentful Data Provider', () => {
                       {
                         startDate: '2020-01-01T00:00:00.000Z',
                         endDate: '2021-01-01T00:00:00.000Z',
-                        team: { sys: { id: 'team-1' } },
+                        team: {
+                          sys: { id: 'team-1' },
+                          inactiveSince: '2020-06-01T00:00:00.000Z',
+                        },
                       },
                     ],
                   },
@@ -2330,6 +2333,7 @@ describe('Events Contentful Data Provider', () => {
           teamId: 'team-1',
           startDate: '2020-01-01T00:00:00.000Z',
           endDate: '2021-01-01T00:00:00.000Z',
+          inactiveSince: '2020-06-01T00:00:00.000Z',
         },
       ]);
     });

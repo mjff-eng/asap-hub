@@ -99,6 +99,67 @@ describe('getInterestGroupTeamIdsForEvent', () => {
     ).toEqual(['team-1']);
   });
 
+  test('excludes a team that became inactive before the event ends', () => {
+    expect(
+      getInterestGroupTeamIdsForEvent(
+        [
+          {
+            teamId: 'team-1',
+            startDate: '2025-01-01T00:00:00.000Z',
+            inactiveSince: '2025-10-01T08:59:00.000Z',
+          },
+        ],
+        eventEndDate,
+      ),
+    ).toEqual([]);
+  });
+
+  test('includes a team that became inactive when the event ends', () => {
+    expect(
+      getInterestGroupTeamIdsForEvent(
+        [
+          {
+            teamId: 'team-1',
+            startDate: '2025-01-01T00:00:00.000Z',
+            inactiveSince: eventEndDate,
+          },
+        ],
+        eventEndDate,
+      ),
+    ).toEqual(['team-1']);
+  });
+
+  test('includes a team that became inactive after the event ends', () => {
+    expect(
+      getInterestGroupTeamIdsForEvent(
+        [
+          {
+            teamId: 'team-1',
+            startDate: '2025-01-01T00:00:00.000Z',
+            inactiveSince: '2025-12-01T00:00:00.000Z',
+          },
+        ],
+        eventEndDate,
+      ),
+    ).toEqual(['team-1']);
+  });
+
+  test('excludes an inactive team even when its membership has no end date', () => {
+    expect(
+      getInterestGroupTeamIdsForEvent(
+        [
+          {
+            teamId: 'team-1',
+            startDate: '2025-01-01T00:00:00.000Z',
+            endDate: null,
+            inactiveSince: '2025-06-01T00:00:00.000Z',
+          },
+        ],
+        eventEndDate,
+      ),
+    ).toEqual([]);
+  });
+
   test('returns each team once when it has more than one matching membership', () => {
     expect(
       getInterestGroupTeamIdsForEvent(

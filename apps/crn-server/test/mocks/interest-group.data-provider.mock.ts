@@ -5,4 +5,5 @@ export const interestGroupDataProviderMock = {
   fetchById: jest.fn(),
   fetchCalendarId: jest.fn(),
   fetchIdByInterestGroupTeamId: jest.fn(),
+  fetchIdsByTeamId: jest.fn(),
 } as unknown as jest.Mocked<InterestGroupDataProvider>;
