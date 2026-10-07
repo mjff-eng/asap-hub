@@ -792,13 +792,6 @@ const codeChoices: {
     next: 'Follows Figma automatically. Only revisit if design adds a dedicated name.',
   },
   {
-    what: 'Primary button border',
-    uses: 'colour.background.button.primary.hover',
-    file: 'primaryStyles (button.tsx)',
-    why: 'border/button/primary is neutral/100 and draws a pale outline; production used the darker hover shade.',
-    next: 'When border/button/primary points at brand/700, switch back to colour.border.button.primary.*.',
-  },
-  {
     what: 'Muted panels and light hovers',
     uses: 'colour.neutral[50]',
     file: "Card accent 'neutral200', Accordion, ReminderItem, StatusButton, MilestoneStatusDropdown, CookieButton, EventAttendanceMetric, ManuscriptVersionImportCard, OutputVersions",
@@ -932,8 +925,9 @@ export const DesignQuestions = () => {
             Design reworked the brand, status and border colours for
             readability: links and error text now pass, the warning background
             is production&apos;s peach <Colour value="#F8EDDE" />, the success
-            border matches production, and disabled and button borders are light
-            greys again.
+            border matches production, disabled borders are a light grey again,
+            and primary buttons have a brand border one shade darker than their
+            fill, as in production.
           </li>
           <li>
             The selected menu item uses {code('background/color-brand')}, as
@@ -1074,20 +1068,7 @@ export const DesignQuestions = () => {
         </p>
       </Section>
 
-      <Section title="Open question 3: primary button border">
-        <p style={{ marginTop: 0 }}>
-          Figma sets {code('border/button/primary')} to light grey (
-          {code('neutral/100')} <Colour value="#E3E6E8" />
-          ), which showed as a pale outline around the green and blue buttons.
-          Production drew the border in the darker hover shade (
-          <Colour value="#287953" />, <Colour value="#006A92" />
-          ), so the code now uses {code('background/button/primary/hover')} for
-          the border too. Could Figma point the border at that shade, so the
-          code can use the border name again?
-        </p>
-      </Section>
-
-      <Section title="Open question 4: avatars without a photo">
+      <Section title="Open question 3: avatars without a photo">
         <p style={{ marginTop: 0 }}>
           Production has six colour pairs, including a pink{' '}
           <Colour value="#9A2386" /> and a purple <Colour value="#693B77" />;
@@ -1116,7 +1097,7 @@ export const DesignQuestions = () => {
         />
       </Section>
 
-      <Section title="Open question 5: names to confirm">
+      <Section title="Open question 4: names to confirm">
         <ul style={{ paddingLeft: '20px', marginTop: 0 }}>
           <li>
             The neutral names are grey ({code('foreground/neutral')}{' '}
@@ -1134,7 +1115,7 @@ export const DesignQuestions = () => {
         </ul>
       </Section>
 
-      <Section title="Open question 6: names CAS does not have yet">
+      <Section title="Open question 5: names CAS does not have yet">
         <p style={{ marginTop: 0 }}>
           A few Hub colours have no CAS name, so the code uses the nearest name
           or a palette colour. Small, but a name for each would let design
