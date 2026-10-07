@@ -60,7 +60,7 @@ it('renders the state tag for a complete working group and displays the correct 
   expect(getByText('Complete', { selector: 'span' })).toBeVisible();
   expect(
     findParentWithStyle(getByText(props.title), 'boxShadow')?.element,
-  ).toHaveStyleRule('background-color', accents.neutral200.backgroundColor);
+  ).toHaveStyleRule('background-color', accents.inactive.backgroundColor);
 
   rerender(<WorkingGroupCard {...props} complete={false} />);
 

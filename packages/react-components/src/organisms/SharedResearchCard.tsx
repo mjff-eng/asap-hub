@@ -83,7 +83,7 @@ const SharedResearchCard: React.FC<SharedResearchCardProps> = ({
   });
 
   return (
-    <Card accent={published ? 'default' : 'neutral200'}>
+    <Card accent={published ? 'default' : 'inactive'}>
       <SharedResearchMetadata
         pills={[
           associationPill,

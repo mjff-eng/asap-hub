@@ -1,5 +1,6 @@
 import { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
+import { colour } from '../../colors';
 import { formatProjectDate } from '../../date';
 
 import ProjectCard, {
@@ -151,8 +152,8 @@ describe('Helper Functions', () => {
   describe('getCardAccentByStatus', () => {
     it.each([
       { status: 'Active' as const, expected: 'default' as const },
-      { status: 'Completed' as const, expected: 'neutral200' as const },
-      { status: 'Closed' as const, expected: 'neutral200' as const },
+      { status: 'Completed' as const, expected: 'inactive' as const },
+      { status: 'Closed' as const, expected: 'inactive' as const },
     ])(
       'returns $expected accent for $status status',
       ({ status, expected }) => {
@@ -414,11 +415,14 @@ describe('ProjectCard - Trainee Project', () => {
 
 describe('ProjectCard - Card Background Colors', () => {
   it('renders Active projects with default (white) background', () => {
-    const { container } = render(<ProjectCard {...discoveryProjectProps} />);
+    const { container } = render(
+      <ProjectCard {...discoveryProjectProps} status="Active" />,
+    );
     const card = container.querySelector('section');
-    const styles = window.getComputedStyle(card!);
-    // Default accent has no backgroundColor set, so it's transparent/white
-    expect(styles.backgroundColor).not.toContain('var(--neutral200)'); // neutral200
+    expect(card).not.toHaveStyleRule(
+      'background-color',
+      colour.background.tertiary,
+    );
   });
 
   it('renders Complete projects with grey background', () => {
@@ -426,7 +430,10 @@ describe('ProjectCard - Card Background Colors', () => {
       <ProjectCard {...discoveryProjectProps} status="Completed" />,
     );
     const card = container.querySelector('section');
-    expect(card).toHaveStyle({ backgroundColor: 'var(--neutral200)' }); // neutral200
+    expect(card).toHaveStyleRule(
+      'background-color',
+      colour.background.tertiary,
+    );
   });
 
   it('renders Closed projects with grey background', () => {
@@ -434,7 +441,10 @@ describe('ProjectCard - Card Background Colors', () => {
       <ProjectCard {...discoveryProjectProps} status="Closed" />,
     );
     const card = container.querySelector('section');
-    expect(card).toHaveStyle({ backgroundColor: 'var(--neutral200)' }); // neutral200
+    expect(card).toHaveStyleRule(
+      'background-color',
+      colour.background.tertiary,
+    );
   });
 });
 

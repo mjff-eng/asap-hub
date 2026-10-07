@@ -18,6 +18,7 @@ export type AccentVariant =
   | 'green'
   | 'placeholder'
   | 'neutral200'
+  | 'inactive'
   | 'warning'
   | 'information';
 
@@ -44,6 +45,11 @@ export const accents: Record<AccentVariant, CSSObject> = {
   },
   neutral200: {
     backgroundColor: colour.neutral[50],
+    borderColor: colour.border.card.default,
+    boxShadow: `0px 2px 4px ${colour.neutral[100]}`,
+  },
+  inactive: {
+    backgroundColor: colour.background.tertiary,
     borderColor: colour.border.card.default,
     boxShadow: `0px 2px 4px ${colour.neutral[100]}`,
   },

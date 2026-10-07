@@ -106,7 +106,7 @@ const EntityCard: React.FC<CardWrapperProps> = ({
   isTeamCard,
 }) => (
   <Card
-    accent={active ? 'default' : 'neutral200'}
+    accent={active ? 'default' : 'inactive'}
     padding={false}
     overrideStyles={containerStyles}
   >
