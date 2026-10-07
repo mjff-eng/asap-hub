@@ -62,6 +62,10 @@ tramp
 *storybook.log
 
 .claude/*
+!.claude/commands/
+!.claude/commands/**
+!.claude/settings.json
+!.claude/hooks/
+!.claude/hooks/**
 .gitnexus/*
-CLAUDE.md
 AGENTS.md
