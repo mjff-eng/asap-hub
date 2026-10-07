@@ -27250,7 +27250,14 @@ export type FetchAttendanceQuery = {
                       Pick<Attendance, 'attended'> & {
                         linkedFrom?: Maybe<{
                           eventsCollection?: Maybe<{
-                            items: Array<Maybe<Pick<Events, 'startDate'>>>;
+                            items: Array<
+                              Maybe<
+                                Pick<
+                                  Events,
+                                  'startDate' | 'endDate' | 'hidden' | 'status'
+                                >
+                              >
+                            >;
                           }>;
                         }>;
                       }
@@ -58236,6 +58243,27 @@ export const FetchAttendanceDocument = {
                                                               kind: 'Name',
                                                               value:
                                                                 'startDate',
+                                                            },
+                                                          },
+                                                          {
+                                                            kind: 'Field',
+                                                            name: {
+                                                              kind: 'Name',
+                                                              value: 'endDate',
+                                                            },
+                                                          },
+                                                          {
+                                                            kind: 'Field',
+                                                            name: {
+                                                              kind: 'Name',
+                                                              value: 'hidden',
+                                                            },
+                                                          },
+                                                          {
+                                                            kind: 'Field',
+                                                            name: {
+                                                              kind: 'Name',
+                                                              value: 'status',
                                                             },
                                                           },
                                                         ],

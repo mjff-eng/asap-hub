@@ -1101,6 +1101,9 @@ export const getAttendanceQuery = (): FetchAttendanceQuery => ({
                     items: [
                       {
                         startDate: '2024-01-15',
+                        endDate: '2024-01-15',
+                        hidden: false,
+                        status: 'Confirmed',
                       },
                     ],
                   },
@@ -1113,6 +1116,9 @@ export const getAttendanceQuery = (): FetchAttendanceQuery => ({
                     items: [
                       {
                         startDate: '2024-02-20',
+                        endDate: '2024-02-20',
+                        hidden: false,
+                        status: 'Confirmed',
                       },
                     ],
                   },
@@ -1125,6 +1131,9 @@ export const getAttendanceQuery = (): FetchAttendanceQuery => ({
                     items: [
                       {
                         startDate: '2023-06-10',
+                        endDate: '2023-06-10',
+                        hidden: false,
+                        status: 'Confirmed',
                       },
                     ],
                   },
