@@ -118,20 +118,20 @@ const boxShadow = (color: string) => `0px 2px 4px -2px ${color}`;
 const primaryStyles = css({
   color: colour.foreground.button.primary.default,
   backgroundColor: colour.background.button.primary.default,
-  borderColor: colour.border.button.primary.default,
-  boxShadow: boxShadow(colour.border.button.primary.default),
+  borderColor: colour.background.button.primary.hover,
+  boxShadow: boxShadow(colour.background.button.primary.hover),
   svg: {
     stroke: colour.foreground.button.primary.default,
   },
   ':hover, :focus': {
     color: colour.foreground.button.primary.hover,
     backgroundColor: colour.background.button.primary.hover,
-    borderColor: colour.border.button.primary.hover,
+    borderColor: colour.background.button.primary.hover,
     boxShadow: boxShadow(colour.neutral[600]),
   },
   ':active': {
     backgroundColor: colour.background.button.primary.hover,
-    borderColor: colour.border.button.primary.hover,
+    borderColor: colour.background.button.primary.hover,
     boxShadow: 'none',
   },
 });

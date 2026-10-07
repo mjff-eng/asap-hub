@@ -98,7 +98,7 @@ describe('primary button', () => {
     );
     expect(getByRole('button')).toHaveStyleRule(
       'border-color',
-      colour.border.button.primary.default,
+      colour.background.button.primary.hover,
     );
   });
 
@@ -111,7 +111,7 @@ describe('primary button', () => {
     );
     expect(getByRole('button')).toHaveStyleRule(
       'border-color',
-      colour.border.button.primary.hover,
+      colour.background.button.primary.hover,
       { target: ':hover' },
     );
   });
