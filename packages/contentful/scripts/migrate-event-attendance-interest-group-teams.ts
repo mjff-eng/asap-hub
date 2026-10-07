@@ -81,6 +81,8 @@ const FETCH_EVENTS = gql`
         }
         title
         endDate
+        status
+        hidden
         attendanceCollection(limit: $nestedLimit) {
           items {
             team {
@@ -117,6 +119,7 @@ const FETCH_INTEREST_GROUP_TEAMS = gql`
                   sys {
                     id
                   }
+                  displayName
                   inactiveSince
                 }
               }
@@ -131,13 +134,19 @@ const FETCH_INTEREST_GROUP_TEAMS = gql`
 type InterestGroupTeamItem = {
   startDate: string | null;
   endDate: string | null;
-  team: { sys: { id: string }; inactiveSince: string | null } | null;
+  team: {
+    sys: { id: string };
+    displayName: string | null;
+    inactiveSince: string | null;
+  } | null;
 } | null;
 
 type EventItem = {
   sys: { id: string };
   title: string | null;
   endDate: string | null;
+  status: string | null;
+  hidden: boolean | null;
   attendanceCollection: {
     items: ({ team: { sys: { id: string } } | null } | null)[];
   } | null;
@@ -173,6 +182,60 @@ const errors: UpdateError[] = [];
 
 const stats = { scanned: 0, updated: 0, attendanceCreated: 0 };
 
+// one row per team added to an event's attendance, to cross check the
+// attendance analytics after the backfill
+type ReportRow = {
+  teamName: string;
+  eventName: string;
+  eventEndDate: string;
+  eventStatus: string;
+  hidden: boolean;
+};
+const reportRows: ReportRow[] = [];
+
+const teamNames = new Map<string, string>();
+
+const addReportRows = (event: EventItem, teamIds: string[]) =>
+  teamIds.forEach((teamId) =>
+    reportRows.push({
+      teamName: teamNames.get(teamId) ?? teamId,
+      eventName: event.title ?? event.sys.id,
+      eventEndDate: event.endDate ?? '',
+      eventStatus: event.status ?? '',
+      hidden: !!event.hidden,
+    }),
+  );
+
+const toCsvValue = (value: string | boolean) =>
+  `"${String(value).replace(/"/g, '""')}"`;
+
+const writeReport = async () => {
+  const path = resolve(__dirname, './event-attendance-migration-report.csv');
+  const header = [
+    'Team name',
+    'Event name',
+    'Event end date',
+    'Event status',
+    'Hidden',
+  ];
+  const lines = [
+    header.map(toCsvValue).join(','),
+    ...reportRows.map((row) =>
+      [
+        row.teamName,
+        row.eventName,
+        row.eventEndDate,
+        row.eventStatus,
+        row.hidden,
+      ]
+        .map(toCsvValue)
+        .join(','),
+    ),
+  ];
+  await fs.writeFile(path, `${lines.join('\n')}\n`);
+  console.log(`\n${reportRows.length} added teams saved to: ${path}`);
+};
+
 const membershipsByCalendarId = new Map<
   string,
   Promise<InterestGroupTeamMembership[]>
@@ -188,6 +251,12 @@ const fetchMemberships = async (
     );
   const interestGroup =
     calendars?.linkedFrom?.interestGroupsCollection?.items[0];
+
+  (interestGroup?.teamsCollection?.items ?? []).forEach((item) => {
+    if (item?.team?.displayName) {
+      teamNames.set(item.team.sys.id, item.team.displayName);
+    }
+  });
 
   return (interestGroup?.teamsCollection?.items ?? []).flatMap((item) =>
     item?.team && item.startDate
@@ -307,11 +376,13 @@ const processEvent = async (
   stats.updated += 1;
 
   if (dryRun || !environment) {
+    addReportRows(event, teamIds);
     return;
   }
 
   try {
     await addAttendance(environment, event.sys.id, teamIds);
+    addReportRows(event, teamIds);
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     console.error(
@@ -369,6 +440,8 @@ const migrate = async () => {
   }
 
   await processPages(environment);
+
+  await writeReport();
 
   if (errors.length > 0) {
     const path = resolve(__dirname, './event-attendance-migration-errors.json');
