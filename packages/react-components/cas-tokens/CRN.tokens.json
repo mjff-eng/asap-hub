@@ -1684,19 +1684,19 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [
-                0.8916666507720947, 0.9027777910232544, 0.9083333611488342
+                0.1725490242242813, 0.5254902243614197, 0.3607843220233917
               ],
               "alpha": 1,
-              "hex": "#E3E6E8"
+              "hex": "#2C865C"
             },
             "$extensions": {
               "com.figma.variableId": "VariableID:4952:7112",
               "com.figma.scopes": ["STROKE"],
               "com.figma.aliasData": {
-                "targetVariableId": "VariableID:9ac2521b376b17d02f412c8c95161dd6ee9358ed/-1:-1",
-                "targetVariableName": "colour/neutral/100",
-                "targetVariableSetId": "VariableCollectionId:086004e4aef7d59b2870b6d7882bc35a15a40107/-1:-1",
-                "targetVariableSetName": "primitives"
+                "targetVariableId": "VariableID:6e57cdfdd9091e8fc2495db895a3ce76930460a6/-1:-1",
+                "targetVariableName": "colour/brand/crn/700",
+                "targetVariableSetId": "VariableCollectionId:b46a3452b747e14754d4797bdaff7414716f4641/-1:-1",
+                "targetVariableSetName": "mode"
               }
             }
           },
@@ -1705,19 +1705,19 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [
-                0.8916666507720947, 0.9027777910232544, 0.9083333611488342
+                0.1568627506494522, 0.4745098054409027, 0.32549020648002625
               ],
               "alpha": 1,
-              "hex": "#E3E6E8"
+              "hex": "#287953"
             },
             "$extensions": {
               "com.figma.variableId": "VariableID:4952:7113",
               "com.figma.scopes": ["STROKE"],
               "com.figma.aliasData": {
-                "targetVariableId": "VariableID:9ac2521b376b17d02f412c8c95161dd6ee9358ed/-1:-1",
-                "targetVariableName": "colour/neutral/100",
-                "targetVariableSetId": "VariableCollectionId:086004e4aef7d59b2870b6d7882bc35a15a40107/-1:-1",
-                "targetVariableSetName": "primitives"
+                "targetVariableId": "VariableID:6abcbd6271d7a61a93fdd49ce4e76aec262a6ea5/-1:-1",
+                "targetVariableName": "colour/brand/crn/800",
+                "targetVariableSetId": "VariableCollectionId:b46a3452b747e14754d4797bdaff7414716f4641/-1:-1",
+                "targetVariableSetName": "mode"
               }
             }
           }

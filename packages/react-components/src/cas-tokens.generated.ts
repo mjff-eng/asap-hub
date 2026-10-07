@@ -730,15 +730,15 @@ export const casTheme = {
       alias: 'colour/neutral/500',
     },
     'colour/border/button/primary/default': {
-      hex: '#E3E6E8',
+      hex: '#2C865C',
       alpha: 1,
-      alias: 'colour/neutral/100',
+      alias: 'colour/brand/crn/700',
       production: '#287953',
     },
     'colour/border/button/primary/hover': {
-      hex: '#E3E6E8',
+      hex: '#287953',
       alpha: 1,
-      alias: 'colour/neutral/100',
+      alias: 'colour/brand/crn/800',
       production: '#287953',
     },
     'colour/border/button/secondary/default': {
@@ -1207,15 +1207,15 @@ export const casTheme = {
       alias: 'colour/neutral/500',
     },
     'colour/border/button/primary/default': {
-      hex: '#E3E6E8',
+      hex: '#0375A2',
       alpha: 1,
-      alias: 'colour/neutral/100',
+      alias: 'colour/brand/gp2/700',
       production: '#006A92',
     },
     'colour/border/button/primary/hover': {
-      hex: '#E3E6E8',
+      hex: '#006A92',
       alpha: 1,
-      alias: 'colour/neutral/100',
+      alias: 'colour/brand/gp2/800',
       production: '#006A92',
     },
     'colour/border/button/secondary/default': {
