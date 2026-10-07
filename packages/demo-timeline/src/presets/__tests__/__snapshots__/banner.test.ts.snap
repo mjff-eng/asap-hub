@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bannerSvg renders a heading on its own at the top 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs><linearGradient id="scrim" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="216"><stop offset="0" stop-color="#000000" stop-opacity="0.78"/><stop offset="0.6" stop-color="#000000" stop-opacity="0.45"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></linearGradient></defs>
+  <rect x="0" y="0" width="1920" height="216" fill="url(#scrim)"/>
+  <text x="115" y="119" font-family="Roboto, Inter, 'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="700" fill="#ffffff" text-anchor="start">Rebecca Nunn</text>
+</svg>"
+`;
+
+exports[`bannerSvg renders a lower third with a heading and a subtitle 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs><linearGradient id="scrim" gradientUnits="userSpaceOnUse" x1="0" y1="1080" x2="0" y2="819"><stop offset="0" stop-color="#000000" stop-opacity="0.78"/><stop offset="0.6" stop-color="#000000" stop-opacity="0.45"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></linearGradient></defs>
+  <rect x="0" y="819" width="1920" height="261" fill="url(#scrim)"/>
+  <text x="115" y="938" font-family="Roboto, Inter, 'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="700" fill="#ffffff" text-anchor="start">Rebecca Nunn</text>
+  <text x="115" y="992" font-family="Roboto, Inter, 'Helvetica Neue', Arial, sans-serif" font-size="30" font-weight="500" fill="#ebebeb" text-anchor="start">Project manager, ASAP</text>
+</svg>"
+`;
+
+exports[`bannerSvg wraps and truncates a long heading 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs><linearGradient id="scrim" gradientUnits="userSpaceOnUse" x1="0" y1="1080" x2="0" y2="756"><stop offset="0" stop-color="#000000" stop-opacity="0.78"/><stop offset="0.6" stop-color="#000000" stop-opacity="0.45"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></linearGradient></defs>
+  <rect x="0" y="756" width="1920" height="324" fill="url(#scrim)"/>
+  <text x="115" y="876" font-family="Roboto, Inter, 'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="700" fill="#ffffff" text-anchor="start">A banner heading that runs far past the width of the frame and</text>
+  <text x="115" y="938" font-family="Roboto, Inter, 'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="700" fill="#ffffff" text-anchor="start">keeps going</text>
+  <text x="115" y="992" font-family="Roboto, Inter, 'Helvetica Neue', Arial, sans-serif" font-size="30" font-weight="500" fill="#ebebeb" text-anchor="start">a subtitle that also runs far past the width of the frame</text>
+</svg>"
+`;

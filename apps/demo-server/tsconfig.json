@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "resolveJsonModule": true,
+    "outDir": "build",
+    "lib": ["esnext"],
+    "module": "commonjs",
+    "target": "es2022"
+  },
+  "include": [
+    "src",
+    "test",
+    "scripts",
+    "encoder",
+    "@types/**/*.d.ts",
+    "serverless.ts"
+  ],
+  "references": [{ "path": "../../packages/demo-timeline" }]
+}

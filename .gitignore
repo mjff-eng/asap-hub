@@ -65,3 +65,8 @@ tramp
 .gitnexus/*
 CLAUDE.md
 AGENTS.md
+apps/demo-server/.esbuild/.build/*
+# the encoder bundle is built from source by yarn build:encoder
+apps/demo-server/encoder/dist/
+
+.playwright-mcp/

@@ -1,5 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "scripts/build-babel.sh",
+    "babel.config.js",
+    "babel-base.config.js",
+    "babel-cjs.config.js"
+  ],
   "pipeline": {
     "build:babel": {
       "dependsOn": ["^build:babel"],

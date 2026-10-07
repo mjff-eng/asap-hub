@@ -70,6 +70,47 @@ beforeEach(() => {
   nock.cleanAll();
 });
 
+describe('For a demo hub login', () => {
+  const demoEvent = {
+    ...eventBase,
+    client: {
+      ...eventBase.client,
+      name: 'ASAP Demos',
+      client_id: 'demo_client_id',
+    },
+    secrets: {
+      ...eventBase.secrets,
+      DEMO_CLIENT_ID: 'demo_client_id',
+    },
+  };
+
+  it('lets the login through without fetching hub metadata', async () => {
+    // no nock interceptor is set up, so any HTTP call would throw
+    const result = await onExecutePostLogin(demoEvent, apiBase);
+
+    expect(result).toBe(true);
+    expect(apiBase.access.deny).not.toHaveBeenCalled();
+    expect(apiBase.idToken.setCustomClaim).not.toHaveBeenCalled();
+  });
+
+  it('still fetches metadata for other clients when the secret is set', async () => {
+    const hubEvent = {
+      ...eventBase,
+      secrets: {
+        ...eventBase.secrets,
+        DEMO_CLIENT_ID: 'demo_client_id',
+      },
+    };
+    nock(apiUrl)
+      .get(`/webhook/users/${user.user_id}`)
+      .reply(404, { error: 'not found' });
+
+    await onExecutePostLogin(hubEvent, apiBase);
+
+    expect(apiBase.access.deny).toHaveBeenCalled();
+  });
+});
+
 describe('For an ASAP KR-Sync login', () => {
   const krSyncEvent = {
     ...eventBase,

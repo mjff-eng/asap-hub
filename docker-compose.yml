@@ -10,3 +10,35 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # build only: the job runner starts one container per job from this image,
+  # `docker compose build encoder` is the only command that should name it
+  encoder:
+    image: demo-hub-encoder:local
+    build:
+      context: ./apps/demo-server/encoder
+    profiles:
+      - jobs
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: 'server /data --console-address ":9001"'
+    ports:
+      # 9000/9001 are commonly taken by another local S3; the container
+      # still listens on 9000 inside the network
+      - '9010:9000'
+      - '9011:9001'
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_API_CORS_ALLOW_ORIGIN: '*'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'curl -f http://localhost:9000/minio/health/live || exit 1',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
