@@ -936,6 +936,13 @@ export const DesignQuestions = () => {
           <li>
             GP2 radio buttons no longer show the CRN green (a production bug).
           </li>
+          <li>
+            CRN and GP2 share both brand palettes, as design decided (it is all
+            ASAP branding): info colours use the GP2 blues in CRN, success
+            colours use the CRN greens in GP2, and the tooltip uses{' '}
+            {code('brand/gp2/900')} in both. Code that names the other
+            product&apos;s palette is intended.
+          </li>
         </ul>
         <p>
           Of the {productionGaps.length} name and product pairs we can compare
@@ -1059,16 +1066,7 @@ export const DesignQuestions = () => {
         </ul>
       </Section>
 
-      <Section title="Open question 2: text or borders?">
-        <p style={{ marginTop: 0 }}>
-          Design&apos;s note said brand, info and success text move from 700 to
-          800. In the export only their <b>borders</b> moved; the text is still{' '}
-          {code('brand/crn/700')}, {code('brand/gp2/700')} and{' '}
-          {code('brand/*/600')}. Was the text meant to change too?
-        </p>
-      </Section>
-
-      <Section title="Open question 3: avatars without a photo">
+      <Section title="Open question 2: avatars without a photo">
         <p style={{ marginTop: 0 }}>
           Production has six colour pairs, including a pink{' '}
           <Colour value="#9A2386" /> and a purple <Colour value="#693B77" />;
@@ -1097,7 +1095,7 @@ export const DesignQuestions = () => {
         />
       </Section>
 
-      <Section title="Open question 4: names to confirm">
+      <Section title="Open question 3: names to confirm">
         <ul style={{ paddingLeft: '20px', marginTop: 0 }}>
           <li>
             The neutral names are grey ({code('foreground/neutral')}{' '}
@@ -1115,7 +1113,7 @@ export const DesignQuestions = () => {
         </ul>
       </Section>
 
-      <Section title="Open question 5: names CAS does not have yet">
+      <Section title="Open question 4: names CAS does not have yet">
         <p style={{ marginTop: 0 }}>
           A few Hub colours have no CAS name, so the code uses the nearest name
           or a palette colour. Small, but a name for each would let design
