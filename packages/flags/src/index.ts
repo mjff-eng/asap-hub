@@ -3,8 +3,7 @@ export type Flag =
   | 'QUERY_DEVTOOLS' // react query devtools
   | 'STAGING_MODE'
   | 'COMPLIANCE_NOTIFICATION_LIST'
-  | 'NEW_EVENT_PAGE'
-  | 'TEAM_METRICS_TAB';
+  | 'NEW_EVENT_PAGE';
 
 export type Flags = Partial<Record<Flag, boolean | string | undefined>>;
 let overrides: Flags = {
@@ -17,7 +16,6 @@ let overrides: Flags = {
   QUERY_DEVTOOLS: false,
   STAGING_MODE: false,
   NEW_EVENT_PAGE: false,
-  TEAM_METRICS_TAB: false,
 };
 
 const envDefaults: Record<string, boolean> = {

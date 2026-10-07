@@ -7,7 +7,6 @@ import {
   createTeamResponse,
 } from '@asap-hub/fixtures';
 import { TeamResponse } from '@asap-hub/model';
-import { disable, enable } from '@asap-hub/flags';
 import { network } from '@asap-hub/routing';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -337,9 +336,11 @@ describe('the metrics tab', () => {
   const teamMember = {
     teams: [{ id: team.id, role: 'Project Manager' as const }],
   };
+  const nonMember = {
+    teams: [{ id: 'another-team', role: 'Project Manager' as const }],
+  };
 
   beforeEach(() => {
-    enable('TEAM_METRICS_TAB');
     mockGetTeamHubResearchOutputs.mockResolvedValue({});
     mockGetTeamLeadershipMetrics.mockResolvedValue({
       workingGroupLead: false,
@@ -383,19 +384,7 @@ describe('the metrics tab', () => {
   });
 
   it('is hidden from a user who is neither staff nor on the team', async () => {
-    await renderPage(
-      team,
-      {},
-      { teams: [{ id: 'another-team', role: 'Project Manager' }] },
-    );
-
-    expect(screen.queryByText('Metrics')).not.toBeInTheDocument();
-  });
-
-  it('is hidden when the flag is disabled', async () => {
-    disable('TEAM_METRICS_TAB');
-
-    await renderPage(team, {}, teamMember);
+    await renderPage(team, {}, nonMember);
 
     expect(screen.queryByText('Metrics')).not.toBeInTheDocument();
   });
@@ -427,13 +416,11 @@ describe('the metrics tab', () => {
     );
   });
 
-  it('does not render the metrics route when the flag is disabled', async () => {
-    disable('TEAM_METRICS_TAB');
-
+  it('does not render the metrics route for a user who is neither staff nor on the team', async () => {
     await renderPage(
       team,
       {},
-      teamMember,
+      nonMember,
       network({}).teams({}).team({ teamId: team.id }).metrics({}).$,
     );
 

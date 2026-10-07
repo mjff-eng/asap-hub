@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router';
 import { v4 as uuid } from 'uuid';
 
 import { NotFoundPage, TeamProfilePage } from '@asap-hub/react-components';
-import { useCurrentUserCRN, useFlags } from '@asap-hub/react-context';
+import { useCurrentUserCRN } from '@asap-hub/react-context';
 import { network, useRouteParams } from '@asap-hub/routing';
 
 import { useDismissable } from '../../hooks';
@@ -39,13 +39,10 @@ const TeamProfile: FC<TeamProfileProps> = ({ currentTime }) => {
     'crn-team-project-banner-dismissed',
   );
 
-  const { isEnabled } = useFlags();
-
   const isStaff = user?.role === 'Staff';
   const isAsapTeam = team?.displayName === ASAP_TEAM_NAME;
   const isTeamMember = !!user?.teams.some(({ id }) => id === teamId);
-  const canViewMetrics =
-    isEnabled('TEAM_METRICS_TAB') && (isStaff || isTeamMember);
+  const canViewMetrics = isStaff || isTeamMember;
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
