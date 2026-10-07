@@ -2,13 +2,11 @@
 /**
  * Adds the teams of an event's interest group to the event's attendance
  * (with attended set to false) when they are missing. A team is added when
- * it is a member of the interest group at the point the event ends.
- * Existing attendance entries are never modified or removed.
+ * it is not inactive and is a member of the interest group at the point the event ends.
+ * Existing attendance entries are not modified or removed.
  *
- * Events are read with the preview API so draft events are included and
- * their latest draft attendance is used. Draft events are updated but not
- * published. Interest group memberships are read from published content
- * only, since publishing a membership triggers the attendance sync handler.
+ * Events are read with the preview API so draft events are included. Draft events are updated but not
+ * published.
  *
  * Usage:
  *   CONTENTFUL_SPACE_ID=<spaceId> \
@@ -119,6 +117,7 @@ const FETCH_INTEREST_GROUP_TEAMS = gql`
                   sys {
                     id
                   }
+                  inactiveSince
                 }
               }
             }
@@ -132,7 +131,7 @@ const FETCH_INTEREST_GROUP_TEAMS = gql`
 type InterestGroupTeamItem = {
   startDate: string | null;
   endDate: string | null;
-  team: { sys: { id: string } } | null;
+  team: { sys: { id: string }; inactiveSince: string | null } | null;
 } | null;
 
 type EventItem = {
@@ -197,6 +196,7 @@ const fetchMemberships = async (
             teamId: item.team.sys.id,
             startDate: item.startDate,
             endDate: item.endDate,
+            inactiveSince: item.team.inactiveSince,
           },
         ]
       : [],
@@ -205,7 +205,10 @@ const fetchMemberships = async (
 
 const getMemberships = (calendarId: string) => {
   if (!membershipsByCalendarId.has(calendarId)) {
-    membershipsByCalendarId.set(calendarId, fetchMemberships(calendarId));
+    const memberships = fetchMemberships(calendarId);
+    // drop failed requests from the cache so the next event retries them
+    memberships.catch(() => membershipsByCalendarId.delete(calendarId));
+    membershipsByCalendarId.set(calendarId, memberships);
   }
   return membershipsByCalendarId.get(calendarId)!;
 };
@@ -274,7 +277,23 @@ const processEvent = async (
   event: EventItem,
 ) => {
   stats.scanned += 1;
-  const teamIds = await getMissingTeamIds(event);
+
+  let teamIds: string[];
+  try {
+    teamIds = await getMissingTeamIds(event);
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    console.error(
+      `Failed to fetch interest group teams for event ${event.sys.id}: ${message}`,
+    );
+    errors.push({
+      eventId: event.sys.id,
+      teamIds: [],
+      error: message,
+      timestamp: new Date().toISOString(),
+    });
+    return;
+  }
 
   if (teamIds.length === 0) {
     return;

@@ -24,6 +24,9 @@ import {
   FetchInterestGroupsByTeamIdQuery,
   FetchInterestGroupsByTeamIdQueryVariables,
   FETCH_INTEREST_GROUP_ID_BY_INTEREST_GROUP_TEAM_ID,
+  FETCH_INTEREST_GROUP_IDS_BY_TEAM_ID,
+  FetchInterestGroupIdsByTeamIdQuery,
+  FetchInterestGroupIdsByTeamIdQueryVariables,
   FetchInterestGroupIdByInterestGroupTeamIdQuery,
   FetchInterestGroupIdByInterestGroupTeamIdQueryVariables,
   FETCH_INTEREST_GROUP_CALENDAR,
@@ -239,6 +242,24 @@ export class InterestGroupContentfulDataProvider
       interestGroupsTeams?.linkedFrom?.interestGroupsCollection?.items[0]?.sys
         .id ?? null
     );
+  }
+
+  async fetchIdsByTeamId(teamId: string): Promise<string[]> {
+    const { interestGroupsTeamsCollection } =
+      await this.contentfulClient.request<
+        FetchInterestGroupIdsByTeamIdQuery,
+        FetchInterestGroupIdsByTeamIdQueryVariables
+      >(FETCH_INTEREST_GROUP_IDS_BY_TEAM_ID, { id: teamId });
+
+    const interestGroupIds = cleanArray(
+      interestGroupsTeamsCollection?.items,
+    ).flatMap((interestGroupTeam) =>
+      cleanArray(
+        interestGroupTeam.linkedFrom?.interestGroupsCollection?.items,
+      ).map((interestGroup) => interestGroup.sys.id),
+    );
+
+    return [...new Set(interestGroupIds)];
   }
 }
 

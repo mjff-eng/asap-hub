@@ -13,4 +13,5 @@ export type InterestGroupDataProvider = DataProvider<
   fetchIdByInterestGroupTeamId: (
     interestGroupTeamId: string,
   ) => Promise<string | null>;
+  fetchIdsByTeamId: (teamId: string) => Promise<string[]>;
 };

@@ -189,6 +189,27 @@ export const FETCH_INTEREST_GROUP_ID_BY_INTEREST_GROUP_TEAM_ID = gql`
   }
 `;
 
+export const FETCH_INTEREST_GROUP_IDS_BY_TEAM_ID = gql`
+  query FetchInterestGroupIdsByTeamId($id: String!) {
+    interestGroupsTeamsCollection(
+      where: { team: { sys: { id: $id } } }
+      limit: 50
+    ) {
+      items {
+        linkedFrom {
+          interestGroupsCollection(limit: 1) {
+            items {
+              sys {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const FETCH_INTEREST_GROUPS_BY_TEAM_ID = gql`
   query FetchInterestGroupsByTeamId($id: String!) {
     interestGroupsTeamsCollection(where: { team: { sys: { id: $id } } }) {

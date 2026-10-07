@@ -85,12 +85,14 @@ export type InterestGroupTeamMembership = {
   teamId: string;
   startDate: string;
   endDate?: string | null;
+  inactiveSince?: string | null;
 };
 
 /**
  * Returns the ids of teams that are members of the interest group
  * at the point of the event ending: their membership started any time
- * before the end of the event and does not end before the event is over.
+ * before the end of the event and does not end before the event is over,
+ * and the team did not become inactive before the event is over.
  */
 export const getInterestGroupTeamIdsForEvent = (
   memberships: InterestGroupTeamMembership[],
@@ -100,9 +102,10 @@ export const getInterestGroupTeamIdsForEvent = (
 
   const teamIds = memberships
     .filter(
-      ({ startDate, endDate }) =>
+      ({ startDate, endDate, inactiveSince }) =>
         new Date(startDate) < eventEnd &&
-        (!endDate || new Date(endDate) >= eventEnd),
+        (!endDate || new Date(endDate) >= eventEnd) &&
+        (!inactiveSince || new Date(inactiveSince) >= eventEnd),
     )
     .map(({ teamId }) => teamId);
 

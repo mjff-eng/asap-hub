@@ -4,8 +4,10 @@ import {
   getInterestGroupTeamIdsForEvent,
   InterestGroupEvent,
   InterestGroupTeamEvent,
+  TeamEvent,
 } from '@asap-hub/model';
 import { EventBridgeHandler } from '@asap-hub/server-common';
+import { mapLimit } from 'async';
 import { Handler } from 'aws-lambda/handler';
 import {
   EventDataProvider,
@@ -16,51 +18,26 @@ import { getInterestGroupDataProvider } from '../../dependencies/interest-groups
 import { getAttendanceToSync } from '../../utils/event-attendance';
 import logger from '../../utils/logger';
 import { sentryWrapper } from '../../utils/sentry-wrapper';
-import { InterestGroupPayload, InterestGroupTeamPayload } from '../event-bus';
+import {
+  InterestGroupPayload,
+  InterestGroupTeamPayload,
+  TeamPayload,
+} from '../event-bus';
 
-const isInterestGroupTeamEvent = (
-  detailType: InterestGroupEvent | InterestGroupTeamEvent,
-): detailType is InterestGroupTeamEvent =>
-  detailType.startsWith('InterestGroupsTeams');
+const MAX_CONCURRENT_EVENT_UPDATES = 5;
 
-/**
- * Keeps the attendance of interest group events that haven't ended in sync
- * with the interest group teams.
- *
- * Unpublished entries are not handled:
- * - Unpublishing an interest group leaves the attendance of its events as
- *   it is. Republishing it triggers InterestGroupsPublished, which syncs the
- *   attendance again.
- * - Once an interest group team is unpublished, its interest group can't be
- *   found through GraphQL. The team is removed from the attendance the next
- *   time the interest group is published. Handling it directly would need a
- *   lookup through the management API (links_to_entry).
- */
-export const syncInterestGroupEventAttendanceHandler =
+type SyncEventType = InterestGroupEvent | InterestGroupTeamEvent | TeamEvent;
+type SyncPayload =
+  | InterestGroupPayload
+  | InterestGroupTeamPayload
+  | TeamPayload;
+
+const syncInterestGroupFactory =
   (
     eventDataProvider: EventDataProvider,
     interestGroupDataProvider: InterestGroupDataProvider,
-  ): EventBridgeHandler<
-    InterestGroupEvent | InterestGroupTeamEvent,
-    InterestGroupPayload | InterestGroupTeamPayload
-  > =>
-  async (event) => {
-    const { resourceId } = event.detail;
-    logger.info(
-      `Received ${event['detail-type']} event for entry with id ${resourceId}`,
-    );
-
-    const interestGroupId = isInterestGroupTeamEvent(event['detail-type'])
-      ? await interestGroupDataProvider.fetchIdByInterestGroupTeamId(resourceId)
-      : resourceId;
-
-    if (!interestGroupId) {
-      logger.info(
-        `Interest group team ${resourceId} is not linked to an interest group, skipping attendance sync`,
-      );
-      return;
-    }
-
+  ) =>
+  async (interestGroupId: string) => {
     const calendarId =
       await interestGroupDataProvider.fetchCalendarId(interestGroupId);
 
@@ -77,22 +54,76 @@ export const syncInterestGroupEventAttendanceHandler =
       eventDataProvider.fetchUpcomingEventsByCalendarId(calendarId, now),
     ]);
 
-    for (const calendarEvent of events) {
+    const updates = events.flatMap((calendarEvent) => {
       const attendance = getAttendanceToSync(
         calendarEvent.attendance,
         getInterestGroupTeamIdsForEvent(memberships, calendarEvent.endDate),
       );
+      return attendance ? [{ eventId: calendarEvent.id, attendance }] : [];
+    });
 
-      if (attendance) {
+    await mapLimit(
+      updates,
+      MAX_CONCURRENT_EVENT_UPDATES,
+      async ({ eventId, attendance }: (typeof updates)[number]) => {
         logger.info(
-          `Updating attendance for event ${calendarEvent.id} of interest group ${interestGroupId}`,
+          `Updating attendance for event ${eventId} of interest group ${interestGroupId}`,
         );
-        await eventDataProvider.updateEventDetails(calendarEvent.id, {
-          attendance,
-        });
-      }
+        await eventDataProvider.updateEventDetails(eventId, { attendance });
+      },
+    );
+  };
+
+/**
+ * Keeps the attendance of interest group events that haven't ended in sync
+ * with the interest group teams. It runs when an interest group, an interest
+ * group team or a team (e.g. its inactiveSince) is published.
+ */
+export const syncInterestGroupEventAttendanceHandler = (
+  eventDataProvider: EventDataProvider,
+  interestGroupDataProvider: InterestGroupDataProvider,
+): EventBridgeHandler<SyncEventType, SyncPayload> => {
+  const syncInterestGroup = syncInterestGroupFactory(
+    eventDataProvider,
+    interestGroupDataProvider,
+  );
+
+  const getInterestGroupIds = async (
+    detailType: SyncEventType,
+    resourceId: string,
+  ): Promise<string[]> => {
+    if (detailType.startsWith('InterestGroupsTeams')) {
+      const interestGroupId =
+        await interestGroupDataProvider.fetchIdByInterestGroupTeamId(
+          resourceId,
+        );
+      return interestGroupId ? [interestGroupId] : [];
+    }
+    if (detailType.startsWith('Teams')) {
+      return interestGroupDataProvider.fetchIdsByTeamId(resourceId);
+    }
+    return [resourceId];
+  };
+
+  return async (event) => {
+    const detailType = event['detail-type'];
+    const { resourceId } = event.detail;
+    logger.info(`Received ${detailType} event for entry with id ${resourceId}`);
+
+    const interestGroupIds = await getInterestGroupIds(detailType, resourceId);
+
+    if (interestGroupIds.length === 0) {
+      logger.info(
+        `Entry ${resourceId} is not linked to an interest group, skipping attendance sync`,
+      );
+      return;
+    }
+
+    for (const interestGroupId of interestGroupIds) {
+      await syncInterestGroup(interestGroupId);
     }
   };
+};
 
 /* istanbul ignore next */
 export const handler: Handler = sentryWrapper(
