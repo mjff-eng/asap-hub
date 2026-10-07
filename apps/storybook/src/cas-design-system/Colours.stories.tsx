@@ -1047,11 +1047,14 @@ export const DesignQuestions = () => {
 
       <Section title="Open question 3: primary button border">
         <p style={{ marginTop: 0 }}>
-          The primary button border is light grey ({code('neutral/100')}{' '}
-          <Colour value="#E3E6E8" />
-          ). Production had a border in the brand colour (
+          Figma sets {code('border/button/primary')} to light grey (
+          {code('neutral/100')} <Colour value="#E3E6E8" />
+          ), which showed as a pale outline around the green and blue buttons.
+          Production drew the border in the darker hover shade (
           <Colour value="#287953" />, <Colour value="#006A92" />
-          ). Is the grey intended?
+          ), so the code now uses {code('background/button/primary/hover')} for
+          the border too. Could Figma point the border at that shade, so the
+          code can use the border name again?
         </p>
       </Section>
 
