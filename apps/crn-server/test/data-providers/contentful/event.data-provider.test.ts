@@ -4,6 +4,8 @@ import {
   Environment,
   FetchEventByIdQuery,
   FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID,
+  FETCH_INTEREST_GROUP_TEAMS_BY_ID,
+  FETCH_PREVIOUS_EVENT_ATTENDANCE,
   FETCH_UPCOMING_EVENTS_BY_CALENDAR_ID,
   getContentfulGraphqlClientMockServer,
   patchAndPublish,
@@ -499,6 +501,161 @@ describe('Events Contentful Data Provider', () => {
             },
           },
         ]);
+      });
+
+      describe('Interest group provenance', () => {
+        afterEach(() => {
+          contentfulGraphqlClientMock.request.mockReset();
+        });
+
+        const withInterestGroup = () => {
+          const contentfulGraphQLResponse = getContentfulGraphqlEvent();
+          contentfulGraphQLResponse.calendar!.linkedFrom = {
+            interestGroupsCollection: {
+              items: [{ sys: { id: 'ig-1' }, name: 'IG-1', active: true }],
+            },
+          };
+          return contentfulGraphQLResponse;
+        };
+
+        const membershipsResponse = (
+          memberships: Array<{
+            teamId: string;
+            startDate: string;
+            endDate?: string;
+            inactiveSince?: string;
+          }>,
+        ) => ({
+          interestGroups: {
+            teamsCollection: {
+              items: memberships.map(
+                ({ teamId, startDate, endDate, inactiveSince }) => ({
+                  startDate,
+                  endDate: endDate ?? null,
+                  team: {
+                    sys: { id: teamId },
+                    inactiveSince: inactiveSince ?? null,
+                  },
+                }),
+              ),
+            },
+          },
+        });
+
+        test('Should flag the teams that were members of the hosting interest group when the event ended', async () => {
+          contentfulGraphqlClientMock.request
+            .mockResolvedValueOnce({ events: withInterestGroup() })
+            .mockResolvedValueOnce(
+              membershipsResponse([
+                { teamId: 'team-id-1', startDate: '2009-01-01T00:00:00.000Z' },
+              ]),
+            );
+
+          const result = await eventDataProvider.fetchById(eventId);
+
+          expect(
+            result?.attendance?.map(({ team, isFromInterestGroup }) => [
+              team.id,
+              isFromInterestGroup,
+            ]),
+          ).toEqual([
+            ['team-id-1', true],
+            ['team-id-2', false],
+          ]);
+          expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+            FETCH_INTEREST_GROUP_TEAMS_BY_ID,
+            { id: 'ig-1' },
+          );
+        });
+
+        test.each`
+          description                                      | startDate                     | endDate                       | inactiveSince
+          ${'membership ended before the event ended'}     | ${'2009-01-01T00:00:00.000Z'} | ${'2009-12-01T00:00:00.000Z'} | ${undefined}
+          ${'membership started after the event'}          | ${'2010-01-01T00:00:00.000Z'} | ${undefined}                  | ${undefined}
+          ${'team became inactive before the event ended'} | ${'2009-01-01T00:00:00.000Z'} | ${undefined}                  | ${'2009-12-01T00:00:00.000Z'}
+        `(
+          'Should not flag a team whose $description',
+          async ({ startDate, endDate, inactiveSince }) => {
+            contentfulGraphqlClientMock.request
+              .mockResolvedValueOnce({ events: withInterestGroup() })
+              .mockResolvedValueOnce(
+                membershipsResponse([
+                  { teamId: 'team-id-1', startDate, endDate, inactiveSince },
+                ]),
+              );
+
+            const result = await eventDataProvider.fetchById(eventId);
+
+            expect(
+              result?.attendance?.every(
+                ({ isFromInterestGroup }) => isFromInterestGroup === false,
+              ),
+            ).toBe(true);
+          },
+        );
+
+        test('Should flag the attendance and fetch the previous event attendance in the same read', async () => {
+          const contentfulGraphQLResponse = withInterestGroup();
+          contentfulGraphQLResponse.googleId = 'abc123_20260101T100000Z';
+          contentfulGraphqlClientMock.request.mockImplementation(((
+            query: unknown,
+          ) =>
+            Promise.resolve(
+              query === FETCH_INTEREST_GROUP_TEAMS_BY_ID
+                ? membershipsResponse([
+                    {
+                      teamId: 'team-id-1',
+                      startDate: '2009-01-01T00:00:00.000Z',
+                    },
+                  ])
+                : query === FETCH_PREVIOUS_EVENT_ATTENDANCE
+                  ? getPreviousEventAttendanceGraphqlResponse()
+                  : { events: contentfulGraphQLResponse },
+            )) as unknown as Parameters<
+            typeof contentfulGraphqlClientMock.request.mockImplementation
+          >[0]);
+
+          const result = await eventDataProvider.fetchById(eventId);
+
+          expect(
+            result?.attendance?.map(
+              ({ isFromInterestGroup }) => isFromInterestGroup,
+            ),
+          ).toEqual([true, false]);
+          expect(result?.previousEventAttendance).toEqual({
+            teamsTotal: 3,
+            teamsAttended: 2,
+          });
+        });
+
+        test('Should not look up memberships when the interest group event has no attendance', async () => {
+          const contentfulGraphQLResponse = withInterestGroup();
+          contentfulGraphQLResponse.attendanceCollection = {
+            total: 0,
+            items: [],
+          };
+          contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+            events: contentfulGraphQLResponse,
+          });
+
+          const result = await eventDataProvider.fetchById(eventId);
+
+          expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(1);
+          expect(result?.attendance).toEqual([]);
+        });
+
+        test('Should not look up memberships when the event has no interest group', async () => {
+          contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+            events: getContentfulGraphqlEvent(),
+          });
+
+          const result = await eventDataProvider.fetchById(eventId);
+
+          expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(1);
+          expect(result?.attendance?.[0]).not.toHaveProperty(
+            'isFromInterestGroup',
+          );
+        });
       });
 
       test('Should not include attendance on list fetches', async () => {
@@ -1094,9 +1251,9 @@ describe('Events Contentful Data Provider', () => {
           },
         };
 
-        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
-          events: contentfulGraphQLResponse,
-        });
+        contentfulGraphqlClientMock.request
+          .mockResolvedValueOnce({ events: contentfulGraphQLResponse })
+          .mockResolvedValueOnce({ interestGroups: null });
 
         const result = await eventDataProvider.fetchById(eventId);
 
@@ -1128,9 +1285,9 @@ describe('Events Contentful Data Provider', () => {
           },
         };
 
-        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
-          events: contentfulGraphQLResponse,
-        });
+        contentfulGraphqlClientMock.request
+          .mockResolvedValueOnce({ events: contentfulGraphQLResponse })
+          .mockResolvedValueOnce({ interestGroups: null });
 
         const result = await eventDataProvider.fetchById(eventId);
 
@@ -1156,9 +1313,9 @@ describe('Events Contentful Data Provider', () => {
           },
         };
 
-        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
-          events: contentfulGraphQLResponse,
-        });
+        contentfulGraphqlClientMock.request
+          .mockResolvedValueOnce({ events: contentfulGraphQLResponse })
+          .mockResolvedValueOnce({ interestGroups: null });
 
         const result = await eventDataProvider.fetchById(eventId);
 

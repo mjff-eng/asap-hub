@@ -9,14 +9,11 @@ import {
 import {
   EventResponse,
   EventUpdateDetailsRequest,
-  InterestGroupTeam,
   ListEventResponse,
 } from '@asap-hub/model';
 import { SpeakerGroup } from '@asap-hub/react-components';
 import {
-  skipToken,
   useMutation,
-  useQuery,
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
@@ -24,8 +21,6 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 
 import { useAuthorization } from '../auth/useAuthorization';
 import { useAlgolia } from '../hooks/algolia';
-import { getInterestGroup } from '../network/interest-groups/api';
-import { interestGroupQueryKeys } from '../network/interest-groups/state';
 import { teamQueryKeys } from '../network/teams/state';
 import {
   getEvent,
@@ -54,33 +49,6 @@ export const useEventById = (id: string): EventResponse | undefined => {
 export const useEventSpeakerGroups = (id: string): SpeakerGroup[] => {
   const event = useEventById(id);
   return useMemo(() => (event ? mapSpeakersToGroups(event) : []), [event]);
-};
-
-export type InterestGroupTeamsState = {
-  teams: ReadonlyArray<InterestGroupTeam>;
-  // False while the request is in flight or failed, where an empty list is not
-  // an answer.
-  resolved: boolean;
-};
-
-export const useInterestGroupTeams = (
-  id: string | undefined,
-): InterestGroupTeamsState => {
-  const getAuthorization = useAuthorization();
-  const { data, isPending, isError } = useQuery({
-    queryKey: interestGroupQueryKeys.detail(id ?? ''),
-    queryFn: id
-      ? () =>
-          nullOnUndefined(async () =>
-            getInterestGroup(id, await getAuthorization()),
-          )
-      : skipToken,
-  });
-
-  if (!id) {
-    return { teams: [], resolved: true };
-  }
-  return { teams: data?.teams ?? [], resolved: !isPending && !isError };
 };
 
 export const useQuietRefreshEventById = (id: string) => {

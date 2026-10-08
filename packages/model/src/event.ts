@@ -61,6 +61,7 @@ export type EventTeamAttendance = {
     inactiveSince?: string;
   };
   attended: boolean;
+  isFromInterestGroup?: boolean;
 };
 
 export type EventPreviousAttendance = {
