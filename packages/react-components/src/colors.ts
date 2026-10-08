@@ -7,8 +7,13 @@ export const cssColour = (hex: string, alpha = 1): string =>
         .map((start) => parseInt(hex.slice(start, start + 2), 16))
         .join(', ')}, ${alpha})`;
 
+// plain rgba for hex values, since older Safari versions we support lack color-mix
 export const colourWithAlpha = (value: string, alpha: number): string =>
-  `color-mix(in srgb, ${value} ${Math.round(alpha * 1000) / 10}%, transparent)`;
+  value.startsWith('#')
+    ? cssColour(value, alpha)
+    : `color-mix(in srgb, ${value} ${
+        Math.round(alpha * 1000) / 10
+      }%, transparent)`;
 
 type PrimitiveValues<T> = T extends readonly number[]
   ? string

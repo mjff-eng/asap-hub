@@ -18,9 +18,13 @@ describe('colourWithAlpha', () => {
     );
   });
 
-  it('accepts a primitive and rounds the percentage', () => {
-    expect(colourWithAlpha(colour.neutral[200], 0.34)).toBe(
-      `color-mix(in srgb, ${colour.neutral[200]} 34%, transparent)`,
+  it('rounds the percentage', () => {
+    expect(colourWithAlpha(colour.border.secondary, 0.345)).toBe(
+      'color-mix(in srgb, var(--colour-border-secondary) 34.5%, transparent)',
     );
+  });
+
+  it('gives a hex primitive as plain rgba, which browsers without color-mix support', () => {
+    expect(colourWithAlpha('#DFE5EA', 0.34)).toBe('rgba(223, 229, 234, 0.34)');
   });
 });
