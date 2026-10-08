@@ -518,15 +518,21 @@ describe('Events Contentful Data Provider', () => {
             teamId: string;
             startDate: string;
             endDate?: string;
+            inactiveSince?: string;
           }>,
         ) => ({
           interestGroups: {
             teamsCollection: {
-              items: memberships.map(({ teamId, startDate, endDate }) => ({
-                startDate,
-                endDate: endDate ?? null,
-                team: { sys: { id: teamId } },
-              })),
+              items: memberships.map(
+                ({ teamId, startDate, endDate, inactiveSince }) => ({
+                  startDate,
+                  endDate: endDate ?? null,
+                  team: {
+                    sys: { id: teamId },
+                    inactiveSince: inactiveSince ?? null,
+                  },
+                }),
+              ),
             },
           },
         });
@@ -558,17 +564,18 @@ describe('Events Contentful Data Provider', () => {
         });
 
         test.each`
-          description                                  | startDate                     | endDate
-          ${'membership ended before the event ended'} | ${'2009-01-01T00:00:00.000Z'} | ${'2009-12-01T00:00:00.000Z'}
-          ${'membership started after the event'}      | ${'2010-01-01T00:00:00.000Z'} | ${undefined}
+          description                                          | startDate                     | endDate                       | inactiveSince
+          ${'membership ended before the event ended'}         | ${'2009-01-01T00:00:00.000Z'} | ${'2009-12-01T00:00:00.000Z'} | ${undefined}
+          ${'membership started after the event'}              | ${'2010-01-01T00:00:00.000Z'} | ${undefined}                  | ${undefined}
+          ${'team became inactive before the event ended'}     | ${'2009-01-01T00:00:00.000Z'} | ${undefined}                  | ${'2009-12-01T00:00:00.000Z'}
         `(
           'Should not flag a team whose $description',
-          async ({ startDate, endDate }) => {
+          async ({ startDate, endDate, inactiveSince }) => {
             contentfulGraphqlClientMock.request
               .mockResolvedValueOnce({ events: withInterestGroup() })
               .mockResolvedValueOnce(
                 membershipsResponse([
-                  { teamId: 'team-id-1', startDate, endDate },
+                  { teamId: 'team-id-1', startDate, endDate, inactiveSince },
                 ]),
               );
 
