@@ -5,6 +5,7 @@ import {
   FetchEventByIdQuery,
   FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID,
   FETCH_INTEREST_GROUP_TEAMS_BY_ID,
+  FETCH_PREVIOUS_EVENT_ATTENDANCE,
   FETCH_UPCOMING_EVENTS_BY_CALENDAR_ID,
   getContentfulGraphqlClientMockServer,
   patchAndPublish,
@@ -503,6 +504,10 @@ describe('Events Contentful Data Provider', () => {
       });
 
       describe('Interest group provenance', () => {
+        afterEach(() => {
+          contentfulGraphqlClientMock.request.mockReset();
+        });
+
         const withInterestGroup = () => {
           const contentfulGraphQLResponse = getContentfulGraphqlEvent();
           contentfulGraphQLResponse.calendar!.linkedFrom = {
@@ -564,10 +569,10 @@ describe('Events Contentful Data Provider', () => {
         });
 
         test.each`
-          description                                          | startDate                     | endDate                       | inactiveSince
-          ${'membership ended before the event ended'}         | ${'2009-01-01T00:00:00.000Z'} | ${'2009-12-01T00:00:00.000Z'} | ${undefined}
-          ${'membership started after the event'}              | ${'2010-01-01T00:00:00.000Z'} | ${undefined}                  | ${undefined}
-          ${'team became inactive before the event ended'}     | ${'2009-01-01T00:00:00.000Z'} | ${undefined}                  | ${'2009-12-01T00:00:00.000Z'}
+          description                                      | startDate                     | endDate                       | inactiveSince
+          ${'membership ended before the event ended'}     | ${'2009-01-01T00:00:00.000Z'} | ${'2009-12-01T00:00:00.000Z'} | ${undefined}
+          ${'membership started after the event'}          | ${'2010-01-01T00:00:00.000Z'} | ${undefined}                  | ${undefined}
+          ${'team became inactive before the event ended'} | ${'2009-01-01T00:00:00.000Z'} | ${undefined}                  | ${'2009-12-01T00:00:00.000Z'}
         `(
           'Should not flag a team whose $description',
           async ({ startDate, endDate, inactiveSince }) => {
@@ -588,6 +593,40 @@ describe('Events Contentful Data Provider', () => {
             ).toBe(true);
           },
         );
+
+        test('Should flag the attendance and fetch the previous event attendance in the same read', async () => {
+          const contentfulGraphQLResponse = withInterestGroup();
+          contentfulGraphQLResponse.googleId = 'abc123_20260101T100000Z';
+          contentfulGraphqlClientMock.request.mockImplementation(((
+            query: unknown,
+          ) =>
+            Promise.resolve(
+              query === FETCH_INTEREST_GROUP_TEAMS_BY_ID
+                ? membershipsResponse([
+                    {
+                      teamId: 'team-id-1',
+                      startDate: '2009-01-01T00:00:00.000Z',
+                    },
+                  ])
+                : query === FETCH_PREVIOUS_EVENT_ATTENDANCE
+                  ? getPreviousEventAttendanceGraphqlResponse()
+                  : { events: contentfulGraphQLResponse },
+            )) as unknown as Parameters<
+            typeof contentfulGraphqlClientMock.request.mockImplementation
+          >[0]);
+
+          const result = await eventDataProvider.fetchById(eventId);
+
+          expect(
+            result?.attendance?.map(
+              ({ isFromInterestGroup }) => isFromInterestGroup,
+            ),
+          ).toEqual([true, false]);
+          expect(result?.previousEventAttendance).toEqual({
+            teamsTotal: 3,
+            teamsAttended: 2,
+          });
+        });
 
         test('Should not look up memberships when the interest group event has no attendance', async () => {
           const contentfulGraphQLResponse = withInterestGroup();

@@ -132,7 +132,20 @@ export class EventContentfulDataProvider implements EventDataProvider {
     }
 
     const { interestGroups } = await this.contentfulClient.request<
-      { interestGroups: InterestGroupTeamsItem | null },
+      {
+        interestGroups: {
+          teamsCollection: {
+            items: Array<{
+              startDate?: string | null;
+              endDate?: string | null;
+              team?: {
+                sys: { id: string };
+                inactiveSince?: string | null;
+              } | null;
+            } | null>;
+          } | null;
+        } | null;
+      },
       { id: string }
     >(FETCH_INTEREST_GROUP_TEAMS_BY_ID, { id: event.interestGroup.id });
     const interestGroupTeamIds = new Set(
