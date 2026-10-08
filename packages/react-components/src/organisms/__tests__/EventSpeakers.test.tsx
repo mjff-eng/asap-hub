@@ -196,6 +196,26 @@ describe('EventSpeakers', () => {
       expect(getAllByText('2').length).toBeGreaterThan(0);
     });
 
+    it('Should make the total the sum of the section counts when a speaker is under a team and a project', () => {
+      const [sharedUser] = makeUsers('shared', 1);
+      const { getByText } = renderCard({
+        groups: [
+          teamGroup({ users: [sharedUser!, ...makeUsers('team-0', 2)] }),
+          projectGroup({ users: [sharedUser!] }),
+          externalGroup({ users: makeExternalUsers(1) }),
+        ],
+        hasFinished: false,
+      });
+      expect(getByText('total speakers').previousSibling).toHaveTextContent(
+        '5',
+      );
+      const breakdown = (label: string) =>
+        getByText(label, { selector: 'p' }).nextSibling;
+      expect(breakdown('From Teams')).toHaveTextContent('3');
+      expect(breakdown('From Individual Projects')).toHaveTextContent('1');
+      expect(breakdown('External')).toHaveTextContent('1');
+    });
+
     it('Should count shared CRN speakers, not groups, and leave externals out', () => {
       const { getByText } = renderCard({
         groups: [
@@ -244,6 +264,11 @@ describe('EventSpeakers', () => {
       expect(
         queryByLabelText('No preliminary findings'),
       ).not.toBeInTheDocument();
+    });
+
+    it('Should not render the speakers column header', () => {
+      const { getAllByText } = renderCard({ hasFinished: false });
+      expect(getAllByText('Speakers')).toHaveLength(1);
     });
 
     it('Should expand the first group of the first non-empty section', () => {

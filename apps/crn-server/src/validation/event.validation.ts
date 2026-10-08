@@ -79,6 +79,19 @@ const eventUpdateDetailsValidationSchema: JSONSchemaType<EventUpdateDetailsReque
         nullable: true,
         items: { type: 'string' },
       },
+      speakersToUnlink: {
+        type: 'array',
+        nullable: true,
+        items: {
+          type: 'object',
+          properties: {
+            speakerId: { type: 'string' },
+            field: { type: 'string', enum: ['team', 'project'] },
+          },
+          required: ['speakerId', 'field'],
+          additionalProperties: false,
+        },
+      },
       preliminaryDataShared: {
         type: 'array',
         nullable: true,

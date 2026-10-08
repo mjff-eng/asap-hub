@@ -102,6 +102,89 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ).toEqual(['ext-1']);
   });
 
+  test('Should only send removed project and affiliated external speakers for an upcoming event', () => {
+    const projectGroup = (users: SpeakerGroupUser[]): SpeakerGroup => ({
+      id: 'project-1',
+      variant: 'project',
+      projectName: 'Project One',
+      users,
+    });
+    const projectUser = speaker({ id: 'user-2', speakerIds: ['speaker-2'] });
+    const affiliatedExternal = speaker({
+      id: 'external-3',
+      speakerIds: ['speaker-3'],
+      roles: [],
+      isExternal: true,
+    });
+    const original = [projectGroup([projectUser, affiliatedExternal])];
+    const saved = [projectGroup([])];
+
+    expect(mapGroupsToSpeakersUpdate(original, saved, false)).toEqual({
+      speakersToRemove: ['speaker-2', 'speaker-3'],
+    });
+  });
+
+  describe('a speaker entry listed under a team and a project', () => {
+    const projectGroup = (users: SpeakerGroupUser[]): SpeakerGroup => ({
+      id: 'project-1',
+      variant: 'project',
+      projectName: 'Project One',
+      users,
+    });
+    const original = [
+      teamGroup(),
+      projectGroup([speaker({ roles: ['Lead PI'] })]),
+    ];
+
+    test('Should only unlink the project when removed from the project', () => {
+      const saved = [teamGroup(), projectGroup([])];
+
+      expect(mapGroupsToSpeakersUpdate(original, saved, false)).toEqual({
+        speakersToRemove: [],
+        speakersToUnlink: [{ speakerId: 'speaker-1', field: 'project' }],
+      });
+    });
+
+    test('Should only unlink the team when removed from the team', () => {
+      const saved = [
+        teamGroup({ users: [] }),
+        projectGroup([speaker({ roles: ['Lead PI'] })]),
+      ];
+
+      expect(mapGroupsToSpeakersUpdate(original, saved, true)).toMatchObject({
+        speakersToRemove: [],
+        speakersToUnlink: [{ speakerId: 'speaker-1', field: 'team' }],
+      });
+    });
+
+    test('Should remove the entry when removed from both', () => {
+      const saved = [teamGroup({ users: [] }), projectGroup([])];
+
+      expect(mapGroupsToSpeakersUpdate(original, saved, false)).toEqual({
+        speakersToRemove: ['speaker-1'],
+      });
+    });
+
+    test('Should unlink an affiliated external speaker the same way', () => {
+      const external = speaker({
+        id: 'external-3',
+        speakerIds: ['speaker-3'],
+        roles: [],
+        isExternal: true,
+      });
+      const withExternal = [
+        teamGroup({ users: [external] }),
+        projectGroup([external]),
+      ];
+      const saved = [teamGroup({ users: [] }), projectGroup([external])];
+
+      expect(mapGroupsToSpeakersUpdate(withExternal, saved, false)).toEqual({
+        speakersToRemove: [],
+        speakersToUnlink: [{ speakerId: 'speaker-3', field: 'team' }],
+      });
+    });
+  });
+
   test('Should not mark anything for removal when nothing was removed', () => {
     const groups = [teamGroup()];
 

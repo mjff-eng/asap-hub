@@ -232,6 +232,19 @@ describe('EditEventSpeakersModal', () => {
     expect(screen.queryByText('Preliminary Findings')).not.toBeInTheDocument();
   });
 
+  it('Should show each group speaker count on an upcoming event', () => {
+    renderModal({ isPastEvent: false, groups: [getTeamGroup()] });
+
+    expect(screen.getByText('(1)')).toBeVisible();
+  });
+
+  it('Should leave the group speaker count to the shared pill on a past event', () => {
+    renderModal({ isPastEvent: true, groups: [getTeamGroup()] });
+
+    expect(screen.queryByText('(1)')).not.toBeInTheDocument();
+    expect(screen.getByText('0 of 1 shared')).toBeVisible();
+  });
+
   it('Should render only the sections that have speakers, in order', () => {
     renderModal({ groups: [getTeamGroup(), getExternalGroup()] });
 

@@ -16,6 +16,7 @@ const sectionStyles = css({
   display: 'flex',
   flexDirection: 'column',
   paddingTop: rem(16),
+  ':first-of-type': { paddingTop: 0 },
 });
 
 // A ratio, not `rem`: line-height in `em` resolves against the element's own
