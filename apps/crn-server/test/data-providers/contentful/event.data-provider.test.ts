@@ -2153,8 +2153,8 @@ describe('Events Contentful Data Provider', () => {
       return event;
     };
 
-    test('Should log and alert for each event skipped from a list', async () => {
-      const loggerErrorSpy = jest.spyOn(logger, 'error');
+    test('Should log a warning without alerting for each event skipped from a list', async () => {
+      const loggerWarnSpy = jest.spyOn(logger, 'warn');
       const contentfulGraphQLResponse = getContentfulGraphqlEventsResponse();
       contentfulGraphQLResponse.eventsCollection!.items.push(
         getEventWithoutCalendar(),
@@ -2166,9 +2166,9 @@ describe('Events Contentful Data Provider', () => {
       const result = await alertingDataProvider.fetch({});
 
       expect(result.items).toEqual(getContentfulListEventDataObject().items);
-      expect(loggerErrorSpy).toHaveBeenCalledWith(expectedMessage);
-      expect(alerts.error).toHaveBeenCalledTimes(1);
-      expect(alerts.error).toHaveBeenCalledWith(new Error(expectedMessage));
+      expect(loggerWarnSpy).toHaveBeenCalledTimes(1);
+      expect(loggerWarnSpy).toHaveBeenCalledWith(expectedMessage);
+      expect(alerts.error).not.toHaveBeenCalled();
     });
 
     test('Should log and alert when fetching a skipped event by id', async () => {
@@ -2186,14 +2186,15 @@ describe('Events Contentful Data Provider', () => {
       expect(alerts.error).toHaveBeenCalledWith(new Error(expectedMessage));
     });
 
-    test('Should not alert when every event has a calendar', async () => {
+    test('Should not log when every event in a list has a calendar', async () => {
+      const loggerWarnSpy = jest.spyOn(logger, 'warn');
       contentfulGraphqlClientMock.request.mockResolvedValueOnce(
         getContentfulGraphqlEventsResponse(),
       );
 
       await alertingDataProvider.fetch({});
 
-      expect(alerts.error).not.toHaveBeenCalled();
+      expect(loggerWarnSpy).not.toHaveBeenCalled();
     });
   });
 

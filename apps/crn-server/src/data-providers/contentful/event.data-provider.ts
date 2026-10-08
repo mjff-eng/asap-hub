@@ -92,7 +92,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
   ) {}
 
   private reportEventWithoutCalendar = (id: string) => {
-    const message = `Event (${id}) skipped because it has no published calendar`;
+    const message = getEventWithoutCalendarMessage(id);
     logger.error(message);
     void this.alerts?.error(new Error(message));
   };
@@ -186,10 +186,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
         users?.linkedFrom?.eventSpeakersCollection?.items[0]?.linkedFrom
           ?.eventsCollection;
 
-      return getEventDataObject(
-        eventsCollection,
-        this.reportEventWithoutCalendar,
-      );
+      return getEventDataObject(eventsCollection);
     }
 
     if (filter?.externalAuthorId) {
@@ -206,10 +203,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
         externalAuthors?.linkedFrom?.eventSpeakersCollection?.items[0]
           ?.linkedFrom?.eventsCollection;
 
-      return getEventDataObject(
-        eventsCollection,
-        this.reportEventWithoutCalendar,
-      );
+      return getEventDataObject(eventsCollection);
     }
 
     if (filter?.teamId) {
@@ -226,10 +220,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
         teams?.linkedFrom?.eventSpeakersCollection?.items[0]?.linkedFrom
           ?.eventsCollection;
 
-      return getEventDataObject(
-        eventsCollection,
-        this.reportEventWithoutCalendar,
-      );
+      return getEventDataObject(eventsCollection);
     }
 
     const getOrderFilter = () => {
@@ -310,10 +301,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
       },
     });
 
-    return getEventDataObject(
-      eventsCollection,
-      this.reportEventWithoutCalendar,
-    );
+    return getEventDataObject(eventsCollection);
   }
 
   async create(create: EventCreateDataObject): Promise<string> {
@@ -911,9 +899,11 @@ export const parseGraphQLEvent = (item: EventItem): EventDataObject | null => {
   };
 };
 
+const getEventWithoutCalendarMessage = (id: string) =>
+  `Event (${id}) skipped because it has no published calendar`;
+
 const getEventDataObject = (
   eventsCollection: FetchEventsQuery['eventsCollection'],
-  onEventWithoutCalendar: (id: string) => void,
 ) => {
   if (!eventsCollection?.items) {
     return {
@@ -926,9 +916,14 @@ const getEventDataObject = (
     (x): x is EventItem => x !== null,
   );
 
+  // Background indexers fetch these lists, and an event skipped here usually
+  // means an editor unpublished its calendar on purpose, so only log it.
+  // fetchById alerts, because there a user or an editor hit the event.
   items
     .filter((item) => !item.calendar)
-    .forEach((item) => onEventWithoutCalendar(item.sys.id));
+    .forEach((item) =>
+      logger.warn(getEventWithoutCalendarMessage(item.sys.id)),
+    );
 
   return {
     total: eventsCollection.total,
