@@ -163,8 +163,8 @@ export const StartHere = () => (
           cannot work or does not exist:
           <ul style={{ paddingLeft: '20px' }}>
             <li>
-              emails and SVG attributes such as {code('fill={...}')}, which
-              cannot read CSS variables;
+              SVGs turned into a {code('data:')} image (the checkbox tick, the
+              avatar placeholder), which cannot read CSS variables;
             </li>
             <li>
               shadows, gradients, table stripes and artwork, which have no token
@@ -200,8 +200,9 @@ export const StartHere = () => (
         </li>
         <li>
           Email templates cannot use CSS variables, because email clients do not
-          support them. Use primitives there. The email layouts give links the
-          product brand colour as a fixed value, and a test fails if an email
+          support them. The email layouts read fixed values from the product
+          theme with {code("themeColour('crn', 'colour/foreground/brand')")}, so
+          a Figma export reaches emails too, and a test fails if an email
           renders a CSS variable.
         </li>
         <li>
