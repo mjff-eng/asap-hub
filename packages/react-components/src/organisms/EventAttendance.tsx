@@ -58,7 +58,17 @@ const teamInnerStyles = css({
   gap: rem(8),
 });
 
-const attendanceColStyles = css({ width: '1%' });
+// Pixels, not `rem`: `rem` emits `em`, which a `<col>` resolves against the
+// table's font size.
+const attendanceColStyles = css({
+  width: '204px',
+  [`@media (max-width: ${mobileScreen.max}px)`]: { width: '1%' },
+});
+
+const attendanceCellStyles = css([
+  statusCellStyles,
+  { [`@media (max-width: ${mobileScreen.max}px)`]: { textAlign: 'center' } },
+]);
 
 const metricStyles = css({ marginTop: rem(24) });
 
@@ -115,7 +125,7 @@ const sectionCountStyles = css([
 
 const sectionHelperStyles = css([
   sectionLineStyles,
-  { margin: `${rem(8)} 0 0`, color: neutral800.rgb },
+  { margin: '4px 0 0', color: neutral800.rgb },
 ]);
 
 const showMoreCellStyles = css({
@@ -134,9 +144,6 @@ export type EventAttendanceTeam = {
   isFromInterestGroup?: boolean;
 };
 
-// Attended teams first, then active before inactive, then by name in natural
-// order (numeric collation, so "Team 2" precedes "Team 10"), with teamId as a
-// stable tiebreaker so equal names order deterministically.
 export const compareAttendanceTeams = (
   a: EventAttendanceTeam,
   b: EventAttendanceTeam,
@@ -189,7 +196,7 @@ const TeamRows: React.FC<{
             {team.isTeamInactive && <InactiveBadgeIcon />}
           </span>
         </td>
-        <td css={statusCellStyles}>
+        <td css={attendanceCellStyles}>
           <span
             css={statusIconStyles}
             role="img"
@@ -208,8 +215,6 @@ const TeamRows: React.FC<{
 );
 
 const AttendanceSection: React.FC<{
-  // Dropped when the event has no hosting group: with a single section there is
-  // nothing to tell apart, so the count stands on its own.
   title?: string;
   teams: EventAttendanceTeam[];
   helperText?: string;
