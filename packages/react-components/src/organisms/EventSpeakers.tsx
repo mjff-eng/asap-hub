@@ -202,12 +202,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
     0,
   );
   const crnSpeakers = teamSpeakers + projectSpeakers;
-  const totalSpeakers = new Set([
-    ...[...teamGroups, ...projectGroups].flatMap(({ users }) =>
-      users.map(({ id }) => id),
-    ),
-    ...externalUsers.map(({ id }) => id),
-  ]).size;
+  const totalSpeakers = crnSpeakers + externalUsers.length;
   const sharedSpeakers = [...teamGroups, ...projectGroups].reduce(
     (total, group) => total + groupFindings(group).shared,
     0,
