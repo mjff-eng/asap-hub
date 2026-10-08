@@ -516,17 +516,17 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [
-                0.9882352948188782, 0.9882352948188782, 0.9921568632125854
+                0.0117647061124444, 0.4588235318660736, 0.6352941393852234
               ],
               "alpha": 1,
-              "hex": "#FCFCFD"
+              "hex": "#0375A2"
             },
             "$extensions": {
               "com.figma.variableId": "VariableID:4952:7147",
               "com.figma.scopes": ["SHAPE_FILL", "TEXT_FILL"],
               "com.figma.aliasData": {
-                "targetVariableId": "VariableID:6f6babdb9b868c91a91a2f67cb1e9fb3c43408d9/-1:-1",
-                "targetVariableName": "colour/neutral/25",
+                "targetVariableId": "VariableID:e68e5e6a08451ad292996b5623c9a03e24b4d546/-1:-1",
+                "targetVariableName": "colour/brand/gp2/700",
                 "targetVariableSetId": "VariableCollectionId:086004e4aef7d59b2870b6d7882bc35a15a40107/-1:-1",
                 "targetVariableSetName": "primitives"
               }
@@ -536,18 +536,16 @@
             "$type": "color",
             "$value": {
               "colorSpace": "srgb",
-              "components": [
-                0.9882352948188782, 0.9882352948188782, 0.9921568632125854
-              ],
+              "components": [0, 0.4156862795352936, 0.572549045085907],
               "alpha": 1,
-              "hex": "#FCFCFD"
+              "hex": "#006A92"
             },
             "$extensions": {
               "com.figma.variableId": "VariableID:4952:7148",
               "com.figma.scopes": ["SHAPE_FILL", "TEXT_FILL"],
               "com.figma.aliasData": {
-                "targetVariableId": "VariableID:6f6babdb9b868c91a91a2f67cb1e9fb3c43408d9/-1:-1",
-                "targetVariableName": "colour/neutral/25",
+                "targetVariableId": "VariableID:baa9b4dd5d1e328c56fedb9c3b15bdc05aee161c/-1:-1",
+                "targetVariableName": "colour/brand/gp2/800",
                 "targetVariableSetId": "VariableCollectionId:086004e4aef7d59b2870b6d7882bc35a15a40107/-1:-1",
                 "targetVariableSetName": "primitives"
               }

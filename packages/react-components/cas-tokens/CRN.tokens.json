@@ -516,17 +516,17 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [
-                0.9882352948188782, 0.9882352948188782, 0.9921568632125854
+                0.1725490242242813, 0.5254902243614197, 0.3607843220233917
               ],
               "alpha": 1,
-              "hex": "#FCFCFD"
+              "hex": "#2C865C"
             },
             "$extensions": {
               "com.figma.variableId": "VariableID:4952:7147",
               "com.figma.scopes": ["SHAPE_FILL", "TEXT_FILL"],
               "com.figma.aliasData": {
-                "targetVariableId": "VariableID:6f6babdb9b868c91a91a2f67cb1e9fb3c43408d9/-1:-1",
-                "targetVariableName": "colour/neutral/25",
+                "targetVariableId": "VariableID:41b61a2addad157e26952c07c9a353c449df5491/-1:-1",
+                "targetVariableName": "colour/brand/crn/700",
                 "targetVariableSetId": "VariableCollectionId:086004e4aef7d59b2870b6d7882bc35a15a40107/-1:-1",
                 "targetVariableSetName": "primitives"
               }
@@ -537,17 +537,17 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [
-                0.9882352948188782, 0.9882352948188782, 0.9921568632125854
+                0.1568627506494522, 0.4745098054409027, 0.32549020648002625
               ],
               "alpha": 1,
-              "hex": "#FCFCFD"
+              "hex": "#287953"
             },
             "$extensions": {
               "com.figma.variableId": "VariableID:4952:7148",
               "com.figma.scopes": ["SHAPE_FILL", "TEXT_FILL"],
               "com.figma.aliasData": {
-                "targetVariableId": "VariableID:6f6babdb9b868c91a91a2f67cb1e9fb3c43408d9/-1:-1",
-                "targetVariableName": "colour/neutral/25",
+                "targetVariableId": "VariableID:234f10a4423b034215a6c30ee36ff98b44461a1f/-1:-1",
+                "targetVariableName": "colour/brand/crn/800",
                 "targetVariableSetId": "VariableCollectionId:086004e4aef7d59b2870b6d7882bc35a15a40107/-1:-1",
                 "targetVariableSetName": "primitives"
               }
