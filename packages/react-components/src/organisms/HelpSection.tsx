@@ -22,7 +22,7 @@ const HelpSection: React.FC<HelpSectionProps> = ({
       <br /> The grants team is here to help.
     </CtaCard>
     {!hideTechSupportText && (
-      <Paragraph accent="lead">
+      <Paragraph accent="tertiary">
         If you're facing a technical issue with the Hub, our team is happy to
         help! <Link href={mailToSupport()}>Contact tech support</Link>.
       </Paragraph>

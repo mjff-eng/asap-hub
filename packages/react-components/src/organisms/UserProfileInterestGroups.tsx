@@ -20,7 +20,7 @@ const UserProfileInterestGroups: FC<UserProfileInterestGroupsProps> = ({
       }}
     >
       <Headline2 styleAsHeading={3}>{firstName}’s Groups</Headline2>
-      <Paragraph accent="lead">
+      <Paragraph accent="tertiary">
         {firstName}’s team is collaborating with other teams via groups, which
         meet frequently
       </Paragraph>

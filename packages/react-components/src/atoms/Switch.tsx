@@ -1,18 +1,18 @@
-import { css, Theme } from '@emotion/react';
-import { error500, fern, neutral800, steel } from '../colors';
+import { css } from '@emotion/react';
+import { colour } from '../colors';
 import { noop } from '../utils';
 
-const toggleStyles = (
-  uncheckedColor: 'default' | 'error',
-  { primary500 = fern }: Theme['colors'] = {},
-) =>
+const toggleStyles = (uncheckedColor: 'default' | 'error') =>
   css({
     position: 'relative',
     width: '40px',
     height: '20px',
     flexShrink: 0,
     appearance: 'none',
-    backgroundColor: uncheckedColor === 'error' ? error500.rgb : steel.rgb,
+    backgroundColor:
+      uncheckedColor === 'error'
+        ? colour.background['error-inverse']
+        : colour.neutral[100],
     borderRadius: '10px',
     outline: 'none',
     cursor: 'pointer',
@@ -25,23 +25,23 @@ const toggleStyles = (
       left: '2px',
       width: '16px',
       height: '16px',
-      backgroundColor: '#fff',
+      backgroundColor: colour.background.primary,
       borderRadius: '50%',
       transition: 'transform 0.2s',
     },
 
     ':checked': {
-      backgroundColor: primary500.rgba,
+      backgroundColor: colour.background['brand-inverse'],
       '::before': {
         transform: 'translateX(20px)',
       },
     },
 
     ':disabled': {
-      backgroundColor: neutral800.rgb,
+      backgroundColor: colour.neutral[400],
       cursor: 'not-allowed',
       '::before': {
-        backgroundColor: '#fff',
+        backgroundColor: colour.background.primary,
       },
     },
   });
@@ -71,7 +71,7 @@ const Switch: React.FC<SwitchProps> = ({
     checked={checked}
     disabled={!enabled}
     onChange={onClick}
-    css={({ colors }) => toggleStyles(uncheckedColor, colors)}
+    css={toggleStyles(uncheckedColor)}
   />
 );
 

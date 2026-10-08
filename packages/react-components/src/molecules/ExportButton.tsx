@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 import { Button, Spinner } from '../atoms';
-import { lead, neutral500 } from '../colors';
+import { colour } from '../colors';
 import { ExportIcon } from '../icons';
 import { mobileScreen, rem, tabletScreen } from '../pixels';
 import TooltipInfo from './TooltipInfo';
@@ -171,8 +171,8 @@ const ExportButton: React.FC<ExportButtonProps> = ({
                   <Spinner
                     size={16}
                     thickness={2}
-                    color={lead.rgb}
-                    trackColor={neutral500.rgb}
+                    color={colour.neutral[600]}
+                    trackColor={colour.neutral[100]}
                     ariaLabel="Exporting"
                     css={{ flexShrink: 0 }}
                   />

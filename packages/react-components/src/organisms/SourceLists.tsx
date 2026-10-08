@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button, Paragraph } from '../atoms';
-import { lead, neutral800, neutral1000, steel } from '../colors';
+import { colour } from '../colors';
 import { ExportIcon, linkIcon } from '../icons';
 import { mobileScreen, rem } from '../pixels';
 import { UploadListSourceFile } from './UploadListModal';
@@ -27,12 +27,12 @@ const titleStyles = css({
   fontSize: rem(17),
   fontWeight: 700,
   lineHeight: rem(24),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const countStyles = css({
   fontWeight: 400,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const listStyles = css({
@@ -46,7 +46,7 @@ const rowStyles = css({
   justifyContent: 'space-between',
   gap: rem(16),
   padding: `${rem(16)} 0`,
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderTop: 'none',
     paddingTop: 0,
@@ -79,7 +79,7 @@ const nameStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 const dateStyles = css({
@@ -87,7 +87,7 @@ const dateStyles = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: neutral800.rgb,
+  color: colour.foreground.quaternary,
 });
 
 const downloadButtonStyles = css({
@@ -96,7 +96,7 @@ const downloadButtonStyles = css({
   height: rem(40),
   gap: rem(8),
   maxWidth: 'none',
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
   '> svg': {
     boxSizing: 'border-box',
     width: rem(24),
@@ -145,7 +145,7 @@ const SourceLists: React.FC<SourceListsProps> = ({ files }) => {
             • {files.length} {files.length === 1 ? 'File' : 'Files'}
           </span>
         </h3>
-        <Paragraph noMargin accent="lead">
+        <Paragraph noMargin accent="tertiary">
           The lists you uploaded. The panel shows teams, so open a file to check
           an individual. These are the files as uploaded, not the current
           attendance.

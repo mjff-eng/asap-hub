@@ -10,15 +10,15 @@ import {
   pixels,
   Subtitle,
   userPlaceholderIcon,
+  colour,
 } from '@asap-hub/react-components';
 import { mobileQuery, nonMobileQuery } from '../layout';
-import colors from '../templates/colors';
 
 const { rem } = pixels;
 
 const rowStyles = css({
   display: 'grid',
-  borderBottom: `1px solid ${colors.neutral500.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   padding: `${rem(16)} 0 ${rem(12)}`,
   rowGap: rem(24),
   gridTemplateColumns: '1fr',
@@ -51,7 +51,7 @@ const headingListStyles = css({
 });
 
 const secondaryTextStyles = css({
-  color: colors.greyscale1000.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const textWrap = css({

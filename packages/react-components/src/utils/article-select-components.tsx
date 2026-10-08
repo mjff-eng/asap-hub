@@ -7,7 +7,7 @@ import {
 } from 'react-select';
 
 import { Pill } from '../atoms';
-import { charcoal } from '../colors';
+import { colour } from '../colors';
 import { article } from '../icons';
 import { rem } from '../pixels';
 import { getMultiValueStyles } from '../select';
@@ -38,7 +38,7 @@ const articleSelectIconStyles = css({
     height: '18px',
     paddingLeft: rem(3),
     paddingTop: rem(4.5),
-    stroke: charcoal.rgb,
+    stroke: colour.foreground.primary,
     strokeWidth: rem(0.3),
   },
 });

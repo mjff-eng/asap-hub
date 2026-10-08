@@ -7,7 +7,7 @@ import { rem, smallDesktopScreen } from '../pixels';
 import { formatDate } from '../date';
 import { newsPlaceholder, trainingPlaceholderIcon } from '../icons';
 import { ExternalLink, LinkHeadline, ImageLink } from '../molecules';
-import { lead, TagList } from '..';
+import { TagList, colour } from '..';
 import { captionStyles } from '../text';
 
 const imageStyle = css({
@@ -55,13 +55,13 @@ const containerStyle = css({
 
 const shortTextStyles = css({
   flex: 1,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   overflowWrap: 'anywhere',
 });
 
 const footerStyles = css({
   ...captionStyles,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   justifySelf: 'flex-end',
 });
 

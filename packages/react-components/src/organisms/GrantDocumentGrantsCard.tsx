@@ -3,7 +3,7 @@ import { sharedResearch } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { Card, Headline2, Link, Paragraph, Subtitle } from '../atoms';
-import { steel } from '../colors';
+import { colour } from '../colors';
 import { formatProjectDate } from '../date';
 import { mobileScreen, rem } from '../pixels';
 
@@ -26,7 +26,7 @@ const grantsStyles = css({
     gap: rem(36),
     paddingBottom: rem(24),
     '& > * + *': {
-      borderTop: `1px solid ${steel.rgb}`,
+      borderTop: `1px solid ${colour.border.tertiary}`,
       paddingTop: rem(36),
     },
   },
@@ -60,7 +60,7 @@ const GrantRow: React.FC<{
   <div css={grantRowStyles}>
     <div css={grantFieldStyles}>
       <Subtitle noMargin>{label}</Subtitle>
-      <Paragraph noMargin accent="lead">
+      <Paragraph noMargin accent="tertiary">
         {linked && researchOutputId ? (
           <Link
             href={sharedResearch({}).researchOutput({ researchOutputId }).$}
@@ -75,7 +75,7 @@ const GrantRow: React.FC<{
     {startDate && (
       <div css={grantFieldStyles}>
         <Subtitle noMargin>Grant Period</Subtitle>
-        <Paragraph noMargin accent="lead">
+        <Paragraph noMargin accent="tertiary">
           {`${formatProjectDate(startDate)} - ${
             endDate ? formatProjectDate(endDate) : 'Present'
           }`}
@@ -95,7 +95,7 @@ const GrantDocumentGrantsCard: React.FC<GrantDocumentGrantsCardProps> = ({
       Grants
     </Headline2>
     <div css={subtitleStyles}>
-      <Paragraph noMargin accent="lead">
+      <Paragraph noMargin accent="tertiary">
         Explore all the details about grants.
       </Paragraph>
     </div>

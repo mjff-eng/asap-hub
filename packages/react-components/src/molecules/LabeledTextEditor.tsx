@@ -3,7 +3,7 @@ import { css, SerializedStyles } from '@emotion/react';
 
 import { rem } from '../pixels';
 import { Label, Paragraph, TextEditor } from '../atoms';
-import { lead } from '../colors';
+import { colour } from '../colors';
 
 const tipStyles = css({
   marginTop: 0,
@@ -12,7 +12,7 @@ const tipStyles = css({
   },
   paddingTop: 0,
 
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const subtitleStyles = css({

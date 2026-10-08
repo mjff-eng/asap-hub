@@ -8,7 +8,7 @@ import { useFlags } from '@asap-hub/react-context';
 import { eventMaterialSectionIds } from '../organisms/EventMaterials';
 import { Link } from '../atoms';
 import { paperClipIcon } from '../icons';
-import { tin } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -23,7 +23,7 @@ const containerStyles = css({
 
 const mutedIconStyles = css({
   'svg path[stroke]': {
-    stroke: tin.rgb,
+    stroke: colour.foreground.disabled,
   },
 });
 
@@ -58,7 +58,7 @@ const materialListStyles = css({
 });
 
 const unavailableMaterialStyles = css({
-  color: tin.rgb,
+  color: colour.foreground.disabled,
 });
 
 type EventMaterialsListProps = Pick<

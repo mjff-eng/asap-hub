@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Button } from '../atoms';
-import { neutral1000 } from '../colors';
+import { colour } from '../colors';
 import { mobileScreen, rem } from '../pixels';
 
 const footerStyles = (isConfirming: boolean) =>
@@ -44,7 +44,7 @@ const buttonTextStyles = css({
 
 const warningStyles = css({
   fontWeight: 'bold',
-  color: neutral1000.rgb,
+  color: colour.foreground.primary,
 });
 
 type ConfirmableModalFooterProps = {

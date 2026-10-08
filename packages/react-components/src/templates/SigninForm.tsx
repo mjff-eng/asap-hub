@@ -44,7 +44,7 @@ const Signin: React.FC<SigninProps> = ({
         {signup ? 'Choose a login method' : `Sign in to the ${appName}`}
       </Display>
       {signup ? (
-        <Paragraph accent="lead">
+        <Paragraph accent="tertiary">
           Please remember your choice, you'll need it to log in to the Hub in
           the future.
         </Paragraph>

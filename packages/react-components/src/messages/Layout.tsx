@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
-import { css } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
 import { staticPages } from '@asap-hub/routing';
 
 import { Link } from '../atoms';
-import { silver } from '../colors';
 import { asapImage } from '../images';
 import { ceruleanFernGradientStyles } from '../appearance';
 import { rem } from '../pixels';
+import { themeColour } from '../theme';
 
 const containerStyles = css({
   maxWidth: rem(600),
@@ -32,7 +32,7 @@ const contentContainerStyles = css({
 });
 
 const footerContainerStyles = css({
-  backgroundColor: silver.rgb,
+  backgroundColor: themeColour('crn', 'colour/background/tertiary'),
   padding: rem(12),
 });
 
@@ -48,8 +48,19 @@ interface LayoutProps {
   readonly appOrigin: string;
 }
 
+const emailTheme = {
+  colors: {
+    link: themeColour('crn', 'colour/foreground/brand'),
+    buttonBackground: themeColour(
+      'crn',
+      'colour/background/button/primary/default',
+    ),
+    buttonBorder: themeColour('crn', 'colour/border/button/primary/default'),
+  },
+};
+
 const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (
-  <>
+  <ThemeProvider theme={emailTheme}>
     <div css={containerStyles}>
       <div
         role="presentation"
@@ -75,7 +86,7 @@ const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (
         </Link>
       </ul>
     </div>
-  </>
+  </ThemeProvider>
 );
 
 export default MessageLayout;

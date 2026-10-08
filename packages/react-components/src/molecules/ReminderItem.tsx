@@ -11,7 +11,7 @@ import {
   article,
 } from '../icons';
 import { Anchor, Markdown } from '../atoms';
-import { neutral200, cerulean } from '../colors';
+import { colour } from '../colors';
 
 export type ReminderEntity =
   | ReminderResponse['entity']
@@ -35,7 +35,7 @@ const iconStyles = css({
 const linkStyles = css({
   ':hover': {
     borderRadius: rem(3),
-    background: neutral200.rgb,
+    background: colour.neutral[50],
   },
 });
 
@@ -53,7 +53,7 @@ const subtextStyles = css({
 });
 
 const timeElapsedStyles = css({
-  color: cerulean.rgb,
+  color: colour.foreground.info,
 });
 
 const iconMap: Record<ReminderEntity, React.ReactElement> = {

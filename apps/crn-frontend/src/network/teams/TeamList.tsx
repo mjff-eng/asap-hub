@@ -5,7 +5,7 @@ import {
   NetworkTeams,
   DiscoveryTeamIcon,
   ResourceTeamIcon,
-  colors,
+  colour,
 } from '@asap-hub/react-components';
 import { ReactElement } from 'react';
 
@@ -18,8 +18,8 @@ interface NetworkTeamListProps {
 }
 
 const NoResultsIcon: Record<TeamDataObject['teamType'], ReactElement> = {
-  'Discovery Team': <DiscoveryTeamIcon color={colors.charcoal.rgb} />,
-  'Resource Team': <ResourceTeamIcon color={colors.charcoal.rgb} />,
+  'Discovery Team': <DiscoveryTeamIcon color={colour.neutral[900]} />,
+  'Resource Team': <ResourceTeamIcon color={colour.neutral[900]} />,
 };
 
 const NetworkTeamList: React.FC<NetworkTeamListProps> = ({

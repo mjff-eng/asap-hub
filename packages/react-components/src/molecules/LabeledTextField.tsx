@@ -1,11 +1,11 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { Label, Paragraph, TextField } from '../atoms';
-import { lead } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 
 const descriptionStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const hintStyles = css({
@@ -14,7 +14,7 @@ const hintStyles = css({
   },
   paddingTop: rem(6),
 
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 type LabeledTextFieldProps = {

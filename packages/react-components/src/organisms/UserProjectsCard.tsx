@@ -3,7 +3,7 @@ import { UserProjectMembership, ProjectStatus } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
 import { Card, Paragraph, Button, Headline2, Anchor, Pill } from '../atoms';
-import { charcoal, fern, neutral900, steel } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { getProjectRoute } from '../utils';
 import { getStatusPillAccent } from './ProjectCard';
@@ -35,7 +35,7 @@ const tableHeaderStyles = css({
   fontWeight: 700,
   lineHeight: '24px',
   letterSpacing: '0.1px',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
 });
 
 const tableHeaderAutoWidthStyles = css({
@@ -51,7 +51,7 @@ const tableHeaderLastColumnStyles = css({
 
 const tableCellStyles = css({
   padding: `${rem(16)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   verticalAlign: 'top',
   wordBreak: 'break-word',
   overflowWrap: 'break-word',
@@ -67,7 +67,7 @@ const tableCellLastColumnStyles = css({
   width: '1%',
   whiteSpace: 'nowrap',
   padding: `${rem(16)} 0 ${rem(16)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   verticalAlign: 'top',
 });
 
@@ -78,7 +78,7 @@ const lastRowNoBorder = css({
 const projectNameStyles = css({
   fontSize: rem(17),
   fontWeight: '500',
-  color: fern.rgb,
+  color: colour.foreground.brand,
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',
@@ -86,7 +86,7 @@ const projectNameStyles = css({
 });
 
 const typeLabelStyles = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
@@ -98,8 +98,8 @@ const showMoreButtonStyles = css({
   justifyContent: 'center',
   width: '100%',
   fontWeight: 'normal',
-  color: fern.rgba,
-  borderTop: `1px solid ${steel.rgb}`,
+  color: colour.foreground.brand,
+  borderTop: `1px solid ${colour.border.tertiary}`,
   marginTop: rem(16),
   paddingTop: rem(16),
   textDecoration: 'none',
@@ -129,7 +129,7 @@ const mobileProjectItem = css({
   display: 'flex',
   flexDirection: 'column',
   padding: `${rem(20)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   gap: rem(32),
   ':last-child': {
     borderBottom: 'none',
@@ -147,7 +147,7 @@ const mobileFieldLabel = css({
   fontWeight: 700,
   lineHeight: '16px',
   letterSpacing: '0.1px',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   textTransform: 'uppercase',
 });
 
@@ -155,13 +155,13 @@ const mobileFieldValue = css({
   fontSize: rem(17),
   fontWeight: 400,
   lineHeight: rem(24),
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const mobileProjectNameValue = css({
   fontSize: rem(17),
   fontWeight: '500',
-  color: fern.rgb,
+  color: colour.foreground.brand,
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',
@@ -185,7 +185,7 @@ const UserProjectsCard: React.FC<UserProjectsCardProps> = ({ projects }) => {
           <Headline2 styleAsHeading={3} noMargin>
             Projects
           </Headline2>
-          <Paragraph accent="lead" noMargin>
+          <Paragraph accent="tertiary" noMargin>
             This user is not currently assigned to any projects.
           </Paragraph>
         </div>
@@ -201,7 +201,7 @@ const UserProjectsCard: React.FC<UserProjectsCardProps> = ({ projects }) => {
         <Headline2 styleAsHeading={3} noMargin>
           Projects
         </Headline2>
-        <Paragraph accent="lead" noMargin>
+        <Paragraph accent="tertiary" noMargin>
           Explore all projects this user has contributed to.
         </Paragraph>
       </div>

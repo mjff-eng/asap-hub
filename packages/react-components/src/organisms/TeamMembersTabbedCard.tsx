@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import React, { ComponentProps, useMemo } from 'react';
 import { rem, tabletScreen } from '../pixels';
 import { LabsList, MembersList, RolesList, TabbedCard } from '../molecules';
-import { fern } from '../colors';
+import { colour } from '../colors';
 import { getTeamMembersByStatus, GroupedTeamMember } from '../utils';
 import { Paragraph } from '../atoms';
 
@@ -19,7 +19,7 @@ const containerStyles = css({
 });
 
 const nameStyles = css({
-  color: fern.rgb,
+  color: colour.foreground.brand,
   fontWeight: 'normal',
 });
 
@@ -54,7 +54,7 @@ const TeamMembersTabbedCard: React.FC<TeamMembersTabbedCardProps> = ({
           truncateFrom: 8,
           disabled: isTeamInactive,
           empty: (
-            <Paragraph accent="lead">
+            <Paragraph accent="tertiary">
               There are no active team members.
             </Paragraph>
           ),
@@ -65,7 +65,9 @@ const TeamMembersTabbedCard: React.FC<TeamMembersTabbedCardProps> = ({
           truncateFrom: 8,
           disabled: pastMembers.length === 0,
           empty: (
-            <Paragraph accent="lead">There are no past team members.</Paragraph>
+            <Paragraph accent="tertiary">
+              There are no past team members.
+            </Paragraph>
           ),
         },
       ]}

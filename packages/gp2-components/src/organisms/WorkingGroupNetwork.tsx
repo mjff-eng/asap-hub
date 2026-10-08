@@ -56,7 +56,7 @@ const WorkingGroupNetwork: React.FC<WorkingGroupsNetworkProps> = ({
   return (
     <div css={styles}>
       <Subtitle noMargin>{descriptions[role].subtitle}</Subtitle>
-      <Paragraph noMargin accent="lead">
+      <Paragraph noMargin accent="tertiary">
         {descriptions[role].paragraph}
       </Paragraph>
       <article css={container}>

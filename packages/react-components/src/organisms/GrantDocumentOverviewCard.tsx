@@ -26,7 +26,7 @@ const GrantDocumentOverviewCard: React.FC<GrantDocumentOverviewCardProps> = (
     </Headline2>
     {'text' in props ? (
       <div css={textStyles}>
-        <Paragraph noMargin accent="lead">
+        <Paragraph noMargin accent="tertiary">
           {props.text}
         </Paragraph>
       </div>

@@ -1,27 +1,27 @@
 import { css } from '@emotion/react';
 
-import { charcoal, lead, pearl, steel } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 import { headlineStyles } from '../text';
 
 export const metricContainerStyles = css({
   boxSizing: 'border-box',
   padding: rem(24),
-  backgroundColor: pearl.rgb,
-  border: `1px solid ${steel.rgb}`,
+  backgroundColor: colour.background.secondary,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRadius: rem(8),
 });
 
 export const metricLabelStyles = css({
   margin: 0,
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   lineHeight: rem(24),
 });
 
 export const metricValueStyles = css(headlineStyles[1], {
   margin: 0,
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
 });
 
 export const metricProgressRowStyles = css({

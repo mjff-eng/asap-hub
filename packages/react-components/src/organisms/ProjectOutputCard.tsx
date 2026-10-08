@@ -10,7 +10,7 @@ const ProjectOutputCard: React.FC<ProjectOutputCardProps> = ({
   showTags = true,
   ...output
 }) => (
-  <Card accent={output.published ? 'default' : 'neutral200'}>
+  <Card accent={output.published ? 'default' : 'inactive'}>
     <ProjectOutputBody variant="card" showTags={showTags} {...output} />
   </Card>
 );

@@ -3,9 +3,9 @@ import { FC } from 'react';
 import emotionNormalize from 'emotion-normalize';
 
 import { fontStyles } from '../text';
-import { themes } from '../theme';
+import { Product, themes, themeVariables } from '../theme';
 import { rem } from '../pixels';
-import { neutral300, neutral700, neutral800 } from '../colors';
+import { colour } from '../colors';
 
 const styles = {
   html: {
@@ -26,22 +26,31 @@ const styles = {
     height: rem(8),
   },
   '*::-webkit-scrollbar-track': {
-    background: neutral300.rgb,
+    background: colour.background.tertiary,
     borderRadius: rem(4),
   },
   '*::-webkit-scrollbar-thumb': {
-    background: neutral700.rgb,
+    background: colour.neutral[200],
     borderRadius: rem(4),
     innerWidth: 8,
     outerWidth: 8,
   },
   '*::-webkit-scrollbar-thumb:hover': {
-    background: neutral800.rgb,
+    background: colour.neutral[400],
   },
 } as const;
-const GlobalStyles: FC<Record<string, never>> = () => (
+type GlobalStylesProps = {
+  readonly product?: Product;
+};
+const GlobalStyles: FC<GlobalStylesProps> = ({ product = 'crn' }) => (
   <>
     <Global styles={emotionNormalize} />
+    <Global
+      styles={{
+        ':root': themeVariables(product),
+        '[data-app="gp2"]': themeVariables('gp2'),
+      }}
+    />
     <Global styles={styles} />
   </>
 );

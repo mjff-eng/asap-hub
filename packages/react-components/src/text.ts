@@ -143,20 +143,13 @@ export const headlineStyles = {
 } as const;
 
 export type AccentColorName =
-  | 'lead'
-  | 'charcoal'
-  | 'ember'
-  | 'pepper'
-  | 'sandstone'
-  | 'clay'
-  | 'pine'
-  | 'mint'
-  | 'fern'
-  | 'cerulean'
-  | 'denim'
-  | 'prussian'
-  | 'space'
-  | 'berry'
-  | 'magenta'
-  | 'iris'
-  | 'mauve';
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'quaternary'
+  | 'brand'
+  | 'error'
+  | 'warning'
+  | 'success'
+  | 'info'
+  | 'disabled';

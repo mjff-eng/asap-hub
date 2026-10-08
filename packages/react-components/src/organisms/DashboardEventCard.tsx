@@ -5,7 +5,7 @@ import { BasicEvent } from '@asap-hub/model';
 
 import { EventInfo, EventMaterialsList } from '../molecules';
 import { Link } from '../atoms';
-import { ember, silver, lead } from '../colors';
+import { colour } from '../colors';
 import { EventsUpcomingIcon, LiveIcon, MapPinIcon } from '../icons';
 import { pillStyles } from '../pill';
 import { rem, mobileScreen, largeDesktopScreen } from '../pixels';
@@ -42,8 +42,8 @@ const buttonContentStyles = css({
 const inPersonPillStyles = css([
   pillStyles,
   {
-    backgroundColor: silver.rgb,
-    color: lead.rgb,
+    backgroundColor: colour.background.tertiary,
+    color: colour.foreground.tertiary,
   },
 ]);
 
@@ -100,7 +100,9 @@ const DashboardEventCard: React.FC<DashboardEventCardProps> = ({
         alwaysShowDateBlock
         dateBlockMuted={variant === 'past'}
         titlePrefix={
-          live ? <LiveIcon color={ember.hex} size={16} /> : undefined
+          live ? (
+            <LiveIcon color={colour.utilitarian.red[600]} size={16} />
+          ) : undefined
         }
         titleSuffix={
           inPerson ? (

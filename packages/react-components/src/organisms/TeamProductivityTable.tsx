@@ -12,7 +12,7 @@ import { PageControls, PerformanceCard } from '..';
 
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, neutral200, steel } from '../colors';
+import { colour } from '../colors';
 import {
   AlphabeticalSortingIcon,
   InactiveBadgeIcon,
@@ -44,12 +44,12 @@ const rowTitleStyles = css({
 const rowStyles = css({
   display: 'grid',
   padding: `${rem(20)} ${rem(24)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
   },
   ':nth-of-type(2n+3)': {
-    background: neutral200.rgb,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',
@@ -62,7 +62,7 @@ const rowStyles = css({
     columnGap: rem(15),
     paddingTop: 0,
     paddingBottom: 0,
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -70,7 +70,7 @@ const titleStyles = css({
   display: 'flex',
   alignItems: 'center',
   fontWeight: 'bold',
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   gap: rem(8),
 });
 

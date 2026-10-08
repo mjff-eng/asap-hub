@@ -83,7 +83,7 @@ const SharedResearchCard: React.FC<SharedResearchCardProps> = ({
   });
 
   return (
-    <Card accent={published ? 'default' : 'neutral200'}>
+    <Card accent={published ? 'default' : 'inactive'}>
       <SharedResearchMetadata
         pills={[
           associationPill,
@@ -159,7 +159,7 @@ const SharedResearchCard: React.FC<SharedResearchCardProps> = ({
           <TagList max={3} tags={keywords} />
         </div>
       )}
-      <Caption accent={'lead'} asParagraph>
+      <Caption accent="tertiary" asParagraph>
         Date Added: {formatDate(new Date(addedDate || created))}
       </Caption>
     </Card>

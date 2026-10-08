@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Headline3, Link, Paragraph } from '../atoms';
-import { neutral1000 } from '../colors';
+import { colour } from '../colors';
 import { paperClipIcon } from '../icons';
 import { createMailTo } from '../mail';
 import { rem } from '../pixels';
@@ -22,7 +22,7 @@ const iconStyles = css({
     width: 'auto',
   },
   'svg path[stroke]': {
-    stroke: neutral1000.rgba,
+    stroke: colour.foreground.primary,
   },
   'svg path[stroke-width]': {
     strokeWidth: 1,
@@ -42,14 +42,14 @@ const EventMaterialsEmptyView: React.FC<EventMaterialsEmptyViewProps> = ({
     {paperClipIcon}
     <Headline3>No meeting materials available.</Headline3>
     {variant === 'stale' ? (
-      <Paragraph accent="lead">
+      <Paragraph accent="tertiary">
         Nothing was shared for this event.{' '}
         <Link href={createMailTo('hub@asap.science')}>Contact ASAP</Link> if you
         have any questions.
       </Paragraph>
     ) : (
       <div css={textContainerStyles}>
-        <Paragraph accent="lead">
+        <Paragraph accent="tertiary">
           Meeting Materials for this event will be coming soon - usually within
           a week after the event. Please check back later.
         </Paragraph>

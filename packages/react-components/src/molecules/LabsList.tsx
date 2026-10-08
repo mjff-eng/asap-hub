@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { LabResponse } from '@asap-hub/model';
-import { neutral800 } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { OverflowBadge } from '../atoms';
 
@@ -10,7 +10,7 @@ const containerStyles = css({
 });
 
 const labTextStyles = css({
-  color: neutral800.rgb,
+  color: colour.foreground.quaternary,
   fontSize: rem(17),
 });
 

@@ -13,13 +13,13 @@ import {
   Pill,
   pixels,
   Subtitle,
+  colour,
 } from '@asap-hub/react-components';
 
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import { addIcon, editIcon } from '../icons';
 import { mobileQuery, nonMobileQuery } from '../layout';
-import colors from '../templates/colors';
 
 export type ResourcesProps = {
   resources?: gp2.Resource[];
@@ -69,7 +69,7 @@ const resourceLinkStyles = css({
   gap: rem(8),
   ':hover': {
     svg: {
-      stroke: colors.primary500.rgb,
+      stroke: colour.foreground.brand,
     },
   },
 });
@@ -183,7 +183,7 @@ const Resources: React.FC<ResourcesProps> = ({
                     </Subtitle>
                   )}
                 </div>
-                <Paragraph noMargin accent="lead">
+                <Paragraph noMargin accent="tertiary">
                   {resource.description}
                 </Paragraph>
               </Card>

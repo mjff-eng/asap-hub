@@ -63,7 +63,7 @@ const EventCard: React.FC<EventCardProps> = ({
       return {
         toastContent: 'The event has been cancelled.',
         type: 'alert',
-        ...(hasFinished ? { accent: 'neutral200' } : {}),
+        ...(hasFinished ? { accent: 'inactive' } : {}),
       };
     }
     if (hasStarted && !hasFinished) {

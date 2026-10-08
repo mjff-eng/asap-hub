@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
 
 import { formatDateToTimezone } from '../date';
-import { info100, info500, lead, silver } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { calendarIcon, clockIcon, CircleInfoIcon } from '../icons';
 import { pillStyles } from '../pill';
@@ -26,7 +26,7 @@ const listStyles = css({
 });
 
 const rowStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   overflow: 'hidden',
   lineHeight: rem(32),
 });
@@ -55,16 +55,16 @@ const infoTriggerStyles = css({
 const recurringPillStyles = css([
   pillStyles,
   {
-    backgroundColor: info100.rgb,
-    color: info500.rgb,
+    backgroundColor: colour.background.info,
+    color: colour.foreground.info,
   },
 ]);
 
 const dayCountPillStyles = css([
   pillStyles,
   {
-    backgroundColor: silver.rgb,
-    color: lead.rgb,
+    backgroundColor: colour.background.tertiary,
+    color: colour.foreground.tertiary,
   },
 ]);
 

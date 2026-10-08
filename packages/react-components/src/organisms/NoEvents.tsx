@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { calendarIcon } from '../icons';
 import { rem } from '../pixels';
-import { charcoal, Display, Link, Paragraph } from '..';
+import { Display, Link, Paragraph, colour } from '..';
 
 const wrapperStyle = css({
   textAlign: 'center',
@@ -11,7 +11,7 @@ const iconStyles = css({
   svg: {
     width: rem(48),
     height: rem(48),
-    stroke: charcoal.rgb,
+    stroke: colour.foreground.primary,
   },
 });
 
@@ -29,7 +29,7 @@ const NoEvents: React.FC<{
       <Display styleAsHeading={3}>
         This {type} doesn’t have any {lowerEventPeriod} events!
       </Display>
-      <Paragraph accent="lead">
+      <Paragraph accent="tertiary">
         In the meantime, try exploring other {lowerEventPeriod} events on the
         Hub.
       </Paragraph>

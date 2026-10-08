@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { TabbedCard } from '../molecules';
 import { Button, Link } from '../atoms';
 import { calendarIcon } from '../icons';
-import { lead, steel } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import DashboardEventCard from './DashboardEventCard';
 
@@ -16,7 +16,7 @@ const viewAllStyles = css({
 const emptyStateStyles = css({
   display: 'flex',
   flexDirection: 'row',
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   gap: rem(15),
 });
 
@@ -27,7 +27,7 @@ const eventListStyles = css({
 const eventRowStyles = css({
   paddingBottom: rem(24),
   marginBottom: rem(24),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':last-child': {
     paddingBottom: 0,
     marginBottom: 0,

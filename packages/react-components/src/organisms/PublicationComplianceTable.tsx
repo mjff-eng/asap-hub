@@ -10,7 +10,7 @@ import { PageControls } from '..';
 
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
-import { charcoal, lead, neutral200, steel } from '../colors';
+import { colour } from '../colors';
 import {
   InactiveBadgeIcon,
   AlphabeticalSortingIcon,
@@ -29,27 +29,27 @@ const container = css({
     paddingLeft: rem(24),
   },
   'th.team, td.team': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
   'th.publications, td.publications': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
   'th.datasets, td.datasets': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
   'th.protocols, td.protocols': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
   'th.code, td.code': {
-    borderRight: `1px solid ${steel.rgb}`,
+    borderRight: `1px solid ${colour.border.tertiary}`,
   },
 });
 
 const titleStyles = css({
   alignItems: 'center',
   fontWeight: 'bold',
-  color: charcoal.rgb,
-  background: '#fff',
+  color: colour.foreground.primary,
+  background: colour.background.primary,
   verticalAlign: 'top',
   paddingTop: rem(32),
   overflowWrap: 'break-word',
@@ -71,9 +71,9 @@ const headerStyles = css({
 });
 
 const rowStyles = css({
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':nth-of-type(even)': {
-    background: neutral200.rgb,
+    background: colour.neutral[50],
   },
   ':last-child': {
     borderBottom: 'none',
@@ -87,7 +87,7 @@ const valueStyles = css({
   fontWeight: 400,
   fontSize: rem(17),
   textWrap: 'nowrap',
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   width: rem(60),
 });
 

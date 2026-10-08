@@ -12,12 +12,10 @@ import {
   addUserIcon,
   AssignedUsersAvatarList,
   AuthorSelect,
-  lead,
-  neutral200,
   PencilIcon,
   plusIcon,
   StatusButton,
-  steel,
+  colour,
 } from '..';
 import { Anchor, Button, Link, Pill } from '../atoms';
 import { borderRadius } from '../card';
@@ -27,15 +25,15 @@ import { getProjectConfig, getReviewerStatusType } from '../utils';
 
 const rowStyles = css({
   padding: `${rem(20)} ${rem(24)} 0`,
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
   },
   ':nth-of-type(even) td': {
-    background: neutral200.rgb,
+    background: colour.neutral[50],
   },
   ':nth-of-type(odd) td': {
-    background: '#fff',
+    background: colour.background.primary,
   },
   ':last-child': {
     borderBottom: 'none',
@@ -55,7 +53,7 @@ const apcCoverageStyles = (italicize: boolean) =>
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: rem(14),
-    color: lead.rgb,
+    color: colour.foreground.tertiary,
     maxWidth: rem(72),
     ...(italicize ? { fontStyle: 'italic' } : {}),
   });
@@ -80,7 +78,7 @@ const noUsersStyles = css({
   display: 'flex',
   fontStyle: 'italic',
   fontSize: rem(14),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   width: '100%',
   whiteSpace: 'nowrap',
   alignItems: 'anchor-center',

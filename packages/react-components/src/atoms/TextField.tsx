@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { InputHTMLAttributes } from 'react';
-import { ember, lead, paper, pine, rose, silver, steel, tin } from '../colors';
+import { colour } from '../colors';
 import {
   indicatorPadding,
   indicatorSize,
@@ -26,32 +26,32 @@ type FieldType =
   | 'number';
 
 const disabledStyles = css({
-  color: lead.rgb,
-  backgroundColor: silver.rgb,
+  color: colour.foreground.tertiary,
+  backgroundColor: colour.background.disabled,
   '&[type="date"]': {
-    color: lead.rgb,
+    color: colour.foreground.tertiary,
   },
 });
 
 const LABEL_INDICATOR_CLASS_NAME = 'labelIndicator';
 const labelIndicatorStyles = css({
   padding: `${rem(15)} ${rem(18)}`,
-  backgroundColor: silver.rgb,
-  border: `1px solid ${steel.rgb}`,
+  backgroundColor: colour.background.tertiary,
+  border: `1px solid ${colour.border.tertiary}`,
   borderRight: 0,
   display: 'flex',
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   order: -1,
 });
 
 const invalidStyles = css({
   ':invalid': {
-    color: ember.rgb,
-    borderColor: ember.rgb,
-    backgroundColor: rose.rgb,
+    color: colour.foreground.error,
+    borderColor: colour.border.error,
+    backgroundColor: colour.background.error,
 
     '::placeholder': {
-      color: ember.rgb,
+      color: colour.foreground.error,
       opacity: 0.4,
     },
 
@@ -59,27 +59,24 @@ const invalidStyles = css({
       display: 'block',
     },
     '~ div': {
-      color: ember.rgb,
+      color: colour.foreground.error,
     },
     '~ div svg': {
-      fill: ember.rgb,
+      fill: colour.foreground.error,
     },
     [`& ~ .${LABEL_INDICATOR_CLASS_NAME}`]: {
-      backgroundColor: ember.rgb,
-      borderColor: ember.rgb,
-      color: paper.rgb,
+      backgroundColor: colour.background['error-inverse'],
+      borderColor: colour.border.error,
+      color: colour.foreground['primary-inverse'],
       svg: {
-        stroke: paper.rgb,
+        stroke: colour.foreground['primary-inverse'],
         fill: 'white',
       },
     },
   },
 });
 
-const textFieldStyles = (
-  hasValue: boolean,
-  { primary900 = pine }: Theme['colors'] = {},
-) =>
+const textFieldStyles = (hasValue: boolean) =>
   css({
     backgroundPosition: `right ${rem(paddingLeftRight)} top ${rem(
       paddingTopBottom,
@@ -88,10 +85,12 @@ const textFieldStyles = (
     backgroundSize: `auto ${rem(indicatorSize)}`,
 
     '::placeholder': {
-      color: tin.rgb,
+      color: colour.foreground.disabled,
     },
     '&[type="date"]': {
-      color: hasValue ? '#000' : '#92999E',
+      color: hasValue
+        ? colour.foreground.primary
+        : colour.foreground.quaternary,
     },
 
     // see invalid
@@ -99,10 +98,10 @@ const textFieldStyles = (
       display: 'none',
     },
     '~ div svg': {
-      stroke: lead.rgb,
+      stroke: colour.foreground.tertiary,
     },
     ':focus ~ div svg': {
-      stroke: primary900.rgba,
+      stroke: colour.foreground.brand,
     },
   });
 
@@ -202,9 +201,9 @@ const TextField: React.FC<TextFieldProps> = ({
         onChange={({ currentTarget: { value: newValue } }) =>
           onChange(newValue)
         }
-        css={({ colors }) => [
+        css={[
           styles,
-          textFieldStyles(Boolean(value), colors),
+          textFieldStyles(Boolean(value)),
           enabled || disabledStyles,
 
           validationMessage && invalidStyles,
@@ -216,9 +215,6 @@ const TextField: React.FC<TextFieldProps> = ({
 
           rightIndicator && {
             paddingRight: getIndicatorPadding(rightIndicator),
-          },
-          colors?.primary500 && {
-            ':focus': { borderColor: colors.primary500.rgba },
           },
         ]}
         {...(onBlur ? { onBlur } : {})}

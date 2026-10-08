@@ -6,7 +6,7 @@ import { LabeledMultiSelect, Modal } from '../molecules';
 import { crossIcon } from '../icons';
 import { Button, Headline3, Paragraph, Spinner } from '../atoms';
 import { mobileScreen, rem } from '../pixels';
-import { error500, neutral300, neutral900 } from '../colors';
+import { colour } from '../colors';
 import { ResearchOutputOption } from '../utils';
 import { articleSelectComponents } from '../utils/article-select-components';
 import { articlesToOptions } from './MilestoneArticlesModal';
@@ -91,7 +91,7 @@ const loadingWrapperStyles = css({
 
 const errorMessageStyles = css({
   marginTop: rem(8),
-  color: error500.rgb,
+  color: colour.foreground.error,
 });
 
 export type MilestoneStatusConfirmationStatus = 'Complete' | 'Terminated';
@@ -166,7 +166,7 @@ const MilestoneStatusConfirmationModal: React.FC<
             {`Set status to ${status}? This action is irreversible.`}
           </Headline3>
         </header>
-        <Paragraph accent="lead" styles={bodyParagraphStyles}>
+        <Paragraph accent="tertiary" styles={bodyParagraphStyles}>
           {`Before marking a milestone as ${status}${
             status === 'Terminated' ? '' : ','
           } you may add any related articles associated with this milestone, if applicable. Once the status is set to ${status}, it cannot be changed, but related articles may still be added later. Relevant members will be notified via the CRN Hub and/or email. If further updates are required, please contact Technical Support.`}
@@ -175,8 +175,8 @@ const MilestoneStatusConfirmationModal: React.FC<
           <div css={loadingWrapperStyles}>
             <Spinner
               size={18}
-              color={neutral900.rgb}
-              trackColor={neutral300.rgb}
+              color={colour.neutral[600]}
+              trackColor={colour.general.blue.cerulean[25]}
             />
             <Paragraph noMargin>Loading...</Paragraph>
           </div>
@@ -196,7 +196,7 @@ const MilestoneStatusConfirmationModal: React.FC<
               onMenuClose={() => setIsMenuOpen(false)}
             />
             {loadError && (
-              <Paragraph accent="lead" styles={errorMessageStyles}>
+              <Paragraph accent="tertiary" styles={errorMessageStyles}>
                 Could not load existing articles. Please close this dialog and
                 try again.
               </Paragraph>

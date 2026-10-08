@@ -2,7 +2,7 @@
 import { FC } from 'react';
 import { css, keyframes } from '@emotion/react';
 
-import { fern } from '../colors';
+import { colour } from '../colors';
 
 const pulse = keyframes({
   '0%': { transform: 'scale(0.5)', opacity: 0.5 },
@@ -25,7 +25,10 @@ interface LiveIconProps {
   readonly size?: number;
 }
 
-const LiveIcon: FC<LiveIconProps> = ({ color = fern.hex, size = 24 }) => (
+const LiveIcon: FC<LiveIconProps> = ({
+  color = colour.brand.crn[500],
+  size = 24,
+}) => (
   <svg
     width={size}
     height={size}

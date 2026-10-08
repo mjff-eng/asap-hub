@@ -4,6 +4,7 @@ import {
   formatUserLocation,
   Link,
   pixels,
+  colour,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
@@ -14,7 +15,6 @@ import {
   workingGroupIcon,
   projectIcon,
 } from '../icons';
-import colors from '../templates/colors';
 import IconWithLabel from './IconWithLabel';
 import UserRegion from './UserRegion';
 
@@ -78,7 +78,7 @@ const workingGroupsLinkStyles = css({
   },
 });
 
-const subduedText = css({ color: colors.neutral800.rgba });
+const subduedText = css({ color: colour.foreground.quaternary });
 const caseInsensitiveTitle = <T extends { title: string }>(a: T, b: T) =>
   a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
 const UserCardInfo: React.FC<UserCardInfoProps> = ({

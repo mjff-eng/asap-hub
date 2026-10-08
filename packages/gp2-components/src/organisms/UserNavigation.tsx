@@ -2,13 +2,10 @@ import {
   Avatar,
   chevronDownIcon,
   chevronUpIcon,
-  colorWithTransparency,
+  colourWithAlpha,
   drawerQuery,
-  navigationGrey,
-  paper,
-  steel,
-  tin,
   pixels,
+  colour,
 } from '@asap-hub/react-components';
 import { useCurrentUserGP2 } from '@asap-hub/react-context';
 import { css } from '@emotion/react';
@@ -31,18 +28,18 @@ const buttonStyles = css({
 });
 
 const userMenuStyles = css({
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.background.primary,
   display: 'none',
   position: 'absolute',
-  border: `1px solid ${steel.rgb}`,
-  boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+  border: `1px solid ${colour.border.tertiary}`,
+  boxShadow: `0 2px 6px 0 ${colourWithAlpha(colour.neutral[200], 0.34)}`,
   right: 5,
 });
 
 const userMenuShownStyles = css({
   zIndex: 1,
   [drawerQuery]: {
-    backgroundColor: navigationGrey.rgb,
+    backgroundColor: colour.background.tertiary,
   },
   display: 'unset',
 });

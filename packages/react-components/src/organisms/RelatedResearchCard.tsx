@@ -5,7 +5,7 @@ import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph, Pill } from '../atoms';
-import { charcoal, lead, steel } from '../colors';
+import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
 
 const container = css({
@@ -40,7 +40,7 @@ const rowStyles = css({
   display: 'grid',
   paddingTop: rem(20),
   paddingBottom: rem(20),
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   ':last-child': {
     borderBottom: 'none',
     marginBottom: 0,
@@ -58,7 +58,7 @@ const rowStyles = css({
 const rowDivider = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     paddingTop: rem(16),
-    borderBottom: `1px solid ${steel.rgb}`,
+    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -69,7 +69,7 @@ const paragraphStyle = css({
   alignItems: 'center',
   flexDirection: 'row',
   gap: rem(6),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const showMoreStyles = css({
@@ -78,10 +78,13 @@ const showMoreStyles = css({
   marginTop: rem(32),
   paddingTop: rem(16),
   paddingBottom: rem(16),
-  borderTop: `1px solid ${steel.rgb}`,
+  borderTop: `1px solid ${colour.border.tertiary}`,
 });
 
-const titleStyles = css({ fontWeight: 'bold', color: charcoal.rgb });
+const titleStyles = css({
+  fontWeight: 'bold',
+  color: colour.foreground.primary,
+});
 
 const iconStyles = css({
   verticalAlign: 'middle',
@@ -135,12 +138,12 @@ const RelatedResearchCard = <
       >
         <Headline3 noMargin>{title}</Headline3>
         <div css={descriptionStyles}>
-          <Paragraph accent="lead" noMargin>
+          <Paragraph accent="tertiary" noMargin>
             {description}
           </Paragraph>
         </div>
         {relatedResearch.length === 0 ? (
-          <Paragraph noMargin accent="lead">
+          <Paragraph noMargin accent="tertiary">
             <b>No related research available.</b>
           </Paragraph>
         ) : (

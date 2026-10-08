@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 
 import Paragraph from '../Paragraph';
-import { ember } from '../../colors';
+import { colour } from '../../colors';
 
 it('renders the text in a <p>', () => {
   const { getByText } = render(<Paragraph>text</Paragraph>);
@@ -15,7 +15,6 @@ it('applies the text margin', () => {
 });
 
 it('renders a given accent color', () => {
-  const { getByText } = render(<Paragraph accent="ember">text</Paragraph>);
-  const { color } = getComputedStyle(getByText('text'));
-  expect(color).toBe(ember.rgb);
+  const { getByText } = render(<Paragraph accent="error">text</Paragraph>);
+  expect(getByText('text')).toHaveStyleRule('color', colour.foreground.error);
 });

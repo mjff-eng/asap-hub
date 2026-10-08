@@ -1,15 +1,7 @@
-import { css, Theme } from '@emotion/react';
+import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 
-import {
-  paper,
-  steel,
-  colorWithTransparency,
-  tin,
-  pine,
-  mint,
-  neutral900,
-} from '../colors';
+import { colourWithAlpha, colour } from '../colors';
 import { GeneralSortingIcon } from '../icons';
 import { rem } from '../pixels';
 
@@ -29,9 +21,9 @@ const menuStyles = css({
   right: `-${rem(6)}`,
   top: `-${rem(6)}`,
 
-  backgroundColor: paper.rgb,
-  border: `1px solid ${steel.rgb}`,
-  boxShadow: `0 2px 6px 0 ${colorWithTransparency(tin, 0.34).rgba}`,
+  backgroundColor: colour.background.primary,
+  border: `1px solid ${colour.border.tertiary}`,
+  boxShadow: `0 2px 6px 0 ${colourWithAlpha(colour.neutral[200], 0.34)}`,
 
   display: 'none',
   flexDirection: 'column',
@@ -52,26 +44,22 @@ const optionStyles = css({
   gap: rem(8),
   padding: `${rem(8)} ${rem(16)}`,
 
-  color: neutral900.rgba,
+  color: colour.foreground.tertiary,
   border: 'none',
   backgroundColor: 'unset',
 
   ':hover': {
-    backgroundColor: mint.rgba,
-    color: pine.rgba,
+    backgroundColor: colour.background['hover-brand'],
+    color: colour.foreground.brand,
   },
 });
 
-const hoverStyles = ({
-  primary100 = mint,
-  primary900 = pine,
-}: Theme['colors'] = {}) =>
-  css({
-    ':hover': {
-      backgroundColor: primary100.rgba,
-      color: primary900.rgba,
-    },
-  });
+const hoverStyles = css({
+  ':hover': {
+    backgroundColor: colour.background['hover-brand'],
+    color: colour.foreground.brand,
+  },
+});
 
 export interface EngagementSortProps {
   isActive: boolean;
@@ -129,7 +117,7 @@ const EngagementSort: React.FC<EngagementSortProps> = ({
             <button
               role="menuitem"
               key={key}
-              css={({ colors }) => [optionStyles, hoverStyles(colors)]}
+              css={[optionStyles, hoverStyles]}
               onClick={() => {
                 setMenuShown(false);
                 onClick();

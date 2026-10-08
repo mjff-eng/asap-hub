@@ -44,19 +44,20 @@ import {
   typeItalic,
   typeStrikethrough,
 } from '../icons/editor';
+import { colour } from '../colors';
 import FloatingLinkEditor from './FloatingLinkEditor';
 import { getSelectedNode } from './lexical-utils';
 
 const dividerStyles = css({
   width: '1px',
-  backgroundColor: '#eee',
+  backgroundColor: colour.border.tertiary,
   margin: '0 4px',
 });
 
 const toolbarStyles = css({
   display: 'flex',
   marginBottom: '1px',
-  background: '#fff',
+  background: colour.background.primary,
   padding: '4px',
   borderTopLeftRadius: '10px',
   borderTopRightRadius: '10px',
@@ -73,7 +74,7 @@ const toolbarItemStyles = ({
   css({
     border: '0',
     display: 'flex',
-    background: active ? 'rgba(223, 232, 250, 0.3)' : 'none',
+    background: active ? colour.background.active : 'none',
     borderRadius: '10px',
     padding: '8px',
     cursor: 'pointer',

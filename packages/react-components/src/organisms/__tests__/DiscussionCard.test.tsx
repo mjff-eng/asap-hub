@@ -7,6 +7,7 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ManuscriptDiscussion } from '@asap-hub/model';
+import { colour } from '../../colors';
 import DiscussionCard from '../DiscussionCard';
 import { mockActErrorsInConsole } from '../../test-utils';
 
@@ -510,9 +511,10 @@ describe('DiscussionCard', () => {
     );
 
     const cardElement = container.firstChild;
-    expect(cardElement).toHaveStyle({
-      borderBottomWidth: '1px',
-    });
+    expect(cardElement).toHaveStyleRule(
+      'border-bottom',
+      `1px solid ${colour.border.tertiary}`,
+    );
   });
 
   it('displays team information correctly', async () => {

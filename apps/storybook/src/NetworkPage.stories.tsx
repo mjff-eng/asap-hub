@@ -37,7 +37,7 @@ export const Normal = () => {
         searchQuery={text('Search Query', '')}
         pageDescription={
           showDescription ? (
-            <Paragraph accent="lead">
+            <Paragraph accent="tertiary">
               This is a custom page description that provides additional context
               about the current network section.
             </Paragraph>
@@ -75,7 +75,7 @@ export const WithPageDescription = () => {
         page={activeTab}
         searchQuery={text('Search Query', '')}
         pageDescription={
-          <Paragraph accent="lead">
+          <Paragraph accent="tertiary">
             {activeTab === 'discovery-teams' &&
               `Discovery Teams conduct collaborative research to advance our understanding of Parkinson's disease.`}
             {activeTab === 'resource-teams' &&

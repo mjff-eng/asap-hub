@@ -4,7 +4,7 @@ import { UserAward, UserResponse, UserTeam } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
 
 import { rem, tabletScreen } from '../pixels';
-import { lead } from '../colors';
+import { colour } from '../colors';
 import { Link, Anchor, Ellipsis } from '../atoms';
 import { alumniBadgeIcon } from '../icons';
 import { hoverStyle } from './ImageLink';
@@ -52,7 +52,7 @@ const addToColumnStyles = css({
   gridColumn: 2,
 });
 const textStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   minHeight: rem(24),
 });
 
@@ -121,12 +121,7 @@ const MembersList: React.FC<MembersListProps> = ({
             </Anchor>
             <Anchor
               href={href}
-              css={({ colors }) => [
-                styles,
-                hover(colors),
-                nameStyles,
-                overrideNameStyles,
-              ]}
+              css={[styles, hover, nameStyles, overrideNameStyles]}
             >
               {firstLine}
               {alumniSinceDate && (

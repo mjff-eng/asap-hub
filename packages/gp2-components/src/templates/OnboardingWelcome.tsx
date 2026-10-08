@@ -42,7 +42,7 @@ const OnboardingWelcome: React.FC<Record<string, never>> = () => (
   <div css={containerStyles}>
     <header>
       <Headline2 noMargin>Welcome to the GP2 Hub</Headline2>
-      <Subtitle accent="lead">
+      <Subtitle accent="tertiary">
         The internal platform for those within the Global Parkinson's Genetics
         Program
       </Subtitle>
@@ -68,7 +68,7 @@ const OnboardingWelcome: React.FC<Record<string, never>> = () => (
         that others can learn about who you are and what you do
       </Paragraph>
     </CardWithOffsetBackground>
-    <Caption accent="lead">
+    <Caption accent="tertiary">
       <strong>Please note —</strong> all information provided can only be viewed
       by other GP2 members who have also registered.
     </Caption>

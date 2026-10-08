@@ -13,7 +13,7 @@ import { FunctionComponent, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { Link } from '../atoms';
-import { charcoal, lead } from '../colors';
+import { colour } from '../colors';
 import {
   BlueSkyIcon,
   GithubIcon,
@@ -47,7 +47,7 @@ const wrapIcon = (
   adjustBackground?: boolean,
 ) => (
   <span css={[iconStyles, adjustBackground ? iconCSS : {}]}>
-    <Icon color={lead.hex} />
+    <Icon color={colour.neutral[600]} />
   </span>
 );
 
@@ -230,7 +230,9 @@ const ContactInfoModal: React.FC<ContactInfoModalProps> = ({
               description={
                 <>
                   People in the ASAP Network will contact you using{' '}
-                  <strong css={{ color: charcoal.rgb }}>{fallbackEmail}</strong>
+                  <strong css={{ color: colour.foreground.primary }}>
+                    {fallbackEmail}
+                  </strong>
                   . To use a different correspondence email address, please add
                   it below.
                 </>

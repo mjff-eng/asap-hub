@@ -7,7 +7,7 @@ import { UserProfileContext } from '@asap-hub/react-context';
 import { Link, Ellipsis, Anchor, Subtitle, OverflowBadge } from '../atoms';
 import { alumniBadgeIcon, locationIcon } from '../icons';
 import { rem, lineHeight } from '../pixels';
-import { lead, tin } from '../colors';
+import { colour } from '../colors';
 import {
   formatUserLocation,
   groupUserTeamsByTeamId,
@@ -23,7 +23,7 @@ const locationStyles = css({
   padding: `${rem(6)} 0 ${rem(24)}`,
   display: 'flex',
   alignItems: 'center',
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const iconStyles = css({
@@ -36,7 +36,7 @@ const iconStyles = css({
 const paragraphStyles = css({
   marginTop: 0,
   marginBottom: rem(18),
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const badgeStyles = css({
@@ -123,7 +123,7 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
             {institution}
           </>
         ) : isOwnProfile ? (
-          <span css={{ color: tin.rgb }}>
+          <span css={{ color: colour.foreground.disabled }}>
             Where do you work and what's your position?
           </span>
         ) : null}
@@ -228,7 +228,9 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
               {formatUserLocation(city, stateOrProvince, country)}
             </Ellipsis>
           ) : (
-            <span css={{ color: tin.rgb }}>Add your location</span>
+            <span css={{ color: colour.foreground.disabled }}>
+              Add your location
+            </span>
           )}
         </span>
       )}

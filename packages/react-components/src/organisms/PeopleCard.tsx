@@ -62,7 +62,7 @@ const PeopleCard: React.FC<UserListItemResponse> = ({
   const latestAward = getLatestUserAward(props.teams);
 
   return (
-    <Card accent={alumniSinceDate ? 'neutral200' : undefined}>
+    <Card accent={alumniSinceDate ? 'inactive' : undefined}>
       <div css={[containerStyles]}>
         <ImageLink link={userHref}>
           <UserAvatar
@@ -89,7 +89,7 @@ const PeopleCard: React.FC<UserListItemResponse> = ({
           <div css={profileTextStyles}>
             <UserProfilePersonalText {...props} />
           </div>
-          <Caption accent={'lead'} asParagraph>
+          <Caption accent="tertiary" asParagraph>
             {alumniSinceDate
               ? `Alumni since: ${formatDate(new Date(alumniSinceDate))}`
               : `Joined: ${formatDate(new Date(createdDate))}`}

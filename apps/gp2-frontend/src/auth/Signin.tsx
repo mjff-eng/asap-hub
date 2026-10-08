@@ -14,7 +14,7 @@ const { INVITE_SUPPORT_EMAIL } = mail;
 
 // common footer component for signup and welcome pages
 const TermsFooter: React.FC<{ intro: string }> = ({ intro }) => (
-  <Paragraph accent="lead">
+  <Paragraph accent="tertiary">
     {intro} you are agreeing to our{' '}
     <Link href="/terms-and-conditions">Terms and Conditions</Link> and{' '}
     <Link href="/privacy-notice">Privacy Notice</Link>.

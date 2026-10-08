@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 
 import { Label, Paragraph, TextField } from '../atoms';
-import { lead } from '../colors';
+import { colour } from '../colors';
 import { rem } from '../pixels';
 import { noop } from '../utils';
 
@@ -25,7 +25,7 @@ const subtitleStyles = css({
 });
 
 const descriptionStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const LabeledDateInput: React.FC<LabeledDateFieldProps> = ({

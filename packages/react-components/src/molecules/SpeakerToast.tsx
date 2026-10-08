@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Button } from '../atoms';
-import { error100, success100 } from '../colors';
+import { colour } from '../colors';
 import {
   circleFilledCheckIcon,
   circleFilledCrossIcon,
@@ -10,8 +10,8 @@ import {
 import { mobileScreen, rem } from '../pixels';
 
 // Not in the palette: the toast is drawn with detached values.
-const toastText = '#1C1F21';
-const toastRule = '#A6AEB4';
+const toastText = colour.foreground.primary;
+const toastRule = colour.neutral[300];
 
 const toastStyles = (accent: 'success' | 'error', hasUndo: boolean) =>
   css({
@@ -20,7 +20,10 @@ const toastStyles = (accent: 'success' | 'error', hasUndo: boolean) =>
     gap: rem(12),
     padding: rem(16),
     borderRadius: rem(8),
-    backgroundColor: (accent === 'success' ? success100 : error100).rgb,
+    backgroundColor:
+      accent === 'success'
+        ? colour.background.success
+        : colour.background.error,
     color: toastText,
     fontSize: rem(17),
     lineHeight: 24 / 17,

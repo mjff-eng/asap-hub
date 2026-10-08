@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 import { CopyButton, Link } from '../atoms';
 import { rem, smallDesktopScreen, tabletScreen } from '../pixels';
-import { colors } from '..';
+import { colour } from '..';
 
 const contactStyles = css({
   display: 'flex',
@@ -22,13 +22,13 @@ const buttonStyles = css({
 
 const copyButtonStyles = css({
   backgroundColor: 'inherit',
-  borderColor: colors.info200.rgb,
+  borderColor: colour.brand.crn[100],
   ':hover, :focus': {
-    borderColor: colors.fern.rgb,
+    borderColor: colour.border.brand,
   },
   path: {
-    fill: colors.fern.rgb,
-    stroke: colors.fern.rgb,
+    fill: colour.foreground.brand,
+    stroke: colour.foreground.brand,
   },
 });
 interface CtaContactSectionProps {

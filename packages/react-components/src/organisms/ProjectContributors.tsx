@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Card, Headline3, Paragraph, Pill, TabButton } from '../atoms';
-import { lead, steel } from '../colors';
+import { colour } from '../colors';
 import {
   TabNav,
   ProjectMembers,
@@ -23,7 +23,7 @@ const subtitleStyles = css({
 
 const tabsContainerStyles = css({
   display: 'flex',
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   marginTop: rem(8),
 });
 
@@ -48,7 +48,7 @@ const teamHeaderStyles = css({
 });
 
 const teamDescriptionStyles = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   fontSize: rem(17),
   lineHeight: rem(24),
   margin: 0,
@@ -82,7 +82,7 @@ const ProjectContributors: React.FC<ProjectContributorsProps> = ({
       <Card padding={false}>
         <div css={cardContentStyles}>
           <Headline3 noMargin>Contributors</Headline3>
-          <Paragraph noMargin accent="lead" styles={subtitleStyles}>
+          <Paragraph noMargin accent="tertiary" styles={subtitleStyles}>
             View the people contributing to this project.
           </Paragraph>
           <div css={membersContentStyles}>
@@ -103,7 +103,7 @@ const ProjectContributors: React.FC<ProjectContributorsProps> = ({
     <Card padding={false}>
       <div css={cardContentStyles}>
         <Headline3 noMargin>Contributors</Headline3>
-        <Paragraph noMargin accent="lead" styles={subtitleStyles}>
+        <Paragraph noMargin accent="tertiary" styles={subtitleStyles}>
           View the funded team leading this project and the teams that have
           collaborated on its articles.
         </Paragraph>

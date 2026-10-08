@@ -1,14 +1,5 @@
-import { css, Theme } from '@emotion/react';
-import {
-  steel,
-  mint,
-  neutral900,
-  neutral1000,
-  paper,
-  silver,
-  pine,
-  charcoal,
-} from '../colors';
+import { css } from '@emotion/react';
+import { colour } from '../colors';
 import { crossSmallIcon } from '../icons';
 import { rem } from '../pixels';
 import Ellipsis from './Ellipsis';
@@ -28,10 +19,10 @@ const styles = css({
   justifyContent: 'center',
   alignItems: 'center',
 
-  backgroundColor: paper.rgb,
+  backgroundColor: colour.background.primary,
   borderStyle: 'solid',
   borderWidth: `${borderWidth}px`,
-  borderColor: steel.rgb,
+  borderColor: colour.border.tertiary,
   borderRadius: rem(18),
 });
 
@@ -41,25 +32,21 @@ const largeStyles = css({
 });
 
 const highlightStyles = css({
-  backgroundColor: mint.rgb,
+  backgroundColor: colour.background.brand,
 });
 
-const hoverStyles = ({
-  primary100 = mint,
-  primary900 = pine,
-}: Theme['colors'] = {}) =>
-  css({
-    ':hover': {
-      backgroundColor: primary100.rgba,
-      borderColor: primary900.rgba,
-      color: primary900.rgba,
-    },
-  });
+const hoverStyles = css({
+  ':hover': {
+    backgroundColor: colour.background['hover-brand'],
+    borderColor: colour.border.brand,
+    color: colour.foreground.brand,
+  },
+});
 
 const disabledStyles = css({
-  backgroundColor: silver.rgb,
-  borderColor: steel.rgb,
-  color: neutral1000.rgb,
+  backgroundColor: colour.background.disabled,
+  borderColor: colour.border.tertiary,
+  color: colour.foreground.primary,
 });
 
 const iconStyles = css({
@@ -69,7 +56,7 @@ const iconStyles = css({
   border: 'none',
   backgroundColor: 'unset',
   svg: {
-    fill: neutral900.rgba,
+    fill: colour.foreground.tertiary,
   },
   cursor: 'pointer',
 });
@@ -77,7 +64,7 @@ const iconStyles = css({
 const iconDisabledStyles = css({
   cursor: 'not-allowed',
   svg: {
-    fill: neutral1000.rgb,
+    fill: colour.foreground.primary,
   },
 });
 
@@ -104,7 +91,10 @@ const ConditionalLinkWrapper: React.FC<{
 }> = ({ href, children }) => (
   <>
     {href ? (
-      <a href={href} style={{ color: charcoal.rgb, textDecoration: 'inherit' }}>
+      <a
+        href={href}
+        style={{ color: colour.foreground.primary, textDecoration: 'inherit' }}
+      >
         {children}
       </a>
     ) : (
@@ -125,11 +115,11 @@ const Tag: React.FC<TagProps> = ({
   <div css={containerStyles} title={title}>
     <ConditionalLinkWrapper href={enabled ? href : undefined}>
       <div
-        css={({ colors }) => [
+        css={[
           styles,
           large && largeStyles,
           ...(enabled
-            ? [highlight && highlightStyles, !!href && hoverStyles(colors)]
+            ? [highlight && highlightStyles, !!href && hoverStyles]
             : [disabledStyles]),
         ]}
       >

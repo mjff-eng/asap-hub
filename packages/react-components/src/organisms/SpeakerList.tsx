@@ -13,7 +13,7 @@ import {
 } from '../icons';
 import { useDateHasPassed } from '../date';
 import { considerEndedAfter } from '../utils';
-import { steel, lead, colorWithTransparency } from '../colors';
+import { colourWithAlpha, colour } from '../colors';
 
 const gridStyles = css({
   display: 'grid',
@@ -74,15 +74,15 @@ const groupStyle = css({
 
 const toBeAnnouncedStyle = css({
   fontStyle: 'italic',
-  color: `${lead}`,
+  color: colour.foreground.tertiary,
 });
 
 const previewStyle = {
   maxHeight: rem(69),
   overflow: 'hidden',
-  background: `linear-gradient(180deg, ${lead.rgb} 26.56%, ${
-    colorWithTransparency(lead, 0).rgba
-  } 100%)`,
+  background: `linear-gradient(180deg, ${
+    colour.neutral[600]
+  } 26.56%, ${colourWithAlpha(colour.neutral[600], 0)} 100%)`,
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
@@ -92,7 +92,7 @@ const previewStyle = {
 const speakerListMobileMixin = {
   gridAutoFlow: 'row',
   alignItems: 'start',
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   paddingBottom: rem(12),
   paddingTop: rem(12),
 };
@@ -135,7 +135,7 @@ const buttonWrapperStyles = css({
   display: 'flex',
   justifyContent: 'center',
   width: '100%',
-  borderBottom: `1px solid ${steel.rgb}`,
+  borderBottom: `1px solid ${colour.border.tertiary}`,
   [`@media (min-width: ${tabletScreen.width - 1}px)`]: {
     borderBottom: `transparent`,
   },
@@ -159,7 +159,7 @@ const SpeakerList: React.FC<SpeakerListProps> = ({ speakers, endDate }) => {
       return {
         ...speakerListStyles,
         [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
-          borderBottom: `1px solid ${steel.rgb}`,
+          borderBottom: `1px solid ${colour.border.tertiary}`,
         },
       };
     }

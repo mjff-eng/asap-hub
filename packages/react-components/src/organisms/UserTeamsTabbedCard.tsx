@@ -6,7 +6,7 @@ import { Divider, Link, Paragraph } from '../atoms';
 import { InactiveBadgeIcon } from '../icons';
 import { TabbedCard } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
-import { neutral900 } from '../colors';
+import { colour } from '../colors';
 import { groupUserTeamsByTeamId, GroupedUserTeam, splitListBy } from '../utils';
 import { formatDateToTimezone } from '../date';
 
@@ -76,7 +76,7 @@ const roleTitleMobileStyle = css({
 });
 
 const rolesColumnStyle = css({
-  color: neutral900.rgb,
+  color: colour.foreground.tertiary,
   display: 'flex',
   flexDirection: 'column',
   gap: rem(16),
@@ -123,7 +123,11 @@ const UserTeamsTabbedCard: React.FC<UserTeamsTabbedCardProps> = ({
       <TabbedCard
         title="Teams and Roles"
         description={
-          <Paragraph noMargin accent="lead" styles={css({ margin: '0 0 8px' })}>
+          <Paragraph
+            noMargin
+            accent="tertiary"
+            styles={css({ margin: '0 0 8px' })}
+          >
             Teams are a constellation of labs focus on a specific grant
             proposal. Find out teams status and the member's current and past
             roles within them.
@@ -136,7 +140,7 @@ const UserTeamsTabbedCard: React.FC<UserTeamsTabbedCardProps> = ({
             items: activeTeams,
             truncateFrom: MAX_TEAMS,
             empty: (
-              <Paragraph accent="lead" noMargin>
+              <Paragraph accent="tertiary" noMargin>
                 No team affiliation.
               </Paragraph>
             ),
@@ -146,7 +150,7 @@ const UserTeamsTabbedCard: React.FC<UserTeamsTabbedCardProps> = ({
             items: inactiveTeams,
             truncateFrom: MAX_TEAMS,
             empty: (
-              <Paragraph accent="lead" noMargin>
+              <Paragraph accent="tertiary" noMargin>
                 There are no previous teams.
               </Paragraph>
             ),

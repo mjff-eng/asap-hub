@@ -2,14 +2,14 @@ import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { layoutStyles } from '../text';
 import { rem } from '../pixels';
-import { fern, lead, charcoal, info500 } from '../colors';
+import { colour } from '../colors';
 
 const styles = css({
   display: 'inline-block',
   paddingTop: rem(12),
   paddingBottom: rem(12),
 
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   cursor: 'pointer',
@@ -17,14 +17,11 @@ const styles = css({
 
 const activeStyles = css({
   paddingBottom: rem(12 - 4),
-  borderBottom: `solid ${rem(4)} ${fern.rgb}`,
+  borderBottom: `solid ${rem(4)} ${colour.foreground.brand}`,
 
-  color: charcoal.rgb,
+  color: colour.foreground.primary,
   cursor: 'default',
   fontWeight: 'bold',
-  "[data-app='gp2'] &": {
-    borderBottomColor: info500.rgb,
-  },
 });
 
 const disabledStyles = css({

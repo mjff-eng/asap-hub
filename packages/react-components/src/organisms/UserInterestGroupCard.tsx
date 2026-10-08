@@ -3,7 +3,7 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import React from 'react';
 import { Divider, Link, Paragraph } from '../atoms';
-import { lead } from '../colors';
+import { colour } from '../colors';
 import { TabbedCard } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
 import { splitListBy } from '../utils';
@@ -27,7 +27,7 @@ const titleStyle = css({
 });
 
 const roleStyle = css({
-  color: lead.rgb,
+  color: colour.foreground.tertiary,
 });
 
 const listItemStyle = css({
@@ -123,7 +123,11 @@ const UserInterestGroupCard: React.FC<UserInterestGroupCardProps> = ({
     <TabbedCard
       title="Interest Groups"
       description={
-        <Paragraph noMargin accent="lead" styles={css({ margin: '0 0 8px' })}>
+        <Paragraph
+          noMargin
+          accent="tertiary"
+          styles={css({ margin: '0 0 8px' })}
+        >
           Interest groups allow teams to share findings with other teams about
           topics of interest. Find out the membership status of this member.
         </Paragraph>
@@ -141,7 +145,7 @@ const UserInterestGroupCard: React.FC<UserInterestGroupCardProps> = ({
           truncateFrom: 5,
           disabled: activeMemberships.length === 0,
           empty: (
-            <Paragraph accent="lead">
+            <Paragraph accent="tertiary">
               There are no active collaborations.
             </Paragraph>
           ),
@@ -152,7 +156,7 @@ const UserInterestGroupCard: React.FC<UserInterestGroupCardProps> = ({
           truncateFrom: 5,
           disabled: inactiveMemberships.length === 0,
           empty: (
-            <Paragraph accent="lead">
+            <Paragraph accent="tertiary">
               There are no past collaborations.
             </Paragraph>
           ),
