@@ -64,7 +64,7 @@ export const exportEntity = async (
     recordsFetched = records.items.length;
 
     if (recordsFetched) {
-      if (page != 1) {
+      if (recordCount > 0) {
         await file.write(',\n');
       }
 
@@ -80,9 +80,11 @@ export const exportEntity = async (
     page++;
     recordCount += recordsFetched;
 
+    // Page through `total`: data providers can skip items (events without a
+    // published calendar), so the exported count can stay below it.
     shouldContinue = isManuscriptVersionEntity
       ? total !== 0
-      : total > recordCount;
+      : (page - 1) * PAGE_SIZE < total;
   } while (shouldContinue);
 
   await file.write(']');
