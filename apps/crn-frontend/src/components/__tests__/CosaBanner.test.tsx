@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CosaBanner } from '../CosaBanner';
 
@@ -24,9 +24,7 @@ describe('CosaBanner', () => {
   it('renders the banner when not dismissed', async () => {
     render(<CosaBanner />);
 
-    await waitFor(() => {
-      expect(screen.getByText(/COSA is currently live!/i)).toBeInTheDocument();
-    });
+    expect(screen.getByText(/COSA is currently live!/i)).toBeInTheDocument();
 
     expect(
       screen.getByText(/Access the event through the/i),
@@ -47,16 +45,12 @@ describe('CosaBanner', () => {
   it('dismisses the banner when close button is clicked', async () => {
     const { container } = render(<CosaBanner />);
 
-    await waitFor(() => {
-      expect(screen.getByText(/COSA is currently live!/i)).toBeInTheDocument();
-    });
+    expect(screen.getByText(/COSA is currently live!/i)).toBeInTheDocument();
 
     const closeButton = screen.getByLabelText('Close');
     await userEvent.click(closeButton);
 
-    await waitFor(() => {
-      expect(container.firstChild).toBeNull();
-    });
+    expect(container.firstChild).toBeNull();
 
     expect(localStorage.getItem(COSA_BANNER_DISMISSED_KEY)).toBe('true');
   });
@@ -64,18 +58,14 @@ describe('CosaBanner', () => {
   it('does not render after being dismissed and re-rendered', async () => {
     const { rerender } = render(<CosaBanner />);
 
-    await waitFor(() => {
-      expect(screen.getByText(/COSA is currently live!/i)).toBeInTheDocument();
-    });
+    expect(screen.getByText(/COSA is currently live!/i)).toBeInTheDocument();
 
     const closeButton = screen.getByLabelText('Close');
     await userEvent.click(closeButton);
 
-    await waitFor(() => {
-      expect(
-        screen.queryByText(/COSA is currently live!/i),
-      ).not.toBeInTheDocument();
-    });
+    expect(
+      screen.queryByText(/COSA is currently live!/i),
+    ).not.toBeInTheDocument();
 
     rerender(<CosaBanner />);
 
