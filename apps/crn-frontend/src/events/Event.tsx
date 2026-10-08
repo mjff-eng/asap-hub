@@ -24,7 +24,7 @@ import { isEventProjectManager } from '@asap-hub/validation';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 
-import { composeAttendanceRows } from './attendance-rows';
+import { toAttendanceRows } from './attendance-rows';
 import { downloadEventSpeakers } from './export';
 import { mapGroupsToSpeakersUpdate } from './map-groups-to-speakers-update';
 import { matchTeamNames } from './match-team-names';
@@ -32,7 +32,6 @@ import { parseTeamRows } from './parse-team-list';
 import {
   useEventById,
   useEventSpeakerGroups,
-  useInterestGroupTeams,
   usePatchEvent,
   useQuietRefreshEventById,
   useTeamsForMatching,
@@ -50,8 +49,6 @@ const Event: React.FC = () => {
   const [isEditingSpeakers, setIsEditingSpeakers] = useState(false);
   const patchEvent = usePatchEvent(eventId);
   const fetchTeamsForMatching = useTeamsForMatching();
-  const { teams: interestGroupTeams, resolved: interestGroupResolved } =
-    useInterestGroupTeams(event?.interestGroup?.id);
 
   const hasFinished = useDateHasPassed(
     considerEndedAfter(event?.endDate || ''),
@@ -61,9 +58,8 @@ const Event: React.FC = () => {
     const displayCalendar =
       event.interestGroup === undefined || event.interestGroup.active;
 
-    const teams = composeAttendanceRows(event.attendance, interestGroupTeams);
+    const teams = toAttendanceRows(event.attendance);
     const isTechSupport = !!user?.techSupport;
-    const canEditAttendance = isTechSupport && interestGroupResolved;
     const isProjectManager = isEventProjectManager(user, event);
     const openAttendanceEditor = () => setIsEditingAttendance(true);
     const openSpeakersEditor = () => setIsEditingSpeakers(true);
@@ -72,7 +68,7 @@ const Event: React.FC = () => {
         <EventAttendance
           teams={teams}
           interestGroupName={event.interestGroup?.name}
-          onEdit={canEditAttendance ? openAttendanceEditor : undefined}
+          onEdit={isTechSupport ? openAttendanceEditor : undefined}
         />
         {isEditingAttendance && (
           <EditEventAttendanceModal

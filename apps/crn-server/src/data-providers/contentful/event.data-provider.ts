@@ -33,6 +33,7 @@ import {
   FETCH_EVENT_BY_ID,
   FETCH_INTEREST_GROUP_CALENDAR,
   FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID,
+  FETCH_INTEREST_GROUP_TEAMS_BY_ID,
   FETCH_PREVIOUS_EVENT_ATTENDANCE,
   FETCH_UPCOMING_EVENTS_BY_CALENDAR_ID,
   FETCH_WORKING_GROUP_CALENDAR,
@@ -113,13 +114,41 @@ export class EventContentfulDataProvider implements EventDataProvider {
       return null;
     }
 
-    const event = parseGraphQLEvent(events);
-    const previousEventAttendance =
-      await this.fetchPreviousEventAttendance(events);
+    const [event, previousEventAttendance] = await Promise.all([
+      this.flagInterestGroupAttendance(parseGraphQLEvent(events)),
+      this.fetchPreviousEventAttendance(events),
+    ]);
 
     return previousEventAttendance
       ? { ...event, previousEventAttendance }
       : event;
+  }
+
+  private async flagInterestGroupAttendance(
+    event: EventDataObject,
+  ): Promise<EventDataObject> {
+    if (!event.interestGroup || !event.attendance?.length) {
+      return event;
+    }
+
+    const { interestGroups } = await this.contentfulClient.request<
+      { interestGroups: InterestGroupTeamsItem | null },
+      { id: string }
+    >(FETCH_INTEREST_GROUP_TEAMS_BY_ID, { id: event.interestGroup.id });
+    const interestGroupTeamIds = new Set(
+      getInterestGroupTeamIdsForEvent(
+        parseGraphQLInterestGroupMemberships(interestGroups),
+        event.endDate,
+      ),
+    );
+
+    return {
+      ...event,
+      attendance: event.attendance.map((attendance) => ({
+        ...attendance,
+        isFromInterestGroup: interestGroupTeamIds.has(attendance.team.id),
+      })),
+    };
   }
 
   private async fetchPreviousEventAttendance(item: EventItem) {

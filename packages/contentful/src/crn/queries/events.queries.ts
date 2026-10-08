@@ -441,6 +441,24 @@ export const FETCH_INTEREST_GROUP_TEAMS_BY_CALENDAR_ID = gql`
   }
 `;
 
+export const FETCH_INTEREST_GROUP_TEAMS_BY_ID = gql`
+  query FetchInterestGroupTeamsById($id: String!) {
+    interestGroups(id: $id) {
+      teamsCollection(limit: 50) {
+        items {
+          startDate
+          endDate
+          team {
+            sys {
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const FETCH_UPCOMING_EVENTS_BY_CALENDAR_ID = gql`
   query FetchUpcomingEventsByCalendarId(
     $calendarId: String!
