@@ -2,9 +2,11 @@ import { SerializedStyles } from '@emotion/react';
 
 declare module '@emotion/react' {
   export interface Theme {
-    // hex link colour for email templates, which cannot use CSS variables
+    // hex colours for email templates, which cannot use CSS variables
     colors?: {
-      primary500?: string;
+      link?: string;
+      buttonBackground?: string;
+      buttonBorder?: string;
     };
     components?: {
       NavigationLink?: {

@@ -3,7 +3,7 @@ import {
   ceruleanFernGradientStyles,
   Link,
   pixels,
-  colour,
+  themeColour,
 } from '@asap-hub/react-components';
 import { staticPages } from '@asap-hub/routing';
 import { css, ThemeProvider } from '@emotion/react';
@@ -36,7 +36,7 @@ const contentContainerStyles = css({
 });
 
 const footerContainerStyles = css({
-  backgroundColor: colour.general.blue.cerulean[25],
+  backgroundColor: themeColour('gp2', 'colour/background/tertiary'),
   padding: rem(12),
 });
 
@@ -53,7 +53,14 @@ interface LayoutProps {
 }
 
 const emailTheme = {
-  colors: { primary500: colour.brand.gp2[600] },
+  colors: {
+    link: themeColour('gp2', 'colour/foreground/brand'),
+    buttonBackground: themeColour(
+      'gp2',
+      'colour/background/button/primary/default',
+    ),
+    buttonBorder: themeColour('gp2', 'colour/border/button/primary/default'),
+  },
 };
 
 const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (

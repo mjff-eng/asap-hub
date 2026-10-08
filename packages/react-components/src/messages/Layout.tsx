@@ -3,10 +3,10 @@ import { css, ThemeProvider } from '@emotion/react';
 import { staticPages } from '@asap-hub/routing';
 
 import { Link } from '../atoms';
-import { colour } from '../colors';
 import { asapImage } from '../images';
 import { ceruleanFernGradientStyles } from '../appearance';
 import { rem } from '../pixels';
+import { themeColour } from '../theme';
 
 const containerStyles = css({
   maxWidth: rem(600),
@@ -32,7 +32,7 @@ const contentContainerStyles = css({
 });
 
 const footerContainerStyles = css({
-  backgroundColor: colour.general.blue.cerulean[25],
+  backgroundColor: themeColour('crn', 'colour/background/tertiary'),
   padding: rem(12),
 });
 
@@ -49,7 +49,14 @@ interface LayoutProps {
 }
 
 const emailTheme = {
-  colors: { primary500: colour.brand.crn[600] },
+  colors: {
+    link: themeColour('crn', 'colour/foreground/brand'),
+    buttonBackground: themeColour(
+      'crn',
+      'colour/background/button/primary/default',
+    ),
+    buttonBorder: themeColour('crn', 'colour/border/button/primary/default'),
+  },
 };
 
 const MessageLayout: React.FC<LayoutProps> = ({ children, appOrigin }) => (

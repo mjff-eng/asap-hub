@@ -31,3 +31,9 @@ export const themeVariables = (product: Product): Record<string, string> =>
       cssColour(hex, alpha),
     ]),
   );
+
+export const themeColour = (
+  product: Product,
+  name: keyof (typeof casTheme)[Product],
+): string =>
+  cssColour(casTheme[product][name].hex, casTheme[product][name].alpha);

@@ -34,11 +34,11 @@ it('applies an underline when requested', () => {
 });
 
 describe('theme with ThemeProvider', () => {
-  it('uses the primary500 hex override that email layouts rely on', () => {
+  it('uses the hex link colour that email layouts rely on', () => {
     const testColor = '#0C8DC3';
     const theme = {
       colors: {
-        primary500: testColor,
+        link: testColor,
       },
     };
     const { getByRole } = render(
