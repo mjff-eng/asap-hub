@@ -51,7 +51,7 @@ import {
   isTeamType,
   ListEventDataObject,
 } from '@asap-hub/model';
-import { parseUserDisplayName } from '@asap-hub/server-common';
+import { Alerts, parseUserDisplayName } from '@asap-hub/server-common';
 import { DateTime } from 'luxon';
 
 import { parseCalendarDataObjectToResponse } from '../../controllers/calendar.controller';
@@ -88,7 +88,14 @@ export class EventContentfulDataProvider implements EventDataProvider {
   constructor(
     private contentfulClient: GraphQLClient,
     private getRestClient: () => Promise<Environment>,
+    private alerts?: Alerts,
   ) {}
+
+  private reportEventWithoutCalendar = (id: string) => {
+    const message = getEventWithoutCalendarMessage(id);
+    logger.error(message);
+    void this.alerts?.error(new Error(message));
+  };
 
   private fetchEventById(id: string) {
     return this.contentfulClient.request<
@@ -105,6 +112,12 @@ export class EventContentfulDataProvider implements EventDataProvider {
     }
 
     const event = parseGraphQLEvent(events);
+
+    if (!event) {
+      this.reportEventWithoutCalendar(id);
+      return null;
+    }
+
     const previousEventAttendance =
       await this.fetchPreviousEventAttendance(events);
 
@@ -723,9 +736,9 @@ export const parseGraphQLAttendance = (
     return list;
   }, []);
 
-export const parseGraphQLEvent = (item: EventItem): EventDataObject => {
+export const parseGraphQLEvent = (item: EventItem): EventDataObject | null => {
   if (!item.calendar) {
-    throw new Error(`Event (${item.sys.id}) doesn't have a calendar"`);
+    return null;
   }
 
   if (item.status && !isEventStatus(item.status)) {
@@ -886,6 +899,9 @@ export const parseGraphQLEvent = (item: EventItem): EventDataObject => {
   };
 };
 
+const getEventWithoutCalendarMessage = (id: string) =>
+  `Event (${id}) skipped because it has no published calendar`;
+
 const getEventDataObject = (
   eventsCollection: FetchEventsQuery['eventsCollection'],
 ) => {
@@ -896,10 +912,23 @@ const getEventDataObject = (
     };
   }
 
+  const items = eventsCollection.items.filter(
+    (x): x is EventItem => x !== null,
+  );
+
+  // Background indexers fetch these lists, and an event skipped here usually
+  // means an editor unpublished its calendar on purpose, so only log it.
+  // fetchById alerts, because there a user or an editor hit the event.
+  items
+    .filter((item) => !item.calendar)
+    .forEach((item) =>
+      logger.warn(getEventWithoutCalendarMessage(item.sys.id)),
+    );
+
   return {
     total: eventsCollection.total,
-    items: eventsCollection.items
-      .filter((x): x is EventItem => x !== null)
-      .map(parseGraphQLEvent),
+    items: items
+      .map(parseGraphQLEvent)
+      .filter((event): event is EventDataObject => event !== null),
   };
 };

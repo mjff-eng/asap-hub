@@ -1,4 +1,6 @@
 import { getGraphQLClient as getContentfulGraphQLClient } from '@asap-hub/contentful';
+import { AlertsSentry } from '@asap-hub/server-common';
+import * as Sentry from '@sentry/serverless';
 import {
   contentfulAccessToken,
   contentfulEnvId,
@@ -18,5 +20,6 @@ export const getEventDataProvider = (): EventDataProvider => {
   return new EventContentfulDataProvider(
     contentfulGraphQLClient,
     getContentfulRestClientFactory,
+    new AlertsSentry(Sentry.captureException.bind(Sentry)),
   );
 };
