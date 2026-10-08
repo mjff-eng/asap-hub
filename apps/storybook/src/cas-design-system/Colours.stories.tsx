@@ -400,36 +400,35 @@ export const ThemeTokens = () => {
                       </td>
                       {group === 'foreground' && (
                         <td style={cell}>
-                          {token.crn.alpha === 1 &&
-                            !token.figmaName.includes('button/tertiary') && (
-                              <>
-                                {contrastProducts(token).map((product) => (
-                                  <div key={product}>
-                                    <ContrastBadge
-                                      foreground={token[product].hex}
-                                      background={
-                                        contrastBackground(
-                                          token.figmaName,
-                                          product,
-                                        ).hex
-                                      }
-                                    />
-                                    {contrastProducts(token).length > 1 && (
-                                      <span style={muted}>
-                                        {' '}
-                                        {product.toUpperCase()}
-                                      </span>
-                                    )}
-                                  </div>
-                                ))}
-                                <div style={muted}>
-                                  {
-                                    contrastBackground(token.figmaName, 'crn')
-                                      .label
-                                  }
+                          {token.crn.alpha === 1 && (
+                            <>
+                              {contrastProducts(token).map((product) => (
+                                <div key={product}>
+                                  <ContrastBadge
+                                    foreground={token[product].hex}
+                                    background={
+                                      contrastBackground(
+                                        token.figmaName,
+                                        product,
+                                      ).hex
+                                    }
+                                  />
+                                  {contrastProducts(token).length > 1 && (
+                                    <span style={muted}>
+                                      {' '}
+                                      {product.toUpperCase()}
+                                    </span>
+                                  )}
                                 </div>
-                              </>
-                            )}
+                              ))}
+                              <div style={muted}>
+                                {
+                                  contrastBackground(token.figmaName, 'crn')
+                                    .label
+                                }
+                              </div>
+                            </>
+                          )}
                         </td>
                       )}
                     </tr>
