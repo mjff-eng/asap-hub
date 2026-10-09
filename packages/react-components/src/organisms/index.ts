@@ -58,11 +58,13 @@ export type {
 export { default as EventCard } from './EventCard';
 export { default as EventConversation } from './EventConversation';
 export { default as EventMaterials } from './EventMaterials';
+export { default as EventMonthFilter } from './EventMonthFilter';
 export { default as EventSearch } from './EventSearch';
 export { default as EventSpeakers } from './EventSpeakers';
 export { default as EventSupport } from './EventSupport';
 export { default as ExportAnalyticsModal } from './ExportAnalyticsModal';
 export { default as Filter } from './Filter';
+export { default as FilterDropdown } from './FilterDropdown';
 export { default as GoogleCalendar } from './GoogleCalendar';
 export { default as GrantDocumentGrantsCard } from './GrantDocumentGrantsCard';
 export { default as GrantDocumentHeaderCard } from './GrantDocumentHeaderCard';
@@ -204,3 +206,4 @@ export type {
   ResearchOutputConfirmModalType,
   SeenModalType,
 } from './ResearchOutputConfirmModal';
+export * from './event-month-filter-selection';
