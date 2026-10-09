@@ -18,21 +18,19 @@ describe('getReferenceDates', () => {
     jest.resetAllMocks();
   });
 
-  test('returns last24HoursISO, last72HoursISO, lastMidnightISO, now and todayMidnightISO for Europe/London', () => {
+  test('returns last24HoursISO, lastMidnightISO, now and todayMidnightISO for Europe/London', () => {
     const zone = 'Europe/London';
     const result = getReferenceDates(zone);
     expect(result.last24HoursISO.toISO()).toEqual('2024-01-19T10:00:00.000Z');
-    expect(result.last72HoursISO.toISO()).toEqual('2024-01-17T10:00:00.000Z');
     expect(result.lastMidnightISO.toISO()).toEqual('2024-01-20T00:00:00.000Z');
     expect(result.now.toISO()).toEqual('2024-01-20T10:00:00.000Z');
     expect(result.todayMidnightISO.toISO()).toEqual('2024-01-21T00:00:00.000Z');
   });
 
-  test('returns last24HoursISO, last72HoursISO, lastMidnightISO, now and todayMidnightISO for America/Sao_Paulo', () => {
+  test('returns last24HoursISO, lastMidnightISO, now and todayMidnightISO for America/Sao_Paulo', () => {
     const zone = 'America/Sao_Paulo';
     const result = getReferenceDates(zone);
     expect(result.last24HoursISO.toISO()).toEqual('2024-01-19T10:00:00.000Z');
-    expect(result.last72HoursISO.toISO()).toEqual('2024-01-17T10:00:00.000Z');
     expect(result.lastMidnightISO.toISO()).toEqual('2024-01-20T03:00:00.000Z');
     expect(result.now.toISO()).toEqual('2024-01-20T10:00:00.000Z');
     expect(result.todayMidnightISO.toISO()).toEqual('2024-01-21T03:00:00.000Z');
