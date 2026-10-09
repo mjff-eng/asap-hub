@@ -1,4 +1,5 @@
 import {
+  AddSpeakersReminder,
   DiscussionCreatedReminder,
   DiscussionRepliedToReminder,
   EventHappeningNowReminder,
@@ -9,6 +10,7 @@ import {
   ManuscriptCreatedReminder,
   ManuscriptResubmittedReminder,
   ManuscriptStatusUpdatedReminder,
+  MarkAttendanceReminder,
   MilestoneCreatedReminder,
   MilestoneOutputsLinkedReminder,
   MilestoneStatusUpdatedReminder,
@@ -223,6 +225,34 @@ export const getPublishMaterialReminder = (): PublishMaterialReminder => {
   };
 };
 
+export const getMarkAttendanceReminder = (): MarkAttendanceReminder => {
+  const eventResponse = getEventResponse();
+  return {
+    id: `mark-attendance-${eventResponse.id}`,
+    entity: 'Event',
+    type: 'Mark Attendance',
+    data: {
+      eventId: eventResponse.id,
+      title: eventResponse.title,
+      endDate: eventResponse.endDate,
+    },
+  };
+};
+
+export const getAddSpeakersReminder = (): AddSpeakersReminder => {
+  const eventResponse = getEventResponse();
+  return {
+    id: `add-speakers-${eventResponse.id}`,
+    entity: 'Event',
+    type: 'Add Speakers',
+    data: {
+      eventId: eventResponse.id,
+      title: eventResponse.title,
+      endDate: eventResponse.endDate,
+    },
+  };
+};
+
 export const getVideoEventUpdatedReminder = (): VideoEventReminder => {
   const eventResponse = getEventResponse() as ReminderEventResponse;
   eventResponse.videoRecordingUpdatedAt = '2010-08-01T08:00:04.000Z';
@@ -317,6 +347,19 @@ export const getContentfulReminderEventsCollectionItem = (): NonNullable<
           },
         },
       ],
+    },
+    calendar: {
+      linkedFrom: {
+        interestGroupsCollection: {
+          items: [
+            {
+              sys: {
+                id: 'interest-group-1',
+              },
+            },
+          ],
+        },
+      },
     },
   };
 };
@@ -440,6 +483,7 @@ export const getContentfulReminderUsersContent =
 
     return {
       role: 'Grantee',
+      techSupport: false,
       teamsCollection: {
         items: [
           {
@@ -513,6 +557,9 @@ export const getContentfulReminderUsersContent =
               },
             },
           ],
+        },
+        interestGroupLeadersCollection: {
+          items: [],
         },
       },
     };

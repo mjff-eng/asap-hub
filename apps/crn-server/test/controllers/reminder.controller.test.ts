@@ -1,7 +1,9 @@
 import {
+  AddSpeakersReminder,
   EventHappeningNowReminder,
   EventHappeningTodayReminder,
   FetchRemindersOptions,
+  MarkAttendanceReminder,
   PublishMaterialReminder,
   ResearchOutputDraftReminder,
   ResearchOutputInReviewReminder,
@@ -15,6 +17,7 @@ import Reminders, {
   formattedMaterialByEventType,
 } from '../../src/controllers/reminder.controller';
 import {
+  getAddSpeakersReminder,
   getDiscussionRepliedToByGranteeReminder,
   getDiscussionRepliedToByOpenScienceMemberReminder,
   getDiscussionStartedByGranteeReminder,
@@ -24,6 +27,7 @@ import {
   getManuscriptCreatedReminder,
   getManuscriptResubmittedReminder,
   getManuscriptStatusUpdatedReminder,
+  getMarkAttendanceReminder,
   getMilestoneCreatedReminder,
   getMilestoneOutputsLinkedReminder,
   getMilestoneStatusUpdatedReminder,
@@ -791,6 +795,46 @@ describe('Reminder Controller', () => {
         expect(items[0]).toMatchObject({
           description:
             "It's time to publish the meeting materials for the Some Test Event Title event.",
+        });
+      });
+
+      test('Should return the correct description and href for the mark attendance reminder', async () => {
+        const reminderDataObject: MarkAttendanceReminder =
+          getMarkAttendanceReminder();
+        reminderDataObject.data.title = 'Some Test Event Title';
+        reminderDataObject.data.eventId = 'some-event-id';
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminderDataObject],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            "It's time to mark attendance for the Some Test Event Title event.",
+          href: `/events/some-event-id`,
+        });
+      });
+
+      test('Should return the correct description and href for the add speakers reminder', async () => {
+        const reminderDataObject: AddSpeakersReminder =
+          getAddSpeakersReminder();
+        reminderDataObject.data.title = 'Some Test Event Title';
+        reminderDataObject.data.eventId = 'some-event-id';
+
+        reminderDataProviderMock.fetch.mockResolvedValueOnce({
+          total: 1,
+          items: [reminderDataObject],
+        });
+
+        const { items } = await reminderController.fetch(options);
+
+        expect(items[0]).toMatchObject({
+          description:
+            "It's time to add event speakers and indicate sharing of preliminary findings for the Some Test Event Title event.",
+          href: `/events/some-event-id`,
         });
       });
 

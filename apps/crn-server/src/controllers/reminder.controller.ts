@@ -309,6 +309,31 @@ export default class ReminderController {
 
         if (
           reminder.entity === 'Event' &&
+          reminder.type === 'Mark Attendance'
+        ) {
+          return {
+            id: reminder.id,
+            entity: reminder.entity,
+            href: events({}).event({
+              eventId: reminder.data.eventId,
+            }).$,
+            description: `It's time to mark attendance for the ${reminder.data.title} event.`,
+          };
+        }
+
+        if (reminder.entity === 'Event' && reminder.type === 'Add Speakers') {
+          return {
+            id: reminder.id,
+            entity: reminder.entity,
+            href: events({}).event({
+              eventId: reminder.data.eventId,
+            }).$,
+            description: `It's time to add event speakers and indicate sharing of preliminary findings for the ${reminder.data.title} event.`,
+          };
+        }
+
+        if (
+          reminder.entity === 'Event' &&
           ['Video Updated', 'Presentation Updated', 'Notes Updated'].includes(
             reminder.type,
           )

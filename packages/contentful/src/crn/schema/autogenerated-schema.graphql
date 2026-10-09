@@ -3067,10 +3067,6 @@ enum EventsOrder {
   videoRecordingUpdatedAt_DESC
 }
 
-
-
-
-
 type EventsPresentation {
   json: JSON!
   links: EventsPresentationLinks!
@@ -7874,61 +7870,6 @@ type PagesTextResourcesInline implements ResourceLink {
   sys: ResourceSys!
 }
 
-"""[See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/preliminaryDataSharing)"""
-type PreliminaryDataSharing implements Entry & _Node {
-  _id: ID!
-  contentfulMetadata: ContentfulMetadata!
-  linkedFrom(allowedLocales: [String]): PreliminaryDataSharingLinkingCollections
-  preliminaryDataShared(locale: String, useFallbackLocale: Boolean): Boolean
-  sys: Sys!
-  team(locale: String, preview: Boolean, useFallbackLocale: Boolean, where: TeamsFilter): Teams
-}
-
-type PreliminaryDataSharingCollection {
-  items: [PreliminaryDataSharing]!
-  limit: Int!
-  skip: Int!
-  total: Int!
-}
-
-type PreliminaryDataSharingCursorCollection {
-  items: [PreliminaryDataSharing]!
-  limit: Int!
-  pages: CursorPages!
-}
-
-input PreliminaryDataSharingFilter {
-  AND: [PreliminaryDataSharingFilter]
-  OR: [PreliminaryDataSharingFilter]
-  contentfulMetadata: ContentfulMetadataFilter
-  preliminaryDataShared: Boolean
-  preliminaryDataShared_exists: Boolean
-  preliminaryDataShared_not: Boolean
-  sys: SysFilter
-  team: cfTeamsNestedFilter
-  team_exists: Boolean
-}
-
-type PreliminaryDataSharingLinkingCollections {
-  entryCollection(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): EntryCollection
-  entryCursorCollection(limit: Int = 100, locale: String, pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): EntryCursorCollection
-}
-
-
-
-enum PreliminaryDataSharingOrder {
-  preliminaryDataShared_ASC
-  preliminaryDataShared_DESC
-  sys_firstPublishedAt_ASC
-  sys_firstPublishedAt_DESC
-  sys_id_ASC
-  sys_id_DESC
-  sys_publishedAt_ASC
-  sys_publishedAt_DESC
-  sys_publishedVersion_ASC
-  sys_publishedVersion_DESC
-}
-
 """[See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/projectMembership)"""
 type ProjectMembership implements Entry & _Node {
   _id: ID!
@@ -8843,9 +8784,6 @@ type Query {
   pages(id: String!, locale: String, preview: Boolean, useFallbackLocale: Boolean): Pages
   pagesCollection(limit: Int = 100, locale: String, order: [PagesOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: PagesFilter): PagesCollection
   pagesCursorCollection(limit: Int = 100, locale: String, order: [PagesOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: PagesFilter): PagesCursorCollection
-  preliminaryDataSharing(id: String!, locale: String, preview: Boolean, useFallbackLocale: Boolean): PreliminaryDataSharing
-  preliminaryDataSharingCollection(limit: Int = 100, locale: String, order: [PreliminaryDataSharingOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: PreliminaryDataSharingFilter): PreliminaryDataSharingCollection
-  preliminaryDataSharingCursorCollection(limit: Int = 100, locale: String, order: [PreliminaryDataSharingOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: PreliminaryDataSharingFilter): PreliminaryDataSharingCursorCollection
   projectMembership(id: String!, locale: String, preview: Boolean, useFallbackLocale: Boolean): ProjectMembership
   projectMembershipCollection(limit: Int = 100, locale: String, order: [ProjectMembershipOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: ProjectMembershipFilter): ProjectMembershipCollection
   projectMembershipCursorCollection(limit: Int = 100, locale: String, order: [ProjectMembershipOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: ProjectMembershipFilter): ProjectMembershipCursorCollection
@@ -12214,8 +12152,6 @@ type TeamsLinkingCollections {
   manuscriptVersionsCursorCollection(limit: Int = 100, locale: String, order: [TeamsLinkingCollectionsManuscriptVersionsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): ManuscriptVersionsCursorCollection
   manuscriptsCollection(limit: Int = 100, locale: String, order: [TeamsLinkingCollectionsManuscriptsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): ManuscriptsCollection
   manuscriptsCursorCollection(limit: Int = 100, locale: String, order: [TeamsLinkingCollectionsManuscriptsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): ManuscriptsCursorCollection
-  preliminaryDataSharingCollection(limit: Int = 100, locale: String, order: [TeamsLinkingCollectionsPreliminaryDataSharingCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): PreliminaryDataSharingCollection
-  preliminaryDataSharingCursorCollection(limit: Int = 100, locale: String, order: [TeamsLinkingCollectionsPreliminaryDataSharingCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): PreliminaryDataSharingCursorCollection
   projectMembershipCollection(limit: Int = 100, locale: String, order: [TeamsLinkingCollectionsProjectMembershipCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): ProjectMembershipCollection
   projectMembershipCursorCollection(limit: Int = 100, locale: String, order: [TeamsLinkingCollectionsProjectMembershipCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): ProjectMembershipCursorCollection
   researchOutputsCollection(limit: Int = 100, locale: String, order: [TeamsLinkingCollectionsResearchOutputsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): ResearchOutputsCollection
@@ -12520,32 +12456,6 @@ enum TeamsLinkingCollectionsManuscriptsCursorCollectionOrder {
   title_DESC
   url_ASC
   url_DESC
-}
-
-enum TeamsLinkingCollectionsPreliminaryDataSharingCollectionOrder {
-  preliminaryDataShared_ASC
-  preliminaryDataShared_DESC
-  sys_firstPublishedAt_ASC
-  sys_firstPublishedAt_DESC
-  sys_id_ASC
-  sys_id_DESC
-  sys_publishedAt_ASC
-  sys_publishedAt_DESC
-  sys_publishedVersion_ASC
-  sys_publishedVersion_DESC
-}
-
-enum TeamsLinkingCollectionsPreliminaryDataSharingCursorCollectionOrder {
-  preliminaryDataShared_ASC
-  preliminaryDataShared_DESC
-  sys_firstPublishedAt_ASC
-  sys_firstPublishedAt_DESC
-  sys_id_ASC
-  sys_id_DESC
-  sys_publishedAt_ASC
-  sys_publishedAt_DESC
-  sys_publishedVersion_ASC
-  sys_publishedVersion_DESC
 }
 
 enum TeamsLinkingCollectionsProjectMembershipCollectionOrder {
@@ -16311,7 +16221,6 @@ input cfPagesNestedFilter {
   title_not_contains: String
   title_not_in: [String]
 }
-
 
 input cfProjectMembershipNestedFilter {
   AND: [cfProjectMembershipNestedFilter]

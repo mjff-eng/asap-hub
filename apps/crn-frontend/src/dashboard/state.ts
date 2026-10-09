@@ -1,4 +1,5 @@
 import { DashboardResponse, ListReminderResponse } from '@asap-hub/model';
+import { useFlags } from '@asap-hub/react-context';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { useAuthorization } from '../auth/useAuthorization';
@@ -22,8 +23,11 @@ export const useDashboardState = (): DashboardResponse => {
 
 export const useReminderState = (): ListReminderResponse => {
   const getAuthorization = useAuthorization();
+  const { isEnabled } = useFlags();
+  const isNewEventPageEnabled = isEnabled('NEW_EVENT_PAGE');
   return useSuspenseQuery({
-    queryKey: dashboardQueryKeys.reminders(),
-    queryFn: async () => getReminders(await getAuthorization()),
+    queryKey: [...dashboardQueryKeys.reminders(), { isNewEventPageEnabled }],
+    queryFn: async () =>
+      getReminders(await getAuthorization(), { isNewEventPageEnabled }),
   }).data;
 };

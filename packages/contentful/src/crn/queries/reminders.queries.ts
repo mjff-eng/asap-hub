@@ -205,6 +205,17 @@ export const FETCH_REMINDERS = gql`
             }
           }
         }
+        calendar {
+          linkedFrom {
+            interestGroupsCollection(limit: 1) {
+              items {
+                sys {
+                  id
+                }
+              }
+            }
+          }
+        }
       }
     }
     researchOutputVersionsCollection(where: $researchOutputVersionsFilter) {
@@ -269,6 +280,7 @@ export const FETCH_REMINDERS_USER = gql`
   query FetchRemindersUser($userId: String!) {
     users(id: $userId) {
       role
+      techSupport
       openScienceTeamMember
       teamsCollection {
         items {
@@ -342,6 +354,23 @@ export const FETCH_REMINDERS_USER = gql`
                   }
                   title
                   endDate
+                }
+              }
+            }
+          }
+        }
+        interestGroupLeadersCollection(limit: 10) {
+          items {
+            role
+            inactiveSinceDate
+            linkedFrom {
+              interestGroupsCollection(limit: 1) {
+                items {
+                  sys {
+                    id
+                  }
+                  active
+                  name
                 }
               }
             }

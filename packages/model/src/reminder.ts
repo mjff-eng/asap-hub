@@ -30,7 +30,9 @@ export type EventReminderType =
   | 'Notes Updated'
   | 'Share Presentation'
   | 'Publish Material'
-  | 'Upload Presentation';
+  | 'Upload Presentation'
+  | 'Mark Attendance'
+  | 'Add Speakers';
 
 type ManuscriptReminderType =
   | 'Manuscript Created'
@@ -310,6 +312,26 @@ export interface UploadPresentationReminder extends EventReminder {
   };
 }
 
+export interface MarkAttendanceReminder extends EventReminder {
+  entity: 'Event';
+  type: 'Mark Attendance';
+  data: {
+    eventId: ReminderEventResponse['id'];
+    title: ReminderEventResponse['title'];
+    endDate: ReminderEventResponse['endDate'];
+  };
+}
+
+export interface AddSpeakersReminder extends EventReminder {
+  entity: 'Event';
+  type: 'Add Speakers';
+  data: {
+    eventId: ReminderEventResponse['id'];
+    title: ReminderEventResponse['title'];
+    endDate: ReminderEventResponse['endDate'];
+  };
+}
+
 export interface VideoEventReminder extends EventReminder {
   entity: 'Event';
   type: 'Video Updated';
@@ -368,6 +390,8 @@ export type ReminderDataObject =
   | SharePresentationReminder
   | PublishMaterialReminder
   | UploadPresentationReminder
+  | MarkAttendanceReminder
+  | AddSpeakersReminder
   | ManuscriptReminder
   | DiscussionReminder
   | MilestoneReminder;
@@ -377,6 +401,7 @@ export type ListReminderDataObject = ListResponse<ReminderDataObject>;
 export type FetchRemindersOptions = {
   userId: string;
   timezone: string;
+  isNewEventPageEnabled?: boolean;
 };
 
 export type ReminderResponse = {
