@@ -2,13 +2,13 @@ import { render, screen, within } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { ComponentProps } from 'react';
 import {
-  osChampionInitialSortingDirection,
+  awardsInitialSortingDirection,
   OSChampionResponse,
-  SortOSChampion,
+  SortAwards,
 } from '@asap-hub/model';
-import OSChampionTable from '../OSChampionTable';
+import AwardsTable from '../AwardsTable';
 
-describe('OSChampionTable', () => {
+describe('AwardsTable', () => {
   const pageControlsProps = {
     numberOfPages: 1,
     currentPageIndex: 0,
@@ -30,12 +30,12 @@ describe('OSChampionTable', () => {
     ],
   };
 
-  const defaultProps: ComponentProps<typeof OSChampionTable> = {
+  const defaultProps: ComponentProps<typeof AwardsTable> = {
     ...pageControlsProps,
     data: [osChampionData],
-    sort: 'team_asc' as SortOSChampion,
+    sort: 'team_asc' as SortAwards,
     setSort: jest.fn(),
-    sortingDirection: osChampionInitialSortingDirection,
+    sortingDirection: awardsInitialSortingDirection,
   };
 
   beforeEach(() => {
@@ -43,7 +43,7 @@ describe('OSChampionTable', () => {
   });
 
   it('renders sort buttons in Team and OS Champion Awards headers', () => {
-    render(<OSChampionTable {...defaultProps} />);
+    render(<AwardsTable {...defaultProps} />);
     const teamHeader = screen.getByRole('columnheader', { name: /Team/ });
     const awardsHeader = screen.getByRole('columnheader', {
       name: /Total number of Open Science Champion awards/,
@@ -52,9 +52,18 @@ describe('OSChampionTable', () => {
     expect(awardsHeader.querySelector('button')).toBeInTheDocument();
   });
 
+  it('uses the award label in the awards column header', () => {
+    render(<AwardsTable {...defaultProps} awardLabel="Network Spotlight" />);
+    expect(
+      screen.getByRole('columnheader', {
+        name: /Total number of Network Spotlight awards/,
+      }),
+    ).toBeInTheDocument();
+  });
+
   it('handles sorting when team header button is clicked', () => {
     const mockSetSort = jest.fn();
-    render(<OSChampionTable {...defaultProps} setSort={mockSetSort} />);
+    render(<AwardsTable {...defaultProps} setSort={mockSetSort} />);
     const teamHeader = screen.getByRole('columnheader', { name: /Team/ });
     const sortButton = teamHeader.querySelector('button');
     fireEvent.click(sortButton!);
@@ -64,24 +73,24 @@ describe('OSChampionTable', () => {
 
   it('handles sorting when OS Champion Awards header button is clicked', () => {
     const mockSetSort = jest.fn();
-    render(<OSChampionTable {...defaultProps} setSort={mockSetSort} />);
+    render(<AwardsTable {...defaultProps} setSort={mockSetSort} />);
     const awardsHeader = screen.getByRole('columnheader', {
       name: /Total number of Open Science Champion awards/,
     });
     const sortButton = awardsHeader.querySelector('button');
     fireEvent.click(sortButton!);
 
-    expect(mockSetSort).toHaveBeenCalledWith('os_champion_awards_desc');
+    expect(mockSetSort).toHaveBeenCalledWith('awards_desc');
   });
 
   it('toggles team sort direction when team column is already active', () => {
     const mockSetSort = jest.fn();
     const { rerender } = render(
-      <OSChampionTable
+      <AwardsTable
         {...defaultProps}
         sort="team_asc"
         setSort={mockSetSort}
-        sortingDirection={osChampionInitialSortingDirection}
+        sortingDirection={awardsInitialSortingDirection}
       />,
     );
     const teamHeader = screen.getByRole('columnheader', { name: /Team/ });
@@ -90,12 +99,12 @@ describe('OSChampionTable', () => {
 
     expect(mockSetSort).toHaveBeenCalledWith('team_desc');
     rerender(
-      <OSChampionTable
+      <AwardsTable
         {...defaultProps}
         sort="team_desc"
         setSort={mockSetSort}
         sortingDirection={{
-          ...osChampionInitialSortingDirection,
+          ...awardsInitialSortingDirection,
           team: 'desc',
         }}
       />,
@@ -105,7 +114,7 @@ describe('OSChampionTable', () => {
   });
 
   it('renders data', () => {
-    const { getByText } = render(<OSChampionTable {...defaultProps} />);
+    const { getByText } = render(<AwardsTable {...defaultProps} />);
     expect(getByText('Test Team')).toBeInTheDocument();
   });
 
@@ -117,18 +126,18 @@ describe('OSChampionTable', () => {
       },
     ];
     const { getByTitle } = render(
-      <OSChampionTable {...defaultProps} data={data} />,
+      <AwardsTable {...defaultProps} data={data} />,
     );
     expect(getByTitle('Inactive Team')).toBeInTheDocument();
   });
 
   it('allows collapsing and expanding rows', () => {
     const { getByTestId, getByText, queryByText } = render(
-      <OSChampionTable {...defaultProps} />,
+      <AwardsTable {...defaultProps} />,
     );
     expect(queryByText('Test User')).not.toBeInTheDocument();
     fireEvent.click(
-      within(getByTestId('os-champion-table-row')).getByRole('button'),
+      within(getByTestId('awards-table-row')).getByRole('button'),
     );
     expect(getByText('Test User')).toBeVisible();
   });

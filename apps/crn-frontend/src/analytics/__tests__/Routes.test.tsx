@@ -1,4 +1,5 @@
 import { mockConsoleError } from '@asap-hub/dom-test-utils';
+import { disable, enable } from '@asap-hub/flags';
 import {
   performanceByDocumentType,
   userProductivityPerformance,
@@ -450,5 +451,65 @@ describe('Open Science', () => {
         selector: 'h3',
       }),
     ).toBeVisible();
+  });
+});
+
+describe('Awards', () => {
+  beforeEach(() => {
+    enable('AWARDS_TAB');
+  });
+  afterEach(() => {
+    disable('AWARDS_TAB');
+  });
+
+  it('renders the Awards tab successfully', async () => {
+    await renderPage(
+      analytics({}).awards({}).metric({ metric: 'os-champion' }).$,
+    );
+    expect(
+      await screen.findByText(/Analytics/i, {
+        selector: 'h1',
+      }),
+    ).toBeVisible();
+    expect(
+      await screen.findByText(/Open Science Champion/i, {
+        selector: 'h3',
+      }),
+    ).toBeVisible();
+  });
+
+  it('renders Network Spotlight when metric is selected', async () => {
+    await renderPage(
+      analytics({}).awards({}).metric({ metric: 'network-spotlight' }).$,
+    );
+    expect(
+      await screen.findByText(/Network Spotlight/i, {
+        selector: 'h3',
+      }),
+    ).toBeVisible();
+  });
+
+  it('redirects to os-champion when no metric is specified', async () => {
+    await renderPage(analytics({}).awards({}).$);
+    expect(
+      await screen.findByText(/Open Science Champion/i, {
+        selector: 'h3',
+      }),
+    ).toBeVisible();
+  });
+
+  it('redirects to productivity when the flag is disabled', async () => {
+    disable('AWARDS_TAB');
+    await renderPage(
+      analytics({}).awards({}).metric({ metric: 'os-champion' }).$,
+    );
+    expect(
+      await screen.findByText(/User Productivity/i, {
+        selector: 'h3',
+      }),
+    ).toBeVisible();
+    expect(
+      screen.queryByText(/Open Science Champion/i, { selector: 'h3' }),
+    ).not.toBeInTheDocument();
   });
 });

@@ -3,7 +3,7 @@ import { teamLeadershipResponse } from '@asap-hub/fixtures';
 import {
   AnalyticsTeamLeadershipResponse,
   OSChampionOpensearchResponse,
-  SortOSChampion,
+  SortAwards,
 } from '@asap-hub/model';
 import {
   AnalyticsSearchOptionsWithSort,
@@ -292,7 +292,7 @@ describe('getAnalyticsLeadership', () => {
 });
 
 describe('getAnalyticsOSChampion', () => {
-  const defaultOSChampionOptions: AnalyticsSearchOptionsWithFiltering<SortOSChampion> =
+  const defaultOSChampionOptions: AnalyticsSearchOptionsWithFiltering<SortAwards> =
     {
       ...defaultOptions,
       sort: 'team_asc',
@@ -373,12 +373,12 @@ describe('getAnalyticsOSChampion', () => {
     );
   });
 
-  it('should pass sort clause to opensearch when sort is os_champion_awards_desc', async () => {
+  it('should pass sort clause to opensearch when sort is awards_desc', async () => {
     opensearchClient.search.mockResolvedValue(defaultResponse);
 
     await getAnalyticsOSChampion(opensearchClient, {
       ...defaultOSChampionOptions,
-      sort: 'os_champion_awards_desc',
+      sort: 'awards_desc',
     });
 
     expect(opensearchClient.search).toHaveBeenCalledWith(
