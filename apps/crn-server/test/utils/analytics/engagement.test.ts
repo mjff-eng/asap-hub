@@ -5,6 +5,8 @@ import {
   makeUser,
 } from '../../fixtures/analytics.fixtures';
 
+const interestGroupCalendarIds = new Set(['interest-group-calendar-id']);
+
 describe('getEngagementItems', () => {
   beforeAll(() => {
     jest.useFakeTimers();
@@ -40,7 +42,11 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.eventCount).toEqual(1);
     });
@@ -48,7 +54,11 @@ describe('getEngagementItems', () => {
     it('does not count the same event twice', () => {
       const engagementQuery = getEngagementQuery().teamsCollection;
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.eventCount).toEqual(2);
     });
@@ -78,9 +88,70 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.eventCount).toEqual(1);
+    });
+
+    it('only counts events that belong to an interest group calendar', () => {
+      const user1 = makeUser({
+        userId: 'user-1',
+        teams: [{ id: 'team-id-0', role: 'Key Personnel' }],
+      });
+
+      const engagementQuery = getEngagementQuery().teamsCollection;
+      engagementQuery!.items[0]!.linkedFrom!.eventSpeakersCollection = {
+        items: [
+          {
+            user: user1,
+            linkedFrom: {
+              eventsCollection: makeEvent({
+                eventId: 'event-1',
+                endDate: '2024-06-11T13:00:00.000Z',
+              }),
+            },
+          },
+          {
+            user: user1,
+            linkedFrom: {
+              eventsCollection: makeEvent({
+                eventId: 'event-2',
+                endDate: '2024-06-11T13:00:00.000Z',
+                calendar: { sys: { id: 'working-group-calendar-id' } },
+              }),
+            },
+          },
+          {
+            user: user1,
+            linkedFrom: {
+              eventsCollection: makeEvent({
+                eventId: 'event-3',
+                endDate: '2024-06-11T13:00:00.000Z',
+                calendar: null,
+              }),
+            },
+          },
+        ],
+      };
+
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
+
+      expect(result[0]).toEqual(
+        expect.objectContaining({
+          eventCount: 1,
+          totalSpeakerCount: 1,
+          uniqueAllRolesCount: 1,
+          uniqueKeyPersonnelCount: 1,
+        }),
+      );
     });
 
     it('returns the correct number of events', () => {
@@ -107,7 +178,11 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.eventCount).toEqual(3);
     });
@@ -117,7 +192,11 @@ describe('getEngagementItems', () => {
     it('only counts onboarded members', () => {
       const engagementQuery = getEngagementQuery().teamsCollection;
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.memberCount).toEqual(4);
     });
@@ -127,7 +206,11 @@ describe('getEngagementItems', () => {
       engagementQuery!.items[0]!.linkedFrom!.teamMembershipCollection!.items[0]!.role =
         null;
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.memberCount).toEqual(3);
     });
@@ -137,7 +220,11 @@ describe('getEngagementItems', () => {
       engagementQuery!.items[0]!.linkedFrom!.teamMembershipCollection!.items[0] =
         null;
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.memberCount).toEqual(3);
     });
@@ -162,7 +249,11 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.totalSpeakerCount).toEqual(0);
     });
@@ -190,7 +281,11 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.totalSpeakerCount).toEqual(0);
     });
@@ -211,7 +306,11 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.totalSpeakerCount).toEqual(0);
     });
@@ -267,7 +366,11 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.totalSpeakerCount).toEqual(4);
     });
@@ -292,7 +395,11 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.uniqueAllRolesCount).toEqual(0);
       expect(result[0]!.uniqueKeyPersonnelCount).toEqual(0);
@@ -321,7 +428,11 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.uniqueAllRolesCount).toEqual(0);
       expect(result[0]!.uniqueKeyPersonnelCount).toEqual(0);
@@ -379,7 +490,11 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.uniqueAllRolesCount).toEqual(3);
       expect(result[0]!.uniqueKeyPersonnelCount).toEqual(0);
@@ -388,7 +503,11 @@ describe('getEngagementItems', () => {
     it('returns the correct number of unique speakers', () => {
       const engagementQuery = getEngagementQuery().teamsCollection;
 
-      const result = getEngagementItems(engagementQuery, 'all');
+      const result = getEngagementItems(
+        engagementQuery,
+        interestGroupCalendarIds,
+        'all',
+      );
 
       expect(result[0]!.uniqueAllRolesCount).toEqual(2);
       expect(result[0]!.uniqueKeyPersonnelCount).toEqual(1);
@@ -442,7 +561,9 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      expect(getEngagementItems(engagementQuery, '30d')).toEqual([
+      expect(
+        getEngagementItems(engagementQuery, interestGroupCalendarIds, '30d'),
+      ).toEqual([
         {
           id: 'team-id-0',
           inactiveSince: null,
@@ -489,7 +610,13 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      expect(getEngagementItems(engagementQuery, 'current-year')).toEqual([
+      expect(
+        getEngagementItems(
+          engagementQuery,
+          interestGroupCalendarIds,
+          'current-year',
+        ),
+      ).toEqual([
         {
           id: 'team-id-0',
           inactiveSince: null,
@@ -536,7 +663,9 @@ describe('getEngagementItems', () => {
         ],
       };
 
-      expect(getEngagementItems(engagementQuery, 'all')).toEqual([
+      expect(
+        getEngagementItems(engagementQuery, interestGroupCalendarIds, 'all'),
+      ).toEqual([
         {
           id: 'team-id-0',
           inactiveSince: null,

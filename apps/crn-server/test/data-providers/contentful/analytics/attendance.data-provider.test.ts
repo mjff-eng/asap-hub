@@ -1,12 +1,33 @@
+import { FETCH_INTEREST_GROUP_CALENDAR_IDS } from '@asap-hub/contentful';
 import { DateTime } from 'luxon';
 import { AnalyticsContentfulDataProvider } from '../../../../src/data-providers/contentful/analytics.data-provider';
-import { getAttendanceQuery } from '../../../fixtures/analytics.fixtures';
+import {
+  getAttendanceQuery,
+  getInterestGroupCalendarIdsQuery,
+} from '../../../fixtures/analytics.fixtures';
 import { getContentfulGraphqlClientMock } from '../../../mocks/contentful-graphql-client.mock';
 
 const contentfulGraphqlClientMock = getContentfulGraphqlClientMock();
 const analyticsDataProvider = new AnalyticsContentfulDataProvider(
   contentfulGraphqlClientMock,
 );
+
+type RequestImplementation = Parameters<
+  typeof contentfulGraphqlClientMock.request.mockImplementation
+>[0];
+
+const interestGroupCalendar = { sys: { id: 'interest-group-calendar-id' } };
+const workingGroupCalendar = { sys: { id: 'working-group-calendar-id' } };
+
+const mockRequests = (teamsResponse: unknown) => {
+  const implementation = async (query: unknown) =>
+    query === FETCH_INTEREST_GROUP_CALENDAR_IDS
+      ? getInterestGroupCalendarIdsQuery()
+      : teamsResponse;
+  contentfulGraphqlClientMock.request.mockImplementation(
+    implementation as unknown as RequestImplementation,
+  );
+};
 
 beforeAll(() => {
   jest.useFakeTimers();
@@ -28,7 +49,7 @@ afterEach(() => {
 });
 
 test('Should return an empty result when the client returns an empty list', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+  mockRequests({
     teamsCollection: {
       items: [],
       total: 0,
@@ -47,7 +68,7 @@ test('Should return zero attendance percentage and limited data when the attenda
   const graphqlResponse = getAttendanceQuery();
   graphqlResponse.teamsCollection!.items[0]!.linkedFrom!.attendanceCollection!.items =
     [];
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+  mockRequests(graphqlResponse);
 
   const result = await analyticsDataProvider.fetchAttendance({});
 
@@ -68,7 +89,7 @@ test('Should return zero attendance percentage and limited data when the attenda
 
 test('Should return the correct attendance percentage when the client returns a valid response', async () => {
   const graphqlResponse = getAttendanceQuery();
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+  mockRequests(graphqlResponse);
 
   const result = await analyticsDataProvider.fetchAttendance({});
 
@@ -109,6 +130,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
                         {
                           startDate: '2024-05-07T00:00:00.000Z',
                           endDate: '2024-05-07T00:00:00.000Z',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -122,6 +144,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
                         {
                           startDate: '2024-02-20T00:00:00.000Z',
                           endDate: '2024-02-20T00:00:00.000Z',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -135,6 +158,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
                         {
                           startDate: '2024-10-03T00:00:00.000Z',
                           endDate: '2024-10-03T00:00:00.000Z',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -148,6 +172,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
                         {
                           startDate: '2022-12-30T00:00:00.000Z',
                           endDate: '2022-12-30T00:00:00.000Z',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -161,7 +186,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
       ],
     },
   };
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+  mockRequests(graphqlResponse);
 
   const result = await analyticsDataProvider.fetchAttendance({
     filter: { timeRange: 'last-year' },
@@ -188,6 +213,7 @@ describe('events that are excluded', () => {
       endDate: string;
       hidden?: boolean;
       status?: string;
+      calendar?: { sys: { id: string } } | null;
     },
     attended: boolean,
   ) => ({
@@ -198,6 +224,7 @@ describe('events that are excluded', () => {
             startDate: event.endDate,
             hidden: false,
             status: 'Confirmed',
+            calendar: interestGroupCalendar,
             ...event,
           },
         ],
@@ -207,7 +234,7 @@ describe('events that are excluded', () => {
   });
 
   const mockAttendance = (items: ReturnType<typeof getAttendanceItem>[]) =>
-    contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+    mockRequests({
       teamsCollection: {
         total: 1,
         items: [
@@ -267,6 +294,41 @@ describe('events that are excluded', () => {
     });
   });
 
+  test('excludes events that do not belong to an interest group calendar', async () => {
+    mockAttendance([
+      getAttendanceItem(pastEvent, true),
+      getAttendanceItem(
+        { ...pastEvent, calendar: workingGroupCalendar },
+        false,
+      ),
+      getAttendanceItem({ ...pastEvent, calendar: null }, false),
+    ]);
+
+    const result = await analyticsDataProvider.fetchAttendance({});
+
+    expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+      FETCH_INTEREST_GROUP_CALENDAR_IDS,
+      { limit: 500, skip: 0 },
+    );
+    expect(result.items[0]).toMatchObject({
+      attendancePercentage: 100,
+      limitedData: false,
+    });
+  });
+
+  test('returns zero attendance percentage and limited data when a team only attended events outside interest groups', async () => {
+    mockAttendance([
+      getAttendanceItem({ ...pastEvent, calendar: workingGroupCalendar }, true),
+    ]);
+
+    const result = await analyticsDataProvider.fetchAttendance({});
+
+    expect(result.items[0]).toMatchObject({
+      attendancePercentage: 0,
+      limitedData: true,
+    });
+  });
+
   test('excludes attendance that is not linked to an event', async () => {
     mockAttendance([
       getAttendanceItem(pastEvent, true),
@@ -316,7 +378,7 @@ describe('events that are excluded', () => {
 test('Should handle inactive teams correctly', async () => {
   const graphqlResponse = getAttendanceQuery();
   graphqlResponse.teamsCollection!.items[0]!.inactiveSince = '2023-01-01';
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+  mockRequests(graphqlResponse);
 
   const result = await analyticsDataProvider.fetchAttendance({});
 

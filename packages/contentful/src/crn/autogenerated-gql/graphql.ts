@@ -27063,6 +27063,7 @@ export type FetchEngagementQuery = {
                           Maybe<
                             Pick<Events, 'endDate' | 'status'> & {
                               sys: Pick<Sys, 'id'>;
+                              calendar?: Maybe<{ sys: Pick<Sys, 'id'> }>;
                             }
                           >
                         >;
@@ -27150,11 +27151,25 @@ export type PreliminaryDataSharingSpeakerFragment = Pick<
         Maybe<
           Pick<Events, 'startDate' | 'endDate' | 'status'> & {
             sys: Pick<Sys, 'id'>;
+            calendar?: Maybe<{ sys: Pick<Sys, 'id'> }>;
           }
         >
       >;
     }>;
   }>;
+};
+
+export type FetchInterestGroupCalendarIdsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type FetchInterestGroupCalendarIdsQuery = {
+  interestGroupsCollection?: Maybe<
+    Pick<InterestGroupsCollection, 'total'> & {
+      items: Array<Maybe<{ calendar?: Maybe<{ sys: Pick<Sys, 'id'> }> }>>;
+    }
+  >;
 };
 
 export type FetchPreliminaryDataSharingQueryVariables = Exact<{
@@ -27182,7 +27197,10 @@ export type FetchPreliminaryDataSharingQuery = {
                                 Pick<
                                   Events,
                                   'startDate' | 'endDate' | 'status'
-                                > & { sys: Pick<Sys, 'id'> }
+                                > & {
+                                  sys: Pick<Sys, 'id'>;
+                                  calendar?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+                                }
                               >
                             >;
                           }>;
@@ -27218,6 +27236,7 @@ export type FetchPreliminaryDataSharingByTeamQuery = {
                   Maybe<
                     Pick<Events, 'startDate' | 'endDate' | 'status'> & {
                       sys: Pick<Sys, 'id'>;
+                      calendar?: Maybe<{ sys: Pick<Sys, 'id'> }>;
                     }
                   >
                 >;
@@ -27255,7 +27274,9 @@ export type FetchAttendanceQuery = {
                                 Pick<
                                   Events,
                                   'startDate' | 'endDate' | 'hidden' | 'status'
-                                >
+                                > & {
+                                  calendar?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+                                }
                               >
                             >;
                           }>;
@@ -32032,6 +32053,26 @@ export type FetchInterestGroupTeamsByCalendarIdQuery = {
           }>
         >;
       }>;
+    }>;
+  }>;
+};
+
+export type FetchInterestGroupTeamsByIdQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type FetchInterestGroupTeamsByIdQuery = {
+  interestGroups?: Maybe<{
+    teamsCollection?: Maybe<{
+      items: Array<
+        Maybe<
+          Pick<InterestGroupsTeams, 'startDate' | 'endDate'> & {
+            team?: Maybe<
+              Pick<Teams, 'inactiveSince'> & { sys: Pick<Sys, 'id'> }
+            >;
+          }
+        >
+      >;
     }>;
   }>;
 };
@@ -41424,6 +41465,28 @@ export const PreliminaryDataSharingSpeakerFragmentDoc = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'status' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'calendar' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'sys' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: { kind: 'Name', value: 'id' },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
                             },
                           ],
                         },
@@ -57539,6 +57602,41 @@ export const FetchEngagementDocument = {
                                                               value: 'status',
                                                             },
                                                           },
+                                                          {
+                                                            kind: 'Field',
+                                                            name: {
+                                                              kind: 'Name',
+                                                              value: 'calendar',
+                                                            },
+                                                            selectionSet: {
+                                                              kind: 'SelectionSet',
+                                                              selections: [
+                                                                {
+                                                                  kind: 'Field',
+                                                                  name: {
+                                                                    kind: 'Name',
+                                                                    value:
+                                                                      'sys',
+                                                                  },
+                                                                  selectionSet:
+                                                                    {
+                                                                      kind: 'SelectionSet',
+                                                                      selections:
+                                                                        [
+                                                                          {
+                                                                            kind: 'Field',
+                                                                            name: {
+                                                                              kind: 'Name',
+                                                                              value:
+                                                                                'id',
+                                                                            },
+                                                                          },
+                                                                        ],
+                                                                    },
+                                                                },
+                                                              ],
+                                                            },
+                                                          },
                                                         ],
                                                       },
                                                     },
@@ -58048,6 +58146,103 @@ export const FetchOsChampionDocument = {
   FetchOsChampionQuery,
   FetchOsChampionQueryVariables
 >;
+export const FetchInterestGroupCalendarIdsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchInterestGroupCalendarIds' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'interestGroupsCollection' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'order' },
+                value: { kind: 'EnumValue', value: 'sys_id_ASC' },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'limit' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'calendar' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'sys' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'id' },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FetchInterestGroupCalendarIdsQuery,
+  FetchInterestGroupCalendarIdsQueryVariables
+>;
 export const FetchPreliminaryDataSharingDocument = {
   kind: 'Document',
   definitions: [
@@ -58514,6 +58709,41 @@ export const FetchAttendanceDocument = {
                                                             name: {
                                                               kind: 'Name',
                                                               value: 'status',
+                                                            },
+                                                          },
+                                                          {
+                                                            kind: 'Field',
+                                                            name: {
+                                                              kind: 'Name',
+                                                              value: 'calendar',
+                                                            },
+                                                            selectionSet: {
+                                                              kind: 'SelectionSet',
+                                                              selections: [
+                                                                {
+                                                                  kind: 'Field',
+                                                                  name: {
+                                                                    kind: 'Name',
+                                                                    value:
+                                                                      'sys',
+                                                                  },
+                                                                  selectionSet:
+                                                                    {
+                                                                      kind: 'SelectionSet',
+                                                                      selections:
+                                                                        [
+                                                                          {
+                                                                            kind: 'Field',
+                                                                            name: {
+                                                                              kind: 'Name',
+                                                                              value:
+                                                                                'id',
+                                                                            },
+                                                                          },
+                                                                        ],
+                                                                    },
+                                                                },
+                                                              ],
                                                             },
                                                           },
                                                         ],
@@ -60990,6 +61220,118 @@ export const FetchInterestGroupTeamsByCalendarIdDocument = {
 } as unknown as DocumentNode<
   FetchInterestGroupTeamsByCalendarIdQuery,
   FetchInterestGroupTeamsByCalendarIdQueryVariables
+>;
+export const FetchInterestGroupTeamsByIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FetchInterestGroupTeamsById' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'interestGroups' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'teamsCollection' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'limit' },
+                      value: { kind: 'IntValue', value: '50' },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'items' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'startDate' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'endDate' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'team' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'sys' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: { kind: 'Name', value: 'id' },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'inactiveSince',
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FetchInterestGroupTeamsByIdQuery,
+  FetchInterestGroupTeamsByIdQueryVariables
 >;
 export const FetchUpcomingEventsByCalendarIdDocument = {
   kind: 'Document',
