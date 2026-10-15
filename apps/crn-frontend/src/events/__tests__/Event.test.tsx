@@ -939,8 +939,8 @@ describe('the NEW_EVENT_PAGE flag', () => {
         expect(
           getByText('From Individual Projects', { selector: 'p' }).nextSibling,
         ).toHaveTextContent('1');
-        expect(getByText('1 of 3 speakers')).toBeVisible();
-        expect(getByText('33%')).toBeVisible();
+        expect(getByText('1 of 4 speakers')).toBeVisible();
+        expect(getByText('25%')).toBeVisible();
         expect(getByText('1 of 2 shared')).toBeVisible();
         expect(getByText('0 of 1 shared')).toBeVisible();
         expect(getByText('Lone Guest')).toBeVisible();
