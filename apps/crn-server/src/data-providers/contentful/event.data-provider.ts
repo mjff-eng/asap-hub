@@ -962,6 +962,7 @@ export const parseGraphQLSpeakers = (speakers: SpeakerItem[]): EventSpeaker[] =>
         externalUser: parseEventSpeakerExternalUser(user),
         ...(team ? { team: parseSpeakerTeam(team) } : {}),
         ...(project ? { project: parseSpeakerProject(project) } : {}),
+        preliminaryDataShared: !!speaker.preliminaryDataShared,
       });
       return speakerList;
     }

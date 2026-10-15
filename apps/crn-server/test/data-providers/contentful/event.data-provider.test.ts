@@ -865,6 +865,7 @@ describe('Events Contentful Data Provider', () => {
               displayName: 'The team three',
               inactiveSince: '2022-10-24T11:00:00Z',
             },
+            preliminaryDataShared: true,
           },
         ]);
       });
@@ -1119,6 +1120,7 @@ describe('Events Contentful Data Provider', () => {
                 title: 'Project One',
                 projectType: 'Trainee Project',
               },
+              preliminaryDataShared: true,
             },
           ]);
         });
@@ -1342,6 +1344,7 @@ describe('Events Contentful Data Provider', () => {
             externalUser: {
               name: 'Jane Doe',
             },
+            preliminaryDataShared: false,
           },
           {
             user: expect.objectContaining({
