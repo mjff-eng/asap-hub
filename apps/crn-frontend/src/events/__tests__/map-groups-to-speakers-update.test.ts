@@ -193,7 +193,7 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ).toEqual([]);
   });
 
-  test("Should emit one item per speaker entry carrying that user's own flag", () => {
+  test("Should emit one item per speaker entry, external ones included, carrying that user's own flag", () => {
     const saved = [
       teamGroup({
         users: [
@@ -205,6 +205,13 @@ describe('mapGroupsToSpeakersUpdate', () => {
           speaker({
             id: 'user-2',
             speakerIds: ['speaker-2'],
+            preliminaryFindingsShared: true,
+          }),
+          speaker({
+            id: 'external-3',
+            speakerIds: ['speaker-3'],
+            roles: [],
+            isExternal: true,
             preliminaryFindingsShared: true,
           }),
         ],
@@ -224,6 +231,8 @@ describe('mapGroupsToSpeakersUpdate', () => {
     ).toEqual([
       { speakerId: 'speaker-1', shared: false },
       { speakerId: 'speaker-2', shared: true },
+      { speakerId: 'speaker-3', shared: true },
+      { speakerId: 'ext-1', shared: true },
     ]);
   });
 

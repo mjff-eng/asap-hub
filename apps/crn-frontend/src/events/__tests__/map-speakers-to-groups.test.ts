@@ -247,7 +247,11 @@ describe('mapSpeakersToGroups', () => {
     const groups = mapSpeakersToGroups(
       makeEvent([
         teamSpeaker('t1', 'Alpha', 'u1', 'Chair'),
-        { id: 'es-ext-1', externalUser: { name: 'Jane External' } },
+        {
+          id: 'es-ext-1',
+          externalUser: { name: 'Jane External' },
+          preliminaryDataShared: true,
+        },
         { id: 'es-ext-2', externalUser: { name: 'John External' } },
       ]),
     );
@@ -260,7 +264,7 @@ describe('mapSpeakersToGroups', () => {
           id: 'external-1',
           speakerIds: ['es-ext-1'],
           displayName: 'Jane External',
-          preliminaryFindingsShared: false,
+          preliminaryFindingsShared: true,
         },
         {
           id: 'external-2',
@@ -359,6 +363,7 @@ describe('mapSpeakersToGroups', () => {
           id: 'es-ext-1',
           externalUser: { name: 'Jane External' },
           team: { id: 't1', displayName: 'Alpha' },
+          preliminaryDataShared: true,
         },
         {
           id: 'es-ext-2',
@@ -379,7 +384,7 @@ describe('mapSpeakersToGroups', () => {
             displayName: 'Jane External',
             roles: [],
             isExternal: true,
-            preliminaryFindingsShared: false,
+            preliminaryFindingsShared: true,
           },
         ],
       }),
@@ -388,7 +393,11 @@ describe('mapSpeakersToGroups', () => {
         variant: 'project',
         projectName: 'Project One',
         users: [
-          expect.objectContaining({ id: 'external-2', isExternal: true }),
+          expect.objectContaining({
+            id: 'external-2',
+            isExternal: true,
+            preliminaryFindingsShared: false,
+          }),
         ],
       }),
     ]);
