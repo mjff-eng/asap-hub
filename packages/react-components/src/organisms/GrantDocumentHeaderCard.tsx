@@ -10,22 +10,12 @@ import { Card, Display, Pill } from '../atoms';
 import { colour } from '../colors';
 import { formatDate } from '../date';
 import { TeamIcon } from '../icons';
-import { AssociationRow, ExternalLink } from '../molecules';
+import { AssociationRow } from '../molecules';
 import { mobileScreen, rem } from '../pixels';
 import { getProjectConfig, titleCase } from '../utils';
 
 const cardStyles = css({
   backgroundColor: colour.background.secondary,
-});
-
-const metadataStyles = css({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  columnGap: rem(12),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
-    alignItems: 'flex-start',
-  },
 });
 
 const labelsStyles = css({
@@ -65,25 +55,6 @@ const HeaderLabel: React.FC<{ children: string }> = ({ children }) => (
   </span>
 );
 
-const accessOutputStyles = css({
-  '& > div': {
-    height: rem(32),
-  },
-  '& a > span': {
-    flexDirection: 'row-reverse',
-    columnGap: rem(8),
-    height: rem(32),
-    padding: `${rem(3)} ${rem(7)} ${rem(3)} ${rem(15)}`,
-    borderRadius: rem(4),
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
-      padding: rem(3),
-    },
-  },
-  '& a > span > span': {
-    paddingTop: 0,
-  },
-});
-
 const titleStyles = css({
   marginTop: rem(16),
   '& > h1': {
@@ -118,7 +89,6 @@ type GrantDocumentHeaderCardProps = Pick<
   ResearchOutputResponse,
   | 'title'
   | 'documentType'
-  | 'link'
   | 'teams'
   | 'addedDate'
   | 'created'
@@ -131,7 +101,6 @@ type GrantDocumentHeaderCardProps = Pick<
 const GrantDocumentHeaderCard: React.FC<GrantDocumentHeaderCardProps> = ({
   title,
   documentType,
-  link,
   teams,
   addedDate,
   created,
@@ -145,24 +114,12 @@ const GrantDocumentHeaderCard: React.FC<GrantDocumentHeaderCardProps> = ({
   });
   return (
     <Card overrideStyles={cardStyles}>
-      <div css={metadataStyles}>
-        <div css={labelsStyles}>
-          <HeaderLabel>Project Output</HeaderLabel>
-          <div css={labelGroupStyles}>
-            <HeaderLabel>{documentType}</HeaderLabel>
-            <HeaderLabel>{titleCase(grantType)}</HeaderLabel>
-          </div>
+      <div css={labelsStyles}>
+        <HeaderLabel>Project Output</HeaderLabel>
+        <div css={labelGroupStyles}>
+          <HeaderLabel>{documentType}</HeaderLabel>
+          <HeaderLabel>{titleCase(grantType)}</HeaderLabel>
         </div>
-        {link && (
-          <div css={accessOutputStyles}>
-            <ExternalLink
-              href={link}
-              label="Access Output"
-              size="large"
-              noMargin
-            />
-          </div>
-        )}
       </div>
       <div css={titleStyles}>
         <Display styleAsHeading={3}>{title}</Display>

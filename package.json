@@ -92,7 +92,14 @@
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "axios@^1.0.0": "1.13.2",
-    "axios@^0.30.0": "0.30.2"
+    "axios@^0.30.0": "0.30.2",
+    "@embedpdf/engines/@embedpdf/fonts-arabic": "link:./.yarn/stubs/embedpdf-fonts",
+    "@embedpdf/engines/@embedpdf/fonts-hebrew": "link:./.yarn/stubs/embedpdf-fonts",
+    "@embedpdf/engines/@embedpdf/fonts-jp": "link:./.yarn/stubs/embedpdf-fonts",
+    "@embedpdf/engines/@embedpdf/fonts-kr": "link:./.yarn/stubs/embedpdf-fonts",
+    "@embedpdf/engines/@embedpdf/fonts-latin": "link:./.yarn/stubs/embedpdf-fonts",
+    "@embedpdf/engines/@embedpdf/fonts-sc": "link:./.yarn/stubs/embedpdf-fonts",
+    "@embedpdf/engines/@embedpdf/fonts-tc": "link:./.yarn/stubs/embedpdf-fonts"
   },
   "dependenciesMeta": {
     "aws-sdk": {

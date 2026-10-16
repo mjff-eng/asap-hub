@@ -1,0 +1,6 @@
+{
+  "name": "@embedpdf/fonts-stub",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Stand-in for @embedpdf/engines' fallback font packages. The viewer bundles its own code and loads fallback fonts from a CDN, which we turn off, so nothing imports these. The real packages add about 120 MB to the Yarn cache."
+}

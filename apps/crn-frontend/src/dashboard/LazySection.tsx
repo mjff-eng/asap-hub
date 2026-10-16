@@ -1,8 +1,6 @@
 import { ErrorBoundary } from '@asap-hub/frontend-utils';
-import { Loading } from '@asap-hub/react-components';
+import { Loading, useInView } from '@asap-hub/react-components';
 import { FC, ReactNode, Suspense } from 'react';
-
-import { useInView } from '../hooks/useInView';
 
 type LazySectionProps = {
   /** Height reserved before load, to avoid layout jump. */

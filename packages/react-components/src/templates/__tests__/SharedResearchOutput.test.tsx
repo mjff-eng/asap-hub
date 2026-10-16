@@ -243,6 +243,9 @@ describe('Grant Document page', () => {
       'href',
       '/projects/discovery/project-id',
     );
+    expect(
+      screen.queryByRole('link', { name: /access output/i }),
+    ).not.toBeInTheDocument();
   });
 
   it('renders breadcrumbs to shared research above the header', () => {
@@ -337,19 +340,20 @@ describe('Grant Document page', () => {
     ]);
   });
 
-  it('embeds the output link as a PDF only when there is a link', () => {
+  it('views the output link as a PDF only when there is a link', async () => {
     const { rerender } = renderGrantPage();
-    expect(screen.getByTitle('Grant Document PDF')).toHaveAttribute(
-      'src',
-      'https://example.com/grant.pdf',
-    );
+    expect(
+      await screen.findByRole('region', { name: 'Grant Document PDF' }),
+    ).toBeInTheDocument();
 
     rerender(
       <MemoryRouter>
         <SharedResearchOutput {...grantProps} link={undefined} />
       </MemoryRouter>,
     );
-    expect(screen.queryByTitle('Grant Document PDF')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Grant Document PDF' }),
+    ).not.toBeInTheDocument();
   });
 
   it('renders the grants card only when there is a supplement grant', () => {

@@ -1,15 +1,26 @@
 import { css } from '@emotion/react';
+import { lazy, Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
-import { Card, Headline2 } from '../atoms';
+import { Card, Headline2, Paragraph } from '../atoms';
+import { useInView } from '../hooks';
+import { Loading } from '../molecules';
 import { rem } from '../pixels';
 
-const pdfStyles = css({
-  display: 'block',
+const PdfViewer = lazy(() => import('./PdfViewer'));
+
+const cardStyles = css({
+  '@media print': {
+    display: 'none',
+  },
+});
+
+const frameStyles = css({
+  position: 'relative',
   marginTop: rem(16),
-  width: '100%',
   aspectRatio: '1 / 1.414',
-  border: 0,
   borderRadius: rem(16),
+  overflow: 'hidden',
 });
 
 type GrantDocumentPdfCardProps = {
@@ -18,18 +29,32 @@ type GrantDocumentPdfCardProps = {
 
 const GrantDocumentPdfCard: React.FC<GrantDocumentPdfCardProps> = ({
   link,
-}) => (
-  <Card>
-    <Headline2 styleAsHeading={4} noMargin>
-      Grant Document PDF
-    </Headline2>
-    <iframe
-      title="Grant Document PDF"
-      src={link}
-      loading="lazy"
-      css={pdfStyles}
-    />
-  </Card>
-);
+}) => {
+  const [frameRef, inView] = useInView<HTMLDivElement>();
+
+  return (
+    <Card overrideStyles={cardStyles}>
+      <Headline2 styleAsHeading={4} noMargin>
+        Grant Document PDF
+      </Headline2>
+      <div ref={frameRef} css={frameStyles}>
+        {inView && (
+          <ErrorBoundary
+            key={link}
+            fallback={
+              <Paragraph accent="tertiary">
+                Unable to display this PDF.
+              </Paragraph>
+            }
+          >
+            <Suspense fallback={<Loading />}>
+              <PdfViewer url={link} title="Grant Document PDF" />
+            </Suspense>
+          </ErrorBoundary>
+        )}
+      </div>
+    </Card>
+  );
+};
 
 export default GrantDocumentPdfCard;

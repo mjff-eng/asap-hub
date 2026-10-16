@@ -47,6 +47,12 @@
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
       "matchPackageNames": ["/^@graphql-tools//", "/^graphql/"]
+    },
+    {
+      "groupName": "EmbedPDF",
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": false,
+      "matchPackageNames": ["/^@embedpdf//"]
     }
   ],
   "timezone": "Europe/London",

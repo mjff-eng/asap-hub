@@ -8,6 +8,7 @@ node_modules
 !.yarn/releases
 !.yarn/plugins
 !.yarn/patches
+!.yarn/stubs
 
 **/__pycache__
 *.pyc
