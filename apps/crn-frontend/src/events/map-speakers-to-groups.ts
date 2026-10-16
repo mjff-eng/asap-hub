@@ -125,7 +125,7 @@ export const mapSpeakersToGroups = (event: EventResponse): SpeakerGroup[] => {
         id: `external-${index}`,
         speakerIds: speaker.id ? [speaker.id] : [],
         displayName: speaker.externalUser.name,
-        preliminaryFindingsShared: false,
+        preliminaryFindingsShared: !!speaker.preliminaryDataShared,
       };
       const { team, project } = speaker;
       if (!team && !project) {

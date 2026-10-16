@@ -67,6 +67,7 @@ export type EventSpeakerExternalUser = {
   externalUser: EventSpeakerExternalUserData;
   team?: EventSpeakerTeamData;
   project?: EventSpeakerProjectData;
+  preliminaryDataShared?: boolean;
 };
 
 export type EventSpeaker =

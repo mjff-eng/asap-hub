@@ -2,7 +2,7 @@ import {
   EventSpeakerUnlinkItem,
   EventUpdateDetailsRequest,
 } from '@asap-hub/model';
-import { SpeakerGroup, SpeakerTeamGroup } from '@asap-hub/react-components';
+import { SpeakerGroup } from '@asap-hub/react-components';
 
 const collectSpeakerVariants = (
   groups: SpeakerGroup[],
@@ -54,21 +54,14 @@ export const mapGroupsToSpeakersUpdate = (
     return removals;
   }
 
-  const preliminaryDataShared = saved
-    .filter(
-      (group): group is SpeakerTeamGroup =>
-        group.variant === 'team' || group.variant === 'project',
-    )
-    .flatMap((group) =>
-      group.users
-        .filter((user) => !user.isExternal)
-        .flatMap((user) =>
-          (user.speakerIds ?? []).map((speakerId) => ({
-            speakerId,
-            shared: user.preliminaryFindingsShared,
-          })),
-        ),
-    );
+  const preliminaryDataShared = saved.flatMap((group) =>
+    group.users.flatMap((user) =>
+      (user.speakerIds ?? []).map((speakerId) => ({
+        speakerId,
+        shared: user.preliminaryFindingsShared,
+      })),
+    ),
+  );
 
   return { ...removals, preliminaryDataShared };
 };

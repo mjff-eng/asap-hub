@@ -883,6 +883,66 @@ describe('the NEW_EVENT_PAGE flag', () => {
           ),
         );
       });
+
+      it('shows and saves the preliminary findings of external speakers', async () => {
+        mockGetEvent.mockResolvedValue({
+          ...createEventResponse(),
+          id,
+          endDate: pastEndDate,
+          speakers: [
+            {
+              id: 'es-ext-team',
+              externalUser: { name: 'Team Guest' },
+              team: { id: 't-alpha', displayName: 'Alpha' },
+              preliminaryDataShared: true,
+            },
+            {
+              id: 'es-ext',
+              externalUser: { name: 'Lone Guest' },
+              preliminaryDataShared: true,
+            },
+          ],
+        });
+        mockPatchEvent.mockResolvedValue({ ...createEventResponse(), id });
+        const { findByText, getByText, getByRole } = render(<Event />, {
+          wrapper: projectManagerWrapper,
+        });
+
+        expect(await findByText('2 of 2 speakers')).toBeVisible();
+        expect(getByText('1 of 1 shared')).toBeVisible();
+
+        await userEvent.click(getByRole('button', { name: 'Edit speakers' }));
+        const modal = within(getByRole('dialog'));
+        await userEvent.click(
+          modal.getByRole('button', { name: 'Expand Alpha' }),
+        );
+        expect(
+          modal.getByRole('checkbox', {
+            name: 'Team Guest preliminary findings shared',
+          }),
+        ).toBeChecked();
+        const loneGuestToggle = modal.getByRole('checkbox', {
+          name: 'Lone Guest preliminary findings shared',
+        });
+        expect(loneGuestToggle).toBeChecked();
+
+        await userEvent.click(loneGuestToggle);
+        await userEvent.click(modal.getByRole('button', { name: 'Save' }));
+
+        await waitFor(() =>
+          expect(mockPatchEvent).toHaveBeenCalledWith(
+            id,
+            {
+              speakersToRemove: [],
+              preliminaryDataShared: [
+                { speakerId: 'es-ext-team', shared: true },
+                { speakerId: 'es-ext', shared: false },
+              ],
+            },
+            expect.anything(),
+          ),
+        );
+      });
     });
 
     describe('past event sections', () => {
@@ -939,8 +999,8 @@ describe('the NEW_EVENT_PAGE flag', () => {
         expect(
           getByText('From Individual Projects', { selector: 'p' }).nextSibling,
         ).toHaveTextContent('1');
-        expect(getByText('1 of 3 speakers')).toBeVisible();
-        expect(getByText('33%')).toBeVisible();
+        expect(getByText('1 of 4 speakers')).toBeVisible();
+        expect(getByText('25%')).toBeVisible();
         expect(getByText('1 of 2 shared')).toBeVisible();
         expect(getByText('0 of 1 shared')).toBeVisible();
         expect(getByText('Lone Guest')).toBeVisible();
@@ -1009,7 +1069,9 @@ describe('the NEW_EVENT_PAGE flag', () => {
               speakersToRemove: [],
               preliminaryDataShared: [
                 { speakerId: 'es-t-alpha-u1', shared: true },
+                { speakerId: 'es-ext-team', shared: false },
                 { speakerId: 'es-p1-u2', shared: true },
+                { speakerId: 'es-ext', shared: false },
               ],
             },
             expect.anything(),

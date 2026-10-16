@@ -216,7 +216,7 @@ describe('EventSpeakers', () => {
       expect(breakdown('External')).toHaveTextContent('1');
     });
 
-    it('Should count shared CRN speakers, not groups, and leave externals out', () => {
+    it('Should count shared speakers, not groups, external ones included', () => {
       const { getByText } = renderCard({
         groups: [
           teamGroup({ users: makeUsers('team-0', 4, 1) }),
@@ -224,11 +224,10 @@ describe('EventSpeakers', () => {
           externalGroup({ users: makeExternalUsers(2, 2) }),
         ],
       });
-      // 1 team + 2 project shared of 6 CRN speakers; the 2 externals who shared
-      // count in neither side.
-      expect(getByText('50%')).toBeVisible();
+      // 1 team + 2 project + 2 external shared of 8 speakers.
+      expect(getByText('63%')).toBeVisible();
       // The count and the sentence are separate nodes so only the count is bold.
-      expect(getByText(/3 of 6 speakers/)).toBeVisible();
+      expect(getByText(/5 of 8 speakers/)).toBeVisible();
       expect(getByText('shared preliminary findings')).toBeVisible();
     });
 
