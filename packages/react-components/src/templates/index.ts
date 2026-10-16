@@ -1,6 +1,7 @@
 export { default as AboutPage } from './AboutPage';
 export { default as AboutPageBody } from './AboutPageBody';
 export { default as AboutPageHeader } from './AboutPageHeader';
+export { default as AnalyticsAwardsPageBody } from './AnalyticsAwardsPageBody';
 export { default as AnalyticsPage } from './AnalyticsPage';
 export { default as AnalyticsCollaborationPageBody } from './AnalyticsCollaborationPageBody';
 export { default as AnalyticsLeadershipPageBody } from './AnalyticsLeadershipPageBody';

@@ -69,7 +69,7 @@ export { default as MilestoneStatusDropdown } from './MilestoneStatusDropdown';
 export { default as Modal } from './Modal';
 export { default as ModalEditHeaderDecorator } from './ModalEditHeaderDecorator';
 export { default as OrcidSigninButton } from './OrcidSigninButton';
-export { default as OSChampionTableRow } from './OSChampionTableRow';
+export { default as AwardsTableRow } from './AwardsTableRow';
 export { default as PageControls } from './PageControls';
 export { default as PillList } from './PillList';
 export { default as ProjectDuration } from './ProjectDuration';

@@ -129,9 +129,7 @@ describe('OSChampion', () => {
 
     render(
       <MemoryRouter
-        initialEntries={[
-          '/analytics/leadership/os-champion?sort=os_champion_awards_desc',
-        ]}
+        initialEntries={['/analytics/leadership/os-champion?sort=awards_desc']}
       >
         <QueryClientProvider client={createTestQueryClient()}>
           <Suspense fallback="loading">
@@ -154,7 +152,7 @@ describe('OSChampion', () => {
     expect(mockGetAnalyticsOSChampion).toHaveBeenCalledWith(
       expect.any(Object),
       expect.objectContaining({
-        sort: 'os_champion_awards_desc',
+        sort: 'awards_desc',
       }),
     );
   });
@@ -196,7 +194,7 @@ describe('OSChampion', () => {
     fireEvent.click(sortButton!);
 
     expect(mockNavigate).toHaveBeenCalledWith(
-      { search: 'sort=os_champion_awards_desc' } as never,
+      { search: 'sort=awards_desc' } as never,
       { replace: true },
     );
   });

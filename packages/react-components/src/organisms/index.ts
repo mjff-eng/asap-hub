@@ -102,7 +102,7 @@ export { default as NoEvents } from './NoEvents';
 export { default as OnboardingFooter } from './OnboardingFooter';
 export { default as SharingPrelimFindingsTable } from './SharingPrelimFindingsTable';
 export { default as ShortDescriptionCard } from './ShortDescriptionCard';
-export { default as OSChampionTable } from './OSChampionTable';
+export { default as AwardsTable } from './AwardsTable';
 export { default as OutputVersions } from './OutputVersions';
 export { default as PageCard } from './PageCard';
 export { default as PagesSection } from './PagesSection';
