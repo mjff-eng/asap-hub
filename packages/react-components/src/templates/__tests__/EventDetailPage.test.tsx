@@ -86,16 +86,8 @@ it('falls back to the event dates when hasFinished is not provided', () => {
       endDate={subDays(new Date(), 1).toISOString()}
     />,
   );
-  expect(screen.queryByText(/join this event/i)).not.toBeInTheDocument();
-});
-
-it('omits the speakers and join card when there is nothing to show', () => {
-  renderPage(
-    <EventDetailPage {...props} hasFinished>
-      {false}
-    </EventDetailPage>,
-  );
-  expect(screen.queryByText(/join this event/i)).not.toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'About' })).toBeVisible();
+  expect(screen.getByRole('link', { name: 'Meeting Materials' })).toBeVisible();
 });
 
 it('renders the about section with description and tags', () => {
@@ -121,7 +113,7 @@ it('renders the description without the always-on collapse toggle', () => {
   ).not.toBeInTheDocument();
 });
 
-it('shows the about section before the speakers and join section', () => {
+it('shows the about section before the children section', () => {
   const { container } = renderPage(
     <EventDetailPage {...props} description="My Desc">
       <div>My Speakers</div>
@@ -139,29 +131,18 @@ it('omits the about section without description and tags', () => {
   expect(screen.queryByText('About this event')).not.toBeInTheDocument();
 });
 
-it("renders the join event button, when 'hideMeetingLink' is set to false", () => {
-  const endDate = addDays(new Date(), 100).toISOString();
-  const { rerender } = renderPage(
+it('does not render a separate join card for an upcoming event', () => {
+  renderPage(
     <EventDetailPage
       {...props}
-      endDate={endDate}
+      startDate={addDays(new Date(), 1).toISOString()}
+      endDate={addDays(new Date(), 2).toISOString()}
       meetingLink="link"
       hideMeetingLink={false}
     />,
   );
-  expect(screen.getAllByText(/join the meeting/i)).not.toHaveLength(0);
-
-  rerender(
-    <MemoryRouter initialEntries={[aboutHref]}>
-      <EventDetailPage
-        {...props}
-        endDate={endDate}
-        meetingLink="link"
-        hideMeetingLink={true}
-      />
-    </MemoryRouter>,
-  );
-  expect(screen.queryAllByText(/join the meeting/i)).toHaveLength(0);
+  expect(screen.queryByText(/join this event/i)).not.toBeInTheDocument();
+  expect(screen.queryByText(/join the meeting/i)).not.toBeInTheDocument();
 });
 
 it('renders About and Meeting Materials tabs for a finished event', () => {

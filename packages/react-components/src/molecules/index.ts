@@ -44,6 +44,7 @@ export { default as Header } from './Header';
 export { default as ImageLink } from './ImageLink';
 export { default as Info } from './Info';
 export { default as InformationSection } from './InformationSection';
+export { default as JoinMeetingButton } from './JoinMeetingButton';
 export { default as LabeledCheckbox } from './LabeledCheckbox';
 export { default as LabeledCheckboxGroup } from './LabeledCheckboxGroup';
 export { default as LabeledDateField } from './LabeledDateField';

@@ -1,12 +1,14 @@
 import { ComponentProps } from 'react';
-import { css } from '@emotion/react';
 
 import { BasicEvent, eventMaterialTypes } from '@asap-hub/model';
 
-import { ToastCard, EventInfo, EventMaterialsList } from '../molecules';
+import {
+  ToastCard,
+  EventInfo,
+  EventMaterialsList,
+  JoinMeetingButton,
+} from '../molecules';
 import type { MaterialType } from '../molecules';
-import { rem, mobileScreen } from '../pixels';
-import { Link } from '../atoms';
 import { useEventLiveStatus } from '../utils';
 
 type EventCardProps = ComponentProps<typeof EventInfo> &
@@ -23,13 +25,6 @@ type EventCardProps = ComponentProps<typeof EventInfo> &
     displayToast?: boolean;
     hasSpeakersToBeAnnounced: boolean;
   };
-
-const buttonStyle = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
-    marginTop: rem(15),
-    width: '100%',
-  },
-});
 
 const displayedMaterialTypes = [
   'notes',
@@ -67,34 +62,18 @@ const EventCard: React.FC<EventCardProps> = ({
       };
     }
     if (hasStarted && !hasFinished) {
+      if (props.hideMeetingLink) {
+        return {
+          type: 'live',
+          toastContent: (
+            <span>This in-person event is currently happening.</span>
+          ),
+        };
+      }
       return {
         type: 'live',
-        toastContent: (
-          <>
-            {props.hideMeetingLink || !props.meetingLink ? (
-              <span>This in-person event is currently happening.</span>
-            ) : (
-              <span>This event is happening now.</span>
-            )}
-          </>
-        ),
-        toastAction: (
-          <>
-            {props.meetingLink && !props.hideMeetingLink && (
-              <div css={buttonStyle}>
-                <Link
-                  href={props.meetingLink}
-                  noMargin
-                  primary
-                  buttonStyle
-                  small
-                >
-                  Join Meeting Now
-                </Link>
-              </div>
-            )}
-          </>
-        ),
+        toastContent: <span>This event is happening now.</span>,
+        toastAction: <JoinMeetingButton meetingLink={props.meetingLink} />,
       };
     }
     if (!hasStarted && hasSpeakersToBeAnnounced) {
