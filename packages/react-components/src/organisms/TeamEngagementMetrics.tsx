@@ -22,7 +22,7 @@ const TeamEngagementMetrics: React.FC<TeamEngagementMetricsProps> = ({
       philosophy:
         'At ASAP, we want to ensure that diverse perspectives are being encouraged and that the entire team is engaged in the work.',
       definition:
-        'The Speaker Diversity Metric calculates how many times different speakers from a team have presented for events hosted on the Hub.',
+        'The Speaker Diversity Metric calculates how many times different speakers from a team have presented at interest group meetings hosted on the Hub.',
     },
     {
       id: 'traineePresentations',

@@ -1,12 +1,47 @@
+import {
+  FETCH_INTEREST_GROUP_CALENDAR_IDS,
+  FETCH_PRELIMINARY_DATA_SHARING,
+} from '@asap-hub/contentful';
 import { DateTime } from 'luxon';
 import { AnalyticsContentfulDataProvider } from '../../../../src/data-providers/contentful/analytics.data-provider';
-import { getPreliminaryDataSharingQuery } from '../../../fixtures/analytics.fixtures';
+import {
+  getInterestGroupCalendarIdsQuery,
+  getPreliminaryDataSharingQuery,
+} from '../../../fixtures/analytics.fixtures';
 import { getContentfulGraphqlClientMock } from '../../../mocks/contentful-graphql-client.mock';
 
 const contentfulGraphqlClientMock = getContentfulGraphqlClientMock();
 const analyticsDataProvider = new AnalyticsContentfulDataProvider(
   contentfulGraphqlClientMock,
 );
+
+type RequestImplementation = Parameters<
+  typeof contentfulGraphqlClientMock.request.mockImplementation
+>[0];
+
+const interestGroupCalendar = { sys: { id: 'interest-group-calendar-id' } };
+const workingGroupCalendar = { sys: { id: 'working-group-calendar-id' } };
+
+const mockRequests = (
+  teamsResponse: unknown,
+  ...byTeamResponses: unknown[]
+) => {
+  let byTeamIndex = 0;
+  const implementation = async (query: unknown) => {
+    if (query === FETCH_INTEREST_GROUP_CALENDAR_IDS) {
+      return getInterestGroupCalendarIdsQuery();
+    }
+    if (query === FETCH_PRELIMINARY_DATA_SHARING) {
+      return teamsResponse;
+    }
+    const response = byTeamResponses[byTeamIndex];
+    byTeamIndex += 1;
+    return response;
+  };
+  contentfulGraphqlClientMock.request.mockImplementation(
+    implementation as unknown as RequestImplementation,
+  );
+};
 
 beforeAll(() => {
   jest.useFakeTimers();
@@ -28,7 +63,7 @@ afterEach(() => {
 });
 
 test('Should return an empty result when the client returns an empty list', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+  mockRequests({
     teamsCollection: {
       items: [],
       total: 0,
@@ -48,7 +83,7 @@ test('Should return zero percent shared and limited data when the preliminary da
   graphqlResponse.teamsCollection!.items[0]!.linkedFrom!.eventSpeakersCollection!.total = 0;
   graphqlResponse.teamsCollection!.items[0]!.linkedFrom!.eventSpeakersCollection!.items =
     [];
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+  mockRequests(graphqlResponse);
 
   const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
 
@@ -69,7 +104,7 @@ test('Should return zero percent shared and limited data when the preliminary da
 
 test('Should return the correct percent shared when the client returns a valid response', async () => {
   const graphqlResponse = getPreliminaryDataSharingQuery();
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+  mockRequests(graphqlResponse);
 
   const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
 
@@ -115,6 +150,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
                           startDate: '2024-05-07T00:00:00.000Z',
                           endDate: '2024-05-07T00:00:00.000Z',
                           status: 'Confirmed',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -132,6 +168,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
                           startDate: '2024-02-20T00:00:00.000Z',
                           endDate: '2024-02-20T00:00:00.000Z',
                           status: 'Confirmed',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -149,6 +186,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
                           startDate: '2024-10-03T00:00:00.000Z',
                           endDate: '2024-10-03T00:00:00.000Z',
                           status: 'Confirmed',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -166,6 +204,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
                           startDate: '2022-12-30T00:00:00.000Z',
                           endDate: '2022-12-30T00:00:00.000Z',
                           status: 'Confirmed',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -178,7 +217,7 @@ test('Should filter by time range when last-year filter is applied', async () =>
       ],
     },
   };
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+  mockRequests(graphqlResponse);
 
   const result = await analyticsDataProvider.fetchPreliminaryDataSharing({
     filter: { timeRange: 'last-year' },
@@ -206,12 +245,13 @@ const speaker = (
     startDate?: string | null;
     endDate: string | null;
     status?: string | null;
+    calendar?: { sys: { id: string } } | null;
   } | null,
 ) => ({
   preliminaryDataShared,
   linkedFrom: {
     eventsCollection: {
-      items: event ? [event] : [],
+      items: event ? [{ calendar: interestGroupCalendar, ...event }] : [],
     },
   },
 });
@@ -236,7 +276,7 @@ const teamWithSpeakers = (speakers: unknown[]) => ({
 });
 
 test('Should ignore speakers that are not linked to any event', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+  mockRequests(
     teamWithSpeakers([
       speaker(true, {
         sys: { id: 'event-1' },
@@ -264,7 +304,7 @@ test('Should ignore speakers that are not linked to any event', async () => {
 });
 
 test('Should return zero percent shared and limited data when every speaker is skipped', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+  mockRequests(
     teamWithSpeakers([
       speaker(null, {
         sys: { id: 'event-1' },
@@ -284,7 +324,7 @@ test('Should return zero percent shared and limited data when every speaker is s
 });
 
 test('Should exclude events without a start date from the last-year range', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+  mockRequests(
     teamWithSpeakers([
       speaker(true, {
         sys: { id: 'event-1' },
@@ -317,7 +357,7 @@ test('Should exclude events without a start date from the last-year range', asyn
 });
 
 test('Should keep events without a start date when no time range is applied', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+  mockRequests(
     teamWithSpeakers([
       speaker(true, {
         sys: { id: 'event-1' },
@@ -350,7 +390,7 @@ test('Should keep events without a start date when no time range is applied', as
 });
 
 test('Should exclude events without an end date', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+  mockRequests(
     teamWithSpeakers([
       speaker(true, {
         sys: { id: 'event-1' },
@@ -378,7 +418,7 @@ test('Should exclude events without an end date', async () => {
 });
 
 test('Should exclude upcoming events', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+  mockRequests(
     teamWithSpeakers([
       speaker(true, {
         sys: { id: 'event-1' },
@@ -409,7 +449,7 @@ test('Should exclude upcoming events', async () => {
 });
 
 test('Should exclude cancelled events', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+  mockRequests(
     teamWithSpeakers([
       speaker(true, {
         sys: { id: 'event-1' },
@@ -434,7 +474,7 @@ test('Should exclude cancelled events', async () => {
 });
 
 test('Should return zero percent shared and limited data when a team only has upcoming or cancelled events', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+  mockRequests(
     teamWithSpeakers([
       speaker(false, {
         sys: { id: 'event-1' },
@@ -485,6 +525,7 @@ test('Should group speakers by event and count an event as shared when any of it
                           startDate: '2024-01-15T00:00:00.000Z',
                           endDate: '2024-01-15T00:00:00.000Z',
                           status: 'Confirmed',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -502,6 +543,7 @@ test('Should group speakers by event and count an event as shared when any of it
                           startDate: '2024-01-15T00:00:00.000Z',
                           endDate: '2024-01-15T00:00:00.000Z',
                           status: 'Confirmed',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -519,6 +561,7 @@ test('Should group speakers by event and count an event as shared when any of it
                           startDate: '2024-02-20T00:00:00.000Z',
                           endDate: '2024-02-20T00:00:00.000Z',
                           status: 'Confirmed',
+                          calendar: interestGroupCalendar,
                         },
                       ],
                     },
@@ -531,7 +574,7 @@ test('Should group speakers by event and count an event as shared when any of it
       ],
     },
   };
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+  mockRequests(graphqlResponse);
 
   const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
 
@@ -567,6 +610,7 @@ test('Should drain remaining event speakers when a team overflows the nested pag
               startDate: '2024-01-15',
               endDate: '2024-01-15',
               status: 'Confirmed',
+              calendar: interestGroupCalendar,
             },
           ],
         },
@@ -588,6 +632,7 @@ test('Should drain remaining event speakers when a team overflows the nested pag
                   startDate: '2024-01-15',
                   endDate: '2024-01-15',
                   status: 'Confirmed',
+                  calendar: interestGroupCalendar,
                 },
               ],
             },
@@ -603,6 +648,7 @@ test('Should drain remaining event speakers when a team overflows the nested pag
                   startDate: '2024-02-20',
                   endDate: '2024-02-20',
                   status: 'Confirmed',
+                  calendar: interestGroupCalendar,
                 },
               ],
             },
@@ -618,6 +664,7 @@ test('Should drain remaining event speakers when a team overflows the nested pag
                   startDate: '2023-06-10',
                   endDate: '2023-06-10',
                   status: 'Confirmed',
+                  calendar: interestGroupCalendar,
                 },
               ],
             },
@@ -627,13 +674,11 @@ test('Should drain remaining event speakers when a team overflows the nested pag
     },
   };
 
-  contentfulGraphqlClientMock.request
-    .mockResolvedValueOnce(graphqlResponse)
-    .mockResolvedValueOnce(byTeamResponse);
+  mockRequests(graphqlResponse, byTeamResponse);
 
   const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
 
-  expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(2);
+  expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(3);
   expect(contentfulGraphqlClientMock.request).toHaveBeenLastCalledWith(
     expect.anything(),
     expect.objectContaining({ teamId: 'team-id-0', skip: 0 }),
@@ -655,7 +700,7 @@ test('Should drain remaining event speakers when a team overflows the nested pag
 });
 
 test('Should not request more speakers for null teams or teams without linked speakers', async () => {
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+  mockRequests({
     teamsCollection: {
       total: 2,
       items: [
@@ -672,7 +717,7 @@ test('Should not request more speakers for null teams or teams without linked sp
 
   const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
 
-  expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(1);
+  expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(2);
   expect(result).toEqual({
     total: 2,
     items: [
@@ -726,6 +771,9 @@ test('Should bound the number of concurrent speaker requests when several teams 
     _query: unknown,
     variables: Record<string, unknown>,
   ) => {
+    if (_query === FETCH_INTEREST_GROUP_CALENDAR_IDS) {
+      return getInterestGroupCalendarIdsQuery();
+    }
     const teamId = variables?.teamId as string | undefined;
     if (!teamId) {
       return mainResponse;
@@ -752,14 +800,12 @@ test('Should bound the number of concurrent speaker requests when several teams 
   };
 
   contentfulGraphqlClientMock.request.mockImplementation(
-    requestImplementation as unknown as Parameters<
-      typeof contentfulGraphqlClientMock.request.mockImplementation
-    >[0],
+    requestImplementation as unknown as RequestImplementation,
   );
 
   const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
 
-  expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(9);
+  expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(10);
   expect(maxInFlight).toBeLessThanOrEqual(5);
   teamIds.forEach((teamId) => {
     expect(skipsByTeam[teamId]).toEqual([0, 1000]);
@@ -777,7 +823,7 @@ test('Should bound the number of concurrent speaker requests when several teams 
 test('Should handle inactive teams correctly', async () => {
   const graphqlResponse = getPreliminaryDataSharingQuery();
   graphqlResponse.teamsCollection!.items[0]!.inactiveSince = '2023-01-01';
-  contentfulGraphqlClientMock.request.mockResolvedValueOnce(graphqlResponse);
+  mockRequests(graphqlResponse);
 
   const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
 
@@ -794,4 +840,106 @@ test('Should handle inactive teams correctly', async () => {
       },
     ],
   });
+});
+
+test('Should only count events that belong to an interest group calendar', async () => {
+  mockRequests(
+    teamWithSpeakers([
+      speaker(true, {
+        sys: { id: 'event-1' },
+        startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
+      }),
+      speaker(false, {
+        sys: { id: 'event-2' },
+        startDate: '2024-10-03T00:00:00.000Z',
+        endDate: '2024-10-03T00:00:00.000Z',
+        status: 'Confirmed',
+        calendar: workingGroupCalendar,
+      }),
+      speaker(false, {
+        sys: { id: 'event-3' },
+        startDate: '2024-11-03T00:00:00.000Z',
+        endDate: '2024-11-03T00:00:00.000Z',
+        status: 'Confirmed',
+        calendar: null,
+      }),
+    ]),
+  );
+
+  const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
+
+  expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+    FETCH_INTEREST_GROUP_CALENDAR_IDS,
+    { limit: 500, skip: 0 },
+  );
+  expect(result.items[0]).toEqual(
+    expect.objectContaining({ percentShared: 100, limitedData: false }),
+  );
+});
+
+test('Should return zero percent shared and limited data when a team only spoke at events outside interest groups', async () => {
+  mockRequests(
+    teamWithSpeakers([
+      speaker(true, {
+        sys: { id: 'event-1' },
+        startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
+        calendar: workingGroupCalendar,
+      }),
+    ]),
+  );
+
+  const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
+
+  expect(result.items[0]).toEqual(
+    expect.objectContaining({ percentShared: 0, limitedData: true }),
+  );
+});
+
+test('Should page through interest groups when they exceed the calendar page size', async () => {
+  const calendarId = (index: number) => `interest-group-calendar-${index}`;
+  const interestGroupsPage = (skip: number, count: number) => ({
+    interestGroupsCollection: {
+      total: 501,
+      items: Array.from({ length: count }, (_, index) => ({
+        calendar: { sys: { id: calendarId(skip + index) } },
+      })),
+    },
+  });
+
+  contentfulGraphqlClientMock.request.mockImplementation((async (
+    _query: unknown,
+    variables: Record<string, unknown>,
+  ) => {
+    if (_query === FETCH_INTEREST_GROUP_CALENDAR_IDS) {
+      const skip = variables.skip as number;
+      return interestGroupsPage(skip, skip === 0 ? 500 : 1);
+    }
+    return teamWithSpeakers([
+      speaker(true, {
+        sys: { id: 'event-1' },
+        startDate: '2024-05-07T00:00:00.000Z',
+        endDate: '2024-05-07T00:00:00.000Z',
+        status: 'Confirmed',
+        calendar: { sys: { id: calendarId(500) } },
+      }),
+    ]);
+  }) as unknown as RequestImplementation);
+
+  const result = await analyticsDataProvider.fetchPreliminaryDataSharing({});
+
+  expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+    FETCH_INTEREST_GROUP_CALENDAR_IDS,
+    { limit: 500, skip: 0 },
+  );
+  expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+    FETCH_INTEREST_GROUP_CALENDAR_IDS,
+    { limit: 500, skip: 500 },
+  );
+  expect(result.items[0]).toEqual(
+    expect.objectContaining({ percentShared: 100, limitedData: false }),
+  );
 });

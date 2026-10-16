@@ -5,6 +5,8 @@ import {
   FetchAttendanceQueryVariables,
   FetchEngagementQuery,
   FetchEngagementQueryVariables,
+  FetchInterestGroupCalendarIdsQuery,
+  FetchInterestGroupCalendarIdsQueryVariables,
   FetchOsChampionQuery,
   FetchOsChampionQueryVariables,
   FetchPreliminaryDataSharingByTeamQuery,
@@ -24,6 +26,7 @@ import {
   FETCH_ANALYTICS_TEAM_LEADERSHIP,
   FETCH_ATTENDANCE,
   FETCH_ENGAGEMENT,
+  FETCH_INTEREST_GROUP_CALENDAR_IDS,
   FETCH_OS_CHAMPION,
   FETCH_PRELIMINARY_DATA_SHARING,
   FETCH_PRELIMINARY_DATA_SHARING_BY_TEAM,
@@ -77,6 +80,8 @@ import { AnalyticsDataProvider } from '../types/analytics.data-provider.types';
 const PRELIMINARY_DATA_SHARING_SPEAKERS_PAGE_SIZE = 1000;
 const PRELIMINARY_DATA_SHARING_MAX_SPEAKER_PAGES = 20;
 const PRELIMINARY_DATA_SHARING_MAX_CONCURRENT_REQUESTS = 5;
+const INTEREST_GROUP_CALENDARS_PAGE_SIZE = 500;
+const INTEREST_GROUP_CALENDARS_MAX_PAGES = 20;
 
 type UserTotalResearchOutputsItems = NonNullable<
   FetchUserTotalResearchOutputsQuery['usersCollection']
@@ -209,12 +214,47 @@ export class AnalyticsContentfulDataProvider implements AnalyticsDataProvider {
     return itemsByTeam;
   }
 
+  private async fetchInterestGroupCalendarIds(): Promise<Set<string>> {
+    const calendarIds = new Set<string>();
+
+    for (let page = 0; page < INTEREST_GROUP_CALENDARS_MAX_PAGES; page += 1) {
+      const { interestGroupsCollection } = await this.contentfulClient.request<
+        FetchInterestGroupCalendarIdsQuery,
+        FetchInterestGroupCalendarIdsQueryVariables
+      >(FETCH_INTEREST_GROUP_CALENDAR_IDS, {
+        limit: INTEREST_GROUP_CALENDARS_PAGE_SIZE,
+        skip: page * INTEREST_GROUP_CALENDARS_PAGE_SIZE,
+      });
+
+      const items = interestGroupsCollection?.items ?? [];
+      items.forEach((interestGroup) => {
+        const calendarId = interestGroup?.calendar?.sys.id;
+        if (calendarId) {
+          calendarIds.add(calendarId);
+        }
+      });
+
+      const fetched = (page + 1) * INTEREST_GROUP_CALENDARS_PAGE_SIZE;
+      if (
+        items.length < INTEREST_GROUP_CALENDARS_PAGE_SIZE ||
+        fetched >= (interestGroupsCollection?.total ?? 0)
+      ) {
+        break;
+      }
+    }
+
+    return calendarIds;
+  }
+
   async fetchPreliminaryDataSharing(options: FetchAnalyticsOptions) {
     const { take = 10, skip = 0, filter } = options;
-    const { teamsCollection } = await this.contentfulClient.request<
-      FetchPreliminaryDataSharingQuery,
-      FetchPreliminaryDataSharingQueryVariables
-    >(FETCH_PRELIMINARY_DATA_SHARING, { limit: take, skip });
+    const [{ teamsCollection }, interestGroupCalendarIds] = await Promise.all([
+      this.contentfulClient.request<
+        FetchPreliminaryDataSharingQuery,
+        FetchPreliminaryDataSharingQueryVariables
+      >(FETCH_PRELIMINARY_DATA_SHARING, { limit: take, skip }),
+      this.fetchInterestGroupCalendarIds(),
+    ]);
 
     const speakerItemsByTeam =
       await this.completeEventSpeakersCollections(teamsCollection);
@@ -224,6 +264,7 @@ export class AnalyticsContentfulDataProvider implements AnalyticsDataProvider {
       items: getPreliminaryDataSharingItems(
         teamsCollection,
         speakerItemsByTeam,
+        interestGroupCalendarIds,
         filter?.timeRange as Extract<TimeRangeOption, 'all' | 'last-year'>,
       ),
     };
@@ -231,15 +272,19 @@ export class AnalyticsContentfulDataProvider implements AnalyticsDataProvider {
 
   async fetchAttendance(options: FetchAnalyticsOptions) {
     const { take = 10, skip = 0, filter } = options;
-    const { teamsCollection } = await this.contentfulClient.request<
-      FetchAttendanceQuery,
-      FetchAttendanceQueryVariables
-    >(FETCH_ATTENDANCE, { limit: take, skip });
+    const [{ teamsCollection }, interestGroupCalendarIds] = await Promise.all([
+      this.contentfulClient.request<
+        FetchAttendanceQuery,
+        FetchAttendanceQueryVariables
+      >(FETCH_ATTENDANCE, { limit: take, skip }),
+      this.fetchInterestGroupCalendarIds(),
+    ]);
 
     return {
       total: teamsCollection?.total || 0,
       items: getAttendanceItems(
         teamsCollection,
+        interestGroupCalendarIds,
         filter?.timeRange as Extract<TimeRangeOption, 'all' | 'last-year'>,
       ),
     };
@@ -353,27 +398,41 @@ export class AnalyticsContentfulDataProvider implements AnalyticsDataProvider {
     options: FetchAnalyticsOptions,
   ): Promise<ListEngagementDataObject> {
     const { take = 10, skip = 0, filter } = options;
-    let collection: FetchEngagementQuery['teamsCollection'] = {
-      total: 0,
-      items: [],
+
+    const fetchTeams = async () => {
+      let collection: FetchEngagementQuery['teamsCollection'] = {
+        total: 0,
+        items: [],
+      };
+
+      for (let i = 0; i < take / 5; i += 1) {
+        const { teamsCollection } = await this.contentfulClient.request<
+          FetchEngagementQuery,
+          FetchEngagementQueryVariables
+        >(FETCH_ENGAGEMENT, { limit: 5, skip: skip + 5 * i });
+        if (teamsCollection && teamsCollection.items) {
+          collection = {
+            total: teamsCollection.total,
+            items: [...collection.items, ...teamsCollection.items],
+          };
+        }
+      }
+
+      return collection;
     };
 
-    for (let i = 0; i < take / 5; i += 1) {
-      const { teamsCollection } = await this.contentfulClient.request<
-        FetchEngagementQuery,
-        FetchEngagementQueryVariables
-      >(FETCH_ENGAGEMENT, { limit: 5, skip: skip + 5 * i });
-      if (teamsCollection && teamsCollection.items) {
-        collection = {
-          total: teamsCollection.total,
-          items: [...collection.items, ...teamsCollection.items],
-        };
-      }
-    }
+    const [collection, interestGroupCalendarIds] = await Promise.all([
+      fetchTeams(),
+      this.fetchInterestGroupCalendarIds(),
+    ]);
 
     return {
       total: collection?.total || 0,
-      items: getEngagementItems(collection, filter?.timeRange),
+      items: getEngagementItems(
+        collection,
+        interestGroupCalendarIds,
+        filter?.timeRange,
+      ),
     };
   }
 }
@@ -581,6 +640,7 @@ type PreliminaryDataSharingSpeakerItems = NonNullable<
 const getPreliminaryDataSharingItems = (
   teamsCollection: FetchPreliminaryDataSharingQuery['teamsCollection'],
   speakerItemsByTeam: Map<string, PreliminaryDataSharingSpeakerItems>,
+  interestGroupCalendarIds: Set<string>,
   rangeKey?: Extract<TimeRangeOption, 'all' | 'last-year'>,
 ): PreliminaryDataSharingDataObject[] => {
   const filter = getRangeFilterParams(rangeKey);
@@ -602,8 +662,11 @@ const getPreliminaryDataSharingItems = (
         }
         const event = speaker.linkedFrom?.eventsCollection?.items[0];
         const eventId = event?.sys.id;
+        const calendarId = event?.calendar?.sys.id;
         if (
           !eventId ||
+          !calendarId ||
+          !interestGroupCalendarIds.has(calendarId) ||
           !isPastEvent(event?.endDate) ||
           !isNotCancelledEventStatus(event?.status)
         ) {
@@ -659,6 +722,7 @@ const getPreliminaryDataSharingItems = (
 
 const getAttendanceItems = (
   teamsCollection: FetchAttendanceQuery['teamsCollection'],
+  interestGroupCalendarIds: Set<string>,
   rangeKey?: Extract<TimeRangeOption, 'all' | 'last-year'>,
 ): MeetingRepAttendanceDataObject[] => {
   const filter = getRangeFilterParams(rangeKey);
@@ -673,9 +737,12 @@ const getAttendanceItems = (
       attendanceItems.forEach((item) => {
         const event = item?.linkedFrom?.eventsCollection?.items[0];
         const eventStartDate = event?.startDate;
+        const calendarId = event?.calendar?.sys.id;
 
         if (
           !event ||
+          !calendarId ||
+          !interestGroupCalendarIds.has(calendarId) ||
           event.hidden ||
           !isPastEvent(event.endDate) ||
           !isNotCancelledEventStatus(event.status)

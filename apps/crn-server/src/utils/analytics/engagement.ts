@@ -17,6 +17,7 @@ type Membership = NonNullable<
 
 export const getEngagementItems = (
   teamCollection: FetchEngagementQuery['teamsCollection'],
+  interestGroupCalendarIds: Set<string>,
   rangeKey?: TimeRangeOption,
 ): EngagementDataObject[] =>
   cleanArray(teamCollection?.items).map((teamItem) => {
@@ -28,6 +29,7 @@ export const getEngagementItems = (
     };
 
     cleanArray(teamItem.linkedFrom?.eventSpeakersCollection?.items)
+      .filter(isInterestGroupEvent(interestGroupCalendarIds))
       .filter(getFilterEventByRange(rangeKey))
       .filter(isNotCancelledEvent)
       .forEach((eventSpeakerItem) => {
@@ -102,6 +104,15 @@ export const getFilterEventByRange =
     const filter = getRangeFilterParams(rangeKey);
     const endDate = item?.linkedFrom?.eventsCollection?.items[0]?.endDate;
     return isPastEvent(endDate) && (!filter || endDate >= filter);
+  };
+
+export const isInterestGroupEvent =
+  (interestGroupCalendarIds: Set<string>) =>
+  (eventSpeakerItem: EventSpeakersCollectionItem) => {
+    const calendarId =
+      eventSpeakerItem?.linkedFrom?.eventsCollection?.items[0]?.calendar?.sys
+        .id;
+    return !!calendarId && interestGroupCalendarIds.has(calendarId);
   };
 
 export const isNotCancelledEvent = (
