@@ -244,7 +244,7 @@ describe('Event controller', () => {
       const result = await eventController.fetchByGoogleId(googleId);
 
       expect(eventDataProviderMock.fetch).toHaveBeenCalledWith({
-        filter: { googleId },
+        filter: { googleId, hidden: true },
         take: 1,
       });
       expect(result).toEqual(getEventResponse());
@@ -254,10 +254,17 @@ describe('Event controller', () => {
       const result = await eventController.fetchByGoogleId(googleId);
 
       expect(eventDataProviderMock.fetch).toHaveBeenCalledWith({
-        filter: { googleId },
+        filter: { googleId, hidden: true },
         take: 1,
       });
       expect(result).toEqual(null);
+    });
+    test('it should throw when the matching event was skipped by the data provider', async () => {
+      eventDataProviderMock.fetch.mockResolvedValue({ total: 1, items: [] });
+
+      await expect(eventController.fetchByGoogleId(googleId)).rejects.toThrow(
+        `Event with google id ${googleId} exists but could not be parsed`,
+      );
     });
   });
 });
