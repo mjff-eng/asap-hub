@@ -9,6 +9,7 @@ on:
         default: all
         options:
           - os-champion
+          - awards
           - preliminary-data-sharing
           - attendance
           - preprint-compliance

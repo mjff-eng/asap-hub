@@ -1,6 +1,8 @@
 import {
   FetchAnalyticsTeamLeadershipQuery,
   FetchAttendanceQuery,
+  FetchAwardsQuery,
+  FetchAwardTypesQuery,
   FetchEngagementQuery,
   FetchOsChampionQuery,
   FetchPreliminaryDataSharingQuery,
@@ -13,7 +15,10 @@ import {
 import {
   AnalyticsTeamLeadershipDataObject,
   AnalyticsTeamLeadershipResponse,
+  AwardsResponse,
+  AwardTypeDataObject,
   EngagementResponse,
+  ListAwardsResponse,
   EventStatus,
   ListAnalyticsTeamLeadershipDataObject,
   ListAnalyticsTeamLeadershipResponse,
@@ -989,6 +994,49 @@ export const getOSChampionResponse: () => OSChampionResponse = () => ({
 export const getListOSChampionResponse = (): ListOSChampionResponse => ({
   total: 1,
   items: [getOSChampionResponse()],
+});
+
+export const getAwardTypesQuery = (): FetchAwardTypesQuery => ({
+  awardTypeCollection: {
+    items: [
+      {
+        sys: { id: 'award-type-network-spotlight' },
+        name: 'Network Spotlight',
+      },
+      {
+        sys: { id: 'award-type-os-champion' },
+        name: 'Open Science Champion',
+      },
+    ],
+  },
+});
+
+export const getAwardTypeDataObjects = (): AwardTypeDataObject[] => [
+  {
+    id: 'award-type-network-spotlight',
+    name: 'Network Spotlight',
+    slug: 'network-spotlight',
+  },
+  {
+    id: 'award-type-os-champion',
+    name: 'Open Science Champion',
+    slug: 'open-science-champion',
+  },
+];
+
+export const getAwardsQuery = (): FetchAwardsQuery =>
+  getOsChampionQuery() as FetchAwardsQuery;
+
+export const getAwardsResponse = (): AwardsResponse => ({
+  ...getOSChampionResponse(),
+  id: 'team-id-0_open-science-champion_all',
+  awardType: 'open-science-champion',
+  awardTypeName: 'Open Science Champion',
+});
+
+export const getListAwardsResponse = (): ListAwardsResponse => ({
+  total: 1,
+  items: [getAwardsResponse()],
 });
 
 export const getPreliminaryDataSharingQuery =

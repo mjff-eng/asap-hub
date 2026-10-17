@@ -61,6 +61,7 @@ const textWithNgramKeyword = (options?: {
 
 export const validMetrics = [
   'os-champion',
+  'awards',
   'preliminary-data-sharing',
   'attendance',
   'preprint-compliance',
@@ -88,6 +89,32 @@ export const metricConfig: Record<Metrics, OpensearchMetricConfig> = {
         }),
         isTeamInactive: { type: 'boolean' },
         teamAwardsCount: { type: 'integer' },
+        users: {
+          type: 'nested',
+          properties: {
+            id: { type: 'text' },
+            name: textWithNgramKeyword({ raw: true }),
+            awardsCount: { type: 'integer' },
+          },
+        },
+        timeRange: { type: 'keyword' },
+      },
+    },
+  },
+  awards: {
+    indexAlias: 'awards',
+    mapping: {
+      properties: {
+        id: { type: 'keyword' },
+        teamId: { type: 'keyword' },
+        teamName: textWithNgramKeyword({
+          normalizer: 'lowercase_normalizer',
+          raw: true,
+        }),
+        isTeamInactive: { type: 'boolean' },
+        teamAwardsCount: { type: 'integer' },
+        awardType: { type: 'keyword' },
+        awardTypeName: { type: 'keyword' },
         users: {
           type: 'nested',
           properties: {

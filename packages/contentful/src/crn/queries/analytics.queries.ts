@@ -397,6 +397,68 @@ export const FETCH_OS_CHAMPION = gql`
   }
 `;
 
+export const FETCH_AWARD_TYPES = gql`
+  query FetchAwardTypes {
+    awardTypeCollection(limit: 50, order: [name_ASC]) {
+      items {
+        sys {
+          id
+        }
+        name
+      }
+    }
+  }
+`;
+
+export const FETCH_AWARDS = gql`
+  query FetchAwards(
+    $limit: Int
+    $skip: Int
+    $dateFilter: DateTime
+    $awardTypeId: String!
+  ) {
+    teamsCollection(order: sys_id_ASC, limit: $limit, skip: $skip) {
+      total
+      items {
+        sys {
+          id
+        }
+        displayName
+        inactiveSince
+        linkedFrom {
+          teamMembershipCollection(limit: 100) {
+            items {
+              linkedFrom {
+                usersCollection(limit: 1) {
+                  items {
+                    sys {
+                      id
+                    }
+                    firstName
+                    middleName
+                    nickname
+                    lastName
+                  }
+                }
+              }
+              awardsCollection(
+                limit: 10
+                where: {
+                  date_exists: true
+                  awardType: { sys: { id: $awardTypeId } }
+                  date_gte: $dateFilter
+                }
+              ) {
+                total
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const preliminaryDataSharingSpeakerFragment = gql`
   fragment PreliminaryDataSharingSpeaker on EventSpeakers {
     preliminaryDataShared

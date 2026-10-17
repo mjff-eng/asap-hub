@@ -3,6 +3,9 @@ import {
   FetchAnalyticsTeamLeadershipQueryVariables,
   FetchAttendanceQuery,
   FetchAttendanceQueryVariables,
+  FetchAwardsQuery,
+  FetchAwardsQueryVariables,
+  FetchAwardTypesQuery,
   FetchEngagementQuery,
   FetchEngagementQueryVariables,
   FetchOsChampionQuery,
@@ -23,6 +26,8 @@ import {
   FetchUserTotalResearchOutputsQueryVariables,
   FETCH_ANALYTICS_TEAM_LEADERSHIP,
   FETCH_ATTENDANCE,
+  FETCH_AWARD_TYPES,
+  FETCH_AWARDS,
   FETCH_ENGAGEMENT,
   FETCH_OS_CHAMPION,
   FETCH_PRELIMINARY_DATA_SHARING,
@@ -35,18 +40,23 @@ import {
   GraphQLClient,
 } from '@asap-hub/contentful';
 import {
+  AwardsDataObject,
+  AwardTypeDataObject,
   FetchAnalyticsOptions,
+  FetchAwardsOptions,
   FetchPaginationOptions,
   FilterAnalyticsOptions,
   ListAnalyticsTeamLeadershipDataObject,
+  ListAwardsDataObject,
   ListEngagementDataObject,
+  ListOSChampionDataObject,
   ListTeamCollaborationDataObject,
   ListTeamProductivityDataObject,
   ListUserProductivityDataObject,
   MeetingRepAttendanceDataObject,
-  OSChampionDataObject,
   OutputTypeOption,
   PreliminaryDataSharingDataObject,
+  TeamAwardsDataObject,
   TeamProductivityDataObject,
   TeamRole,
   TimeRangeOption,
@@ -135,7 +145,9 @@ export class AnalyticsContentfulDataProvider implements AnalyticsDataProvider {
     };
   }
 
-  async fetchOSChampion(options: FetchAnalyticsOptions) {
+  async fetchOSChampion(
+    options: FetchAnalyticsOptions,
+  ): Promise<ListOSChampionDataObject> {
     const { take = 10, skip = 0, filter } = options;
     const dateFilter = getRangeFilterParams(filter?.timeRange);
     const { teamsCollection } = await this.contentfulClient.request<
@@ -145,7 +157,45 @@ export class AnalyticsContentfulDataProvider implements AnalyticsDataProvider {
 
     return {
       total: teamsCollection?.total || 0,
-      items: getOsChampionItems(teamsCollection, filter?.timeRange),
+      items: getTeamAwardsItems(teamsCollection, filter?.timeRange),
+    };
+  }
+
+  async fetchAwardTypes(): Promise<AwardTypeDataObject[]> {
+    const { awardTypeCollection } =
+      await this.contentfulClient.request<FetchAwardTypesQuery>(
+        FETCH_AWARD_TYPES,
+      );
+
+    return cleanArray(awardTypeCollection?.items).map((awardType) => {
+      const name = awardType.name ?? '';
+      return {
+        id: awardType.sys.id,
+        name,
+        slug: toSlug(name) || awardType.sys.id,
+      };
+    });
+  }
+
+  async fetchAwards(
+    options: FetchAwardsOptions,
+  ): Promise<ListAwardsDataObject> {
+    const { take = 10, skip = 0, filter } = options;
+    const { awardType, timeRange } = filter;
+    const dateFilter = getRangeFilterParams(timeRange);
+    const { teamsCollection } = await this.contentfulClient.request<
+      FetchAwardsQuery,
+      FetchAwardsQueryVariables
+    >(FETCH_AWARDS, {
+      limit: take,
+      skip,
+      dateFilter,
+      awardTypeId: awardType.id,
+    });
+
+    return {
+      total: teamsCollection?.total || 0,
+      items: getAwardsItems(teamsCollection, awardType, timeRange),
     };
   }
 
@@ -513,10 +563,30 @@ const getTeamProductivityItems = (
     };
   });
 
-const getOsChampionItems = (
-  teamsCollection: FetchOsChampionQuery['teamsCollection'],
+const toSlug = (name: string): string =>
+  name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+const getAwardsItems = (
+  teamsCollection: FetchAwardsQuery['teamsCollection'],
+  awardType: AwardTypeDataObject,
   rangeKey?: TimeRangeOption,
-): OSChampionDataObject[] =>
+): AwardsDataObject[] =>
+  getTeamAwardsItems(teamsCollection, rangeKey).map((item) => ({
+    ...item,
+    id: `${item.teamId}_${awardType.slug}_${item.timeRange}`,
+    awardType: awardType.slug,
+    awardTypeName: awardType.name,
+  }));
+
+// FETCH_OS_CHAMPION and FETCH_AWARDS select the same fields, so one mapper serves both.
+const getTeamAwardsItems = (
+  teamsCollection: FetchAwardsQuery['teamsCollection'],
+  rangeKey?: TimeRangeOption,
+): TeamAwardsDataObject[] =>
   cleanArray(teamsCollection?.items).map((teamItem) => {
     let awardsCount = 0;
     if (teamItem.linkedFrom?.teamMembershipCollection?.items.length) {
@@ -525,7 +595,7 @@ const getOsChampionItems = (
 
       const userAwardsCount = teamMembershipItems.reduce(
         (
-          usersWithAwards: OSChampionDataObject['users'],
+          usersWithAwards: TeamAwardsDataObject['users'],
           teamMembershipItem,
         ) => {
           const user =

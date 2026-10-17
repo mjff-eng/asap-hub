@@ -8,6 +8,8 @@ export const analyticsDataProviderMock = {
   fetchTeamCollaboration: jest.fn(),
   fetchEngagement: jest.fn(),
   fetchOSChampion: jest.fn(),
+  fetchAwardTypes: jest.fn(),
+  fetchAwards: jest.fn(),
   fetchPreliminaryDataSharing: jest.fn(),
   fetchAttendance: jest.fn(),
 } as unknown as jest.Mocked<AnalyticsDataProvider>;

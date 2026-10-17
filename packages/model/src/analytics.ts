@@ -621,7 +621,7 @@ export type AnalyticsSortOptions =
   | SortUserCollaboration
   | SortUserProductivity;
 
-export type OSChampionDataObject = {
+export type TeamAwardsDataObject = {
   teamId: string;
   teamName: string;
   isTeamInactive: boolean;
@@ -633,6 +633,8 @@ export type OSChampionDataObject = {
     awardsCount: number;
   }[];
 };
+
+export type OSChampionDataObject = TeamAwardsDataObject;
 export type ListOSChampionDataObject = ListResponse<OSChampionDataObject>;
 export type OSChampionResponse = OSChampionDataObject;
 export type OSChampionOpensearchResponse = OSChampionResponse & {
@@ -641,6 +643,29 @@ export type OSChampionOpensearchResponse = OSChampionResponse & {
 export type ListOSChampionResponse = ListResponse<OSChampionResponse>;
 export type ListOSChampionOpensearchResponse =
   ListResponse<OSChampionOpensearchResponse>;
+
+export type AwardTypeDataObject = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+export type FetchAwardsOptions = FetchPaginationOptions & {
+  filter: {
+    timeRange?: TimeRangeOption;
+    awardType: AwardTypeDataObject;
+  };
+};
+
+export type AwardsDataObject = TeamAwardsDataObject & {
+  /** `${teamId}_${awardType}_${timeRange}`, used as the OpenSearch _id */
+  id: string;
+  awardType: string;
+  awardTypeName: string;
+};
+export type ListAwardsDataObject = ListResponse<AwardsDataObject>;
+export type AwardsResponse = AwardsDataObject;
+export type ListAwardsResponse = ListResponse<AwardsResponse>;
 
 export type PreliminaryDataSharingDataObject = {
   teamId: string;

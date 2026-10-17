@@ -1,5 +1,6 @@
 import {
   FetchAnalyticsOptions,
+  FetchAwardsOptions,
   FetchPaginationOptions,
   ListAnalyticsTeamLeadershipResponse,
 } from '@asap-hub/model';
@@ -15,6 +16,8 @@ import {
   getListUserProductivityDataObject,
   getListUserProductivityResponse,
   getListOSChampionResponse,
+  getAwardTypeDataObjects,
+  getListAwardsResponse,
   getListPreliminaryDataSharingResponse,
   getListAttendanceResponse,
 } from '../fixtures/analytics.fixtures';
@@ -275,6 +278,69 @@ describe('Analytics controller', () => {
       await analyticsController.fetchOSChampion(options);
 
       expect(analyticsDataProviderMock.fetchOSChampion).toHaveBeenCalledWith(
+        options,
+      );
+    });
+  });
+
+  describe('fetchAwardTypes method', () => {
+    test('Should return an empty list when the data provider returns no award types', async () => {
+      analyticsDataProviderMock.fetchAwardTypes.mockResolvedValue([]);
+
+      const result = await analyticsController.fetchAwardTypes();
+
+      expect(result).toEqual([]);
+    });
+
+    test('Should return the award types from the data provider', async () => {
+      analyticsDataProviderMock.fetchAwardTypes.mockResolvedValue(
+        getAwardTypeDataObjects(),
+      );
+
+      const result = await analyticsController.fetchAwardTypes();
+
+      expect(result).toEqual(getAwardTypeDataObjects());
+      expect(analyticsDataProviderMock.fetchAwardTypes).toHaveBeenCalledWith();
+    });
+  });
+
+  describe('fetchAwards method', () => {
+    const osChampionAwardType = getAwardTypeDataObjects()[1]!;
+
+    test('Should return an empty result when the data provider returns an empty list', async () => {
+      analyticsDataProviderMock.fetchAwards.mockResolvedValue({
+        total: 0,
+        items: [],
+      });
+
+      const result = await analyticsController.fetchAwards({
+        filter: { awardType: osChampionAwardType },
+      });
+
+      expect(result).toEqual({ total: 0, items: [] });
+    });
+
+    test('Should return the awards data', async () => {
+      analyticsDataProviderMock.fetchAwards.mockResolvedValue(
+        getListAwardsResponse(),
+      );
+
+      const result = await analyticsController.fetchAwards({
+        filter: { awardType: osChampionAwardType },
+      });
+
+      expect(result).toEqual(getListAwardsResponse());
+    });
+
+    test('Should call the data provider with the correct options', async () => {
+      const options: FetchAwardsOptions = {
+        take: 10,
+        skip: 5,
+        filter: { timeRange: '90d', awardType: osChampionAwardType },
+      };
+      await analyticsController.fetchAwards(options);
+
+      expect(analyticsDataProviderMock.fetchAwards).toHaveBeenCalledWith(
         options,
       );
     });

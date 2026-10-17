@@ -1,5 +1,6 @@
 import {
   AnalyticsTeamLeadershipDataObject,
+  AwardsDataObject,
   EngagementDataObject,
   MeetingRepAttendanceDataObject,
   OSChampionDataObject,
@@ -85,6 +86,7 @@ export type ProjectAimsDataObject = {
 
 export type MetricToObjectMap = {
   'os-champion': OSChampionDataObject;
+  awards: AwardsDataObject;
   'preliminary-data-sharing': PreliminaryDataSharingDataObject;
   attendance: MeetingRepAttendanceDataObject;
   'preprint-compliance': PreprintComplianceDataObject;
