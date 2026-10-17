@@ -1706,6 +1706,7 @@ __metadata:
     hast-util-sanitize: "npm:3.0.2"
     ismounted: "npm:^0.1.8"
     lexical: "npm:0.18.0"
+    pdfjs-dist: "npm:6.4.299"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     react-hook-form: "npm:7.53.2"
@@ -12408,6 +12409,12 @@ __metadata:
   checksum: 10/d92546cf9bf670ddb927c53f5fa19f0554b7475a264ead4e1ae2339874f4312fe4ada5d42588f27eea3577bee29fa8f46889d398f0e7ecb3f7a4c1d3e0b71bdc
   languageName: node
   linkType: hard
+
+"@napi-rs/canvas@link:./.yarn/stubs/napi-rs-canvas::locator=asap-hub%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@napi-rs/canvas@link:./.yarn/stubs/napi-rs-canvas::locator=asap-hub%40workspace%3A."
+  languageName: node
+  linkType: soft
 
 "@napi-rs/wasm-runtime@npm:^0.2.11":
   version: 0.2.12
@@ -34515,6 +34522,18 @@ __metadata:
   version: 2.0.1
   resolution: "pathval@npm:2.0.1"
   checksum: 10/f5e8b82f6b988a5bba197970af050268fd800780d0f9ee026e6f0b544ac4b17ab52bebeabccb790d63a794530a1641ae399ad07ecfc67ad337504c85dc9e5693
+  languageName: node
+  linkType: hard
+
+"pdfjs-dist@npm:6.4.299":
+  version: 6.4.299
+  resolution: "pdfjs-dist@npm:6.4.299"
+  dependencies:
+    "@napi-rs/canvas": "npm:^1.0.10"
+  dependenciesMeta:
+    "@napi-rs/canvas":
+      optional: true
+  checksum: 10/a6c2a607340bee5b4e3af1b206a7c1bdf8a4e7417e78892194d0f80e2b7dc753189b79992a74b3c44c331fb141231021e8377498561c7667ccb77864bebcfaca
   languageName: node
   linkType: hard
 

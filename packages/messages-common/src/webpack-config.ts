@@ -1,4 +1,4 @@
-import { Configuration } from 'webpack';
+import { Configuration, IgnorePlugin } from 'webpack';
 import { TemplatePlugin } from './template-plugin';
 
 const configFactory = (
@@ -35,7 +35,11 @@ const configFactory = (
       },
     ],
   },
-  plugins: [TemplatePlugin(appOrigin)],
+  plugins: [
+    // No email renders the PDF viewer, and webpack can't load pdf.js's CSS
+    new IgnorePlugin({ resourceRegExp: /^pdfjs-dist(\/|$)/ }),
+    TemplatePlugin(appOrigin),
+  ],
 });
 
 export { configFactory };

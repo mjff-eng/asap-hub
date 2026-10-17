@@ -1,0 +1,6 @@
+{
+  "name": "@napi-rs/canvas",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Stand-in for pdfjs-dist's optional @napi-rs/canvas, which only its Node build uses. The real package adds about 100 MB of native binaries to the Yarn cache."
+}

@@ -8,7 +8,6 @@ const props: ComponentProps<typeof GrantDocumentHeaderCard> = {
   ...createResearchOutputResponse(),
   title: 'Grant title',
   documentType: 'Grant Document',
-  link: 'https://example.com/grant.pdf',
   teams: [{ id: 'team-1', displayName: 'Alpha' }],
   addedDate: '2024-03-10T00:00:00.000Z',
   lastUpdatedPartial: '2024-06-20T00:00:00.000Z',
@@ -39,28 +38,16 @@ describe('GrantDocumentHeaderCard', () => {
     expect(screen.getByText('Last updated: 20th June 2024')).toBeVisible();
   });
 
-  it('links to the output', () => {
-    render(<GrantDocumentHeaderCard {...props} />);
-
-    expect(
-      screen.getByRole('link', { name: /access output/i }),
-    ).toHaveAttribute('href', 'https://example.com/grant.pdf');
-  });
-
-  it('omits the access output button and team row when they are missing', () => {
+  it('omits the team row when there are no teams', () => {
     render(
       <GrantDocumentHeaderCard
         {...props}
-        link={undefined}
         teams={[]}
         addedDate={undefined}
         created="2023-01-05T00:00:00.000Z"
       />,
     );
 
-    expect(
-      screen.queryByRole('link', { name: /access output/i }),
-    ).not.toBeInTheDocument();
     expect(screen.queryByText(/Team /)).not.toBeInTheDocument();
     expect(screen.getByText('Date Added: 5th January 2023')).toBeVisible();
   });

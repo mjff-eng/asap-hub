@@ -30,15 +30,23 @@ const MAX_ALGOLIA_QUERY_LENGTH = 512;
 
 type SearchProps = Pick<
   ComponentProps<typeof TextField>,
-  'value' | 'onChange'
+  'value' | 'onChange' | 'onKeyDown'
 > &
   Required<Pick<ComponentProps<typeof TextField>, 'placeholder'>> & {
     padding?: boolean;
+    trackSearch?: boolean;
   };
-const SearchField: React.FC<SearchProps> = ({ padding = true, ...props }) => {
+const SearchField: React.FC<SearchProps> = ({
+  padding = true,
+  trackSearch = true,
+  ...props
+}) => {
   const [debouncedValue] = useDebounce(props.value, 5000);
 
   useEffect(() => {
+    if (!trackSearch) {
+      return undefined;
+    }
     if (props.value && props.value === debouncedValue) {
       window.dataLayer?.push({
         [SEARCH_QUERY_KEY]: props.value,
@@ -53,7 +61,7 @@ const SearchField: React.FC<SearchProps> = ({ padding = true, ...props }) => {
         [SEARCH_PLACEHOLDER_KEY]: undefined,
       });
     };
-  }, [debouncedValue, props.placeholder, props.value]);
+  }, [debouncedValue, props.placeholder, props.value, trackSearch]);
 
   return (
     <div css={[clearButtonStyles, !padding && { padding: 0 }]}>

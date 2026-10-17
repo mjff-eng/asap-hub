@@ -297,7 +297,6 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
             <GrantDocumentHeaderCard
               title={props.title}
               documentType={props.documentType}
-              link={props.link}
               teams={props.teams}
               addedDate={props.addedDate}
               created={props.created}

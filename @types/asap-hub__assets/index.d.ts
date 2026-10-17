@@ -10,3 +10,7 @@ declare module '*.png' {
   const path: string;
   export default path;
 }
+declare module '*?url' {
+  const path: string;
+  export default path;
+}

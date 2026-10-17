@@ -66,6 +66,7 @@
     "hast-util-sanitize": "3.0.2",
     "ismounted": "^0.1.8",
     "lexical": "0.18.0",
+    "pdfjs-dist": "6.4.299",
     "react-hook-form": "7.53.2",
     "react-select": "5.8.0",
     "regenerator-runtime": "0.14.1",

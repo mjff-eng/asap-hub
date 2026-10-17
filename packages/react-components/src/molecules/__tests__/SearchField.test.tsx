@@ -65,6 +65,17 @@ describe('GTM data', () => {
     });
   });
 
+  it('is not pushed when search tracking is off', () => {
+    const { rerender } = render(
+      <SearchField placeholder="p" value="" trackSearch={false} />,
+    );
+    rerender(<SearchField placeholder="p" value="q" trackSearch={false} />);
+    act(() => {
+      jest.advanceTimersByTime(30 * 1000);
+    });
+    expect(window.dataLayer).toEqual([]);
+  });
+
   it('is not pushed after changing the query to be empty', () => {
     const { rerender } = render(<SearchField placeholder="p" value="q" />);
     rerender(<SearchField placeholder="p" value="" />);

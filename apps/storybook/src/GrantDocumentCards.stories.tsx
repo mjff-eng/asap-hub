@@ -17,7 +17,6 @@ export const Header = () => (
     {...createResearchOutputResponse()}
     documentType="Grant Document"
     title="Understanding the molecular mechanisms of Parkinson’s disease"
-    link="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
     grantType="original"
     project={{
       id: 'project-1',

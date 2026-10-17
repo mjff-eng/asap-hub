@@ -2543,6 +2543,10 @@ const RAW_RUNTIME_STATE =
       "npm:0.39.8"\
     ],\
     [\
+      "@napi-rs/canvas",\
+      "link:./.yarn/stubs/napi-rs-canvas::locator=asap-hub%40workspace%3A."\
+    ],\
+    [\
       "@napi-rs/wasm-runtime",\
       "npm:0.2.12"\
     ],\
@@ -8876,6 +8880,10 @@ const RAW_RUNTIME_STATE =
       "npm:2.0.1"\
     ],\
     [\
+      "pdfjs-dist",\
+      "npm:6.4.299"\
+    ],\
+    [\
       "peberminta",\
       "npm:0.9.0"\
     ],\
@@ -13751,6 +13759,7 @@ const RAW_RUNTIME_STATE =
           ["hast-util-sanitize", "npm:3.0.2"],\
           ["ismounted", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:0.1.8"],\
           ["lexical", "npm:0.18.0"],\
+          ["pdfjs-dist", "npm:6.4.299"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:18.3.1"],\
           ["react-hook-form", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:7.53.2"],\
@@ -13838,6 +13847,7 @@ const RAW_RUNTIME_STATE =
           ["hast-util-sanitize", "npm:3.0.2"],\
           ["ismounted", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:0.1.8"],\
           ["lexical", "npm:0.18.0"],\
+          ["pdfjs-dist", "npm:6.4.299"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:18.3.1"],\
           ["react-hook-form", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:7.53.2"],\
@@ -13923,6 +13933,7 @@ const RAW_RUNTIME_STATE =
           ["hast-util-sanitize", "npm:3.0.2"],\
           ["ismounted", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:0.1.8"],\
           ["lexical", "npm:0.18.0"],\
+          ["pdfjs-dist", "npm:6.4.299"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:18.3.1"],\
           ["react-hook-form", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:7.53.2"],\
@@ -14009,6 +14020,7 @@ const RAW_RUNTIME_STATE =
           ["hast-util-sanitize", "npm:3.0.2"],\
           ["ismounted", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:0.1.8"],\
           ["lexical", "npm:0.18.0"],\
+          ["pdfjs-dist", "npm:6.4.299"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:18.3.1"],\
           ["react-hook-form", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:7.53.2"],\
@@ -14096,6 +14108,7 @@ const RAW_RUNTIME_STATE =
           ["hast-util-sanitize", "npm:3.0.2"],\
           ["ismounted", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:0.1.8"],\
           ["lexical", "npm:0.18.0"],\
+          ["pdfjs-dist", "npm:6.4.299"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:18.3.1"],\
           ["react-hook-form", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:7.53.2"],\
@@ -14180,6 +14193,7 @@ const RAW_RUNTIME_STATE =
           ["hast-util-sanitize", "npm:3.0.2"],\
           ["ismounted", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:0.1.8"],\
           ["lexical", "npm:0.18.0"],\
+          ["pdfjs-dist", "npm:6.4.299"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:18.3.1"],\
           ["react-hook-form", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:7.53.2"],\
@@ -33863,6 +33877,16 @@ const RAW_RUNTIME_STATE =
           ["strict-event-emitter", "npm:0.5.1"]\
         ],\
         "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas", [\
+      ["link:./.yarn/stubs/napi-rs-canvas::locator=asap-hub%40workspace%3A.", {\
+        "packageLocation": "./.yarn/stubs/napi-rs-canvas/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas", "link:./.yarn/stubs/napi-rs-canvas::locator=asap-hub%40workspace%3A."]\
+        ],\
+        "linkType": "SOFT",\
+        "discardFromLookup": true\
       }]\
     ]],\
     ["@napi-rs/wasm-runtime", [\
@@ -60623,6 +60647,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/pathval-npm-2.0.1-7fb9ae82ba-f5e8b82f6b.zip/node_modules/pathval/",\
         "packageDependencies": [\
           ["pathval", "npm:2.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["pdfjs-dist", [\
+      ["npm:6.4.299", {\
+        "packageLocation": "./.yarn/cache/pdfjs-dist-npm-6.4.299-98d54b4097-a6c2a60734.zip/node_modules/pdfjs-dist/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas", "link:./.yarn/stubs/napi-rs-canvas::locator=asap-hub%40workspace%3A."],\
+          ["pdfjs-dist", "npm:6.4.299"]\
         ],\
         "linkType": "HARD"\
       }]\
