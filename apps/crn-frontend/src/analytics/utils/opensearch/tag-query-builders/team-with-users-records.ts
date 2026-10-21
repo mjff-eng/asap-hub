@@ -9,7 +9,7 @@ import type {
 } from '../types';
 
 // Unique aggregation keys for team-with-users index
-// (used by attendance, os-champion, preliminary-data-sharing, preprint-compliance, publication-compliance)
+// (used by attendance, awards, os-champion, preliminary-data-sharing, preprint-compliance, publication-compliance)
 const TEAM_WITH_USERS_INDEX_TEAMS = 'teamWithUsersIndex_teams' as const;
 const TEAM_WITH_USERS_INDEX_NESTED_USERS =
   'teamWithUsersIndex_nestedUsers' as const;

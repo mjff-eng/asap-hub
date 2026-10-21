@@ -36,6 +36,13 @@ import {
 import Analytics from '../Routes';
 
 jest.mock('../leadership/api');
+jest.mock('../awards/api', () => ({
+  getAwardTypes: jest.fn().mockResolvedValue([
+    { value: 'network-spotlight', label: 'Network Spotlight' },
+    { value: 'open-science-champion', label: 'Open Science Champion' },
+  ]),
+  getAnalyticsAwards: jest.fn().mockResolvedValue({ items: [], total: 0 }),
+}));
 jest.mock('../productivity/api');
 jest.mock('../collaboration/api');
 jest.mock('../engagement/api');
@@ -464,7 +471,7 @@ describe('Awards', () => {
 
   it('renders the Awards tab successfully', async () => {
     await renderPage(
-      analytics({}).awards({}).metric({ metric: 'os-champion' }).$,
+      analytics({}).awards({}).metric({ metric: 'open-science-champion' }).$,
     );
     expect(
       await screen.findByText(/Analytics/i, {
@@ -489,10 +496,10 @@ describe('Awards', () => {
     ).toBeVisible();
   });
 
-  it('redirects to os-champion when no metric is specified', async () => {
+  it('redirects to the first award type when no metric is specified', async () => {
     await renderPage(analytics({}).awards({}).$);
     expect(
-      await screen.findByText(/Open Science Champion/i, {
+      await screen.findByText(/Network Spotlight/i, {
         selector: 'h3',
       }),
     ).toBeVisible();
@@ -501,7 +508,7 @@ describe('Awards', () => {
   it('redirects to productivity when the flag is disabled', async () => {
     disable('AWARDS_TAB');
     await renderPage(
-      analytics({}).awards({}).metric({ metric: 'os-champion' }).$,
+      analytics({}).awards({}).metric({ metric: 'open-science-champion' }).$,
     );
     expect(
       await screen.findByText(/User Productivity/i, {

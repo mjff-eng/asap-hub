@@ -6,16 +6,9 @@ import { Dropdown, Headline3, Paragraph, Subtitle } from '../atoms';
 import { AnalyticsControls } from '../molecules';
 import { rem } from '../pixels';
 
-export type AwardsMetricOption = 'os-champion' | 'network-spotlight';
-
-export const awardsMetricOptions: Record<AwardsMetricOption, string> = {
-  'os-champion': 'Open Science Champion',
-  'network-spotlight': 'Network Spotlight',
-};
-
-const metricDescription: Record<AwardsMetricOption, string> = {
-  'os-champion': 'Number of Open Science Champion awards by team',
-  'network-spotlight': 'Number of Network Spotlight awards by team',
+export type AwardsMetricOption = {
+  value: string;
+  label: string;
 };
 
 type AwardsAnalyticsProps = Pick<
@@ -23,14 +16,15 @@ type AwardsAnalyticsProps = Pick<
   'timeRange'
 > & {
   children: React.ReactNode;
-  metric: AwardsMetricOption;
+  metric: string;
+  metricOptions: ReadonlyArray<AwardsMetricOption>;
   tags: string[];
   currentPage: number;
   loadTags?: (
     tagsQuery: string,
   ) => Promise<Array<{ label: string; value: string }>>;
   setTags: (tags: string[]) => void;
-  setMetric: (option: AwardsMetricOption) => void;
+  setMetric: (option: string) => void;
   exportResults: () => Promise<void>;
 };
 
@@ -45,6 +39,7 @@ const tableHeaderStyles = css({
 const AnalyticsAwardsPageBody: React.FC<AwardsAnalyticsProps> = ({
   children,
   metric,
+  metricOptions,
   tags,
   timeRange,
   currentPage,
@@ -53,26 +48,24 @@ const AnalyticsAwardsPageBody: React.FC<AwardsAnalyticsProps> = ({
   setMetric,
   exportResults,
 }) => {
-  const metricOptionList = Object.keys(awardsMetricOptions).map((value) => ({
-    value: value as AwardsMetricOption,
-    label: awardsMetricOptions[value as AwardsMetricOption],
-  }));
+  const metricLabel =
+    metricOptions.find(({ value }) => value === metric)?.label ?? '';
 
   return (
     <article>
       <div css={metricDropdownStyles}>
         <Subtitle>Metric</Subtitle>
         <Dropdown
-          options={metricOptionList}
+          options={metricOptions}
           value={metric}
           onChange={setMetric}
           required
         />
       </div>
       <div css={tableHeaderStyles}>
-        <Headline3>{awardsMetricOptions[metric]}</Headline3>
+        <Headline3>{metricLabel}</Headline3>
         <Paragraph styles={css({ color: colour.foreground.tertiary })}>
-          {metricDescription[metric]}.
+          Number of {metricLabel} awards by team.
         </Paragraph>
       </div>
       <AnalyticsControls

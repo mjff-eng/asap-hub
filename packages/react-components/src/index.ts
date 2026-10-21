@@ -467,4 +467,3 @@ export type {
 } from './utils';
 export type { MetricOption } from './templates/AnalyticsLeadershipPageBody';
 export type { AwardsMetricOption } from './templates/AnalyticsAwardsPageBody';
-export { awardsMetricOptions } from './templates/AnalyticsAwardsPageBody';

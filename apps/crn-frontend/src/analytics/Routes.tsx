@@ -220,26 +220,13 @@ const AnalyticsRoutes = () => {
             element={
               <Routes>
                 <Route
-                  path={analytics({}).awards({}).metric.template}
+                  path={`${analytics({}).awards({}).metric.template}?`}
                   element={
                     <AnalyticsPage onExportAnalytics={handleExportAnalytics}>
                       <Frame title="Awards">
                         <AwardsBody />
                       </Frame>
                     </AnalyticsPage>
-                  }
-                />
-                <Route
-                  path="*"
-                  element={
-                    <Navigate
-                      to={
-                        analytics({})
-                          .awards({})
-                          .metric({ metric: 'os-champion' }).$
-                      }
-                      replace
-                    />
                   }
                 />
               </Routes>

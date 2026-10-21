@@ -244,6 +244,22 @@ describe('teamWithUsersRecordSearchQueryBuilder', () => {
     expect(result.query.bool).not.toHaveProperty('should');
   });
 
+  it('includes awardType in must clauses when provided', () => {
+    const result = teamWithUsersRecordSearchQueryBuilder({
+      searchTags: [],
+      currentPage: 0,
+      pageSize: 10,
+      timeRange: 'all',
+      searchScope: 'flat',
+      awardType: 'open-science-champion',
+    });
+
+    expect(result.query.bool.must).toEqual([
+      { term: { timeRange: 'all' } },
+      { term: { awardType: 'open-science-champion' } },
+    ]);
+  });
+
   it('excludes teamId from must clauses when undefined', () => {
     const result = teamWithUsersRecordSearchQueryBuilder({
       searchTags: [],
