@@ -301,7 +301,7 @@ const groupHeaderStyles = css({
 });
 
 // A ratio, not `rem`: line-height in `em` resolves against the element's own
-// font size, so `rem(16)` here would render 16/17 x 14px.
+// font size, so `rem(16)` here would render 16/16 x 14px.
 const groupLineStyles = css({
   margin: 0,
   fontSize: rem(14),

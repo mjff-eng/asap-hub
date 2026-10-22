@@ -1,5 +1,5 @@
 export const lineHeight = 24;
-export const perRem = 17;
+export const perRem = 16;
 
 export interface Screen {
   width: number;
