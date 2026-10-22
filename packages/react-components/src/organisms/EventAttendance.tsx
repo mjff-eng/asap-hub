@@ -57,8 +57,7 @@ const teamInnerStyles = css({
   alignItems: 'center',
   fontSize: rem(16),
   lineHeight: 24 / 16,
-  // `em` against the 16px team name, since `rem()` assumes 17px.
-  gap: `${8 / 16}em`,
+  gap: rem(8),
 });
 
 // Pixels, not `rem`: `rem` emits `em`, which a `<col>` resolves against the
@@ -94,8 +93,6 @@ const sectionHeaderCellStyles = css({
   padding: `${rem(16)} 0 0`,
 });
 
-// A ratio, not `rem`: line-height in `em` resolves against the element's own
-// font size, so `rem(24)` here would render 24/17 x 16px.
 const sectionLineStyles = css({ fontSize: rem(16), lineHeight: 24 / 16 });
 
 // Declared per line: a `> span` rule on the cell would outrank the separator's
