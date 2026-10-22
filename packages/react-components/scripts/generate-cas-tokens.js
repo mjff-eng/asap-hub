@@ -3,6 +3,13 @@
 // variables panel > right-click a collection > export modes) into
 // ../src/cas-tokens.generated.ts. Run with `yarn cas-tokens:generate`.
 //
+// TextStyles.tokens.json holds the text styles. Figma has no dev mode here, so
+// design exports them with the "Design Tokens" plugin (Figma: Plugins > Design
+// Tokens > Export Design Token File). That export lists ARIA's font on every
+// style, so the font comes from the theme collection instead, and which font a
+// style uses comes from the "Style | Font" table in Notion ("CAS Design System:
+// Text Styles").
+//
 // ASAP only uses the primitives "Value" mode, the mode "Light" mode and the
 // theme "CRN" and "GP2" modes; ARIA and Dark are left out on purpose.
 //
@@ -137,6 +144,54 @@ Object.keys(theme.crn).forEach((name) => {
   setIn(themeVariables, path.slice(1), `var(--${path.join('-')})`);
 });
 
+const fontFamiliesFor = (name) => {
+  const families = {};
+  walk(read(name).font.family, [], (path, token) => {
+    families[path.join('/')] = token.$value;
+  });
+  return families;
+};
+
+const fontFamily = fontFamiliesFor('CRN');
+if (JSON.stringify(fontFamily) !== JSON.stringify(fontFamiliesFor('GP2'))) {
+  throw new Error('CRN and GP2 no longer share their font families');
+}
+
+const fontByStyleGroup = {
+  heading: 'heading',
+  body: 'body',
+  button: 'body',
+  caption: 'body',
+};
+
+const textStyles = {};
+const walkTextStyles = (node, path) => {
+  if (node.type === 'custom-fontStyle') {
+    const family = fontByStyleGroup[path[0]];
+    if (!family) throw new Error(`No font for text style ${path.join('/')}`);
+    const {
+      fontSize,
+      lineHeight,
+      fontWeight,
+      letterSpacing,
+      paragraphSpacing,
+    } = node.value;
+    setIn(textStyles, path, {
+      family,
+      fontSize,
+      lineHeight,
+      fontWeight,
+      letterSpacing,
+      paragraphSpacing,
+    });
+    return;
+  }
+  Object.entries(node).forEach(([key, child]) =>
+    walkTextStyles(child, [...path, key]),
+  );
+};
+walkTextStyles(read('TextStyles').font, []);
+
 const literal = (value) => JSON.stringify(value, null, 2);
 
 writeFileSync(
@@ -153,5 +208,11 @@ export const casTheme = ${literal(theme)} as const;
 
 /** CSS custom property for every theme token, named after its Figma path. */
 export const casThemeVariables = ${literal(themeVariables)} as const;
+
+/** Figma collection "theme", font/family, the same in modes "CRN" and "GP2". */
+export const casFontFamily = ${literal(fontFamily)} as const;
+
+/** Figma text styles in pixels; \`family\` is the casFontFamily key the style uses. */
+export const casTextStyles = ${literal(textStyles)} as const;
 `,
 );

@@ -1391,3 +1391,195 @@ export const casThemeVariables = {
     },
   },
 } as const;
+
+/** Figma collection "theme", font/family, the same in modes "CRN" and "GP2". */
+export const casFontFamily = {
+  heading: 'Roboto Slab',
+  subtitle: 'Roboto',
+  body: 'Roboto',
+  caption: 'Roboto',
+} as const;
+
+/** Figma text styles in pixels; `family` is the casFontFamily key the style uses. */
+export const casTextStyles = {
+  heading: {
+    '1': {
+      black: {
+        family: 'heading',
+        fontSize: 60,
+        lineHeight: 72,
+        fontWeight: 900,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+      bold: {
+        family: 'heading',
+        fontSize: 60,
+        lineHeight: 72,
+        fontWeight: 700,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+    },
+    '2': {
+      bold: {
+        family: 'heading',
+        fontSize: 40,
+        lineHeight: 48,
+        fontWeight: 700,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+      semibold: {
+        family: 'heading',
+        fontSize: 40,
+        lineHeight: 40,
+        fontWeight: 600,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+    },
+    '3': {
+      bold: {
+        family: 'heading',
+        fontSize: 32,
+        lineHeight: 40,
+        fontWeight: 700,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+      semibold: {
+        family: 'heading',
+        fontSize: 32,
+        lineHeight: 40,
+        fontWeight: 600,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+    },
+    '4': {
+      bold: {
+        family: 'heading',
+        fontSize: 28,
+        lineHeight: 36,
+        fontWeight: 700,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+      semibold: {
+        family: 'heading',
+        fontSize: 28,
+        lineHeight: 36,
+        fontWeight: 600,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+    },
+    '5': {
+      bold: {
+        family: 'heading',
+        fontSize: 24,
+        lineHeight: 32,
+        fontWeight: 700,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+      semibold: {
+        family: 'heading',
+        fontSize: 24,
+        lineHeight: 32,
+        fontWeight: 600,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+    },
+    '6': {
+      bold: {
+        family: 'heading',
+        fontSize: 20,
+        lineHeight: 28,
+        fontWeight: 700,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+      semibold: {
+        family: 'heading',
+        fontSize: 20,
+        lineHeight: 28,
+        fontWeight: 600,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+      regular: {
+        family: 'heading',
+        fontSize: 20,
+        lineHeight: 28,
+        fontWeight: 400,
+        letterSpacing: 0,
+        paragraphSpacing: 0,
+      },
+    },
+  },
+  body: {
+    regular: {
+      family: 'body',
+      fontSize: 16,
+      lineHeight: 24,
+      fontWeight: 400,
+      letterSpacing: 0,
+      paragraphSpacing: 24,
+    },
+    medium: {
+      family: 'body',
+      fontSize: 16,
+      lineHeight: 24,
+      fontWeight: 500,
+      letterSpacing: 0,
+      paragraphSpacing: 0,
+    },
+    bold: {
+      family: 'body',
+      fontSize: 16,
+      lineHeight: 24,
+      fontWeight: 700,
+      letterSpacing: 0,
+      paragraphSpacing: 0,
+    },
+  },
+  button: {
+    default: {
+      family: 'body',
+      fontSize: 16,
+      lineHeight: 24,
+      fontWeight: 600,
+      letterSpacing: 0,
+      paragraphSpacing: 0,
+    },
+    mid: {
+      family: 'body',
+      fontSize: 16,
+      lineHeight: 20,
+      fontWeight: 600,
+      letterSpacing: 0,
+      paragraphSpacing: 0,
+    },
+    small: {
+      family: 'body',
+      fontSize: 14,
+      lineHeight: 16,
+      fontWeight: 600,
+      letterSpacing: 0,
+      paragraphSpacing: 0,
+    },
+  },
+  caption: {
+    regular: {
+      family: 'body',
+      fontSize: 14,
+      lineHeight: 24,
+      fontWeight: 400,
+      letterSpacing: 0,
+      paragraphSpacing: 0,
+    },
+  },
+} as const;
