@@ -1,13 +1,12 @@
 import { isValidElement } from 'react';
 import { CSSObject } from '@emotion/react';
 
+import { casFontFamily, casTextStyles } from './cas-tokens.generated';
 import {
   rem,
   vminLinearCalc,
   mobileScreen,
   largeDesktopScreen,
-  lineHeight,
-  perRem,
 } from './pixels';
 
 export type TextChild = React.ReactText | boolean | null | undefined;
@@ -67,15 +66,16 @@ export const isAllowedChildren = (
   return false;
 };
 
+const body = casTextStyles.body.regular;
+
 export const fontStyles = {
-  fontFamily:
-    "Roboto, 'Roboto Slab', Calibri, Mukta, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif",
+  fontFamily: `${casFontFamily.body}, 'Roboto Slab', Calibri, Mukta, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif`,
   WebkitFontSmoothing: 'antialiased',
   MozOsxFontSmoothing: 'auto',
 
   // This value must be declared in pixels so that the rest of the UI inherits its base value from it
-  fontSize: `${perRem}px`,
-  lineHeight: rem(lineHeight),
+  fontSize: `${body.fontSize}px`,
+  lineHeight: rem(body.lineHeight),
 } as const;
 export const captionStyles = {
   fontSize: rem(14),
