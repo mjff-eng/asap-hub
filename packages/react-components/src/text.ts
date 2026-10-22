@@ -2,12 +2,7 @@ import { isValidElement } from 'react';
 import { CSSObject } from '@emotion/react';
 
 import { casFontFamily, casTextStyles } from './cas-tokens.generated';
-import {
-  rem,
-  vminLinearCalc,
-  mobileScreen,
-  largeDesktopScreen,
-} from './pixels';
+import { rem } from './pixels';
 
 export type TextChild = React.ReactText | boolean | null | undefined;
 export type TextChildren = TextChild | ReadonlyArray<TextChild>;
@@ -88,57 +83,38 @@ export const layoutStyles = {
     display: 'none',
   },
 } as const;
+type TextStyle = {
+  readonly family: keyof typeof casFontFamily;
+  readonly fontSize: number;
+  readonly lineHeight: number;
+  readonly fontWeight: number;
+};
+const textStyle = ({
+  family,
+  fontSize,
+  lineHeight,
+  fontWeight,
+}: TextStyle): CSSObject => ({
+  fontFamily: casFontFamily[family],
+  fontSize: `${fontSize}px`,
+  lineHeight: `${lineHeight}px`,
+  fontWeight,
+});
+
+// Each level takes the Figma style closest to its size before CAS (Elena, 22 Oct 2026)
 export const headlineStyles = {
-  1: {
-    fontWeight: 'bold',
-    fontFamily: 'Roboto Slab',
-    fontSize: vminLinearCalc(
-      mobileScreen,
-      35.25,
-      largeDesktopScreen,
-      41.5,
-      'px',
-    ),
-    lineHeight: vminLinearCalc(mobileScreen, 42, largeDesktopScreen, 48, 'px'),
-  } as CSSObject,
-  2: {
-    fontWeight: 'bold',
-    fontFamily: 'Roboto Slab',
-    fontSize: vminLinearCalc(mobileScreen, 30, largeDesktopScreen, 30, 'px'),
-    lineHeight: vminLinearCalc(mobileScreen, 30, largeDesktopScreen, 42, 'px'),
-  } as CSSObject,
-  3: {
-    fontWeight: 'bold',
-    fontFamily: 'Roboto Slab',
-    fontSize: vminLinearCalc(
-      mobileScreen,
-      24.48,
-      largeDesktopScreen,
-      26.56,
-      'px',
-    ),
-    lineHeight: vminLinearCalc(mobileScreen, 30, largeDesktopScreen, 36, 'px'),
-  } as CSSObject,
-  4: {
-    fontWeight: 'bold',
-    fontFamily: 'Roboto Slab',
-    fontSize: vminLinearCalc(
-      mobileScreen,
-      20.4,
-      largeDesktopScreen,
-      21.25,
-      'px',
-    ),
-    lineHeight: vminLinearCalc(mobileScreen, 24, largeDesktopScreen, 30, 'px'),
-  } as CSSObject,
+  1: textStyle(casTextStyles.heading[2].bold),
+  2: textStyle(casTextStyles.heading[3].bold),
+  3: textStyle(casTextStyles.heading[4].bold),
+  4: textStyle(casTextStyles.heading[6].bold),
   5: {
     ...fontStyles,
-    fontFamily: 'Roboto',
-    fontWeight: 'bold',
+    fontFamily: casFontFamily.body,
+    fontWeight: casTextStyles.body.bold.fontWeight,
   } as CSSObject,
   6: {
     ...fontStyles,
-    fontWeight: 'normal',
+    fontWeight: body.fontWeight,
   } as CSSObject,
 } as const;
 

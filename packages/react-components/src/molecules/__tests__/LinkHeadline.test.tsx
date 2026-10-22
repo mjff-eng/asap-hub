@@ -1,7 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import { ComponentProps } from 'react';
-import { largeDesktopScreen } from '../../pixels';
-import { viewportCalc } from '../../test-utils';
 
 import LinkHeadline from '../LinkHeadline';
 
@@ -46,10 +44,10 @@ describe.each<ComponentProps<typeof LinkHeadline>['level']>([1, 2, 3, 4, 5, 6])(
     });
 
     const headingFontSizeVariations = {
-      1: '41.5px',
-      2: '30px',
-      3: '26.56px',
-      4: '21.25px',
+      1: '40px',
+      2: '32px',
+      3: '28px',
+      4: '20px',
       5: 'default',
       6: 'default',
     };
@@ -67,9 +65,7 @@ describe.each<ComponentProps<typeof LinkHeadline>['level']>([1, 2, 3, 4, 5, 6])(
           </LinkHeadline>,
         );
         const { fontSize } = getComputedStyle(screen.getByRole('heading'));
-        expect(viewportCalc(fontSize, largeDesktopScreen)).toEqual(
-          headingFontSizeVariations[styleAsHeading],
-        );
+        expect(fontSize).toEqual(headingFontSizeVariations[styleAsHeading]);
       },
     );
     it('varies the headline font weight for level 5', () => {
@@ -79,7 +75,7 @@ describe.each<ComponentProps<typeof LinkHeadline>['level']>([1, 2, 3, 4, 5, 6])(
         </LinkHeadline>,
       );
       const { fontWeight } = getComputedStyle(screen.getByRole('heading'));
-      expect(fontWeight).toEqual('bold');
+      expect(fontWeight).toEqual('700');
     });
   },
 );
