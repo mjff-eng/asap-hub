@@ -39,3 +39,17 @@ it('renders multiple event cards', () => {
     ['FirstEvent', 'SecondEvent'],
   );
 });
+
+it('shows the online events notice only when asked to', () => {
+  const event = {
+    ...createEventResponse(),
+    tags: [],
+    eventOwner: <div>ASAP Team</div>,
+    hasSpeakersToBeAnnounced: false,
+  };
+  const { queryByText, rerender } = render(<EventsList {...props([event])} />);
+  expect(queryByText(/Events are online by default/)).not.toBeInTheDocument();
+
+  rerender(<EventsList {...props([event])} showOnlineEventsNotice />);
+  expect(queryByText(/Events are online by default/)).toBeVisible();
+});

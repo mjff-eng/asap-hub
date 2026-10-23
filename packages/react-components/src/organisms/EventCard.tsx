@@ -1,6 +1,12 @@
 import { ComponentProps } from 'react';
+import { css } from '@emotion/react';
 
 import { BasicEvent, eventMaterialTypes } from '@asap-hub/model';
+
+import { colour } from '../colors';
+import { MapPinIcon } from '../icons';
+import { pillStyles } from '../pill';
+import { rem } from '../pixels';
 
 import {
   ToastCard,
@@ -29,6 +35,17 @@ type EventCardProps = ComponentProps<typeof EventInfo> &
     >['tooltipPosition'];
   };
 
+const inPersonPillStyles = css([
+  pillStyles,
+  {
+    padding: `${rem(4)} ${rem(8)}`,
+    borderRadius: rem(12),
+    backgroundColor: colour.background.info,
+    color: colour.foreground.info,
+    fontWeight: 500,
+  },
+]);
+
 const displayedMaterialTypes = [
   'notes',
   'videoRecording',
@@ -48,7 +65,7 @@ const EventCard: React.FC<EventCardProps> = ({
   joinMeetingTooltipPosition,
   ...props
 }) => {
-  const { hasStarted, hasFinished } = useEventLiveStatus(
+  const { hasStarted, hasFinished, isStartingSoon } = useEventLiveStatus(
     props.startDate,
     props.endDate,
   );
@@ -69,9 +86,7 @@ const EventCard: React.FC<EventCardProps> = ({
       if (props.hideMeetingLink) {
         return {
           type: 'live',
-          toastContent: (
-            <span>This in-person event is currently happening.</span>
-          ),
+          toastContent: <span>This in-person event is happening now.</span>,
         };
       }
       return {
@@ -83,6 +98,22 @@ const EventCard: React.FC<EventCardProps> = ({
             tooltipPosition={joinMeetingTooltipPosition}
           />
         ),
+      };
+    }
+    if (isStartingSoon) {
+      return {
+        type: 'upcoming',
+        toastContent: <span>This event starts in less than 24 hours.</span>,
+        ...(props.hideMeetingLink
+          ? {}
+          : {
+              toastAction: (
+                <JoinMeetingButton
+                  meetingLink={props.meetingLink}
+                  tooltipPosition={joinMeetingTooltipPosition}
+                />
+              ),
+            }),
       };
     }
     if (!hasStarted && hasSpeakersToBeAnnounced) {
@@ -120,7 +151,18 @@ const EventCard: React.FC<EventCardProps> = ({
 
   return (
     <ToastCard {...toastCardProps(displayToast)}>
-      <EventInfo {...props} status={status} />
+      <EventInfo
+        {...props}
+        status={status}
+        titleSuffix={
+          props.hideMeetingLink ? (
+            <span css={inPersonPillStyles}>
+              <MapPinIcon color={colour.foreground.info} size={16} />
+              In person
+            </span>
+          ) : undefined
+        }
+      />
     </ToastCard>
   );
 };

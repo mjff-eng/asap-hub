@@ -57,7 +57,6 @@ type DashboardEventCardProps = Pick<
   | 'startDateTimeZone'
   | 'endDate'
   | 'endDateTimeZone'
-  | 'recurring'
   | 'meetingLink'
   | 'hideMeetingLink'
   | 'notes'

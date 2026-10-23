@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 import { render, screen } from '@testing-library/react';
 import { createEventResponse } from '@asap-hub/fixtures';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
-import { addMinutes, subDays, subMinutes, addDays } from 'date-fns';
+import { addDays, addHours, addMinutes, subDays, subMinutes } from 'date-fns';
 
 import EventCard from '../EventCard';
 import { colour } from '../../colors';
@@ -40,12 +40,12 @@ it('renders the event tags', () => {
   expect(screen.getByText('MyTag')).toBeVisible();
 });
 
-it('shows the recurring badge for recurring events only', () => {
-  const { rerender } = render(<EventCard {...props} recurring />);
-  expect(screen.getByText('Recurring')).toBeVisible();
+it('shows the in person badge for in-person events only', () => {
+  const { rerender } = render(<EventCard {...props} hideMeetingLink />);
+  expect(screen.getByText('In person')).toBeVisible();
 
-  rerender(<EventCard {...props} recurring={false} />);
-  expect(screen.queryByText('Recurring')).not.toBeInTheDocument();
+  rerender(<EventCard {...props} hideMeetingLink={false} />);
+  expect(screen.queryByText('In person')).not.toBeInTheDocument();
 });
 
 describe('current events', () => {
@@ -126,7 +126,7 @@ describe('current events', () => {
       />,
     );
     expect(
-      screen.getByText('This in-person event is currently happening.'),
+      screen.getByText('This in-person event is happening now.'),
     ).toBeVisible();
     expect(screen.queryByText('Join Meeting Now')).not.toBeInTheDocument();
   });
@@ -147,13 +147,103 @@ describe('current events', () => {
       <EventCard
         {...props}
         hasSpeakersToBeAnnounced
-        startDate={addMinutes(new Date(), 30).toISOString()}
+        startDate={addDays(new Date(), 2).toISOString()}
+        endDate={addHours(addDays(new Date(), 2), 1).toISOString()}
       />,
     );
 
     expect(
       screen.queryByText(/more speakers to be announced/i),
     ).toBeInTheDocument();
+  });
+});
+
+describe('events starting in less than 24 hours', () => {
+  const startingSoon = {
+    startDate: addHours(new Date(), 3).toISOString(),
+    endDate: addHours(new Date(), 4).toISOString(),
+  };
+
+  it('toasts with a join button when the meeting link is valid', () => {
+    render(
+      <EventCard
+        {...props}
+        {...startingSoon}
+        status="Confirmed"
+        meetingLink="http://example.com"
+      />,
+    );
+    expect(
+      screen.getByText('This event starts in less than 24 hours.'),
+    ).toBeVisible();
+    expect(screen.getByText('Join Meeting Now').closest('a')).toHaveAttribute(
+      'href',
+      'http://example.com',
+    );
+    expect(
+      screen.queryByText('This event is happening now.'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('toasts with a disabled join button when the meeting link is missing', () => {
+    render(
+      <EventCard
+        {...props}
+        {...startingSoon}
+        status="Confirmed"
+        meetingLink={undefined}
+      />,
+    );
+    expect(
+      screen.getByText('Join Meeting Now').closest('a'),
+    ).not.toHaveAttribute('href');
+  });
+
+  it('toasts without a join button for in-person events', () => {
+    render(
+      <EventCard
+        {...props}
+        {...startingSoon}
+        status="Confirmed"
+        hideMeetingLink
+      />,
+    );
+    expect(
+      screen.getByText('This event starts in less than 24 hours.'),
+    ).toBeVisible();
+    expect(screen.queryByText('Join Meeting Now')).not.toBeInTheDocument();
+  });
+
+  it('takes precedence over the speakers to be announced toast', () => {
+    render(<EventCard {...props} {...startingSoon} hasSpeakersToBeAnnounced />);
+    expect(
+      screen.getByText('This event starts in less than 24 hours.'),
+    ).toBeVisible();
+    expect(
+      screen.queryByText(/more speakers to be announced/i),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows cancelled instead', () => {
+    render(<EventCard {...props} {...startingSoon} status="Cancelled" />);
+    expect(screen.getByText('The event has been cancelled.')).toBeVisible();
+    expect(
+      screen.queryByText('This event starts in less than 24 hours.'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('does not toast for events more than 24 hours away', () => {
+    render(
+      <EventCard
+        {...props}
+        status="Confirmed"
+        startDate={addHours(new Date(), 25).toISOString()}
+        endDate={addHours(new Date(), 26).toISOString()}
+      />,
+    );
+    expect(
+      screen.queryByText('This event starts in less than 24 hours.'),
+    ).not.toBeInTheDocument();
   });
 });
 
