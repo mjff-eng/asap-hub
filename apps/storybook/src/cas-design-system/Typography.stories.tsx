@@ -8,6 +8,7 @@ import {
   Headline6,
   Paragraph,
   Subtitle,
+  text,
 } from '@asap-hub/react-components';
 import {
   casFontFamily,
@@ -188,7 +189,8 @@ export const HubComponents = () => (
                     <Chip kind="amber">waiting on design</Chip>
                   )}
                 </td>
-                <td style={cell}>{sample}</td>
+                {/* Paragraph and Caption size in em, so they need the app's base font around them, not the page's 14px */}
+                <td style={{ ...cell, ...text.fontStyles }}>{sample}</td>
               </tr>
             );
           })}
