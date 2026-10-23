@@ -212,6 +212,15 @@ export const casThemeVariables = ${literal(themeVariables)} as const;
 /** Figma collection "theme", font/family, the same in modes "CRN" and "GP2". */
 export const casFontFamily = ${literal(fontFamily)} as const;
 
+export type CasTextStyle = {
+  readonly family: keyof typeof casFontFamily;
+  readonly fontSize: number;
+  readonly lineHeight: number;
+  readonly fontWeight: number;
+  readonly letterSpacing: number;
+  readonly paragraphSpacing: number;
+};
+
 /** Figma text styles in pixels; \`family\` is the casFontFamily key the style uses. */
 export const casTextStyles = ${literal(textStyles)} as const;
 `,

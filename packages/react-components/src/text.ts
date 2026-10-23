@@ -1,7 +1,11 @@
 import { isValidElement } from 'react';
 import { CSSObject } from '@emotion/react';
 
-import { casFontFamily, casTextStyles } from './cas-tokens.generated';
+import {
+  casFontFamily,
+  casTextStyles,
+  CasTextStyle,
+} from './cas-tokens.generated';
 import { rem } from './pixels';
 
 export type TextChild = React.ReactText | boolean | null | undefined;
@@ -83,18 +87,12 @@ export const layoutStyles = {
     display: 'none',
   },
 } as const;
-type TextStyle = {
-  readonly family: keyof typeof casFontFamily;
-  readonly fontSize: number;
-  readonly lineHeight: number;
-  readonly fontWeight: number;
-};
 const textStyle = ({
   family,
   fontSize,
   lineHeight,
   fontWeight,
-}: TextStyle): CSSObject => ({
+}: CasTextStyle): CSSObject => ({
   fontFamily: casFontFamily[family],
   fontSize: `${fontSize}px`,
   lineHeight: `${lineHeight}px`,
