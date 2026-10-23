@@ -1,4 +1,4 @@
-import { CSSProperties, useState } from 'react';
+import { useState } from 'react';
 import { colour } from '@asap-hub/react-components';
 import {
   casHex,
@@ -22,13 +22,16 @@ import {
   Chip,
   Colour,
   ContrastBadge,
+  cell,
   Copy,
+  headCell,
   mono,
   muted,
   Page,
   Rich,
   Section,
   Swatch,
+  table,
   useCopy,
 } from './ui';
 
@@ -48,22 +51,6 @@ const codeColour = (name: string) => (
   <Colour value={casHex(name)} label={`colour.${name}`} />
 );
 
-const table: CSSProperties = {
-  width: '100%',
-  borderCollapse: 'collapse',
-};
-const cell: CSSProperties = {
-  padding: '8px',
-  borderBottom: `1px solid ${colour.border.tertiary}`,
-  verticalAlign: 'middle',
-  textAlign: 'left',
-};
-const headCell: CSSProperties = {
-  ...cell,
-  ...muted,
-  fontWeight: 500,
-  borderBottom: `1px solid ${colour.border.secondary}`,
-};
 export const StartHere = () => (
   <Page
     title="Colours: start here"
