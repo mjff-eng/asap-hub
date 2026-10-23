@@ -1,7 +1,6 @@
-import { CSSProperties, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import {
   Caption,
-  colour,
   Display,
   Headline2,
   Headline3,
@@ -13,28 +12,20 @@ import {
 import {
   casFontFamily,
   casTextStyles,
+  CasTextStyle,
 } from '@asap-hub/react-components/cas-tokens';
-import { Chip, mono, muted, Page, Section } from './ui';
+import { cell, Chip, headCell, mono, muted, Page, Section, table } from './ui';
 
 export default {
   title: 'CAS Design System / Typography',
 };
 
-interface TextStyle {
-  family: keyof typeof casFontFamily;
-  fontSize: number;
-  lineHeight: number;
-  fontWeight: number;
-  letterSpacing: number;
-  paragraphSpacing: number;
-}
-
 const flattenStyles = (
   node: unknown,
   path: string[],
-): { name: string; style: TextStyle }[] =>
+): { name: string; style: CasTextStyle }[] =>
   'fontSize' in (node as object)
-    ? [{ name: path.join('/'), style: node as TextStyle }]
+    ? [{ name: path.join('/'), style: node as CasTextStyle }]
     : Object.entries(node as Record<string, unknown>).flatMap(([key, child]) =>
         flattenStyles(child, [...path, key]),
       );
@@ -43,24 +34,12 @@ const textStyles = flattenStyles(casTextStyles, []);
 
 const loadedWeights = [400, 700];
 
-const table: CSSProperties = {
-  width: '100%',
-  borderCollapse: 'collapse',
-};
-const cell: CSSProperties = {
-  padding: '8px',
-  borderBottom: `1px solid ${colour.border.tertiary}`,
-  verticalAlign: 'middle',
-  textAlign: 'left',
-};
-const headCell: CSSProperties = {
-  ...cell,
-  ...muted,
-  fontWeight: 500,
-  borderBottom: `1px solid ${colour.border.secondary}`,
-};
-
-const values = ({ family, fontSize, lineHeight, fontWeight }: TextStyle) =>
+const styleSummary = ({
+  family,
+  fontSize,
+  lineHeight,
+  fontWeight,
+}: CasTextStyle) =>
   `${casFontFamily[family]} ${fontWeight} · ${fontSize} / ${lineHeight}px`;
 
 export const TextStyles = () => (
@@ -100,7 +79,7 @@ export const TextStyles = () => (
             <tr key={name}>
               <td style={{ ...cell, ...mono }}>{name}</td>
               <td style={{ ...cell, ...mono }}>
-                {values(style)}
+                {styleSummary(style)}
                 {!loadedWeights.includes(style.fontWeight) && (
                   <div>
                     <Chip kind="amber">weight not loaded</Chip>
@@ -203,7 +182,7 @@ export const HubComponents = () => (
                   {figmaStyle && style ? (
                     <>
                       {figmaStyle}
-                      <div style={muted}>{values(style)}</div>
+                      <div style={muted}>{styleSummary(style)}</div>
                     </>
                   ) : (
                     <Chip kind="amber">waiting on design</Chip>

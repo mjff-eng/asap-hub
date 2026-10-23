@@ -12,6 +12,25 @@ export const muted: CSSProperties = {
   fontSize: '12px',
 };
 
+export const table: CSSProperties = {
+  width: '100%',
+  borderCollapse: 'collapse',
+};
+
+export const cell: CSSProperties = {
+  padding: '8px',
+  borderBottom: `1px solid ${colour.border.tertiary}`,
+  verticalAlign: 'middle',
+  textAlign: 'left',
+};
+
+export const headCell: CSSProperties = {
+  ...cell,
+  ...muted,
+  fontWeight: 500,
+  borderBottom: `1px solid ${colour.border.secondary}`,
+};
+
 export const Page = ({
   title,
   intro,
