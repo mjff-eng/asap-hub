@@ -1,8 +1,10 @@
 import Boom from '@hapi/boom';
 import { indexTeamUsersHandler } from '../../../src/handlers/teams/algolia-index-team-users-handler';
+import { toUserListItem } from '@asap-hub/model';
 import {
   getListUserResponse,
   getUserListItemResponse,
+  getUserResponse,
 } from '../../fixtures/users.fixtures';
 
 import {
@@ -17,11 +19,6 @@ import { userControllerMock } from '../../mocks/user.controller.mock';
 jest.mock('../../../src/utils/logger');
 
 const algoliaSearchClientMock = getAlgoliaSearchClientMock();
-
-const possibleEvents: [string, TeamEventGenerator][] = [
-  ['published', getTeamPublishedEvent],
-  ['unpublished', getTeamUnpublishedEvent],
-];
 
 const possibleRacingConditionEvents: [
   string,
@@ -80,24 +77,52 @@ describe('Index Users on Team event handler', () => {
     ]);
   });
 
-  test.each(possibleEvents)(
-    'Should index users when team event %s occurs',
-    async (name, eventA) => {
-      const usersResponse = getListUserResponse();
+  test('Should index the users of the team when the team is published', async () => {
+    const usersResponse = getListUserResponse();
+    userControllerMock.fetch.mockResolvedValueOnce(usersResponse);
 
-      const event = eventA('team-1234');
-      userControllerMock.fetch.mockResolvedValueOnce(usersResponse);
+    await indexHandler(getTeamPublishedEvent('team-1234'));
 
-      await indexHandler(event);
+    expect(userControllerMock.fetch).toHaveBeenCalledWith(
+      expect.objectContaining({ filter: { teamId: 'team-1234' } }),
+    );
+    expect(algoliaSearchClientMock.saveMany).toHaveBeenCalledWith(
+      usersResponse.items.map((item) => ({
+        data: item,
+        type: 'user',
+      })),
+    );
+  });
 
-      expect(algoliaSearchClientMock.saveMany).toHaveBeenCalledWith(
-        usersResponse.items.map((item) => ({
-          data: item,
-          type: 'user',
-        })),
-      );
-    },
-  );
+  test('Should reindex the users that list the team in Algolia when the team is unpublished', async () => {
+    const users = ['user-1', 'user-2'].map((id) => ({
+      ...getUserResponse(),
+      id,
+    }));
+    algoliaSearchClientMock.search.mockResolvedValueOnce({
+      hits: users.map(toUserListItem),
+    } as never);
+    userControllerMock.fetchByIdForAlgoliaList.mockImplementation(
+      async (id) => ({ ...getUserResponse(), id }),
+    );
+
+    await indexHandler(getTeamUnpublishedEvent('team-1234'));
+
+    expect(algoliaSearchClientMock.search).toHaveBeenCalledWith(['user'], '', {
+      filters: 'teams.id:"team-1234"',
+      hitsPerPage: 1000,
+    });
+    expect(userControllerMock.fetchByIdForAlgoliaList).toHaveBeenCalledWith(
+      'user-1',
+    );
+    expect(userControllerMock.fetchByIdForAlgoliaList).toHaveBeenCalledWith(
+      'user-2',
+    );
+    expect(userControllerMock.fetch).not.toHaveBeenCalled();
+    expect(algoliaSearchClientMock.saveMany).toHaveBeenCalledWith(
+      users.map((user) => ({ data: toUserListItem(user), type: 'user' })),
+    );
+  });
 
   describe('Should process the events, handle race conditions and not rely on the order of the events', () => {
     test.each(possibleRacingConditionEvents)(
@@ -108,26 +133,28 @@ describe('Index Users on Team event handler', () => {
           ...getListUserResponse(),
           id: userID,
         };
+        const userResponse = getUserResponse();
         userControllerMock.fetch.mockResolvedValue(usersResponse);
+        algoliaSearchClientMock.search.mockResolvedValue({
+          hits: [toUserListItem(userResponse)],
+        } as never);
+        userControllerMock.fetchByIdForAlgoliaList.mockResolvedValue(
+          userResponse,
+        );
 
         await indexHandler(eventA(userID));
         await indexHandler(eventB(userID));
 
         expect(algoliaSearchClientMock.saveMany).toHaveBeenCalledTimes(2);
-        expect(algoliaSearchClientMock.saveMany).toHaveBeenNthCalledWith(
-          1,
+        expect(algoliaSearchClientMock.saveMany).toHaveBeenCalledWith(
           usersResponse.items.map((item) => ({
             data: item,
             type: 'user',
           })),
         );
-        expect(algoliaSearchClientMock.saveMany).toHaveBeenNthCalledWith(
-          2,
-          usersResponse.items.map((item) => ({
-            data: item,
-            type: 'user',
-          })),
-        );
+        expect(algoliaSearchClientMock.saveMany).toHaveBeenCalledWith([
+          { data: toUserListItem(userResponse), type: 'user' },
+        ]);
       },
     );
   });

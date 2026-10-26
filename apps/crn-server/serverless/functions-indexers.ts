@@ -124,6 +124,10 @@ export const indexerFunctions: AWS['functions'] = {
     './src/handlers/interest-group/algolia-index-interest-group-handler.handler',
     ['InterestGroupsPublished', 'InterestGroupsUnpublished'],
   ),
+  algoliaIndexInterestGroupTeams: algoliaIndexer(
+    './src/handlers/interest-group/algolia-index-interest-group-teams-handler.handler',
+    ['InterestGroupsTeamsPublished', 'TeamsPublished', 'TeamsUnpublished'],
+  ),
   algoliaIndexManuscripts: algoliaIndexer(
     './src/handlers/manuscript/algolia-index-manuscript-handler.handler',
     ['ManuscriptsPublished', 'ManuscriptsUnpublished'],

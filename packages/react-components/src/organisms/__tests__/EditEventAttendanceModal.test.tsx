@@ -89,11 +89,20 @@ describe('EditEventAttendanceModal', () => {
   });
 
   it('Should say why the attendees list is empty', () => {
-    renderModal({ teams: [] });
+    renderModal({ teams: [], interestGroupName: undefined });
 
     expect(
       screen.getByText(/no hosting group, so nothing was added automatically/),
     ).toBeInTheDocument();
+  });
+
+  it('Should not claim there is no hosting group when the event has one', () => {
+    renderModal({ teams: [] });
+
+    expect(
+      screen.getByText('Search for a team above or upload a list.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/no hosting group/)).not.toBeInTheDocument();
   });
 
   it('Should save an untouched list, so the hosting rows get recorded', async () => {
@@ -414,6 +423,38 @@ describe('EditEventAttendanceModal', () => {
     await userEvent.type(screen.getByRole('combobox'), 'Sea');
 
     expect(await screen.findByText('• adds 1 team')).toBeInTheDocument();
+  });
+
+  it('Should flag a group with no teams at the event date', async () => {
+    renderModal({
+      teams: [],
+      loadSearchOptions: jest.fn(async () => [
+        {
+          value: 'empty-group-1',
+          label: 'Empty Group',
+          optionType: 'interestGroup' as const,
+          teams: [],
+        },
+      ]),
+    });
+
+    await userEvent.type(screen.getByRole('combobox'), 'Emp');
+
+    expect(
+      await screen.findByText('• no teams at event date'),
+    ).toBeInTheDocument();
+  });
+
+  it('Should flag a team that is already in the list', async () => {
+    renderModal({
+      teams: [
+        { teamId: 'searched-1', teamName: 'Searched Team', attended: true },
+      ],
+    });
+
+    await userEvent.type(screen.getByRole('combobox'), 'Sea');
+
+    expect(await screen.findByText('• already added')).toBeInTheDocument();
   });
 
   it('Should show a no-matches message when the search returns nothing', async () => {

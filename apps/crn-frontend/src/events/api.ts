@@ -121,3 +121,15 @@ export const getTeamsForMatching = async (
 
   return items;
 };
+
+export const getAttendanceSearchHits = async (
+  algoliaClient: AlgoliaClient<'crn'>,
+  searchQuery: string,
+) =>
+  (
+    await algoliaClient.search(['interest-group', 'team'], searchQuery, {
+      // Interest group records also index their teams' names; without this, a
+      // team name would match every group the team belongs to.
+      restrictSearchableAttributes: ['name', 'displayName'],
+    })
+  ).hits;

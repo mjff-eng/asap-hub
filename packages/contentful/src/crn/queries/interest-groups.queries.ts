@@ -33,6 +33,7 @@ export const interestGroupContentQueryFragment = gql`
             id
           }
           displayName
+          teamType
           inactiveSince
           linkedFrom {
             projectMembershipCollection(limit: 1) {
@@ -56,6 +57,7 @@ export const interestGroupContentQueryFragment = gql`
             }
           }
         }
+        startDate
         endDate
       }
     }

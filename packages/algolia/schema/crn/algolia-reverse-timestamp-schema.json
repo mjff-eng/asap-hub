@@ -26,6 +26,7 @@
     "project.id"
   ],
   "attributesToIndex": [
+    "name",
     "displayName",
     "fullDisplayName",
     "title",

@@ -1,3 +1,4 @@
+import { ClientSearchResponse } from '@asap-hub/algolia';
 import {
   EventResponse,
   ListEventResponse,
@@ -31,4 +32,10 @@ export const patchEvent = jest.fn(
 
 export const getTeamsForMatching = jest.fn(
   async (): Promise<TeamListItemResponse[]> => [createTeamListItemResponse()],
+);
+
+export const getAttendanceSearchHits = jest.fn(
+  async (): Promise<
+    ClientSearchResponse<'crn', 'interest-group' | 'team'>['hits']
+  > => [],
 );

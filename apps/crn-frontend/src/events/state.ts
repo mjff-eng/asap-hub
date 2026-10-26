@@ -22,7 +22,9 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 import { useAuthorization } from '../auth/useAuthorization';
 import { useAlgolia } from '../hooks/algolia';
 import { teamQueryKeys } from '../network/teams/state';
+import { toAttendanceSearchOptions } from './attendance-rows';
 import {
+  getAttendanceSearchHits,
   getEvent,
   getEvents,
   getTeamsForMatching,
@@ -58,6 +60,20 @@ export const useQuietRefreshEventById = (id: string) => {
     const event = await getEvent(id, await getAuthorization());
     queryClient.setQueryData(eventQueryKeys.detail(id), event ?? null);
   };
+};
+
+export const useEventAttendanceSearch = () => {
+  const { client } = useAlgolia();
+  return async (
+    search: string,
+    eventEndDate: string,
+    hostingInterestGroupId?: string,
+  ) =>
+    toAttendanceSearchOptions(
+      await getAttendanceSearchHits(client, search),
+      eventEndDate,
+      hostingInterestGroupId,
+    );
 };
 
 export const usePatchEvent = (id: string) => {

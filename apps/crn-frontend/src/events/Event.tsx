@@ -30,6 +30,7 @@ import { mapGroupsToSpeakersUpdate } from './map-groups-to-speakers-update';
 import { matchTeamNames } from './match-team-names';
 import { parseTeamRows } from './parse-team-list';
 import {
+  useEventAttendanceSearch,
   useEventById,
   useEventSpeakerGroups,
   usePatchEvent,
@@ -49,6 +50,7 @@ const Event: React.FC = () => {
   const [isEditingSpeakers, setIsEditingSpeakers] = useState(false);
   const patchEvent = usePatchEvent(eventId);
   const fetchTeamsForMatching = useTeamsForMatching();
+  const searchAttendance = useEventAttendanceSearch();
 
   const hasFinished = useDateHasPassed(
     considerEndedAfter(event?.endDate || ''),
@@ -74,7 +76,9 @@ const Event: React.FC = () => {
           <EditEventAttendanceModal
             teams={teams}
             interestGroupName={event.interestGroup?.name}
-            loadSearchOptions={async () => []}
+            loadSearchOptions={(search) =>
+              searchAttendance(search, event.endDate, event.interestGroup?.id)
+            }
             onUploadList={async (files: File[]) => {
               const [rows, corpus] = await Promise.all([
                 parseTeamRows(files),

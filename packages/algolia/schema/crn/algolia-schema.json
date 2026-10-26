@@ -5,6 +5,7 @@
   "maxValuesPerFacet": 100,
   "version": 2,
   "attributesToIndex": [
+    "name",
     "displayName",
     "fullDisplayName",
     "title",

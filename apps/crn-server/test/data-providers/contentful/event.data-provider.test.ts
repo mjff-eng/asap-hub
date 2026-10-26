@@ -1970,6 +1970,34 @@ describe('Events Contentful Data Provider', () => {
       ).rejects.toThrow('Error creating attendance entry');
     });
 
+    test('keeps the removed attendance entries when creating a new one fails', async () => {
+      const staleLink = {
+        sys: { type: 'Link', linkType: 'Entry', id: 'attendance-stale' },
+      };
+      const eventEntry = getEntry(
+        { attendance: { 'en-US': [staleLink] } },
+        { id: '123' },
+      );
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+      const staleEntry = getEntry({}, { id: 'attendance-stale' });
+      staleEntry.isPublished = jest.fn(() => true);
+      when(environmentMock.getEntry)
+        .calledWith('attendance-stale')
+        .mockResolvedValue(staleEntry);
+      environmentMock.createEntry.mockRejectedValue(new Error('boom'));
+
+      await expect(
+        eventDataProvider.updateEventDetails('123', {
+          attendance: [{ teamId: 'team-1', attended: true }],
+        }),
+      ).rejects.toThrow('Error creating attendance entry');
+      expect(staleEntry.unpublish).not.toHaveBeenCalled();
+      expect(staleEntry.delete).not.toHaveBeenCalled();
+      expect(patchAndPublish).not.toHaveBeenCalled();
+    });
+
     test('does nothing when the payload has no recognised fields', async () => {
       const eventEntry = getEntry({}, { id: '123' });
       when(environmentMock.getEntry)

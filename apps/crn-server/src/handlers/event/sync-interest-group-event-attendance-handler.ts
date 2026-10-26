@@ -16,6 +16,7 @@ import {
 import { getEventDataProvider } from '../../dependencies/events.dependencies';
 import { getInterestGroupDataProvider } from '../../dependencies/interest-groups.dependencies';
 import { getAttendanceToSync } from '../../utils/event-attendance';
+import { getInterestGroupIdsForEntry } from '../../utils/interest-group-ids';
 import logger from '../../utils/logger';
 import { sentryWrapper } from '../../utils/sentry-wrapper';
 import {
@@ -88,29 +89,16 @@ export const syncInterestGroupEventAttendanceHandler = (
     interestGroupDataProvider,
   );
 
-  const getInterestGroupIds = async (
-    detailType: SyncEventType,
-    resourceId: string,
-  ): Promise<string[]> => {
-    if (detailType.startsWith('InterestGroupsTeams')) {
-      const interestGroupId =
-        await interestGroupDataProvider.fetchIdByInterestGroupTeamId(
-          resourceId,
-        );
-      return interestGroupId ? [interestGroupId] : [];
-    }
-    if (detailType.startsWith('Teams')) {
-      return interestGroupDataProvider.fetchIdsByTeamId(resourceId);
-    }
-    return [resourceId];
-  };
-
   return async (event) => {
     const detailType = event['detail-type'];
     const { resourceId } = event.detail;
     logger.info(`Received ${detailType} event for entry with id ${resourceId}`);
 
-    const interestGroupIds = await getInterestGroupIds(detailType, resourceId);
+    const interestGroupIds = await getInterestGroupIdsForEntry(
+      interestGroupDataProvider,
+      detailType,
+      resourceId,
+    );
 
     if (interestGroupIds.length === 0) {
       logger.info(

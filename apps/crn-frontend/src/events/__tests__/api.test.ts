@@ -11,7 +11,13 @@ import {
 import { getEventListOptions } from '@asap-hub/frontend-utils';
 import nock from 'nock';
 import { API_BASE_URL } from '../../config';
-import { getEvent, getEvents, getTeamsForMatching, patchEvent } from '../api';
+import {
+  getAttendanceSearchHits,
+  getEvent,
+  getEvents,
+  getTeamsForMatching,
+  patchEvent,
+} from '../api';
 
 jest.mock('../../config');
 
@@ -341,5 +347,32 @@ describe('getTeamsForMatching', () => {
 
     await expect(getTeamsForMatching(algoliaSearchClient)).resolves.toEqual([]);
     expect(search).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('getAttendanceSearchHits', () => {
+  type Search = ClientSearch<'crn', 'interest-group' | 'team'>;
+  const search: jest.MockedFunction<Search> = jest.fn();
+
+  const algoliaSearchClient = {
+    search,
+  } as unknown as AlgoliaSearchClient<'crn'>;
+
+  it('searches interest group and team names only and returns the hits', async () => {
+    const hit = {
+      ...createTeamListItemResponse(),
+      objectID: 't0',
+      __meta: { type: 'team' as const },
+    } as unknown as Awaited<ReturnType<Search>>['hits'][number];
+    search.mockResolvedValueOnce(
+      createAlgoliaResponse<'crn', 'interest-group' | 'team'>([hit]),
+    );
+
+    expect(await getAttendanceSearchHits(algoliaSearchClient, 'alp')).toEqual([
+      hit,
+    ]);
+    expect(search).toHaveBeenCalledWith(['interest-group', 'team'], 'alp', {
+      restrictSearchableAttributes: ['name', 'displayName'],
+    });
   });
 });

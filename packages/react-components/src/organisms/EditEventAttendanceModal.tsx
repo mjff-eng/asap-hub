@@ -25,7 +25,6 @@ import {
   InterestGroupsIcon,
   lockSmallIcon,
   searchIcon,
-  TeamIcon,
   uploadIcon,
 } from '../icons';
 import { useSectionExpansion } from '../hooks';
@@ -355,10 +354,29 @@ const searchOptionStyles = css({
     height: rem(24),
     flexShrink: 0,
   },
+  [`@media (max-width: ${mobileScreen.max}px)`]: {
+    flexWrap: 'wrap',
+    rowGap: 0,
+  },
+});
+
+const searchOptionLabelStyles = css({
+  [`@media (max-width: ${mobileScreen.max}px)`]: {
+    flex: '1 1 0',
+    minWidth: 0,
+  },
+});
+
+const unfocusedSearchOptionLabelStyles = css({
+  color: colour.foreground.tertiary,
 });
 
 const searchOptionMetaStyles = css({
-  color: colour.foreground.tertiary,
+  color: colour.foreground.quaternary,
+  [`@media (max-width: ${mobileScreen.max}px)`]: {
+    flexBasis: '100%',
+    paddingLeft: rem(32),
+  },
 });
 
 const placeholderStyles = css({
@@ -385,6 +403,26 @@ const SearchPlaceholder = (
 const SearchMenu = (menuProps: MenuProps<AttendanceSearchOption, true>) =>
   menuProps.selectProps.inputValue ? <components.Menu {...menuProps} /> : null;
 
+// What selecting the option would actually add, so the count does not promise
+// rows that are already in the list.
+const searchOptionMeta = (
+  option: AttendanceSearchOption,
+  addedTeamIds: ReadonlySet<string>,
+) => {
+  if (option.optionType === 'team') {
+    return addedTeamIds.has(option.value) ? '• already added' : undefined;
+  }
+  if (option.teams.length === 0) {
+    return '• no teams at event date';
+  }
+  const toAdd = option.teams.filter(
+    (team) => !addedTeamIds.has(team.teamId),
+  ).length;
+  return toAdd === 0
+    ? '• all teams already added'
+    : `• adds ${pluralizeTeams(toAdd)}`;
+};
+
 const SearchOption = ({
   addedTeamIds,
   ...optionProps
@@ -392,28 +430,24 @@ const SearchOption = ({
   addedTeamIds: ReadonlySet<string>;
 }) => {
   const option = optionProps.data;
-  // What selecting the group would actually add, so the count does not promise
-  // rows that are already in the list.
-  const toAdd =
-    option.optionType === 'interestGroup'
-      ? option.teams.filter((team) => !addedTeamIds.has(team.teamId)).length
-      : 0;
+  const meta = searchOptionMeta(option, addedTeamIds);
   return (
     <components.Option {...optionProps}>
       <span css={searchOptionStyles}>
         {option.optionType === 'interestGroup' ? (
           <InterestGroupsIcon />
         ) : (
-          <TeamIcon />
+          teamIcon(option.teamType)
         )}
-        <span>{option.label}</span>
-        {option.optionType === 'interestGroup' && (
-          <span css={searchOptionMetaStyles}>
-            {toAdd === 0
-              ? '• all teams already added'
-              : `• adds ${pluralizeTeams(toAdd)}`}
-          </span>
-        )}
+        <span
+          css={[
+            searchOptionLabelStyles,
+            !optionProps.isFocused && unfocusedSearchOptionLabelStyles,
+          ]}
+        >
+          {option.label}
+        </span>
+        {meta && <span css={searchOptionMetaStyles}>{meta}</span>}
       </span>
     </components.Option>
   );
@@ -764,8 +798,9 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
                 <strong>Add teams to track attendance</strong>
               </Paragraph>
               <Paragraph noMargin accent="tertiary">
-                This event has no hosting group, so nothing was added
-                automatically. Search for a team above or upload a list.
+                {!interestGroupName &&
+                  'This event has no hosting group, so nothing was added automatically. '}
+                Search for a team above or upload a list.
               </Paragraph>
             </div>
           ) : (

@@ -3,7 +3,7 @@ import {
   algoliaSearchClientFactory,
   Payload,
 } from '@asap-hub/algolia';
-import { ListUserResponse, TeamEvent } from '@asap-hub/model';
+import { ListUserResponse, TeamEvent, toUserListItem } from '@asap-hub/model';
 import {
   createProcessingFunction,
   loopOverCustomCollection,
@@ -34,6 +34,23 @@ export const indexTeamUsersHandler = (
   );
   return async (event) => {
     logger.debug(`Event ${event['detail-type']}`);
+
+    if (event['detail-type'] === 'TeamsUnpublished') {
+      // Contentful no longer matches the memberships of an unpublished team,
+      // so its members are found through their Algolia records.
+      const { hits } = await algoliaClient.search(['user'], '', {
+        filters: `teams.id:"${event.detail.resourceId}"`,
+        hitsPerPage: 1000,
+      });
+      const users = await Promise.all(
+        hits.map(({ id }) => userController.fetchByIdForAlgoliaList(id)),
+      );
+      await processingFunction({
+        total: users.length,
+        items: users.map(toUserListItem),
+      });
+      return;
+    }
 
     const fetchFunction = ({
       skip,
