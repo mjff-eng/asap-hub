@@ -14,6 +14,8 @@ export const calendarsContentQueryFragment = gql`
     name
     color
     googleApiMetadata
+    crnCalendar
+    seminarSeries
     linkedFrom {
       workingGroupsCollection(limit: 1) {
         items {

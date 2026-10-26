@@ -11,7 +11,7 @@ export const Normal = () => (
   <Card
     accent={select(
       'Accent',
-      ['default', 'red', 'green', 'placeholder'],
+      ['default', 'red', 'green', 'placeholder', 'highlight'],
       'default',
     )}
   >
@@ -24,7 +24,7 @@ export const NoPadding = () => (
     padding={false}
     accent={select(
       'Accent',
-      ['default', 'red', 'green', 'placeholder'],
+      ['default', 'red', 'green', 'placeholder', 'highlight'],
       'default',
     )}
   >

@@ -26,6 +26,8 @@ export const getContentfulGraphqlCalendar = (): NonNullable<
     syncToken: 'sync-token',
     expirationDate: 1617196357000,
   },
+  crnCalendar: true,
+  seminarSeries: false,
   linkedFrom: {
     workingGroupsCollection: {
       items: [
@@ -69,6 +71,8 @@ export const getCalendarDataObject = (): CalendarDataObject => ({
   version: 42,
   interestGroups: [{ id: 'group-id-1', active: true }],
   workingGroups: [{ id: '123', complete: false }],
+  crnCalendar: true,
+  seminarSeries: false,
 });
 export const getCalendarCreateDataObject = (): CalendarCreateDataObject => {
   const {
@@ -76,6 +80,8 @@ export const getCalendarCreateDataObject = (): CalendarCreateDataObject => {
     version: _version,
     interestGroups: _interestGroups,
     workingGroups: _workingGroups,
+    crnCalendar: _crnCalendar,
+    seminarSeries: _seminarSeries,
     ...data
   } = getCalendarDataObject();
   return data;
@@ -92,6 +98,8 @@ export const getCalendarResponse = (): CalendarResponse => ({
   name: 'Tech 4a - iPSCs - 3D & Co-cultures',
   interestGroups: [{ id: 'group-id-1', active: true }],
   workingGroups: [{ id: '123', complete: false }],
+  crnCalendar: true,
+  seminarSeries: false,
 });
 
 export const getListCalendarResponse = (): ListCalendarResponse => ({

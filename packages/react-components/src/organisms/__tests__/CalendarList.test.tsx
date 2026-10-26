@@ -2,6 +2,7 @@ import { ComponentProps } from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { createListCalendarResponse } from '@asap-hub/fixtures';
 
+import { colour } from '../../colors';
 import CalendarList from '../CalendarList';
 
 const props: ComponentProps<typeof CalendarList> = {
@@ -34,6 +35,38 @@ it('Renders calender list item with colour', () => {
   );
   expect(getComputedStyle(getByText('●')).color).toMatch('rgb(13, 120, 19)');
   expect(getByText('Test Calendar')).toBeVisible();
+});
+
+it('links the calendar name in a new tab when the calendar has an href', () => {
+  const { getByRole } = render(
+    <CalendarList
+      {...props}
+      calendars={[
+        { color: '#113F47', name: 'Test Calendar', id: '1', href: '/group' },
+      ]}
+    />,
+  );
+  const link = getByRole('link', { name: 'Test Calendar' });
+  expect(link).toHaveAttribute('href', '/group');
+  expect(link).toHaveAttribute('target', '_blank');
+});
+
+it('renders the empty message when there are no calendars', () => {
+  const { getByText } = render(
+    <CalendarList {...props} emptyMessage="No calendars yet." />,
+  );
+  expect(getByText('No calendars yet.')).toBeVisible();
+});
+
+it('does not render the empty message when there are calendars', () => {
+  const { queryByText } = render(
+    <CalendarList
+      {...props}
+      calendars={[{ color: '#113F47', name: 'Test Calendar', id: '1' }]}
+      emptyMessage="No calendars yet."
+    />,
+  );
+  expect(queryByText('No calendars yet.')).not.toBeInTheDocument();
 });
 
 it('Correctly generates the subscribe link', () => {
@@ -87,4 +120,47 @@ it('displays the description', () => {
     <CalendarList {...props} description={'Test Description'} />,
   );
   expect(getByText('Test Description')).toBeVisible();
+});
+
+it('renders an icon before each calendar name when provided', () => {
+  const { getAllByTitle } = render(
+    <CalendarList
+      {...props}
+      calendars={createListCalendarResponse(2).items}
+      icon={
+        <svg>
+          <title>Calendar Icon</title>
+        </svg>
+      }
+    />,
+  );
+  expect(getAllByTitle('Calendar Icon')).toHaveLength(2);
+});
+
+it('hides the calendar colour when hideCalendarColour is set', () => {
+  const { getByText, queryByText } = render(
+    <CalendarList
+      {...props}
+      calendars={[{ color: '#0D7813', name: 'Test Calendar', id: '1' }]}
+      hideCalendarColour
+    />,
+  );
+  expect(queryByText('●')).not.toBeInTheDocument();
+  expect(getComputedStyle(getByText('Test Calendar')).fontWeight).not.toBe(
+    'bold',
+  );
+});
+
+it('shows calendar names without a link in the primary colour', () => {
+  const { getByText } = render(
+    <CalendarList
+      {...props}
+      calendars={[{ color: '#0D7813', name: 'Test Calendar', id: '1' }]}
+      hideCalendarColour
+    />,
+  );
+  expect(getByText('Test Calendar').closest('p')).toHaveStyleRule(
+    'color',
+    colour.foreground.primary,
+  );
 });

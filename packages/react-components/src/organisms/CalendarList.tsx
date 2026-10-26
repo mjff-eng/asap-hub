@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { BasicCalendarResponse } from '@asap-hub/model';
-import { FC, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 
 import { Card, Headline3, Paragraph, Link, Button } from '../atoms';
 import { tabletScreen, rem } from '../pixels';
@@ -22,6 +22,8 @@ const headerStyles = css({
   marginRight: rem(24),
 });
 
+const subheaderMarginBottom = 33 - 12;
+
 const subheaderStyles = css({
   display: 'flex',
   flexDirection: 'row',
@@ -30,7 +32,7 @@ const subheaderStyles = css({
   marginTop: rem(24),
   marginLeft: rem(24),
   marginRight: rem(24),
-  marginBottom: rem(33 - 12),
+  marginBottom: rem(subheaderMarginBottom),
 });
 
 const dataGrid = css({
@@ -71,6 +73,22 @@ const orderList = css({
   },
 });
 
+const iconStyles = css({
+  display: 'inline-flex',
+  alignSelf: 'center',
+  width: rem(20),
+  height: rem(20),
+  marginRight: rem(12),
+  '& svg': {
+    width: '100%',
+    height: '100%',
+  },
+});
+
+const emptyMessageStyles = css({
+  padding: `${rem(24 - subheaderMarginBottom)} ${rem(24)} ${rem(24)}`,
+});
+
 const showMoreStyles = css({
   display: 'flex',
   justifyContent: 'center',
@@ -80,16 +98,22 @@ const showMoreStyles = css({
 });
 
 interface CalendarListProps {
-  calendars: ReadonlyArray<BasicCalendarResponse>;
+  calendars: ReadonlyArray<BasicCalendarResponse & { href?: string }>;
   title: string;
   description?: string;
   hideSupportText?: boolean;
+  icon?: ReactNode;
+  hideCalendarColour?: boolean;
+  emptyMessage?: string;
 }
 const CalendarList: FC<CalendarListProps> = ({
   calendars,
   title,
   description,
   hideSupportText = false,
+  icon,
+  hideCalendarColour = false,
+  emptyMessage,
 }) => {
   const truncateFrom = 5;
   const [showMore, setShowMore] = useState(false);
@@ -108,6 +132,17 @@ const CalendarList: FC<CalendarListProps> = ({
             </Paragraph>
           </div>
         )}
+        {!calendars.length && emptyMessage && (
+          <div css={emptyMessageStyles}>
+            <Paragraph
+              accent="primary"
+              noMargin
+              styles={css({ fontWeight: 500 })}
+            >
+              {emptyMessage}
+            </Paragraph>
+          </div>
+        )}
         {!!calendars.length && (
           <ul
             css={[
@@ -117,14 +152,33 @@ const CalendarList: FC<CalendarListProps> = ({
           >
             {calendars
               .slice(0, showMore ? undefined : truncateFrom)
-              .map(({ id, name, color }) => (
+              .map(({ id, name, color, href }) => (
                 <li key={id}>
                   <div css={dataGrid}>
                     <div css={gridText}>
                       <Paragraph accent="primary">
                         <span css={{ display: 'flex' }}>
-                          <span css={{ color, paddingRight: rem(14) }}>●</span>
-                          <span css={{ fontWeight: 'bold' }}>{name}</span>
+                          {icon && <span css={iconStyles}>{icon}</span>}
+                          {!hideCalendarColour && (
+                            <span css={{ color, paddingRight: rem(14) }}>
+                              ●
+                            </span>
+                          )}
+                          <span
+                            css={
+                              hideCalendarColour
+                                ? undefined
+                                : { fontWeight: 'bold' }
+                            }
+                          >
+                            {href ? (
+                              <Link href={href} openInNewTab>
+                                {name}
+                              </Link>
+                            ) : (
+                              name
+                            )}
+                          </span>
                         </span>
                       </Paragraph>
                     </div>

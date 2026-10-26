@@ -1,5 +1,6 @@
 import { render, fireEvent } from '@testing-library/react';
 
+import { colour } from '../../colors';
 import CalendarLink from '../CalendarLink';
 
 const originalUserAgent = window.navigator.userAgent;
@@ -92,4 +93,40 @@ describe('Copies text to clipboard', () => {
       'https://calendar.google.com/calendar/ical/12345/public/basic.ics',
     );
   });
+});
+
+it('renders a primary subscribe button when primary is set', () => {
+  const { getByRole, rerender } = render(<CalendarLink id="123" />);
+  expect(getByRole('button')).not.toHaveStyleRule(
+    'background-color',
+    colour.background.button.primary.default,
+  );
+
+  rerender(<CalendarLink id="123" primary />);
+
+  expect(getByRole('button')).toHaveStyleRule(
+    'background-color',
+    colour.background.button.primary.default,
+  );
+});
+
+it('renders the chevron in the primary button text colour when primary is set', () => {
+  const { getByRole } = render(<CalendarLink id="123" primary />);
+  const chevronStroke = getByRole('button').querySelector(
+    'svg [stroke]:not([stroke="none"])',
+  )!;
+  expect(getComputedStyle(chevronStroke).stroke).toBe(
+    colour.foreground.button.primary.default,
+  );
+});
+
+it('removes the button margin when noMargin is set', () => {
+  const { getByRole, rerender } = render(<CalendarLink id="123" />);
+  const defaultMarginTop = getComputedStyle(getByRole('button')).marginTop;
+
+  rerender(<CalendarLink id="123" noMargin />);
+
+  expect(getComputedStyle(getByRole('button')).marginTop).not.toEqual(
+    defaultMarginTop,
+  );
 });

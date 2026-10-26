@@ -1463,15 +1463,23 @@ export type Calendars = Entry &
     _id: Scalars['ID'];
     color?: Maybe<Scalars['String']>;
     contentfulMetadata: ContentfulMetadata;
+    crnCalendar?: Maybe<Scalars['Boolean']>;
     googleApiMetadata?: Maybe<Scalars['JSON']>;
     googleCalendarId?: Maybe<Scalars['String']>;
     linkedFrom?: Maybe<CalendarsLinkingCollections>;
     name?: Maybe<Scalars['String']>;
+    seminarSeries?: Maybe<Scalars['Boolean']>;
     sys: Sys;
   };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/calendars) */
 export type CalendarsColorArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/calendars) */
+export type CalendarsCrnCalendarArgs = {
   locale?: InputMaybe<Scalars['String']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
@@ -1495,6 +1503,12 @@ export type CalendarsLinkedFromArgs = {
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/calendars) */
 export type CalendarsNameArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/calendars) */
+export type CalendarsSeminarSeriesArgs = {
   locale?: InputMaybe<Scalars['String']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
@@ -1523,6 +1537,9 @@ export type CalendarsFilter = {
   color_not_contains?: InputMaybe<Scalars['String']>;
   color_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  crnCalendar?: InputMaybe<Scalars['Boolean']>;
+  crnCalendar_exists?: InputMaybe<Scalars['Boolean']>;
+  crnCalendar_not?: InputMaybe<Scalars['Boolean']>;
   googleApiMetadata_exists?: InputMaybe<Scalars['Boolean']>;
   googleCalendarId?: InputMaybe<Scalars['String']>;
   googleCalendarId_contains?: InputMaybe<Scalars['String']>;
@@ -1538,6 +1555,9 @@ export type CalendarsFilter = {
   name_not?: InputMaybe<Scalars['String']>;
   name_not_contains?: InputMaybe<Scalars['String']>;
   name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  seminarSeries?: InputMaybe<Scalars['Boolean']>;
+  seminarSeries_exists?: InputMaybe<Scalars['Boolean']>;
+  seminarSeries_not?: InputMaybe<Scalars['Boolean']>;
   sys?: InputMaybe<SysFilter>;
 };
 
@@ -1827,10 +1847,14 @@ export enum CalendarsLinkingCollectionsWorkingGroupsCursorCollectionOrder {
 export enum CalendarsOrder {
   ColorAsc = 'color_ASC',
   ColorDesc = 'color_DESC',
+  CrnCalendarAsc = 'crnCalendar_ASC',
+  CrnCalendarDesc = 'crnCalendar_DESC',
   GoogleCalendarIdAsc = 'googleCalendarId_ASC',
   GoogleCalendarIdDesc = 'googleCalendarId_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
+  SeminarSeriesAsc = 'seminarSeries_ASC',
+  SeminarSeriesDesc = 'seminarSeries_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -24301,6 +24325,9 @@ export type CfCalendarsNestedFilter = {
   color_not_contains?: InputMaybe<Scalars['String']>;
   color_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  crnCalendar?: InputMaybe<Scalars['Boolean']>;
+  crnCalendar_exists?: InputMaybe<Scalars['Boolean']>;
+  crnCalendar_not?: InputMaybe<Scalars['Boolean']>;
   googleApiMetadata_exists?: InputMaybe<Scalars['Boolean']>;
   googleCalendarId?: InputMaybe<Scalars['String']>;
   googleCalendarId_contains?: InputMaybe<Scalars['String']>;
@@ -24316,6 +24343,9 @@ export type CfCalendarsNestedFilter = {
   name_not?: InputMaybe<Scalars['String']>;
   name_not_contains?: InputMaybe<Scalars['String']>;
   name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  seminarSeries?: InputMaybe<Scalars['Boolean']>;
+  seminarSeries_exists?: InputMaybe<Scalars['Boolean']>;
+  seminarSeries_not?: InputMaybe<Scalars['Boolean']>;
   sys?: InputMaybe<SysFilter>;
 };
 
@@ -27380,7 +27410,12 @@ export type FetchAttendanceQuery = {
 
 export type CalendarsContentFragment = Pick<
   Calendars,
-  'googleCalendarId' | 'name' | 'color' | 'googleApiMetadata'
+  | 'googleCalendarId'
+  | 'name'
+  | 'color'
+  | 'googleApiMetadata'
+  | 'crnCalendar'
+  | 'seminarSeries'
 > & {
   sys: Pick<
     Sys,
@@ -27408,7 +27443,12 @@ export type FetchCalendarByIdQuery = {
   calendars?: Maybe<
     Pick<
       Calendars,
-      'googleCalendarId' | 'name' | 'color' | 'googleApiMetadata'
+      | 'googleCalendarId'
+      | 'name'
+      | 'color'
+      | 'googleApiMetadata'
+      | 'crnCalendar'
+      | 'seminarSeries'
     > & {
       sys: Pick<
         Sys,
@@ -27446,7 +27486,12 @@ export type FetchCalendarsQuery = {
         Maybe<
           Pick<
             Calendars,
-            'googleCalendarId' | 'name' | 'color' | 'googleApiMetadata'
+            | 'googleCalendarId'
+            | 'name'
+            | 'color'
+            | 'googleApiMetadata'
+            | 'crnCalendar'
+            | 'seminarSeries'
           > & {
             sys: Pick<
               Sys,
@@ -41622,6 +41667,8 @@ export const CalendarsContentFragmentDoc = {
           { kind: 'Field', name: { kind: 'Name', value: 'name' } },
           { kind: 'Field', name: { kind: 'Name', value: 'color' } },
           { kind: 'Field', name: { kind: 'Name', value: 'googleApiMetadata' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'crnCalendar' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'seminarSeries' } },
           {
             kind: 'Field',
             name: { kind: 'Name', value: 'linkedFrom' },

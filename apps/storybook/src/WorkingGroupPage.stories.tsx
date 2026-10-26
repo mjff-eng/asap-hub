@@ -59,6 +59,8 @@ export const Normal = () => {
         name: 'ASAP Hub',
         interestGroups: [],
         workingGroups: [],
+        crnCalendar: false,
+        seminarSeries: false,
       },
     ],
   };

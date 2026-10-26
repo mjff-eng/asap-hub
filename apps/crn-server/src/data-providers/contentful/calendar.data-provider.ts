@@ -216,6 +216,8 @@ export const parseGraphQlCalendarToDataObject = (
     syncToken: item.googleApiMetadata?.syncToken ?? undefined,
     workingGroups,
     interestGroups,
+    crnCalendar: !!item.crnCalendar,
+    seminarSeries: !!item.seminarSeries,
     ...parseContentfulGraphqlCalendarPartialToDataObject(item),
   };
 };

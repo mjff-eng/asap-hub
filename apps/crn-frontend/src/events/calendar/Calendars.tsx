@@ -1,5 +1,6 @@
-import { CalendarList, EventsCalendar } from '@asap-hub/react-components';
+import { SubscribeToCalendarsPage } from '@asap-hub/react-components';
 import { getEventListOptions } from '@asap-hub/frontend-utils';
+import { network } from '@asap-hub/routing';
 
 import { useCalendars } from './state';
 import { usePrefetchEvents } from '../state';
@@ -13,29 +14,46 @@ const Calendars: React.FC<CalendarsProps> = ({ currentTime }) => {
   usePrefetchEvents(getEventListOptions(currentTime, { past: true }));
   usePrefetchEvents(getEventListOptions(currentTime, { past: false }));
 
+  const interestGroupCalendars = items.flatMap((calendar) => {
+    const interestGroup = calendar.interestGroups.find(({ active }) => active);
+    return interestGroup
+      ? [
+          {
+            ...calendar,
+            href: network({})
+              .interestGroups({})
+              .interestGroup({ interestGroupId: interestGroup.id })
+              .upcoming({}).$,
+          },
+        ]
+      : [];
+  });
+  const workingGroupCalendars = items.flatMap((calendar) => {
+    const workingGroup = calendar.workingGroups.find(
+      ({ complete }) => !complete,
+    );
+    return workingGroup
+      ? [
+          {
+            ...calendar,
+            href: network({})
+              .workingGroups({})
+              .workingGroup({ workingGroupId: workingGroup.id })
+              .upcoming({}).$,
+          },
+        ]
+      : [];
+  });
+
   return (
-    <EventsCalendar calendars={items}>
-      <CalendarList
-        calendars={items.filter(
-          (calendar) =>
-            calendar.interestGroups.some(({ active }) => active) ||
-            (calendar.interestGroups.every(({ active }) => !active) &&
-              calendar.workingGroups.every(({ complete }) => complete)),
-        )}
-        title="Subscribe to Interest Groups on Calendar"
-        description="Below you can find a list of all the Interest Groups that will present in the future. Hitting subscribe will allow you to
-  add them to your own personal calendar."
-        hideSupportText
-      />
-      <CalendarList
-        title="Subscribe to Working Groups on Calendar"
-        description="Below you can find a list of all the Working Groups that will present in the future. Hitting subscribe will allow you to
-  add them to your own personal calendar."
-        calendars={items.filter((calendar) =>
-          calendar.workingGroups.some(({ complete }) => !complete),
-        )}
-      />
-    </EventsCalendar>
+    <SubscribeToCalendarsPage
+      hubCalendar={items.find(({ crnCalendar }) => crnCalendar)}
+      interestGroupCalendars={interestGroupCalendars}
+      workingGroupCalendars={workingGroupCalendars}
+      seminarSeriesCalendars={items.filter(
+        ({ seminarSeries }) => seminarSeries,
+      )}
+    />
   );
 };
 

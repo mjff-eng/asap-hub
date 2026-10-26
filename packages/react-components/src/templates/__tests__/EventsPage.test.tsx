@@ -5,7 +5,7 @@ import EventsPage from '../EventsPage';
 it('renders the header', () => {
   const { getByRole } = render(<EventsPage />);
   expect(getByRole('heading', { level: 1 })).toHaveTextContent(
-    'Calendar and Events',
+    'Calendar & Events',
   );
 });
 

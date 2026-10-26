@@ -24,6 +24,8 @@ export const createCalendarResponse = (
   workingGroups: [
     { id: 'working-group-1', complete: !incompleteWorkingGroups },
   ],
+  crnCalendar: false,
+  seminarSeries: false,
 });
 
 export const createListCalendarResponse = (
