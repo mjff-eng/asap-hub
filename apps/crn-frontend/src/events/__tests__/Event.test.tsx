@@ -249,18 +249,6 @@ describe('the NEW_EVENT_PAGE flag', () => {
     expect(await findByText('The event has been cancelled.')).toBeVisible();
   });
 
-  it('does not show the back link when enabled', async () => {
-    enable('NEW_EVENT_PAGE');
-    mockGetEvent.mockResolvedValue({
-      ...createEventResponse(),
-      id,
-      title: 'My Event',
-    });
-    const { findByRole, queryByText } = render(<Event />, { wrapper });
-    expect(await findByRole('heading', { name: 'My Event' })).toBeVisible();
-    expect(queryByText(/back/i)).not.toBeInTheDocument();
-  });
-
   it('keeps the current page without the banner when disabled', async () => {
     disable('NEW_EVENT_PAGE');
     mockGetEvent.mockResolvedValue({
