@@ -10,7 +10,6 @@ import { rem } from '../pixels';
 import {
   EventCard,
   EventMaterials,
-  JoinEvent,
   EventAbout,
   CalendarList,
   RelatedResearchCard,
@@ -19,7 +18,7 @@ import {
 } from '../organisms';
 import { useScrollToHash } from '../routing';
 import { useDateHasPassed } from '../date';
-import { considerEndedAfter } from '../utils';
+import { considerEndedAfter, noop, useMeetingLinkRefresh } from '../utils';
 import { colour } from '../colors';
 import PageConstraints from './PageConstraints';
 
@@ -51,7 +50,6 @@ const eventCardContainerStyles = css({
 export type EventDetailTab = 'about' | 'meeting-materials';
 
 type EventDetailPageProps = ComponentProps<typeof EventCard> &
-  ComponentProps<typeof JoinEvent> &
   Omit<ComponentProps<typeof EventAbout>, 'variant'> &
   Pick<
     ComponentProps<typeof RelatedResearchCard>,
@@ -68,6 +66,7 @@ type EventDetailPageProps = ComponentProps<typeof EventCard> &
       documentType: EventResponse['relatedResearch'][number]['documentType'],
     ) => EmotionJSX.Element;
     readonly hasFinished?: boolean;
+    readonly onRefresh?: () => void;
     readonly children?: ReactNode;
     readonly aboutHref: string;
     readonly meetingMaterialsHref: string;
@@ -90,12 +89,19 @@ const EventDetailPage = ({
   aboutHref,
   meetingMaterialsHref,
   selectedTab,
+  onRefresh = noop,
   ...props
 }: EventDetailPageProps) => {
   useScrollToHash();
+  useMeetingLinkRefresh({
+    meetingLink: props.meetingLink,
+    hideMeetingLink: props.hideMeetingLink,
+    startDate: props.startDate,
+    endDate: props.endDate,
+    onRefresh,
+  });
   const hasEnded = useDateHasPassed(considerEndedAfter(props.endDate));
   const finished = hasFinished ?? hasEnded;
-  const displayJoinEvent = !props.hideMeetingLink && !finished;
   const isMeetingMaterialsTab = selectedTab === 'meeting-materials';
 
   return (
@@ -112,7 +118,12 @@ const EventDetailPage = ({
             </div>
           )}
           <div css={eventCardContainerStyles}>
-            <EventCard {...props} titleLimit={null} titleAsLink={false} />
+            <EventCard
+              {...props}
+              titleLimit={null}
+              titleAsLink={false}
+              joinMeetingTooltipPosition="bottom"
+            />
           </div>
           {finished && (
             <TabNav>
@@ -135,12 +146,7 @@ const EventDetailPage = ({
               )}
               {eventSpeakers}
               {eventAttendance}
-              {(children || displayJoinEvent) && (
-                <Card>
-                  {children}
-                  {displayJoinEvent && <JoinEvent {...props} />}
-                </Card>
-              )}
+              {children && <Card>{children}</Card>}
               <RelatedResearchCard
                 description="Find all shared research outputs related to this event."
                 relatedResearch={relatedResearch ?? []}

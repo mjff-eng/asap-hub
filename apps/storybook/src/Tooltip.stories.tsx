@@ -18,3 +18,13 @@ export const Normal = () => (
     Target element
   </div>
 );
+
+export const Bottom = () => (
+  // The bubble renders below its anchor, so leave room for it at the bottom.
+  <div style={{ paddingBottom: 64 }}>
+    Target element
+    <Tooltip shown={boolean('Shown', true)} position="bottom">
+      {text('Tooltip text', 'Tooltip text')}
+    </Tooltip>
+  </div>
+);

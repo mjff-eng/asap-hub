@@ -6,6 +6,7 @@ import {
   useInterval,
   useIsMounted,
   usePrevious,
+  useTooltipTrigger,
 } from '../hooks';
 
 describe('useGifReplay', () => {
@@ -275,5 +276,18 @@ describe('useInView', () => {
   it('stays hidden when the ref is never attached to an element', () => {
     render(<DetachedComponent />);
     expect(screen.getByTestId('detached')).toHaveTextContent('hidden');
+  });
+});
+
+describe('useTooltipTrigger', () => {
+  it('toggles on click and has no hover handlers by default', () => {
+    const { result } = renderHook(() => useTooltipTrigger());
+    expect(result.current.triggerProps).not.toHaveProperty('onMouseEnter');
+
+    act(() => result.current.triggerProps.onClick());
+    expect(result.current.shown).toBe(true);
+
+    act(() => result.current.triggerProps.onClick());
+    expect(result.current.shown).toBe(false);
   });
 });

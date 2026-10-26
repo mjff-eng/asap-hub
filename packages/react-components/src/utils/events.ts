@@ -1,10 +1,14 @@
 import {
   EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
   EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT,
+  MEETING_LINK_AVAILABLE_HOURS_BEFORE_EVENT,
 } from '@asap-hub/model';
-import { parseISO, addHours, subMinutes } from 'date-fns';
+import { parseISO, addHours, subHours, subMinutes } from 'date-fns';
 
 import { formatDateToTimezone, useDateHasPassed } from '../date';
+import { useInterval } from '../hooks';
+
+export const MEETING_LINK_REFRESH_INTERVAL_SECONDS = 60;
 
 export function considerEndedAfter(endDate: string): Date {
   return addHours(parseISO(endDate), EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT);
@@ -24,6 +28,34 @@ export const useEventLiveStatus = (
   const hasFinished = useDateHasPassed(considerEndedAfter(endDate), enabled);
 
   return { hasStarted, hasFinished };
+};
+
+export const getMeetingLinkAvailableFrom = (startDate: string): Date =>
+  subHours(parseISO(startDate), MEETING_LINK_AVAILABLE_HOURS_BEFORE_EVENT);
+
+export const useMeetingLinkRefresh = ({
+  meetingLink,
+  hideMeetingLink = false,
+  startDate,
+  endDate,
+  onRefresh,
+}: {
+  meetingLink?: string;
+  hideMeetingLink?: boolean;
+  startDate: string;
+  endDate: string;
+  onRefresh: () => void;
+}): void => {
+  const startRefreshing = useDateHasPassed(
+    getMeetingLinkAvailableFrom(startDate),
+  );
+  const hasEnded = useDateHasPassed(considerEndedAfter(endDate));
+
+  useInterval(() => {
+    if (!hideMeetingLink && !meetingLink && startRefreshing && !hasEnded) {
+      onRefresh();
+    }
+  }, MEETING_LINK_REFRESH_INTERVAL_SECONDS * 1000);
 };
 
 export const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
