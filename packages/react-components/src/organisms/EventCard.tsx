@@ -154,6 +154,7 @@ const EventCard: React.FC<EventCardProps> = ({
       <EventInfo
         {...props}
         status={status}
+        dateBlockMuted={hasFinished}
         titleSuffix={
           props.hideMeetingLink ? (
             <span css={inPersonPillStyles}>

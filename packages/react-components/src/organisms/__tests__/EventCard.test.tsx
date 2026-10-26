@@ -248,6 +248,35 @@ describe('events starting in less than 24 hours', () => {
 });
 
 describe('past events', () => {
+  it('greys out the date block', () => {
+    const { unmount } = render(
+      <EventCard
+        {...props}
+        thumbnail={undefined}
+        startDate={subDays(new Date(), 2).toISOString()}
+        endDate={subDays(new Date(), 2).toISOString()}
+      />,
+    );
+    expect(screen.getByText(/^[A-Z]{3}$/)).toHaveStyleRule(
+      'background-color',
+      colour.background.tertiary,
+    );
+    unmount();
+
+    render(
+      <EventCard
+        {...props}
+        thumbnail={undefined}
+        startDate={addDays(new Date(), 2).toISOString()}
+        endDate={addDays(new Date(), 2).toISOString()}
+      />,
+    );
+    expect(screen.getByText(/^[A-Z]{3}$/)).toHaveStyleRule(
+      'background-color',
+      colour.background.brand,
+    );
+  });
+
   it('shows cancelled over materials', () => {
     render(
       <EventCard
