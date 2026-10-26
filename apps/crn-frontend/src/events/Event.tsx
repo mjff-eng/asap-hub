@@ -141,7 +141,6 @@ const Event: React.FC = () => {
       const pageProps = {
         ...eventMapper(event),
         hasFinished,
-        backHref,
         onRefresh: refreshEvent,
         getIconForDocumentType,
         displayCalendar,

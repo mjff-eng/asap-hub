@@ -32,7 +32,6 @@ const pageProps = (
     ...overrides,
   }),
   hasFinished: false,
-  backHref: '#',
   displayCalendar: true,
   getIconForDocumentType: () => getIconForDocumentType('Article'),
   aboutHref: '/events/1/about',

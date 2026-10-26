@@ -1,5 +1,5 @@
 import { ComponentProps } from 'react';
-import { render } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 
 import NewsDetailsPage from '../NewsDetailsPage';
 
@@ -28,4 +28,16 @@ it('renders the tags section if present', () => {
 
   expect(getByRole('heading', { name: 'Tags' })).toBeVisible();
   expect(getByRole('link', { name: 'Test Tag' })).toBeVisible();
+});
+
+it('renders breadcrumbs to the news list', () => {
+  render(<NewsDetailsPage {...props} />);
+  const breadcrumbs = screen.getByRole('navigation', { name: 'breadcrumbs' });
+  expect(
+    within(breadcrumbs).getByRole('link', { name: 'News' }),
+  ).toHaveAttribute('href', '/news');
+  expect(within(breadcrumbs).getByText('Title')).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
 });

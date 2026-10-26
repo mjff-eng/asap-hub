@@ -1,5 +1,5 @@
 import { ComponentProps } from 'react';
-import { render } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 
 import TutorialsDetailsPage from '../TutorialDetailsPage';
 
@@ -94,4 +94,16 @@ it('conditionally renders additional information card', () => {
 
   rerender(<TutorialsDetailsPage {...props} asapFunded={true} />);
   expect(getByText(/Additional Information/i)).toBeVisible();
+});
+
+it('renders breadcrumbs to the tutorials list', () => {
+  render(<TutorialsDetailsPage {...props} />);
+  const breadcrumbs = screen.getByRole('navigation', { name: 'breadcrumbs' });
+  expect(
+    within(breadcrumbs).getByRole('link', { name: 'Tutorials' }),
+  ).toHaveAttribute('href', '/guides-tutorials/tutorials');
+  expect(within(breadcrumbs).getByText('Title')).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
 });

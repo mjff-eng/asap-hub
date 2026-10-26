@@ -1,17 +1,23 @@
 import { css } from '@emotion/react';
 import { NewsResponse, NewsType, TutorialsResponse } from '@asap-hub/model';
+import { dashboard, news } from '@asap-hub/routing';
 
 import { Pill, Display, Card, Caption, Headline3, Paragraph } from '../atoms';
 import { RichText } from '../organisms';
 import { rem } from '../pixels';
 import { formatDate } from '../date';
-import { ExternalLink, TagList } from '../molecules';
+import { Breadcrumbs, ExternalLink, TagList } from '../molecules';
 import { PageConstraints } from '..';
 
 const containerStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(32),
+});
+
+const breadcrumbsContainerStyles = css({
+  paddingTop: rem(12),
+  paddingBottom: rem(48),
 });
 
 const descriptionStyles = css({
@@ -63,7 +69,13 @@ const NewsDetailsPage: React.FC<NewsDetailsPageProps> = ({
   );
 
   return (
-    <PageConstraints>
+    <PageConstraints noPaddingTop>
+      <div css={breadcrumbsContainerStyles}>
+        <Breadcrumbs
+          homeHref={dashboard({}).$}
+          items={[{ label: 'News', href: news({}).$ }, { label: title }]}
+        />
+      </div>
       <div css={containerStyles}>
         <Card>
           <Pill>{type}</Pill>

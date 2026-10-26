@@ -1,10 +1,11 @@
 import React, { ComponentProps } from 'react';
 import { css } from '@emotion/react';
 import { TutorialsResponse } from '@asap-hub/model';
+import { dashboard, discover } from '@asap-hub/routing';
 
 import { Card, Headline2, Divider, Paragraph } from '../atoms';
 import { rem } from '../pixels';
-import { TagList } from '../molecules';
+import { Breadcrumbs, TagList } from '../molecules';
 import {
   RelatedTutorialsCard,
   RichText,
@@ -14,6 +15,11 @@ import {
   HelpSection,
 } from '../organisms';
 import PageConstraints from './PageConstraints';
+
+const breadcrumbsContainerStyles = css({
+  paddingTop: rem(12),
+  paddingBottom: rem(48),
+});
 
 const tagsContainer = css({
   margin: `${rem(12)} 0 ${rem(12)} 0`,
@@ -45,7 +51,16 @@ const TutorialDetailsPage: React.FC<TutorialDetailsPageProps> = ({
   ].some((info) => info != null);
 
   return (
-    <PageConstraints>
+    <PageConstraints noPaddingTop>
+      <div css={breadcrumbsContainerStyles}>
+        <Breadcrumbs
+          homeHref={dashboard({}).$}
+          items={[
+            { label: 'Tutorials', href: discover({}).tutorials({}).$ },
+            { label: props.title },
+          ]}
+        />
+      </div>
       <div css={cardsStyles}>
         <TutorialHeaderCard {...props} />
         {(text || !!tags.length) && (

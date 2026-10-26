@@ -1,5 +1,5 @@
 import { ComponentProps } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { addDays, addMinutes, subDays, subMinutes } from 'date-fns';
 import {
@@ -20,7 +20,6 @@ const props: ComponentProps<typeof EventDetailPage> = {
   eventOwner: <div>ASAP Team</div>,
   eventConversation: <div>Event Conversation</div>,
   displayCalendar: false,
-  backHref: '/prev',
   getIconForDocumentType: jest.fn(),
   aboutHref,
   meetingMaterialsHref,
@@ -39,14 +38,18 @@ it('does not truncate a long event title', () => {
   const title =
     'A very long event title that would normally get cut off'.padEnd(80, 'x');
   renderPage(<EventDetailPage {...props} title={title} />);
-  expect(screen.getByText(title)).toBeVisible();
+  expect(screen.getByRole('heading', { name: title })).toBeVisible();
 });
 
-it('renders a back link', () => {
-  renderPage(<EventDetailPage {...props} backHref="/prev" />);
-  expect(screen.getByText(/back/i).closest('a')).toHaveAttribute(
-    'href',
-    '/prev',
+it('renders breadcrumbs to the events list', () => {
+  renderPage(<EventDetailPage {...props} title="My Event" />);
+  const breadcrumbs = screen.getByRole('navigation', { name: 'breadcrumbs' });
+  expect(
+    within(breadcrumbs).getByRole('link', { name: 'Calendar & Events' }),
+  ).toHaveAttribute('href', '/events');
+  expect(within(breadcrumbs).getByText('My Event')).toHaveAttribute(
+    'aria-current',
+    'page',
   );
 });
 

@@ -54,6 +54,11 @@ const grantCardsStyles = css({
   rowGap: rem(32),
 });
 
+const breadcrumbsContainerStyles = css({
+  paddingTop: rem(12),
+  paddingBottom: rem(48),
+});
+
 type SharedResearchOutputProps = Pick<
   ResearchOutputResponse,
   | 'description'
@@ -265,6 +270,16 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
     }
   };
 
+  const breadcrumbs = (
+    <Breadcrumbs
+      homeHref={dashboard({}).$}
+      items={[
+        { label: 'Shared Research', href: sharedResearch({}).$ },
+        { label: props.title },
+      ]}
+    />
+  );
+
   return (
     <div>
       <SharedResearchOutputToasts
@@ -283,17 +298,7 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
       />
       {grantDocument && (
         <header>
-          <PageInfoContainer
-            breadcrumbs={
-              <Breadcrumbs
-                homeHref={dashboard({}).$}
-                items={[
-                  { label: 'Shared Research', href: sharedResearch({}).$ },
-                  { label: props.title },
-                ]}
-              />
-            }
-          >
+          <PageInfoContainer breadcrumbs={breadcrumbs}>
             <GrantDocumentHeaderCard
               title={props.title}
               documentType={props.documentType}
@@ -307,7 +312,10 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
           </PageInfoContainer>
         </header>
       )}
-      <PageConstraints>
+      <PageConstraints noPaddingTop={!grantDocument}>
+        {!grantDocument && (
+          <div css={breadcrumbsContainerStyles}>{breadcrumbs}</div>
+        )}
         {!isGrantDocument && (
           <SharedResearchOutputButtons
             id={id}

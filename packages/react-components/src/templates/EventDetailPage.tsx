@@ -2,9 +2,10 @@
 import { ComponentProps, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
+import { dashboard, events } from '@asap-hub/routing';
 
 import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
-import { BackLink, TabNav } from '../molecules';
+import { Breadcrumbs, TabNav } from '../molecules';
 import { Card, TabLink } from '../atoms';
 import { rem } from '../pixels';
 import {
@@ -39,8 +40,8 @@ const heroContentStyles = css({
   paddingTop: rem(12),
 });
 
-const backLinkContainerStyles = css({
-  marginBottom: rem(56),
+const breadcrumbsContainerStyles = css({
+  marginBottom: rem(48),
 });
 
 const eventCardContainerStyles = css({
@@ -57,7 +58,6 @@ type EventDetailPageProps = ComponentProps<typeof EventCard> &
   > &
   Pick<EventResponse, 'calendar' | 'relatedTutorials'> & {
     readonly relatedResearch?: EventResponse['relatedResearch'];
-    readonly backHref?: string;
     readonly displayCalendar: boolean;
     readonly eventConversation?: ReactNode;
     readonly eventAttendance?: ReactNode;
@@ -74,7 +74,6 @@ type EventDetailPageProps = ComponentProps<typeof EventCard> &
   };
 const EventDetailPage = ({
   hasFinished,
-  backHref,
   calendar,
   eventConversation,
   eventAttendance,
@@ -112,11 +111,15 @@ const EventDetailPage = ({
         noPaddingBottom
       >
         <div css={heroContentStyles}>
-          {backHref && (
-            <div css={backLinkContainerStyles}>
-              <BackLink href={backHref} noPadding />
-            </div>
-          )}
+          <div css={breadcrumbsContainerStyles}>
+            <Breadcrumbs
+              homeHref={dashboard({}).$}
+              items={[
+                { label: 'Calendar & Events', href: events({}).$ },
+                { label: props.title },
+              ]}
+            />
+          </div>
           <div css={eventCardContainerStyles}>
             <EventCard
               {...props}

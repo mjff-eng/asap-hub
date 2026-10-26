@@ -419,6 +419,20 @@ describe('Grant Document page', () => {
 });
 
 describe('Not Grant Documents', () => {
+  it('renders breadcrumbs to shared research', () => {
+    renderWithRouter(
+      <SharedResearchOutput {...props} documentType="Article" title="Title" />,
+    );
+    const breadcrumbs = screen.getByRole('navigation', { name: 'breadcrumbs' });
+    expect(
+      within(breadcrumbs).getByRole('link', { name: 'Shared Research' }),
+    ).toHaveAttribute('href', '/shared-research');
+    expect(within(breadcrumbs).getByText('Title')).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+  });
+
   it('displays access instructions when data provided', () => {
     const { queryByText, getByText, rerender } = renderWithRouter(
       <SharedResearchOutput {...props} documentType="Article" usageNotes="" />,
@@ -651,6 +665,7 @@ it('merges different tag types in the correct order', () => {
   );
   expect(
     getAllByRole('listitem')
+      .filter((item) => !item.closest('nav'))
       .map(({ textContent }) => textContent)
       .slice(3),
   ).toEqual(['method', 'organisms', 'environment', 'subtype', 'tag']);
