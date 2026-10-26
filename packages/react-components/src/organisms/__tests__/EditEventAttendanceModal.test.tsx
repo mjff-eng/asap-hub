@@ -781,6 +781,49 @@ describe('EditEventAttendanceModal', () => {
     ).toBeInTheDocument();
   });
 
+  describe('disabled state while saving', () => {
+    it('Should disable every control until the save settles', async () => {
+      let resolveSave: () => void = () => {};
+      renderModal({
+        onSave: jest.fn(
+          () =>
+            new Promise<void>((resolve) => {
+              resolveSave = resolve;
+            }),
+        ),
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+      expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Mark All Attended' }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: /Upload a List/ }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('checkbox', { name: 'Team Alpha attendance' }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('checkbox', { name: 'Team Beta attendance' }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Remove Team Beta' }),
+      ).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled();
+
+      await act(async () => resolveSave());
+
+      expect(
+        screen.getByRole('button', { name: 'Mark All Attended' }),
+      ).toBeEnabled();
+      expect(
+        screen.getByRole('checkbox', { name: 'Team Beta attendance' }),
+      ).toBeEnabled();
+    });
+  });
+
   describe('disabled state during cancel confirmation', () => {
     const enterCancelConfirmation = async () => {
       renderModal();

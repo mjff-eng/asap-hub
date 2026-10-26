@@ -539,6 +539,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   const hasRows = rows.length > 0;
   const allAttended = hasRows && attendedCount === rows.length;
   const saveEnabled = hasRows && !isSaving;
+  const editingEnabled = !isCancelling && !isSaving;
   const addedTeamIds = useMemo(
     () => new Set(rows.map((team) => team.teamId)),
     [rows],
@@ -696,7 +697,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
             isMulti={false}
             values={null}
             noMargin
-            enabled={!isCancelling}
+            enabled={editingEnabled}
             defaultOptions={false}
             leftIndicator={searchIcon}
             loadOptions={loadSearchOptions}
@@ -719,8 +720,8 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
             </div>
             <Button
               noMargin
-              enabled={!isCancelling}
-              overrideStyles={uploadButtonStyles(!isCancelling)}
+              enabled={editingEnabled}
+              overrideStyles={uploadButtonStyles(editingEnabled)}
               onClick={() => setShowUploadList(true)}
             >
               {uploadIcon}
@@ -748,7 +749,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
               <Button
                 small
                 noMargin
-                enabled={!isCancelling}
+                enabled={editingEnabled}
                 overrideStyles={markAllButtonStyles}
                 onClick={toggleMarkAllAttended}
               >
@@ -768,7 +769,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
               </Paragraph>
             </div>
           ) : (
-            <div css={attendeesCardStyles(!isCancelling)}>
+            <div css={attendeesCardStyles(editingEnabled)}>
               <div css={[attendanceGridStyles, attendeesTableHeaderStyles]}>
                 <span>Team</span>
                 <span css={attendanceHeaderStyles}>Attendance</span>
@@ -784,7 +785,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
                     helperText="Added automatically because this group is hosting. These cannot be removed."
                     teams={interestGroupRows}
                     locked
-                    enabled={!isCancelling}
+                    enabled={editingEnabled}
                     onToggleAttended={toggleAttended}
                     onRemove={removeTeam}
                   />
@@ -797,7 +798,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
                         : undefined
                     }
                     teams={additionalRows}
-                    enabled={!isCancelling}
+                    enabled={editingEnabled}
                     onToggleAttended={toggleAttended}
                     onRemove={removeTeam}
                   />
