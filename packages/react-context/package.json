@@ -16,7 +16,7 @@
   },
   "peerDependencies": {
     "react": "^18.3.0",
-    "react-router": "7.13.0"
+    "react-router": "7.18.2"
   },
   "dependencies": {
     "@asap-hub/auth": "workspace:*",
@@ -39,7 +39,7 @@
     "@types/react": "18.3.12",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-router": "7.13.0",
+    "react-router": "7.18.2",
     "react-test-renderer": "18.3.1"
   }
 }

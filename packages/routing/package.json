@@ -19,11 +19,11 @@
     "typescript": "4.9.5"
   },
   "peerDependencies": {
-    "react-router": "7.13.0"
+    "react-router": "7.18.2"
   },
   "devDependencies": {
     "@asap-hub/eslint-config-asap-hub": "workspace:*",
     "@types/qs": "6.14.0",
-    "react-router": "7.13.0"
+    "react-router": "7.18.2"
   }
 }
