@@ -1,3 +1,4 @@
+import { isEnabled } from '@asap-hub/flags';
 import { analytics } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
@@ -55,10 +56,12 @@ const LeadershipPageBody: React.FC<LeadershipAndMembershipAnalyticsProps> = ({
   setMetric,
   exportResults,
 }) => {
-  const metricOptionList = Object.keys(metricOptions).map((value) => ({
-    value: value as MetricOption,
-    label: metricOptions[value as MetricOption],
-  }));
+  const metricOptionList = (Object.keys(metricOptions) as MetricOption[])
+    .filter((value) => value !== 'os-champion' || !isEnabled('AWARDS_TAB'))
+    .map((value) => ({
+      value,
+      label: metricOptions[value],
+    }));
 
   return (
     <article>

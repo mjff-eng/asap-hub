@@ -225,7 +225,7 @@ export {
   NoEvents,
   OnboardingFooter,
   ShortDescriptionCard,
-  OSChampionTable,
+  AwardsTable,
   OutputVersions,
   PageCard,
   PagesSection,
@@ -305,6 +305,7 @@ export {
   AboutPage,
   AboutPageBody,
   AboutPageHeader,
+  AnalyticsAwardsPageBody,
   AnalyticsPage,
   AnalyticsCollaborationPageBody,
   AnalyticsProductivityPageBody,
@@ -465,3 +466,5 @@ export type {
   UserSocialType,
 } from './utils';
 export type { MetricOption } from './templates/AnalyticsLeadershipPageBody';
+export type { AwardsMetricOption } from './templates/AnalyticsAwardsPageBody';
+export { awardsMetricOptions } from './templates/AnalyticsAwardsPageBody';

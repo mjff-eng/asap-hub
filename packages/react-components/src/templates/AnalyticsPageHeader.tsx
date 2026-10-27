@@ -1,12 +1,15 @@
 import { css } from '@emotion/react';
+import { isEnabled } from '@asap-hub/flags';
 import { analytics } from '@asap-hub/routing';
 import { Button, Display, Paragraph, TabLink } from '../atoms';
 import { rem, smallDesktopScreen } from '../pixels';
 import TabNav from '../molecules/TabNav';
 import {
+  AwardsIcon,
   EngagementIcon,
   LeadershipIcon,
   OpenScienceIcon,
+  OrgChartIcon,
   ProductivityIcon,
   TeamIcon,
   downloadIcon,
@@ -48,9 +51,17 @@ const AnalyticsPageHeader: React.FC<AnalyticsPageHeaderProps> = ({
           <TabLink href={analytics({}).collaboration({}).$} Icon={TeamIcon}>
             Collaboration
           </TabLink>
-          <TabLink href={analytics({}).leadership({}).$} Icon={LeadershipIcon}>
+          <TabLink
+            href={analytics({}).leadership({}).$}
+            Icon={isEnabled('AWARDS_TAB') ? OrgChartIcon : LeadershipIcon}
+          >
             Leadership & Membership
           </TabLink>
+          {isEnabled('AWARDS_TAB') && (
+            <TabLink href={analytics({}).awards({}).$} Icon={AwardsIcon}>
+              Awards
+            </TabLink>
+          )}
           <TabLink href={analytics({}).engagement({}).$} Icon={EngagementIcon}>
             Engagement
           </TabLink>

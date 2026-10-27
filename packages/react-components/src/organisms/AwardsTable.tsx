@@ -1,15 +1,12 @@
-import {
-  OSChampionResponse,
-  OSChampionSortingDirection,
-  SortOSChampion,
-} from '@asap-hub/model';
+import { AwardsSortingDirection, SortAwards } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { Card } from '../atoms';
 import { borderRadius } from '../card';
 import { colour } from '../colors';
 import { AlphabeticalSortingIcon, NumericalSortingIcon } from '../icons';
-import { OSChampionTableRow, PageControls } from '../molecules';
+import { AwardsTableRow, PageControls } from '../molecules';
+import { AwardsTableRowItem } from '../molecules/AwardsTableRow';
 import { rem } from '../pixels';
 
 const container = css({
@@ -72,22 +69,24 @@ const pageControlsStyles = css({
   paddingBottom: rem(36),
 });
 
-type OSChampionTableProps = ComponentProps<typeof PageControls> & {
-  data: OSChampionResponse[];
-  sort: SortOSChampion;
-  setSort: React.Dispatch<React.SetStateAction<SortOSChampion>>;
-  sortingDirection: OSChampionSortingDirection;
+type AwardsTableProps = ComponentProps<typeof PageControls> & {
+  data: AwardsTableRowItem[];
+  sort: SortAwards;
+  setSort: React.Dispatch<React.SetStateAction<SortAwards>>;
+  sortingDirection: AwardsSortingDirection;
+  awardLabel?: string;
 };
 
-const OSChampionTable: React.FC<OSChampionTableProps> = ({
+const AwardsTable: React.FC<AwardsTableProps> = ({
   data,
   sort,
   setSort,
   sortingDirection,
+  awardLabel = 'Open Science Champion',
   ...pageControlProps
 }) => {
   const isTeamSortActive = sort.includes('team');
-  const isOSChampionAwardsSortActive = sort.includes('os_champion_awards');
+  const isAwardsSortActive = sort.includes('awards');
 
   const getNewSortDirection = (
     isActive: boolean,
@@ -107,13 +106,13 @@ const OSChampionTable: React.FC<OSChampionTableProps> = ({
     setSort(`team_${newDirection}`);
   };
 
-  const handleOSChampionAwardsSort = () => {
+  const handleAwardsSort = () => {
     const newDirection = getNewSortDirection(
-      isOSChampionAwardsSortActive,
-      sortingDirection.osChampionAwards,
+      isAwardsSortActive,
+      sortingDirection.awards,
       'desc',
     );
-    setSort(`os_champion_awards_${newDirection}`);
+    setSort(`awards_${newDirection}`);
   };
 
   return (
@@ -153,16 +152,16 @@ const OSChampionTable: React.FC<OSChampionTableProps> = ({
                 </th>
                 <th css={titleStyles} scope="col">
                   <span css={headerStyles}>
-                    <span>Total number of Open Science Champion awards</span>
+                    <span>Total number of {awardLabel} awards</span>
                     <button
                       type="button"
                       css={buttonStyles}
-                      onClick={handleOSChampionAwardsSort}
+                      onClick={handleAwardsSort}
                     >
                       <NumericalSortingIcon
-                        active={isOSChampionAwardsSortActive}
-                        ascending={sortingDirection.osChampionAwards === 'asc'}
-                        description="OS Champion Awards"
+                        active={isAwardsSortActive}
+                        ascending={sortingDirection.awards === 'asc'}
+                        description={`${awardLabel} Awards`}
                       />
                     </button>
                   </span>
@@ -174,7 +173,7 @@ const OSChampionTable: React.FC<OSChampionTableProps> = ({
               {data.map((row, index) => {
                 const isEven = index % 2 === 0;
                 return (
-                  <OSChampionTableRow
+                  <AwardsTableRow
                     key={row.teamId}
                     rowItem={row}
                     isEvenRow={isEven}
@@ -192,4 +191,4 @@ const OSChampionTable: React.FC<OSChampionTableProps> = ({
   );
 };
 
-export default OSChampionTable;
+export default AwardsTable;

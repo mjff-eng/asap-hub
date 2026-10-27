@@ -17,8 +17,17 @@ const productivity = route('/productivity', {}, { metric });
 
 const engagement = route('/engagement', {}, { metric });
 
+const awards = route('/awards', {}, { metric });
+
 export default route(
   '/analytics',
   {},
-  { collaboration, leadership, productivity, engagement, openScience },
+  {
+    collaboration,
+    leadership,
+    productivity,
+    engagement,
+    openScience,
+    awards,
+  },
 );
