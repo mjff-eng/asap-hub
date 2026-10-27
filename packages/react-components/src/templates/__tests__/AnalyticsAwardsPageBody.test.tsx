@@ -9,7 +9,11 @@ describe('AnalyticsAwardsPageBody', () => {
     children: <span data-testid="children">table content</span>,
     exportResults: jest.fn(() => Promise.resolve()),
     loadTags: jest.fn().mockResolvedValue([]),
-    metric: 'os-champion',
+    metric: 'open-science-champion',
+    metricOptions: [
+      { value: 'network-spotlight', label: 'Network Spotlight' },
+      { value: 'open-science-champion', label: 'Open Science Champion' },
+    ],
     setMetric: jest.fn(),
     setTags: jest.fn(),
     tags: [],
@@ -21,7 +25,9 @@ describe('AnalyticsAwardsPageBody', () => {
   });
 
   it('renders the Open Science Champion metric', () => {
-    render(<AnalyticsAwardsPageBody {...props} metric="os-champion" />);
+    render(
+      <AnalyticsAwardsPageBody {...props} metric="open-science-champion" />,
+    );
 
     expect(
       screen.getByRole('heading', { name: 'Open Science Champion' }),
@@ -42,10 +48,18 @@ describe('AnalyticsAwardsPageBody', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders the metric dropdown with both options', async () => {
+  it('renders no award name when the metric is not in the options', () => {
+    render(<AnalyticsAwardsPageBody {...props} metric="unknown" />);
+
+    expect(screen.getByText('Number of awards by team.')).toBeInTheDocument();
+  });
+
+  it('renders the metric dropdown with all options', async () => {
     render(<AnalyticsAwardsPageBody {...props} />);
 
-    expect(screen.getByDisplayValue('os-champion')).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue('open-science-champion'),
+    ).toBeInTheDocument();
 
     const dropdownIndicators = screen.getAllByTitle('Chevron Down');
     await userEvent.click(dropdownIndicators[0]!);

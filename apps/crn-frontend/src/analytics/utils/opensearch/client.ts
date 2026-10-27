@@ -39,6 +39,7 @@ const queryBuilderByIndex: Record<
 > = {
   attendance: teamWithUsersRecordSearchQueryBuilder,
   'os-champion': teamWithUsersRecordSearchQueryBuilder,
+  awards: teamWithUsersRecordSearchQueryBuilder,
   'preliminary-data-sharing': teamWithUsersRecordSearchQueryBuilder,
   'preprint-compliance': teamWithUsersRecordSearchQueryBuilder,
   'publication-compliance': teamWithUsersRecordSearchQueryBuilder,
@@ -59,6 +60,7 @@ const queryBuilderByIndex: Record<
 const tagQueryBuilderByIndex: Record<OpensearchIndex, TagQueryBuilder> = {
   attendance: teamWithUsersRecordsTagQueryBuilder,
   'os-champion': teamWithUsersRecordsTagQueryBuilder,
+  awards: teamWithUsersRecordsTagQueryBuilder,
   'preliminary-data-sharing': teamWithUsersRecordsTagQueryBuilder,
   'preprint-compliance': teamWithUsersRecordsTagQueryBuilder,
   'publication-compliance': teamWithUsersRecordsTagQueryBuilder,
@@ -126,6 +128,7 @@ export class OpensearchClient<T> {
     sort,
     outputType,
     teamId,
+    awardType,
   }: Omit<OpensearchSearchOptions, 'currentPage' | 'pageSize'> & {
     currentPage?: number;
     pageSize?: number;
@@ -140,6 +143,7 @@ export class OpensearchClient<T> {
       sort: sort as OpensearchSort[],
       outputType,
       teamId,
+      awardType,
     });
     const response = await this.request<OpensearchHitsResponse<T>>(searchQuery);
 

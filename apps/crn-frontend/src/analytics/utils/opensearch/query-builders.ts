@@ -84,6 +84,11 @@ export const teamWithUsersRecordSearchQueryBuilder = (
       term: { teamId: options.teamId },
     });
   }
+  if (options.awardType) {
+    mustClauses.push({
+      term: { awardType: options.awardType },
+    });
+  }
 
   return {
     from: options.currentPage * options.pageSize,

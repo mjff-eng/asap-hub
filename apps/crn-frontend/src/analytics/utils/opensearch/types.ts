@@ -44,6 +44,7 @@ export type OpensearchSearchOptions = {
   sort?: OpensearchSort[];
   outputType?: OutputTypeOption;
   teamId?: string;
+  awardType?: string;
 };
 
 type SortConfigOrder = 'asc' | 'desc';
@@ -86,6 +87,7 @@ export type OpensearchIndex =
   | 'publication-compliance'
   | 'preprint-compliance'
   | 'os-champion'
+  | 'awards'
   | 'attendance'
   | 'preliminary-data-sharing'
   | 'user-productivity'
@@ -138,7 +140,8 @@ type TermKey =
   | 'documentCategory'
   | 'outputType'
   | 'id'
-  | 'teamId';
+  | 'teamId'
+  | 'awardType';
 
 type ExclusiveRecord<K extends string, V> = {
   [P in K]: { [_ in P]: V } & { [O in Exclude<K, P>]?: never };
