@@ -28,7 +28,7 @@ import {
   uploadIcon,
 } from '../icons';
 import { useSectionExpansion } from '../hooks';
-import { ConfirmableModalFooter, Modal } from '../molecules';
+import { ConfirmableModalFooter, Modal, SpeakerToast } from '../molecules';
 import { mobileScreen, rem } from '../pixels';
 import { pluralizeTeams } from '../utils';
 import { EventAttendanceTeam } from './EventAttendance';
@@ -43,6 +43,11 @@ import UploadListModal, {
   UploadListResult,
   UploadListSourceFile,
 } from './UploadListModal';
+
+type AddedTeams = {
+  readonly message: string;
+  readonly teamIds: ReadonlySet<string>;
+};
 
 export type AttendanceSearchOption = MultiSelectOptionsType &
   (
@@ -99,6 +104,8 @@ const searchSpacingStyles = css({
     marginTop: rem(48),
   },
 });
+
+const toastSpacingStyles = css({ marginTop: rem(24) });
 
 const attendeesSpacingStyles = css({
   marginTop: rem(48),
@@ -565,6 +572,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [hasSaveError, setHasSaveError] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [addedTeams, setAddedTeams] = useState<AddedTeams | null>(null);
 
   const isEditMode = teams.length > 0;
   const title = isEditMode ? 'Edit Attendance' : 'Add Attendance';
@@ -592,14 +600,13 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   const interestGroupRows = rows.filter((team) => team.isFromInterestGroup);
   const additionalRows = rows.filter((team) => !team.isFromInterestGroup);
 
-  const addTeams = (teamsToAdd: EventAttendanceTeam[]) =>
-    setRows((current) => {
-      const existingIds = new Set(current.map((team) => team.teamId));
-      const additions = teamsToAdd.filter(
-        (team) => !existingIds.has(team.teamId),
-      );
-      return [...current, ...additions];
-    });
+  const addTeams = (teamsToAdd: EventAttendanceTeam[]) => {
+    const additions = teamsToAdd.filter(
+      (team) => !addedTeamIds.has(team.teamId),
+    );
+    setRows((current) => [...current, ...additions]);
+    return additions;
+  };
 
   // Upsert kept separate from addTeams so the search path stays append-only: an
   // existing row keeps its attendanceId (and its interest-group provenance) and
@@ -618,6 +625,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
     files: File[],
   ) => {
     applyUploadedTeams(uploadedTeams);
+    setAddedTeams(null);
     const addedDate = new Date().toLocaleDateString('en-GB');
     setSourceFiles((current) => [
       ...current,
@@ -642,9 +650,19 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
 
   const handleSelectSearchOption = (option: AttendanceSearchOption) => {
     if (option.optionType === 'interestGroup') {
-      addTeams(option.teams);
+      const additions = addTeams(option.teams);
+      setAddedTeams(
+        additions.length > 0
+          ? {
+              teamIds: new Set(additions.map((team) => team.teamId)),
+              message: `Added ${pluralizeTeams(additions.length)} from ${
+                option.label
+              }`,
+            }
+          : null,
+      );
     } else {
-      addTeams([
+      const additions = addTeams([
         {
           teamId: option.value,
           teamName: option.label,
@@ -653,6 +671,16 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
           isTeamInactive: option.isTeamInactive,
         },
       ]);
+      setAddedTeams(
+        additions.length > 0
+          ? {
+              teamIds: new Set([option.value]),
+              message: `Added ${option.label}${
+                interestGroupRows.length > 0 ? ' to additional teams' : ''
+              }`,
+            }
+          : null,
+      );
     }
   };
 
@@ -663,8 +691,17 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
       ),
     );
 
-  const removeTeam = (teamId: string) =>
+  const removeTeam = (teamId: string) => {
     setRows((current) => current.filter((team) => team.teamId !== teamId));
+    if (addedTeams?.teamIds.has(teamId)) {
+      setAddedTeams(null);
+    }
+  };
+
+  const undoAddedTeams = ({ teamIds }: AddedTeams) => {
+    setRows((current) => current.filter((team) => !teamIds.has(team.teamId)));
+    setAddedTeams(null);
+  };
 
   const toggleMarkAllAttended = () =>
     setRows((current) =>
@@ -740,6 +777,17 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
             components={searchComponents}
           />
         </div>
+
+        {addedTeams && (
+          <div css={toastSpacingStyles}>
+            <SpeakerToast
+              message={addedTeams.message}
+              onUndo={() => undoAddedTeams(addedTeams)}
+              onDismiss={() => setAddedTeams(null)}
+              enabled={editingEnabled}
+            />
+          </div>
+        )}
 
         {onUploadList && (
           <section
