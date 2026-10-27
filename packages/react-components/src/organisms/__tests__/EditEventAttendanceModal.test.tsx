@@ -442,7 +442,25 @@ describe('EditEventAttendanceModal', () => {
       });
 
       await userEvent.type(screen.getByRole('combobox'), 'Sea');
-      await userEvent.click(await screen.findByText('Searched Team'));
+      await userEvent.click(
+        await screen.findByRole('option', { name: /Searched Team/ }),
+      );
+
+      expect(
+        screen.queryByRole('button', { name: 'Undo' }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('Should not confirm when a group adds nothing', async () => {
+      renderModal({
+        teams: [
+          { teamId: 'sgt-1', teamName: 'Group Search Team', attended: true },
+          { teamId: 'sgt-2', teamName: 'Other Group Team', attended: true },
+        ],
+      });
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(await screen.findByText('Searched Group'));
 
       expect(
         screen.queryByRole('button', { name: 'Undo' }),
