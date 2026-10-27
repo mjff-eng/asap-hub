@@ -166,6 +166,8 @@ describe('/interest-groups/ route', () => {
               color: '#333333',
               interestGroups: [],
               workingGroups: [],
+              crnCalendar: false,
+              seminarSeries: false,
             },
             tags: [],
             status: 'Confirmed',

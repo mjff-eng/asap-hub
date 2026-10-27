@@ -47,18 +47,11 @@ const subheaderRecord: Record<ResearchOutputDocumentType, ReactNode | null> = {
   ),
   Dataset: (
     <>
-      Add your dataset to a platform (e.g. Zenodo) before sharing on the Hub.
-      Find out{' '}
-      <Link
-        href={
-          news({}).article({
-            articleId: '735944ac-5641-431f-8984-bf53972dfd4e',
-          }).$
-        }
-      >
-        how to add to Zenodo
+      Add your dataset to a platform (e.g., CRN Cloud, Zenodo). View the{' '}
+      <Link href="https://youneedawiki.com/app/page/1dTXSFCM-EmnEMTQjWsYWt6V5hPiAokXt?p=1dTXSFCM-EmnEMTQjWsYWt6V5hPiAokXt">
+        ASAP Data Repositories Wiki
       </Link>{' '}
-      to get started.
+      for more information on how to share your datasets.
     </>
   ),
   Bioinformatics: (

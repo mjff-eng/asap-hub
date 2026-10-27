@@ -1,16 +1,9 @@
-import {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { ReactNode, useCallback, useLayoutEffect, useState } from 'react';
 import { css } from '@emotion/react';
 
 import { Tooltip } from '../atoms';
+import { useTooltipTrigger } from '../hooks';
 import { infoIcon } from '../icons';
-import { canHover } from '../utils/common';
 import { Portal } from '../utils/portal';
 
 const buttonStyles = css({
@@ -54,18 +47,21 @@ const Info: React.FC<InfoProps> = ({
   floating = false,
   label,
 }) => {
-  const [tooltipShown, setTooltipShown] = useState(false);
+  const {
+    shown: tooltipShown,
+    ref: buttonRef,
+    triggerProps,
+  } = useTooltipTrigger<HTMLButtonElement>({ openOnHover });
   const [anchor, setAnchor] = useState<{ left: number; top: number } | null>(
     null,
   );
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const measureAnchor = useCallback(() => {
     const rect = buttonRef.current?.getBoundingClientRect();
     if (rect) {
       setAnchor({ left: rect.left + rect.width / 2, top: rect.top });
     }
-  }, []);
+  }, [buttonRef]);
 
   useLayoutEffect(() => {
     if (!floating || !tooltipShown) {
@@ -83,28 +79,6 @@ const Info: React.FC<InfoProps> = ({
     };
   }, [floating, tooltipShown, measureAnchor]);
 
-  useEffect(() => {
-    if (!tooltipShown) return undefined;
-
-    const handlePointerDown = (event: MouseEvent) => {
-      if (!buttonRef.current?.contains(event.target as Node)) {
-        setTooltipShown(false);
-      }
-    };
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setTooltipShown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handlePointerDown);
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', handlePointerDown);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [tooltipShown]);
-
   const tooltip = (
     <Tooltip shown={tooltipShown} width={width} background={background}>
       {children}
@@ -112,21 +86,7 @@ const Info: React.FC<InfoProps> = ({
   );
 
   return (
-    <button
-      ref={buttonRef}
-      css={buttonStyles}
-      aria-label={label}
-      // With hover on, the pointer already opened the tooltip by the time the
-      // click lands, so toggling would close it mid-gesture; hovering out,
-      // Escape and an outside click are what dismiss it.
-      onClick={() => setTooltipShown((shown) => openOnHover || !shown)}
-      onMouseEnter={
-        openOnHover ? () => canHover() && setTooltipShown(true) : undefined
-      }
-      onMouseLeave={openOnHover ? () => setTooltipShown(false) : undefined}
-      onFocus={openOnHover ? () => setTooltipShown(true) : undefined}
-      onBlur={openOnHover ? () => setTooltipShown(false) : undefined}
-    >
+    <button css={buttonStyles} aria-label={label} {...triggerProps}>
       {floating
         ? anchor && (
             <Portal>

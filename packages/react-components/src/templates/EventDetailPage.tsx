@@ -2,15 +2,15 @@
 import { ComponentProps, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { EventResponse } from '@asap-hub/model';
+import { dashboard, events } from '@asap-hub/routing';
 
 import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
-import { BackLink, TabNav } from '../molecules';
+import { Breadcrumbs, TabNav } from '../molecules';
 import { Card, TabLink } from '../atoms';
 import { rem } from '../pixels';
 import {
   EventCard,
   EventMaterials,
-  JoinEvent,
   EventAbout,
   CalendarList,
   RelatedResearchCard,
@@ -19,7 +19,7 @@ import {
 } from '../organisms';
 import { useScrollToHash } from '../routing';
 import { useDateHasPassed } from '../date';
-import { considerEndedAfter } from '../utils';
+import { considerEndedAfter, noop, useMeetingLinkRefresh } from '../utils';
 import { colour } from '../colors';
 import PageConstraints from './PageConstraints';
 
@@ -40,8 +40,8 @@ const heroContentStyles = css({
   paddingTop: rem(12),
 });
 
-const backLinkContainerStyles = css({
-  marginBottom: rem(56),
+const breadcrumbsContainerStyles = css({
+  marginBottom: rem(48),
 });
 
 const eventCardContainerStyles = css({
@@ -51,7 +51,6 @@ const eventCardContainerStyles = css({
 export type EventDetailTab = 'about' | 'meeting-materials';
 
 type EventDetailPageProps = ComponentProps<typeof EventCard> &
-  ComponentProps<typeof JoinEvent> &
   Omit<ComponentProps<typeof EventAbout>, 'variant'> &
   Pick<
     ComponentProps<typeof RelatedResearchCard>,
@@ -59,7 +58,6 @@ type EventDetailPageProps = ComponentProps<typeof EventCard> &
   > &
   Pick<EventResponse, 'calendar' | 'relatedTutorials'> & {
     readonly relatedResearch?: EventResponse['relatedResearch'];
-    readonly backHref?: string;
     readonly displayCalendar: boolean;
     readonly eventConversation?: ReactNode;
     readonly eventAttendance?: ReactNode;
@@ -68,6 +66,7 @@ type EventDetailPageProps = ComponentProps<typeof EventCard> &
       documentType: EventResponse['relatedResearch'][number]['documentType'],
     ) => EmotionJSX.Element;
     readonly hasFinished?: boolean;
+    readonly onRefresh?: () => void;
     readonly children?: ReactNode;
     readonly aboutHref: string;
     readonly meetingMaterialsHref: string;
@@ -75,7 +74,6 @@ type EventDetailPageProps = ComponentProps<typeof EventCard> &
   };
 const EventDetailPage = ({
   hasFinished,
-  backHref,
   calendar,
   eventConversation,
   eventAttendance,
@@ -90,12 +88,19 @@ const EventDetailPage = ({
   aboutHref,
   meetingMaterialsHref,
   selectedTab,
+  onRefresh = noop,
   ...props
 }: EventDetailPageProps) => {
   useScrollToHash();
+  useMeetingLinkRefresh({
+    meetingLink: props.meetingLink,
+    hideMeetingLink: props.hideMeetingLink,
+    startDate: props.startDate,
+    endDate: props.endDate,
+    onRefresh,
+  });
   const hasEnded = useDateHasPassed(considerEndedAfter(props.endDate));
   const finished = hasFinished ?? hasEnded;
-  const displayJoinEvent = !props.hideMeetingLink && !finished;
   const isMeetingMaterialsTab = selectedTab === 'meeting-materials';
 
   return (
@@ -106,13 +111,22 @@ const EventDetailPage = ({
         noPaddingBottom
       >
         <div css={heroContentStyles}>
-          {backHref && (
-            <div css={backLinkContainerStyles}>
-              <BackLink href={backHref} noPadding />
-            </div>
-          )}
+          <div css={breadcrumbsContainerStyles}>
+            <Breadcrumbs
+              homeHref={dashboard({}).$}
+              items={[
+                { label: 'Calendar & Events', href: events({}).$ },
+                { label: props.title },
+              ]}
+            />
+          </div>
           <div css={eventCardContainerStyles}>
-            <EventCard {...props} titleLimit={null} titleAsLink={false} />
+            <EventCard
+              {...props}
+              titleLimit={null}
+              titleAsLink={false}
+              joinMeetingTooltipPosition="bottom"
+            />
           </div>
           {finished && (
             <TabNav>
@@ -135,12 +149,7 @@ const EventDetailPage = ({
               )}
               {eventSpeakers}
               {eventAttendance}
-              {(children || displayJoinEvent) && (
-                <Card>
-                  {children}
-                  {displayJoinEvent && <JoinEvent {...props} />}
-                </Card>
-              )}
+              {children && <Card>{children}</Card>}
               <RelatedResearchCard
                 description="Find all shared research outputs related to this event."
                 relatedResearch={relatedResearch ?? []}

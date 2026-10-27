@@ -630,6 +630,35 @@ export class EventContentfulDataProvider implements EventDataProvider {
       (link) => !incomingIds.has(link.sys.id),
     );
 
+    const attendanceEntries = await Promise.all(
+      attendanceData.map(async ({ id: attendanceId, teamId, attended }) => {
+        if (attendanceId) {
+          let attendanceEntry;
+          try {
+            attendanceEntry = await environment.getEntry(attendanceId);
+          } catch (error) {
+            logger.warn(
+              { error, attendanceId },
+              `Attendance entry with id: ${attendanceId} no longer exists, skipping`,
+            );
+            return null;
+          }
+          if (attendanceEntry.fields.attended?.['en-US'] === attended) {
+            return attendanceEntry;
+          }
+          attendanceEntry.fields = addLocaleToFields({
+            team: createLink(teamId),
+            attended,
+          });
+          const updatedEntry = await attendanceEntry.update();
+          return updatedEntry.publish();
+        }
+
+        return this.createAttendanceEntry(environment, teamId, attended);
+      }),
+    );
+
+    // Deleting is irreversible, so it runs only once the other attendance writes succeed.
     await Promise.all(
       linksToDelete.map(async (link) => {
         try {
@@ -658,34 +687,6 @@ export class EventContentfulDataProvider implements EventDataProvider {
             `Error fetching attendance entry with id: ${link.sys.id}`,
           );
         }
-      }),
-    );
-
-    const attendanceEntries = await Promise.all(
-      attendanceData.map(async ({ id: attendanceId, teamId, attended }) => {
-        if (attendanceId) {
-          let attendanceEntry;
-          try {
-            attendanceEntry = await environment.getEntry(attendanceId);
-          } catch (error) {
-            logger.warn(
-              { error, attendanceId },
-              `Attendance entry with id: ${attendanceId} no longer exists, skipping`,
-            );
-            return null;
-          }
-          if (attendanceEntry.fields.attended?.['en-US'] === attended) {
-            return attendanceEntry;
-          }
-          attendanceEntry.fields = addLocaleToFields({
-            team: createLink(teamId),
-            attended,
-          });
-          const updatedEntry = await attendanceEntry.update();
-          return updatedEntry.publish();
-        }
-
-        return this.createAttendanceEntry(environment, teamId, attended);
       }),
     );
 

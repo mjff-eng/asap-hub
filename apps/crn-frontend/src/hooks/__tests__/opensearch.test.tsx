@@ -230,7 +230,7 @@ describe('useOpensearchMetrics', () => {
         currentPage: 0,
         pageSize: 15,
         timeRange: '30d' as const,
-        sort: 'os_champion_awards_desc' as const,
+        sort: 'awards_desc' as const,
       };
 
       await result.current.getAnalyticsOSChampion(paginationParams);

@@ -81,6 +81,8 @@ export const listInterestGroupsResponse: ListInterestGroupResponse = {
           name: 'ASAP Hub',
           interestGroups: [],
           workingGroups: [],
+          crnCalendar: false,
+          seminarSeries: false,
         },
       ],
     },
@@ -107,6 +109,8 @@ export const listInterestGroupsResponse: ListInterestGroupResponse = {
           name: 'ASAP Hub',
           interestGroups: [],
           workingGroups: [],
+          crnCalendar: false,
+          seminarSeries: false,
         },
       ],
     },
@@ -155,6 +159,8 @@ export const getInterestGroupDataObject = (): InterestGroupDataObject => ({
     {
       id: 'team-id-0',
       displayName: 'Team A',
+      teamType: 'Discovery Team',
+      startDate: '2020-01-01T00:00:00.000Z',
       endDate: '2025-01-11T14:00:00.000Z',
       tags: [{ id: 'tag-1', name: 'Animal resources 1' }],
       projectTitle:
@@ -179,6 +185,8 @@ export const getInterestGroupDataObject = (): InterestGroupDataObject => ({
       name: 'ASAP Hub',
       interestGroups: [],
       workingGroups: [],
+      crnCalendar: false,
+      seminarSeries: false,
     },
   ],
 });
@@ -279,6 +287,7 @@ export const getContentfulGraphqlInterestGroup = (): NonNullable<
     items: [
       {
         team: getContentfulGraphqlTeam(),
+        startDate: '2020-01-01T00:00:00.000Z',
         endDate: '2025-01-11T14:00:00.000Z',
       },
     ],

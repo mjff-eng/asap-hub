@@ -6,6 +6,7 @@ import {
   InterestGroupLeader as GroupLeader,
   ListInterestGroupDataObject,
   getLatestUserAward,
+  isTeamType,
 } from '@asap-hub/model';
 import {
   GraphQLClient,
@@ -213,7 +214,9 @@ export class InterestGroupContentfulDataProvider
       limit: take,
       skip,
       where,
-      order: [InterestGroupsOrder.NameAsc],
+      // Groups can share a name; without a tie-break, pages overlap and some
+      // groups are never returned.
+      order: [InterestGroupsOrder.NameAsc, InterestGroupsOrder.SysIdAsc],
     });
 
     return this.parseCollection(interestGroupsCollection);
@@ -267,16 +270,21 @@ const parseGraphQLInterestGroup = (
   interestGroup: InterestGroupItem,
 ): InterestGroupDataObject => {
   const teams = (interestGroup.teamsCollection?.items || [])
-    .filter((x): x is InterestGroupTeams => x !== null)
+    // An unpublished or archived team resolves to null; without it the
+    // membership would surface as a team with an empty id.
+    .filter((x): x is InterestGroupTeams => !!x?.team)
     .map((t) => {
       const project =
         t?.team?.linkedFrom?.projectMembershipCollection?.items[0]?.linkedFrom
           ?.projectsCollection?.items[0];
+      const teamType = t?.team?.teamType;
       return {
         id: t?.team?.sys.id ?? '',
         inactiveSince: t?.team?.inactiveSince ?? undefined,
+        startDate: t?.startDate ?? undefined,
         endDate: t?.endDate,
         displayName: t?.team?.displayName ?? '',
+        teamType: isTeamType(teamType) ? teamType : undefined,
         projectTitle: project?.title ?? '',
         tags: parseResearchTags(project?.researchTagsCollection?.items || []),
       };

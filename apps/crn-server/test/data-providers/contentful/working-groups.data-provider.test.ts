@@ -401,6 +401,8 @@ describe('Working Groups data provider', () => {
             color: '#B1365F',
             interestGroups: [],
             workingGroups: [],
+            crnCalendar: false,
+            seminarSeries: false,
           },
         ]);
       });

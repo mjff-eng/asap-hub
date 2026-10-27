@@ -67,6 +67,22 @@ describe('Calendars Controller', () => {
 
       expect(result).toEqual(getCalendarResponse());
     });
+
+    test('Should default missing crnCalendar and seminarSeries flags to false', async () => {
+      const {
+        crnCalendar: _crnCalendar,
+        seminarSeries: _seminarSeries,
+        ...calendarDataObject
+      } = getCalendarDataObject();
+      calendarDataProviderMock.fetchById.mockResolvedValue(calendarDataObject);
+
+      const result = await calendarsController.fetchById('calendar-id');
+
+      expect(result).toMatchObject({
+        crnCalendar: false,
+        seminarSeries: false,
+      });
+    });
   });
 
   describe('Update method', () => {

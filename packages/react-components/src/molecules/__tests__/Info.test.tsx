@@ -49,3 +49,27 @@ it('hides the children when pressing Escape', async () => {
   await userEvent.keyboard('{Escape}');
   expect(getByText('text')).not.toBeVisible();
 });
+
+it('toggles on tap with openOnHover on a device that cannot hover', async () => {
+  const realMatchMedia = window.matchMedia;
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    writable: true,
+    value: jest.fn().mockReturnValue({ matches: false }),
+  });
+  try {
+    const { getByTitle, getByText } = render(<Info openOnHover>text</Info>);
+
+    await userEvent.click(getByTitle(/info/i));
+    expect(getByText('text')).toBeVisible();
+
+    await userEvent.click(getByTitle(/info/i));
+    expect(getByText('text')).not.toBeVisible();
+  } finally {
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: realMatchMedia,
+    });
+  }
+});

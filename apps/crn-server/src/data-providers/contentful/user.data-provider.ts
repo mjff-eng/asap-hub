@@ -267,7 +267,9 @@ export class UserContentfulDataProvider implements UserDataProvider {
           .filter((item) => !!item) || [];
 
       return {
-        total: users.length,
+        // Callers page on the membership count; the page size would end the
+        // paging after the first page.
+        total: teamMembershipCollection?.total ?? 0,
         items: users,
       };
     }
@@ -814,7 +816,9 @@ export const parseContentfulGraphQlUserListItem = (
 
   const userTeams = (item.teamsCollection?.items || []).reduce(
     (userListItemTeams: UserListItemTeam[], teamItem) => {
-      if (!teamItem || !teamItem.role || !isTeamRole(teamItem.role)) {
+      // An unpublished team resolves to null; without it the membership would
+      // be indexed as a team with an empty id.
+      if (!teamItem?.team || !teamItem.role || !isTeamRole(teamItem.role)) {
         return userListItemTeams;
       }
 

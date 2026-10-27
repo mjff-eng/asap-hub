@@ -472,6 +472,40 @@ describe('Calendars data provider', () => {
 
       expect(response.items[0]!.color).toBe('#333333');
     });
+
+    test('Should map the crnCalendar and seminarSeries flags', async () => {
+      const calendarResponse = getContentfulCalendarsGraphqlResponse();
+      calendarResponse.calendarsCollection!.items![0]!.crnCalendar = false;
+      calendarResponse.calendarsCollection!.items![0]!.seminarSeries = true;
+
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+        calendarResponse,
+      );
+
+      const response = await calendarDataProvider.fetch();
+
+      expect(response.items[0]).toMatchObject({
+        crnCalendar: false,
+        seminarSeries: true,
+      });
+    });
+
+    test('Should default missing crnCalendar and seminarSeries flags to false', async () => {
+      const calendarResponse = getContentfulCalendarsGraphqlResponse();
+      calendarResponse.calendarsCollection!.items![0]!.crnCalendar = null;
+      calendarResponse.calendarsCollection!.items![0]!.seminarSeries = null;
+
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+        calendarResponse,
+      );
+
+      const response = await calendarDataProvider.fetch();
+
+      expect(response.items[0]).toMatchObject({
+        crnCalendar: false,
+        seminarSeries: false,
+      });
+    });
   });
 
   describe('Fetch-by-id method', () => {

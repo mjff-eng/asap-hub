@@ -1,5 +1,5 @@
 import { FetchOptions, ListResponse } from './common';
-import { TeamListItemResponse } from './team';
+import { TeamListItemResponse, TeamType } from './team';
 import { UserAward, UserResponse } from './user';
 import { CalendarResponse } from './calendar';
 import { ResearchTagDataObject } from './research-tag';
@@ -14,7 +14,9 @@ export type InterestGroupTeam = Omit<
   TeamListItemResponse,
   'memberCount' | 'labCount' | 'teamType' | 'teamStatus'
 > & {
+  startDate?: string;
   endDate?: string;
+  teamType?: TeamType;
 };
 
 export const interestGroupRole = ['Chair', 'Project Manager'] as const;

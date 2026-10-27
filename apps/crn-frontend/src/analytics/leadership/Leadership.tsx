@@ -20,9 +20,10 @@ import {
   usePaginationParams,
   useOpensearchMetrics,
 } from '../../hooks';
+import { getAwardsSortFromSearch } from '../utils/awards-sort';
 import { getAnalyticsOSChampion } from './api';
 import { leadershipToCSV, osChampionToCSV } from './export';
-import OSChampion, { getOSChampionSortFromSearch } from './OSChampion';
+import OSChampion from './OSChampion';
 import TeamLeadership from './TeamLeadership';
 
 const Leadership: FC<Record<string, never>> = () => {
@@ -83,7 +84,7 @@ const Leadership: FC<Record<string, never>> = () => {
         getAnalyticsOSChampion(osChampionClient.client, {
           tags,
           timeRange,
-          sort: getOSChampionSortFromSearch(location.search),
+          sort: getAwardsSortFromSearch(location.search),
           ...paginationParams,
         }),
       osChampionToCSV,

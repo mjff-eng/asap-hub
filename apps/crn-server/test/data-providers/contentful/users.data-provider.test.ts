@@ -623,6 +623,40 @@ describe('User data provider', () => {
       });
     });
 
+    test('should filter user teams that are unpublished', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        usersCollection: {
+          total: 1,
+          items: [
+            getContentfulGraphqlUserListItem({
+              teamsCollection: {
+                items: [
+                  { role: 'Lead PI (Core Leadership)', team: null },
+                  {
+                    role: 'Lead PI (Core Leadership)',
+                    team: {
+                      sys: {
+                        id: 'team-id-1',
+                      },
+                      displayName: 'Team B',
+                    },
+                  },
+                ],
+              },
+            }),
+          ],
+        },
+      });
+      const result = await userDataProvider.fetch({});
+      expect(result.items[0]?.teams).toEqual([
+        {
+          id: 'team-id-1',
+          role: 'Lead PI (Core Leadership)',
+          displayName: 'Team B',
+        },
+      ]);
+    });
+
     test.each([
       { membershipStatus: 'CRN Member', alumniSinceDate: null },
       {
@@ -692,7 +726,8 @@ describe('User data provider', () => {
       });
 
       const result = await userDataProvider.fetch({ filter: { teamId: 'A' } });
-      expect(result!.total).toEqual(2);
+      // The membership count, so callers page through every membership.
+      expect(result!.total).toEqual(3);
       expect(result!.items.map((item) => item.firstName)).toEqual([
         'Alan',
         'Brady',

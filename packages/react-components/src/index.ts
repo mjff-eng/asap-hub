@@ -160,6 +160,7 @@ export {
   AdditionalMaterials,
   articlesToOptions,
   AuthorSelect,
+  CalendarHubUpdates,
   CalendarList,
   CaptionCard,
   CheckboxGroup,
@@ -224,7 +225,7 @@ export {
   NoEvents,
   OnboardingFooter,
   ShortDescriptionCard,
-  OSChampionTable,
+  AwardsTable,
   OutputVersions,
   PageCard,
   PagesSection,
@@ -304,6 +305,7 @@ export {
   AboutPage,
   AboutPageBody,
   AboutPageHeader,
+  AnalyticsAwardsPageBody,
   AnalyticsPage,
   AnalyticsCollaborationPageBody,
   AnalyticsProductivityPageBody,
@@ -379,6 +381,7 @@ export {
   SharedResearchPage,
   SigninForm,
   SigninPage,
+  SubscribeToCalendarsPage,
   TagsPage,
   TagsPageBody,
   TagsPageHeader,
@@ -463,3 +466,5 @@ export type {
   UserSocialType,
 } from './utils';
 export type { MetricOption } from './templates/AnalyticsLeadershipPageBody';
+export type { AwardsMetricOption } from './templates/AnalyticsAwardsPageBody';
+export { awardsMetricOptions } from './templates/AnalyticsAwardsPageBody';

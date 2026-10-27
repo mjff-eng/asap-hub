@@ -20,7 +20,12 @@ import {
   WhenReady,
 } from '@asap-hub/crn-frontend/src/auth/test-utils';
 import Event from '../Event';
-import { getEvent, getTeamsForMatching, patchEvent } from '../api';
+import {
+  getAttendanceSearchHits,
+  getEvent,
+  getTeamsForMatching,
+  patchEvent,
+} from '../api';
 import { downloadEventSpeakers } from '../export';
 
 jest.mock('../api');
@@ -48,6 +53,10 @@ const mockPatchEvent = patchEvent as jest.MockedFunction<typeof patchEvent>;
 const mockGetTeamsForMatching = getTeamsForMatching as jest.MockedFunction<
   typeof getTeamsForMatching
 >;
+const mockGetAttendanceSearchHits =
+  getAttendanceSearchHits as jest.MockedFunction<
+    typeof getAttendanceSearchHits
+  >;
 beforeEach(() => {
   disable('NEW_EVENT_PAGE');
   mockGetEvent.mockClear();
@@ -304,6 +313,25 @@ describe('the NEW_EVENT_PAGE flag', () => {
         attended: true,
       }));
 
+    // The speakers card renders alongside attendance and is irrelevant to the
+    // modal; its rows make every interaction in the modal markedly slower.
+    const eventWithOneTeam = () => ({
+      ...createEventResponse({
+        numberOfSpeakers: 0,
+        numberOfExternalSpeakers: 0,
+        numberOfUnknownSpeakers: 0,
+      }),
+      id,
+      endDate: pastEndDate,
+      attendance: [
+        {
+          id: 'attendance-1',
+          team: { id: 't1', displayName: 'Team One' },
+          attended: false,
+        },
+      ],
+    });
+
     beforeEach(() => {
       enable('NEW_EVENT_PAGE');
     });
@@ -448,26 +476,171 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(await findByText('Sorry, no matches for zzz.')).toBeVisible();
     });
 
-    describe('upload a list', () => {
-      // The speakers card renders alongside attendance and is irrelevant here;
-      // its rows make every interaction in this block markedly slower.
-      const eventWithOneTeam = () => ({
-        ...createEventResponse({
-          numberOfSpeakers: 0,
-          numberOfExternalSpeakers: 0,
-          numberOfUnknownSpeakers: 0,
-        }),
-        id,
-        endDate: pastEndDate,
-        attendance: [
-          {
-            id: 'attendance-1',
-            team: { id: 't1', displayName: 'Team One' },
-            attended: false,
-          },
+    describe('search', () => {
+      const daysAgo = (days: number) => subDays(new Date(), days).toISOString();
+      const groupTeam = (
+        teamId: string,
+        displayName: string,
+        dates: { startDate?: string; endDate?: string },
+        teamType?: 'Discovery Team' | 'Resource Team',
+      ) => ({
+        ...createTeamListItemResponse(),
+        id: teamId,
+        displayName,
+        teamType,
+        ...dates,
+      });
+      // The event ended 3 days ago (pastEndDate).
+      const interestGroupHit = {
+        ...createInterestGroupResponse(),
+        id: 'ig-1',
+        name: 'Alpha Group',
+        teams: [
+          groupTeam('t1', 'Team One', { startDate: daysAgo(400) }),
+          groupTeam(
+            't-ig-a',
+            'Group Team A',
+            { startDate: daysAgo(400) },
+            'Discovery Team',
+          ),
+          groupTeam('t-ig-b', 'Group Team B', {
+            startDate: daysAgo(800),
+            endDate: daysAgo(500),
+          }),
+          groupTeam('t-ig-b', 'Group Team B', {
+            startDate: daysAgo(400),
+            endDate: daysAgo(1),
+          }),
+          groupTeam('t-late', 'Late Team', { startDate: daysAgo(1) }),
+          groupTeam('t-left', 'Left Team', {
+            startDate: daysAgo(400),
+            endDate: daysAgo(10),
+          }),
+          // Records indexed before membership dates were added have no startDate.
+          groupTeam('t-undated', 'Undated Team', {}),
         ],
+        objectID: 'ig-1',
+        __meta: { type: 'interest-group' as const },
+      };
+      const betaTeamHit = {
+        ...createTeamListItemResponse(),
+        id: 't-beta',
+        displayName: 'Beta Team',
+        teamType: 'Resource Team' as const,
+        objectID: 't-beta',
+        __meta: { type: 'team' as const },
+      };
+
+      beforeEach(() => {
+        mockGetEvent.mockResolvedValue(eventWithOneTeam());
+        mockGetAttendanceSearchHits.mockClear();
+        mockGetAttendanceSearchHits.mockResolvedValue([
+          betaTeamHit,
+          interestGroupHit,
+        ]);
       });
 
+      afterEach(() => {
+        mockGetAttendanceSearchHits.mockResolvedValue([]);
+      });
+
+      const openAndSearch = async () => {
+        const rendered = render(<Event />, {
+          wrapper: createWrapper({ techSupport: true }),
+        });
+        await userEvent.click(
+          await rendered.findByRole('button', { name: 'Edit attendance' }),
+        );
+        await userEvent.type(rendered.getByRole('combobox'), 'a');
+        return rendered;
+      };
+
+      it('lists interest groups before teams and counts only the members at the event end still to add', async () => {
+        const { findByText, getAllByText, getByText, getByTitle } =
+          await openAndSearch();
+
+        await findByText('Alpha Group');
+        expect(
+          getAllByText(/^(Alpha Group|Beta Team)$/).map(
+            (option) => option.textContent,
+          ),
+        ).toEqual(['Alpha Group', 'Beta Team']);
+        expect(getByText('• adds 2 teams')).toBeVisible();
+        expect(getByTitle('Resource Team Icon')).toBeInTheDocument();
+        expect(mockGetAttendanceSearchHits).toHaveBeenCalledWith(
+          expect.anything(),
+          'a',
+        );
+      });
+
+      it('adds the members at the event end of a selected interest group as attended, once each', async () => {
+        mockPatchEvent.mockResolvedValue({ ...createEventResponse(), id });
+        const { findByText, getByRole, getAllByRole, getByTitle, queryByText } =
+          await openAndSearch();
+
+        await userEvent.click(await findByText('Alpha Group'));
+
+        expect(
+          getByRole('checkbox', { name: 'Group Team A attendance' }),
+        ).toBeChecked();
+        expect(
+          getAllByRole('checkbox', { name: 'Group Team B attendance' }),
+        ).toHaveLength(1);
+        expect(
+          getAllByRole('checkbox', { name: 'Team One attendance' }),
+        ).toHaveLength(1);
+        expect(queryByText('Late Team')).not.toBeInTheDocument();
+        expect(queryByText('Left Team')).not.toBeInTheDocument();
+        expect(queryByText('Undated Team')).not.toBeInTheDocument();
+        expect(getByTitle('Discovery Team Icon')).toBeInTheDocument();
+
+        await userEvent.click(getByRole('button', { name: 'Save' }));
+
+        await waitFor(() =>
+          expect(mockPatchEvent).toHaveBeenCalledWith(
+            id,
+            {
+              attendance: [
+                { id: 'attendance-1', teamId: 't1', attended: false },
+                { id: undefined, teamId: 't-ig-a', attended: true },
+                { id: undefined, teamId: 't-ig-b', attended: true },
+              ],
+            },
+            expect.anything(),
+          ),
+        );
+      });
+
+      it('adds the hosting group members under the group, where they show once saved', async () => {
+        mockGetEvent.mockResolvedValue({
+          ...eventWithOneTeam(),
+          interestGroup: { ...createInterestGroupResponse(), id: 'ig-1' },
+        });
+        const { findByText, getByRole } = await openAndSearch();
+
+        await userEvent.click(await findByText('Alpha Group'));
+
+        const modal = within(getByRole('dialog'));
+        expect(modal.getByText('From Group 1 (2)')).toBeVisible();
+        expect(modal.getByText('Additional teams (1)')).toBeVisible();
+        expect(
+          modal.queryByRole('button', { name: 'Remove Group Team A' }),
+        ).not.toBeInTheDocument();
+      });
+
+      it('adds a selected team as attended', async () => {
+        mockGetAttendanceSearchHits.mockResolvedValue([betaTeamHit]);
+        const { findByText, getByRole } = await openAndSearch();
+
+        await userEvent.click(await findByText('Beta Team'));
+
+        expect(
+          getByRole('checkbox', { name: 'Beta Team attendance' }),
+        ).toBeChecked();
+      });
+    });
+
+    describe('upload a list', () => {
       // Role queries call getComputedStyle per candidate, and jsdom resolves
       // each one against every emotion rule on the page, which dominates the
       // runtime of this block. Scoping to the dialog walks ~80 elements

@@ -44,6 +44,8 @@ const listCalendarResponse: ListCalendarResponse = {
       name: 'Kubernetes Meetups',
       interestGroups: [],
       workingGroups: [],
+      crnCalendar: false,
+      seminarSeries: false,
     },
     {
       id: 'calendar-id-2',
@@ -51,6 +53,8 @@ const listCalendarResponse: ListCalendarResponse = {
       name: 'Service Mesh Conferences',
       interestGroups: [],
       workingGroups: [],
+      crnCalendar: false,
+      seminarSeries: false,
     },
   ],
 };

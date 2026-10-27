@@ -2,9 +2,15 @@ import {
   MEETING_LINK_AVAILABLE_HOURS_BEFORE_EVENT,
   EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
 } from '@asap-hub/model';
-import { subHours, parseISO, addSeconds, subMinutes } from 'date-fns';
+import { parseISO, addSeconds, subMinutes } from 'date-fns';
 
-import { noop, considerEndedAfter } from '../utils';
+import {
+  noop,
+  considerEndedAfter,
+  getMeetingLinkAvailableFrom,
+  useMeetingLinkRefresh,
+  MEETING_LINK_REFRESH_INTERVAL_SECONDS,
+} from '../utils';
 import { Headline2, Paragraph, Anchor, Link } from '../atoms';
 import { WarningIcon } from '../icons';
 import { colour } from '../colors';
@@ -12,9 +18,6 @@ import { layoutStyles } from '../text';
 import { rem, mobileScreen } from '../pixels';
 import { mailToSupport } from '../mail';
 import { useDateHasPassed } from '../date';
-import { useInterval } from '../hooks';
-
-const REFRESH_INTERVAL_SECONDS = 60;
 
 interface JoinEventProps {
   readonly meetingLink?: string;
@@ -28,10 +31,7 @@ const JoinEvent: React.FC<JoinEventProps> = ({
   endDate,
   onRefresh = noop,
 }) => {
-  const startRefreshingAfter = subHours(
-    parseISO(startDate),
-    MEETING_LINK_AVAILABLE_HOURS_BEFORE_EVENT,
-  );
+  const startRefreshingAfter = getMeetingLinkAvailableFrom(startDate);
   const considerStartedAfter = subMinutes(
     parseISO(startDate),
     EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
@@ -40,18 +40,15 @@ const JoinEvent: React.FC<JoinEventProps> = ({
   const startRefreshing = useDateHasPassed(startRefreshingAfter);
   const linkMissing =
     useDateHasPassed(
-      addSeconds(startRefreshingAfter, 2 * REFRESH_INTERVAL_SECONDS),
+      addSeconds(
+        startRefreshingAfter,
+        2 * MEETING_LINK_REFRESH_INTERVAL_SECONDS,
+      ),
     ) && !meetingLink;
   const hasStarted = useDateHasPassed(considerStartedAfter);
   const hasEnded = useDateHasPassed(considerEndedAfter(endDate));
 
-  // Use interval to periodically refresh when conditions are met
-  // The callback always has access to the latest values via React's closure
-  useInterval(() => {
-    if (!meetingLink && startRefreshing && !hasEnded) {
-      onRefresh();
-    }
-  }, REFRESH_INTERVAL_SECONDS * 1000);
+  useMeetingLinkRefresh({ meetingLink, startDate, endDate, onRefresh });
 
   if (hasEnded) {
     return null;

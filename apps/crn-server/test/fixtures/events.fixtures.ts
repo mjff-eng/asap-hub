@@ -540,6 +540,8 @@ export const getEventDataObject = (
     name: 'Tech 1 - Sequencing/omics',
     interestGroups: [],
     workingGroups: [],
+    crnCalendar: false,
+    seminarSeries: false,
   },
   interestGroup: getInterestGroupResponse(),
   workingGroup: getWorkingGroupResponse(),

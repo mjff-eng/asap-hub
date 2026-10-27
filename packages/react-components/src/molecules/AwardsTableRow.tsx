@@ -77,11 +77,16 @@ const expandButtonStyles = css({
   verticalAlign: 'middle',
 });
 
-interface OSChampionTableRowProps {
-  rowItem: OSChampionResponse;
+export type AwardsTableRowItem = Pick<
+  OSChampionResponse,
+  'teamId' | 'teamName' | 'isTeamInactive' | 'teamAwardsCount' | 'users'
+>;
+
+interface AwardsTableRowProps {
+  rowItem: AwardsTableRowItem;
   isEvenRow: boolean;
 }
-const OSChampionTableRow: React.FC<OSChampionTableRowProps> = ({
+const AwardsTableRow: React.FC<AwardsTableRowProps> = ({
   rowItem,
   isEvenRow,
 }) => {
@@ -93,7 +98,7 @@ const OSChampionTableRow: React.FC<OSChampionTableRowProps> = ({
       <tr
         key={rowItem.teamId}
         css={rowStyles(isEvenRow)}
-        data-testid="os-champion-table-row"
+        data-testid="awards-table-row"
       >
         <td>
           {canExpand && (
@@ -156,4 +161,4 @@ const OSChampionTableRow: React.FC<OSChampionTableRowProps> = ({
   );
 };
 
-export default OSChampionTableRow;
+export default AwardsTableRow;

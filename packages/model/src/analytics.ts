@@ -83,11 +83,11 @@ export type SortLeadershipAndMembership =
   | 'ig_previous_membership_asc'
   | 'ig_previous_membership_desc';
 
-export type SortOSChampion =
+export type SortAwards =
   | 'team_asc'
   | 'team_desc'
-  | 'os_champion_awards_asc'
-  | 'os_champion_awards_desc';
+  | 'awards_asc'
+  | 'awards_desc';
 
 export type LeadershipAndMembershipFields =
   | 'team'
@@ -96,7 +96,7 @@ export type LeadershipAndMembershipFields =
   | 'currentMembership'
   | 'previousMembership';
 
-export type OSChampionFields = 'team' | 'osChampionAwards';
+export type AwardsFields = 'team' | 'awards';
 
 export type SortingDirection = 'asc' | 'desc';
 
@@ -109,20 +109,20 @@ export const initialSortingDirection = {
   previousLeadership: descending,
   currentMembership: descending,
   previousMembership: descending,
-  osChampionAwards: descending,
+  awards: descending,
 };
 
-export const osChampionInitialSortingDirection = {
+export const awardsInitialSortingDirection = {
   team: ascending,
-  osChampionAwards: descending,
+  awards: descending,
 };
 
 export type LeadershipAndMembershipSortingDirection = {
   [key in LeadershipAndMembershipFields]: SortingDirection;
 };
 
-export type OSChampionSortingDirection = {
-  [key in OSChampionFields]: SortingDirection;
+export type AwardsSortingDirection = {
+  [key in AwardsFields]: SortingDirection;
 };
 
 export const warningMessageByTimeRange: Record<

@@ -127,6 +127,8 @@ describe('toWorkingGroupResponse', () => {
           name: 'ASAP Hub',
           interestGroups: [],
           workingGroups: [],
+          crnCalendar: false,
+          seminarSeries: false,
         },
       ],
     });
@@ -166,6 +168,8 @@ describe('toWorkingGroupResponse', () => {
           name: 'ASAP Hub',
           interestGroups: [],
           workingGroups: [],
+          crnCalendar: false,
+          seminarSeries: false,
         },
       ],
     });
@@ -211,6 +215,8 @@ describe('toWorkingGroupResponse', () => {
           name: 'ASAP Hub',
           interestGroups: [],
           workingGroups: [],
+          crnCalendar: false,
+          seminarSeries: false,
         },
       ],
     });
@@ -256,6 +262,8 @@ describe('toWorkingGroupResponse', () => {
           name: 'ASAP Hub',
           interestGroups: [],
           workingGroups: [],
+          crnCalendar: false,
+          seminarSeries: false,
         },
       ],
     });

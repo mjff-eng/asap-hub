@@ -54,13 +54,12 @@ describe('current events', () => {
       <EventCard
         {...props}
         status="Confirmed"
-        meetingLink={undefined}
         presentation="123"
         startDate={subMinutes(new Date(), 1).toISOString()}
         endDate={addMinutes(new Date(), 1).toISOString()}
       />,
     );
-    expect(screen.getByText(/currently happening/i)).toBeVisible();
+    expect(screen.getByText('This event is happening now.')).toBeVisible();
     expect(screen.queryByTitle(/paper/i)).not.toBeInTheDocument();
   });
 
@@ -76,19 +75,29 @@ describe('current events', () => {
     expect(screen.getByTitle('Warning')).toBeInTheDocument();
     expect(screen.getByText(/cancelled/i)).toBeVisible();
   });
-  it('toasts for meetings without meeting link', () => {
-    render(
-      <EventCard
-        {...props}
-        status="Confirmed"
-        meetingLink={undefined}
-        startDate={subMinutes(new Date(), 1).toISOString()}
-        endDate={addMinutes(new Date(), 1).toISOString()}
-      />,
-    );
-    expect(screen.getByText(/currently happening/i)).toBeVisible();
-    expect(screen.queryByText('Join Meeting Now')).not.toBeInTheDocument();
-  });
+  it.each`
+    description  | meetingLink
+    ${'missing'} | ${undefined}
+    ${'invalid'} | ${'not a link'}
+  `(
+    'toasts with a disabled join button when the meeting link is $description',
+    ({ meetingLink }) => {
+      render(
+        <EventCard
+          {...props}
+          status="Confirmed"
+          meetingLink={meetingLink}
+          hideMeetingLink={false}
+          startDate={subMinutes(new Date(), 1).toISOString()}
+          endDate={addMinutes(new Date(), 1).toISOString()}
+        />,
+      );
+      expect(screen.getByText('This event is happening now.')).toBeVisible();
+      expect(
+        screen.getByText('Join Meeting Now').closest('a'),
+      ).not.toHaveAttribute('href');
+    },
+  );
   it('toasts for meetings with meeting link', () => {
     render(
       <EventCard
@@ -104,6 +113,22 @@ describe('current events', () => {
       'href',
       'http://example.com',
     );
+  });
+  it('toasts for in-person meetings when hideMeetingLink is set to true', () => {
+    render(
+      <EventCard
+        {...props}
+        status="Confirmed"
+        meetingLink={undefined}
+        hideMeetingLink
+        startDate={subMinutes(new Date(), 1).toISOString()}
+        endDate={addMinutes(new Date(), 1).toISOString()}
+      />,
+    );
+    expect(
+      screen.getByText('This in-person event is currently happening.'),
+    ).toBeVisible();
+    expect(screen.queryByText('Join Meeting Now')).not.toBeInTheDocument();
   });
 
   it('hides the meeting link when hideMeetingLink is set to true', () => {

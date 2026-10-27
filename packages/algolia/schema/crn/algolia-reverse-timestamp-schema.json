@@ -27,6 +27,7 @@
     "startMonth"
   ],
   "attributesToIndex": [
+    "name",
     "displayName",
     "fullDisplayName",
     "title",

@@ -45,6 +45,19 @@ const tooltipStyles = css({
     width: 'max-content',
   },
 });
+const bottomTooltipStyles = css({
+  top: rem(4),
+  bottom: 'auto',
+  gridTemplateRows: 'auto',
+  paddingTop: rem(triangleHeight),
+
+  '::before': {
+    borderTop: 'none',
+    borderBottom: `${triangleHeight}px solid ${colour.brand.gp2[900]}`,
+    top: 0,
+    bottom: 'auto',
+  },
+});
 const bubbleStyles = css({
   backgroundColor: colour.brand.gp2[900],
   color: colour.foreground['primary-inverse'],
@@ -66,6 +79,7 @@ const bubbleStyles = css({
 interface TooltipProps {
   children: ReactNode;
   shown?: boolean;
+  position?: 'top' | 'bottom';
   maxContent?: boolean;
   bottom?: string;
   textStyles?: SerializedStyles;
@@ -77,6 +91,7 @@ interface TooltipProps {
 const Tooltip: React.FC<TooltipProps> = ({
   children,
   shown = false,
+  position = 'top',
   maxContent = false,
   bottom,
   textStyles,
@@ -95,8 +110,16 @@ const Tooltip: React.FC<TooltipProps> = ({
       <span
         css={[
           tooltipStyles,
+          position === 'bottom' && bottomTooltipStyles,
           { width: widthValue },
-          background ? { '::before': { borderTopColor: background } } : {},
+          background
+            ? {
+                '::before':
+                  position === 'bottom'
+                    ? { borderBottomColor: background }
+                    : { borderTopColor: background },
+              }
+            : {},
           shown || { display: 'none' },
           maxContent && { width: 'max-content' },
           bottom && { bottom },

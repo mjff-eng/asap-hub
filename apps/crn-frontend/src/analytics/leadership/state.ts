@@ -9,7 +9,7 @@ import {
   ListOSChampionOpensearchResponse,
   OSChampionOpensearchResponse,
   SortLeadershipAndMembership,
-  SortOSChampion,
+  SortAwards,
 } from '@asap-hub/model';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { AnalyticsSearchOptionsWithFiltering } from '../utils/analytics-options';
@@ -29,7 +29,7 @@ type Options = AnalyticsSearchOptions & {
   sort: SortLeadershipAndMembership;
 };
 
-type OSOptions = AnalyticsSearchOptionsWithFiltering<SortOSChampion>;
+type OSOptions = AnalyticsSearchOptionsWithFiltering<SortAwards>;
 type StateOptionKeyData = Pick<
   Options,
   'currentPage' | 'pageSize' | 'sort' | 'tags' | 'metric'

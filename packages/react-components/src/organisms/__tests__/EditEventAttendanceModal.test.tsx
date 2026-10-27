@@ -89,11 +89,20 @@ describe('EditEventAttendanceModal', () => {
   });
 
   it('Should say why the attendees list is empty', () => {
-    renderModal({ teams: [] });
+    renderModal({ teams: [], interestGroupName: undefined });
 
     expect(
       screen.getByText(/no hosting group, so nothing was added automatically/),
     ).toBeInTheDocument();
+  });
+
+  it('Should not claim there is no hosting group when the event has one', () => {
+    renderModal({ teams: [] });
+
+    expect(
+      screen.getByText('Search for a team above or upload a list.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/no hosting group/)).not.toBeInTheDocument();
   });
 
   it('Should save an untouched list, so the hosting rows get recorded', async () => {
@@ -414,6 +423,38 @@ describe('EditEventAttendanceModal', () => {
     await userEvent.type(screen.getByRole('combobox'), 'Sea');
 
     expect(await screen.findByText('• adds 1 team')).toBeInTheDocument();
+  });
+
+  it('Should flag a group with no teams at the event date', async () => {
+    renderModal({
+      teams: [],
+      loadSearchOptions: jest.fn(async () => [
+        {
+          value: 'empty-group-1',
+          label: 'Empty Group',
+          optionType: 'interestGroup' as const,
+          teams: [],
+        },
+      ]),
+    });
+
+    await userEvent.type(screen.getByRole('combobox'), 'Emp');
+
+    expect(
+      await screen.findByText('• no teams at event date'),
+    ).toBeInTheDocument();
+  });
+
+  it('Should flag a team that is already in the list', async () => {
+    renderModal({
+      teams: [
+        { teamId: 'searched-1', teamName: 'Searched Team', attended: true },
+      ],
+    });
+
+    await userEvent.type(screen.getByRole('combobox'), 'Sea');
+
+    expect(await screen.findByText('• already added')).toBeInTheDocument();
   });
 
   it('Should show a no-matches message when the search returns nothing', async () => {
@@ -779,6 +820,49 @@ describe('EditEventAttendanceModal', () => {
     expect(
       screen.getByText('Add teams to track attendance'),
     ).toBeInTheDocument();
+  });
+
+  describe('disabled state while saving', () => {
+    it('Should disable every control until the save settles', async () => {
+      let resolveSave: () => void = () => {};
+      renderModal({
+        onSave: jest.fn(
+          () =>
+            new Promise<void>((resolve) => {
+              resolveSave = resolve;
+            }),
+        ),
+      });
+
+      await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+      expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Mark All Attended' }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: /Upload a List/ }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('checkbox', { name: 'Team Alpha attendance' }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('checkbox', { name: 'Team Beta attendance' }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Remove Team Beta' }),
+      ).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled();
+
+      await act(async () => resolveSave());
+
+      expect(
+        screen.getByRole('button', { name: 'Mark All Attended' }),
+      ).toBeEnabled();
+      expect(
+        screen.getByRole('checkbox', { name: 'Team Beta attendance' }),
+      ).toBeEnabled();
+    });
   });
 
   describe('disabled state during cancel confirmation', () => {

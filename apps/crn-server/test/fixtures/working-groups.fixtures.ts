@@ -57,6 +57,8 @@ export const getWorkingGroupDataObject = (
       name: 'ASAP Hub',
       interestGroups: [],
       workingGroups: [],
+      crnCalendar: false,
+      seminarSeries: false,
     },
   ],
   tags: [],

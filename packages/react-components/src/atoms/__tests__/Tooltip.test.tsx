@@ -50,3 +50,20 @@ it('keeps the default background when none is given', () => {
     colour.brand.gp2[900],
   );
 });
+
+it('renders the bubble below its anchor with the tail on top when positioned at the bottom', () => {
+  const { getByRole } = render(
+    <Tooltip shown position="bottom" background="rgb(0, 32, 44)">
+      text
+    </Tooltip>,
+  );
+
+  const tooltip = getByRole('tooltip').parentElement;
+  expect(tooltip).toHaveStyle({ top: rem(4) });
+  expect(tooltip).toHaveStyleRule('border-top', 'none', {
+    target: '::before',
+  });
+  expect(tooltip).toHaveStyleRule('border-bottom-color', 'rgb(0, 32, 44)', {
+    target: '::before',
+  });
+});

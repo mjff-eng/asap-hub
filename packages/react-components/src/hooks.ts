@@ -2,11 +2,14 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
   DependencyList,
   useRef,
   RefObject,
   MutableRefObject,
 } from 'react';
+
+import { canHover } from './utils/common';
 
 export const useGifReplay = (
   url: string,
@@ -144,6 +147,39 @@ export const useDismiss = (
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [enabled, onDismiss, refs]);
+};
+
+/**
+ * State and handlers for the element that opens a tooltip. A click toggles it,
+ * which is also what a tap does on touch devices. With `openOnHover`, a pointer
+ * that can hover opens it on enter and focus, and the click keeps it open
+ * rather than closing it mid-gesture. ESC and a click outside dismiss it.
+ */
+export const useTooltipTrigger = <T extends HTMLElement>({
+  openOnHover = false,
+}: { openOnHover?: boolean } = {}) => {
+  const [shown, setShown] = useState(false);
+  const ref = useRef<T>(null);
+  const refs = useMemo(() => [ref], []);
+  const hide = useCallback(() => setShown(false), []);
+
+  useDismiss(refs, hide, shown);
+
+  const triggerProps = {
+    ref,
+    onClick: () =>
+      setShown((current) => (openOnHover && canHover()) || !current),
+    ...(openOnHover
+      ? {
+          onMouseEnter: () => canHover() && setShown(true),
+          onMouseLeave: hide,
+          onFocus: () => canHover() && setShown(true),
+          onBlur: hide,
+        }
+      : {}),
+  };
+
+  return { shown, ref, triggerProps };
 };
 
 const visibleRowsPerSection = 5;

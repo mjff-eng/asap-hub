@@ -835,10 +835,12 @@ type Calendars implements Entry & _Node {
   _id: ID!
   color(locale: String, useFallbackLocale: Boolean): String
   contentfulMetadata: ContentfulMetadata!
+  crnCalendar(locale: String, useFallbackLocale: Boolean): Boolean
   googleApiMetadata(locale: String, useFallbackLocale: Boolean): JSON
   googleCalendarId(locale: String, useFallbackLocale: Boolean): String
   linkedFrom(allowedLocales: [String]): CalendarsLinkingCollections
   name(locale: String, useFallbackLocale: Boolean): String
+  seminarSeries(locale: String, useFallbackLocale: Boolean): Boolean
   sys: Sys!
 }
 
@@ -866,6 +868,9 @@ input CalendarsFilter {
   color_not_contains: String
   color_not_in: [String]
   contentfulMetadata: ContentfulMetadataFilter
+  crnCalendar: Boolean
+  crnCalendar_exists: Boolean
+  crnCalendar_not: Boolean
   googleApiMetadata_exists: Boolean
   googleCalendarId: String
   googleCalendarId_contains: String
@@ -881,6 +886,9 @@ input CalendarsFilter {
   name_not: String
   name_not_contains: String
   name_not_in: [String]
+  seminarSeries: Boolean
+  seminarSeries_exists: Boolean
+  seminarSeries_not: Boolean
   sys: SysFilter
 }
 
@@ -1080,10 +1088,14 @@ enum CalendarsLinkingCollectionsWorkingGroupsCursorCollectionOrder {
 enum CalendarsOrder {
   color_ASC
   color_DESC
+  crnCalendar_ASC
+  crnCalendar_DESC
   googleCalendarId_ASC
   googleCalendarId_DESC
   name_ASC
   name_DESC
+  seminarSeries_ASC
+  seminarSeries_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -15459,6 +15471,9 @@ input cfCalendarsNestedFilter {
   color_not_contains: String
   color_not_in: [String]
   contentfulMetadata: ContentfulMetadataFilter
+  crnCalendar: Boolean
+  crnCalendar_exists: Boolean
+  crnCalendar_not: Boolean
   googleApiMetadata_exists: Boolean
   googleCalendarId: String
   googleCalendarId_contains: String
@@ -15474,6 +15489,9 @@ input cfCalendarsNestedFilter {
   name_not: String
   name_not_contains: String
   name_not_in: [String]
+  seminarSeries: Boolean
+  seminarSeries_exists: Boolean
+  seminarSeries_not: Boolean
   sys: SysFilter
 }
 
