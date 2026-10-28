@@ -5,6 +5,7 @@ import {
   Subtitle,
   TabLink,
   TabNav,
+  text,
   utils,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
@@ -58,7 +59,7 @@ const WorkingGroupDetailHeader: React.FC<WorkingGroupDetailHeaderProps> = ({
     <header css={detailHeaderStyles}>
       <CardWithBackground image={workingGroupsImage}>
         <Subtitle>Working Group</Subtitle>
-        <h2>{title}</h2>
+        <h2 css={text.headlineStyles[4]}>{title}</h2>
         <div css={infoContainerStyles}>
           <IconWithLabel icon={usersIcon}>
             {getCounterString(members.length, 'member')}
