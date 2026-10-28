@@ -81,9 +81,6 @@ const headerStyles = css({
 });
 
 const titleStyles = css({
-  fontSize: rem(26),
-  fontWeight: 700,
-  lineHeight: 32 / 26,
   color: colour.foreground.primary,
 });
 
@@ -752,7 +749,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   return (
     <Modal padding={false} overrideModalStyles={modalStyles}>
       <header css={headerStyles}>
-        <Headline2 noMargin overrideStyles={titleStyles}>
+        <Headline2 styleAsHeading={4} noMargin overrideStyles={titleStyles}>
           {title}
         </Headline2>
         <Button
