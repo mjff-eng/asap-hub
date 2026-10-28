@@ -113,7 +113,7 @@ export const TextStyles = () => (
 
 const hubComponents: {
   name: string;
-  figmaStyle?: string;
+  figmaStyle: string;
   sample: ReactNode;
 }[] = [
   {
@@ -153,7 +153,13 @@ const hubComponents: {
   },
   {
     name: 'Caption',
+    figmaStyle: 'caption/regular',
     sample: <Caption>Shared Research</Caption>,
+  },
+  {
+    name: 'Caption bold',
+    figmaStyle: 'caption/bold',
+    sample: <Caption bold>Shared Research</Caption>,
   },
 ];
 
@@ -180,14 +186,8 @@ export const HubComponents = () => (
               <tr key={name}>
                 <td style={{ ...cell, ...mono }}>{name}</td>
                 <td style={{ ...cell, ...mono }}>
-                  {figmaStyle && style ? (
-                    <>
-                      {figmaStyle}
-                      <div style={muted}>{styleSummary(style)}</div>
-                    </>
-                  ) : (
-                    <Chip kind="amber">waiting on design</Chip>
-                  )}
+                  {figmaStyle}
+                  {style && <div style={muted}>{styleSummary(style)}</div>}
                 </td>
                 {/* Paragraph and Caption size in em, so they need the app's base font around them, not the page's 14px */}
                 <td style={{ ...cell, ...text.fontStyles }}>{sample}</td>
