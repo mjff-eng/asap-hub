@@ -32,12 +32,33 @@ it('shows the live dot and a Join event now button for a live event with a meeti
   );
 });
 
-it('shows the live dot and an In person pill, but no button, for a live event without a meeting link', () => {
+it('shows the live dot and an In person pill, but no button, for a live in-person event', () => {
   render(
-    <DashboardEventCard {...props} {...liveWindow} meetingLink={undefined} />,
+    <DashboardEventCard
+      {...props}
+      {...liveWindow}
+      meetingLink="https://example.com/meeting"
+      hideMeetingLink
+    />,
   );
   expect(screen.getByTitle('Live')).toBeInTheDocument();
   expect(screen.getByText('In person')).toBeVisible();
+  expect(
+    screen.queryByRole('link', { name: /join event now/i }),
+  ).not.toBeInTheDocument();
+});
+
+it('shows neither the In person pill nor the button for a live online event without a meeting link', () => {
+  render(
+    <DashboardEventCard
+      {...props}
+      {...liveWindow}
+      meetingLink={undefined}
+      hideMeetingLink={false}
+    />,
+  );
+  expect(screen.getByTitle('Live')).toBeInTheDocument();
+  expect(screen.queryByText('In person')).not.toBeInTheDocument();
   expect(
     screen.queryByRole('link', { name: /join event now/i }),
   ).not.toBeInTheDocument();
@@ -58,7 +79,21 @@ it('shows neither the live dot nor the button for an event that has not started'
   ).not.toBeInTheDocument();
 });
 
-it('shows the In person pill for a past event without a meeting link', () => {
+it('shows the In person pill for a past in-person event', () => {
+  render(
+    <DashboardEventCard
+      {...props}
+      variant="past"
+      startDate={subHours(new Date(), 3).toISOString()}
+      endDate={subHours(new Date(), 2).toISOString()}
+      hideMeetingLink
+    />,
+  );
+  expect(screen.getByText('In person')).toBeVisible();
+  expect(screen.queryByTitle('Live')).not.toBeInTheDocument();
+});
+
+it('does not show the In person pill for a past online event without a meeting link', () => {
   render(
     <DashboardEventCard
       {...props}
@@ -66,10 +101,10 @@ it('shows the In person pill for a past event without a meeting link', () => {
       startDate={subHours(new Date(), 3).toISOString()}
       endDate={subHours(new Date(), 2).toISOString()}
       meetingLink={undefined}
+      hideMeetingLink={false}
     />,
   );
-  expect(screen.getByText('In person')).toBeVisible();
-  expect(screen.queryByTitle('Live')).not.toBeInTheDocument();
+  expect(screen.queryByText('In person')).not.toBeInTheDocument();
 });
 
 it('shows the materials list for past events only', () => {

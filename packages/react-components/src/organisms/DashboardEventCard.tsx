@@ -79,7 +79,6 @@ const DashboardEventCard: React.FC<DashboardEventCardProps> = ({
     status !== 'Cancelled' &&
     hasStarted &&
     !hasFinished;
-  const inPerson = !meetingLink || hideMeetingLink;
 
   return (
     <div css={positionedWrapperStyles}>
@@ -94,7 +93,7 @@ const DashboardEventCard: React.FC<DashboardEventCardProps> = ({
             <LiveIcon color={colour.utilitarian.red[600]} size={16} />
           ) : undefined
         }
-        titleSuffix={inPerson ? <InPersonPill /> : undefined}
+        titleSuffix={hideMeetingLink ? <InPersonPill /> : undefined}
         titleAction={
           live && meetingLink && !hideMeetingLink ? (
             <div css={buttonWrapperStyles}>
