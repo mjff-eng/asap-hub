@@ -106,3 +106,12 @@ it('renders an algolia tagged result list and hit', async () => {
     }
   `);
 });
+
+it('shows the online events notice for upcoming events only', async () => {
+  const { getByText, unmount } = await renderEventsListPage();
+  expect(getByText(/Events are online by default/)).toBeVisible();
+  unmount();
+
+  const { queryByText } = await renderEventsListPage('', new Date(), true);
+  expect(queryByText(/Events are online by default/)).not.toBeInTheDocument();
+});

@@ -105,7 +105,6 @@ const props = (): ComponentProps<typeof EventCard> => {
       ? 'http://example.com'
       : undefined,
     hideMeetingLink: boolean('hide meeting Link', false),
-    recurring: boolean('recurring', false),
     meetingMaterials:
       meetingMaterials === 'Yes'
         ? [{ title: 'example', url: 'http://example.com' }]
@@ -129,6 +128,10 @@ const happeningNow = {
   startDate: subHours(new Date(), 1).toISOString(),
   endDate: addHours(new Date(), 1).toISOString(),
 };
+const startingSoon = {
+  startDate: addHours(new Date(), 3).toISOString(),
+  endDate: addHours(new Date(), 4).toISOString(),
+};
 const past = {
   startDate: subDays(new Date(), 7).toISOString(),
   endDate: addHours(subDays(new Date(), 7), 1).toISOString(),
@@ -140,8 +143,19 @@ export const LiveWithMeetingLink = () => (
     {...cardProps({ ...happeningNow, meetingLink: 'http://example.com' })}
   />
 );
-export const LiveInPerson = () => (
+export const LiveWithoutMeetingLink = () => (
   <EventCard {...cardProps({ ...happeningNow, meetingLink: undefined })} />
+);
+export const LiveInPerson = () => (
+  <EventCard {...cardProps({ ...happeningNow, hideMeetingLink: true })} />
+);
+export const StartingSoon = () => (
+  <EventCard
+    {...cardProps({ ...startingSoon, meetingLink: 'http://example.com' })}
+  />
+);
+export const StartingSoonInPerson = () => (
+  <EventCard {...cardProps({ ...startingSoon, hideMeetingLink: true })} />
 );
 export const Cancelled = () => (
   <EventCard {...cardProps({ ...upcoming, status: 'Cancelled' })} />
@@ -153,9 +167,6 @@ export const SpeakersToBeAnnounced = () => (
       numberOfUnknownSpeakers: 3,
     })}
   />
-);
-export const Recurring = () => (
-  <EventCard {...cardProps({ ...upcoming, recurring: true })} />
 );
 export const WithInactiveTeams = () => (
   <EventCard

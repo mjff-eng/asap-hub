@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 
 import ToastCard from '../ToastCard';
+import { colour } from '../../colors';
 
 it('renders a toast card with children', () => {
   const { getByText } = render(<ToastCard>content</ToastCard>);
@@ -40,6 +41,27 @@ it('renders a toast card with live icon', () => {
   );
   expect(getByTitle(/live/i)).toBeInTheDocument();
   expect(getByText('explanation text')).toBeVisible();
+});
+
+it('renders the live icon in red', () => {
+  const { getByTitle } = render(
+    <ToastCard type="live" toastContent="explanation text">
+      content
+    </ToastCard>,
+  );
+  expect(
+    getByTitle(/live/i).parentElement!.querySelector('circle'),
+  ).toHaveAttribute('fill', colour.utilitarian.red[600]);
+});
+
+it('renders an upcoming toast card without an icon', () => {
+  const { container, getByText } = render(
+    <ToastCard type="upcoming" toastContent="explanation text">
+      content
+    </ToastCard>,
+  );
+  expect(getByText('explanation text')).toBeVisible();
+  expect(container.querySelector('svg')).not.toBeInTheDocument();
 });
 
 it('renders a toast card with info icon', () => {

@@ -51,6 +51,11 @@ const liveStyles = css({
   fill: colour.foreground.success,
 });
 
+const upcomingStyles = css({
+  backgroundColor: colour.background.tertiary,
+  color: colour.foreground.secondary,
+});
+
 const leadStyles = css({
   backgroundColor: colour.background.tertiary,
   color: colour.foreground.tertiary,
@@ -60,19 +65,21 @@ const leadStyles = css({
 const toastContentStyles = css({
   display: 'flex',
   alignItems: 'center',
+  fontSize: rem(16),
 
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     alignItems: 'flex-start',
   },
 });
 
-type Type = 'alert' | 'attachment' | 'live' | 'info';
+type Type = 'alert' | 'attachment' | 'live' | 'info' | 'upcoming';
 
 const iconMap: Record<Type, ReactNode> = {
   alert: <WarningIcon color={colour.foreground.warning} />,
   attachment: paperClipIcon,
-  live: <LiveIcon />,
+  live: <LiveIcon color={colour.utilitarian.red[600]} />,
   info: infoInfoIcon,
+  upcoming: null,
 };
 
 const accentMap = {
@@ -80,6 +87,7 @@ const accentMap = {
   info: infoStyles,
   attachment: leadStyles,
   live: liveStyles,
+  upcoming: upcomingStyles,
 };
 
 interface ToastCardProps {
@@ -103,9 +111,11 @@ const ToastCard: React.FC<ToastCardProps> = ({
       <>
         <span css={[toastStyles, accentMap[type]]}>
           <span css={toastContentStyles}>
-            <span css={[iconStyles, mutedIcon && mutedIconStyles]}>
-              {iconMap[type]}
-            </span>
+            {iconMap[type] && (
+              <span css={[iconStyles, mutedIcon && mutedIconStyles]}>
+                {iconMap[type]}
+              </span>
+            )}
             {toastContent}
           </span>
           {toastAction}
