@@ -464,7 +464,7 @@
         "value": {
           "fontSize": 14,
           "textDecoration": "none",
-          "fontFamily": "Inter",
+          "fontFamily": "Nunito Sans",
           "fontWeight": 700,
           "fontStyle": "normal",
           "fontStretch": "normal",
@@ -1434,7 +1434,7 @@
         },
         "fontFamily": {
           "type": "string",
-          "value": "Inter"
+          "value": "Nunito Sans"
         },
         "fontWeight": {
           "type": "number",
