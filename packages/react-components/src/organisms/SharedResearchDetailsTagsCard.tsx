@@ -41,7 +41,7 @@ const SharedResearchDetailsTagsCard: React.FC<
     {shortDescription && (
       <div>
         <div css={{ marginBottom: rem(16) }}>
-          <Headline3 noMargin>Short Description</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>Short Description</Headline3>
         </div>
         <Paragraph noMargin accent="tertiary">
           {shortDescription}
@@ -53,7 +53,7 @@ const SharedResearchDetailsTagsCard: React.FC<
     {displayDescription && (
       <div>
         <div css={{ marginBottom: rem(16) }}>
-          <Headline3 noMargin>Description</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>Description</Headline3>
         </div>
         <TextEditor
           id="description"
@@ -76,7 +76,7 @@ const SharedResearchDetailsTagsCard: React.FC<
     {changelog && (
       <div>
         <div css={{ marginBottom: rem(16) }}>
-          <Headline3 noMargin>Changelog</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>Changelog</Headline3>
         </div>
         <Paragraph noMargin accent="tertiary">
           {changelog}
@@ -86,7 +86,7 @@ const SharedResearchDetailsTagsCard: React.FC<
     {displayDescription && !!tags.length && <Divider />}
     {!!tags.length && (
       <>
-        <Headline2 styleAsHeading={6}>Tags</Headline2>
+        <Headline2 styleAsHeading={5}>Tags</Headline2>
         <div
           css={{
             marginTop: rem(12),

@@ -133,7 +133,7 @@ const ProjectAims: FC<ProjectAimsProps> = ({
   return (
     <Card padding={false} title="Aims">
       <div css={contentStyles}>
-        <Headline3 noMargin>Aims</Headline3>
+        <Headline3 styleAsHeading={5} noMargin>Aims</Headline3>
         <Paragraph
           noMargin
           accent="tertiary"

@@ -162,7 +162,7 @@ const MilestoneStatusConfirmationModal: React.FC<
               {crossIcon}
             </Button>
           </div>
-          <Headline3 noMargin>
+          <Headline3 styleAsHeading={5} noMargin>
             {`Set status to ${status}? This action is irreversible.`}
           </Headline3>
         </header>

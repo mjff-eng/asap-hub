@@ -66,7 +66,7 @@ const ProjectDetailOverview: React.FC<ProjectDetailOverviewProps> = ({
   return (
     <Card>
       <div>
-        <Display styleAsHeading={4}>Overview</Display>
+        <Display styleAsHeading={5}>Overview</Display>
 
         {supplementGrant?.grantTitle ? (
           <>

@@ -82,7 +82,7 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
     <div css={containerStyles}>
       {!!description && (
         <Card overrideStyles={cardStyles}>
-          <Headline3 noMargin>Description</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>Description</Headline3>
           <div css={contentStyles}>
             <ExpandableText>{description}</ExpandableText>
           </div>
@@ -90,7 +90,7 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
       )}
       <div css={columnStyles}>
         <Card overrideStyles={cardStyles}>
-          <Headline3 noMargin>Contact Details</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>Contact Details</Headline3>
           <div css={contentStyles}>
             <EmailSection
               contactEmails={[
@@ -102,7 +102,7 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
         </Card>
         {calendar && status !== 'Completed' ? (
           <Card overrideStyles={cardStyles}>
-            <Headline3 noMargin>Events</Headline3>
+            <Headline3 styleAsHeading={5} noMargin>Events</Headline3>
             <Events
               calendarId={calendar.id}
               paragraph={
@@ -115,7 +115,7 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
 
       {tags.length ? (
         <Card overrideStyles={cardStyles}>
-          <Headline3 noMargin>Tags</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>Tags</Headline3>
           <Paragraph accent="tertiary">
             Explore keywords related to skills, techniques, resources, and
             tools.
@@ -135,6 +135,7 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
       ) : (
         <Card>
           <Headline3
+            styleAsHeading={5}
             noMargin
           >{`Project Members (${members.length})`}</Headline3>
           <div css={contentStyles}>

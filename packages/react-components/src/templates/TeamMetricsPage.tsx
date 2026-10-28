@@ -52,7 +52,7 @@ const TeamMetricsPage: React.FC<TeamMetricsPageProps> = ({
   engagementMetrics,
 }) => (
   <div css={containerStyles}>
-    <Headline3 noMargin>Metrics</Headline3>
+    <Headline3 styleAsHeading={5} noMargin>Metrics</Headline3>
     <Paragraph accent="tertiary">
       Explore a high-level overview of your team's activity within the
       Collaborative Research Network.

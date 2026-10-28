@@ -77,7 +77,7 @@ const PeopleCard: React.FC<UserListItemResponse> = ({
         </ImageLink>
         <div css={textContainerStyles}>
           <div css={moveStyles}>
-            <LinkHeadline href={userHref} level={2} styleAsHeading={6}>
+            <LinkHeadline href={userHref} level={2} styleAsHeading={5}>
               {fullDisplayName}
               {degree && `, ${degree}`}
             </LinkHeadline>

@@ -20,6 +20,18 @@ it('renders an event', () => {
   );
 });
 
+it('renders the title as heading/5, or heading/4 when asked', () => {
+  const { rerender } = render(<EventInfo {...props} />);
+  expect(
+    getComputedStyle(screen.getByRole('heading', { level: 3 })).fontSize,
+  ).toBe('24px');
+
+  rerender(<EventInfo {...props} titleStyleAsHeading={4} />);
+  expect(
+    getComputedStyle(screen.getByRole('heading', { level: 3 })).fontSize,
+  ).toBe('28px');
+});
+
 it('truncates long event titles', () => {
   render(<EventInfo {...props} title={'blablablha'.repeat(100)} />);
 

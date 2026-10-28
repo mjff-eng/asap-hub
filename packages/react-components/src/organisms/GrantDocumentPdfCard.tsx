@@ -34,7 +34,7 @@ const GrantDocumentPdfCard: React.FC<GrantDocumentPdfCardProps> = ({
 
   return (
     <Card overrideStyles={cardStyles}>
-      <Headline2 styleAsHeading={6} noMargin>
+      <Headline2 styleAsHeading={5} noMargin>
         Grant Document PDF
       </Headline2>
       <div ref={frameRef} css={frameStyles}>

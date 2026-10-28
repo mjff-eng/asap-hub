@@ -149,7 +149,7 @@ const ComplianceAssignUsersModal: React.FC<ComplianceAssignUsersModalProps> = ({
               {crossIcon}
             </Button>
           </div>
-          <Headline3>Assign User</Headline3>
+          <Headline3 styleAsHeading={5}>Assign User</Headline3>
         </header>
 
         <div css={modalContentStyles}>
