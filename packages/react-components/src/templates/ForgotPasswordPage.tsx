@@ -73,7 +73,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
   return (
     <div css={styles}>
       <div css={textStyles}>
-        <Display styleAsHeading={3}>Forgot Password</Display>
+        <Display styleAsHeading={4}>Forgot Password</Display>
         <Paragraph primary>
           <strong>We’ll send you a password reset link</strong>
           <br />

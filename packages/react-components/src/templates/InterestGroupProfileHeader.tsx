@@ -131,7 +131,7 @@ const InterestGroupProfileHeader: React.FC<InterestGroupProfileHeaderProps> = ({
         }
       >
         <div css={titleStyle}>
-          <Display styleAsHeading={3}>{name}</Display>
+          <Display styleAsHeading={4}>{name}</Display>
           {!active && (
             <StateTag
               icon={<InactiveBadgeIcon entityName="Interest Group" />}

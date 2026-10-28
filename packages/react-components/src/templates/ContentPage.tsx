@@ -20,7 +20,7 @@ const ContentPage: React.FC<ContentPageProps> = ({ text, title }) => {
     <article
       css={({ components }) => [styles, components?.ContentPage?.styles]}
     >
-      <Display>{title}</Display>
+      <Display styleAsHeading={4}>{title}</Display>
       <RichText toc text={text} />
     </article>
   );

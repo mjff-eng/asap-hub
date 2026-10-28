@@ -338,12 +338,12 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                 <div>
                   <div css={nameHeaderStyles}>
                     <div css={{ display: 'flex' }}>
-                      <Display styleAsHeading={3}>{fullDisplayName}</Display>
+                      <Display styleAsHeading={4}>{fullDisplayName}</Display>
                       {degree ? (
-                        <Display styleAsHeading={3}>, {degree}</Display>
+                        <Display styleAsHeading={4}>, {degree}</Display>
                       ) : isOwnProfile ? (
                         <div css={{ color: colour.foreground.disabled }}>
-                          <Display styleAsHeading={3}>, Degree</Display>
+                          <Display styleAsHeading={4}>, Degree</Display>
                         </div>
                       ) : null}
                     </div>

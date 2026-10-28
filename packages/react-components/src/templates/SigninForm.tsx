@@ -40,7 +40,7 @@ const Signin: React.FC<SigninProps> = ({
 }) => (
   <article css={styles}>
     <header css={[headerStyles, ignoreWidthStyles]}>
-      <Display styleAsHeading={3}>
+      <Display styleAsHeading={4}>
         {signup ? 'Choose a login method' : `Sign in to the ${appName}`}
       </Display>
       {signup ? (
