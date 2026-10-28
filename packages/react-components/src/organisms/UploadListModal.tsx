@@ -597,7 +597,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
           >
             {chevronLeftIcon}
           </Button>
-          <Headline2 styleAsHeading={5} noMargin overrideStyles={titleStyles}>
+          <Headline2 styleAsHeading={4} noMargin overrideStyles={titleStyles}>
             Upload a list
           </Headline2>
         </div>
