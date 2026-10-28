@@ -107,7 +107,7 @@ const dismissStyles = css({
   },
 });
 
-type SpeakerToastProps = {
+type InlineToastProps = {
   readonly accent?: 'success' | 'error';
   readonly message: string;
   readonly onUndo?: () => void;
@@ -115,7 +115,7 @@ type SpeakerToastProps = {
   readonly enabled?: boolean;
 };
 
-const SpeakerToast: React.FC<SpeakerToastProps> = ({
+const InlineToast: React.FC<InlineToastProps> = ({
   accent = 'success',
   message,
   onUndo,
@@ -155,4 +155,4 @@ const SpeakerToast: React.FC<SpeakerToastProps> = ({
   </div>
 );
 
-export default SpeakerToast;
+export default InlineToast;
