@@ -136,7 +136,7 @@ const RelatedResearchCard = <
           ...(displayShowMoreButton ? [{ paddingBottom: 0 }] : []),
         ]}
       >
-        <Headline3 noMargin>{title}</Headline3>
+        <Headline3 styleAsHeading={5} noMargin>{title}</Headline3>
         <div css={descriptionStyles}>
           <Paragraph accent="tertiary" noMargin>
             {description}

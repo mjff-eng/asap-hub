@@ -77,7 +77,7 @@ const ProjectProfileOverview: React.FC<TeamProfileOverviewProps> = ({
   return (
     <Card>
       <div>
-        <Display styleAsHeading={4}>Project Overview</Display>
+        <Display styleAsHeading={5}>Project Overview</Display>
 
         {supplementGrant?.title ? (
           <>

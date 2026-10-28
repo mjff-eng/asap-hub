@@ -133,7 +133,7 @@ const UserProfileBadges: React.FC<UserProfileBadgesProps> = ({ badges }) => {
   return (
     <div id={badgesAnchorId}>
       <Card padding={false} overrideStyles={containerStyles}>
-        <Headline2 styleAsHeading={4} noMargin overrideStyles={headerStyles}>
+        <Headline2 styleAsHeading={5} noMargin overrideStyles={headerStyles}>
           Badges
         </Headline2>
         <Paragraph

@@ -120,7 +120,7 @@ const OutputCard: React.FC<OutputCardProps> = ({
         <div css={css({ margin: `${rem(12)} 0 ${rem(24)}` })}>
           <LinkHeadline
             level={2}
-            styleAsHeading={6}
+            styleAsHeading={5}
             href={gp2Routing.outputs({}).output({ outputId: id }).$}
           >
             {title}

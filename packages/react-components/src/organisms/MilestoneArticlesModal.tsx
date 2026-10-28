@@ -149,7 +149,7 @@ const MilestoneArticlesModal: React.FC<MilestoneArticlesModalProps> = ({
               {crossIcon}
             </Button>
           </div>
-          <Headline3 noMargin>{title}</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>{title}</Headline3>
         </header>
       </div>
       <div css={contentWrapStyles}>

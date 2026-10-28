@@ -66,7 +66,7 @@ const AnalyticsProductivityPageBody: React.FC<ProductivityAnalyticsProps> = ({
       />
     </div>
     <div css={tableHeaderStyles}>
-      <Headline3>{metricOptions[metric]}</Headline3>
+      <Headline3 styleAsHeading={5}>{metricOptions[metric]}</Headline3>
       <Paragraph>
         Overview of ASAP outputs shared on the CRN Hub by {metric}.
       </Paragraph>

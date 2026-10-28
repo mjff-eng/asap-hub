@@ -123,7 +123,7 @@ const CalendarList: FC<CalendarListProps> = ({
     <div css={containerStyles}>
       <Card padding={false}>
         <div css={headerStyles}>
-          <Headline3 noMargin>{title}</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>{title}</Headline3>
         </div>
         {description && (
           <div css={subheaderStyles}>

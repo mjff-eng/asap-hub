@@ -35,7 +35,7 @@ const AdditionalMaterials: React.FC<AdditionalMaterialsProps> = ({
 }) =>
   meetingMaterials && meetingMaterials.length ? (
     <Card>
-      <Headline2 styleAsHeading={4}>Additional meeting materials</Headline2>
+      <Headline2 styleAsHeading={5}>Additional meeting materials</Headline2>
       <ul css={orderList}>
         {meetingMaterials.map(({ title, url }, index) => (
           <li key={`material-${index}`} css={listElement}>

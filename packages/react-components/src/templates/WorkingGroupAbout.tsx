@@ -54,7 +54,7 @@ const WorkingGroupAbout: React.FC<WorkingGroupAboutProps> = ({
 }) => (
   <div css={containerStyles}>
     <Card>
-      <Headline3>Working Group Description</Headline3>
+      <Headline3 styleAsHeading={5}>Working Group Description</Headline3>
       <Collapsible>
         <RichText text={description} />
       </Collapsible>
@@ -62,7 +62,7 @@ const WorkingGroupAbout: React.FC<WorkingGroupAboutProps> = ({
     <DeliverablesCard deliverables={deliverables} />
     {!!tags.length && (
       <Card>
-        <Headline3>Tags</Headline3>
+        <Headline3 styleAsHeading={5}>Tags</Headline3>
         <div css={tagListStyle}>
           <Paragraph accent="tertiary">
             Explore keywords related to skills, techniques, resources, and
@@ -74,7 +74,7 @@ const WorkingGroupAbout: React.FC<WorkingGroupAboutProps> = ({
     )}
     {showCollaborationCard && (
       <Card accent="green">
-        <Headline3>
+        <Headline3 styleAsHeading={5}>
           <span css={{ color: colour.foreground.primary }}>
             Would you like to collaborate with this Working Group?
           </span>

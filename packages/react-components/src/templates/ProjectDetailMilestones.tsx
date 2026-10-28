@@ -164,7 +164,7 @@ const ProjectDetailMilestones: React.FC<ProjectDetailMilestonesProps> = ({
 
           <div css={descriptionSectionStyles}>
             <div css={headerStyles}>
-              <Headline3 noMargin>Milestones</Headline3>
+              <Headline3 styleAsHeading={5} noMargin>Milestones</Headline3>
               {canCreateMilestone && (
                 <div css={createMilestoneButtonStyles}>
                   <Button onClick={handleAddNewMilestone} noMargin small>

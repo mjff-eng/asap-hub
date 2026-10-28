@@ -56,6 +56,7 @@ const DashboardRecommendedUsers: React.FC<DashboardRecommendedUsersProps> = ({
         />
       </ImageLink>
       <LinkHeadline
+        styleAsHeading={5}
         href={gp2Routing.users({}).user({ userId: user.id }).$}
         level={4}
         noMargin
