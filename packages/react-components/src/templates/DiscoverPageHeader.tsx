@@ -13,7 +13,7 @@ const DiscoverPageHeader: React.FC = () => (
         </TabNav>
       }
     >
-      <Display styleAsHeading={3}>Guides &amp; Tutorials</Display>
+      <Display>Guides &amp; Tutorials</Display>
       <Paragraph accent="tertiary">
         Guidance and resources about ASAP’s programs and policies.
       </Paragraph>
