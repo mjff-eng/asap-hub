@@ -38,7 +38,7 @@ const avatarStyles = css([
 
 const nameStyles = css({
   color: colour.foreground.brand,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
   [mobileQuery]: { fontSize: rem(14), lineHeight: 16 / 14 },
@@ -49,7 +49,7 @@ const dismissStyles = (enabled: boolean) =>
 
 const messageStyles = css({
   color: colour.foreground.primary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });
@@ -59,7 +59,7 @@ const pillStyles = css({
   height: rem(40),
   padding: `0 ${rem(16)}`,
   borderColor: colour.border.secondary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
   color: colour.foreground.primary,

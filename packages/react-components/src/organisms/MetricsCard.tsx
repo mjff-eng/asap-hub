@@ -76,7 +76,7 @@ const fieldStyles = css({
   flexDirection: 'column',
   gap: rem(8),
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     display: 'block',
@@ -138,7 +138,7 @@ const moodTooltipMaxTextWidth = 296 - 2 * 12;
 const moodLabelStyles = css({
   display: 'flex',
   justifyContent: 'center',
-  // em here is relative to this element's own 14px font, not the 17px rem base
+  // em here is relative to this element's own 14px font, not the 16px rem base
   maxWidth: `${moodTooltipMaxTextWidth / moodTooltipFontSize}em`,
   whiteSpace: 'pre-line',
   textAlign: 'center',

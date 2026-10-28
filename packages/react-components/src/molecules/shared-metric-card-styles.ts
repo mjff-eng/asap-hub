@@ -15,7 +15,7 @@ export const metricContainerStyles = css({
 export const metricLabelStyles = css({
   margin: 0,
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
 });
 
