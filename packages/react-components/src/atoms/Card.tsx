@@ -21,7 +21,7 @@ export type AccentVariant =
   | 'inactive'
   | 'warning'
   | 'information'
-  | 'highlight';
+  | 'brand';
 
 export const accents: Record<AccentVariant, CSSObject> = {
   default: {
@@ -64,8 +64,8 @@ export const accents: Record<AccentVariant, CSSObject> = {
     color: colour.foreground.info,
     borderColor: colour.border.info,
   },
-  highlight: {
-    backgroundColor: colour.background.highlight,
+  brand: {
+    backgroundColor: colour.background.brand,
     borderColor: colour.border.card.default,
   },
 };
