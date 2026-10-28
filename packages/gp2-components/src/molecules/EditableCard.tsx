@@ -55,7 +55,9 @@ const EditableCard: React.FC<EditableCardProps> = ({
   <Card padding={false}>
     <article css={containerStyles}>
       <div css={[{ gridArea: 'headline' }]}>
-        <Headline3 styleAsHeading={5} noMargin>{title}</Headline3>
+        <Headline3 styleAsHeading={5} noMargin>
+          {title}
+        </Headline3>
         {subtitle && (
           <div css={css({ marginTop: rem(24) })}>
             <Paragraph noMargin accent="tertiary">
