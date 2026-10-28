@@ -63,7 +63,7 @@ const AnalyticsAwardsPageBody: React.FC<AwardsAnalyticsProps> = ({
         />
       </div>
       <div css={tableHeaderStyles}>
-        <Headline3>{metricLabel}</Headline3>
+        <Headline3 styleAsHeading={5}>{metricLabel}</Headline3>
         <Paragraph styles={css({ color: colour.foreground.tertiary })}>
           Number of {metricLabel} awards by team.
         </Paragraph>
