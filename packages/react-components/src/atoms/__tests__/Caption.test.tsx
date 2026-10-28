@@ -48,7 +48,19 @@ it('renders text with font-weight bold', () => {
     </figure>,
   );
   const { fontWeight } = getComputedStyle(getByText('text'));
-  expect(fontWeight).toMatchInlineSnapshot(`"bold"`);
+  expect(fontWeight).toMatchInlineSnapshot(`"700"`);
+});
+
+it('renders a FigCaption 14px on a 24px line', () => {
+  const { getByText } = render(
+    <figure>
+      the figure
+      <Caption>text</Caption>
+    </figure>,
+  );
+  const { fontSize, lineHeight } = getComputedStyle(getByText('text'));
+  expect(parseFloat(fontSize) * 16).toBe(14);
+  expect(parseFloat(lineHeight) * 14).toBeCloseTo(24);
 });
 
 it('renders a given accent color', () => {
