@@ -117,7 +117,7 @@ const TutorialCard: React.FC<TutorialCardProps> = ({
         <div css={containerStyle}>
           <div css={headerStyles}>
             <div css={{ paddingRight: rem(15) }}>
-              <LinkHeadline href={href} level={4}>
+              <LinkHeadline styleAsHeading={5} href={href} level={4}>
                 {title}
               </LinkHeadline>
             </div>

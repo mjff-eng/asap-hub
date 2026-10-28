@@ -56,7 +56,7 @@ const JoinEvent: React.FC<JoinEventProps> = ({
 
   return (
     <section>
-      <Headline2 styleAsHeading={6}>Join this event</Headline2>
+      <Headline2 styleAsHeading={5}>Join this event</Headline2>
       <Paragraph>
         {hasStarted ? (
           'This event is currently happening.'

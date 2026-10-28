@@ -147,7 +147,9 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
             <header css={headerStyles}>{logo}</header>
             <div css={modalContentStyles}>
               <div css={sectionStyles}>
-                <Headline3 noMargin>Privacy Preference Center</Headline3>
+                <Headline3 styleAsHeading={5} noMargin>
+                  Privacy Preference Center
+                </Headline3>
 
                 <Paragraph noMargin accent="tertiary" styles={paragraphStyles}>
                   When you visit our website, it may store or retrieve data in

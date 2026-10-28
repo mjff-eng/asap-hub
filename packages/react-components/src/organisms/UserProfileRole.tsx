@@ -33,7 +33,7 @@ const UserProfileRole: React.FC<UserProfileRoleProps> = ({
   const { isOwnProfile } = useContext(UserProfileContext);
   return (
     <Card>
-      <Headline2 styleAsHeading={4} noMargin>
+      <Headline2 styleAsHeading={5} noMargin>
         Role
       </Headline2>
       <div css={[gapperStyles, css({ marginTop: rem(32) })]}>

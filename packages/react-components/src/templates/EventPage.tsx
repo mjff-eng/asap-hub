@@ -94,7 +94,12 @@ const EventPage = <
       {backHref && <BackLink href={backHref} />}
       <div css={cardsStyles}>
         <Card>
-          <EventInfo {...props} titleLimit={null} tags={[]} />
+          <EventInfo
+            {...props}
+            titleLimit={null}
+            titleStyleAsHeading={4}
+            tags={[]}
+          />
           <Paragraph accent="tertiary" styles={updatedParagraphStyles}>
             <small>
               Last updated:{' '}

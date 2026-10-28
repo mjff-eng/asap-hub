@@ -25,7 +25,7 @@ const ProfileExpertiseAndResources: React.FC<
     <Card>
       {!hideExpertiseAndResources && (
         <>
-          <Headline2 styleAsHeading={4} noMargin>
+          <Headline2 styleAsHeading={5} noMargin>
             Expertise and Resources
           </Headline2>
           {!expertiseAndResourceDescription && isOwnProfile ? (
@@ -40,7 +40,7 @@ const ProfileExpertiseAndResources: React.FC<
           </div>
         </>
       )}
-      <Headline2 styleAsHeading={4}>Tags</Headline2>
+      <Headline2 styleAsHeading={5}>Tags</Headline2>
       {tags.length ? (
         <>
           <div

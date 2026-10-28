@@ -154,7 +154,7 @@ const UserProfileRecentWorks: React.FC<UserProfileRecentWorksProps> = ({
   return (
     <Card>
       <div css={headerStyles}>
-        <Headline2 styleAsHeading={4}>
+        <Headline2 styleAsHeading={5}>
           Recent Publications ({orcidWorks.length})
         </Headline2>
         <Paragraph accent="tertiary">Via ORCID</Paragraph>

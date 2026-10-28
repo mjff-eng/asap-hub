@@ -92,9 +92,6 @@ const headerTitleStyles = css({
 });
 
 const titleStyles = css({
-  fontSize: rem(26),
-  fontWeight: 700,
-  lineHeight: rem(32),
   color: colour.foreground.primary,
 });
 
@@ -600,7 +597,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
           >
             {chevronLeftIcon}
           </Button>
-          <Headline2 noMargin overrideStyles={titleStyles}>
+          <Headline2 styleAsHeading={5} noMargin overrideStyles={titleStyles}>
             Upload a list
           </Headline2>
         </div>

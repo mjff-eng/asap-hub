@@ -82,6 +82,7 @@ type EventInfoProps = ComponentProps<typeof EventTime> &
     tags: string[];
     titleLimit?: number | null;
     titleAsLink?: boolean;
+    titleStyleAsHeading?: 4 | 5;
     eventSpeakers?: React.ReactNode;
     eventTeams?: React.ReactNode;
     titlePrefix?: React.ReactNode;
@@ -100,6 +101,7 @@ const EventInfo: React.FC<EventInfoProps> = ({
   status,
   titleLimit = TITLE_LIMIT,
   titleAsLink = true,
+  titleStyleAsHeading = 5,
   eventSpeakers,
   eventTeams,
   tags,
@@ -140,11 +142,16 @@ const EventInfo: React.FC<EventInfoProps> = ({
           <div css={titleTextGroupStyles}>
             {titlePrefix}
             {link ? (
-              <LinkHeadline level={3} styleAsHeading={6} href={link} noMargin>
+              <LinkHeadline
+                level={3}
+                styleAsHeading={titleStyleAsHeading}
+                href={link}
+                noMargin
+              >
                 {displayTitle}
               </LinkHeadline>
             ) : (
-              <Headline3 styleAsHeading={6} noMargin>
+              <Headline3 styleAsHeading={titleStyleAsHeading} noMargin>
                 {displayTitle}
               </Headline3>
             )}

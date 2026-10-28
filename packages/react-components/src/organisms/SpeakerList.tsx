@@ -175,7 +175,7 @@ const SpeakerList: React.FC<SpeakerListProps> = ({ speakers, endDate }) => {
         flexFlow: 'column',
       }}
     >
-      <Headline3 styleAsHeading={4}>Speakers</Headline3>
+      <Headline3 styleAsHeading={5}>Speakers</Headline3>
       <div css={headerStyle}>
         <Headline4 styleAsHeading={6}>Team</Headline4>
         <Headline4 styleAsHeading={6}>Speaker</Headline4>

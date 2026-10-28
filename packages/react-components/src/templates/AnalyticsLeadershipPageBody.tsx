@@ -75,7 +75,7 @@ const LeadershipPageBody: React.FC<LeadershipAndMembershipAnalyticsProps> = ({
         />
       </div>
       <div css={tableHeaderStyles}>
-        <Headline3>{metricOptions[metric]}</Headline3>
+        <Headline3 styleAsHeading={5}>{metricOptions[metric]}</Headline3>
         <Paragraph>{metricDescription[metric]}</Paragraph>
       </div>
       <AnalyticsControls

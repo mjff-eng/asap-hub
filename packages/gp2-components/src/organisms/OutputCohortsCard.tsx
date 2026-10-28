@@ -75,7 +75,9 @@ const OutputCohortsCard: React.FC<OutputCohortsCardProps> = ({
 }) => (
   <Card padding={false}>
     <div css={[container]}>
-      <Headline2 noMargin>Contributing Cohort Studies</Headline2>
+      <Headline2 styleAsHeading={5} noMargin>
+        Contributing Cohort Studies
+      </Headline2>
       <div css={descriptionStyles}>
         <Paragraph noMargin accent="tertiary">
           Find out all cohort studies that contributed to this output.

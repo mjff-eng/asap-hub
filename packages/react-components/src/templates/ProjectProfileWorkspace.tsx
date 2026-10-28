@@ -230,7 +230,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
         <Card overrideStyles={complianceCardContainerStyles}>
           <div css={complianceContainerStyles}>
             <div css={complianceHeaderStyles}>
-              <Display styleAsHeading={4}>Compliance Review</Display>
+              <Display styleAsHeading={5}>Compliance Review</Display>
               {isActiveProject && isProjectMember && (
                 <div css={css(manuscriptButtonStyles)}>
                   <Button
@@ -378,7 +378,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
       {isProjectMember && (
         <div id="collaboration-tools">
           <Card>
-            <Display styleAsHeading={4}>
+            <Display styleAsHeading={5}>
               Collaboration Tools (Project Only)
             </Display>
             <Paragraph accent="tertiary">
@@ -424,7 +424,7 @@ const ProjectProfileWorkspace: React.FC<ProjectProfileWorkspaceProps> = ({
 
       {isProjectMember && contactEmail && (
         <Card>
-          <Headline2 styleAsHeading={4}>Project Contact Email</Headline2>
+          <Headline2 styleAsHeading={5}>Project Contact Email</Headline2>
           <Paragraph accent="tertiary">
             Members across the Hub can reach your project through the designated
             contact email,{' '}

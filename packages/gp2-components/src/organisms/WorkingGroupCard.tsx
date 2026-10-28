@@ -70,6 +70,7 @@ const WorkingGroupCard: React.FC<WorkingGroupCardProps> = ({
       <div css={containerStyles}>
         <div>
           <LinkHeadline
+            styleAsHeading={5}
             href={workingGroupHref}
             level={3}
             css={titleStyles}
