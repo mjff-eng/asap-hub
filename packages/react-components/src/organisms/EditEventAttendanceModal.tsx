@@ -28,7 +28,7 @@ import {
   uploadIcon,
 } from '../icons';
 import { useSectionExpansion } from '../hooks';
-import { ConfirmableModalFooter, Modal, SpeakerToast } from '../molecules';
+import { ConfirmableModalFooter, InlineToast, Modal } from '../molecules';
 import { mobileScreen, rem } from '../pixels';
 import { pluralizeTeams } from '../utils';
 import { EventAttendanceTeam } from './EventAttendance';
@@ -780,7 +780,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
 
         {addedTeams && (
           <div css={toastSpacingStyles}>
-            <SpeakerToast
+            <InlineToast
               message={addedTeams.message}
               onUndo={() => undoAddedTeams(addedTeams)}
               onDismiss={() => setAddedTeams(null)}

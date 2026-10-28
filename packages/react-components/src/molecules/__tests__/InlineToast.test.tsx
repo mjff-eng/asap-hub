@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import SpeakerToast from '../SpeakerToast';
+import InlineToast from '../InlineToast';
 
 const defaultProps = {
   message: 'Added Jane Doe to Team Alpha',
@@ -12,7 +12,7 @@ const defaultProps = {
 beforeEach(() => jest.clearAllMocks());
 
 it('Should render the message and a success icon', () => {
-  render(<SpeakerToast {...defaultProps} />);
+  render(<InlineToast {...defaultProps} />);
 
   expect(screen.getByText('Added Jane Doe to Team Alpha')).toBeVisible();
   expect(screen.getByTitle('Success')).toBeInTheDocument();
@@ -21,7 +21,7 @@ it('Should render the message and a success icon', () => {
 
 it('Should render an error icon for the error accent', () => {
   render(
-    <SpeakerToast
+    <InlineToast
       {...defaultProps}
       accent="error"
       message="This speaker is not a member on any CRN team or individual project."
@@ -34,7 +34,7 @@ it('Should render an error icon for the error accent', () => {
 });
 
 it('Should omit Undo when there is nothing to undo', () => {
-  render(<SpeakerToast {...defaultProps} onUndo={undefined} />);
+  render(<InlineToast {...defaultProps} onUndo={undefined} />);
 
   expect(
     screen.queryByRole('button', { name: 'Undo' }),
@@ -43,7 +43,7 @@ it('Should omit Undo when there is nothing to undo', () => {
 });
 
 it('Should call onUndo when Undo is clicked', async () => {
-  render(<SpeakerToast {...defaultProps} />);
+  render(<InlineToast {...defaultProps} />);
 
   await userEvent.click(screen.getByRole('button', { name: 'Undo' }));
 
@@ -51,7 +51,7 @@ it('Should call onUndo when Undo is clicked', async () => {
 });
 
 it('Should call onDismiss when the dismiss button is clicked', async () => {
-  render(<SpeakerToast {...defaultProps} />);
+  render(<InlineToast {...defaultProps} />);
 
   await userEvent.click(
     screen.getByRole('button', { name: 'Dismiss message' }),
@@ -61,7 +61,7 @@ it('Should call onDismiss when the dismiss button is clicked', async () => {
 });
 
 it('Should disable Undo and dismiss when not enabled', () => {
-  render(<SpeakerToast {...defaultProps} enabled={false} />);
+  render(<InlineToast {...defaultProps} enabled={false} />);
 
   expect(screen.getByRole('button', { name: 'Undo' })).toBeDisabled();
   expect(
@@ -72,7 +72,7 @@ it('Should disable Undo and dismiss when not enabled', () => {
 it('Should not dismiss itself after any amount of time', () => {
   jest.useFakeTimers();
   try {
-    render(<SpeakerToast {...defaultProps} />);
+    render(<InlineToast {...defaultProps} />);
 
     act(() => {
       jest.advanceTimersByTime(600000);
