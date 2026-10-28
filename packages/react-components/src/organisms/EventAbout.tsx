@@ -44,7 +44,7 @@ const EventAbout: React.FC<EventAboutProps> = ({
       <div css={expandableColumnStyles}>
         {description ? (
           <div css={expandableColumnStyles}>
-            <Headline2 noMargin styleAsHeading={4}>
+            <Headline2 noMargin styleAsHeading={6}>
               About this event
             </Headline2>
             <div css={expandableTextSpacingStyles}>
@@ -57,7 +57,7 @@ const EventAbout: React.FC<EventAboutProps> = ({
         {description && tags.length ? <Divider /> : null}
         {tags.length ? (
           <div>
-            <Headline2 noMargin styleAsHeading={4}>
+            <Headline2 noMargin styleAsHeading={6}>
               Tags
             </Headline2>
             <div css={{ marginTop: rem(24), marginBottom: rem(32) }}>
@@ -74,7 +74,7 @@ const EventAbout: React.FC<EventAboutProps> = ({
 
   const descriptionComponent = description ? (
     <div>
-      <Headline2 styleAsHeading={4}>About this event</Headline2>
+      <Headline2 styleAsHeading={6}>About this event</Headline2>
       <Collapsible
         initiallyExpanded={isBefore(
           new Date(),
@@ -88,7 +88,7 @@ const EventAbout: React.FC<EventAboutProps> = ({
 
   const tagsComponent = tags.length ? (
     <div>
-      <Headline2 styleAsHeading={4}>Tags</Headline2>
+      <Headline2 styleAsHeading={6}>Tags</Headline2>
       <div
         css={{
           marginTop: rem(12),

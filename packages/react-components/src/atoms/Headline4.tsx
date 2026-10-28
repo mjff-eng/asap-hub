@@ -8,7 +8,7 @@ interface Headline4Props {
 }
 const Headline4: React.FC<Headline4Props> = ({
   children,
-  styleAsHeading = 4,
+  styleAsHeading = 6,
   id,
   noMargin = false,
 }) => (

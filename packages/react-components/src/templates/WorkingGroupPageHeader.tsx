@@ -232,7 +232,7 @@ const WorkingGroupPageHeader: React.FC<WorkingGroupPageHeaderProps> = ({
         }
       >
         <div css={titleStyle}>
-          <Display styleAsHeading={2}>{title}</Display>
+          <Display styleAsHeading={3}>{title}</Display>
           {complete && (
             <StateTag accent="green" icon={successIcon} label="Complete" />
           )}

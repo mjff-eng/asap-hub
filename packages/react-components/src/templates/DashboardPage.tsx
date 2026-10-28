@@ -16,7 +16,7 @@ type DashboardPageProps = {
 const Dashboard: React.FC<DashboardPageProps> = ({ firstName, children }) => (
   <PageConstraints as="article">
     <div css={headerStyles}>
-      <Display styleAsHeading={2}>{`Welcome to the Hub${
+      <Display styleAsHeading={3}>{`Welcome to the Hub${
         firstName ? `, ${firstName}` : ''
       }!`}</Display>
     </div>

@@ -19,7 +19,7 @@ export const metricLabelStyles = css({
   lineHeight: rem(24),
 });
 
-export const metricValueStyles = css(headlineStyles[1], {
+export const metricValueStyles = css(headlineStyles[2], {
   margin: 0,
   color: colour.foreground.primary,
 });

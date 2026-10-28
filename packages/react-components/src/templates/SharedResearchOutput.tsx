@@ -418,7 +418,7 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
           {!isGrantDocument && hasUsageNotes && (
             <Card>
               <div css={{ paddingBottom: rem(12) }}>
-                <Headline2 styleAsHeading={4}>Usage Notes</Headline2>
+                <Headline2 styleAsHeading={6}>Usage Notes</Headline2>
                 <Markdown value={usageNotesMD}></Markdown>
                 {!usageNotesMD && <RichText poorText text={usageNotes} />}
               </div>

@@ -41,7 +41,7 @@ const UsersPageBody: React.FC<UsersPageBodyProps> = ({
         />
       ) : (
         <>
-          <Subtitle styleAsHeading={6} bold>
+          <Subtitle styleAsHeading="body/regular" bold>
             Showing {firstItem}-{lastItem} of {users.total} results
           </Subtitle>
           {users.items.map((user) => (

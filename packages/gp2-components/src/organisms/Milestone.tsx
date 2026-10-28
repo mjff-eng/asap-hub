@@ -40,7 +40,7 @@ const Milestone: React.FC<ProjectMilestoneProps> = ({ milestone }) => (
         </div>
       )}
     </div>
-    <Subtitle styleAsHeading={4} noMargin>
+    <Subtitle styleAsHeading={6} noMargin>
       {milestone.title}
     </Subtitle>
     <div css={css({ padding: `${rem(8)} 0` })}>

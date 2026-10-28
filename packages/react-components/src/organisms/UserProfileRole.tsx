@@ -33,13 +33,13 @@ const UserProfileRole: React.FC<UserProfileRoleProps> = ({
   const { isOwnProfile } = useContext(UserProfileContext);
   return (
     <Card>
-      <Headline2 styleAsHeading={3} noMargin>
+      <Headline2 styleAsHeading={4} noMargin>
         Role
       </Headline2>
       <div css={[gapperStyles, css({ marginTop: rem(32) })]}>
         {(researchInterests || isOwnProfile) && role !== 'Staff' && (
           <div>
-            <Headline3 styleAsHeading={5} noMargin>
+            <Headline3 styleAsHeading="body/bold" noMargin>
               Main Research Interests
             </Headline3>
             {researchInterests ? (
@@ -54,7 +54,7 @@ const UserProfileRole: React.FC<UserProfileRoleProps> = ({
         )}
         {(responsibilities || isOwnProfile) && (
           <div>
-            <Headline3 styleAsHeading={5} noMargin>
+            <Headline3 styleAsHeading="body/bold" noMargin>
               Responsibilities
             </Headline3>
             {responsibilities ? (
@@ -69,7 +69,7 @@ const UserProfileRole: React.FC<UserProfileRoleProps> = ({
         )}
         {(reachOut || isOwnProfile) && role === 'Staff' && (
           <div>
-            <Headline3 styleAsHeading={5} noMargin>
+            <Headline3 styleAsHeading="body/bold" noMargin>
               Reach out to {firstName} for help with...
             </Headline3>
             {reachOut ? (

@@ -25,7 +25,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({
   <div css={[styles, { padding: `${rem(paddingTop)} 0 ${rem(48)}` }]}>
     <span>{icon}</span>
     <div>
-      <Display styleAsHeading={3}>{title}</Display>
+      <Display styleAsHeading={4}>{title}</Display>
       <Paragraph accent="tertiary">{description}</Paragraph>
     </div>
   </div>

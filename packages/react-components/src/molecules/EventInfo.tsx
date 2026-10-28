@@ -140,11 +140,11 @@ const EventInfo: React.FC<EventInfoProps> = ({
           <div css={titleTextGroupStyles}>
             {titlePrefix}
             {link ? (
-              <LinkHeadline level={3} styleAsHeading={4} href={link} noMargin>
+              <LinkHeadline level={3} styleAsHeading={6} href={link} noMargin>
                 {displayTitle}
               </LinkHeadline>
             ) : (
-              <Headline3 styleAsHeading={4} noMargin>
+              <Headline3 styleAsHeading={6} noMargin>
                 {displayTitle}
               </Headline3>
             )}

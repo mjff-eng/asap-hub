@@ -66,7 +66,7 @@ const TutorialHeaderCard: React.FC<TutorialHeaderCardProps> = ({
   <Card>
     <div css={headerStyle}>
       <div css={{ paddingRight: rem(15) }}>
-        <Display styleAsHeading={3}>{title}</Display>
+        <Display styleAsHeading={4}>{title}</Display>
       </div>
       {link ? <ExternalLink label={linkText} href={link} /> : null}
     </div>

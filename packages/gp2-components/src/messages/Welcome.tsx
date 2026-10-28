@@ -15,7 +15,7 @@ type WelcomeProps = {
 
 const Welcome: React.FC<WelcomeProps> = ({ firstName, link }) => (
   <section>
-    <Display styleAsHeading={3}>Dear {firstName}</Display>
+    <Display styleAsHeading={4}>Dear {firstName}</Display>
     <Paragraph>Thank you for starting this journey with us!</Paragraph>
     <Paragraph>
       You’re one step closer to joining the GP2 Hub - A private, invite-only

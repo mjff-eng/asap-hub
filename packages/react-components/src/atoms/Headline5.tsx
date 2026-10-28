@@ -8,7 +8,7 @@ interface Headline5Props {
 }
 const Headline5: React.FC<Headline5Props> = ({
   children,
-  styleAsHeading = 5,
+  styleAsHeading = 'body/bold',
   id,
   noMargin = false,
 }) => (

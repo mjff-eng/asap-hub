@@ -44,15 +44,14 @@ describe.each<ComponentProps<typeof LinkHeadline>['level']>([1, 2, 3, 4, 5, 6])(
     });
 
     const headingFontSizeVariations = {
-      1: '40px',
-      2: '32px',
-      3: '28px',
-      4: '20px',
-      5: 'default',
-      6: 'default',
+      2: '40px',
+      3: '32px',
+      4: '28px',
+      5: '24px',
+      6: '20px',
     };
 
-    it.each<keyof typeof headingFontSizeVariations>([1, 2, 3, 4])(
+    it.each<keyof typeof headingFontSizeVariations>([2, 3, 4, 5, 6])(
       'varies the headline fontsize for level %s',
       (styleAsHeading) => {
         render(
@@ -68,9 +67,9 @@ describe.each<ComponentProps<typeof LinkHeadline>['level']>([1, 2, 3, 4, 5, 6])(
         expect(fontSize).toEqual(headingFontSizeVariations[styleAsHeading]);
       },
     );
-    it('varies the headline font weight for level 5', () => {
+    it('varies the headline font weight for body/bold', () => {
       render(
-        <LinkHeadline {...props} level={level} styleAsHeading={5}>
+        <LinkHeadline {...props} level={level} styleAsHeading="body/bold">
           Example
         </LinkHeadline>,
       );

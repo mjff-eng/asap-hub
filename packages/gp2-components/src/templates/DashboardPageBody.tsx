@@ -190,7 +190,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         </div>
       )}
       <div css={columnContainer}>
-        <Headline2 styleAsHeading={3}>Upcoming Events</Headline2>
+        <Headline2 styleAsHeading={4}>Upcoming Events</Headline2>
         <div css={infoStyles}>
           Here are some of the upcoming GP2 Hub events.
         </div>
@@ -207,7 +207,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         )}
       </div>
       <div css={columnContainer}>
-        <Headline2 styleAsHeading={3}>Past Events</Headline2>
+        <Headline2 styleAsHeading={4}>Past Events</Headline2>
         <div css={infoStyles}>
           Explore previous events and learn about what was discussed.
         </div>
@@ -224,7 +224,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         )}
       </div>
       <div>
-        <Headline2 styleAsHeading={3}>Recent Outputs</Headline2>
+        <Headline2 styleAsHeading={4}>Recent Outputs</Headline2>
         <div css={infoStyles}>
           Explore the latest outputs and learn more about them.
         </div>

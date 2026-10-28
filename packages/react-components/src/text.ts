@@ -99,18 +99,21 @@ const textStyle = ({
   fontWeight,
 });
 
-// Each level takes the Figma style closest to its size before CAS (Elena, 22 Oct 2026)
+// Keyed by Figma text style: 2 to 6 are heading/2 to heading/6. Each heading
+// component defaults to the style closest to its size before CAS (Elena,
+// 22 Oct 2026); usages pass the style of their role (Elena, 23 Oct 2026).
 export const headlineStyles = {
-  1: textStyle(casTextStyles.heading[2].bold),
-  2: textStyle(casTextStyles.heading[3].bold),
-  3: textStyle(casTextStyles.heading[4].bold),
-  4: textStyle(casTextStyles.heading[6].bold),
-  5: {
+  2: textStyle(casTextStyles.heading[2].bold),
+  3: textStyle(casTextStyles.heading[3].bold),
+  4: textStyle(casTextStyles.heading[4].bold),
+  5: textStyle(casTextStyles.heading[5].bold),
+  6: textStyle(casTextStyles.heading[6].bold),
+  'body/bold': {
     ...fontStyles,
     fontFamily: casFontFamily.body,
     fontWeight: casTextStyles.body.bold.fontWeight,
   } as CSSObject,
-  6: {
+  'body/regular': {
     ...fontStyles,
     fontWeight: body.fontWeight,
   } as CSSObject,

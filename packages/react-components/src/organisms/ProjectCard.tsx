@@ -148,7 +148,7 @@ const ProjectCard: FC<ProjectCardProps> = (project) => {
         {/* Title */}
 
         <div css={titleStyles}>
-          <LinkHeadline level={3} styleAsHeading={4} href={getHref()} noMargin>
+          <LinkHeadline level={3} styleAsHeading={6} href={getHref()} noMargin>
             {project.title}
           </LinkHeadline>
         </div>

@@ -178,7 +178,7 @@ const Resources: React.FC<ResourcesProps> = ({
                       </span>
                     </LinkHeadline>
                   ) : (
-                    <Subtitle styleAsHeading={4} noMargin>
+                    <Subtitle styleAsHeading={6} noMargin>
                       {resource.title}
                     </Subtitle>
                   )}

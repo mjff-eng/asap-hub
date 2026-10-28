@@ -43,7 +43,7 @@ const ManuscriptWorkspaceUnavailablePage: React.FC<
       <LockIcon color={colour.neutral[900]} />
     </span>
     <div>
-      <Display styleAsHeading={2}>You can't access this manuscript.</Display>
+      <Display styleAsHeading={3}>You can't access this manuscript.</Display>
       <Paragraph accent="tertiary" noMargin>
         Access to a manuscript comes from being part of the project that owns
         it, or from a project of yours that is collaborating on it. Neither

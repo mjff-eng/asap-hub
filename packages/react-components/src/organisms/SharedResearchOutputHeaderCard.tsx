@@ -99,7 +99,7 @@ const SharedResearchOutputHeaderCard: React.FC<
       link={link}
     />
     <span css={headerStyle}>
-      <Display styleAsHeading={3}>{title}</Display>
+      <Display styleAsHeading={4}>{title}</Display>
       {!published && (
         <StateTag
           label={isInReview ? 'In Review' : 'Draft'}

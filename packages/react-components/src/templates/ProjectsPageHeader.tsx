@@ -104,7 +104,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
         }
       >
         <div>
-          <Display styleAsHeading={2}>Projects</Display>
+          <Display styleAsHeading={3}>Projects</Display>
           <Paragraph accent="tertiary" styles={descriptionStyles}>
             Projects are targeted efforts that translate recommendations into
             action to advance the PD field. They address critical research

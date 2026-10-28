@@ -121,7 +121,7 @@ const EntityCard: React.FC<CardWrapperProps> = ({
         )}
         <div css={titleContainerStyles}>
           <div css={titleStyle}>
-            <LinkHeadline level={2} styleAsHeading={4} href={href} noMargin>
+            <LinkHeadline level={2} styleAsHeading={6} href={href} noMargin>
               {title}
             </LinkHeadline>
             {!active && inactiveBadge}

@@ -80,7 +80,7 @@ const FormSection: React.FC<FormSectionProps> = ({
           >
             {!!title && <Headline3 noMargin>{title}</Headline3>}
             {!!secondaryTitle && (
-              <Subtitle noMargin styleAsHeading={4}>
+              <Subtitle noMargin styleAsHeading={6}>
                 {secondaryTitle}
               </Subtitle>
             )}
