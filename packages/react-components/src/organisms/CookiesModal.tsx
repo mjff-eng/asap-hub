@@ -161,7 +161,7 @@ const CookiesModal: React.FC<CookiesModalProps> = ({
                 </Paragraph>
               </div>
               <div css={sectionStyles}>
-                <Headline3 noMargin>
+                <Headline3 styleAsHeading={6} noMargin>
                   Manage Consent Preferences by Category
                 </Headline3>
                 <div css={consentCategoryStyles}>

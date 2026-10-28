@@ -139,7 +139,7 @@ const Accordion: FC<AccordionProps> = ({ items, info }) => {
               onClick={() => setOpened(opened === index ? undefined : index)}
             >
               <div css={iconStyles}>{icon}</div>
-              <Headline5>{title}</Headline5>
+              <Headline5 styleAsHeading={6}>{title}</Headline5>
               <div css={[iconStyles, index === opened && iconOpenStyles]}>
                 {chevronDownIcon}
               </div>
