@@ -4,10 +4,9 @@ import { css } from '@emotion/react';
 import { BasicEvent } from '@asap-hub/model';
 
 import { EventInfo, EventMaterialsList } from '../molecules';
-import { Link } from '../atoms';
+import { InPersonPill, Link } from '../atoms';
 import { colour } from '../colors';
-import { EventsUpcomingIcon, LiveIcon, MapPinIcon } from '../icons';
-import { pillStyles } from '../pill';
+import { EventsUpcomingIcon, LiveIcon } from '../icons';
 import { rem, mobileScreen, largeDesktopScreen } from '../pixels';
 import { useEventLiveStatus } from '../utils';
 
@@ -38,14 +37,6 @@ const buttonContentStyles = css({
   alignItems: 'center',
   gap: rem(8),
 });
-
-const inPersonPillStyles = css([
-  pillStyles,
-  {
-    backgroundColor: colour.background.tertiary,
-    color: colour.foreground.tertiary,
-  },
-]);
 
 type DashboardEventCardProps = Pick<
   BasicEvent,
@@ -103,14 +94,7 @@ const DashboardEventCard: React.FC<DashboardEventCardProps> = ({
             <LiveIcon color={colour.utilitarian.red[600]} size={16} />
           ) : undefined
         }
-        titleSuffix={
-          inPerson ? (
-            <span css={inPersonPillStyles}>
-              <MapPinIcon size={16} />
-              In person
-            </span>
-          ) : undefined
-        }
+        titleSuffix={inPerson ? <InPersonPill /> : undefined}
         titleAction={
           live && meetingLink && !hideMeetingLink ? (
             <div css={buttonWrapperStyles}>

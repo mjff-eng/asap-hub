@@ -1,13 +1,8 @@
 import { ComponentProps } from 'react';
-import { css } from '@emotion/react';
 
 import { BasicEvent, eventMaterialTypes } from '@asap-hub/model';
 
-import { colour } from '../colors';
-import { MapPinIcon } from '../icons';
-import { pillStyles } from '../pill';
-import { rem } from '../pixels';
-
+import { InPersonPill } from '../atoms';
 import {
   ToastCard,
   EventInfo,
@@ -34,17 +29,6 @@ type EventCardProps = ComponentProps<typeof EventInfo> &
       typeof JoinMeetingButton
     >['tooltipPosition'];
   };
-
-const inPersonPillStyles = css([
-  pillStyles,
-  {
-    padding: `${rem(4)} ${rem(8)}`,
-    borderRadius: rem(12),
-    backgroundColor: colour.background.info,
-    color: colour.foreground.info,
-    fontWeight: 500,
-  },
-]);
 
 const displayedMaterialTypes = [
   'notes',
@@ -155,14 +139,7 @@ const EventCard: React.FC<EventCardProps> = ({
         {...props}
         status={status}
         dateBlockMuted={hasFinished}
-        titleSuffix={
-          props.hideMeetingLink ? (
-            <span css={inPersonPillStyles}>
-              <MapPinIcon color={colour.foreground.info} size={16} />
-              In person
-            </span>
-          ) : undefined
-        }
+        titleSuffix={props.hideMeetingLink ? <InPersonPill /> : undefined}
       />
     </ToastCard>
   );
