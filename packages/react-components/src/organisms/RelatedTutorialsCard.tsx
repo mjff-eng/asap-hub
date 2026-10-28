@@ -98,7 +98,9 @@ const RelatedTutorialsCard: React.FC<RelatedTutorialsCardProps> = ({
           ...(displayShowMoreButton ? [{ paddingBottom: 0 }] : []),
         ]}
       >
-        <Headline3 styleAsHeading={5} noMargin>Related Tutorials</Headline3>
+        <Headline3 styleAsHeading={5} noMargin>
+          Related Tutorials
+        </Headline3>
         <div css={descriptionStyles}>
           <Paragraph noMargin accent="tertiary">
             {description}

@@ -79,7 +79,9 @@ const WorkingGroupOverview: React.FC<WorkingGroupOverviewProps> = ({
   return (
     <div css={containerStyles}>
       <Card overrideStyles={cardStyles}>
-        <Headline3 styleAsHeading={5} noMargin>Description</Headline3>
+        <Headline3 styleAsHeading={5} noMargin>
+          Description
+        </Headline3>
         <div css={contentStyles}>
           <ExpandableText>
             <RichText text={description} />
@@ -88,7 +90,9 @@ const WorkingGroupOverview: React.FC<WorkingGroupOverviewProps> = ({
       </Card>
       <div css={columnStyles}>
         <Card overrideStyles={cardStyles}>
-          <Headline3 styleAsHeading={5} noMargin>Contact Details</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            Contact Details
+          </Headline3>
           <div css={contentStyles}>
             <EmailSection
               contactEmails={[
@@ -100,7 +104,9 @@ const WorkingGroupOverview: React.FC<WorkingGroupOverviewProps> = ({
         </Card>
         {calendar ? (
           <Card overrideStyles={cardStyles}>
-            <Headline3 styleAsHeading={5} noMargin>Events</Headline3>
+            <Headline3 styleAsHeading={5} noMargin>
+              Events
+            </Headline3>
             <Events
               calendarId={calendar.id}
               paragraph={
@@ -112,7 +118,9 @@ const WorkingGroupOverview: React.FC<WorkingGroupOverviewProps> = ({
       </div>
       {tags.length ? (
         <Card overrideStyles={cardStyles}>
-          <Headline3 styleAsHeading={5} noMargin>Tags</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            Tags
+          </Headline3>
           <Paragraph accent="tertiary">
             Explore keywords related to skills, techniques, resources, and
             tools.

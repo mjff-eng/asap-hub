@@ -307,7 +307,9 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
 
   const header = (
     <div css={[headerStyles, { alignSelf: 'stretch' }]}>
-      <Headline3 styleAsHeading={5} noMargin>Attendance</Headline3>
+      <Headline3 styleAsHeading={5} noMargin>
+        Attendance
+      </Headline3>
       {(onExport || onEdit) && (
         <div css={actionsStyles}>
           {onExport && (

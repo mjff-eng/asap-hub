@@ -93,7 +93,9 @@ const NewsCard: React.FC<
       {title}
     </LinkHeadline>
   ) : (
-    <Headline4 styleAsHeading={5} noMargin>{title}</Headline4>
+    <Headline4 styleAsHeading={5} noMargin>
+      {title}
+    </Headline4>
   );
   const newsLink = text && href;
 

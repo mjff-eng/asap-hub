@@ -207,7 +207,9 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
     return (
       <Card>
         <div css={emptyStateStyles}>
-          <Headline3 styleAsHeading={5} noMargin>Speakers</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            Speakers
+          </Headline3>
           {onAddSpeaker ? (
             <>
               <Paragraph noMargin accent="tertiary">
@@ -259,7 +261,9 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
     <Card padding={false}>
       <div css={contentStyles}>
         <div css={headerStyles}>
-          <Headline3 styleAsHeading={5} noMargin>Speakers</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            Speakers
+          </Headline3>
           <div css={actionsStyles}>
             {onExport && (
               <Button
