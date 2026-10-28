@@ -16,10 +16,14 @@ const styles = css([
   },
 ]);
 
+const labelStyles = css({
+  fontSize: rem(16),
+});
+
 const InPersonPill: React.FC = () => (
   <span css={styles}>
     <MapPinIcon color={colour.foreground.info} size={16} />
-    In person
+    <span css={labelStyles}>In person</span>
   </span>
 );
 
