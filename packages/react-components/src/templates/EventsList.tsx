@@ -17,6 +17,7 @@ const noticeStyles = css({
   alignItems: 'flex-start',
   gap: rem(8),
   margin: 0,
+  fontSize: rem(16),
   color: colour.neutral[900],
   svg: {
     flexShrink: 0,

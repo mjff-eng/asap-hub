@@ -65,6 +65,7 @@ const leadStyles = css({
 const toastContentStyles = css({
   display: 'flex',
   alignItems: 'center',
+  fontSize: rem(16),
 
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     alignItems: 'flex-start',
