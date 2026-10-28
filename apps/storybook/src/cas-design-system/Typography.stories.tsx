@@ -4,7 +4,6 @@ import {
   Display,
   Headline2,
   Headline3,
-  Headline4,
   Headline6,
   Paragraph,
   Subtitle,
@@ -113,51 +112,67 @@ export const TextStyles = () => (
 
 const hubComponents: {
   name: string;
+  role: string;
   figmaStyle: string;
   sample: ReactNode;
 }[] = [
   {
     name: 'Display',
+    role: 'List page and Dashboard title',
     figmaStyle: 'heading/2/bold',
     sample: <Display>Shared Research</Display>,
   },
   {
     name: 'Headline2',
+    role: 'Stat number',
     figmaStyle: 'heading/3/bold',
-    sample: <Headline2>Shared Research</Headline2>,
+    sample: <Headline2>128</Headline2>,
   },
   {
-    name: 'Headline3',
+    name: 'Display styleAsHeading={4}',
+    role: 'Detail page title, 404, page without a design, editor drawer',
     figmaStyle: 'heading/4/bold',
-    sample: <Headline3>Shared Research</Headline3>,
+    sample: <Display styleAsHeading={4}>Team Profile</Display>,
   },
   {
-    name: 'Headline4',
+    name: 'Headline2 styleAsHeading={5}',
+    role: 'Component header: card, event card title, dialog, form section',
+    figmaStyle: 'heading/5/bold',
+    sample: <Headline2 styleAsHeading={5}>Speakers</Headline2>,
+  },
+  {
+    name: 'Headline3 styleAsHeading={6}',
+    role: 'Title inside a component',
     figmaStyle: 'heading/6/bold',
-    sample: <Headline4>Shared Research</Headline4>,
+    sample: <Headline3 styleAsHeading={6}>Team Name</Headline3>,
   },
   {
-    name: 'Headline5, Subtitle',
+    name: 'Subtitle, Headline5',
+    role: 'Label, column header, small title inside a card',
     figmaStyle: 'body/bold',
-    sample: <Subtitle>Shared Research</Subtitle>,
+    sample: <Subtitle>Version #1</Subtitle>,
   },
   {
     name: 'Headline6',
+    role: 'Smallest heading in Contentful text',
     figmaStyle: 'body/regular',
     sample: <Headline6>Shared Research</Headline6>,
   },
   {
     name: 'Paragraph',
+    role: 'Body text',
     figmaStyle: 'body/regular',
     sample: <Paragraph>Shared Research</Paragraph>,
   },
   {
     name: 'Caption',
+    role: 'Caption',
     figmaStyle: 'caption/regular',
     sample: <Caption>Shared Research</Caption>,
   },
   {
     name: 'Caption bold',
+    role: 'Caption',
     figmaStyle: 'caption/bold',
     sample: <Caption bold>Shared Research</Caption>,
   },
@@ -166,25 +181,27 @@ const hubComponents: {
 export const HubComponents = () => (
   <Page
     title="Typography: Hub components"
-    intro="The text components in react-components and the Figma style each one uses. Each heading level takes the style closest to its size before CAS (agreed with design on 22 Oct 2026)."
+    intro="The text components in react-components and the Figma style each role uses. Headings take the style of their role on the page, the same in CRN and GP2 (agreed with design on 23 Oct 2026)."
   >
     <Section title="Components">
       <table style={table}>
         <thead>
           <tr>
             <th style={headCell}>Component</th>
+            <th style={headCell}>Role</th>
             <th style={headCell}>Figma style</th>
             <th style={headCell}>Sample</th>
           </tr>
         </thead>
         <tbody>
-          {hubComponents.map(({ name, figmaStyle, sample }) => {
+          {hubComponents.map(({ name, role, figmaStyle, sample }) => {
             const style = textStyles.find(
               (textStyle) => textStyle.name === figmaStyle,
             )?.style;
             return (
               <tr key={name}>
                 <td style={{ ...cell, ...mono }}>{name}</td>
+                <td style={cell}>{role}</td>
                 <td style={{ ...cell, ...mono }}>
                   {figmaStyle}
                   {style && <div style={muted}>{styleSummary(style)}</div>}
