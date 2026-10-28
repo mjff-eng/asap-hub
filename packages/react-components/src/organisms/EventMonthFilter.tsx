@@ -328,7 +328,9 @@ const EventMonthFilter: React.FC<EventMonthFilterProps> = ({
                     <button
                       type="button"
                       css={rowStyles}
-                      disabled={count === 0}
+                      disabled={
+                        count === 0 && !hasSelectionInYear(selection, listYear)
+                      }
                       onClick={() => {
                         onChangeYear(listYear);
                         setView('months');
@@ -379,7 +381,7 @@ const EventMonthFilter: React.FC<EventMonthFilterProps> = ({
                   <button
                     type="button"
                     css={[monthStyles, isSelected && selectedStyles]}
-                    disabled={count === 0}
+                    disabled={count === 0 && !isSelected}
                     aria-pressed={isSelected}
                     onClick={() =>
                       onChangeSelection(toggleMonth(selection, year, month))
@@ -398,7 +400,7 @@ const EventMonthFilter: React.FC<EventMonthFilterProps> = ({
             <button
               type="button"
               css={[rowStyles, isYearSelected && selectedStyles]}
-              disabled={yearTotal === 0}
+              disabled={yearTotal === 0 && !isYearSelected}
               aria-pressed={isYearSelected}
               onClick={() => onChangeSelection(toggleYear(selection, year))}
             >

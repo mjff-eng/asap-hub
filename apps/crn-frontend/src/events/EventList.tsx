@@ -10,12 +10,14 @@ type EventListProps = {
   readonly past?: boolean;
 
   readonly searchQuery: string;
+  readonly filters?: Set<string>;
 };
 
 const EventList: React.FC<EventListProps> = ({
   currentTime,
   past = false,
   searchQuery = '',
+  filters,
 }) => {
   const { currentPage, pageSize } = usePaginationParams();
 
@@ -25,6 +27,7 @@ const EventList: React.FC<EventListProps> = ({
       searchQuery,
       currentPage,
       pageSize,
+      filters,
     }),
   );
 

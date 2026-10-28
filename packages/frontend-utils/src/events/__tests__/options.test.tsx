@@ -29,4 +29,19 @@ describe('getEventListOptions', () => {
       searchQuery: 'q',
     });
   });
+
+  it('defaults to no filters', () => {
+    expect(getEventListOptions(new Date(), { past: true }).filters).toEqual(
+      new Set(),
+    );
+  });
+
+  it('passes through the filters', () => {
+    expect(
+      getEventListOptions(new Date(), {
+        past: true,
+        filters: new Set(['2026-04']),
+      }).filters,
+    ).toEqual(new Set(['2026-04']));
+  });
 });

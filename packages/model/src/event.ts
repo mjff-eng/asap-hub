@@ -95,6 +95,7 @@ export type EventPreviousAttendance = {
 };
 
 export interface EventDataObject extends BasicEvent {
+  startMonth: string;
   calendar: CalendarResponse;
   interestGroup?: Pick<
     InterestGroupResponse,

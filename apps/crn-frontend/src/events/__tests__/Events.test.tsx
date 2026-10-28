@@ -7,7 +7,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter, Route, Routes } from 'react-router';
 
 import { Auth0Provider, WhenReady } from '../../auth/test-utils';
-import { getEvents } from '../api';
+import { getEventMonthCounts, getEvents } from '../api';
 import { getCalendars } from '../calendar/api';
 import Events from '../Events';
 
@@ -19,6 +19,10 @@ const mockGetCalendars = getCalendars as jest.MockedFunction<
 >;
 const mockGetEventsFromAlgolia = getEvents as jest.MockedFunction<
   typeof getEvents
+>;
+
+const mockGetEventMonthCounts = getEventMonthCounts as jest.MockedFunction<
+  typeof getEventMonthCounts
 >;
 
 const renderEventsPage = (pathname = events({}).$, search?: string) =>
@@ -76,6 +80,26 @@ describe('Events', () => {
         ),
       );
     });
+  });
+
+  it('filters past events by the month selected in the filter', async () => {
+    const year = new Date().getFullYear();
+    mockGetEventMonthCounts.mockResolvedValue({ [`${year}-01`]: 2 });
+    renderEventsPage(events({}).past({}).$);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /filter/i }),
+    );
+    await userEvent.click(
+      await screen.findByRole('button', { name: /jan.*2 events/i }),
+    );
+
+    await waitFor(() =>
+      expect(mockGetEventsFromAlgolia).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ filters: new Set([`${year}-01`]) }),
+      ),
+    );
   });
 
   describe('the events calendar page', () => {

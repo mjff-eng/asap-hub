@@ -9,10 +9,16 @@ import {
 } from '@asap-hub/fixtures';
 
 import { Auth0Provider, WhenReady } from '../../auth/test-utils';
-import { getEvent, getEvents, getTeamsForMatching } from '../api';
+import {
+  getEvent,
+  getEventMonthCounts,
+  getEvents,
+  getTeamsForMatching,
+} from '../api';
 import {
   eventQueryKeys,
   useEventById,
+  useEventMonthCounts,
   useEvents,
   useEventSpeakerGroups,
   useQuietRefreshEventById,
@@ -22,6 +28,7 @@ import {
 jest.mock('../api', () => ({
   getEvent: jest.fn(),
   getEvents: jest.fn(),
+  getEventMonthCounts: jest.fn(),
   getTeamsForMatching: jest.fn(),
   patchEvent: jest.fn(),
 }));
@@ -193,6 +200,64 @@ const EventsProbe = () => {
   useEvents(listOptions);
   return <>rendered</>;
 };
+
+describe('useEventMonthCounts', () => {
+  const mockGetEventMonthCounts = getEventMonthCounts as jest.MockedFunction<
+    typeof getEventMonthCounts
+  >;
+  const options = {
+    searchQuery: '',
+    filters: new Set<string>(),
+    currentPage: 0,
+    pageSize: 10,
+    before: '2021-01-01T00:00:00.000Z',
+  };
+
+  beforeEach(() => {
+    mockGetEventMonthCounts.mockReset();
+  });
+
+  it('returns the counts once loaded', async () => {
+    mockGetEventMonthCounts.mockResolvedValue({ '2020-12': 3 });
+
+    const { result } = renderStateHook(() =>
+      useEventMonthCounts({ options, enabled: true }),
+    );
+
+    await waitFor(() => expect(result.current).toEqual({ '2020-12': 3 }));
+  });
+
+  it('does not fetch when disabled', async () => {
+    const { result } = renderStateHook(() =>
+      useEventMonthCounts({ options, enabled: false }),
+    );
+
+    await waitFor(() => expect(result.current).toEqual({}));
+    expect(mockGetEventMonthCounts).not.toHaveBeenCalled();
+  });
+
+  it('does not fetch again when the page or the selected months change', async () => {
+    mockGetEventMonthCounts.mockResolvedValue({ '2020-12': 3 });
+
+    const { result, rerender } = renderHook(
+      ({ currentPage, filters }) =>
+        useEventMonthCounts({
+          options: { ...options, currentPage, filters },
+          enabled: true,
+        }),
+      {
+        wrapper: createWrapper(createTestQueryClient()),
+        initialProps: { currentPage: 0, filters: new Set<string>() },
+      },
+    );
+    await waitFor(() => expect(result.current).toEqual({ '2020-12': 3 }));
+
+    rerender({ currentPage: 1, filters: new Set(['2020-12']) });
+
+    expect(result.current).toEqual({ '2020-12': 3 });
+    expect(mockGetEventMonthCounts).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe('useTeamsForMatching', () => {
   const mockGetTeamsForMatching = getTeamsForMatching as jest.MockedFunction<

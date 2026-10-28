@@ -50,6 +50,10 @@ export const useSearch = (filterNames: (keyof Filter)[] = ['filter']) => {
     replaceArrayParams(filterName, currentFilters);
   };
 
+  const setFilters = (newFilters: string[], filterName = 'filter') => {
+    replaceArrayParams(filterName, newFilters);
+  };
+
   const setTags = (newTags: string[]) => {
     replaceArrayParams('tag', newTags);
   };
@@ -75,6 +79,7 @@ export const useSearch = (filterNames: (keyof Filter)[] = ['filter']) => {
     filters,
     filtersMap,
     toggleFilter,
+    setFilters,
     tags,
     setTags,
   };

@@ -1,4 +1,8 @@
-import { AlgoliaClient, getEventFilters } from '@asap-hub/algolia';
+import {
+  AlgoliaClient,
+  getEventFilters,
+  getEventStartMonthFilter,
+} from '@asap-hub/algolia';
 import {
   BackendError,
   createSentryHeaders,
@@ -30,15 +34,17 @@ export const getEvents = async (
     before,
     after,
     constraint,
+    filters: selectedMonths,
   }: GetEventListOptions,
 ): Promise<ListEventResponse> => {
   const filters = getEventFilters({ before, after }, constraint);
+  const monthFilter = getEventStartMonthFilter(selectedMonths);
 
   const result = await algoliaClient.search(
     ['event'],
     searchQuery,
     {
-      filters,
+      filters: monthFilter ? `${filters} AND (${monthFilter})` : filters,
       page: currentPage ?? undefined,
       hitsPerPage: pageSize ?? undefined,
     },
@@ -51,6 +57,20 @@ export const getEvents = async (
     algoliaIndexName: result.index,
     algoliaQueryId: result.queryID,
   };
+};
+
+export const getEventMonthCounts = async (
+  algoliaClient: AlgoliaClient<'crn'>,
+  { searchQuery, before, after, constraint }: GetEventListOptions,
+): Promise<Record<string, number>> => {
+  const result = await algoliaClient.search(['event'], searchQuery, {
+    filters: getEventFilters({ before, after }, constraint),
+    hitsPerPage: 0,
+    facets: ['startMonth'],
+    maxValuesPerFacet: 1000,
+  });
+
+  return result.facets?.startMonth ?? {};
 };
 
 export const getEvent = async (

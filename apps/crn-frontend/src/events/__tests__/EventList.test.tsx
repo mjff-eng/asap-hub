@@ -15,6 +15,7 @@ const renderEventsListPage = async (
   searchQuery = '',
   currentTime = new Date(),
   past?: boolean,
+  filters?: Set<string>,
 ) => {
   const result = render(
     <QueryClientProvider client={createTestQueryClient()}>
@@ -30,6 +31,7 @@ const renderEventsListPage = async (
                       searchQuery={searchQuery}
                       currentTime={currentTime}
                       past={past}
+                      filters={filters}
                     />
                   }
                 />
@@ -77,6 +79,16 @@ it('sets before to an hour before date provided for past events', async () => {
     expect.anything(),
     expect.objectContaining({
       before: new Date('2020-01-01T11:00:00Z').toISOString(),
+    }),
+  );
+});
+
+it('filters past events by the selected months', async () => {
+  await renderEventsListPage('', new Date(), true, new Set(['2026-04']));
+  expect(mockGetEvents).toHaveBeenCalledWith(
+    expect.anything(),
+    expect.objectContaining({
+      filters: new Set(['2026-04']),
     }),
   );
 });

@@ -23,6 +23,10 @@ export const getEvents = jest.fn(
   }),
 );
 
+export const getEventMonthCounts = jest.fn(
+  async (): Promise<Record<string, number>> => ({}),
+);
+
 export const patchEvent = jest.fn(
   async (id: string): Promise<EventResponse> => ({
     ...createEventResponse(),

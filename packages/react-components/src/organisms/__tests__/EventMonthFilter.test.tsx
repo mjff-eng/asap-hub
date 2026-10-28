@@ -114,6 +114,13 @@ describe('month grid', () => {
     expect(getMonthButton('Mar')).toBeDisabled();
   });
 
+  it('keeps a selected month without events enabled to deselect it', async () => {
+    renderEventMonthFilter({ selection: new Set(['2026-03']) });
+    await clickOnTheFilter();
+
+    expect(getMonthButton('Mar')).toBeEnabled();
+  });
+
   it('hides the count of future months without events', async () => {
     renderEventMonthFilter();
     await clickOnTheFilter();
@@ -202,6 +209,17 @@ describe('all of year', () => {
 
     expect(screen.getByText('All of 2023').closest('button')).toBeDisabled();
   });
+
+  it('stays enabled when the year without events is selected', async () => {
+    renderEventMonthFilter({
+      year: 2023,
+      monthCounts: {},
+      selection: new Set(['2023']),
+    });
+    await clickOnTheFilter();
+
+    expect(screen.getByText('All of 2023').closest('button')).toBeEnabled();
+  });
 });
 
 describe('year navigation', () => {
@@ -279,6 +297,13 @@ describe('year list', () => {
 
     expect(getYearRow(2023)).toBeDisabled();
     expect(getYearRow(2024)).toBeEnabled();
+  });
+
+  it('keeps years without events enabled when they have a selection', async () => {
+    renderEventMonthFilter({ selection: new Set(['2023-05']) });
+    await openYearList();
+
+    expect(getYearRow(2023)).toBeEnabled();
   });
 
   it('disables the arrows', async () => {

@@ -27,6 +27,7 @@ type EventListParams<C extends Constraint = EventConstraint> = {
   currentPage?: number;
   pageSize?: number;
   constraint?: C;
+  filters?: Set<string>;
 };
 
 export const getEventListOptions = <C extends Constraint = EventConstraint>(
@@ -37,6 +38,7 @@ export const getEventListOptions = <C extends Constraint = EventConstraint>(
     currentPage = 0,
     pageSize = 10,
     constraint,
+    filters = new Set(),
   }: EventListParams<C>,
 ): GetEventListOptions<C> => {
   const time = subHours(
@@ -49,7 +51,7 @@ export const getEventListOptions = <C extends Constraint = EventConstraint>(
     currentPage,
     constraint,
     pageSize,
-    filters: new Set(),
+    filters,
     ...(past ? { before: time } : { after: time }),
   };
 };

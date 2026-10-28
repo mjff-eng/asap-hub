@@ -1176,6 +1176,7 @@ export const parseGraphQLEvent = (item: EventItem): EventDataObject | null => {
     startDate: startDate.toUTC().toString(),
     startDateTimeZone: startDateTimeZone!,
     startDateTimestamp: startDate.toSeconds(),
+    startMonth: startDate.toUTC().toFormat('yyyy-MM'),
     endDate: endDate.toUTC().toString(),
     endDateTimeZone: endDateTimeZone!,
     endDateTimestamp: endDate.toSeconds(),

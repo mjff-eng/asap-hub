@@ -2,10 +2,15 @@ import { EventsPage } from '@asap-hub/react-components';
 import { events } from '@asap-hub/routing';
 import { FC, lazy, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router';
-import { Frame, SearchFrame } from '@asap-hub/frontend-utils';
+import {
+  Frame,
+  getEventListOptions,
+  SearchFrame,
+} from '@asap-hub/frontend-utils';
 
 import { useSearch } from '../hooks';
 import Event from './Event';
+import { useEventMonthCounts } from './state';
 
 const loadCalendars = () =>
   import(/* webpackChunkName: "events-calendars" */ './calendar/Calendars');
@@ -16,15 +21,29 @@ const Calendars = lazy(loadCalendars);
 const EventList = lazy(loadEventList);
 
 const Events: FC<Record<string, never>> = () => {
+  const { pathname } = useLocation();
+  const [currentTime] = useState(new Date());
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     loadCalendars().then(loadEventList);
   }, []);
 
-  const [currentTime] = useState(new Date());
+  const {
+    searchQuery,
+    setSearchQuery,
+    debouncedSearchQuery,
+    filters,
+    setFilters,
+  } = useSearch();
 
-  const { searchQuery, setSearchQuery, debouncedSearchQuery } = useSearch();
-  const { pathname } = useLocation();
+  const monthCounts = useEventMonthCounts({
+    options: getEventListOptions(currentTime, {
+      past: true,
+      searchQuery: debouncedSearchQuery,
+    }),
+    enabled: pathname === events({}).past({}).$,
+  });
 
   return (
     <Routes key={pathname}>
@@ -60,12 +79,16 @@ const Events: FC<Record<string, never>> = () => {
           <EventsPage
             searchQuery={searchQuery}
             onChangeSearchQuery={setSearchQuery}
+            monthCounts={monthCounts}
+            monthFilter={filters}
+            onChangeMonthFilter={(newFilters) => setFilters([...newFilters])}
           >
             <SearchFrame title="Past Events">
               <EventList
                 past
                 currentTime={currentTime}
                 searchQuery={debouncedSearchQuery}
+                filters={filters}
               />
             </SearchFrame>
           </EventsPage>

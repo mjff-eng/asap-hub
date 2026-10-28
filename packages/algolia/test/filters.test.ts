@@ -1,4 +1,4 @@
-import { getEventFilters } from '../src/filters';
+import { getEventFilters, getEventStartMonthFilter } from '../src/filters';
 
 describe('Filters', () => {
   test('before date is set', () => {
@@ -94,5 +94,26 @@ describe('Filters', () => {
         `(endDateTimestamp < 1183680000 OR endDateTimestamp > 1640649600) AND (speakers.user.id: "1103" AND ${entity}.id: "4321")`,
       );
     });
+  });
+});
+
+describe('getEventStartMonthFilter', () => {
+  test('returns undefined when nothing is selected', () => {
+    expect(getEventStartMonthFilter([])).toBeUndefined();
+  });
+
+  test('matches the selected months', () => {
+    expect(getEventStartMonthFilter(['2026-04', '2025-12'])).toEqual(
+      'startMonth:"2026-04" OR startMonth:"2025-12"',
+    );
+  });
+
+  test('matches every month of a selected year', () => {
+    const filter = getEventStartMonthFilter(['2026']);
+
+    expect(filter?.split(' OR ')).toHaveLength(12);
+    expect(filter).toMatch(
+      /^startMonth:"2026-01" OR .* OR startMonth:"2026-12"$/,
+    );
   });
 });

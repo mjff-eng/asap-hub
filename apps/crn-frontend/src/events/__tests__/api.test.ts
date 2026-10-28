@@ -12,6 +12,7 @@ import { getEventListOptions } from '@asap-hub/frontend-utils';
 import nock from 'nock';
 import { API_BASE_URL } from '../../config';
 import {
+  getEventMonthCounts,
   getAttendanceSearchHits,
   getEvent,
   getEvents,
@@ -282,6 +283,83 @@ describe('getEvents', () => {
       },
       false,
     );
+  });
+
+  it('filters by the selected months', async () => {
+    search.mockResolvedValueOnce(createAlgoliaResponse<'crn', 'event'>([]));
+
+    await getEvents(algoliaSearchClient, {
+      ...getEventListOptions(new Date('2021-01-01T12:00:00'), { past: true }),
+      filters: new Set(['2020-12', '2020-11']),
+    });
+
+    expect(search).toHaveBeenCalledWith(
+      ['event'],
+      '',
+      expect.objectContaining({
+        filters:
+          'endDateTimestamp < 1609498800 AND (startMonth:"2020-12" OR startMonth:"2020-11")',
+      }),
+      true,
+    );
+  });
+});
+
+describe('getEventMonthCounts', () => {
+  type Search = ClientSearch<'crn', 'event'>;
+  const search: jest.MockedFunction<Search> = jest.fn();
+
+  const algoliaSearchClient = {
+    search,
+  } as unknown as AlgoliaSearchClient<'crn'>;
+
+  beforeEach(() => {
+    search.mockReset();
+  });
+
+  it('requests only the counts per start month', async () => {
+    search.mockResolvedValueOnce(createAlgoliaResponse<'crn', 'event'>([]));
+
+    await getEventMonthCounts(
+      algoliaSearchClient,
+      getEventListOptions(new Date('2021-01-01T12:00:00'), {
+        past: true,
+        searchQuery: 'parkinson',
+      }),
+    );
+
+    expect(search).toHaveBeenCalledWith(['event'], 'parkinson', {
+      filters: 'endDateTimestamp < 1609498800',
+      hitsPerPage: 0,
+      facets: ['startMonth'],
+      maxValuesPerFacet: 1000,
+    });
+  });
+
+  it('returns the counts per start month', async () => {
+    search.mockResolvedValueOnce(
+      createAlgoliaResponse<'crn', 'event'>([], {
+        facets: { startMonth: { '2020-12': 3, '2020-11': 1 } },
+      }),
+    );
+
+    expect(
+      await getEventMonthCounts(
+        algoliaSearchClient,
+        getEventListOptions(new Date(), { past: true }),
+      ),
+    ).toEqual({ '2020-12': 3, '2020-11': 1 });
+  });
+
+  it('returns no counts when Algolia returns no facets', async () => {
+    search.mockResolvedValueOnce(createAlgoliaResponse<'crn', 'event'>([]));
+
+    expect(
+      await getEventMonthCounts(
+        algoliaSearchClient,
+        getEventListOptions(new Date(), { past: true }),
+      ),
+    ).toEqual({});
   });
 });
 
