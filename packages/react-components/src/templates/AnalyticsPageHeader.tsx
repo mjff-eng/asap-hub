@@ -74,7 +74,7 @@ const AnalyticsPageHeader: React.FC<AnalyticsPageHeaderProps> = ({
         </TabNav>
       }
     >
-      <Display styleAsHeading={3}>Analytics</Display>
+      <Display>Analytics</Display>
       <div css={containerStyles}>
         <div css={textStyles}>
           <Paragraph accent="tertiary">

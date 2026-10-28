@@ -36,7 +36,7 @@ const EventsPageHeader: React.FC<EventsPageHeaderProps> = ({
         </TabNav>
       }
     >
-      <Display styleAsHeading={3}>Calendar & Events</Display>
+      <Display>Calendar & Events</Display>
       <div css={textStyles}>
         <Paragraph accent="tertiary">
           Find out about upcoming events from ASAP and Groups. You can easily
