@@ -36,7 +36,7 @@ const NewsPageHeader: React.FC<NewsPageHeaderProps> = ({
 }) => (
   <header>
     <PageInfoContainer>
-      <Display styleAsHeading={3}>News</Display>
+      <Display>News</Display>
       <div css={textStyles}>
         <Paragraph accent="tertiary">
           Stay up to date with all the latest activity from the CRN. You'll be
