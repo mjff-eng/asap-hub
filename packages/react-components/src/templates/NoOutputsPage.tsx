@@ -38,7 +38,7 @@ const NoOutputsPage: React.FC<NoOutputsPageProps> = ({
       <LibraryIcon color={colour.neutral[900]} />
     </span>
     <div>
-      <Display styleAsHeading={3}>{title}</Display>
+      <Display styleAsHeading={4}>{title}</Display>
       <Paragraph accent="tertiary">{description}</Paragraph>
     </div>
     {!hideExploreButton && (

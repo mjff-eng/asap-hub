@@ -136,7 +136,7 @@ const ProjectContributors: React.FC<ProjectContributorsProps> = ({
               <LinkHeadline
                 href={`/network/teams/${fundedTeam.id}`}
                 level={3}
-                styleAsHeading={4}
+                styleAsHeading={6}
                 noMargin
               >
                 {fundedTeam.displayName}

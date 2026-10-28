@@ -425,7 +425,7 @@ const ProjectOutputBody: React.FC<ProjectOutputBodyProps> = ({
         {variant === 'card' ? (
           <LinkHeadline
             level={2}
-            styleAsHeading={4}
+            styleAsHeading={6}
             href={sharedResearch({}).researchOutput({ researchOutputId }).$}
           >
             {title}
@@ -434,7 +434,7 @@ const ProjectOutputBody: React.FC<ProjectOutputBodyProps> = ({
           <Anchor
             href={sharedResearch({}).researchOutput({ researchOutputId }).$}
           >
-            <Headline2 styleAsHeading={5} noMargin>
+            <Headline2 styleAsHeading="body/bold" noMargin>
               {title}
             </Headline2>
           </Anchor>

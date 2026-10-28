@@ -122,7 +122,7 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
 }) => (
   <header css={headerStyles}>
     <div css={contentStyles}>
-      <Display styleAsHeading={2}>
+      <Display styleAsHeading={3}>
         {getHeaderText(entityType, documentType, isProjectOutput)}
       </Display>
       <div>

@@ -182,7 +182,7 @@ const UserProjectsCard: React.FC<UserProjectsCardProps> = ({ projects }) => {
     return (
       <Card>
         <div css={headerStyles}>
-          <Headline2 styleAsHeading={3} noMargin>
+          <Headline2 styleAsHeading={4} noMargin>
             Projects
           </Headline2>
           <Paragraph accent="tertiary" noMargin>
@@ -198,7 +198,7 @@ const UserProjectsCard: React.FC<UserProjectsCardProps> = ({ projects }) => {
       overrideStyles={css(hasMoreProjects ? { paddingBottom: rem(16) } : {})}
     >
       <div css={headerStyles}>
-        <Headline2 styleAsHeading={3} noMargin>
+        <Headline2 styleAsHeading={4} noMargin>
           Projects
         </Headline2>
         <Paragraph accent="tertiary" noMargin>

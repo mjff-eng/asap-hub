@@ -95,7 +95,7 @@ const SharedResearchCard: React.FC<SharedResearchCardProps> = ({
       <div css={titleStyles}>
         <LinkHeadline
           level={2}
-          styleAsHeading={4}
+          styleAsHeading={6}
           href={sharedResearch({}).researchOutput({ researchOutputId }).$}
         >
           {title}

@@ -86,7 +86,7 @@ const SharedResearchDetailsTagsCard: React.FC<
     {displayDescription && !!tags.length && <Divider />}
     {!!tags.length && (
       <>
-        <Headline2 styleAsHeading={4}>Tags</Headline2>
+        <Headline2 styleAsHeading={6}>Tags</Headline2>
         <div
           css={{
             marginTop: rem(12),

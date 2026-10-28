@@ -21,7 +21,7 @@ const GrantDocumentOverviewCard: React.FC<GrantDocumentOverviewCardProps> = (
   props,
 ) => (
   <Card>
-    <Headline2 styleAsHeading={3} noMargin>
+    <Headline2 styleAsHeading={4} noMargin>
       Overview
     </Headline2>
     {'text' in props ? (

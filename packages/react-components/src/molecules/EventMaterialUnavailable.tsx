@@ -14,7 +14,7 @@ const EventMaterialUnavailable: React.FC<EventMaterialUnavailableProps> = ({
   materialType,
 }) => (
   <Card>
-    <Headline2 noMargin styleAsHeading={3}>
+    <Headline2 noMargin styleAsHeading={4}>
       {materialType}
     </Headline2>
     <div css={css({ marginTop: rem(24) })} />

@@ -29,7 +29,7 @@ const InfoCard = ({ icon, total, title }: InfoCardProps) => (
       }}
     >
       <span css={iconStyles}>{icon}</span>
-      <Headline2 styleAsHeading={1}>{total}</Headline2>
+      <Headline2 styleAsHeading={2}>{total}</Headline2>
     </div>
     <Paragraph noMargin>{title}</Paragraph>
   </Card>

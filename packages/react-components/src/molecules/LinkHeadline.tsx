@@ -11,7 +11,6 @@ import {
 } from '../atoms';
 import { styles } from '../atoms/Link';
 import { colour } from '../colors';
-import { headlineStyles } from '../text';
 
 export const hover = css({
   ':hover': {
@@ -20,7 +19,7 @@ export const hover = css({
 });
 
 const headlineMap: Record<
-  keyof typeof headlineStyles,
+  1 | 2 | 3 | 4 | 5 | 6,
   | typeof Display
   | typeof Headline2
   | typeof Headline3

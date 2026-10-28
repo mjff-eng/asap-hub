@@ -20,7 +20,7 @@ const GrantDocumentTagsCard: React.FC<GrantDocumentTagsCardProps> = ({
   tags,
 }) => (
   <Card>
-    <Headline2 styleAsHeading={3} noMargin>
+    <Headline2 styleAsHeading={4} noMargin>
       Tags
     </Headline2>
     <div css={subtitleStyles}>

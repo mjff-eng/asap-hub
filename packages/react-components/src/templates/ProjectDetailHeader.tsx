@@ -265,7 +265,7 @@ const ProjectDetailHeader = (project: ProjectDetailHeaderProps) => {
 
           {/* Title */}
           <div css={titleStyles}>
-            <Display styleAsHeading={2}>{project.title}</Display>
+            <Display styleAsHeading={3}>{project.title}</Display>
           </div>
 
           {/* Action Buttons */}

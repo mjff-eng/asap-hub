@@ -85,7 +85,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
     <div css={styles}>
       {!dismissedGettingStarted && (
         <div>
-          <Headline2 styleAsHeading={3}>Get Started with ASAP</Headline2>
+          <Headline2 styleAsHeading={4}>Get Started with ASAP</Headline2>
           <div css={infoStyles}>
             Here’s everything you need to know to start using the Hub.
           </div>
@@ -103,7 +103,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
       )}
       {announcements.length > 0 && (
         <div>
-          <Headline2 styleAsHeading={3}>Announcements</Headline2>
+          <Headline2 styleAsHeading={4}>Announcements</Headline2>
           <div css={infoStyles}>Latest admin announcements.</div>
           <RemindersCard
             reminders={announcements}
@@ -113,7 +113,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         </div>
       )}
       <div>
-        <Headline2 styleAsHeading={3}>Reminders</Headline2>
+        <Headline2 styleAsHeading={4}>Reminders</Headline2>
         <div css={infoStyles}>
           We will remind you of the most important tasks you need to do.
         </div>
