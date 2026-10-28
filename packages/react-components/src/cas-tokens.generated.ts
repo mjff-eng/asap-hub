@@ -1590,5 +1590,13 @@ export const casTextStyles = {
       letterSpacing: 0,
       paragraphSpacing: 0,
     },
+    bold: {
+      family: 'body',
+      fontSize: 14,
+      lineHeight: 24,
+      fontWeight: 700,
+      letterSpacing: 0,
+      paragraphSpacing: 0,
+    },
   },
 } as const;
