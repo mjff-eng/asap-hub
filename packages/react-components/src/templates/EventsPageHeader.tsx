@@ -26,6 +26,9 @@ const searchRowStyles = css({
 
 const yearOf = (month: string) => Number(month.slice(0, 4));
 
+// The hub launched in 2020
+const FIRST_YEAR = 2020;
+
 type EventsPageHeaderProps = Omit<
   ComponentProps<typeof EventSearch>,
   'children'
@@ -41,15 +44,21 @@ const EventsPageHeader: React.FC<EventsPageHeaderProps> = ({
   monthFilter = new Set(),
   onChangeMonthFilter,
 }) => {
-  const [year, setYear] = useState(new Date().getFullYear());
+  const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState(currentYear);
 
-  // Events per year, e.g. { 2025: 12, 2026: 27 }
+  // Events per year since the first year (2020), e.g. { 2020: 0, …, 2026: 27 }
   const yearCounts = Object.entries(monthCounts).reduce<Record<number, number>>(
     (counts, [month, count]) => ({
       ...counts,
       [yearOf(month)]: (counts[yearOf(month)] ?? 0) + count,
     }),
-    { [year]: 0 },
+    Object.fromEntries(
+      Array.from({ length: currentYear - FIRST_YEAR + 1 }, (_, i) => [
+        FIRST_YEAR + i,
+        0,
+      ]),
+    ),
   );
 
   // Events per month in the selected year, by month index, e.g. { 0: 7, 3: 10 }

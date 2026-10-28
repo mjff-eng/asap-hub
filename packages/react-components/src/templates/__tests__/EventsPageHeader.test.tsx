@@ -66,6 +66,26 @@ describe('month filter', () => {
     );
   });
 
+  it('lists every year since 2020, disabling years without events', async () => {
+    render(
+      <EventsPageHeader
+        searchQuery=""
+        monthCounts={{ '2021-03': 12 }}
+        onChangeMonthFilter={jest.fn()}
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: /filter/i }));
+    await userEvent.click(
+      screen.getByRole('button', { name: `Select year, ${year}` }),
+    );
+
+    expect(screen.getByRole('button', { name: /^2020/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /^2021/ })).toBeEnabled();
+    expect(
+      screen.getByRole('button', { name: new RegExp(`^${year}`) }),
+    ).toBeDisabled();
+  });
+
   it('calls onChangeMonthFilter with the selected month', async () => {
     const onChangeMonthFilter = jest.fn();
     render(
