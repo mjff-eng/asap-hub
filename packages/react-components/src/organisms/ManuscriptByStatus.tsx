@@ -73,7 +73,7 @@ const getbuttonStyles = (
 
 const buttonTextStyles = css({
   fontWeight: 400,
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
 });
 

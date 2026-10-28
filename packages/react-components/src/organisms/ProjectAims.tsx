@@ -36,7 +36,7 @@ const headerRowStyles = css({
 });
 
 const headerLabelStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   color: colour.foreground.primary,
 });

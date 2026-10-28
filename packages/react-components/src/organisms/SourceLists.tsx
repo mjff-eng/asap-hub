@@ -24,7 +24,7 @@ const textStyles = css({
 
 const titleStyles = css({
   margin: 0,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 700,
   lineHeight: rem(24),
   color: colour.foreground.primary,
@@ -76,7 +76,7 @@ const fileStyles = css({
 
 const nameStyles = css({
   display: 'block',
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
   color: colour.foreground.primary,
@@ -84,7 +84,7 @@ const nameStyles = css({
 
 const dateStyles = css({
   display: 'block',
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
   color: colour.foreground.quaternary,

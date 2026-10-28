@@ -48,7 +48,7 @@ const teamHeaderStyles = css({
 
 const teamDescriptionStyles = css({
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
   margin: 0,
 });

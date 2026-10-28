@@ -61,7 +61,7 @@ const SharedResearchDetailsTagsCard: React.FC<
           enabled={false}
           isMarkdown
           editorStyles={css({
-            fontSize: '17px',
+            fontSize: '16px',
             letterSpacing: '0.1px',
             color: colour.foreground.tertiary,
             lineHeight: '24px',

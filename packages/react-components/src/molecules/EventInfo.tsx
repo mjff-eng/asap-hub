@@ -43,7 +43,7 @@ const contentStyles = css({
 const tagContainerStyles = css({
   marginTop: rem(8),
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
 });
 
 const cancelledTitleStyles = css({

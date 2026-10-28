@@ -20,8 +20,8 @@ const containerStyles = css({
 });
 
 const legendStyles = css({
-  fontSize: rem(17),
-  lineHeight: `${24 / 17}em`,
+  fontSize: rem(16),
+  lineHeight: `${24 / 16}em`,
 });
 const subtitleStyles = css({
   paddingLeft: rem(6),
@@ -30,8 +30,8 @@ const subtitleStyles = css({
 const descriptionStyles = css({
   display: 'inline-block',
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
-  lineHeight: `${24 / 17}em`,
+  fontSize: rem(16),
+  lineHeight: `${24 / 16}em`,
   marginBottom: rem(12),
 });
 

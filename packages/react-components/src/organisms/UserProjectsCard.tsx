@@ -30,7 +30,7 @@ const tableStyles = css({
 
 const tableHeaderStyles = css({
   textAlign: 'left',
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontStyle: 'normal',
   fontWeight: 700,
   lineHeight: '24px',
@@ -76,7 +76,7 @@ const lastRowNoBorder = css({
 });
 
 const projectNameStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: '500',
   color: colour.foreground.brand,
   textDecoration: 'none',
@@ -87,7 +87,7 @@ const projectNameStyles = css({
 
 const typeLabelStyles = css({
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });
@@ -152,14 +152,14 @@ const mobileFieldLabel = css({
 });
 
 const mobileFieldValue = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
   color: colour.foreground.tertiary,
 });
 
 const mobileProjectNameValue = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: '500',
   color: colour.foreground.brand,
   textDecoration: 'none',
