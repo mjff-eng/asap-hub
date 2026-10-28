@@ -222,7 +222,7 @@ const ManuscriptCard: React.FC<ManuscriptCardProps> = ({
           </span>
           <span css={{ width: '100%' }}>
             <span css={toastHeaderStyles}>
-              <Subtitle noMargin>{title}</Subtitle>
+              <Subtitle styleAsHeading={6} noMargin>{title}</Subtitle>
               <span
                 css={{
                   display: 'flex',
