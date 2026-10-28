@@ -36,7 +36,7 @@ const buttonStyles = css({
 });
 
 const buttonTextStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 700,
   lineHeight: rem(24),
   whiteSpace: 'nowrap',

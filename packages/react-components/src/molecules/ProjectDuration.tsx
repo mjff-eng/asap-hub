@@ -10,7 +10,7 @@ const metadataRowStyles = css({
   display: 'flex',
   alignItems: 'flex-start',
   gap: rem(8),
-  fontSize: rem(17),
+  fontSize: rem(16),
   color: colour.foreground.tertiary,
 });
 

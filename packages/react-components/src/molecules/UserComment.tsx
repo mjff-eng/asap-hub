@@ -25,7 +25,7 @@ const replyStyles = css({
 });
 
 const textEditorStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
   color: colour.foreground.tertiary,

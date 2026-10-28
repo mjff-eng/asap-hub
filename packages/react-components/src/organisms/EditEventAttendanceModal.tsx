@@ -121,9 +121,9 @@ const uploadTextStyles = css({
 
 const sectionTitleStyles = css({
   margin: 0,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 700,
-  lineHeight: 24 / 17,
+  lineHeight: 24 / 16,
   color: colour.foreground.primary,
 });
 
@@ -193,7 +193,7 @@ const statsGroupStyles = css({
 });
 
 const attendeesStatStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   color: colour.foreground.tertiary,
 });
@@ -249,7 +249,7 @@ const attendeesCardStyles = (enabled: boolean) =>
   });
 
 // Widths in pixels because `rem` here emits `em`, which would resolve against
-// each element's own font size: the header's 14px against the rows' 17px.
+// each element's own font size: the header's 14px against the rows' 16px.
 const attendanceGridStyles = css({
   display: 'grid',
   gridTemplateColumns: '1fr 40px 24px',
@@ -261,9 +261,9 @@ const attendanceGridStyles = css({
 });
 
 const attendeesTableHeaderStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
-  lineHeight: 24 / 17,
+  lineHeight: 24 / 16,
   letterSpacing: rem(0.1),
   color: colour.foreground.primary,
   paddingBottom: rem(12),

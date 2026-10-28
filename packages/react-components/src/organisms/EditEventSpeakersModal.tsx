@@ -111,14 +111,14 @@ const searchOptionStyles = css([
 
 const searchUserNameStyles = css({
   color: colour.foreground.brand,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });
 
 const searchExternalTextStyles = css({
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });
@@ -153,7 +153,7 @@ const groupsTableHeaderStyles = css({
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: rem(24),
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),

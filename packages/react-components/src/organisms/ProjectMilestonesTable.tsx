@@ -55,7 +55,7 @@ const tableHeaderStyles = css({
 });
 
 const headerLabelStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   color: colour.foreground.primary,
 });
@@ -107,7 +107,7 @@ const milestoneRowWrapperStyles = (index: number, isLast: boolean) =>
   });
 
 const noMilestonesTextStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
   fontWeight: 700,
   color: colour.foreground.primary,

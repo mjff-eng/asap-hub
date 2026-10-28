@@ -5,7 +5,6 @@ import { rem } from '../pixels';
 import Pill from './Pill';
 
 export const statePillStyles = css({
-  // `em` against the 16px pill text, since `rem()` assumes 17px.
   '> span': {
     fontSize: rem(16),
     fontWeight: 500,

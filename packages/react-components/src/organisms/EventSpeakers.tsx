@@ -47,7 +47,7 @@ const columnHeaderStyles = css({
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: rem(24),
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),

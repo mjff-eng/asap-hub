@@ -9,7 +9,7 @@ const listItemStyles = css({
   whiteSpace: 'break-spaces',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  fontSize: rem(17),
+  fontSize: rem(16),
   display: 'flex',
 });
 
