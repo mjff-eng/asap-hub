@@ -33,7 +33,7 @@ const DashboardSection: React.FC<DashboardSectionProps> = ({
   viewAllTestId,
 }) => (
   <div>
-    <Headline2 styleAsHeading={3}>{title}</Headline2>
+    <Headline2 styleAsHeading={4}>{title}</Headline2>
     <div css={infoStyles}>{description}</div>
     {children}
     {viewAllHref && (

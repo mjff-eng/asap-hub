@@ -85,7 +85,7 @@ const OnboardingContent = ({
   <footer css={[footerStyles, irisCeruleanGradientStyles]}>
     <div css={containerStyles}>
       <div css={titleStyles}>
-        <Headline2 styleAsHeading={3}>{title}</Headline2>
+        <Headline2 styleAsHeading={4}>{title}</Headline2>
       </div>
       <div css={subtitleStyles}>
         <Paragraph>{subtitle}</Paragraph>

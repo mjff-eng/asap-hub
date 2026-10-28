@@ -48,7 +48,7 @@ const ComplianceReportHeader: React.FC<ComplianceReportHeaderProps> = ({
           />
         </div>
       )}
-      <Display styleAsHeading={2}>{title}</Display>
+      <Display styleAsHeading={3}>{title}</Display>
       <div>
         <Paragraph noMargin accent="tertiary">
           Share the compliance report associated with this manuscript.

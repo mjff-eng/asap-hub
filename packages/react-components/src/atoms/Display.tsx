@@ -8,7 +8,7 @@ interface DisplayProps {
 }
 const Display: React.FC<DisplayProps> = ({
   children,
-  styleAsHeading = 1,
+  styleAsHeading = 2,
   id,
   noMargin = false,
 }) => (

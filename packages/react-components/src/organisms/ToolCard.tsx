@@ -54,7 +54,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
       <div css={logoIconStyle}>{getIconFromUrl(url) ?? placeholderIcon}</div>
       <div css={{ flex: 1 }}>
         <Anchor href={url}>
-          <Headline3 styleAsHeading={4}>{name}</Headline3>
+          <Headline3 styleAsHeading={6}>{name}</Headline3>
           <Paragraph accent="tertiary">{description}</Paragraph>
         </Anchor>
         <ol css={linksStyles}>

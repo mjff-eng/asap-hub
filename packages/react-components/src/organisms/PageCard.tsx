@@ -11,7 +11,7 @@ const PageCard: React.FC<PageCardProps> = ({
   linkText,
 }) => (
   <Card>
-    <Headline4 styleAsHeading={5}>{title}</Headline4>
+    <Headline4 styleAsHeading="body/bold">{title}</Headline4>
     <Paragraph accent="tertiary">{shortText}</Paragraph>
     {link ? (
       <Paragraph>

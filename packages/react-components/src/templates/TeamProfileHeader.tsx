@@ -174,7 +174,7 @@ const TeamProfileHeader: React.FC<TeamProfileHeaderProps> = ({
           {resourceType && <Pill noMargin>{resourceType}</Pill>}
         </div>
         <div css={titleStyle}>
-          <Display styleAsHeading={2}>Team {displayName}</Display>
+          <Display styleAsHeading={3}>Team {displayName}</Display>
           {!isActive && (
             <StateTag icon={<InactiveBadgeIcon />} label="Inactive" />
           )}

@@ -79,7 +79,7 @@ const NewsDetailsPage: React.FC<NewsDetailsPageProps> = ({
       <div css={containerStyles}>
         <Card>
           <Pill>{type}</Pill>
-          <Display styleAsHeading={3}>{title}</Display>
+          <Display styleAsHeading={4}>{title}</Display>
           {publishDateComponent}
           <div css={richTextContainer}>
             <RichText text={text} />
