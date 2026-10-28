@@ -66,7 +66,7 @@ export const accents: Record<AccentVariant, CSSObject> = {
   },
   brand: {
     backgroundColor: colour.background.brand,
-    borderColor: colour.border.card.default,
+    borderColor: colour.background.brand,
   },
 };
 
