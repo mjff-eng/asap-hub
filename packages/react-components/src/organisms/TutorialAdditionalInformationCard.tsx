@@ -34,7 +34,9 @@ const TutorialAdditionalInformationCard: React.FC<TutorialCardProps> = ({
   usedInPublication,
 }) => (
   <Card>
-    <Headline2 styleAsHeading={5} noMargin>Additional Information</Headline2>
+    <Headline2 styleAsHeading={5} noMargin>
+      Additional Information
+    </Headline2>
     <ol css={additionalInformationListStyles}>
       <li css={additionalInformationEntryStyles}>
         <strong>Sharing Status</strong>
