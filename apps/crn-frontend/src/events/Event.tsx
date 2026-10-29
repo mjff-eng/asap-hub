@@ -38,6 +38,7 @@ import {
   useEventAttendanceSearch,
   useEventById,
   useEventSpeakerGroups,
+  useEventSpeakerSearch,
   usePatchEvent,
   useQuietRefreshEventById,
   useTeamsForMatching,
@@ -58,6 +59,7 @@ const Event: React.FC = () => {
   const fetchTeamsForMatching = useTeamsForMatching();
   const searchAttendance = useEventAttendanceSearch();
   const uploadAttendeesFiles = useUploadAttendeesFiles(eventId);
+  const { loadSearchOptions } = useEventSpeakerSearch();
 
   const hasFinished = useDateHasPassed(
     considerEndedAfter(event?.endDate || ''),
@@ -146,7 +148,7 @@ const Event: React.FC = () => {
           <EditEventSpeakersModal
             groups={speakerGroups}
             isPastEvent={hasFinished}
-            loadSearchOptions={async () => []}
+            loadSearchOptions={loadSearchOptions}
             onSave={async (savedGroups) => {
               await patchEvent(
                 mapGroupsToSpeakersUpdate(
