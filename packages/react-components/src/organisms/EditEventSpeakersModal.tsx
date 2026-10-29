@@ -40,6 +40,7 @@ import { EventTeamType } from './shared-event-card';
 import { iconButtonStyles } from './shared-event-card-styles';
 import {
   groupLabel,
+  SpeakerExternalGroup,
   SpeakerGroup,
   SpeakerGroupExternalUser,
   SpeakerGroupUser,
@@ -233,6 +234,20 @@ const withExternalGroupLast = (nextGroups: SpeakerGroup[]) => [
   ...nextGroups.filter((group) => group.variant === 'external'),
 ];
 
+const normalizeName = (name: string) =>
+  name.trim().replace(/\s+/g, ' ').toLowerCase();
+
+// Saved external speakers and new names carry no external author id, so the
+// name is the only thing to compare them by.
+const isSameExternalSpeaker = (
+  row: { readonly displayName: string; readonly externalAuthorId?: string },
+  displayName: string,
+  externalAuthorId?: string,
+) =>
+  row.externalAuthorId && externalAuthorId
+    ? row.externalAuthorId === externalAuthorId
+    : normalizeName(row.displayName) === normalizeName(displayName);
+
 type PendingSpeaker = {
   readonly displayName: string;
   readonly user?: NonNullable<SpeakerSearchOption['user']>;
@@ -394,7 +409,13 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       }
       if (
         existingGroup.variant === 'external' ||
-        existingGroup.users.some((row) => row.id === user.userId)
+        existingGroup.users.some(
+          (row) =>
+            row.id === user.userId ||
+            (isExternal &&
+              row.isExternal &&
+              isSameExternalSpeaker(row, user.displayName, externalAuthorId)),
+        )
       ) {
         return current;
       }
@@ -446,25 +467,41 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       externalAuthorId,
       preliminaryFindingsShared: false,
     };
-    updateGroups((current) =>
-      current.some((group) => group.variant === 'external')
-        ? current.map((group) =>
-            group.variant === 'external'
-              ? { ...group, users: [...group.users, newUser] }
-              : group,
-          )
-        : [
-            ...current,
-            { id: 'external', variant: 'external', users: [newUser] },
-          ],
-    );
+    const before = latestGroups.current;
+    const after = updateGroups((current) => {
+      const externalGroup = current.find(
+        (group): group is SpeakerExternalGroup => group.variant === 'external',
+      );
+      if (!externalGroup) {
+        return [
+          ...current,
+          { id: 'external', variant: 'external', users: [newUser] },
+        ];
+      }
+      if (
+        externalGroup.users.some((row) =>
+          isSameExternalSpeaker(row, name, externalAuthorId),
+        )
+      ) {
+        return current;
+      }
+      return current.map((group) =>
+        group === externalGroup
+          ? { ...externalGroup, users: [...externalGroup.users, newUser] }
+          : group,
+      );
+    });
     expandSection('external');
     setPendingSpeaker(null);
-    setAddedSpeaker({
-      speakerName: name,
-      groupId: 'external',
-      userId: newUser.id,
-    });
+    setAddedSpeaker(
+      after === before
+        ? null
+        : {
+            speakerName: name,
+            groupId: 'external',
+            userId: newUser.id,
+          },
+    );
   };
 
   const handleSelectSearchOption = (option: SpeakerSearchOption) => {

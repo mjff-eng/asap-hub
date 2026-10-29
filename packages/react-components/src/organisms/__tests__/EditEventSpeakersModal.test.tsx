@@ -568,6 +568,88 @@ describe('EditEventSpeakersModal', () => {
     expect(screen.getByText('Guest Two')).toBeInTheDocument();
   });
 
+  it('Should not duplicate an external guest whose name is already in the External section', async () => {
+    renderModal({ groups: [getExternalGroup()] });
+
+    await searchNonCrn('guest one');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+
+    expect(screen.getAllByText('Guest One')).toHaveLength(1);
+    expect(screen.queryByText(/as an External Guest/)).not.toBeInTheDocument();
+  });
+
+  it('Should not duplicate an existing external author kept twice as an external guest', async () => {
+    loadSearchOptions.mockImplementation(async () => [externalAuthorOption]);
+    renderModal();
+
+    const keepRileyAsGuest = async () => {
+      await userEvent.type(screen.getByRole('combobox'), 'Riley');
+      await userEvent.click(
+        await screen.findByRole('option', { name: /Riley Stone/ }),
+      );
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Keep as External Guest' }),
+      );
+    };
+    await keepRileyAsGuest();
+    await keepRileyAsGuest();
+
+    expect(
+      screen.getAllByRole('button', { name: 'Remove Riley Stone' }),
+    ).toHaveLength(1);
+  });
+
+  it('Should keep two different external authors who share a name', async () => {
+    loadSearchOptions.mockImplementation(async () => [externalAuthorOption]);
+    renderModal({
+      groups: [
+        getExternalGroup({
+          users: [
+            getExternalUser({
+              displayName: 'Riley Stone',
+              externalAuthorId: 'external-author-2',
+            }),
+          ],
+        }),
+      ],
+    });
+
+    await userEvent.type(screen.getByRole('combobox'), 'Riley');
+    await userEvent.click(
+      await screen.findByRole('option', { name: /Riley Stone/ }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+
+    expect(
+      screen.getAllByRole('button', { name: 'Remove Riley Stone' }),
+    ).toHaveLength(2);
+  });
+
+  it('Should not duplicate an external speaker already in the team picked on the banner', async () => {
+    renderModal();
+
+    const addBobToTeamOmega = async () => {
+      await searchNonCrn('Bob');
+      await userEvent.type(screen.getByRole('combobox'), 'Ome');
+      await userEvent.click(
+        await screen.findByRole('option', { name: 'Team Omega' }),
+      );
+    };
+    await addBobToTeamOmega();
+    await addBobToTeamOmega();
+
+    expect(screen.getAllByRole('button', { name: 'Remove Bob' })).toHaveLength(
+      1,
+    );
+    expect(
+      screen.queryByText('Added Bob to Team Omega'),
+    ).not.toBeInTheDocument();
+  });
+
   it('Should cancel the pending addition when the external banner is dismissed', async () => {
     renderModal();
 
@@ -1094,8 +1176,9 @@ describe('EditEventSpeakersModal', () => {
       screen.getByRole('button', { name: 'Remove Jane Doe' }),
     );
     await searchNonCrn('Bob');
+    await userEvent.type(screen.getByRole('combobox'), 'Ome');
     await userEvent.click(
-      screen.getByRole('button', { name: 'Keep as External Guest' }),
+      await screen.findByRole('option', { name: 'Team Omega' }),
     );
 
     const removeButtons = screen.getAllByRole('button', { name: 'Remove Bob' });
