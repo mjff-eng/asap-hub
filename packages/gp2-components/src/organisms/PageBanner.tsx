@@ -1,9 +1,9 @@
 import {
   accents,
+  Display,
   drawerQuery,
   Paragraph,
   pixels,
-  text,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { smallerScreenQuery } from '../layout';
@@ -87,7 +87,7 @@ const PageBanner: React.FC<PageBannerProp> = ({
       css={[cardStyles, accents.default, noBorderTop && { borderTopWidth: 0 }]}
     >
       <div css={[textContainerStyles(noMarginBottom)]}>
-        <h1 css={text.headlineStyles[2]}>{title}</h1>
+        <Display>{title}</Display>
         {description && <Paragraph accent="tertiary">{description}</Paragraph>}
         {children}
       </div>
