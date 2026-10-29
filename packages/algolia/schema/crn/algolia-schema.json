@@ -89,7 +89,8 @@
     "teamStatus",
     "teamType",
     "project.id",
-    "startMonth"
+    "startMonth",
+    "individualProjects.id"
   ],
   "attributesToSnippet": null,
   "attributesToHighlight": null,
