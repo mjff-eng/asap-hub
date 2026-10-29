@@ -74,6 +74,36 @@ const eventUpdateDetailsValidationSchema: JSONSchemaType<EventUpdateDetailsReque
           additionalProperties: false,
         },
       },
+      speakersToAdd: {
+        type: 'array',
+        nullable: true,
+        items: {
+          type: 'object',
+          properties: {
+            userId: { type: 'string' },
+            externalAuthorId: { type: 'string' },
+            externalAuthorName: { type: 'string' },
+            teamId: { type: 'string', nullable: true },
+            projectId: { type: 'string', nullable: true },
+            preliminaryDataShared: { type: 'boolean', nullable: true },
+          },
+          oneOf: [
+            { type: 'object', required: ['userId'] },
+            { type: 'object', required: ['externalAuthorId'] },
+            { type: 'object', required: ['externalAuthorName'] },
+          ],
+          not: { type: 'object', required: ['teamId', 'projectId'] },
+          if: { type: 'object', required: ['userId'] },
+          then: {
+            type: 'object',
+            anyOf: [
+              { type: 'object', required: ['teamId'] },
+              { type: 'object', required: ['projectId'] },
+            ],
+          },
+          additionalProperties: false,
+        },
+      },
       speakersToRemove: {
         type: 'array',
         nullable: true,

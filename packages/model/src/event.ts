@@ -3,6 +3,7 @@ import { FetchOptions, ListResponse } from './common';
 import { BasicEvent, SortOptions } from './event-common';
 import { InterestGroupResponse } from './interest-group';
 import {
+  AuthorPostRequest,
   ResearchOutputResponse,
   ResearchOutputWorkingGroupResponse,
 } from './research-output';
@@ -179,8 +180,15 @@ export type EventSpeakerUnlinkItem = {
   field: 'team' | 'project';
 };
 
+export type EventSpeakerAddItem = AuthorPostRequest & {
+  teamId?: string;
+  projectId?: string;
+  preliminaryDataShared?: boolean;
+};
+
 export type EventUpdateDetailsRequest = {
   attendance?: EventAttendanceUpdateItem[];
+  speakersToAdd?: EventSpeakerAddItem[];
   speakersToRemove?: string[];
   speakersToUnlink?: EventSpeakerUnlinkItem[];
   preliminaryDataShared?: EventPreliminaryDataSharingUpdateItem[];
