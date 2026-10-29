@@ -79,7 +79,7 @@ const TutorialHeaderCard: React.FC<TutorialHeaderCardProps> = ({
     <div css={associationStyles}>
       <AssociationList type="Team" inline associations={teams} />
     </div>
-    <div css={[timestampStyles, captionStyles]}>
+    <div css={[timestampStyles, captionStyles.regular]}>
       <span>Date added: {formatDate(new Date(created))}</span>
       {lastUpdated && (
         <span> . Last updated: {formatDate(new Date(lastUpdated))}</span>

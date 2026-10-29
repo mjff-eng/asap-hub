@@ -76,9 +76,6 @@ export const fontStyles = {
   fontSize: `${body.fontSize}px`,
   lineHeight: rem(body.lineHeight),
 } as const;
-export const captionStyles = {
-  fontSize: rem(14),
-};
 export const layoutStyles = {
   marginTop: '12px',
   marginBottom: '12px',
@@ -98,6 +95,11 @@ const textStyle = ({
   lineHeight: `${lineHeight}px`,
   fontWeight,
 });
+
+export const captionStyles = {
+  regular: textStyle(casTextStyles.caption.regular),
+  bold: textStyle(casTextStyles.caption.bold),
+};
 
 // Keyed by Figma text style: 2 to 6 are heading/2 to heading/6. Each heading
 // component defaults to the style closest to its size before CAS (Elena,

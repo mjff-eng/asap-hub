@@ -59,8 +59,8 @@ it('renders a FigCaption 14px on a 24px line', () => {
     </figure>,
   );
   const { fontSize, lineHeight } = getComputedStyle(getByText('text'));
-  expect(parseFloat(fontSize) * 16).toBe(14);
-  expect(parseFloat(lineHeight) * 14).toBeCloseTo(24);
+  expect(fontSize).toBe('14px');
+  expect(lineHeight).toBe('24px');
 });
 
 it('renders a given accent color', () => {

@@ -1,18 +1,5 @@
-import { css } from '@emotion/react';
-
-import { CasTextStyle, casTextStyles } from '../cas-tokens.generated';
 import { colour } from '../colors';
-import { rem } from '../pixels';
-import { layoutStyles, AccentColorName } from '../text';
-
-const captionStyle = ({ fontSize, lineHeight, fontWeight }: CasTextStyle) =>
-  css({
-    fontSize: rem(fontSize),
-    lineHeight: `${lineHeight / fontSize}em`,
-    fontWeight,
-  });
-const regularStyles = captionStyle(casTextStyles.caption.regular);
-const boldStyles = captionStyle(casTextStyles.caption.bold);
+import { layoutStyles, AccentColorName, captionStyles } from '../text';
 
 interface CaptionProps {
   readonly children: React.ReactNode;
@@ -30,7 +17,7 @@ const Caption: React.FC<CaptionProps> = ({
 }) => {
   const styles = [
     layoutStyles,
-    bold ? boldStyles : regularStyles,
+    bold ? captionStyles.bold : captionStyles.regular,
     accent ? { color: colour.foreground[accent] } : null,
     noMargin ? { margin: 0 } : null,
   ];

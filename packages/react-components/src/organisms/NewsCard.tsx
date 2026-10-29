@@ -60,7 +60,7 @@ const shortTextStyles = css({
 });
 
 const footerStyles = css({
-  ...captionStyles,
+  ...captionStyles.regular,
   color: colour.foreground.tertiary,
   justifySelf: 'flex-end',
 });
