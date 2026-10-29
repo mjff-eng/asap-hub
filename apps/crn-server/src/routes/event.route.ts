@@ -50,6 +50,7 @@ export const eventRouteFactory = (eventController: EventController): Router => {
         payload.attendance !== undefined ||
         payload.attendeesFileIds !== undefined;
       const isSpeakerWrite =
+        payload.speakersToAdd !== undefined ||
         payload.speakersToRemove !== undefined ||
         payload.speakersToUnlink !== undefined ||
         payload.preliminaryDataShared !== undefined;
