@@ -4,6 +4,7 @@ import { BasicEvent, SortOptions } from './event-common';
 import { InterestGroupResponse } from './interest-group';
 import {
   AuthorPostRequest,
+  AuthorUpsertDataObject,
   ResearchOutputResponse,
   ResearchOutputWorkingGroupResponse,
 } from './research-output';
@@ -189,11 +190,17 @@ export type EventSpeakerUnlinkItem = {
   field: 'team' | 'project';
 };
 
-export type EventSpeakerAddItem = AuthorPostRequest & {
+type EventSpeakerAddAffiliation = {
   teamId?: string;
   projectId?: string;
   preliminaryDataShared?: boolean;
 };
+
+export type EventSpeakerAddItem = AuthorPostRequest &
+  EventSpeakerAddAffiliation;
+
+export type EventSpeakerAddDataObject = AuthorUpsertDataObject &
+  EventSpeakerAddAffiliation;
 
 export type EventUpdateDetailsRequest = {
   attendance?: EventAttendanceUpdateItem[];
@@ -202,6 +209,13 @@ export type EventUpdateDetailsRequest = {
   speakersToRemove?: string[];
   speakersToUnlink?: EventSpeakerUnlinkItem[];
   preliminaryDataShared?: EventPreliminaryDataSharingUpdateItem[];
+};
+
+export type EventUpdateDetailsDataObject = Omit<
+  EventUpdateDetailsRequest,
+  'speakersToAdd'
+> & {
+  speakersToAdd?: EventSpeakerAddDataObject[];
 };
 
 type BaseFilterOptions = {

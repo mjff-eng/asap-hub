@@ -56,7 +56,7 @@ import {
   EventSpeakerUserData,
   EventTeamAttendance,
   EventUpdateDataObject,
-  EventUpdateDetailsRequest,
+  EventUpdateDetailsDataObject,
   FetchEventsOptions,
   getInterestGroupTeamIdsForEvent,
   InterestGroupTeamMembership,
@@ -541,7 +541,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
 
   async updateEventDetails(
     id: string,
-    data: EventUpdateDetailsRequest,
+    data: EventUpdateDetailsDataObject,
   ): Promise<void> {
     const environment = await this.getRestClient();
     const event = await environment.getEntry(id);
@@ -629,7 +629,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
   private async buildAttendanceLinks(
     environment: Environment,
     event: Entry,
-    attendanceData: NonNullable<EventUpdateDetailsRequest['attendance']>,
+    attendanceData: NonNullable<EventUpdateDetailsDataObject['attendance']>,
   ) {
     const existingLinks: Link<'Entry'>[] =
       event.fields.attendance?.['en-US'] || [];
@@ -814,7 +814,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
     environment: Environment,
     event: Entry,
     preliminaryDataShared: NonNullable<
-      EventUpdateDetailsRequest['preliminaryDataShared']
+      EventUpdateDetailsDataObject['preliminaryDataShared']
     >,
     speakersToRemove: string[],
   ): Promise<SpeakerPreliminaryDataSharedUpdate[]> {
