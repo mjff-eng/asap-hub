@@ -1059,6 +1059,19 @@ describe('the NEW_EVENT_PAGE flag', () => {
           'Sam',
         );
         expect(modal.getByText('Added Sam Lee to Omega')).toBeVisible();
+
+        mockPatchEvent.mockResolvedValue({ ...createEventResponse(), id });
+        await userEvent.click(modal.getByRole('button', { name: 'Save' }));
+
+        await waitFor(() =>
+          expect(mockPatchEvent).toHaveBeenCalledWith(
+            id,
+            expect.objectContaining({
+              speakersToAdd: [{ userId: 'u9', teamId: 't-omega' }],
+            }),
+            expect.anything(),
+          ),
+        );
       });
 
       it('adds an external speaker to a team found through the affiliation search', async () => {

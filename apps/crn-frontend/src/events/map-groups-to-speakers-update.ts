@@ -1,8 +1,15 @@
 import {
+  EventSpeakerAddItem,
   EventSpeakerUnlinkItem,
   EventUpdateDetailsRequest,
 } from '@asap-hub/model';
-import { SpeakerGroup } from '@asap-hub/react-components';
+import {
+  SpeakerGroup,
+  SpeakerGroupExternalUser,
+  SpeakerGroupUser,
+} from '@asap-hub/react-components';
+
+type SpeakerRow = SpeakerGroupUser | SpeakerGroupExternalUser;
 
 const collectSpeakerVariants = (
   groups: SpeakerGroup[],
@@ -23,6 +30,42 @@ const collectSpeakerVariants = (
   );
 
 const unlinkableFields: EventSpeakerUnlinkItem['field'][] = ['team', 'project'];
+
+const isNewSpeaker = ({ speakerIds = [] }: SpeakerRow) =>
+  speakerIds.length === 0;
+
+const isExternalSpeaker = (group: SpeakerGroup, user: SpeakerRow) =>
+  group.variant === 'external' || ('isExternal' in user && !!user.isExternal);
+
+const toSpeakerIdentity = (group: SpeakerGroup, user: SpeakerRow) => {
+  if (!isExternalSpeaker(group, user)) {
+    return { userId: user.id };
+  }
+  return user.externalAuthorId
+    ? { externalAuthorId: user.externalAuthorId }
+    : { externalAuthorName: user.displayName };
+};
+
+const toAffiliation = (group: SpeakerGroup) =>
+  ({
+    team: { teamId: group.id },
+    project: { projectId: group.id },
+    external: {},
+  })[group.variant];
+
+const collectSpeakersToAdd = (
+  groups: SpeakerGroup[],
+  isPastEvent: boolean,
+): EventSpeakerAddItem[] =>
+  groups.flatMap((group) =>
+    group.users.filter(isNewSpeaker).map((user) => ({
+      ...toSpeakerIdentity(group, user),
+      ...toAffiliation(group),
+      ...(isPastEvent && {
+        preliminaryDataShared: user.preliminaryFindingsShared,
+      }),
+    })),
+  );
 
 export const mapGroupsToSpeakersUpdate = (
   original: SpeakerGroup[],
@@ -45,13 +88,15 @@ export const mapGroupsToSpeakersUpdate = (
         : [];
     },
   );
-  const removals = {
+  const speakersToAdd = collectSpeakersToAdd(saved, isPastEvent);
+  const speakerChanges = {
     speakersToRemove,
     ...(speakersToUnlink.length > 0 ? { speakersToUnlink } : {}),
+    ...(speakersToAdd.length > 0 ? { speakersToAdd } : {}),
   };
 
   if (!isPastEvent) {
-    return removals;
+    return speakerChanges;
   }
 
   const preliminaryDataShared = saved.flatMap((group) =>
@@ -63,5 +108,5 @@ export const mapGroupsToSpeakersUpdate = (
     ),
   );
 
-  return { ...removals, preliminaryDataShared };
+  return { ...speakerChanges, preliminaryDataShared };
 };
