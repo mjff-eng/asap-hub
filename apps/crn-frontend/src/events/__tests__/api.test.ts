@@ -7,6 +7,7 @@ import {
   createEventResponse,
   createListEventResponse,
   createTeamListItemResponse,
+  createUserListItemResponse,
 } from '@asap-hub/fixtures';
 import { getEventListOptions } from '@asap-hub/frontend-utils';
 import nock from 'nock';
@@ -15,6 +16,7 @@ import {
   getAttendanceSearchHits,
   getEvent,
   getEvents,
+  getSpeakerSearchHits,
   getTeamsForMatching,
   patchEvent,
 } from '../api';
@@ -373,6 +375,33 @@ describe('getAttendanceSearchHits', () => {
     ]);
     expect(search).toHaveBeenCalledWith(['interest-group', 'team'], 'alp', {
       restrictSearchableAttributes: ['name', 'displayName'],
+    });
+  });
+});
+
+describe('getSpeakerSearchHits', () => {
+  type Search = ClientSearch<'crn', 'user' | 'external-author'>;
+  const search: jest.MockedFunction<Search> = jest.fn();
+
+  const algoliaSearchClient = {
+    search,
+  } as unknown as AlgoliaSearchClient<'crn'>;
+
+  it('searches user and external author names only and returns the hits', async () => {
+    const hit = {
+      ...createUserListItemResponse(),
+      objectID: 'user-id-0',
+      __meta: { type: 'user' as const },
+    } as unknown as Awaited<ReturnType<Search>>['hits'][number];
+    search.mockResolvedValueOnce(
+      createAlgoliaResponse<'crn', 'user' | 'external-author'>([hit]),
+    );
+
+    expect(await getSpeakerSearchHits(algoliaSearchClient, 'per')).toEqual([
+      hit,
+    ]);
+    expect(search).toHaveBeenCalledWith(['user', 'external-author'], 'per', {
+      restrictSearchableAttributes: ['displayName'],
     });
   });
 });
