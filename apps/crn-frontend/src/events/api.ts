@@ -191,3 +191,13 @@ export const getSpeakerSearchHits = async (
       restrictSearchableAttributes: ['displayName'],
     })
   ).hits;
+
+export const getSpeakerAffiliationHits = async (
+  algoliaClient: AlgoliaClient<'crn'>,
+  searchQuery: string,
+) =>
+  (
+    await algoliaClient.search(['team', 'project'], searchQuery, {
+      restrictSearchableAttributes: ['displayName', 'title'],
+    })
+  ).hits;

@@ -1,5 +1,6 @@
 import { EditEventSpeakersModal } from '@asap-hub/react-components';
 import type {
+  AffiliationOption,
   SpeakerGroup,
   SpeakerGroupUser,
   SpeakerProjectGroup,
@@ -81,6 +82,34 @@ const loadSearchOptions = async (inputValue: string) =>
     nonCrnGuest,
   ].filter((option) =>
     option.label.toLowerCase().includes(inputValue.toLowerCase()),
+  );
+
+// What the external-guest card finds when searching for a team or project.
+const affiliationSearchResults: AffiliationOption[] = [
+  {
+    variant: 'team',
+    id: 'team-omega',
+    name: 'Omega',
+    teamType: 'Discovery Team',
+  },
+  {
+    variant: 'team',
+    id: 'team-sigma',
+    name: 'Sigma',
+    teamType: 'Resource Team',
+    isTeamInactive: true,
+  },
+  {
+    variant: 'project',
+    id: 'project-orbit',
+    name: 'Orbit Trainee Project',
+    projectType: 'Trainee Project',
+  },
+];
+
+const loadAffiliationOptions = async (inputValue: string) =>
+  affiliationSearchResults.filter((option) =>
+    option.name.toLowerCase().includes(inputValue.toLowerCase()),
   );
 
 // The banner stories drive the real modal: the search ignores what is typed and
@@ -184,6 +213,7 @@ const baseArgs = {
   groups: populatedGroups,
   isPastEvent: true,
   loadSearchOptions,
+  loadAffiliationOptions,
   onSave: () => undefined,
   onDismiss: () => undefined,
 };
@@ -249,8 +279,8 @@ export const BlockedSpeakerMessage: Story = {
   args: { ...baseArgs, loadSearchOptions: loadOnly(noAffiliationUser) },
 };
 
-// Pick the single search result to see the external-guest card. Its affiliation
-// options are the teams and projects already on the event.
+// Pick the single search result to see the external-guest card, then search it
+// for a team or project.
 export const ExternalAffiliationBanner: Story = {
   args: { ...baseArgs, loadSearchOptions: loadOnly(nonCrnGuest) },
 };

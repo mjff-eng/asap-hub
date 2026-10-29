@@ -76,6 +76,9 @@ type EditEventSpeakersModalProps = {
   readonly loadSearchOptions: (
     inputValue: string,
   ) => Promise<SpeakerSearchOption[]>;
+  readonly loadAffiliationOptions: (
+    searchQuery: string,
+  ) => Promise<ReadonlyArray<AffiliationOption>>;
   readonly onSave: (groups: SpeakerGroup[]) => void | Promise<void>;
   readonly onDismiss: () => void;
 };
@@ -286,6 +289,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   groups = [],
   isPastEvent = false,
   loadSearchOptions,
+  loadAffiliationOptions,
   onSave,
   onDismiss,
 }) => {
@@ -614,11 +618,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     ) : (
       <ExternalSpeakerAffiliationCard
         displayName={displayName}
-        affiliationOptions={[...teamGroups, ...projectGroups].map((group) => ({
-          variant: group.variant,
-          id: group.id,
-          name: groupLabel(group),
-        }))}
+        loadAffiliationOptions={loadAffiliationOptions}
         onSelectAffiliation={(affiliation) =>
           addGuestToAffiliation(displayName, affiliation, externalAuthorId)
         }

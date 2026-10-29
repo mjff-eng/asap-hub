@@ -413,6 +413,7 @@ export const EditAndSave: Story = {
             groups={groups}
             isPastEvent
             loadSearchOptions={loadEditAndSaveSearchOptions}
+            loadAffiliationOptions={async () => []}
             onSave={(updated) => {
               setGroups(updated);
               setIsEditing(false);

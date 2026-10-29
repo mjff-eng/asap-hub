@@ -59,7 +59,7 @@ const Event: React.FC = () => {
   const fetchTeamsForMatching = useTeamsForMatching();
   const searchAttendance = useEventAttendanceSearch();
   const uploadAttendeesFiles = useUploadAttendeesFiles(eventId);
-  const { loadSearchOptions } = useEventSpeakerSearch();
+  const { loadSearchOptions, loadAffiliationOptions } = useEventSpeakerSearch();
 
   const hasFinished = useDateHasPassed(
     considerEndedAfter(event?.endDate || ''),
@@ -149,6 +149,7 @@ const Event: React.FC = () => {
             groups={speakerGroups}
             isPastEvent={hasFinished}
             loadSearchOptions={loadSearchOptions}
+            loadAffiliationOptions={loadAffiliationOptions}
             onSave={async (savedGroups) => {
               await patchEvent(
                 mapGroupsToSpeakersUpdate(
