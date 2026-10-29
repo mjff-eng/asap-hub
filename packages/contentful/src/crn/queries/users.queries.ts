@@ -467,6 +467,8 @@ export const userListItemContentQueryFragment = gql`
             id
           }
           displayName
+          teamType
+          inactiveSince
         }
         role
         awardsCollection(limit: 20, order: [date_DESC]) {
@@ -476,6 +478,25 @@ export const userListItemContentQueryFragment = gql`
               name
               icon {
                 url
+              }
+            }
+          }
+        }
+      }
+    }
+    linkedFrom {
+      projectMembershipCollection(limit: 20) {
+        items {
+          role
+          linkedFrom {
+            projectsCollection(limit: 1) {
+              items {
+                sys {
+                  id
+                }
+                title
+                projectType
+                status
               }
             }
           }
@@ -616,6 +637,8 @@ export const FETCH_USER_BY_ID_FOR_ALGOLIA_LIST = gql`
               id
             }
             displayName
+            teamType
+            inactiveSince
           }
           role
           awardsCollection(limit: 20, order: [date_DESC]) {
@@ -625,6 +648,25 @@ export const FETCH_USER_BY_ID_FOR_ALGOLIA_LIST = gql`
                 name
                 icon {
                   url
+                }
+              }
+            }
+          }
+        }
+      }
+      linkedFrom {
+        projectMembershipCollection(limit: 20) {
+          items {
+            role
+            linkedFrom {
+              projectsCollection(limit: 1) {
+                items {
+                  sys {
+                    id
+                  }
+                  title
+                  projectType
+                  status
                 }
               }
             }
