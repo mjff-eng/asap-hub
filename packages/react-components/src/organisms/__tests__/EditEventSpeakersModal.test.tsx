@@ -128,6 +128,12 @@ const loadSearchOptions = jest.fn(async () => [
   multiAffiliationOption,
   noAffiliationOption,
 ]);
+const externalAuthorOption: SpeakerSearchOption = {
+  value: 'external-author-1',
+  label: 'Riley Stone',
+  externalAuthor: { id: 'external-author-1', displayName: 'Riley Stone' },
+};
+
 const onSave = jest.fn();
 const onDismiss = jest.fn();
 
@@ -470,6 +476,36 @@ describe('EditEventSpeakersModal', () => {
     expect(
       screen.getByText('Added Guest Speaker as an External Guest'),
     ).toBeVisible();
+  });
+
+  it('Should keep an existing external author as an external guest with its id', async () => {
+    loadSearchOptions.mockImplementation(async () => [externalAuthorOption]);
+    renderModal();
+
+    await userEvent.type(screen.getByRole('combobox'), 'Riley');
+    const option = await screen.findByRole('option', { name: /Riley Stone/ });
+    expect(within(option).getByText('Non CRN')).toBeInTheDocument();
+    await userEvent.click(option);
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSave).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            variant: 'external',
+            users: [
+              expect.objectContaining({
+                displayName: 'Riley Stone',
+                externalAuthorId: 'external-author-1',
+              }),
+            ],
+          }),
+        ]),
+      ),
+    );
   });
 
   it('Should add a second external speaker into the existing External section', async () => {
