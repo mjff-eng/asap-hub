@@ -109,7 +109,7 @@ const Event: React.FC = () => {
           hasFinished={hasFinished}
           onExport={
             isTechSupport
-              ? () => downloadEventSpeakers(event, speakerGroups)
+              ? () => downloadEventSpeakers(event, speakerGroups, hasFinished)
               : undefined
           }
           onAddSpeaker={isProjectManager ? openSpeakersEditor : undefined}
