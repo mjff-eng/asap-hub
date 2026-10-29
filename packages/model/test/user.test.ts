@@ -80,6 +80,7 @@ describe('User', () => {
               inactiveSinceDate: '',
             },
           ],
+          individualProjects: [],
         }),
       ).toEqual({
         _tags: ['Blood', 'Parkinson'],
@@ -135,6 +136,7 @@ describe('User', () => {
             role: 'Project Manager',
           },
         ],
+        individualProjects: [],
       });
     });
 
@@ -173,6 +175,7 @@ describe('User', () => {
             role: 'Project Manager',
           },
         ],
+        individualProjects: [],
       });
 
       expect(listItem.teams).toEqual([
@@ -188,6 +191,60 @@ describe('User', () => {
           role: 'Project Manager',
         },
       ]);
+    });
+
+    it('carries team type, team inactivity and individual projects through to the algolia list item', () => {
+      const individualProjects = [
+        {
+          id: 'project-1',
+          title: 'Trainee Project',
+          projectType: 'Trainee Project' as const,
+          status: 'Completed',
+          role: 'Trainee',
+        },
+      ];
+      const listItem = toUserListItem({
+        id: 'user-3',
+        createdDate: '2020-09-07T17:36:54Z',
+        lastModifiedDate: '2020-09-07T17:36:54Z',
+        onboarded: true,
+        displayName: 'Project User',
+        fullDisplayName: 'Project User',
+        firstName: 'Project',
+        lastName: 'User',
+        email: 'project.user@asap.com',
+        orcidWorks: [],
+        tags: [],
+        questions: [],
+        role: 'Grantee',
+        social: {},
+        workingGroups: [],
+        interestGroups: [],
+        labs: [],
+        projects: [],
+        teams: [
+          {
+            displayName: 'Alessi',
+            id: 'team-alessi',
+            role: 'Project Manager',
+            teamType: 'Resource Team',
+            teamInactiveSince: '2024-01-01',
+            proposal: 'proposal-1',
+          },
+        ],
+        individualProjects,
+      });
+
+      expect(listItem.teams).toEqual([
+        {
+          displayName: 'Alessi',
+          id: 'team-alessi',
+          role: 'Project Manager',
+          teamType: 'Resource Team',
+          teamInactiveSince: '2024-01-01',
+        },
+      ]);
+      expect(listItem.individualProjects).toEqual(individualProjects);
     });
   });
 

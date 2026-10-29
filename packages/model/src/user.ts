@@ -3,7 +3,7 @@ import { InterestGroupMembership } from './interest-group';
 import { LabResponse } from './lab';
 import { ProjectType } from './project';
 import { ResearchTagDataObject } from './research-tag';
-import { TeamRole } from './team';
+import { TeamRole, TeamType } from './team';
 import { WorkingGroupMembership } from './working-group';
 
 export const userRole = ['Staff', 'Grantee', 'Guest', 'Hidden'] as const;
@@ -59,6 +59,7 @@ export interface UserAward {
 export interface UserTeam {
   id: string;
   displayName?: string;
+  teamType?: TeamType;
   teamInactiveSince?: string;
   proposal?: string;
   role: TeamRole;
@@ -178,8 +179,13 @@ export interface PublicUserResponse
 
 export type UserListItemTeam = Pick<
   UserTeam,
-  'id' | 'displayName' | 'role' | 'awards'
+  'id' | 'displayName' | 'role' | 'awards' | 'teamType' | 'teamInactiveSince'
 >;
+// Projects the user is a direct member of (Trainee and Resource Projects that
+// are not team based). Team based projects are reached through the user's teams.
+export interface UserListItemProject extends UserProjectMembership {
+  role?: string;
+}
 export type UserListItemDataObject = Pick<
   UserDataObject,
   | 'alumniSinceDate'
@@ -212,6 +218,7 @@ export type UserListItemDataObject = Pick<
 > & {
   _tags: string[];
   teams: UserListItemTeam[];
+  individualProjects: UserListItemProject[];
 };
 export type ListUserDataObject = ListResponse<UserListItemDataObject>;
 export type ListPublicUserDataObject = ListResponse<PublicUserDataObject>;
@@ -342,7 +349,11 @@ export type FetchUsersOptions = FetchOptions<FetchUsersFilter>;
 
 export type UserRole = 'Staff' | 'Member' | 'None';
 
-export const toUserListItem = (user: UserResponse): UserListItemResponse => {
+export type UserListItemSource = Omit<UserListItemResponse, '_tags'>;
+
+export const toUserListItem = (
+  user: UserListItemSource,
+): UserListItemResponse => {
   const {
     alumniSinceDate,
     avatarUrl,
@@ -374,6 +385,7 @@ export const toUserListItem = (user: UserResponse): UserListItemResponse => {
     techSupport,
     social,
     teams,
+    individualProjects,
   } = user;
 
   return {
@@ -410,8 +422,11 @@ export const toUserListItem = (user: UserResponse): UserListItemResponse => {
       id: teamItem.id,
       role: teamItem.role,
       displayName: teamItem.displayName,
+      teamType: teamItem.teamType,
+      teamInactiveSince: teamItem.teamInactiveSince,
       ...(teamItem.awards ? { awards: teamItem.awards } : {}),
     })),
+    individualProjects,
     _tags: tags?.map(({ name }) => name) || [],
   };
 };
