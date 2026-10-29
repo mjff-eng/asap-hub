@@ -72,7 +72,7 @@ const AnalyticsOpenSciencePageBody: React.FC<OpenScienceAnalyticsProps> = ({
         />
       </div>
       <div css={tableHeaderStyles}>
-        <Headline3>{metricOptions[metric]}</Headline3>
+        <Headline3 styleAsHeading={5}>{metricOptions[metric]}</Headline3>
         <Paragraph styles={css({ color: colour.foreground.tertiary })}>
           {metricDescription[metric]}.
         </Paragraph>

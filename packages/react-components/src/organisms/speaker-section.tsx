@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { ReactElement } from 'react';
 
-import { Button } from '../atoms';
+import { Button, Headline4 } from '../atoms';
 import { colour } from '../colors';
 import { rem } from '../pixels';
 import { defaultVisibleRows } from './shared-event-card';
@@ -17,16 +17,6 @@ const sectionStyles = css({
   flexDirection: 'column',
   paddingTop: rem(24),
   ':first-of-type': { paddingTop: 0 },
-});
-
-// A ratio, not `rem`: line-height in `em` resolves against the element's own
-// font size.
-const headingStyles = css({
-  margin: 0,
-  color: colour.foreground.primary,
-  fontSize: rem(16),
-  fontWeight: 700,
-  lineHeight: 24 / 16,
 });
 
 // The last visible row drops its own divider, so the line comes from here.
@@ -72,7 +62,9 @@ const SpeakerSection: React.FC<SpeakerSectionProps> = ({
 
   return (
     <div css={sectionStyles}>
-      <h4 css={headingStyles}>{sectionTitles[variant]}</h4>
+      <Headline4 styleAsHeading="body/bold" noMargin>
+        {sectionTitles[variant]}
+      </Headline4>
       <div
         css={variant === 'external' ? externalRowsStyles : groupedRowsStyles}
         role="list"

@@ -24,7 +24,7 @@ const iconContainerStyles = css({
 
 const textStyles = css({
   color: colour.foreground.info,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   verticalAlign: 'middle',
 });

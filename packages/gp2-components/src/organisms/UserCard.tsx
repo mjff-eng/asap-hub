@@ -7,6 +7,7 @@ import {
   pixels,
   StateTag,
   TagList,
+  text,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
@@ -53,11 +54,8 @@ const textContainerStyles = css({
   alignItems: 'start',
   flexDirection: 'column',
 });
-const titleStyles = css({
+const titleStyles = css(text.headlineStyles[5], {
   margin: `8px 0`,
-  fontWeight: 'bold',
-  fontSize: '26px',
-  lineHeight: '32px',
   overflowWrap: 'anywhere',
 });
 const avatarStyles = css({

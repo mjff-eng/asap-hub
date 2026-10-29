@@ -43,7 +43,7 @@ const identityStyles = css([
 
 const nameStyles = css({
   color: colour.foreground.primary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });
@@ -59,7 +59,7 @@ const messageStyles = css({
 
 const bodyStyles = css({
   color: colour.foreground.primary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });

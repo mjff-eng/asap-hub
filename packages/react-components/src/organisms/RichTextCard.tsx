@@ -23,7 +23,7 @@ const RichTextCard: React.FC<RichTextCardProps> = ({
   collapsible = false,
 }) => (
   <Card>
-    <Headline2 noMargin styleAsHeading={3}>
+    <Headline2 noMargin styleAsHeading={5}>
       {title}
     </Headline2>
     {collapsible ? (

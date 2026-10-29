@@ -19,7 +19,7 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
   const { isOwnProfile } = useContext(UserProfileContext);
   return questions.length || isOwnProfile ? (
     <Card>
-      <Headline2 styleAsHeading={3}>Open Questions</Headline2>
+      <Headline2 styleAsHeading={5}>Open Questions</Headline2>
       <Paragraph accent="tertiary">
         This member is interested in answering the following questions within
         their work.
@@ -29,7 +29,7 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
           {questions
             .flatMap((question, idx) => {
               const component = (
-                <Headline3 key={`q-${idx}`} styleAsHeading={4}>
+                <Headline3 key={`q-${idx}`} styleAsHeading={6}>
                   {question}
                 </Headline3>
               );

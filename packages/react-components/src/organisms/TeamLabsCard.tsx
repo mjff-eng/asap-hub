@@ -55,7 +55,7 @@ const TeamLabsCard: React.FC<TeamLabsCardProps> = ({ labs, isTeamActive }) => {
   return (
     <Card padding={false}>
       <div css={contentStyles}>
-        <Headline3>Labs</Headline3>
+        <Headline3 styleAsHeading={5}>Labs</Headline3>
         <div css={descriptionStyles}>
           <Paragraph accent="tertiary">
             {isTeamActive

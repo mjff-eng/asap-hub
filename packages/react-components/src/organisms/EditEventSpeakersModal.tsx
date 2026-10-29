@@ -80,9 +80,6 @@ const headerStyles = css({
 });
 
 const titleStyles = css({
-  fontSize: rem(26),
-  fontWeight: 700,
-  lineHeight: 32 / 26,
   color: colour.foreground.primary,
 });
 
@@ -111,14 +108,14 @@ const searchOptionStyles = css([
 
 const searchUserNameStyles = css({
   color: colour.foreground.brand,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });
 
 const searchExternalTextStyles = css({
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });
@@ -153,7 +150,7 @@ const groupsTableHeaderStyles = css({
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: rem(24),
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),
@@ -567,7 +564,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   return (
     <Modal padding={false} overrideModalStyles={modalStyles}>
       <header css={headerStyles}>
-        <Headline2 noMargin overrideStyles={titleStyles}>
+        <Headline2 styleAsHeading={4} noMargin overrideStyles={titleStyles}>
           {title}
         </Headline2>
         <Button

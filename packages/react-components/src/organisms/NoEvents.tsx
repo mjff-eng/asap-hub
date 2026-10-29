@@ -26,7 +26,7 @@ const NoEvents: React.FC<{
   return (
     <main css={wrapperStyle}>
       <span css={iconStyles}>{calendarIcon}</span>
-      <Display styleAsHeading={3}>
+      <Display styleAsHeading={4}>
         This {type} doesn’t have any {lowerEventPeriod} events!
       </Display>
       <Paragraph accent="tertiary">

@@ -82,7 +82,9 @@ const ManuscriptVersionImportCard: React.FC<
     <div css={wrapperStyles}>
       <Card padding={false} overrideStyles={cardStyles}>
         <div css={container}>
-          <Headline3 noMargin>Imported Manuscript Version</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            Imported Manuscript Version
+          </Headline3>
           <div css={descriptionStyles}>
             <Paragraph noMargin>
               The details in the form below have been imported from the

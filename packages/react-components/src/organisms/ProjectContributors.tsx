@@ -49,7 +49,7 @@ const teamHeaderStyles = css({
 
 const teamDescriptionStyles = css({
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
   margin: 0,
 });
@@ -81,7 +81,9 @@ const ProjectContributors: React.FC<ProjectContributorsProps> = ({
     return (
       <Card padding={false}>
         <div css={cardContentStyles}>
-          <Headline3 noMargin>Contributors</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            Contributors
+          </Headline3>
           <Paragraph noMargin accent="tertiary" styles={subtitleStyles}>
             View the people contributing to this project.
           </Paragraph>
@@ -102,7 +104,9 @@ const ProjectContributors: React.FC<ProjectContributorsProps> = ({
   return (
     <Card padding={false}>
       <div css={cardContentStyles}>
-        <Headline3 noMargin>Contributors</Headline3>
+        <Headline3 styleAsHeading={5} noMargin>
+          Contributors
+        </Headline3>
         <Paragraph noMargin accent="tertiary" styles={subtitleStyles}>
           View the funded team leading this project and the teams that have
           collaborated on its articles.
@@ -136,7 +140,7 @@ const ProjectContributors: React.FC<ProjectContributorsProps> = ({
               <LinkHeadline
                 href={`/network/teams/${fundedTeam.id}`}
                 level={3}
-                styleAsHeading={4}
+                styleAsHeading={6}
                 noMargin
               >
                 {fundedTeam.displayName}

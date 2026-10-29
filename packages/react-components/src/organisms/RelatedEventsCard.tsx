@@ -103,7 +103,9 @@ const RelatedEventsCard: React.FC<RelatedEventsCardProps> = ({
           ...(displayShowMoreButton ? [{ paddingBottom: 0 }] : []),
         ]}
       >
-        <Headline3 noMargin>Related {hub} Hub Events</Headline3>
+        <Headline3 styleAsHeading={5} noMargin>
+          Related {hub} Hub Events
+        </Headline3>
         <div css={descriptionStyles}>
           <Paragraph noMargin accent="tertiary">
             {description}

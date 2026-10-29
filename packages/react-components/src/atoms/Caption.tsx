@@ -1,15 +1,5 @@
-import { css } from '@emotion/react';
-
 import { colour } from '../colors';
 import { layoutStyles, AccentColorName, captionStyles } from '../text';
-
-const figStyles = css({
-  lineHeight: `${18 / 13.6}em`,
-});
-
-const boldStyles = css({
-  fontWeight: 'bold',
-});
 
 interface CaptionProps {
   readonly children: React.ReactNode;
@@ -27,16 +17,15 @@ const Caption: React.FC<CaptionProps> = ({
 }) => {
   const styles = [
     layoutStyles,
-    captionStyles,
+    bold ? captionStyles.bold : captionStyles.regular,
     accent ? { color: colour.foreground[accent] } : null,
-    bold ? boldStyles : null,
     noMargin ? { margin: 0 } : null,
   ];
 
   return asParagraph ? (
     <p css={styles}>{children}</p>
   ) : (
-    <figcaption css={[...styles, figStyles]}>{children}</figcaption>
+    <figcaption css={styles}>{children}</figcaption>
   );
 };
 

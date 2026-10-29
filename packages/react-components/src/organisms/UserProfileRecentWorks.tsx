@@ -131,11 +131,11 @@ const UserProfileRecentWork: React.FC<UserProfileRecentWorkProps> = ({
       <div>
         <Pill>{typeMap[type]}</Pill>
         {doi ? (
-          <LinkHeadline level={3} styleAsHeading={4} href={doi}>
+          <LinkHeadline level={3} styleAsHeading={6} href={doi}>
             {title}
           </LinkHeadline>
         ) : (
-          <Headline3 styleAsHeading={4}>{title}</Headline3>
+          <Headline3 styleAsHeading={6}>{title}</Headline3>
         )}
 
         {publishDateComponent}
@@ -154,7 +154,7 @@ const UserProfileRecentWorks: React.FC<UserProfileRecentWorksProps> = ({
   return (
     <Card>
       <div css={headerStyles}>
-        <Headline2 styleAsHeading={3}>
+        <Headline2 styleAsHeading={5}>
           Recent Publications ({orcidWorks.length})
         </Headline2>
         <Paragraph accent="tertiary">Via ORCID</Paragraph>

@@ -60,7 +60,7 @@ const avatarStyles = css({
   fontSize: rem(20),
 });
 const nameStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',

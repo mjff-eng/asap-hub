@@ -91,7 +91,7 @@ const GrantDocumentGrantsCard: React.FC<GrantDocumentGrantsCardProps> = ({
   supplement,
 }) => (
   <Card>
-    <Headline2 styleAsHeading={3} noMargin>
+    <Headline2 styleAsHeading={5} noMargin>
       Grants
     </Headline2>
     <div css={subtitleStyles}>

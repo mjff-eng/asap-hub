@@ -41,7 +41,9 @@ const buttonWrapperStyle = css({
 const OnboardingWelcome: React.FC<Record<string, never>> = () => (
   <div css={containerStyles}>
     <header>
-      <Headline2 noMargin>Welcome to the GP2 Hub</Headline2>
+      <Headline2 styleAsHeading={4} noMargin>
+        Welcome to the GP2 Hub
+      </Headline2>
       <Subtitle accent="tertiary">
         The internal platform for those within the Global Parkinson's Genetics
         Program

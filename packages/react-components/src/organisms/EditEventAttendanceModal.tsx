@@ -11,6 +11,7 @@ import {
 import {
   Button,
   Headline2,
+  Headline3,
   Link,
   MultiSelect,
   MultiSelectOptionsType,
@@ -77,9 +78,6 @@ const headerStyles = css({
 });
 
 const titleStyles = css({
-  fontSize: rem(26),
-  fontWeight: 700,
-  lineHeight: 32 / 26,
   color: colour.foreground.primary,
 });
 
@@ -119,24 +117,16 @@ const uploadTextStyles = css({
   flexDirection: 'column',
 });
 
-const sectionTitleStyles = css({
-  margin: 0,
-  fontSize: rem(17),
-  fontWeight: 700,
-  lineHeight: 24 / 17,
-  color: colour.foreground.primary,
-});
-
 const optionalLabelStyles = css({ fontWeight: 400 });
 
 const SectionTitle: React.FC<{
-  children: React.ReactNode;
+  children: string;
   optional?: boolean;
 }> = ({ children, optional = false }) => (
-  <h3 css={sectionTitleStyles}>
+  <Headline3 styleAsHeading="body/bold" noMargin>
     {children}
     {optional && <span css={optionalLabelStyles}> (optional)</span>}
-  </h3>
+  </Headline3>
 );
 
 const buttonIconGapReset = { '> svg + span': { marginLeft: 0 } } as const;
@@ -193,7 +183,7 @@ const statsGroupStyles = css({
 });
 
 const attendeesStatStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   color: colour.foreground.tertiary,
 });
@@ -249,7 +239,7 @@ const attendeesCardStyles = (enabled: boolean) =>
   });
 
 // Widths in pixels because `rem` here emits `em`, which would resolve against
-// each element's own font size: the header's 14px against the rows' 17px.
+// each element's own font size: the header's 14px against the rows' 16px.
 const attendanceGridStyles = css({
   display: 'grid',
   gridTemplateColumns: '1fr 40px 24px',
@@ -261,9 +251,9 @@ const attendanceGridStyles = css({
 });
 
 const attendeesTableHeaderStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
-  lineHeight: 24 / 17,
+  lineHeight: 24 / 16,
   letterSpacing: rem(0.1),
   color: colour.foreground.primary,
   paddingBottom: rem(12),
@@ -301,7 +291,7 @@ const groupHeaderStyles = css({
 });
 
 // A ratio, not `rem`: line-height in `em` resolves against the element's own
-// font size, so `rem(16)` here would render 16/17 x 14px.
+// font size, so `rem(16)` here would render 14px, not 16px.
 const groupLineStyles = css({
   margin: 0,
   fontSize: rem(14),
@@ -707,7 +697,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   return (
     <Modal padding={false} overrideModalStyles={modalStyles}>
       <header css={headerStyles}>
-        <Headline2 noMargin overrideStyles={titleStyles}>
+        <Headline2 styleAsHeading={4} noMargin overrideStyles={titleStyles}>
           {title}
         </Headline2>
         <Button

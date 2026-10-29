@@ -37,7 +37,7 @@ const tabletAndAbove = css({
 const NotFoundPage: React.FC<Record<string, never>> = () => (
   <div css={styles}>
     <div>
-      <Display styleAsHeading={2}>
+      <Display styleAsHeading={4}>
         Sorry! We can’t seem to find that page.
       </Display>
       <Paragraph>

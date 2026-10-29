@@ -2,13 +2,11 @@ import { isValidElement } from 'react';
 import { CSSObject } from '@emotion/react';
 
 import {
-  rem,
-  vminLinearCalc,
-  mobileScreen,
-  largeDesktopScreen,
-  lineHeight,
-  perRem,
-} from './pixels';
+  casFontFamily,
+  casTextStyles,
+  CasTextStyle,
+} from './cas-tokens.generated';
+import { rem } from './pixels';
 
 export type TextChild = React.ReactText | boolean | null | undefined;
 export type TextChildren = TextChild | ReadonlyArray<TextChild>;
@@ -67,19 +65,17 @@ export const isAllowedChildren = (
   return false;
 };
 
+const body = casTextStyles.body.regular;
+
 export const fontStyles = {
-  fontFamily:
-    "Roboto, 'Roboto Slab', Calibri, Mukta, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif",
+  fontFamily: `${casFontFamily.body}, 'Roboto Slab', Calibri, Mukta, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif`,
   WebkitFontSmoothing: 'antialiased',
   MozOsxFontSmoothing: 'auto',
 
   // This value must be declared in pixels so that the rest of the UI inherits its base value from it
-  fontSize: `${perRem}px`,
-  lineHeight: rem(lineHeight),
+  fontSize: `${body.fontSize}px`,
+  lineHeight: rem(body.lineHeight),
 } as const;
-export const captionStyles = {
-  fontSize: rem(14),
-};
 export const layoutStyles = {
   marginTop: '12px',
   marginBottom: '12px',
@@ -88,57 +84,40 @@ export const layoutStyles = {
     display: 'none',
   },
 } as const;
+const textStyle = ({
+  family,
+  fontSize,
+  lineHeight,
+  fontWeight,
+}: CasTextStyle): CSSObject => ({
+  fontFamily: casFontFamily[family],
+  fontSize: `${fontSize}px`,
+  lineHeight: `${lineHeight}px`,
+  fontWeight,
+});
+
+export const captionStyles = {
+  regular: textStyle(casTextStyles.caption.regular),
+  bold: textStyle(casTextStyles.caption.bold),
+};
+
+// Keyed by Figma text style: 2 to 6 are heading/2 to heading/6. Each heading
+// component defaults to the style closest to its size before CAS (Elena,
+// 22 Oct 2026); usages pass the style of their role (Elena, 23 Oct 2026).
 export const headlineStyles = {
-  1: {
-    fontWeight: 'bold',
-    fontFamily: 'Roboto Slab',
-    fontSize: vminLinearCalc(
-      mobileScreen,
-      35.25,
-      largeDesktopScreen,
-      41.5,
-      'px',
-    ),
-    lineHeight: vminLinearCalc(mobileScreen, 42, largeDesktopScreen, 48, 'px'),
-  } as CSSObject,
-  2: {
-    fontWeight: 'bold',
-    fontFamily: 'Roboto Slab',
-    fontSize: vminLinearCalc(mobileScreen, 30, largeDesktopScreen, 30, 'px'),
-    lineHeight: vminLinearCalc(mobileScreen, 30, largeDesktopScreen, 42, 'px'),
-  } as CSSObject,
-  3: {
-    fontWeight: 'bold',
-    fontFamily: 'Roboto Slab',
-    fontSize: vminLinearCalc(
-      mobileScreen,
-      24.48,
-      largeDesktopScreen,
-      26.56,
-      'px',
-    ),
-    lineHeight: vminLinearCalc(mobileScreen, 30, largeDesktopScreen, 36, 'px'),
-  } as CSSObject,
-  4: {
-    fontWeight: 'bold',
-    fontFamily: 'Roboto Slab',
-    fontSize: vminLinearCalc(
-      mobileScreen,
-      20.4,
-      largeDesktopScreen,
-      21.25,
-      'px',
-    ),
-    lineHeight: vminLinearCalc(mobileScreen, 24, largeDesktopScreen, 30, 'px'),
-  } as CSSObject,
-  5: {
+  2: textStyle(casTextStyles.heading[2].bold),
+  3: textStyle(casTextStyles.heading[3].bold),
+  4: textStyle(casTextStyles.heading[4].bold),
+  5: textStyle(casTextStyles.heading[5].bold),
+  6: textStyle(casTextStyles.heading[6].bold),
+  'body/bold': {
     ...fontStyles,
-    fontFamily: 'Roboto',
-    fontWeight: 'bold',
+    fontFamily: casFontFamily.body,
+    fontWeight: casTextStyles.body.bold.fontWeight,
   } as CSSObject,
-  6: {
+  'body/regular': {
     ...fontStyles,
-    fontWeight: 'normal',
+    fontWeight: body.fontWeight,
   } as CSSObject,
 } as const;
 

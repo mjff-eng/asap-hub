@@ -61,7 +61,7 @@ const containerStyle = css({
 });
 
 const footerStyles = css({
-  ...captionStyles,
+  ...captionStyles.regular,
   color: colour.foreground.tertiary,
   justifySelf: 'flex-end',
 });
@@ -117,7 +117,7 @@ const TutorialCard: React.FC<TutorialCardProps> = ({
         <div css={containerStyle}>
           <div css={headerStyles}>
             <div css={{ paddingRight: rem(15) }}>
-              <LinkHeadline href={href} level={4}>
+              <LinkHeadline styleAsHeading={5} href={href} level={4}>
                 {title}
               </LinkHeadline>
             </div>

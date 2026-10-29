@@ -21,7 +21,7 @@ const TeamMembersSection: React.FC<TeamMembersSectionProps> = ({
   hrefText,
 }) => (
   <Card>
-    <Headline2 styleAsHeading={3}>{title}</Headline2>
+    <Headline2 styleAsHeading={5}>{title}</Headline2>
     <MembersList members={members} />
     {href && (
       <div css={{ display: 'inline-block' }}>

@@ -77,7 +77,7 @@ export const squareIconButtonStyles = (enabled: boolean) =>
 // Not the Pill atom: it brings a border and its own <small> type scale.
 const findingsPillFontSize = 14;
 // `rem` resolves against the element's own font size, so inside the 14px pill
-// it would shrink every dimension to 14/17.
+// it would shrink every dimension to 14/16.
 const pillEm = (px: number) => `${px / findingsPillFontSize}em`;
 
 export const findingsPillStyles = (shared: boolean) =>

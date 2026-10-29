@@ -136,7 +136,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({ speakers }) => {
                   {value && (
                     <>
                       <div css={headingListStyles}>
-                        <Subtitle noMargin styleAsHeading={5}>
+                        <Subtitle noMargin styleAsHeading="body/bold">
                           {headings[idx]}:
                         </Subtitle>
                       </div>

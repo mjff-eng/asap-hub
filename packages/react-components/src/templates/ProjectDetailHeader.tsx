@@ -91,7 +91,7 @@ const metadataRowStyles = css({
   display: 'flex',
   alignItems: 'flex-start',
   gap: rem(8),
-  fontSize: rem(17),
+  fontSize: rem(16),
   color: colour.foreground.tertiary,
 });
 const iconContainerStyles = css({
@@ -265,7 +265,7 @@ const ProjectDetailHeader = (project: ProjectDetailHeaderProps) => {
 
           {/* Title */}
           <div css={titleStyles}>
-            <Display styleAsHeading={2}>{project.title}</Display>
+            <Display styleAsHeading={4}>{project.title}</Display>
           </div>
 
           {/* Action Buttons */}

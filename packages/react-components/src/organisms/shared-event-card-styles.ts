@@ -110,7 +110,7 @@ export const tableWrapperStyles = css({
 export const headerCellStyles = css({
   textAlign: 'left',
   color: colour.foreground.primary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),

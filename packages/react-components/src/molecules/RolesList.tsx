@@ -10,7 +10,7 @@ const containerStyles = css({
 
 const roleTextStyles = css({
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
 });
 
 type RolesListProps = {

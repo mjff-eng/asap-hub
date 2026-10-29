@@ -66,7 +66,7 @@ const DeliverablesCard: React.FC<DeliverablesCardProps> = ({
   return (
     <Card padding={false}>
       <div css={paddingStyles}>
-        <Headline3>Purpose</Headline3>
+        <Headline3 styleAsHeading={5}>Purpose</Headline3>
         <Paragraph accent="tertiary">
           The deliverables of this working group are:
         </Paragraph>

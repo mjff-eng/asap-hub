@@ -66,7 +66,7 @@ const TutorialHeaderCard: React.FC<TutorialHeaderCardProps> = ({
   <Card>
     <div css={headerStyle}>
       <div css={{ paddingRight: rem(15) }}>
-        <Display styleAsHeading={3}>{title}</Display>
+        <Display styleAsHeading={4}>{title}</Display>
       </div>
       {link ? <ExternalLink label={linkText} href={link} /> : null}
     </div>
@@ -79,7 +79,7 @@ const TutorialHeaderCard: React.FC<TutorialHeaderCardProps> = ({
     <div css={associationStyles}>
       <AssociationList type="Team" inline associations={teams} />
     </div>
-    <div css={[timestampStyles, captionStyles]}>
+    <div css={[timestampStyles, captionStyles.regular]}>
       <span>Date added: {formatDate(new Date(created))}</span>
       {lastUpdated && (
         <span> . Last updated: {formatDate(new Date(lastUpdated))}</span>

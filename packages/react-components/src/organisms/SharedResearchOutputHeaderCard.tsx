@@ -99,7 +99,7 @@ const SharedResearchOutputHeaderCard: React.FC<
       link={link}
     />
     <span css={headerStyle}>
-      <Display styleAsHeading={3}>{title}</Display>
+      <Display styleAsHeading={4}>{title}</Display>
       {!published && (
         <StateTag
           label={isInReview ? 'In Review' : 'Draft'}
@@ -154,7 +154,7 @@ const SharedResearchOutputHeaderCard: React.FC<
         />
       )}
     </div>
-    <div css={[timestampStyles, captionStyles]}>
+    <div css={[timestampStyles, captionStyles.regular]}>
       <span>Date added: {formatDate(new Date(addedDate || created))} · </span>
       <span>Last updated: {formatDate(new Date(lastUpdatedPartial))}</span>
     </div>

@@ -122,7 +122,7 @@ const GrantDocumentHeaderCard: React.FC<GrantDocumentHeaderCardProps> = ({
         </div>
       </div>
       <div css={titleStyles}>
-        <Display styleAsHeading={3}>{title}</Display>
+        <Display styleAsHeading={4}>{title}</Display>
       </div>
       <div css={associationsStyles}>
         <AssociationRow

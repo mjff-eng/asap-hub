@@ -62,7 +62,7 @@ const initialsStyle = css({
   justifyContent: 'stretch',
   alignContent: 'stretch',
 });
-const textStyle = css(fontStyles, headlineStyles[3], {
+const textStyle = css(fontStyles, headlineStyles[4], {
   dominantBaseline: 'central',
   textAnchor: 'middle',
   fontSize: '2.25em',

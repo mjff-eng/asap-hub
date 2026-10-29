@@ -114,13 +114,13 @@ const OutputCard: React.FC<OutputCardProps> = ({
       </div>
       {detailedView ? (
         <span css={titleStyles}>
-          <Display styleAsHeading={3}>{title}</Display>
+          <Display styleAsHeading={4}>{title}</Display>
         </span>
       ) : (
         <div css={css({ margin: `${rem(12)} 0 ${rem(24)}` })}>
           <LinkHeadline
             level={2}
-            styleAsHeading={4}
+            styleAsHeading={5}
             href={gp2Routing.outputs({}).output({ outputId: id }).$}
           >
             {title}

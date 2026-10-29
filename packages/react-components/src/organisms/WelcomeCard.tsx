@@ -34,7 +34,7 @@ const Welcome: React.FC<WelcomeProps> = ({
     <Card>
       <article css={styles}>
         <header>
-          <Display styleAsHeading={2}>{title}</Display>
+          <Display styleAsHeading={4}>{title}</Display>
           <Paragraph accent="tertiary">{content}</Paragraph>
         </header>
 

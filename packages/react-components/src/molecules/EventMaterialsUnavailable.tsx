@@ -45,7 +45,7 @@ const EventMaterialUnavailable: React.FC<Record<string, never>> = () => {
 
   return (
     <Card accent="placeholder">
-      <Headline2 styleAsHeading={3}>
+      <Headline2 styleAsHeading={4}>
         No additional meeting materials available for this event
       </Headline2>
       <Paragraph accent="tertiary">

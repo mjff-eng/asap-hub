@@ -47,7 +47,7 @@ const columnHeaderStyles = css({
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: rem(24),
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),
@@ -215,7 +215,9 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
     return (
       <Card>
         <div css={emptyStateStyles}>
-          <Headline3 noMargin>Speakers</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            Speakers
+          </Headline3>
           {onAddSpeaker ? (
             <>
               <Paragraph noMargin accent="tertiary">
@@ -283,7 +285,9 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
     <Card padding={false}>
       <div css={contentStyles}>
         <div css={headerStyles}>
-          <Headline3 noMargin>Speakers</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            Speakers
+          </Headline3>
           <div css={actionsStyles}>
             {onExport && (
               <Button

@@ -92,9 +92,6 @@ const headerTitleStyles = css({
 });
 
 const titleStyles = css({
-  fontSize: rem(26),
-  fontWeight: 700,
-  lineHeight: rem(32),
   color: colour.foreground.primary,
 });
 
@@ -155,7 +152,7 @@ const addButtonStyles = css({
 const errorStyles = css({
   margin: 0,
   color: colour.foreground.error,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
   letterSpacing: 0,
@@ -165,7 +162,7 @@ const summaryStyles = css({
   display: 'flex',
   alignItems: 'center',
   flexWrap: 'wrap',
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
   color: colour.foreground.tertiary,
 });
@@ -200,7 +197,7 @@ const sectionHeaderStyles = css({
   border: 'none',
   background: 'none',
   cursor: 'pointer',
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
   textAlign: 'left',
   color: colour.foreground.primary,
@@ -294,7 +291,7 @@ const unmatchedRowStyles = css({
 });
 
 const unmatchedTextStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
   color: colour.foreground.tertiary,
 });
@@ -326,7 +323,7 @@ const addSuggestionButtonStyles = css({
 const emptyResultStyles = css({
   margin: 0,
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });
@@ -600,7 +597,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
           >
             {chevronLeftIcon}
           </Button>
-          <Headline2 noMargin overrideStyles={titleStyles}>
+          <Headline2 styleAsHeading={4} noMargin overrideStyles={titleStyles}>
             Upload a list
           </Headline2>
         </div>

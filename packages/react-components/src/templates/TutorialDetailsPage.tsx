@@ -67,14 +67,14 @@ const TutorialDetailsPage: React.FC<TutorialDetailsPageProps> = ({
           <Card>
             {text && (
               <div css={{ paddingBottom: rem(12) }}>
-                <Headline2>Description</Headline2>
+                <Headline2 styleAsHeading={5}>Description</Headline2>
                 <RichText text={text} />
               </div>
             )}
             {text && !!tags.length && <Divider />}
             {!!tags.length && (
               <>
-                <Headline2>Tags</Headline2>
+                <Headline2 styleAsHeading={5}>Tags</Headline2>
                 <Paragraph noMargin accent="tertiary">
                   Explore keywords related to skills, techniques, resources, and
                   tools.

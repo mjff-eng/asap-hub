@@ -7,7 +7,7 @@ interface DisplayProps {
 }
 const Display: React.FC<DisplayProps> = ({
   children,
-  styleAsHeading = 1,
+  styleAsHeading = 2,
   id,
 }) => (
   <h1 css={[layoutStyles, headlineStyles[styleAsHeading]]} id={id}>

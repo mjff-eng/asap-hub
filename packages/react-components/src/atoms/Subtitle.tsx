@@ -16,7 +16,7 @@ interface SubtitleProps {
 }
 const Subtitle: React.FC<SubtitleProps> = ({
   children,
-  styleAsHeading = 5,
+  styleAsHeading = 'body/bold',
   bold,
   id,
   accent,

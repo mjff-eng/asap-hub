@@ -128,7 +128,7 @@ const AnalyticsCollaborationPageBody: React.FC<CollaborationAnalyticsProps> = ({
         </div>
       )}
       <div css={tableHeaderStyles}>
-        <Headline3>{header}</Headline3>
+        <Headline3 styleAsHeading={5}>{header}</Headline3>
         <Paragraph>{description}.</Paragraph>
       </div>
       <AnalyticsControls

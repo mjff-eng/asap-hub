@@ -182,7 +182,7 @@ const APCCoverageModal: React.FC<APCCoverageModalProps> = ({
               {crossIcon}
             </Button>
           </div>
-          <Headline3>APC Coverage</Headline3>
+          <Headline3 styleAsHeading={5}>APC Coverage</Headline3>
         </header>
 
         <div css={modalContentStyles}>

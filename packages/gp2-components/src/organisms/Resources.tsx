@@ -114,7 +114,9 @@ const Resources: React.FC<ResourcesProps> = ({
 
       <Card>
         <div css={[rowStyles, buttonStyles]}>
-          <Headline3 noMargin>Workspace Resources</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            Workspace Resources
+          </Headline3>
           {add && (
             <div css={editButtonStyles}>
               <Link href={add} fullWidth buttonStyle noMargin small>
@@ -178,7 +180,7 @@ const Resources: React.FC<ResourcesProps> = ({
                       </span>
                     </LinkHeadline>
                   ) : (
-                    <Subtitle styleAsHeading={4} noMargin>
+                    <Subtitle styleAsHeading={6} noMargin>
                       {resource.title}
                     </Subtitle>
                   )}

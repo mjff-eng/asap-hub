@@ -84,7 +84,7 @@ const ManuscriptFormModals: React.FC<ManuscriptFormModalsProps> = ({
                 {crossIcon}
               </Button>
             </div>
-            <Headline3>Submit manuscript?</Headline3>
+            <Headline3 styleAsHeading={5}>Submit manuscript?</Headline3>
           </header>
 
           <Paragraph>
@@ -120,7 +120,7 @@ const ManuscriptFormModals: React.FC<ManuscriptFormModalsProps> = ({
                 {crossIcon}
               </Button>
             </div>
-            <Headline3>
+            <Headline3 styleAsHeading={5}>
               Cancel manuscript {isEditMode ? 'edits' : 'submission'}?
             </Headline3>
           </header>
