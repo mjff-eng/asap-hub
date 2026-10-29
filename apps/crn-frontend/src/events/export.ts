@@ -7,12 +7,11 @@ import {
 } from '@asap-hub/frontend-utils';
 import { EventResponse } from '@asap-hub/model';
 import {
-  groupFindings,
   groupLabel,
-  SpeakerExternalGroup,
   SpeakerGroup,
   SpeakerProjectGroup,
   SpeakerTeamGroup,
+  summarizeSpeakerGroups,
 } from '@asap-hub/react-components';
 import { format } from 'date-fns';
 
@@ -22,14 +21,14 @@ export const eventSpeakersFields = {
   description: 'Description',
   startDate: 'Event Start Date',
   endDate: 'Event End Date',
+  interestGroupName: 'Interest Group Name',
   totalSpeakers: 'Total # of Speakers',
-  crnSpeakerCount: '# CRN Speakers',
-  externalSpeakerCount: '# External Speakers',
-  teamCount: '# Teams',
-  teamsWithFindingsCount: '# Teams With Findings',
-  teamsWithFindings: 'With Findings List',
-  teamsWithoutFindings: 'Without Findings List',
-  crnSpeakers: 'CRN Speakers',
+  teamSpeakerCount: '# of Speakers from Teams',
+  projectSpeakerCount: '# of Speakers from Individual Projects',
+  externalSpeakerCount: '# of External Speakers',
+  findingsPercentage: '% of Speakers Shared Preliminary Findings',
+  teamSpeakers: 'Team Speakers',
+  projectSpeakers: 'Individual Project Speakers',
   externalSpeakers: 'External Speakers',
 };
 
@@ -38,42 +37,49 @@ export type EventSpeakersCSV = Record<
   CSVValue
 >;
 
-const isTeamGroup = (group: SpeakerGroup): group is SpeakerTeamGroup =>
-  group.variant === 'team';
+// Findings are only recorded once the event is over, as on the Speakers card.
+const speakerEntry = (
+  {
+    displayName,
+    isExternal,
+    preliminaryFindingsShared,
+  }: {
+    readonly displayName: string;
+    readonly isExternal?: boolean;
+    readonly preliminaryFindingsShared: boolean;
+  },
+  hasFinished: boolean,
+) =>
+  `${displayName}${isExternal ? ' (Non CRN)' : ''}${
+    hasFinished ? ` [${preliminaryFindingsShared ? 'Y' : 'N'}]` : ''
+  }`;
 
-const isExternalGroup = (group: SpeakerGroup): group is SpeakerExternalGroup =>
-  group.variant === 'external';
-
-const isCrnGroup = (
-  group: SpeakerGroup,
-): group is SpeakerTeamGroup | SpeakerProjectGroup =>
-  group.variant === 'team' || group.variant === 'project';
+const groupEntries = (
+  groups: ReadonlyArray<SpeakerTeamGroup | SpeakerProjectGroup>,
+  hasFinished: boolean,
+) =>
+  groups
+    .flatMap((group) =>
+      group.users.map(
+        (user) => `${groupLabel(group)} - ${speakerEntry(user, hasFinished)}`,
+      ),
+    )
+    .join('; ');
 
 export const eventSpeakersToCSV = (
   event: EventResponse,
   groups: SpeakerGroup[],
+  hasFinished: boolean,
 ): EventSpeakersCSV => {
-  const teamGroups = groups.filter(isTeamGroup);
-
-  const teamsWithFindings = teamGroups
-    .filter((group) => groupFindings(group).hasAnyShared)
-    .map(({ teamName }) => teamName);
-
-  const teamsWithoutFindings = teamGroups
-    .filter((group) => !groupFindings(group).hasAnyShared)
-    .map(({ teamName }) => teamName);
-
-  const crnSpeakers = groups
-    .filter(isCrnGroup)
-    .flatMap((group) =>
-      group.users.map(
-        ({ displayName }) => `${groupLabel(group)}-${displayName}`,
-      ),
-    );
-
-  const externalSpeakers = groups
-    .filter(isExternalGroup)
-    .flatMap(({ users }) => users.map(({ displayName }) => displayName));
+  const {
+    teamGroups,
+    projectGroups,
+    externalUsers,
+    teamSpeakers,
+    projectSpeakers,
+    totalSpeakers,
+    findingsPercentage,
+  } = summarizeSpeakerGroups(groups);
 
   // Counts are stringified because emptyToNA is constrained to CSVValue
   // (string | undefined | boolean). A falsy fallback would turn 0 into NA.
@@ -82,21 +88,25 @@ export const eventSpeakersToCSV = (
     description: htmlToCsvText(event.description),
     startDate: event.startDate,
     endDate: event.endDate,
-    totalSpeakers: String(crnSpeakers.length + externalSpeakers.length),
-    crnSpeakerCount: String(crnSpeakers.length),
-    externalSpeakerCount: String(externalSpeakers.length),
-    teamCount: String(teamGroups.length),
-    teamsWithFindingsCount: String(teamsWithFindings.length),
-    teamsWithFindings: teamsWithFindings.join('; '),
-    teamsWithoutFindings: teamsWithoutFindings.join('; '),
-    crnSpeakers: crnSpeakers.join('; '),
-    externalSpeakers: externalSpeakers.join('; '),
+    interestGroupName: event.interestGroup?.name,
+    totalSpeakers: String(totalSpeakers),
+    teamSpeakerCount: String(teamSpeakers),
+    projectSpeakerCount: String(projectSpeakers),
+    externalSpeakerCount: String(externalUsers.length),
+    findingsPercentage:
+      hasFinished && totalSpeakers > 0 ? `${findingsPercentage}%` : undefined,
+    teamSpeakers: groupEntries(teamGroups, hasFinished),
+    projectSpeakers: groupEntries(projectGroups, hasFinished),
+    externalSpeakers: externalUsers
+      .map((user) => speakerEntry(user, hasFinished))
+      .join('; '),
   });
 };
 
 export const downloadEventSpeakers = (
   event: EventResponse,
   groups: SpeakerGroup[],
+  hasFinished: boolean,
 ): void => {
   const csvStream = createCsvFileStream(
     `EventSpeakers_${sanitizeFileNamePart(event.title, 'event')}_${format(
@@ -105,6 +115,6 @@ export const downloadEventSpeakers = (
     )}.csv`,
     { columns: eventSpeakersFields, header: true },
   );
-  csvStream.write(eventSpeakersToCSV(event, groups));
+  csvStream.write(eventSpeakersToCSV(event, groups, hasFinished));
   csvStream.end();
 };

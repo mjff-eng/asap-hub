@@ -72,6 +72,50 @@ export const groupLabel = (
   group: SpeakerTeamGroup | SpeakerProjectGroup,
 ): string => (group.variant === 'team' ? group.teamName : group.projectName);
 
+// The Speakers card and the speakers CSV both read these figures, so the
+// download always matches what is on screen.
+export const summarizeSpeakerGroups = (groups: ReadonlyArray<SpeakerGroup>) => {
+  const teamGroups = groups.filter(
+    (group): group is SpeakerTeamGroup =>
+      group.variant === 'team' && group.users.length > 0,
+  );
+  const projectGroups = groups.filter(
+    (group): group is SpeakerProjectGroup =>
+      group.variant === 'project' && group.users.length > 0,
+  );
+  const externalUsers = groups.flatMap((group) =>
+    group.variant === 'external' ? group.users : [],
+  );
+
+  const teamSpeakers = teamGroups.reduce(
+    (total, group) => total + group.users.length,
+    0,
+  );
+  const projectSpeakers = projectGroups.reduce(
+    (total, group) => total + group.users.length,
+    0,
+  );
+  const totalSpeakers = teamSpeakers + projectSpeakers + externalUsers.length;
+  const sharedSpeakers = [
+    ...teamGroups,
+    ...projectGroups,
+    { users: externalUsers },
+  ].reduce((total, group) => total + groupFindings(group).shared, 0);
+
+  return {
+    teamGroups,
+    projectGroups,
+    externalUsers,
+    teamSpeakers,
+    projectSpeakers,
+    totalSpeakers,
+    sharedSpeakers,
+    findingsPercentage: totalSpeakers
+      ? Math.round((sharedSpeakers / totalSpeakers) * 100)
+      : 0,
+  };
+};
+
 export const sectionTitles = {
   team: 'From Team Projects',
   project: 'From Individual Projects',

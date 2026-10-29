@@ -1,9 +1,12 @@
 import {
   groupFindings,
   groupLabel,
+  SpeakerExternalGroup,
   SpeakerGroup,
   SpeakerGroupUser,
+  SpeakerProjectGroup,
   SpeakerTeamGroup,
+  summarizeSpeakerGroups,
 } from '../speaker-group';
 
 const getUser = (
@@ -68,6 +71,73 @@ describe('groupLabel', () => {
         users: [],
       }),
     ).toBe('Project One');
+  });
+});
+
+describe('summarizeSpeakerGroups', () => {
+  const projectGroup: SpeakerProjectGroup = {
+    id: 'project-1',
+    variant: 'project',
+    projectName: 'Project One',
+    users: [getUser({ id: 'user-3', preliminaryFindingsShared: true })],
+  };
+  const externalGroup: SpeakerExternalGroup = {
+    id: 'external',
+    variant: 'external',
+    users: [
+      {
+        id: 'external-0',
+        displayName: 'Jane Doe',
+        preliminaryFindingsShared: false,
+      },
+    ],
+  };
+
+  test('Should count the speakers of each section and those who shared', () => {
+    const teamGroup = getTeamGroup([
+      getUser({ id: 'user-1', preliminaryFindingsShared: true }),
+      getUser({ id: 'user-2' }),
+    ]);
+
+    expect(
+      summarizeSpeakerGroups([teamGroup, projectGroup, externalGroup]),
+    ).toEqual({
+      teamGroups: [teamGroup],
+      projectGroups: [projectGroup],
+      externalUsers: externalGroup.users,
+      teamSpeakers: 2,
+      projectSpeakers: 1,
+      totalSpeakers: 4,
+      sharedSpeakers: 2,
+      findingsPercentage: 50,
+    });
+  });
+
+  test('Should leave out groups without speakers', () => {
+    const summary = summarizeSpeakerGroups([
+      getTeamGroup([]),
+      { ...projectGroup, users: [] },
+    ]);
+
+    expect(summary.teamGroups).toEqual([]);
+    expect(summary.projectGroups).toEqual([]);
+    expect(summary.totalSpeakers).toBe(0);
+  });
+
+  test('Should round the findings percentage', () => {
+    expect(
+      summarizeSpeakerGroups([
+        getTeamGroup([
+          getUser({ id: 'user-1', preliminaryFindingsShared: true }),
+          getUser({ id: 'user-2' }),
+          getUser({ id: 'user-3' }),
+        ]),
+      ]).findingsPercentage,
+    ).toBe(33);
+  });
+
+  test('Should report a zero findings percentage when there are no speakers', () => {
+    expect(summarizeSpeakerGroups([]).findingsPercentage).toBe(0);
   });
 });
 

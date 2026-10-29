@@ -1,5 +1,8 @@
 import { createCsvFileStream } from '@asap-hub/frontend-utils';
-import { createEventResponse } from '@asap-hub/fixtures';
+import {
+  createEventResponse,
+  createInterestGroupResponse,
+} from '@asap-hub/fixtures';
 import { EventResponse } from '@asap-hub/model';
 import {
   SpeakerGroup,
@@ -88,186 +91,189 @@ const externalGroup = (
   })),
 });
 
-describe('eventSpeakersToCSV', () => {
-  test('Should render team and external speakers with counts', () => {
-    const row = eventSpeakersToCSV(getEvent(), [teamGroup(), externalGroup()]);
-
-    expect(row).toMatchObject({
-      eventTitle: 'Kick-off',
-      totalSpeakers: '3',
-      crnSpeakerCount: '2',
-      externalSpeakerCount: '1',
-      teamCount: '1',
-      teamsWithFindingsCount: '1',
-      teamsWithFindings: 'Alessi',
-      teamsWithoutFindings: 'NA',
-      crnSpeakers: 'Alessi-Padmini; Alessi-Marco',
-      externalSpeakers: 'Jane Doe',
-    });
-  });
-
-  test('Should stay identical to the pre-redesign row for a team-only event', () => {
-    const row = eventSpeakersToCSV(getEvent(), [
-      teamGroup(),
-      teamGroup({
-        id: 'team-2',
-        teamName: 'Barabasi',
-        users: [speaker({ id: 'u3', displayName: 'Ana' })],
+const mixedGroups = (): SpeakerGroup[] => [
+  teamGroup({
+    users: [
+      speaker({ preliminaryFindingsShared: true }),
+      speaker({ id: 'u2', displayName: 'Marco' }),
+      speaker({ id: 'u3', displayName: 'Jane Doe', isExternal: true }),
+    ],
+  }),
+  projectGroup({
+    users: [
+      speaker({
+        id: 'u9',
+        displayName: 'Nadia',
+        preliminaryFindingsShared: true,
       }),
-      externalGroup(),
-    ]);
+    ],
+  }),
+  externalGroup(['John Roe']),
+];
+
+describe('eventSpeakersToCSV', () => {
+  test('Should render every column for a finished event', () => {
+    const row = eventSpeakersToCSV(
+      getEvent({
+        interestGroup: {
+          ...createInterestGroupResponse(),
+          name: 'Parkinson IG',
+        },
+      }),
+      mixedGroups(),
+      true,
+    );
 
     expect(row).toEqual({
       eventTitle: 'Kick-off',
       description: 'Intro session',
       startDate: '2026-08-19T10:00:00.000Z',
       endDate: '2026-08-19T11:00:00.000Z',
-      totalSpeakers: '4',
-      crnSpeakerCount: '3',
+      interestGroupName: 'Parkinson IG',
+      totalSpeakers: '5',
+      teamSpeakerCount: '3',
+      projectSpeakerCount: '1',
       externalSpeakerCount: '1',
-      teamCount: '2',
-      teamsWithFindingsCount: '1',
-      teamsWithFindings: 'Alessi',
-      teamsWithoutFindings: 'Barabasi',
-      crnSpeakers: 'Alessi-Padmini; Alessi-Marco; Barabasi-Ana',
-      externalSpeakers: 'Jane Doe',
+      findingsPercentage: '40%',
+      teamSpeakers:
+        'Alessi - Padmini [Y]; Alessi - Marco [N]; Alessi - Jane Doe (Non CRN) [N]',
+      projectSpeakers: 'Alpha Project - Nadia [Y]',
+      externalSpeakers: 'John Roe [N]',
     });
   });
 
-  test('Should list project group speakers alongside team speakers', () => {
-    const row = eventSpeakersToCSV(getEvent(), [teamGroup(), projectGroup()]);
+  test('Should leave findings out for an event that has not finished', () => {
+    const row = eventSpeakersToCSV(getEvent(), mixedGroups(), false);
 
     expect(row).toMatchObject({
-      totalSpeakers: '3',
-      crnSpeakerCount: '3',
-      crnSpeakers: 'Alessi-Padmini; Alessi-Marco; Alpha Project-Nadia',
+      totalSpeakers: '5',
+      teamSpeakerCount: '3',
+      projectSpeakerCount: '1',
+      externalSpeakerCount: '1',
+      findingsPercentage: 'NA',
+      teamSpeakers:
+        'Alessi - Padmini; Alessi - Marco; Alessi - Jane Doe (Non CRN)',
+      projectSpeakers: 'Alpha Project - Nadia',
+      externalSpeakers: 'John Roe',
     });
   });
 
-  test('Should count only team groups in the team columns', () => {
-    const row = eventSpeakersToCSV(getEvent(), [teamGroup(), projectGroup()]);
+  test('Should flag the external speakers who shared preliminary findings', () => {
+    const row = eventSpeakersToCSV(
+      getEvent(),
+      [
+        {
+          id: 'external',
+          variant: 'external',
+          users: [
+            {
+              id: 'external-0',
+              displayName: 'Jane Doe',
+              preliminaryFindingsShared: true,
+            },
+            {
+              id: 'external-1',
+              displayName: 'John Roe',
+              preliminaryFindingsShared: false,
+            },
+          ],
+        },
+      ],
+      true,
+    );
 
     expect(row).toMatchObject({
-      teamCount: '1',
-      teamsWithFindingsCount: '1',
-      teamsWithFindings: 'Alessi',
-      teamsWithoutFindings: 'NA',
+      externalSpeakers: 'Jane Doe [Y]; John Roe [N]',
+      findingsPercentage: '50%',
     });
   });
 
-  test('Should report a team that has not shared preliminary findings', () => {
-    const row = eventSpeakersToCSV(getEvent(), [
-      teamGroup({ users: [speaker()] }),
-    ]);
+  test('Should render 0% rather than NA when no speaker shared', () => {
+    const row = eventSpeakersToCSV(
+      getEvent(),
+      [teamGroup({ users: [speaker()] })],
+      true,
+    );
 
-    expect(row).toMatchObject({
-      teamCount: '1',
-      teamsWithFindingsCount: '0',
-      teamsWithFindings: 'NA',
-      teamsWithoutFindings: 'Alessi',
-    });
-  });
-
-  test('Should treat a team as sharing when a single speaker shared', () => {
-    const row = eventSpeakersToCSV(getEvent(), [
-      teamGroup({
-        users: [
-          speaker(),
-          speaker({ id: 'u2', preliminaryFindingsShared: true }),
-        ],
-      }),
-    ]);
-
-    expect(row).toMatchObject({
-      teamsWithFindingsCount: '1',
-      teamsWithFindings: 'Alessi',
-      teamsWithoutFindings: 'NA',
-    });
-  });
-
-  test('Should split and join teams across the two findings lists', () => {
-    const row = eventSpeakersToCSV(getEvent(), [
-      teamGroup(),
-      teamGroup({
-        id: 'team-2',
-        teamName: 'Banteng',
-        users: [speaker({ preliminaryFindingsShared: true })],
-      }),
-      teamGroup({ id: 'team-3', teamName: 'Barabasi', users: [] }),
-      teamGroup({ id: 'team-4', teamName: 'Cepheus', users: [] }),
-    ]);
-
-    expect(row).toMatchObject({
-      teamCount: '4',
-      teamsWithFindingsCount: '2',
-      teamsWithFindings: 'Alessi; Banteng',
-      teamsWithoutFindings: 'Barabasi; Cepheus',
-    });
+    expect(row.findingsPercentage).toEqual('0%');
   });
 
   test('Should list speakers from several teams in group order', () => {
-    const row = eventSpeakersToCSV(getEvent(), [
-      teamGroup(),
-      teamGroup({
-        id: 'team-2',
-        teamName: 'Barabasi',
-        users: [speaker({ id: 'u3', displayName: 'Ana' })],
-      }),
-    ]);
-
-    expect(row.crnSpeakers).toEqual(
-      'Alessi-Padmini; Alessi-Marco; Barabasi-Ana',
+    const row = eventSpeakersToCSV(
+      getEvent(),
+      [
+        teamGroup(),
+        teamGroup({
+          id: 'team-2',
+          teamName: 'Barabasi',
+          users: [speaker({ id: 'u3', displayName: 'Ana' })],
+        }),
+      ],
+      true,
     );
-    expect(row.crnSpeakerCount).toEqual('3');
-  });
 
-  test('Should render NA for external speakers when the event has none', () => {
-    const row = eventSpeakersToCSV(getEvent(), [teamGroup()]);
-
-    expect(row.externalSpeakerCount).toEqual('0');
-    expect(row.externalSpeakers).toEqual('NA');
+    expect(row).toMatchObject({
+      teamSpeakerCount: '3',
+      teamSpeakers:
+        'Alessi - Padmini [Y]; Alessi - Marco [Y]; Barabasi - Ana [N]',
+    });
   });
 
   test('Should render zero counts and NA cells when the event has no speakers', () => {
-    const row = eventSpeakersToCSV(getEvent(), []);
+    const row = eventSpeakersToCSV(getEvent(), [], true);
 
     expect(row).toMatchObject({
       totalSpeakers: '0',
-      crnSpeakerCount: '0',
+      teamSpeakerCount: '0',
+      projectSpeakerCount: '0',
       externalSpeakerCount: '0',
-      teamCount: '0',
-      teamsWithFindingsCount: '0',
-      teamsWithFindings: 'NA',
-      teamsWithoutFindings: 'NA',
-      crnSpeakers: 'NA',
+      findingsPercentage: 'NA',
+      teamSpeakers: 'NA',
+      projectSpeakers: 'NA',
       externalSpeakers: 'NA',
     });
   });
 
-  test('Should render external-only events with NA for the CRN cell', () => {
-    const row = eventSpeakersToCSV(getEvent(), [externalGroup(['Jane Doe'])]);
+  test('Should render NA for the team and project cells of an external-only event', () => {
+    const row = eventSpeakersToCSV(getEvent(), [externalGroup()], true);
 
     expect(row).toMatchObject({
       totalSpeakers: '1',
-      crnSpeakerCount: '0',
-      teamCount: '0',
-      teamsWithFindingsCount: '0',
-      crnSpeakers: 'NA',
-      externalSpeakers: 'Jane Doe',
+      teamSpeakerCount: '0',
+      projectSpeakerCount: '0',
+      externalSpeakerCount: '1',
+      teamSpeakers: 'NA',
+      projectSpeakers: 'NA',
+      externalSpeakers: 'Jane Doe [N]',
     });
+  });
+
+  test('Should render NA for the interest group when the event has none', () => {
+    const row = eventSpeakersToCSV(
+      getEvent({ interestGroup: undefined }),
+      [],
+      true,
+    );
+
+    expect(row.interestGroupName).toEqual('NA');
   });
 
   test('Should strip markup from an HTML description', () => {
     const row = eventSpeakersToCSV(
       getEvent({ description: '<p>Intro <strong>session</strong></p>' }),
       [],
+      true,
     );
 
     expect(row.description).toEqual('Intro session');
   });
 
   test('Should render NA for an undefined description', () => {
-    const row = eventSpeakersToCSV(getEvent({ description: undefined }), []);
+    const row = eventSpeakersToCSV(
+      getEvent({ description: undefined }),
+      [],
+      true,
+    );
 
     expect(row.description).toEqual('NA');
   });
@@ -280,16 +286,16 @@ describe('eventSpeakersToCSV', () => {
     ] as unknown as EventResponse['speakers'];
     const event = getEvent({ speakers });
 
-    const row = eventSpeakersToCSV(event, mapSpeakersToGroups(event));
+    const row = eventSpeakersToCSV(event, mapSpeakersToGroups(event), true);
 
     expect(row).toMatchObject({
       totalSpeakers: '0',
-      crnSpeakerCount: '0',
-      crnSpeakers: 'NA',
+      teamSpeakerCount: '0',
+      teamSpeakers: 'NA',
     });
   });
 
-  test('Should keep every mapped speaker in the CSV once project groups are synthesised', () => {
+  test('Should list every mapped speaker, marking Non CRN speakers of a team', () => {
     const event = getEvent({
       speakers: [
         {
@@ -297,6 +303,7 @@ describe('eventSpeakersToCSV', () => {
           team: { id: 'team-1', displayName: 'Alessi' },
           user: { id: 'u1', displayName: 'Padmini' },
           role: 'Chair',
+          preliminaryDataShared: true,
         },
         {
           id: 'es-2',
@@ -304,15 +311,23 @@ describe('eventSpeakersToCSV', () => {
           user: { id: 'u2', displayName: 'Marco' },
           role: 'Chair',
         },
+        {
+          id: 'es-3',
+          team: { id: 'team-1', displayName: 'Alessi' },
+          externalUser: { name: 'Jane Doe' },
+        },
       ] as unknown as EventResponse['speakers'],
     });
 
-    const row = eventSpeakersToCSV(event, mapSpeakersToGroups(event));
+    const row = eventSpeakersToCSV(event, mapSpeakersToGroups(event), true);
 
-    expect(row.totalSpeakers).toEqual('2');
-    expect(row.crnSpeakerCount).toEqual('2');
-    expect(row.crnSpeakers).toEqual(expect.stringContaining('Marco'));
-    expect(row.crnSpeakers).toEqual(expect.stringContaining('Padmini'));
+    expect(row).toMatchObject({
+      totalSpeakers: '3',
+      teamSpeakerCount: '3',
+      externalSpeakerCount: '0',
+      teamSpeakers:
+        'Alessi - Padmini [Y]; Alessi - Marco [N]; Alessi - Jane Doe (Non CRN) [N]',
+    });
   });
 });
 
@@ -327,41 +342,48 @@ describe('downloadEventSpeakers', () => {
       'description',
       'startDate',
       'endDate',
+      'interestGroupName',
       'totalSpeakers',
-      'crnSpeakerCount',
+      'teamSpeakerCount',
+      'projectSpeakerCount',
       'externalSpeakerCount',
-      'teamCount',
-      'teamsWithFindingsCount',
-      'teamsWithFindings',
-      'teamsWithoutFindings',
-      'crnSpeakers',
+      'findingsPercentage',
+      'teamSpeakers',
+      'projectSpeakers',
       'externalSpeakers',
     ]);
   });
 
-  test('Should open a dated stream with headers, write one row and end it', () => {
-    const write = jest.fn();
-    const end = jest.fn();
-    mockCreateCsvFileStream.mockReturnValueOnce({
-      write,
-      end,
-    } as unknown as ReturnType<typeof createCsvFileStream>);
+  test.each`
+    hasFinished | teamSpeakers
+    ${true}     | ${'Alessi - Padmini [Y]; Alessi - Marco [Y]'}
+    ${false}    | ${'Alessi - Padmini; Alessi - Marco'}
+  `(
+    'Should open a dated stream with headers and write one row when hasFinished is $hasFinished',
+    ({ hasFinished, teamSpeakers }) => {
+      const write = jest.fn();
+      const end = jest.fn();
+      mockCreateCsvFileStream.mockReturnValueOnce({
+        write,
+        end,
+      } as unknown as ReturnType<typeof createCsvFileStream>);
 
-    downloadEventSpeakers(getEvent(), [teamGroup()]);
+      downloadEventSpeakers(getEvent(), [teamGroup()], hasFinished);
 
-    expect(mockCreateCsvFileStream).toHaveBeenCalledWith(
-      expect.stringMatching(/^EventSpeakers_Kick_off_\d{6}\.csv$/),
-      { columns: eventSpeakersFields, header: true },
-    );
-    expect(write).toHaveBeenCalledTimes(1);
-    expect(write).toHaveBeenCalledWith(
-      expect.objectContaining({ eventTitle: 'Kick-off' }),
-    );
-    expect(end).toHaveBeenCalledTimes(1);
-  });
+      expect(mockCreateCsvFileStream).toHaveBeenCalledWith(
+        expect.stringMatching(/^EventSpeakers_Kick_off_\d{6}\.csv$/),
+        { columns: eventSpeakersFields, header: true },
+      );
+      expect(write).toHaveBeenCalledTimes(1);
+      expect(write).toHaveBeenCalledWith(
+        expect.objectContaining({ eventTitle: 'Kick-off', teamSpeakers }),
+      );
+      expect(end).toHaveBeenCalledTimes(1);
+    },
+  );
 
   test('Should fall back to a generic filename when the title has no usable characters', () => {
-    downloadEventSpeakers(getEvent({ title: '!!!' }), [teamGroup()]);
+    downloadEventSpeakers(getEvent({ title: '!!!' }), [teamGroup()], true);
 
     expect(mockCreateCsvFileStream).toHaveBeenCalledWith(
       expect.stringMatching(/^EventSpeakers_event_\d{6}\.csv$/),

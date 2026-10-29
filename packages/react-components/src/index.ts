@@ -272,6 +272,7 @@ export {
   SharingPrelimFindingsTable,
   SpeakerList,
   SsoButtons,
+  summarizeSpeakerGroups,
   TeamAwardMetrics,
   TeamCard,
   TeamCollaborationMetrics,

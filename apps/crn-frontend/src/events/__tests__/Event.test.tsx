@@ -1416,6 +1416,26 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(mockDownloadEventSpeakers).toHaveBeenCalledWith(
         expect.objectContaining({ id }),
         expect.any(Array),
+        false,
+      );
+    });
+
+    it('tells the download when the event has finished', async () => {
+      mockGetEvent.mockResolvedValue({
+        ...createEventResponse(),
+        id,
+        endDate: subDays(new Date(), 3).toISOString(),
+      });
+      const { findByLabelText } = render(<Event />, {
+        wrapper: createWrapper({ techSupport: true }),
+      });
+
+      await userEvent.click(await findByLabelText('Download speakers'));
+
+      expect(mockDownloadEventSpeakers).toHaveBeenCalledWith(
+        expect.objectContaining({ id }),
+        expect.any(Array),
+        true,
       );
     });
 

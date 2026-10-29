@@ -26,12 +26,11 @@ import {
   iconButtonStyles,
 } from './shared-event-card-styles';
 import {
-  groupFindings,
   groupLabel,
   SpeakerGroup,
-  SpeakerGroupExternalUser,
   SpeakerProjectGroup,
   SpeakerTeamGroup,
+  summarizeSpeakerGroups,
 } from './speaker-group';
 import SpeakerSection from './speaker-section';
 
@@ -174,19 +173,16 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
   onEdit,
   onAddSpeaker,
 }) => {
-  const teamGroups = groups.filter(
-    (group): group is SpeakerTeamGroup =>
-      group.variant === 'team' && group.users.length > 0,
-  );
-  const projectGroups = groups.filter(
-    (group): group is SpeakerProjectGroup =>
-      group.variant === 'project' && group.users.length > 0,
-  );
-  const externalUsers = groups.reduce<SpeakerGroupExternalUser[]>(
-    (users, group) =>
-      group.variant === 'external' ? [...users, ...group.users] : users,
-    [],
-  );
+  const {
+    teamGroups,
+    projectGroups,
+    externalUsers,
+    teamSpeakers,
+    projectSpeakers,
+    totalSpeakers,
+    sharedSpeakers,
+    findingsPercentage,
+  } = summarizeSpeakerGroups(groups);
 
   const firstGroupId = [...teamGroups, ...projectGroups][0]?.id;
   const [expandedGroups, setExpandedGroups] = useState<ReadonlySet<string>>(
@@ -207,11 +203,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
 
   const showFindings = hasFinished;
 
-  if (
-    teamGroups.length === 0 &&
-    projectGroups.length === 0 &&
-    externalUsers.length === 0
-  ) {
+  if (totalSpeakers === 0) {
     return (
       <Card>
         <div css={emptyStateStyles}>
@@ -243,22 +235,6 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({
       }
       return next;
     });
-
-  const teamSpeakers = teamGroups.reduce(
-    (total, group) => total + group.users.length,
-    0,
-  );
-  const projectSpeakers = projectGroups.reduce(
-    (total, group) => total + group.users.length,
-    0,
-  );
-  const totalSpeakers = teamSpeakers + projectSpeakers + externalUsers.length;
-  const sharedSpeakers = [
-    ...teamGroups,
-    ...projectGroups,
-    { users: externalUsers },
-  ].reduce((total, group) => total + groupFindings(group).shared, 0);
-  const findingsPercentage = Math.round((sharedSpeakers / totalSpeakers) * 100);
 
   const renderGroupRow = (group: SpeakerTeamGroup | SpeakerProjectGroup) => (
     <SpeakerTeamRow
