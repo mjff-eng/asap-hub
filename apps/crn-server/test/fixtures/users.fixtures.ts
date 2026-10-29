@@ -210,6 +210,7 @@ export const getUserListItemDataObject = (): UserListItemDataObject => ({
       displayName: 'Team A',
     },
   ],
+  individualProjects: [],
 });
 
 export const getUserListItemResponse = (): UserListItemResponse => ({
@@ -283,6 +284,7 @@ export const fetchExpectation: ListUserResponse = {
           displayName: 'Team B',
         },
       ],
+      individualProjects: [],
       role: 'Grantee',
       openScienceTeamMember: false,
       techSupport: false,

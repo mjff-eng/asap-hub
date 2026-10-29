@@ -21,6 +21,7 @@ const person: ComponentProps<typeof NetworkPeople>['people'][0] = {
       role: 'Lead PI (Core Leadership)',
     },
   ],
+  individualProjects: [],
   labs: [
     { id: 'cd7be4902', name: 'Barcelona' },
     { id: 'cd7be4905', name: 'Glasgow' },

@@ -11,7 +11,10 @@ const listUserResponseTeam: Omit<UserTeam, 'id'> = {
   role: 'Project Manager',
 };
 
-export const listUserResponseItem: Omit<ListUserResponse['items'][0], 'id'> = {
+export const listUserResponseItem: Omit<
+  ListUserResponse['items'][0],
+  'id' | 'individualProjects'
+> = {
   createdDate: '2020-09-07T17:36:54Z',
   displayName: 'Person A',
   fullDisplayName: 'Person A',
@@ -87,6 +90,7 @@ export const createUserListItemResponse = (
   fullDisplayName: `${listUserResponseItem.fullDisplayName} ${itemIndex + 1}`,
   teams: createUserTeams(options),
   labs: createLabs(options),
+  individualProjects: [],
 });
 
 export const createListUserResponse = (

@@ -4,7 +4,6 @@ import { indexUserHandler } from '../../../src/handlers/user/algolia-index-user-
 import {
   getUserEvent,
   getUserListItemResponse,
-  getUserResponse,
 } from '../../fixtures/users.fixtures';
 import {
   getTeamMembershipPublishedEvent,
@@ -33,7 +32,7 @@ describe('User index handler', () => {
 
   test('Should fetch the user and create a record in Algolia when the user is published', async () => {
     const event = publishedEvent();
-    const userResponse = getUserResponse();
+    const userResponse = getUserListItemResponse();
     userControllerMock.fetchByIdForAlgoliaList.mockResolvedValueOnce(
       userResponse,
     );
@@ -43,23 +42,15 @@ describe('User index handler', () => {
       event.detail.resourceId,
     );
 
-    const user = getUserListItemResponse();
     expect(algoliaSearchClientMock.save).toHaveBeenCalledWith({
-      data: {
-        ...user,
-        avatarUrl: undefined,
-        biography: 'some bio',
-        contactEmail: 'T@rdy.io',
-        orcid: '123-456-789',
-        social: { orcid: '123-456-789' },
-      },
+      data: getUserListItemResponse(),
       type: 'user',
     });
   });
 
   test('Should fetch the user and remove a record in Algolia when user is published but not onboarded', async () => {
     const userResponse = {
-      ...getUserResponse(),
+      ...getUserListItemResponse(),
       onboarded: false,
     };
     userControllerMock.fetchByIdForAlgoliaList.mockResolvedValueOnce(
@@ -74,7 +65,7 @@ describe('User index handler', () => {
   });
 
   test('Should fetch the user and remove a record in Algolia when user is published but Hidden', async () => {
-    const userResponse = getUserResponse();
+    const userResponse = getUserListItemResponse();
     userControllerMock.fetchByIdForAlgoliaList.mockResolvedValueOnce({
       ...userResponse,
       role: 'Hidden',
@@ -117,7 +108,7 @@ describe('User index handler', () => {
 
   test('Should populate _tags field before saving the user to Algolia', async () => {
     const event = publishedEvent();
-    const userResponse = getUserResponse();
+    const userResponse = getUserListItemResponse();
     userResponse.tags = [
       { id: '1', name: 'Bitopertin' },
       { id: '2', name: 'A53T' },
@@ -152,7 +143,7 @@ describe('User index handler', () => {
     const algoliaError = new Error('ERROR');
 
     userControllerMock.fetchByIdForAlgoliaList.mockResolvedValueOnce(
-      getUserResponse(),
+      getUserListItemResponse(),
     );
     algoliaSearchClientMock.save.mockRejectedValueOnce(algoliaError);
 
@@ -188,7 +179,7 @@ describe('User index handler', () => {
   test.each(possibleTeamMembershipEvents)(
     'Should index user when team membership event %s occurs',
     async (name, eventA) => {
-      const userResponse = getUserResponse();
+      const userResponse = getUserListItemResponse();
       const membershipId = 'membership-123';
       const teamId = 'team-456';
 
@@ -222,7 +213,7 @@ describe('User index handler', () => {
   );
 
   test('Should extract user ID correctly from TeamMembershipPublished event', async () => {
-    const userResponse = getUserResponse();
+    const userResponse = getUserListItemResponse();
     const membershipId = 'membership-abc123';
     const teamId = 'team-xyz789';
 
@@ -255,7 +246,7 @@ describe('User index handler', () => {
   });
 
   test('Should extract user ID correctly from TeamMembershipUnpublished event', async () => {
-    const userResponse = getUserResponse();
+    const userResponse = getUserListItemResponse();
     const membershipId = 'membership-def456';
     const teamId = 'team-uvw012';
 
