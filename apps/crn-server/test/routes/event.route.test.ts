@@ -400,37 +400,63 @@ describe('/events/ routes', () => {
           projectId: 'project-1',
           preliminaryDataShared: true,
         },
-      ])('Should accept the speaker to add %o', async (speaker) => {
-        const addPayload = {
-          speakersToAdd: [speaker],
-          speakersToRemove: ['speaker-1'],
-        };
-        userMockFactory.mockReturnValueOnce({
-          ...createUserResponse(),
-          interestGroups: [
-            {
-              id: getInterestGroupResponse().id,
-              name: 'Group 1',
-              active: true,
-              role: 'Project Manager',
-            },
-          ],
-        });
-        eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
-        eventControllerMock.updateEventDetails.mockResolvedValueOnce(
-          getEventResponse(),
-        );
+      ])(
+        'Should add the speaker %o for a project manager of the hosting interest group',
+        async (speaker) => {
+          const addPayload = { speakersToAdd: [speaker] };
+          userMockFactory.mockReturnValueOnce({
+            ...createUserResponse(),
+            interestGroups: [
+              {
+                id: getInterestGroupResponse().id,
+                name: 'Group 1',
+                active: true,
+                role: 'Project Manager',
+              },
+            ],
+          });
+          eventControllerMock.fetchById.mockResolvedValueOnce(
+            getEventResponse(),
+          );
+          eventControllerMock.updateEventDetails.mockResolvedValueOnce(
+            getEventResponse(),
+          );
 
-        const response = await supertest(app)
-          .patch('/events/123')
-          .send(addPayload);
+          const response = await supertest(app)
+            .patch('/events/123')
+            .send(addPayload);
 
-        expect(response.status).toBe(200);
-        expect(eventControllerMock.updateEventDetails).toHaveBeenCalledWith(
-          '123',
-          addPayload,
-        );
-      });
+          expect(response.status).toBe(200);
+          expect(eventControllerMock.updateEventDetails).toHaveBeenCalledWith(
+            '123',
+            addPayload,
+          );
+        },
+      );
+
+      test.each([
+        ['a tech support user', { techSupport: true }],
+        ['a user who is not a project manager', {}],
+      ])(
+        'Should return 403 when %s adds speakers',
+        async (_, userOverrides) => {
+          userMockFactory.mockReturnValueOnce({
+            ...createUserResponse(),
+            ...userOverrides,
+          });
+          eventControllerMock.fetchById.mockResolvedValueOnce(
+            getEventResponse(),
+          );
+
+          const response = await supertest(app)
+            .patch('/events/123')
+            .send({ speakersToAdd: [{ userId: 'user-1', teamId: 'team-1' }] });
+
+          expect(response.status).toBe(403);
+          expect(eventControllerMock.fetchById).toHaveBeenCalledWith('123');
+          expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
+        },
+      );
     });
 
     test('Should return 403 for a payload that touches neither attendance nor speakers', async () => {
