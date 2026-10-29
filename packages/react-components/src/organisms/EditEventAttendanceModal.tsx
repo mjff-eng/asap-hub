@@ -11,6 +11,7 @@ import {
 import {
   Button,
   Headline2,
+  Headline3,
   Link,
   MultiSelect,
   MultiSelectOptionsType,
@@ -116,24 +117,16 @@ const uploadTextStyles = css({
   flexDirection: 'column',
 });
 
-const sectionTitleStyles = css({
-  margin: 0,
-  fontSize: rem(16),
-  fontWeight: 700,
-  lineHeight: 24 / 16,
-  color: colour.foreground.primary,
-});
-
 const optionalLabelStyles = css({ fontWeight: 400 });
 
 const SectionTitle: React.FC<{
-  children: React.ReactNode;
+  children: string;
   optional?: boolean;
 }> = ({ children, optional = false }) => (
-  <h3 css={sectionTitleStyles}>
+  <Headline3 styleAsHeading="body/bold" noMargin>
     {children}
     {optional && <span css={optionalLabelStyles}> (optional)</span>}
-  </h3>
+  </Headline3>
 );
 
 const buttonIconGapReset = { '> svg + span': { marginLeft: 0 } } as const;
