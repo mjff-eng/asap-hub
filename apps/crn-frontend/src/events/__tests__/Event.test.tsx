@@ -24,6 +24,7 @@ import Event from '../Event';
 import {
   getAttendanceSearchHits,
   getEvent,
+  getSpeakerAffiliationHits,
   getSpeakerSearchHits,
   getTeamsForMatching,
   patchEvent,
@@ -62,6 +63,10 @@ const mockGetAttendanceSearchHits =
 const mockGetSpeakerSearchHits = getSpeakerSearchHits as jest.MockedFunction<
   typeof getSpeakerSearchHits
 >;
+const mockGetSpeakerAffiliationHits =
+  getSpeakerAffiliationHits as jest.MockedFunction<
+    typeof getSpeakerAffiliationHits
+  >;
 beforeEach(() => {
   disable('NEW_EVENT_PAGE');
   mockGetEvent.mockClear();
@@ -1054,6 +1059,33 @@ describe('the NEW_EVENT_PAGE flag', () => {
           'Sam',
         );
         expect(modal.getByText('Added Sam Lee to Omega')).toBeVisible();
+      });
+
+      it('adds an external speaker to a team found through the affiliation search', async () => {
+        mockGetSpeakerSearchHits.mockResolvedValue([]);
+        mockGetSpeakerAffiliationHits.mockResolvedValue([
+          { ...omegaTeam, objectID: omegaTeam.id, __meta: { type: 'team' } },
+        ]);
+        const { findByRole, getByRole } = render(<Event />, {
+          wrapper: projectManagerWrapper,
+        });
+
+        await userEvent.click(
+          await findByRole('button', { name: 'Edit speakers' }),
+        );
+        const modal = within(getByRole('dialog'));
+        await userEvent.type(modal.getByRole('combobox'), 'Bob');
+        await userEvent.click(
+          await modal.findByText('Bob', { selector: 'strong' }),
+        );
+        await userEvent.type(modal.getByRole('combobox'), 'Ome');
+        await userEvent.click(await modal.findByText('Omega'));
+
+        expect(mockGetSpeakerAffiliationHits).toHaveBeenCalledWith(
+          expect.anything(),
+          'Ome',
+        );
+        expect(modal.getByText('Added Bob to Omega')).toBeVisible();
       });
     });
 

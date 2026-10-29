@@ -27,13 +27,17 @@ import {
   getAttendanceSearchHits,
   getEvent,
   getEvents,
+  getSpeakerAffiliationHits,
   getSpeakerSearchHits,
   getTeamsForMatching,
   patchEvent,
   teamsForMatchingOptions,
 } from './api';
 import { mapSpeakersToGroups } from './map-speakers-to-groups';
-import { toSpeakerSearchOptions } from './speaker-search-options';
+import {
+  toSpeakerAffiliationOptions,
+  toSpeakerSearchOptions,
+} from './speaker-search-options';
 
 export const eventQueryKeys = createQueryKeys<GetEventListOptions>('events');
 
@@ -83,6 +87,10 @@ export const useEventSpeakerSearch = () => {
   return {
     loadSearchOptions: async (search: string) =>
       toSpeakerSearchOptions(await getSpeakerSearchHits(client, search)),
+    loadAffiliationOptions: async (search: string) =>
+      toSpeakerAffiliationOptions(
+        await getSpeakerAffiliationHits(client, search),
+      ),
   };
 };
 

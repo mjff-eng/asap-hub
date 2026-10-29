@@ -16,6 +16,7 @@ import {
   getAttendanceSearchHits,
   getEvent,
   getEvents,
+  getSpeakerAffiliationHits,
   getSpeakerSearchHits,
   getTeamsForMatching,
   patchEvent,
@@ -402,6 +403,33 @@ describe('getSpeakerSearchHits', () => {
     ]);
     expect(search).toHaveBeenCalledWith(['user', 'external-author'], 'per', {
       restrictSearchableAttributes: ['displayName'],
+    });
+  });
+});
+
+describe('getSpeakerAffiliationHits', () => {
+  type Search = ClientSearch<'crn', 'team' | 'project'>;
+  const search: jest.MockedFunction<Search> = jest.fn();
+
+  const algoliaSearchClient = {
+    search,
+  } as unknown as AlgoliaSearchClient<'crn'>;
+
+  it('searches team names and project titles only and returns the hits', async () => {
+    const hit = {
+      ...createTeamListItemResponse(),
+      objectID: 't0',
+      __meta: { type: 'team' as const },
+    } as unknown as Awaited<ReturnType<Search>>['hits'][number];
+    search.mockResolvedValueOnce(
+      createAlgoliaResponse<'crn', 'team' | 'project'>([hit]),
+    );
+
+    expect(await getSpeakerAffiliationHits(algoliaSearchClient, 'alp')).toEqual(
+      [hit],
+    );
+    expect(search).toHaveBeenCalledWith(['team', 'project'], 'alp', {
+      restrictSearchableAttributes: ['displayName', 'title'],
     });
   });
 });

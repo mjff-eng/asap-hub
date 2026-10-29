@@ -45,3 +45,9 @@ export const getSpeakerSearchHits = jest.fn(
     ClientSearchResponse<'crn', 'user' | 'external-author'>['hits']
   > => [],
 );
+
+export const getSpeakerAffiliationHits = jest.fn(
+  async (): Promise<
+    ClientSearchResponse<'crn', 'team' | 'project'>['hits']
+  > => [],
+);

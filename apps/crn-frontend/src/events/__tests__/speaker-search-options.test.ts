@@ -1,10 +1,19 @@
 import { EntityResponses } from '@asap-hub/algolia';
-import { createUserListItemResponse } from '@asap-hub/fixtures';
+import {
+  createTeamListItemResponse,
+  createUserListItemResponse,
+} from '@asap-hub/fixtures';
+import { BaseProject } from '@asap-hub/model';
 
-import { toSpeakerSearchOptions } from '../speaker-search-options';
+import {
+  toSpeakerAffiliationOptions,
+  toSpeakerSearchOptions,
+} from '../speaker-search-options';
 
 type UserHit = EntityResponses['crn']['user'];
 type ExternalAuthorHit = EntityResponses['crn']['external-author'];
+type TeamHit = EntityResponses['crn']['team'];
+type ProjectHit = EntityResponses['crn']['project'];
 
 const userHit = (overrides: Partial<UserHit> = {}): UserHit => ({
   ...createUserListItemResponse(),
@@ -21,6 +30,52 @@ const externalAuthorHit: ExternalAuthorHit = {
   id: 'external-author-1',
   displayName: 'Riley Stone',
   __meta: { type: 'external-author' },
+};
+
+const teamHit = (overrides: Partial<TeamHit> = {}): TeamHit => ({
+  ...createTeamListItemResponse(),
+  id: 'team-1',
+  displayName: 'Team Alpha',
+  teamType: 'Discovery Team',
+  __meta: { type: 'team' },
+  ...overrides,
+});
+
+const baseProject: BaseProject & { __meta: ProjectHit['__meta'] } = {
+  id: 'project-1',
+  title: 'Project',
+  status: 'Active',
+  statusRank: 1,
+  startDate: '2024-01-01',
+  endDate: '2025-01-01',
+  tags: [],
+  __meta: { type: 'project' },
+};
+
+const traineeProjectHit: ProjectHit = {
+  ...baseProject,
+  id: 'trainee-1',
+  title: 'Trainee One',
+  projectType: 'Trainee Project',
+  members: [],
+};
+
+const resourceProjectHit = (isTeamBased: boolean): ProjectHit => ({
+  ...baseProject,
+  id: isTeamBased ? 'resource-team-1' : 'resource-individual-1',
+  title: isTeamBased ? 'Resource Team Project' : 'Resource Individual Project',
+  projectType: 'Resource Project',
+  resourceType: 'Database',
+  isTeamBased,
+});
+
+const discoveryProjectHit: ProjectHit = {
+  ...baseProject,
+  id: 'discovery-1',
+  title: 'Discovery One',
+  projectType: 'Discovery Project',
+  researchTheme: 'Theme',
+  teamName: 'Team Alpha',
 };
 
 describe('toSpeakerSearchOptions', () => {
@@ -114,6 +169,51 @@ describe('toSpeakerSearchOptions', () => {
           id: 'external-author-1',
           displayName: 'Riley Stone',
         },
+      },
+    ]);
+  });
+});
+
+describe('toSpeakerAffiliationOptions', () => {
+  it('maps teams with their type and inactivity', () => {
+    expect(
+      toSpeakerAffiliationOptions([
+        teamHit({ inactiveSince: '2024-01-01', teamType: 'Resource Team' }),
+      ]),
+    ).toEqual([
+      {
+        variant: 'team',
+        id: 'team-1',
+        name: 'Team Alpha',
+        teamType: 'Resource Team',
+        isTeamInactive: true,
+      },
+    ]);
+  });
+
+  it('keeps only individual projects and lists them after the teams', () => {
+    expect(
+      toSpeakerAffiliationOptions([
+        traineeProjectHit,
+        discoveryProjectHit,
+        resourceProjectHit(true),
+        resourceProjectHit(false),
+        teamHit(),
+      ]).map(({ variant, id }) => `${variant}:${id}`),
+    ).toEqual([
+      'team:team-1',
+      'project:trainee-1',
+      'project:resource-individual-1',
+    ]);
+  });
+
+  it('maps an individual project with its title and type', () => {
+    expect(toSpeakerAffiliationOptions([traineeProjectHit])).toEqual([
+      {
+        variant: 'project',
+        id: 'trainee-1',
+        name: 'Trainee One',
+        projectType: 'Trainee Project',
       },
     ]);
   });

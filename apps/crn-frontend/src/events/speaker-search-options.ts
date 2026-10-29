@@ -1,15 +1,26 @@
 import { EntityResponses } from '@asap-hub/algolia';
 import {
+  AffiliationOption,
   SpeakerSearchOption,
   SpeakerTeamOption,
 } from '@asap-hub/react-components';
 
 type UserHit = EntityResponses['crn']['user'];
 type ExternalAuthorHit = EntityResponses['crn']['external-author'];
+type TeamHit = EntityResponses['crn']['team'];
+type ProjectHit = EntityResponses['crn']['project'];
 
 const isUserHit = (hit: UserHit | ExternalAuthorHit): hit is UserHit =>
   // eslint-disable-next-line no-underscore-dangle
   hit.__meta.type === 'user';
+
+const isTeamHit = (hit: TeamHit | ProjectHit): hit is TeamHit =>
+  // eslint-disable-next-line no-underscore-dangle
+  hit.__meta.type === 'team';
+
+const isIndividualProject = (project: ProjectHit) =>
+  project.projectType === 'Trainee Project' ||
+  (project.projectType === 'Resource Project' && !project.isTeamBased);
 
 const toUserAffiliationOptions = ({
   teams,
@@ -63,6 +74,31 @@ export const toSpeakerSearchOptions = (
           id: externalAuthor.id,
           displayName: externalAuthor.displayName,
         },
+      }),
+    ),
+];
+
+export const toSpeakerAffiliationOptions = (
+  hits: ReadonlyArray<TeamHit | ProjectHit>,
+): AffiliationOption[] => [
+  ...hits.filter(isTeamHit).map(
+    (team): AffiliationOption => ({
+      variant: 'team',
+      id: team.id,
+      name: team.displayName,
+      teamType: team.teamType,
+      isTeamInactive: !!team.inactiveSince,
+    }),
+  ),
+  ...hits
+    .filter((hit): hit is ProjectHit => !isTeamHit(hit))
+    .filter(isIndividualProject)
+    .map(
+      (project): AffiliationOption => ({
+        variant: 'project',
+        id: project.id,
+        name: project.title,
+        projectType: project.projectType,
       }),
     ),
 ];

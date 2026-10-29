@@ -1,8 +1,14 @@
 import { ProjectType } from '@asap-hub/model';
 import { css } from '@emotion/react';
-import { StylesConfig } from 'react-select';
+import { components, StylesConfig } from 'react-select';
 
-import { Button, MultiSelect, Paragraph, Pill } from '../atoms';
+import {
+  Button,
+  MultiSelect,
+  MultiSelectOptionsType,
+  Paragraph,
+  Pill,
+} from '../atoms';
 import { colour } from '../colors';
 import { crossIcon, externalUserAvatarIcon, searchIcon } from '../icons';
 import { EventTeamType } from '../organisms/shared-event-card';
@@ -84,7 +90,9 @@ const actionsStyles = css({
 
 const searchStyles = css({ flexGrow: 1, minWidth: 0 });
 
-type SearchOption = { label: string; value: string };
+type SearchOption = MultiSelectOptionsType & {
+  readonly affiliation: AffiliationOption;
+};
 
 const searchSelectStyles: StylesConfig<SearchOption, false> = {
   control: (base, { isFocused }) => ({
@@ -117,6 +125,7 @@ export type AffiliationOption = {
   readonly name: string;
   readonly variant: 'team' | 'project';
   readonly teamType?: EventTeamType;
+  readonly isTeamInactive?: boolean;
   readonly projectType?: ProjectType;
 };
 
@@ -127,7 +136,9 @@ export const affiliationKey = ({ variant, id }: AffiliationOption) =>
 
 type ExternalSpeakerAffiliationCardProps = {
   readonly displayName: string;
-  readonly affiliationOptions: ReadonlyArray<AffiliationOption>;
+  readonly loadAffiliationOptions: (
+    searchQuery: string,
+  ) => Promise<ReadonlyArray<AffiliationOption>>;
   readonly onSelectAffiliation: (option: AffiliationOption) => void;
   readonly onKeepAsExternalGuest: () => void;
   readonly onDismiss: () => void;
@@ -138,7 +149,7 @@ const ExternalSpeakerAffiliationCard: React.FC<
   ExternalSpeakerAffiliationCardProps
 > = ({
   displayName,
-  affiliationOptions,
+  loadAffiliationOptions,
   onSelectAffiliation,
   onKeepAsExternalGuest,
   onDismiss,
@@ -171,44 +182,46 @@ const ExternalSpeakerAffiliationCard: React.FC<
     <div css={messageStyles}>
       <Paragraph noMargin styles={bodyStyles}>
         This speaker is not a member on any CRN team or individual project.
-        {affiliationOptions.length > 0
-          ? ' Select the team or project they represented for this meeting or choose "External Guest" to proceed without an affiliation.'
-          : ' Choose "External Guest" to proceed without an affiliation.'}
+        Select the team or project they represented for this meeting or choose
+        &quot;External Guest&quot; to proceed without an affiliation.
       </Paragraph>
       <Paragraph noMargin styles={disclaimerStyles}>
         This does not add them to a team or project.
       </Paragraph>
     </div>
     <div css={actionsStyles}>
-      {affiliationOptions.length > 0 && (
-        <>
-          <div css={searchStyles}>
-            <MultiSelect<SearchOption, false>
-              isMulti={false}
-              noMargin
-              enabled={enabled}
-              values={null}
-              leftIndicator={searchIcon}
-              placeholder="Search team or project..."
-              styles={searchSelectStyles}
-              suggestions={affiliationOptions.map((affiliation) => ({
-                label: affiliation.name,
-                value: affiliationKey(affiliation),
-              }))}
-              onChange={(option) => {
-                const selected = affiliationOptions.find(
-                  (affiliation) =>
-                    affiliationKey(affiliation) === option?.value,
-                );
-                if (selected) {
-                  onSelectAffiliation(selected);
-                }
-              }}
-            />
-          </div>
-          <span>or</span>
-        </>
-      )}
+      <div css={searchStyles}>
+        <MultiSelect<SearchOption, false>
+          isMulti={false}
+          noMargin
+          enabled={enabled}
+          values={null}
+          leftIndicator={searchIcon}
+          placeholder="Search team or project..."
+          styles={searchSelectStyles}
+          defaultOptions={false}
+          loadOptions={async (searchQuery) =>
+            (await loadAffiliationOptions(searchQuery)).map((affiliation) => ({
+              label: affiliation.name,
+              value: affiliationKey(affiliation),
+              affiliation,
+            }))
+          }
+          noOptionsMessage={({ inputValue }) =>
+            `Sorry, no matches for ${inputValue}.`
+          }
+          components={{
+            Menu: (menuProps) =>
+              menuProps.selectProps.inputValue ? (
+                <components.Menu {...menuProps} />
+              ) : null,
+          }}
+          onChange={(option) =>
+            option && onSelectAffiliation(option.affiliation)
+          }
+        />
+      </div>
+      <span>or</span>
       <Button
         noMargin
         small
