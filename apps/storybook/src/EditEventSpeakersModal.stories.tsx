@@ -70,15 +70,24 @@ const nonCrnGuest: SpeakerSearchOption = {
   label: 'Sam Rivera',
 };
 
+// An external author already in the hub: reused instead of creating a new one.
+const existingExternalAuthor: SpeakerSearchOption = {
+  value: 'external-author-alex',
+  label: 'Alex Moreno',
+  externalAuthor: { id: 'external-author-alex', displayName: 'Alex Moreno' },
+};
+
 // Search returns a user with a single affiliation (added straight in, with the
 // success toast), a user with two (the "pick an affiliation" pending card), a
-// CRN user with none (blocked), and a name that is not in CRN at all (the
-// external-guest card). Type any letter to see them.
+// CRN user with none (blocked), an existing external author and a name that is
+// not in CRN at all (both open the external-guest card). Type any letter to see
+// them.
 const loadSearchOptions = async (inputValue: string) =>
   [
     singleAffiliationUser,
     multipleAffiliationsUser,
     noAffiliationUser,
+    existingExternalAuthor,
     nonCrnGuest,
   ].filter((option) =>
     option.label.toLowerCase().includes(inputValue.toLowerCase()),
@@ -283,6 +292,11 @@ export const BlockedSpeakerMessage: Story = {
 // for a team or project.
 export const ExternalAffiliationBanner: Story = {
   args: { ...baseArgs, loadSearchOptions: loadOnly(nonCrnGuest) },
+};
+
+// Same card, opened from an external author that already exists in the hub.
+export const ExistingExternalAuthorBanner: Story = {
+  args: { ...baseArgs, loadSearchOptions: loadOnly(existingExternalAuthor) },
 };
 
 // The single-affiliation user is added straight in, showing the success toast
