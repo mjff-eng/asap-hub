@@ -2,7 +2,6 @@ export { default as AssociationList } from './AssociationList';
 export { default as CardWithBackground } from './CardWithBackground';
 export { default as CollapsibleTable } from './CollapsibleTable';
 export { default as ContactSupport } from './ContactSupport';
-export { default as CtaCard } from './CtaCard';
 export { default as EditableCard } from './EditableCard';
 export { default as EmptyState } from './EmptyState';
 export { default as EventOwner } from './EventOwner';

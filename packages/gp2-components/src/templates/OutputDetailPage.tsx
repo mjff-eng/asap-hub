@@ -1,6 +1,7 @@
 import { gp2 as gp2Model } from '@asap-hub/model';
 import {
   Link,
+  CtaCard,
   pixels,
   editIcon,
   VersionIcon,
@@ -14,7 +15,6 @@ import {
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
-import { CtaCard } from '../molecules';
 import { OutputCard } from '../organisms';
 import OutputAdditionalInformationCard from '../organisms/OutputAdditionalInformationCard';
 import OutputCohortsCard from '../organisms/OutputCohortsCard';
