@@ -657,6 +657,132 @@ describe('User data provider', () => {
       ]);
     });
 
+    test('should parse the team type and inactivity of user teams', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        usersCollection: {
+          total: 1,
+          items: [
+            getContentfulGraphqlUserListItem({
+              teamsCollection: {
+                items: [
+                  {
+                    role: 'Lead PI (Core Leadership)',
+                    team: {
+                      sys: { id: 'team-id-0' },
+                      displayName: 'Team A',
+                      teamType: 'Resource Team',
+                      inactiveSince: '2024-01-01T00:00:00.000Z',
+                    },
+                  },
+                  {
+                    role: 'Project Manager',
+                    team: {
+                      sys: { id: 'team-id-1' },
+                      displayName: 'Team B',
+                      teamType: 'not-a-team-type',
+                      inactiveSince: null,
+                    },
+                  },
+                ],
+              },
+            }),
+          ],
+        },
+      });
+      const result = await userDataProvider.fetch({});
+      expect(result.items[0]?.teams).toStrictEqual([
+        {
+          id: 'team-id-0',
+          role: 'Lead PI (Core Leadership)',
+          displayName: 'Team A',
+          teamType: 'Resource Team',
+          teamInactiveSince: '2024-01-01T00:00:00.000Z',
+        },
+        {
+          id: 'team-id-1',
+          role: 'Project Manager',
+          displayName: 'Team B',
+          teamType: undefined,
+          teamInactiveSince: undefined,
+        },
+      ]);
+    });
+
+    test('should parse the projects the user is a direct member of as individual projects', async () => {
+      const project = (
+        id: string,
+        projectType: string,
+        status: string = 'Active',
+      ) => ({
+        linkedFrom: {
+          projectsCollection: {
+            items: [
+              { sys: { id }, title: `Project ${id}`, projectType, status },
+            ],
+          },
+        },
+      });
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        usersCollection: {
+          total: 1,
+          items: [
+            getContentfulGraphqlUserListItem({
+              linkedFrom: {
+                projectMembershipCollection: {
+                  items: [
+                    {
+                      role: 'Trainee',
+                      ...project('trainee-1', 'Trainee Project'),
+                    },
+                    {
+                      role: null,
+                      ...project('resource-1', 'Resource Project', 'Completed'),
+                    },
+                    {
+                      role: 'Lead PI',
+                      ...project('discovery-1', 'Discovery Project'),
+                    },
+                    {
+                      role: 'Trainee',
+                      linkedFrom: { projectsCollection: { items: [null] } },
+                    },
+                    null,
+                  ],
+                },
+              },
+            }),
+          ],
+        },
+      });
+      const result = await userDataProvider.fetch({});
+      expect(result.items[0]?.individualProjects).toStrictEqual([
+        {
+          id: 'trainee-1',
+          title: 'Project trainee-1',
+          projectType: 'Trainee Project',
+          status: 'Active',
+          role: 'Trainee',
+        },
+        {
+          id: 'resource-1',
+          title: 'Project resource-1',
+          projectType: 'Resource Project',
+          status: 'Completed',
+        },
+      ]);
+    });
+
+    test('should return no individual projects when the user has no direct project memberships', async () => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        usersCollection: {
+          total: 1,
+          items: [getContentfulGraphqlUserListItem({ linkedFrom: null })],
+        },
+      });
+      const result = await userDataProvider.fetch({});
+      expect(result.items[0]?.individualProjects).toEqual([]);
+    });
+
     test.each([
       { membershipStatus: 'CRN Member', alumniSinceDate: null },
       {
