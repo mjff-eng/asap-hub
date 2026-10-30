@@ -557,13 +557,14 @@ describe('EditEventSpeakersModal', () => {
   });
 
   it('Should add a second external speaker into the existing External section', async () => {
-    renderModal({ groups: [getExternalGroup()] });
+    renderModal({ groups: [getTeamGroup(), getExternalGroup()] });
 
     await search('Guest Two', 'Guest Two');
     await userEvent.click(
       screen.getByRole('button', { name: 'Keep as External Guest' }),
     );
 
+    expect(screen.getByText('Team Alpha')).toBeInTheDocument();
     expect(screen.getByText('Guest One')).toBeInTheDocument();
     expect(screen.getByText('Guest Two')).toBeInTheDocument();
   });
