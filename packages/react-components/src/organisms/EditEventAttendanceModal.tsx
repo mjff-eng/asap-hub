@@ -31,7 +31,7 @@ import { useSectionExpansion } from '../hooks';
 import { ConfirmableModalFooter, InlineToast, Modal } from '../molecules';
 import { mobileScreen, rem } from '../pixels';
 import { pluralizeTeams } from '../utils';
-import { EventAttendanceTeam } from './EventAttendance';
+import { EventAttendanceTeam, summarizeAttendance } from './EventAttendance';
 import { teamIcon } from './shared-event-card';
 import {
   deleteButtonStyles,
@@ -597,8 +597,10 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
     [addedTeamIds],
   );
 
-  const interestGroupRows = rows.filter((team) => team.isFromInterestGroup);
-  const additionalRows = rows.filter((team) => !team.isFromInterestGroup);
+  const {
+    interestGroupTeams: interestGroupRows,
+    additionalTeams: additionalRows,
+  } = summarizeAttendance(rows);
 
   const addTeams = (teamsToAdd: EventAttendanceTeam[]) => {
     const additions = teamsToAdd.filter(
