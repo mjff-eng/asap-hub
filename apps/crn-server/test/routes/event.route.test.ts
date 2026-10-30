@@ -389,6 +389,74 @@ describe('/events/ routes', () => {
           unlinkPayload,
         );
       });
+
+      test.each([
+        { userId: 'user-1', teamId: 'team-1' },
+        { userId: 'user-1', projectId: 'project-1' },
+        { externalAuthorId: 'external-author-1' },
+        { externalAuthorName: 'Riley Stone', teamId: 'team-1' },
+        {
+          externalAuthorName: 'Riley Stone',
+          projectId: 'project-1',
+          preliminaryDataShared: true,
+        },
+      ])(
+        'Should add the speaker %o for a project manager of the hosting interest group',
+        async (speaker) => {
+          const addPayload = { speakersToAdd: [speaker] };
+          userMockFactory.mockReturnValueOnce({
+            ...createUserResponse(),
+            interestGroups: [
+              {
+                id: getInterestGroupResponse().id,
+                name: 'Group 1',
+                active: true,
+                role: 'Project Manager',
+              },
+            ],
+          });
+          eventControllerMock.fetchById.mockResolvedValueOnce(
+            getEventResponse(),
+          );
+          eventControllerMock.updateEventDetails.mockResolvedValueOnce(
+            getEventResponse(),
+          );
+
+          const response = await supertest(app)
+            .patch('/events/123')
+            .send(addPayload);
+
+          expect(response.status).toBe(200);
+          expect(eventControllerMock.updateEventDetails).toHaveBeenCalledWith(
+            '123',
+            addPayload,
+          );
+        },
+      );
+
+      test.each([
+        ['a tech support user', { techSupport: true }],
+        ['a user who is not a project manager', {}],
+      ])(
+        'Should return 403 when %s adds speakers',
+        async (_, userOverrides) => {
+          userMockFactory.mockReturnValueOnce({
+            ...createUserResponse(),
+            ...userOverrides,
+          });
+          eventControllerMock.fetchById.mockResolvedValueOnce(
+            getEventResponse(),
+          );
+
+          const response = await supertest(app)
+            .patch('/events/123')
+            .send({ speakersToAdd: [{ userId: 'user-1', teamId: 'team-1' }] });
+
+          expect(response.status).toBe(403);
+          expect(eventControllerMock.fetchById).toHaveBeenCalledWith('123');
+          expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
+        },
+      );
     });
 
     test('Should return 403 for a payload that touches neither attendance nor speakers', async () => {
@@ -427,6 +495,45 @@ describe('/events/ routes', () => {
 
       expect(response.status).toBe(400);
     });
+
+    test.each([
+      ['a CRN user without a team or project', { userId: 'user-1' }],
+      [
+        'a team and a project',
+        { userId: 'user-1', teamId: 'team-1', projectId: 'project-1' },
+      ],
+      [
+        'an external speaker with a team and a project',
+        {
+          externalAuthorName: 'Riley Stone',
+          teamId: 'team-1',
+          projectId: 'project-1',
+        },
+      ],
+      [
+        'both a CRN user and an external author',
+        {
+          userId: 'user-1',
+          externalAuthorName: 'Riley Stone',
+          teamId: 'team-1',
+        },
+      ],
+      ['no speaker', { teamId: 'team-1' }],
+      [
+        'an unknown property',
+        { userId: 'user-1', teamId: 'team-1', role: 'Chair' },
+      ],
+    ])(
+      'Should return a validation error for a speaker to add with %s',
+      async (_, speaker) => {
+        const response = await supertest(app)
+          .patch('/events/123')
+          .send({ speakersToAdd: [speaker] });
+
+        expect(response.status).toBe(400);
+        expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
+      },
+    );
 
     test('Should return a validation error when a speaker unlink item has an unknown field', async () => {
       const response = await supertest(app)

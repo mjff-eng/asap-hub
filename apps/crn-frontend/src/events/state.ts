@@ -27,11 +27,17 @@ import {
   getAttendanceSearchHits,
   getEvent,
   getEvents,
+  getSpeakerAffiliationHits,
+  getSpeakerSearchHits,
   getTeamsForMatching,
   patchEvent,
   teamsForMatchingOptions,
 } from './api';
 import { mapSpeakersToGroups } from './map-speakers-to-groups';
+import {
+  toSpeakerAffiliationOptions,
+  toSpeakerSearchOptions,
+} from './speaker-search-options';
 
 export const eventQueryKeys = createQueryKeys<GetEventListOptions>('events');
 
@@ -74,6 +80,18 @@ export const useEventAttendanceSearch = () => {
       eventEndDate,
       hostingInterestGroupId,
     );
+};
+
+export const useEventSpeakerSearch = () => {
+  const { client } = useAlgolia();
+  return {
+    loadSearchOptions: async (search: string) =>
+      toSpeakerSearchOptions(await getSpeakerSearchHits(client, search)),
+    loadAffiliationOptions: async (search: string) =>
+      toSpeakerAffiliationOptions(
+        await getSpeakerAffiliationHits(client, search),
+      ),
+  };
 };
 
 export const usePatchEvent = (id: string) => {

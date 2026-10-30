@@ -206,6 +206,25 @@ describe('Users controller', () => {
       ]);
     });
 
+    test('Should return the individual projects of the user', async () => {
+      const individualProjects = [
+        {
+          id: 'project-1',
+          title: 'Trainee Project',
+          projectType: 'Trainee Project' as const,
+          status: 'Active',
+          role: 'Trainee',
+        },
+      ];
+      userDataProviderMock.fetchByIdForAlgoliaList.mockResolvedValue({
+        ...getUserListItemDataObject(),
+        individualProjects,
+      });
+      const result = await userController.fetchByIdForAlgoliaList('user-id');
+
+      expect(result.individualProjects).toEqual(individualProjects);
+    });
+
     test('Should default onboarded flag to true when its null', async () => {
       const userData = getUserListItemDataObject();
       userData.onboarded = null;

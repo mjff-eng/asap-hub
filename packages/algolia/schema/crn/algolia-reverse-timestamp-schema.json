@@ -23,7 +23,8 @@
     "openScienceTeamMember",
     "apcRequested",
     "apcCoverageRequestStatus",
-    "project.id"
+    "project.id",
+    "individualProjects.id"
   ],
   "attributesToIndex": [
     "name",

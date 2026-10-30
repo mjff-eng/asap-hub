@@ -421,6 +421,7 @@ export {
 export { pixels, text, authTestUtils, utils, mail, ajvErrors, colors };
 export type { AccentVariant, SpinnerProps, SwitchProps } from './atoms';
 export type {
+  AffiliationOption,
   BreadcrumbItem,
   ItemType,
   StatusType,

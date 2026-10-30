@@ -4,7 +4,6 @@ import { toUserListItem } from '@asap-hub/model';
 import {
   getListUserResponse,
   getUserListItemResponse,
-  getUserResponse,
 } from '../../fixtures/users.fixtures';
 
 import {
@@ -96,14 +95,14 @@ describe('Index Users on Team event handler', () => {
 
   test('Should reindex the users that list the team in Algolia when the team is unpublished', async () => {
     const users = ['user-1', 'user-2'].map((id) => ({
-      ...getUserResponse(),
+      ...getUserListItemResponse(),
       id,
     }));
     algoliaSearchClientMock.search.mockResolvedValueOnce({
       hits: users.map(toUserListItem),
     } as never);
     userControllerMock.fetchByIdForAlgoliaList.mockImplementation(
-      async (id) => ({ ...getUserResponse(), id }),
+      async (id) => ({ ...getUserListItemResponse(), id }),
     );
 
     await indexHandler(getTeamUnpublishedEvent('team-1234'));
@@ -133,7 +132,7 @@ describe('Index Users on Team event handler', () => {
           ...getListUserResponse(),
           id: userID,
         };
-        const userResponse = getUserResponse();
+        const userResponse = getUserListItemResponse();
         userControllerMock.fetch.mockResolvedValue(usersResponse);
         algoliaSearchClientMock.search.mockResolvedValue({
           hits: [toUserListItem(userResponse)],

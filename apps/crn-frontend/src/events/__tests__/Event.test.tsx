@@ -9,6 +9,7 @@ import {
   createEventResponse,
   createInterestGroupResponse,
   createTeamListItemResponse,
+  createUserListItemResponse,
 } from '@asap-hub/fixtures';
 import { events } from '@asap-hub/routing';
 import { disable, enable } from '@asap-hub/flags';
@@ -23,6 +24,8 @@ import Event from '../Event';
 import {
   getAttendanceSearchHits,
   getEvent,
+  getSpeakerAffiliationHits,
+  getSpeakerSearchHits,
   getTeamsForMatching,
   patchEvent,
 } from '../api';
@@ -56,6 +59,13 @@ const mockGetTeamsForMatching = getTeamsForMatching as jest.MockedFunction<
 const mockGetAttendanceSearchHits =
   getAttendanceSearchHits as jest.MockedFunction<
     typeof getAttendanceSearchHits
+  >;
+const mockGetSpeakerSearchHits = getSpeakerSearchHits as jest.MockedFunction<
+  typeof getSpeakerSearchHits
+>;
+const mockGetSpeakerAffiliationHits =
+  getSpeakerAffiliationHits as jest.MockedFunction<
+    typeof getSpeakerAffiliationHits
   >;
 beforeEach(() => {
   disable('NEW_EVENT_PAGE');
@@ -997,6 +1007,98 @@ describe('the NEW_EVENT_PAGE flag', () => {
         expect(
           modal.queryByText('Preliminary Findings'),
         ).not.toBeInTheDocument();
+      });
+    });
+
+    describe('speaker search', () => {
+      const omegaTeam = {
+        ...createTeamListItemResponse(),
+        id: 't-omega',
+        displayName: 'Omega',
+      };
+
+      beforeEach(() => {
+        mockGetEvent.mockResolvedValue({
+          ...createEventResponse(),
+          id,
+          speakers: [teamSpeaker('t-alpha', 'Alpha', 'u1')],
+        });
+      });
+
+      it('adds a CRN user found by the search to their only team', async () => {
+        mockGetSpeakerSearchHits.mockResolvedValue([
+          {
+            ...createUserListItemResponse(),
+            id: 'u9',
+            displayName: 'Sam Lee',
+            teams: [
+              {
+                id: omegaTeam.id,
+                displayName: omegaTeam.displayName,
+                role: 'Project Manager',
+              },
+            ],
+            individualProjects: [],
+            objectID: 'u9',
+            __meta: { type: 'user' },
+          },
+        ]);
+        const { findByRole, getByRole } = render(<Event />, {
+          wrapper: projectManagerWrapper,
+        });
+
+        await userEvent.click(
+          await findByRole('button', { name: 'Edit speakers' }),
+        );
+        const modal = within(getByRole('dialog'));
+        await userEvent.type(modal.getByRole('combobox'), 'Sam');
+        await userEvent.click(await modal.findByText('Sam Lee'));
+
+        expect(mockGetSpeakerSearchHits).toHaveBeenCalledWith(
+          expect.anything(),
+          'Sam',
+        );
+        expect(modal.getByText('Added Sam Lee to Omega')).toBeVisible();
+
+        mockPatchEvent.mockResolvedValue({ ...createEventResponse(), id });
+        await userEvent.click(modal.getByRole('button', { name: 'Save' }));
+
+        await waitFor(() =>
+          expect(mockPatchEvent).toHaveBeenCalledWith(
+            id,
+            expect.objectContaining({
+              speakersToAdd: [{ userId: 'u9', teamId: 't-omega' }],
+            }),
+            expect.anything(),
+          ),
+        );
+      });
+
+      it('adds an external speaker to a team found through the affiliation search', async () => {
+        mockGetSpeakerSearchHits.mockResolvedValue([]);
+        mockGetSpeakerAffiliationHits.mockResolvedValue([
+          { ...omegaTeam, objectID: omegaTeam.id, __meta: { type: 'team' } },
+        ]);
+        const { findByRole, getByRole } = render(<Event />, {
+          wrapper: projectManagerWrapper,
+        });
+
+        await userEvent.click(
+          await findByRole('button', { name: 'Edit speakers' }),
+        );
+        const modal = within(getByRole('dialog'));
+        await userEvent.type(modal.getByRole('combobox'), 'Bob');
+        await userEvent.click(
+          await modal.findByText('Bob', { selector: 'strong' }),
+        );
+        await userEvent.type(modal.getByRole('combobox'), 'Ome');
+        await userEvent.click(await modal.findByText('Omega'));
+
+        expect(mockGetSpeakerAffiliationHits).toHaveBeenCalledWith(
+          expect.anything(),
+          'Ome',
+        );
+        expect(modal.getByText('Added Bob to Omega')).toBeVisible();
       });
     });
 

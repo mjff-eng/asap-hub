@@ -2145,6 +2145,136 @@ describe('Events Contentful Data Provider', () => {
       warnSpy.mockRestore();
     });
 
+    describe('Adding speakers', () => {
+      const link = (id: string) => ({
+        sys: { type: 'Link', linkType: 'Entry', id },
+      });
+      const localisedLink = (id: string) => ({ 'en-US': link(id) });
+
+      const mockCreatedSpeakerEntries = (...ids: string[]) => {
+        ids.forEach((id) => {
+          const newEntry = getEntry({}, { id });
+          newEntry.publish = jest.fn().mockResolvedValue(getEntry({}, { id }));
+          environmentMock.createEntry.mockResolvedValueOnce(newEntry);
+        });
+      };
+
+      const mockEventWithSpeakers = (...speakerIds: string[]) => {
+        const eventEntry = getEntry(
+          { speakers: { 'en-US': speakerIds.map(link) } },
+          { id: '123' },
+        );
+        when(environmentMock.getEntry)
+          .calledWith('123')
+          .mockResolvedValue(eventEntry);
+        return eventEntry;
+      };
+
+      test('creates and publishes a speaker entry for each speaker and links them after the existing speakers', async () => {
+        const eventEntry = mockEventWithSpeakers('speaker-1');
+        mockCreatedSpeakerEntries(
+          'speaker-new-1',
+          'speaker-new-2',
+          'speaker-new-3',
+        );
+        mockPollingConsistency();
+
+        await eventDataProvider.updateEventDetails('123', {
+          speakersToAdd: [
+            { userId: 'user-1', teamId: 'team-1' },
+            {
+              externalAuthorId: 'external-author-1',
+              projectId: 'project-1',
+              preliminaryDataShared: true,
+            },
+            { externalAuthorId: 'external-author-2' },
+          ],
+        });
+
+        expect(environmentMock.createEntry.mock.calls).toEqual([
+          [
+            'eventSpeakers',
+            {
+              fields: {
+                user: localisedLink('user-1'),
+                team: localisedLink('team-1'),
+                preliminaryDataShared: { 'en-US': false },
+              },
+            },
+          ],
+          [
+            'eventSpeakers',
+            {
+              fields: {
+                user: localisedLink('external-author-1'),
+                project: localisedLink('project-1'),
+                preliminaryDataShared: { 'en-US': true },
+              },
+            },
+          ],
+          [
+            'eventSpeakers',
+            {
+              fields: {
+                user: localisedLink('external-author-2'),
+                preliminaryDataShared: { 'en-US': false },
+              },
+            },
+          ],
+        ]);
+        expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+          speakers: [
+            link('speaker-1'),
+            link('speaker-new-1'),
+            link('speaker-new-2'),
+            link('speaker-new-3'),
+          ],
+        });
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalled();
+      });
+
+      test('adds and removes speakers in the same update', async () => {
+        const eventEntry = mockEventWithSpeakers('speaker-1', 'speaker-2');
+        const speakerToDelete = getEntry({}, { id: 'speaker-1' });
+        speakerToDelete.isPublished = jest.fn(() => true);
+        when(environmentMock.getEntry)
+          .calledWith('speaker-1')
+          .mockResolvedValue(speakerToDelete);
+        mockCreatedSpeakerEntries('speaker-new-1');
+        mockPollingConsistency();
+
+        await eventDataProvider.updateEventDetails('123', {
+          speakersToAdd: [{ userId: 'user-1', projectId: 'project-1' }],
+          speakersToRemove: ['speaker-1'],
+        });
+
+        expect(speakerToDelete.delete).toHaveBeenCalled();
+        expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+          speakers: [link('speaker-2'), link('speaker-new-1')],
+        });
+      });
+
+      test('keeps the speakers to remove and leaves the event untouched when creating a speaker entry fails', async () => {
+        mockEventWithSpeakers('speaker-1');
+        const speakerToDelete = getEntry({}, { id: 'speaker-1' });
+        speakerToDelete.isPublished = jest.fn(() => true);
+        when(environmentMock.getEntry)
+          .calledWith('speaker-1')
+          .mockResolvedValue(speakerToDelete);
+        environmentMock.createEntry.mockRejectedValue(new Error('boom'));
+
+        await expect(
+          eventDataProvider.updateEventDetails('123', {
+            speakersToAdd: [{ userId: 'user-1', teamId: 'team-1' }],
+            speakersToRemove: ['speaker-1'],
+          }),
+        ).rejects.toThrow('Error creating speaker entry');
+        expect(speakerToDelete.unpublish).not.toHaveBeenCalled();
+        expect(speakerToDelete.delete).not.toHaveBeenCalled();
+        expect(patchAndPublish).not.toHaveBeenCalled();
+      });
+    });
+
     describe('Preliminary data shared', () => {
       const speakerLink = (id: string) => ({
         sys: { type: 'Link', linkType: 'Entry', id },

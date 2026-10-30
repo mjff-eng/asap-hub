@@ -377,7 +377,8 @@ export const appFactory = (libs: Libs = {}): Express => {
     libs.discussionController ||
     new DiscussionController(discussionDataProvider);
   const eventController =
-    libs.eventController || new EventController(eventDataProvider);
+    libs.eventController ||
+    new EventController(eventDataProvider, externalAuthorDataProvider);
   const guideController =
     libs.guideController || new GuideController(guideDataProvider);
   const impactController =

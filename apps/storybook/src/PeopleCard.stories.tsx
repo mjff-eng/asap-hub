@@ -48,6 +48,7 @@ const props = {
   })),
   _tags: [],
   tags: [],
+  individualProjects: [],
 };
 
 export const Normal = () => <PeopleCard {...props} />;

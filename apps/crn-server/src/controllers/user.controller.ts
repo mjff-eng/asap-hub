@@ -7,6 +7,7 @@ import {
   PublicUserDataObject,
   PublicUserResponse,
   UserDataObject,
+  UserListItemSource,
   UserResponse,
   UserUpdateDataObject,
   UserUpdateRequest,
@@ -99,7 +100,7 @@ export default class UserController {
     return parseUserToResponse(user);
   }
 
-  async fetchByIdForAlgoliaList(id: string): Promise<UserResponse> {
+  async fetchByIdForAlgoliaList(id: string): Promise<UserListItemSource> {
     const user = await this.userDataProvider.fetchByIdForAlgoliaList(id);
 
     if (!user) {
@@ -125,6 +126,7 @@ export default class UserController {
       openScienceTeamMember: user.openScienceTeamMember,
       techSupport: user.techSupport,
       teams: user.teams,
+      individualProjects: user.individualProjects,
       alumniSinceDate: user.alumniSinceDate,
       avatarUrl: user.avatarUrl,
       biography: user.biography,
@@ -149,7 +151,7 @@ export default class UserController {
       social: user.social,
       stateOrProvince: user.stateOrProvince,
       tags: user.tags,
-    } as UserResponse;
+    };
   }
 
   async fetchByCode(code: string): Promise<UserResponse> {

@@ -39,3 +39,15 @@ export const getAttendanceSearchHits = jest.fn(
     ClientSearchResponse<'crn', 'interest-group' | 'team'>['hits']
   > => [],
 );
+
+export const getSpeakerSearchHits = jest.fn(
+  async (): Promise<
+    ClientSearchResponse<'crn', 'user' | 'external-author'>['hits']
+  > => [],
+);
+
+export const getSpeakerAffiliationHits = jest.fn(
+  async (): Promise<
+    ClientSearchResponse<'crn', 'team' | 'project'>['hits']
+  > => [],
+);

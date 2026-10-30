@@ -128,6 +128,21 @@ const loadSearchOptions = jest.fn(async () => [
   multiAffiliationOption,
   noAffiliationOption,
 ]);
+const externalAuthorOption: SpeakerSearchOption = {
+  value: 'external-author-1',
+  label: 'Riley Stone',
+  externalAuthor: { id: 'external-author-1', displayName: 'Riley Stone' },
+};
+
+const loadAffiliationOptions = jest.fn(async () => [
+  {
+    id: 'team-9',
+    name: 'Team Omega',
+    variant: 'team' as const,
+    teamType: 'Resource Team' as const,
+    isTeamInactive: true,
+  },
+]);
 const onSave = jest.fn();
 const onDismiss = jest.fn();
 
@@ -146,6 +161,7 @@ const renderModal = (
   render(
     <EditEventSpeakersModal
       loadSearchOptions={loadSearchOptions}
+      loadAffiliationOptions={loadAffiliationOptions}
       onSave={onSave}
       onDismiss={onDismiss}
       groups={groups}
@@ -472,16 +488,167 @@ describe('EditEventSpeakersModal', () => {
     ).toBeVisible();
   });
 
+  it('Should keep an existing external author as an external guest with its id', async () => {
+    loadSearchOptions.mockImplementation(async () => [externalAuthorOption]);
+    renderModal();
+
+    await userEvent.type(screen.getByRole('combobox'), 'Riley');
+    const option = await screen.findByRole('option', { name: /Riley Stone/ });
+    expect(within(option).getByText('Non CRN')).toBeInTheDocument();
+    await userEvent.click(option);
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSave).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            variant: 'external',
+            users: [
+              expect.objectContaining({
+                displayName: 'Riley Stone',
+                externalAuthorId: 'external-author-1',
+              }),
+            ],
+          }),
+        ]),
+      ),
+    );
+  });
+
+  it('Should add an external speaker to a team found through the affiliation search', async () => {
+    loadSearchOptions.mockImplementation(async () => [externalAuthorOption]);
+    renderModal();
+
+    await userEvent.type(screen.getByRole('combobox'), 'Riley');
+    await userEvent.click(
+      await screen.findByRole('option', { name: /Riley Stone/ }),
+    );
+    await userEvent.type(screen.getByRole('combobox'), 'Ome');
+    await userEvent.click(await screen.findByText('Team Omega'));
+
+    expect(loadAffiliationOptions).toHaveBeenLastCalledWith('Ome');
+    expect(screen.getByText('Added Riley Stone to Team Omega')).toBeVisible();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSave).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: 'team-9',
+            variant: 'team',
+            teamName: 'Team Omega',
+            teamType: 'Resource Team',
+            isTeamInactive: true,
+            users: [
+              expect.objectContaining({
+                displayName: 'Riley Stone',
+                isExternal: true,
+                externalAuthorId: 'external-author-1',
+              }),
+            ],
+          }),
+        ]),
+      ),
+    );
+  });
+
   it('Should add a second external speaker into the existing External section', async () => {
-    renderModal({ groups: [getExternalGroup()] });
+    renderModal({ groups: [getTeamGroup(), getExternalGroup()] });
 
     await search('Guest Two', 'Guest Two');
     await userEvent.click(
       screen.getByRole('button', { name: 'Keep as External Guest' }),
     );
 
+    expect(screen.getByText('Team Alpha')).toBeInTheDocument();
     expect(screen.getByText('Guest One')).toBeInTheDocument();
     expect(screen.getByText('Guest Two')).toBeInTheDocument();
+  });
+
+  it('Should not duplicate an external guest whose name is already in the External section', async () => {
+    renderModal({ groups: [getExternalGroup()] });
+
+    await searchNonCrn('guest one');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+
+    expect(screen.getAllByText('Guest One')).toHaveLength(1);
+    expect(screen.queryByText(/as an External Guest/)).not.toBeInTheDocument();
+  });
+
+  it('Should not duplicate an existing external author kept twice as an external guest', async () => {
+    loadSearchOptions.mockImplementation(async () => [externalAuthorOption]);
+    renderModal();
+
+    const keepRileyAsGuest = async () => {
+      await userEvent.type(screen.getByRole('combobox'), 'Riley');
+      await userEvent.click(
+        await screen.findByRole('option', { name: /Riley Stone/ }),
+      );
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Keep as External Guest' }),
+      );
+    };
+    await keepRileyAsGuest();
+    await keepRileyAsGuest();
+
+    expect(
+      screen.getAllByRole('button', { name: 'Remove Riley Stone' }),
+    ).toHaveLength(1);
+  });
+
+  it('Should keep two different external authors who share a name', async () => {
+    loadSearchOptions.mockImplementation(async () => [externalAuthorOption]);
+    renderModal({
+      groups: [
+        getExternalGroup({
+          users: [
+            getExternalUser({
+              displayName: 'Riley Stone',
+              externalAuthorId: 'external-author-2',
+            }),
+          ],
+        }),
+      ],
+    });
+
+    await userEvent.type(screen.getByRole('combobox'), 'Riley');
+    await userEvent.click(
+      await screen.findByRole('option', { name: /Riley Stone/ }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Keep as External Guest' }),
+    );
+
+    expect(
+      screen.getAllByRole('button', { name: 'Remove Riley Stone' }),
+    ).toHaveLength(2);
+  });
+
+  it('Should not duplicate an external speaker already in the team picked on the banner', async () => {
+    renderModal();
+
+    const addBobToTeamOmega = async () => {
+      await searchNonCrn('Bob');
+      await userEvent.type(screen.getByRole('combobox'), 'Ome');
+      await userEvent.click(
+        await screen.findByRole('option', { name: 'Team Omega' }),
+      );
+    };
+    await addBobToTeamOmega();
+    await addBobToTeamOmega();
+
+    expect(screen.getAllByRole('button', { name: 'Remove Bob' })).toHaveLength(
+      1,
+    );
+    expect(
+      screen.queryByText('Added Bob to Team Omega'),
+    ).not.toBeInTheDocument();
   });
 
   it('Should cancel the pending addition when the external banner is dismissed', async () => {
@@ -1010,8 +1177,9 @@ describe('EditEventSpeakersModal', () => {
       screen.getByRole('button', { name: 'Remove Jane Doe' }),
     );
     await searchNonCrn('Bob');
+    await userEvent.type(screen.getByRole('combobox'), 'Ome');
     await userEvent.click(
-      screen.getByRole('button', { name: 'Keep as External Guest' }),
+      await screen.findByRole('option', { name: 'Team Omega' }),
     );
 
     const removeButtons = screen.getAllByRole('button', { name: 'Remove Bob' });
@@ -1067,6 +1235,7 @@ describe('EditEventSpeakersModal', () => {
     rerender(
       <EditEventSpeakersModal
         loadSearchOptions={loadSearchOptions}
+        loadAffiliationOptions={loadAffiliationOptions}
         onSave={onSave}
         onDismiss={onDismiss}
         isPastEvent
@@ -1163,12 +1332,12 @@ describe('EditEventSpeakersModal', () => {
     renderModal();
 
     await searchNonCrn('Bob');
-    await userEvent.click(screen.getByRole('combobox'));
+    await userEvent.type(screen.getByRole('combobox'), 'Ome');
     await userEvent.click(
-      await screen.findByRole('option', { name: 'Team Alpha' }),
+      await screen.findByRole('option', { name: 'Team Omega' }),
     );
 
-    expect(screen.getByText('Added Bob to Team Alpha')).toBeVisible();
+    expect(screen.getByText('Added Bob to Team Omega')).toBeVisible();
     expect(screen.getByText('Bob')).toBeInTheDocument();
   });
 
@@ -1176,9 +1345,9 @@ describe('EditEventSpeakersModal', () => {
     renderModal();
 
     await searchNonCrn('Bob');
-    await userEvent.click(screen.getByRole('combobox'));
+    await userEvent.type(screen.getByRole('combobox'), 'Ome');
     await userEvent.click(
-      await screen.findByRole('option', { name: 'Team Alpha' }),
+      await screen.findByRole('option', { name: 'Team Omega' }),
     );
 
     // No CRN profile to link to, and "Non CRN" rather than the "No role" a
@@ -1219,6 +1388,7 @@ describe('EditEventSpeakersModal', () => {
     render(
       <EditEventSpeakersModal
         loadSearchOptions={loadSearchOptions}
+        loadAffiliationOptions={loadAffiliationOptions}
         onSave={onSave}
         onDismiss={onDismiss}
       />,

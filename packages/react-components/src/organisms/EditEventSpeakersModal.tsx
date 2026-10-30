@@ -10,9 +10,15 @@ import {
   MultiSelect,
   MultiSelectOptionsType,
   Paragraph,
+  Pill,
 } from '../atoms';
 import { colour } from '../colors';
-import { crossIcon, plusIcon, searchIcon } from '../icons';
+import {
+  crossIcon,
+  externalUserAvatarIcon,
+  plusIcon,
+  searchIcon,
+} from '../icons';
 import { ConfirmableModalFooter, Modal } from '../molecules';
 import ExternalSpeakerAffiliationCard, {
   AffiliationOption,
@@ -25,6 +31,7 @@ import SpeakerUserRow, {
   chevronSpacerStyles,
   findingsColumnStyles,
   flexRowGap8Styles,
+  placeholderAvatarStyles,
   trailingColumnsStyles,
 } from '../molecules/SpeakerUserRow';
 import { mobileScreen, rem } from '../pixels';
@@ -33,6 +40,7 @@ import { EventTeamType } from './shared-event-card';
 import { iconButtonStyles } from './shared-event-card-styles';
 import {
   groupLabel,
+  SpeakerExternalGroup,
   SpeakerGroup,
   SpeakerGroupExternalUser,
   SpeakerGroupUser,
@@ -57,6 +65,10 @@ export type SpeakerSearchOption = MultiSelectOptionsType & {
     readonly isAlumni?: boolean;
     readonly affiliationOptions: ReadonlyArray<SpeakerTeamOption>;
   };
+  readonly externalAuthor?: {
+    readonly id: string;
+    readonly displayName: string;
+  };
 };
 
 type EditEventSpeakersModalProps = {
@@ -65,6 +77,9 @@ type EditEventSpeakersModalProps = {
   readonly loadSearchOptions: (
     inputValue: string,
   ) => Promise<SpeakerSearchOption[]>;
+  readonly loadAffiliationOptions: (
+    searchQuery: string,
+  ) => Promise<ReadonlyArray<AffiliationOption>>;
   readonly onSave: (groups: SpeakerGroup[]) => void | Promise<void>;
   readonly onDismiss: () => void;
 };
@@ -219,9 +234,24 @@ const withExternalGroupLast = (nextGroups: SpeakerGroup[]) => [
   ...nextGroups.filter((group) => group.variant === 'external'),
 ];
 
+const normalizeName = (name: string) =>
+  name.trim().replace(/\s+/g, ' ').toLowerCase();
+
+// Saved external speakers and new names carry no external author id, so the
+// name is the only thing to compare them by.
+const isSameExternalSpeaker = (
+  row: { readonly displayName: string; readonly externalAuthorId?: string },
+  displayName: string,
+  externalAuthorId?: string,
+) =>
+  row.externalAuthorId && externalAuthorId
+    ? row.externalAuthorId === externalAuthorId
+    : normalizeName(row.displayName) === normalizeName(displayName);
+
 type PendingSpeaker = {
   readonly displayName: string;
   readonly user?: NonNullable<SpeakerSearchOption['user']>;
+  readonly externalAuthorId?: string;
 };
 
 type AddedSpeaker = {
@@ -231,10 +261,50 @@ type AddedSpeaker = {
   readonly userId: string;
 };
 
+const renderSearchOption = (
+  option: SpeakerSearchOption,
+  typedName: React.ReactNode,
+) => {
+  if (option.user) {
+    return (
+      <span css={searchOptionStyles}>
+        <Avatar
+          {...splitDisplayName(option.user.displayName)}
+          imageUrl={option.user.avatarUrl}
+          overrideStyles={avatar24Styles}
+        />
+        <span css={searchUserNameStyles}>{option.user.displayName}</span>
+      </span>
+    );
+  }
+  if (option.externalAuthor) {
+    return (
+      <span css={searchOptionStyles}>
+        <span css={placeholderAvatarStyles}>{externalUserAvatarIcon}</span>
+        <span css={searchUserNameStyles}>
+          {option.externalAuthor.displayName}
+        </span>
+        <Pill accent="gray" noMargin>
+          Non CRN
+        </Pill>
+      </span>
+    );
+  }
+  return (
+    <span css={searchOptionStyles}>
+      {plusIcon}
+      <span css={searchExternalTextStyles}>
+        <strong>{typedName}</strong> (Non CRN)
+      </span>
+    </span>
+  );
+};
+
 const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   groups = [],
   isPastEvent = false,
   loadSearchOptions,
+  loadAffiliationOptions,
   onSave,
   onDismiss,
 }) => {
@@ -296,7 +366,10 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   const addUserToAffiliation = (
     user: NonNullable<SpeakerSearchOption['user']>,
     affiliation: SpeakerTeamOption,
-    { isExternal = false }: { isExternal?: boolean } = {},
+    {
+      isExternal = false,
+      externalAuthorId,
+    }: { isExternal?: boolean; externalAuthorId?: string } = {},
   ) => {
     const newUser: SpeakerGroupUser = {
       id: user.userId,
@@ -305,6 +378,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       avatarUrl: user.avatarUrl,
       isAlumni: user.isAlumni,
       isExternal,
+      externalAuthorId,
       roles: affiliation.role ? [affiliation.role] : [],
       preliminaryFindingsShared: false,
     };
@@ -335,7 +409,13 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       }
       if (
         existingGroup.variant === 'external' ||
-        existingGroup.users.some((row) => row.id === user.userId)
+        existingGroup.users.some(
+          (row) =>
+            row.id === user.userId ||
+            (isExternal &&
+              row.isExternal &&
+              isSameExternalSpeaker(row, user.displayName, externalAuthorId)),
+        )
       ) {
         return current;
       }
@@ -371,39 +451,57 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   const addGuestToAffiliation = (
     name: string,
     affiliation: SpeakerTeamOption,
+    externalAuthorId?: string,
   ) =>
     addUserToAffiliation(
       { userId: nextGuestId(name), displayName: name, affiliationOptions: [] },
       affiliation,
-      { isExternal: true },
+      { isExternal: true, externalAuthorId },
     );
 
-  const addExternalUser = (name: string) => {
+  const addExternalUser = (name: string, externalAuthorId?: string) => {
     const newUser: SpeakerGroupExternalUser = {
       id: nextGuestId(name),
       speakerIds: [],
       displayName: name,
+      externalAuthorId,
       preliminaryFindingsShared: false,
     };
-    updateGroups((current) =>
-      current.some((group) => group.variant === 'external')
-        ? current.map((group) =>
-            group.variant === 'external'
-              ? { ...group, users: [...group.users, newUser] }
-              : group,
-          )
-        : [
-            ...current,
-            { id: 'external', variant: 'external', users: [newUser] },
-          ],
-    );
+    const before = latestGroups.current;
+    const after = updateGroups((current) => {
+      const externalGroup = current.find(
+        (group): group is SpeakerExternalGroup => group.variant === 'external',
+      );
+      if (!externalGroup) {
+        return [
+          ...current,
+          { id: 'external', variant: 'external', users: [newUser] },
+        ];
+      }
+      if (
+        externalGroup.users.some((row) =>
+          isSameExternalSpeaker(row, name, externalAuthorId),
+        )
+      ) {
+        return current;
+      }
+      return current.map((group) =>
+        group === externalGroup
+          ? { ...externalGroup, users: [...externalGroup.users, newUser] }
+          : group,
+      );
+    });
     expandSection('external');
     setPendingSpeaker(null);
-    setAddedSpeaker({
-      speakerName: name,
-      groupId: 'external',
-      userId: newUser.id,
-    });
+    setAddedSpeaker(
+      after === before
+        ? null
+        : {
+            speakerName: name,
+            groupId: 'external',
+            userId: newUser.id,
+          },
+    );
   };
 
   const handleSelectSearchOption = (option: SpeakerSearchOption) => {
@@ -415,8 +513,12 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     }
     setAddedSpeaker(null);
     setPendingSpeaker({
-      displayName: option.user?.displayName ?? option.label,
+      displayName:
+        option.user?.displayName ??
+        option.externalAuthor?.displayName ??
+        option.label,
       user: option.user,
+      externalAuthorId: option.externalAuthor?.id,
     });
   };
 
@@ -523,7 +625,11 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     />
   );
 
-  const renderBanner = ({ displayName, user }: PendingSpeaker) => {
+  const renderBanner = ({
+    displayName,
+    user,
+    externalAuthorId,
+  }: PendingSpeaker) => {
     if (user && user.affiliationOptions.length === 0) {
       return (
         <SpeakerToast
@@ -549,15 +655,13 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     ) : (
       <ExternalSpeakerAffiliationCard
         displayName={displayName}
-        affiliationOptions={[...teamGroups, ...projectGroups].map((group) => ({
-          variant: group.variant,
-          id: group.id,
-          name: groupLabel(group),
-        }))}
+        loadAffiliationOptions={loadAffiliationOptions}
         onSelectAffiliation={(affiliation) =>
-          addGuestToAffiliation(displayName, affiliation)
+          addGuestToAffiliation(displayName, affiliation, externalAuthorId)
         }
-        onKeepAsExternalGuest={() => addExternalUser(displayName)}
+        onKeepAsExternalGuest={() =>
+          addExternalUser(displayName, externalAuthorId)
+        }
         onDismiss={() => setPendingSpeaker(null)}
         enabled={!isCancelling}
       />
@@ -615,39 +719,11 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
                 menuProps.selectProps.inputValue ? (
                   <components.Menu {...menuProps} />
                 ) : null,
-              Option: (optionProps) => {
-                const option = optionProps.data;
-                return (
-                  <components.Option {...optionProps}>
-                    <span css={searchOptionStyles}>
-                      {option.user ? (
-                        <Avatar
-                          {...splitDisplayName(option.user.displayName)}
-                          imageUrl={option.user.avatarUrl}
-                          overrideStyles={avatar24Styles}
-                        />
-                      ) : (
-                        plusIcon
-                      )}
-                      <span
-                        css={
-                          option.user
-                            ? searchUserNameStyles
-                            : searchExternalTextStyles
-                        }
-                      >
-                        {option.user ? (
-                          option.user.displayName
-                        ) : (
-                          <>
-                            <strong>{optionProps.children}</strong> (Non CRN)
-                          </>
-                        )}
-                      </span>
-                    </span>
-                  </components.Option>
-                );
-              },
+              Option: (optionProps) => (
+                <components.Option {...optionProps}>
+                  {renderSearchOption(optionProps.data, optionProps.children)}
+                </components.Option>
+              ),
             }}
           />
         </div>

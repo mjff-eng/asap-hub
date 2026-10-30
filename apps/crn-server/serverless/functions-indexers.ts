@@ -112,6 +112,15 @@ export const indexerFunctions: AWS['functions'] = {
     './src/handlers/project/algolia-index-project-membership-handler.handler',
     ['ProjectMembershipPublished', 'ProjectMembershipUnpublished'],
   ),
+  algoliaIndexProjectUsers: algoliaIndexer(
+    './src/handlers/user/algolia-index-project-users-handler.handler',
+    [
+      'ProjectsPublished',
+      'ProjectsUnpublished',
+      'ProjectMembershipPublished',
+      'ProjectMembershipUnpublished',
+    ],
+  ),
   algoliaIndexTutorials: algoliaIndexer(
     './src/handlers/tutorials/algolia-index-tutorials-handler.handler',
     ['TutorialsPublished', 'TutorialsUnpublished'],

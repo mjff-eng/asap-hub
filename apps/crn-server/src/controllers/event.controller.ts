@@ -2,6 +2,8 @@ import { NotFoundError } from '@asap-hub/errors';
 import {
   EventCreateRequest,
   EventResponse,
+  EventSpeakerAddDataObject,
+  EventSpeakerAddItem,
   EventUpdateDetailsRequest,
   EventUpdateRequest,
   FetchEventsOptions,
@@ -9,9 +11,13 @@ import {
 } from '@asap-hub/model';
 
 import { EventDataProvider } from '../data-providers/types';
+import { ExternalAuthorDataProvider } from '../data-providers/types/external-authors.data-provider.types';
 
 export default class EventController {
-  constructor(private dataProvider: EventDataProvider) {}
+  constructor(
+    private dataProvider: EventDataProvider,
+    private externalAuthorDataProvider: ExternalAuthorDataProvider,
+  ) {}
 
   async fetch(options: FetchEventsOptions): Promise<ListEventResponse> {
     return this.dataProvider.fetch(options);
@@ -40,9 +46,14 @@ export default class EventController {
 
   async updateEventDetails(
     eventId: string,
-    data: EventUpdateDetailsRequest,
+    { speakersToAdd, ...data }: EventUpdateDetailsRequest,
   ): Promise<EventResponse> {
-    await this.dataProvider.updateEventDetails(eventId, data);
+    await this.dataProvider.updateEventDetails(eventId, {
+      ...data,
+      ...(speakersToAdd && {
+        speakersToAdd: await this.createNewExternalAuthors(speakersToAdd),
+      }),
+    });
     return this.fetchById(eventId);
   }
 
@@ -64,4 +75,20 @@ export default class EventController {
 
     return event || null;
   }
+
+  private createNewExternalAuthors = (
+    speakers: EventSpeakerAddItem[],
+  ): Promise<EventSpeakerAddDataObject[]> =>
+    Promise.all(
+      speakers.map(async (speaker) => {
+        if (!('externalAuthorName' in speaker)) {
+          return speaker;
+        }
+        const { externalAuthorName, ...affiliation } = speaker;
+        const externalAuthorId = await this.externalAuthorDataProvider.create({
+          name: externalAuthorName,
+        });
+        return { ...affiliation, externalAuthorId };
+      }),
+    );
 }
