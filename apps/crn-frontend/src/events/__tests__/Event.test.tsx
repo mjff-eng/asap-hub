@@ -26,7 +26,7 @@ import {
   getTeamsForMatching,
   patchEvent,
 } from '../api';
-import { downloadEventSpeakers } from '../export';
+import { downloadEventAttendance, downloadEventSpeakers } from '../export';
 
 jest.mock('../api');
 jest.mock('../export');
@@ -39,6 +39,10 @@ jest.setTimeout(30_000);
 const mockDownloadEventSpeakers = downloadEventSpeakers as jest.MockedFunction<
   typeof downloadEventSpeakers
 >;
+const mockDownloadEventAttendance =
+  downloadEventAttendance as jest.MockedFunction<
+    typeof downloadEventAttendance
+  >;
 
 globalThis.ResizeObserver = jest.fn(() => ({
   observe: jest.fn(),
@@ -800,7 +804,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
       expect(mockPatchEvent).not.toHaveBeenCalled();
     });
 
-    it('hides the edit control for a user without tech support', async () => {
+    it('hides the edit and download controls for a user without tech support', async () => {
       mockGetEvent.mockResolvedValue({
         ...createEventResponse(),
         id,
@@ -813,6 +817,23 @@ describe('the NEW_EVENT_PAGE flag', () => {
       });
       expect(await findByText('No attendance recorded yet')).toBeVisible();
       expect(queryByLabelText('Edit attendance')).not.toBeInTheDocument();
+      expect(queryByLabelText('Download attendance')).not.toBeInTheDocument();
+    });
+
+    it('lets a tech support member download the attendance', async () => {
+      mockDownloadEventAttendance.mockClear();
+      mockGetEvent.mockResolvedValue(eventWithOneTeam());
+      const { findByLabelText } = render(<Event />, {
+        wrapper: createWrapper({ techSupport: true }),
+      });
+
+      await userEvent.click(await findByLabelText('Download attendance'));
+
+      expect(mockDownloadEventAttendance).toHaveBeenCalledTimes(1);
+      expect(mockDownloadEventAttendance).toHaveBeenCalledWith(
+        expect.objectContaining({ id }),
+        [expect.objectContaining({ teamName: 'Team One', attended: false })],
+      );
     });
 
     describe('interest group teams', () => {
