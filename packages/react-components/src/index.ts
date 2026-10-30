@@ -182,6 +182,7 @@ export {
   EventAbout,
   EventAttendance,
   compareAttendanceTeams,
+  summarizeAttendance,
   SourceLists,
   UploadListModal,
   EventCard,
