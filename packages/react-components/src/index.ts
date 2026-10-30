@@ -396,6 +396,7 @@ export {
   TutorialsPageHeader,
   UnsupportedBrowserPage,
   UserProfileAbout,
+  UserProfileHeaderNew,
   UserProfilePage,
   UserProfileResearch,
   UserProfileResearchOutputs,

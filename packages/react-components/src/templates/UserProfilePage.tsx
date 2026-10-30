@@ -1,6 +1,8 @@
 import { ComponentProps } from 'react';
+import { isEnabled } from '@asap-hub/flags';
 
 import UserProfileHeader from './UserProfileHeader';
+import UserProfileHeaderNew from './UserProfileHeaderNew';
 import PageConstraints from './PageConstraints';
 
 type UserProfilePageProps = ComponentProps<typeof UserProfileHeader> & {
@@ -12,7 +14,11 @@ const UserProfilePage: React.FC<UserProfilePageProps> = ({
   ...profile
 }) => (
   <article>
-    <UserProfileHeader {...profile} />
+    {isEnabled('NEW_USER_DETAIL_PAGE') ? (
+      <UserProfileHeaderNew {...profile} />
+    ) : (
+      <UserProfileHeader {...profile} />
+    )}
     <PageConstraints as="main">{children}</PageConstraints>
   </article>
 );

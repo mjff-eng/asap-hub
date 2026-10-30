@@ -35,21 +35,14 @@ const iconStyles = css({
   },
 });
 
-const SocialIconLink: React.FC<{
-  link?: string;
-  icon: React.ReactElement<{ color?: string }>;
-}> = ({ link, icon }) =>
-  link ? (
-    <Link href={link}>
-      <div css={iconStyles}>
-        {cloneElement(icon, { color: SOCIAL_ICON_COLOR })}
-      </div>
-    </Link>
-  ) : null;
+export type SocialLink = {
+  readonly link: string;
+  readonly icon: React.ReactElement<{ color?: string }>;
+};
 
 type SocialIconsProps = NonNullable<UserResponse['social']>;
 
-const SocialIcons: React.FC<SocialIconsProps> = ({
+export const getSocialLinks = ({
   blueSky,
   github,
   linkedIn,
@@ -60,74 +53,73 @@ const SocialIcons: React.FC<SocialIconsProps> = ({
   researchGate,
   website1,
   website2,
-}) => (
-  <div css={socialContainerStyles}>
-    <SocialIconLink
-      link={
-        orcid ? new URL(`https://orcid.org/${orcid}`).toString() : undefined
-      }
-      icon={<OrcidSocialIcon />}
-    />
-    <SocialIconLink
-      link={
-        researcherId
+}: SocialIconsProps): SocialLink[] =>
+  (
+    [
+      {
+        link: orcid ? new URL(`https://orcid.org/${orcid}`).toString() : null,
+        icon: <OrcidSocialIcon />,
+      },
+      {
+        link: researcherId
           ? new URL(`https://publons.com/researcher/${researcherId}`).toString()
-          : undefined
-      }
-      icon={<ResearcherIdIcon />}
-    />
-    <SocialIconLink
-      link={
-        blueSky
+          : null,
+        icon: <ResearcherIdIcon />,
+      },
+      {
+        link: blueSky
           ? new URL(`https://bsky.app/profile/${blueSky}`).toString()
-          : undefined
-      }
-      icon={<BlueSkyIcon />}
-    />
-    <SocialIconLink
-      link={
-        twitter
+          : null,
+        icon: <BlueSkyIcon />,
+      },
+      {
+        link: twitter
           ? new URL(`https://twitter.com/${twitter}`).toString()
-          : undefined
-      }
-      icon={<TwitterIcon />}
-    />
-    <SocialIconLink
-      link={
-        github ? new URL(`https://github.com/${github}`).toString() : undefined
-      }
-      icon={<GithubIcon />}
-    />
-    <SocialIconLink
-      link={
-        googleScholar
+          : null,
+        icon: <TwitterIcon />,
+      },
+      {
+        link: github
+          ? new URL(`https://github.com/${github}`).toString()
+          : null,
+        icon: <GithubIcon />,
+      },
+      {
+        link: googleScholar
           ? `https://scholar.google.co.uk/citations?${new URLSearchParams({
               user: googleScholar,
             }).toString()}`
-          : undefined
-      }
-      icon={<GoogleScholarIcon />}
-    />
-    <SocialIconLink
-      link={
-        researchGate
+          : null,
+        icon: <GoogleScholarIcon />,
+      },
+      {
+        link: researchGate
           ? new URL(
               `https://www.researchgate.net/profile/${researchGate}`,
             ).toString()
-          : undefined
-      }
-      icon={<ResearchGateIcon />}
-    />
-    <SocialIconLink
-      link={
-        linkedIn
+          : null,
+        icon: <ResearchGateIcon />,
+      },
+      {
+        link: linkedIn
           ? new URL(`https://www.linkedin.com/in/${linkedIn}`).toString()
-          : undefined
-      }
-      icon={<LinkedInIcon />}
-    />
-    <SocialIconLink link={website1} icon={<GlobeIcon />} />
-    <SocialIconLink link={website2} icon={<GlobeIcon />} />
+          : null,
+        icon: <LinkedInIcon />,
+      },
+      { link: website1 ?? null, icon: <GlobeIcon /> },
+      { link: website2 ?? null, icon: <GlobeIcon /> },
+    ] as const
+  ).filter((item): item is SocialLink => !!item.link);
+
+const SocialIcons: React.FC<SocialIconsProps> = (social) => (
+  <div css={socialContainerStyles}>
+    {getSocialLinks(social).map(({ link, icon }) => (
+      <Link key={link} href={link}>
+        <div css={iconStyles}>
+          {cloneElement(icon, { color: SOCIAL_ICON_COLOR })}
+        </div>
+      </Link>
+    ))}
   </div>
 );
 
