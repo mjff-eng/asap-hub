@@ -4,7 +4,8 @@ export type Flag =
   | 'STAGING_MODE'
   | 'COMPLIANCE_NOTIFICATION_LIST'
   | 'NEW_EVENT_PAGE'
-  | 'AWARDS_TAB';
+  | 'AWARDS_TAB'
+  | 'NEW_USER_DETAIL_PAGE';
 
 export type Flags = Partial<Record<Flag, boolean | string | undefined>>;
 let overrides: Flags = {
@@ -18,6 +19,7 @@ let overrides: Flags = {
   STAGING_MODE: false,
   NEW_EVENT_PAGE: false,
   AWARDS_TAB: false,
+  NEW_USER_DETAIL_PAGE: false,
 };
 
 const envDefaults: Record<string, boolean> = {

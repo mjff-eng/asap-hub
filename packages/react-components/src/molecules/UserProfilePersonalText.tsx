@@ -1,4 +1,10 @@
-import React, { FC, useContext, useState } from 'react';
+import React, {
+  ComponentProps,
+  FC,
+  ReactNode,
+  useContext,
+  useState,
+} from 'react';
 import { css } from '@emotion/react';
 import { UserListItemResponse, UserTeam } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
@@ -27,7 +33,9 @@ const locationStyles = css({
 });
 
 const iconStyles = css({
-  display: 'inline-block',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   width: rem(lineHeight),
   height: rem(lineHeight),
   paddingRight: rem(6),
@@ -37,6 +45,18 @@ const paragraphStyles = css({
   marginTop: 0,
   marginBottom: rem(18),
   color: colour.foreground.tertiary,
+});
+
+const compactParagraphStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  rowGap: rem(4),
+  marginBottom: rem(16),
+});
+
+const compactLocationStyles = css({
+  padding: 0,
 });
 
 const badgeStyles = css({
@@ -79,7 +99,16 @@ type UserProfilePersonalTextProps = Pick<
   | 'city'
   | 'labs'
   | 'tags'
-> & { isAlumni?: boolean; teams: UserTeam[] };
+> & {
+  isAlumni?: boolean;
+  teams: UserTeam[];
+  locationIcon?: ReactNode;
+  noTeamAffiliationTooltip?: Pick<
+    ComponentProps<typeof TooltipInfo>,
+    'icon' | 'overrideTooltipStyles' | 'width'
+  >;
+  variant?: 'default' | 'compact';
+};
 const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
   institution,
   country,
@@ -90,6 +119,9 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
   labs,
   tags,
   isAlumni,
+  locationIcon: locationIconOverride = locationIcon,
+  noTeamAffiliationTooltip,
+  variant = 'default',
 }) => {
   const { isOwnProfile } = useContext(UserProfileContext);
   const [showAllActive, setShowAllActive] = useState(false);
@@ -113,9 +145,11 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
     ? inactiveTeams
     : inactiveTeams.slice(0, MAX_TEAMS);
 
+  const isCompact = variant === 'compact';
+
   return (
     <div>
-      <div css={paragraphStyles}>
+      <div css={[paragraphStyles, isCompact && compactParagraphStyles]}>
         {jobTitle || institution ? (
           <>
             {jobTitle}
@@ -132,7 +166,7 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
         {teams.length === 0 ? (
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <em>No team affiliation</em>
-            <TooltipInfo>
+            <TooltipInfo {...noTeamAffiliationTooltip}>
               Some members are not linked to a team because they work directly
               under a project.
             </TooltipInfo>
@@ -221,8 +255,8 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
         )}
       </div>
       {(country || stateOrProvince || city || isOwnProfile) && (
-        <span css={locationStyles}>
-          <span css={iconStyles}>{locationIcon}</span>
+        <span css={[locationStyles, isCompact && compactLocationStyles]}>
+          <span css={iconStyles}>{locationIconOverride}</span>
           {country || stateOrProvince || city ? (
             <Ellipsis>
               {formatUserLocation(city, stateOrProvince, country)}
