@@ -33,6 +33,22 @@ it('shows user location', () => {
   expect(getByTitle(/location/i)).toBeInTheDocument();
 });
 
+it('renders a custom location icon when one is provided', () => {
+  const { getByTitle, queryByTitle } = render(
+    <UserProfilePersonalText
+      {...props}
+      city="Toronto"
+      locationIcon={
+        <svg>
+          <title>Custom Pin</title>
+        </svg>
+      }
+    />,
+  );
+  expect(getByTitle('Custom Pin')).toBeInTheDocument();
+  expect(queryByTitle(/location/i)).toBe(null);
+});
+
 it('does not show the location icon if no location is available', () => {
   const { queryByTitle } = render(<UserProfilePersonalText {...props} />);
   expect(queryByTitle(/location/i)).toBe(null);

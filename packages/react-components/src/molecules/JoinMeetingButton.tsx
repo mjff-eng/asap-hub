@@ -6,7 +6,7 @@ import { Link, Tooltip } from '../atoms';
 import { colour } from '../colors';
 import { useTooltipTrigger } from '../hooks';
 import { rem, mobileScreen, tabletScreen } from '../pixels';
-import { fontStyles } from '../text';
+import { captionRegularStyles } from '../text';
 
 const containerStyles = css({
   [`@media (max-width: ${mobileScreen.max}px)`]: {
@@ -33,11 +33,8 @@ const tooltipBubbleStyles = css({
   },
 });
 
-const tooltipTextStyles = css({
+const tooltipTextStyles = css(captionRegularStyles, {
   display: 'block',
-  fontFamily: `'Nunito Sans', ${fontStyles.fontFamily}`,
-  fontSize: rem(14),
-  lineHeight: 24 / 14,
 });
 
 const isValidMeetingLink = (meetingLink?: string): meetingLink is string =>

@@ -2,27 +2,18 @@ import { getLatestUserAward, UserResponse } from '@asap-hub/model';
 import { UserProfileContext } from '@asap-hub/react-context';
 import { dashboard, network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
-import { useCallback, useContext } from 'react';
-import {
-  Anchor,
-  Avatar,
-  Display,
-  Link,
-  TabLink,
-  StateTag,
-  CopyButton,
-  Spinner,
-} from '../atoms';
-import { colour, colourWithAlpha } from '../colors';
-import { editIcon, uploadIcon, alumniBadgeIcon } from '../icons';
+import { useContext } from 'react';
+import { Display, Link, TabLink, StateTag, CopyButton } from '../atoms';
+import { colour } from '../colors';
+import { editIcon, alumniBadgeIcon } from '../icons';
 import { createMailTo } from '../mail';
 import {
   Breadcrumbs,
   SocialIcons,
   TabNav,
+  UserProfileAvatar,
   UserProfilePersonalText,
 } from '../molecules';
-import { badgeImageStyles } from '../molecules/AvatarWithBadge';
 import { Toast } from '../organisms';
 import { badgesAnchorId } from '../organisms/UserProfileBadges';
 import {
@@ -128,9 +119,6 @@ const avatarSize = 128;
 
 const avatarContainer = css({
   gridArea: 'avatar',
-  position: 'relative',
-  // keep the badge's z-index scoped here so it can't float over the nav drawer
-  isolation: 'isolate',
   width: rem(avatarSize),
   height: rem(avatarSize),
   justifySelf: 'start',
@@ -143,48 +131,6 @@ const avatarContainer = css({
   [bigSizeQuery]: {
     transform: `translateX(${rem(64)})`,
   },
-});
-const avatarStyles = css({
-  width: rem(avatarSize),
-  height: rem(avatarSize),
-  margin: 0,
-});
-const uploadOverlayStyles = css({
-  position: 'absolute',
-  inset: 0,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  borderRadius: '50%',
-  cursor: 'pointer',
-  opacity: 0,
-  backgroundColor: colourWithAlpha(colour.neutral[900], 0.5),
-  transition: 'opacity 150ms ease-in-out',
-  ':hover, :focus-within': {
-    opacity: 1,
-  },
-});
-
-const savingOverlayStyles = css({
-  position: 'absolute',
-  inset: 0,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  borderRadius: '50%',
-  backgroundColor: colourWithAlpha(colour.neutral[900], 0.5),
-});
-const badgeSize = 48;
-const badgeStyles = css({
-  position: 'absolute',
-  right: rem(-10),
-  bottom: rem(-8),
-  display: 'inline-flex',
-  width: rem(badgeSize),
-  height: rem(badgeSize),
-  // above the hover/upload and saving overlays; scoped by the container's
-  // isolate so it does not escape over page-level layers like the nav drawer
-  zIndex: 1,
 });
 
 type UserProfileHeaderProps = Pick<
@@ -264,16 +210,6 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
   const tabRoutes = network({}).users({}).user({ userId: id });
   const { isOwnProfile } = useContext(UserProfileContext);
   const latestAward = getLatestUserAward(teams);
-
-  const scrollHandler = useCallback(() => {
-    // scroll imperatively too: re-clicking when the hash is
-    // already #badges is a no-op for the router, so the
-    // hash-based scroll would not fire on the second click
-    document.getElementById(badgesAnchorId)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-  }, []);
 
   return (
     <>
@@ -364,54 +300,23 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
                 </div>
               </section>
               <div css={avatarContainer}>
-                <Avatar
-                  imageUrl={avatarUrl}
+                <UserProfileAvatar
+                  avatarUrl={avatarUrl}
                   firstName={firstName}
                   lastName={lastName}
-                  overrideStyles={avatarStyles}
-                />
-                {latestAward?.iconUrl && (
-                  <span css={badgeStyles}>
-                    <Anchor
-                      href={`${tabRoutes.research({}).$}#${badgesAnchorId}`}
-                      aria-label={`${latestAward.name} badge`}
-                      onClick={scrollHandler}
-                    >
-                      <img
-                        css={badgeImageStyles}
-                        src={latestAward.iconUrl}
-                        alt=""
-                      />
-                    </Anchor>
-                  </span>
-                )}
-                {onImageSelect &&
-                  (avatarSaving ? (
-                    <div css={savingOverlayStyles}>
-                      <Spinner
-                        size={24}
-                        color={colour.neutral[0]}
-                        trackColor={colourWithAlpha(colour.neutral[0], 0.4)}
-                        ariaLabel="Saving avatar"
-                        ariaBusy
-                      />
-                    </div>
-                  ) : (
-                    <label css={uploadOverlayStyles} aria-label="Edit Avatar">
-                      {uploadIcon}
-                      <input
-                        type="file"
-                        accept="image/png,image/jpeg"
-                        aria-label="Upload Avatar"
-                        onChange={(event) =>
-                          event.target.files?.length &&
-                          event.target.files[0] &&
-                          onImageSelect(event.target.files[0])
+                  size={avatarSize}
+                  badge={
+                    latestAward?.iconUrl
+                      ? {
+                          name: latestAward.name,
+                          iconUrl: latestAward.iconUrl,
+                          href: `${tabRoutes.research({}).$}#${badgesAnchorId}`,
                         }
-                        css={{ display: 'none' }}
-                      />
-                    </label>
-                  ))}
+                      : undefined
+                  }
+                  onImageSelect={onImageSelect}
+                  avatarSaving={avatarSaving}
+                />
               </div>
               {editPersonalInfoHref && (
                 <div css={editPersonalInfoStyles}>
