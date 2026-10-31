@@ -28,7 +28,6 @@ describe('Assets data provider', () => {
       fields: {
         file: {
           'en-US': {
-            url: 'https://test-url',
             fileName: 'abc.jpeg',
           },
         },
@@ -36,6 +35,14 @@ describe('Assets data provider', () => {
     } as unknown as Asset);
     processMock.mockResolvedValueOnce({
       publish: publishMock,
+      fields: {
+        file: {
+          'en-US': {
+            url: 'https://test-url',
+            fileName: 'abc.jpeg',
+          },
+        },
+      },
     } as unknown as Asset);
   });
 
@@ -133,6 +140,11 @@ describe('Assets data provider', () => {
     });
 
     test('should default to input filename and empty url if locale not present', async () => {
+      processMock.mockReset();
+      processMock.mockResolvedValueOnce({
+        publish: publishMock,
+        fields: { file: {} },
+      } as unknown as Asset);
       environmentMock.createAssetFromFiles.mockReset();
       environmentMock.createAssetFromFiles.mockResolvedValueOnce({
         processForAllLocales: processMock,
@@ -173,7 +185,6 @@ describe('Assets data provider', () => {
           file: {
             'en-US': {
               fileName: 'from-url.pdf',
-              url: 'https://cdn.contentful.com/assets/from-url.pdf',
             },
           },
         },
@@ -182,6 +193,14 @@ describe('Assets data provider', () => {
 
       processMock.mockResolvedValue({
         publish: publishMock,
+        fields: {
+          file: {
+            'en-US': {
+              fileName: 'from-url.pdf',
+              url: 'https://cdn.contentful.com/assets/from-url.pdf',
+            },
+          },
+        },
       } as unknown as Asset);
     });
 
@@ -240,6 +259,10 @@ describe('Assets data provider', () => {
           file: {}, // no 'en-US'
         },
         processForAllLocales: processMock,
+      } as unknown as Asset);
+      processMock.mockResolvedValueOnce({
+        publish: publishMock,
+        fields: { file: {} },
       } as unknown as Asset);
 
       const asset = await assetsDataProvider.createFromUrl({

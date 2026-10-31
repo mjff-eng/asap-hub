@@ -54,8 +54,8 @@ export class AssetContentfulDataProvider implements AssetDataProvider {
 
     return {
       id: asset.sys.id,
-      filename: asset.fields.file['en-US']?.fileName || assetFilename,
-      url: asset.fields.file['en-US']?.url || '',
+      filename: processed.fields.file['en-US']?.fileName || assetFilename,
+      url: processed.fields.file['en-US']?.url || '',
     };
   }
 
@@ -98,8 +98,8 @@ export class AssetContentfulDataProvider implements AssetDataProvider {
 
       return {
         id: asset.sys.id,
-        filename: asset.fields.file['en-US']?.fileName || filename,
-        url: asset.fields.file['en-US']?.url || '',
+        filename: processed.fields.file['en-US']?.fileName || filename,
+        url: processed.fields.file['en-US']?.url || '',
       };
     } catch (error) {
       logger.error('Failed to create asset from URL', {

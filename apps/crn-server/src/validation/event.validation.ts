@@ -74,6 +74,11 @@ const eventUpdateDetailsValidationSchema: JSONSchemaType<EventUpdateDetailsReque
           additionalProperties: false,
         },
       },
+      attendeesFileIds: {
+        type: 'array',
+        nullable: true,
+        items: { type: 'string' },
+      },
       speakersToRemove: {
         type: 'array',
         nullable: true,

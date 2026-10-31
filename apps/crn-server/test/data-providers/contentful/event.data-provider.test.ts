@@ -15,6 +15,7 @@ import { when } from 'jest-when';
 
 import {
   areSpeakersPreliminaryDataSharedSynced,
+  areAttendeesFilesLinked,
   areSpeakersUnlinked,
   EventContentfulDataProvider,
   parseGraphQLEvent,
@@ -545,6 +546,37 @@ describe('Events Contentful Data Provider', () => {
               teamType: undefined,
               inactiveSince: '2022-10-24T11:00:00Z',
             },
+          },
+        ]);
+      });
+
+      test('Should parse the attendees files', async () => {
+        const contentfulGraphQLResponse = getContentfulGraphqlEvent();
+        contentfulGraphQLResponse.attendeesFilesCollection = {
+          items: [
+            {
+              sys: {
+                id: 'asset-1',
+                firstPublishedAt: '2026-10-01T10:00:00.000Z',
+              },
+              fileName: 'day-1.csv',
+              url: '//assets.ctfassets.net/day-1.csv',
+            },
+            null,
+          ],
+        };
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          events: contentfulGraphQLResponse,
+        });
+
+        const result = await eventDataProvider.fetchById(eventId);
+
+        expect(result?.attendeesFiles).toEqual([
+          {
+            id: 'asset-1',
+            filename: 'day-1.csv',
+            url: '//assets.ctfassets.net/day-1.csv',
+            addedDate: '2026-10-01T10:00:00.000Z',
           },
         ]);
       });
@@ -1723,6 +1755,33 @@ describe('Events Contentful Data Provider', () => {
       });
     });
 
+    test('links the attendees files to the event as assets', async () => {
+      const eventEntry = getEntry({}, { id: '123' });
+      when(environmentMock.getEntry)
+        .calledWith('123')
+        .mockResolvedValue(eventEntry);
+      mockPollingConsistency();
+      contentfulGraphqlClientMock.request.mockResolvedValue({
+        events: {
+          sys: { publishedVersion: 2 },
+          attendeesFilesCollection: {
+            items: [{ sys: { id: 'asset-1' } }, { sys: { id: 'asset-2' } }],
+          },
+        },
+      });
+
+      await eventDataProvider.updateEventDetails('123', {
+        attendeesFileIds: ['asset-1', 'asset-2'],
+      });
+
+      expect(patchAndPublish).toHaveBeenCalledWith(eventEntry, {
+        attendeesFiles: [
+          { sys: { type: 'Link', linkType: 'Asset', id: 'asset-1' } },
+          { sys: { type: 'Link', linkType: 'Asset', id: 'asset-2' } },
+        ],
+      });
+    });
+
     test('updates an existing attendance entry in place when attended changes, without recreating it', async () => {
       const existingLink = {
         sys: { type: 'Link', linkType: 'Entry', id: 'attendance-1' },
@@ -2649,6 +2708,39 @@ describe('Events Contentful Data Provider', () => {
           expect(removedEntry.delete).not.toHaveBeenCalled();
         });
       });
+    });
+  });
+
+  describe('areAttendeesFilesLinked', () => {
+    const response = (items: (Record<string, unknown> | null)[]) =>
+      ({
+        events: { attendeesFilesCollection: { items } },
+      }) as unknown as FetchEventByIdQuery;
+
+    test('is synced once every file resolves', () => {
+      expect(
+        areAttendeesFilesLinked(
+          response([{ sys: { id: 'asset-1' } }, { sys: { id: 'asset-2' } }]),
+          ['asset-1', 'asset-2'],
+        ),
+      ).toBe(true);
+    });
+
+    test('is not synced while a new file link still resolves to null', () => {
+      expect(
+        areAttendeesFilesLinked(response([{ sys: { id: 'asset-1' } }, null]), [
+          'asset-1',
+          'asset-2',
+        ]),
+      ).toBe(false);
+    });
+
+    test('is not synced when the event is missing', () => {
+      expect(
+        areAttendeesFilesLinked({ events: null } as FetchEventByIdQuery, [
+          'asset-1',
+        ]),
+      ).toBe(false);
     });
   });
 
