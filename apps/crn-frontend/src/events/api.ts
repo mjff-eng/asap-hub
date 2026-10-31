@@ -131,7 +131,6 @@ export const uploadAttendeesFile = async (
     method: 'POST',
     headers: {
       authorization,
-      'content-type': 'multipart/form-data',
       ...createSentryHeaders(),
     },
     body: formData,
