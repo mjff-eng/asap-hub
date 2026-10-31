@@ -2584,6 +2584,8 @@ type Events implements Entry & _Node {
   _id: ID!
   attendanceCollection(limit: Int = 100, locale: String, order: [EventsAttendanceCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: AttendanceFilter): EventsAttendanceCollection
   attendanceCursorCollection(limit: Int = 100, locale: String, order: [EventsAttendanceCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: AttendanceFilter): EventsAttendanceCursorCollection
+  attendeesFilesCollection(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): AssetCollection
+  attendeesFilesCursorCollection(limit: Int = 100, locale: String, pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): AssetCursorCollection
   calendar(locale: String, preview: Boolean, useFallbackLocale: Boolean, where: CalendarsFilter): Calendars
   contentfulMetadata: ContentfulMetadata!
   description(locale: String, useFallbackLocale: Boolean): String
@@ -2677,6 +2679,7 @@ input EventsFilter {
   OR: [EventsFilter]
   attendance: cfAttendanceNestedFilter
   attendanceCollection_exists: Boolean
+  attendeesFilesCollection_exists: Boolean
   calendar: cfCalendarsNestedFilter
   calendar_exists: Boolean
   contentfulMetadata: ContentfulMetadataFilter
@@ -15543,6 +15546,7 @@ input cfEventsNestedFilter {
   AND: [cfEventsNestedFilter]
   OR: [cfEventsNestedFilter]
   attendanceCollection_exists: Boolean
+  attendeesFilesCollection_exists: Boolean
   calendar_exists: Boolean
   contentfulMetadata: ContentfulMetadataFilter
   description: String

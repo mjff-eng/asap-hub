@@ -33,6 +33,7 @@ import {
   getTeamsForMatching,
   patchEvent,
   teamsForMatchingOptions,
+  uploadAttendeesFile,
 } from './api';
 import { mapSpeakersToGroups } from './map-speakers-to-groups';
 
@@ -164,4 +165,15 @@ export const useEventMonthCounts = ({
     enabled,
   });
   return data ?? {};
+};
+
+export const useUploadAttendeesFiles = (eventId: string) => {
+  const getAuthorization = useAuthorization();
+  return async (files: File[]): Promise<string[]> => {
+    const authorization = await getAuthorization();
+    const uploaded = await Promise.all(
+      files.map((file) => uploadAttendeesFile(eventId, file, authorization)),
+    );
+    return uploaded.map(({ id }) => id);
+  };
 };

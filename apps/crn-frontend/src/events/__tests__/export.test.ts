@@ -12,7 +12,10 @@ import {
   SpeakerTeamGroup,
 } from '@asap-hub/react-components';
 
+import nock from 'nock';
+
 import {
+  downloadAttendeesFile,
   downloadEventAttendance,
   downloadEventSpeakers,
   eventAttendanceFields,
@@ -532,5 +535,81 @@ describe('downloadEventAttendance', () => {
       }),
     );
     expect(end).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('downloadAttendeesFile', () => {
+  const originalCreateObjectURL = URL.createObjectURL;
+  const originalRevokeObjectURL = URL.revokeObjectURL;
+  const createObjectURL = jest.fn(() => 'blob:fake');
+  const revokeObjectURL = jest.fn();
+  const click = jest
+    .spyOn(HTMLAnchorElement.prototype, 'click')
+    .mockImplementation(() => {});
+
+  beforeAll(() => {
+    Object.defineProperty(URL, 'createObjectURL', {
+      configurable: true,
+      value: createObjectURL,
+    });
+    Object.defineProperty(URL, 'revokeObjectURL', {
+      configurable: true,
+      value: revokeObjectURL,
+    });
+  });
+
+  afterAll(() => {
+    Object.defineProperty(URL, 'createObjectURL', {
+      configurable: true,
+      value: originalCreateObjectURL,
+    });
+    Object.defineProperty(URL, 'revokeObjectURL', {
+      configurable: true,
+      value: originalRevokeObjectURL,
+    });
+    click.mockRestore();
+  });
+
+  beforeEach(() => {
+    createObjectURL.mockClear();
+    revokeObjectURL.mockClear();
+    click.mockClear();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  it('fetches a protocol-relative asset over https and saves it under its filename', async () => {
+    nock('https://assets.ctfassets.net')
+      .get('/space/day-1.csv')
+      .reply(200, 'Team Name\nAlessi');
+    await downloadAttendeesFile({
+      filename: 'day-1.csv',
+      url: '//assets.ctfassets.net/space/day-1.csv',
+    });
+
+    expect(nock.isDone()).toBe(true);
+    expect(click).toHaveBeenCalledTimes(1);
+    const anchor = click.mock.contexts[0] as HTMLAnchorElement;
+    expect(anchor.download).toBe('day-1.csv');
+    expect(anchor.href).toBe('blob:fake');
+    expect(revokeObjectURL).not.toHaveBeenCalled();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:fake');
+  });
+
+  it('errors for a non-2xx status', async () => {
+    nock('https://assets.ctfassets.net').get('/space/day-1.csv').reply(404);
+
+    await expect(
+      downloadAttendeesFile({
+        filename: 'day-1.csv',
+        url: 'https://assets.ctfassets.net/space/day-1.csv',
+      }),
+    ).rejects.toThrow('Failed to download day-1.csv. Received status 404.');
+    expect(click).not.toHaveBeenCalled();
   });
 });

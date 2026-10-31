@@ -55,6 +55,13 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
+const sourceList = {
+  id: 'file-1',
+  filename: 'attendees.csv',
+  url: '//assets/attendees.csv',
+  addedDate: '2025-01-01T10:00:00.000Z',
+};
+
 const renderModal = (
   overrides: Partial<ComponentProps<typeof EditEventAttendanceModal>> = {},
 ) =>
@@ -114,7 +121,7 @@ describe('EditEventAttendanceModal', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-    await waitFor(() => expect(onSave).toHaveBeenCalledWith(hostingRows));
+    await waitFor(() => expect(onSave).toHaveBeenCalledWith(hostingRows, []));
   });
 
   it('Should flag an inactive team in the attendees table', () => {
@@ -149,6 +156,25 @@ describe('EditEventAttendanceModal', () => {
     expect(screen.getByText('2 Expected')).toBeInTheDocument();
     expect(screen.getByText('1 Attended')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
+  });
+
+  it('Should save an empty list after removing every team', async () => {
+    renderModal({
+      teams: [
+        { teamId: 't2', teamName: 'Team Beta', attended: false },
+        { teamId: 't3', teamName: 'Team Gamma', attended: true },
+      ],
+    });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Team Beta' }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Team Gamma' }),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(onSave).toHaveBeenCalledWith([], []));
   });
 
   it('Should toggle a team attendance on and off', async () => {
@@ -706,17 +732,20 @@ describe('EditEventAttendanceModal', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-    expect(onSave).toHaveBeenCalledWith([
-      expect.objectContaining({ teamId: 't1', attended: false }),
-      expect.objectContaining({ teamId: 't2', attended: false }),
-    ]);
+    expect(onSave).toHaveBeenCalledWith(
+      [
+        expect.objectContaining({ teamId: 't1', attended: false }),
+        expect.objectContaining({ teamId: 't2', attended: false }),
+      ],
+      [expect.objectContaining({ name: 'teams.csv' })],
+    );
   });
 
   it('Should pluralise the source list count for multiple files', () => {
     renderModal({
       sourceLists: [
-        { id: 'file-1', filename: 'day-1.csv' },
-        { id: 'file-2', filename: 'day-2.xlsx' },
+        { id: 'file-1', filename: 'day-1.csv', url: '//assets/day-1.csv' },
+        { id: 'file-2', filename: 'day-2.xlsx', url: '//assets/day-2.xlsx' },
       ],
     });
 
@@ -769,14 +798,8 @@ describe('EditEventAttendanceModal', () => {
     const onDownload = jest.fn(() => downloadPromise);
     renderModal({
       teams,
-      sourceLists: [
-        {
-          id: 'file-1',
-          filename: 'attendees.csv',
-          addedDate: '01/01/2025',
-          onDownload,
-        },
-      ],
+      sourceLists: [sourceList],
+      onDownloadSourceList: onDownload,
     });
 
     await userEvent.click(screen.getByRole('button', { name: 'Download' }));
@@ -794,14 +817,8 @@ describe('EditEventAttendanceModal', () => {
     const onDownload = jest.fn().mockRejectedValue(new Error('nope'));
     renderModal({
       teams,
-      sourceLists: [
-        {
-          id: 'file-1',
-          filename: 'attendees.csv',
-          addedDate: '01/01/2025',
-          onDownload,
-        },
-      ],
+      sourceLists: [sourceList],
+      onDownloadSourceList: onDownload,
     });
 
     await userEvent.click(screen.getByRole('button', { name: 'Download' }));
@@ -834,7 +851,7 @@ describe('EditEventAttendanceModal', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-    await waitFor(() => expect(onSave).toHaveBeenCalledWith(teams));
+    await waitFor(() => expect(onSave).toHaveBeenCalledWith(teams, []));
   });
 
   it('Should stay usable when saving fails', async () => {

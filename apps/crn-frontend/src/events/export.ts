@@ -5,7 +5,7 @@ import {
   htmlToCsvText,
   sanitizeFileNamePart,
 } from '@asap-hub/frontend-utils';
-import { EventResponse } from '@asap-hub/model';
+import { EventAttendeesFile, EventResponse } from '@asap-hub/model';
 import {
   EventAttendanceTeam,
   groupLabel,
@@ -14,6 +14,7 @@ import {
   SpeakerTeamGroup,
   summarizeAttendance,
   summarizeSpeakerGroups,
+  triggerDownloadFile,
 } from '@asap-hub/react-components';
 import { format } from 'date-fns';
 
@@ -187,3 +188,15 @@ export const downloadEventAttendance = (
     eventAttendanceFields,
     eventAttendanceToCSV(event, teams),
   );
+
+export const downloadAttendeesFile = async ({
+  filename,
+  url,
+}: Pick<EventAttendeesFile, 'filename' | 'url'>): Promise<void> => {
+  const response = await fetch(url.startsWith('//') ? `https:${url}` : url);
+
+  if (!response.ok) throw new Error(`Failed to download ${filename}.`);
+
+  const blob = await response.blob();
+  triggerDownloadFile(blob, filename);
+};

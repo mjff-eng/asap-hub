@@ -25,7 +25,11 @@ import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 
 import { toAttendanceRows } from './attendance-rows';
-import { downloadEventAttendance, downloadEventSpeakers } from './export';
+import {
+  downloadAttendeesFile,
+  downloadEventAttendance,
+  downloadEventSpeakers,
+} from './export';
 import { mapGroupsToSpeakersUpdate } from './map-groups-to-speakers-update';
 import { matchTeamNames } from './match-team-names';
 import { parseTeamRows } from './parse-team-list';
@@ -36,7 +40,9 @@ import {
   usePatchEvent,
   useQuietRefreshEventById,
   useTeamsForMatching,
+  useUploadAttendeesFiles,
 } from './state';
+import { EventUpdateDetailsRequest } from '@asap-hub/model';
 
 const Event: React.FC = () => {
   const { eventId } = useRouteParams(events({}).event);
@@ -51,6 +57,7 @@ const Event: React.FC = () => {
   const patchEvent = usePatchEvent(eventId);
   const fetchTeamsForMatching = useTeamsForMatching();
   const searchAttendance = useEventAttendanceSearch();
+  const uploadAttendeesFiles = useUploadAttendeesFiles(eventId);
 
   const hasFinished = useDateHasPassed(
     considerEndedAfter(event?.endDate || ''),
@@ -63,6 +70,8 @@ const Event: React.FC = () => {
     const teams = toAttendanceRows(event.attendance);
     const isTechSupport = !!user?.techSupport;
     const isProjectManager = isEventProjectManager(user, event);
+    const canEditAttendance = isTechSupport || isProjectManager;
+    const attendeesFiles = event.attendeesFiles ?? [];
     const openAttendanceEditor = () => setIsEditingAttendance(true);
     const openSpeakersEditor = () => setIsEditingSpeakers(true);
     const attendance = hasFinished ? (
@@ -75,12 +84,14 @@ const Event: React.FC = () => {
               ? () => downloadEventAttendance(event, teams)
               : undefined
           }
-          onEdit={isTechSupport ? openAttendanceEditor : undefined}
+          onEdit={canEditAttendance ? openAttendanceEditor : undefined}
         />
         {isEditingAttendance && (
           <EditEventAttendanceModal
             teams={teams}
             interestGroupName={event.interestGroup?.name}
+            sourceLists={attendeesFiles}
+            onDownloadSourceList={downloadAttendeesFile}
             loadSearchOptions={(search) =>
               searchAttendance(search, event.endDate, event.interestGroup?.id)
             }
@@ -91,14 +102,26 @@ const Event: React.FC = () => {
               ]);
               return matchTeamNames(rows, corpus);
             }}
-            onSave={async (updatedTeams: EventAttendanceTeam[]) => {
-              await patchEvent({
+            onSave={async (
+              updatedTeams: EventAttendanceTeam[],
+              newFiles: File[],
+            ) => {
+              const updates: EventUpdateDetailsRequest = {
                 attendance: updatedTeams.map((team) => ({
                   id: team.attendanceId,
                   teamId: team.teamId,
                   attended: team.attended,
                 })),
-              });
+              };
+
+              const newFileIds = await uploadAttendeesFiles(newFiles);
+              if (newFileIds.length) {
+                updates.attendeesFileIds = [
+                  ...attendeesFiles.map((file) => file.id),
+                  ...newFileIds,
+                ];
+              }
+              await patchEvent(updates);
               setIsEditingAttendance(false);
             }}
             onDismiss={() => setIsEditingAttendance(false)}

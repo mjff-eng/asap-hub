@@ -1,5 +1,6 @@
 import { ClientSearchResponse } from '@asap-hub/algolia';
 import {
+  EventAttendeesFile,
   EventResponse,
   ListEventResponse,
   TeamListItemResponse,
@@ -31,6 +32,14 @@ export const patchEvent = jest.fn(
   async (id: string): Promise<EventResponse> => ({
     ...createEventResponse(),
     id,
+  }),
+);
+
+export const uploadAttendeesFile = jest.fn(
+  async (_id: string, file: File): Promise<EventAttendeesFile> => ({
+    id: `asset-${file.name}`,
+    filename: file.name,
+    url: `//assets.ctfassets.net/${file.name}`,
   }),
 );
 

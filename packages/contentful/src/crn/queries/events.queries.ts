@@ -40,6 +40,16 @@ export const eventsContentQueryFragment = gql`
         }
       }
     }
+    attendeesFilesCollection(limit: 20) @include(if: $singleEvent) {
+      items {
+        sys {
+          id
+          firstPublishedAt
+        }
+        fileName
+        url
+      }
+    }
     notesPermanentlyUnavailable
     notes {
       json
