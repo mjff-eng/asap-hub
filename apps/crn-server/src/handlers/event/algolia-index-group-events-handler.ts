@@ -19,6 +19,7 @@ import { EventBridgeEvent } from 'aws-lambda';
 import { algoliaApiKey, algoliaAppId, algoliaIndex } from '../../config';
 import Events from '../../controllers/event.controller';
 import { getEventDataProvider } from '../../dependencies/events.dependencies';
+import { getAssetDataProvider } from '../../dependencies/users.dependencies';
 import logger from '../../utils/logger';
 import { sentryWrapper } from '../../utils/sentry-wrapper';
 import { InterestGroupPayload } from '../event-bus';
@@ -60,7 +61,7 @@ const eventDataProvider = getEventDataProvider();
 /* istanbul ignore next */
 export const handler = sentryWrapper(
   indexGroupEventsHandler(
-    new Events(eventDataProvider),
+    new Events(eventDataProvider, getAssetDataProvider()),
     algoliaSearchClientFactory({
       algoliaApiKey,
       algoliaAppId,
