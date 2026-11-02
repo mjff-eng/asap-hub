@@ -2141,8 +2141,8 @@ describe('Teams data provider', () => {
         const result = await teamDataProvider.fetchById(id);
 
         expect(result?.members).toHaveLength(2);
-        expect(result?.members[0]?.role).toEqual('Project Manager');
-        expect(result?.members[1]?.role).toEqual('Collaborating PI');
+        expect(result?.members[0]?.role).toEqual('Collaborating PI');
+        expect(result?.members[1]?.role).toEqual('Project Manager');
       });
 
       test('should sort team members by role priority', async () => {

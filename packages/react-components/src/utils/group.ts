@@ -4,6 +4,7 @@ import {
   ProjectMemberTeam,
   TeamMember,
   TeamRole,
+  teamRolePriorities,
   UserAward,
   UserTeam,
 } from '@asap-hub/model';
@@ -58,6 +59,13 @@ export type GroupedUserTeam = {
   roles: TeamRole[];
   inactiveSinceDate?: string;
 };
+
+export const byTeamRolePriority = (
+  a: GroupedUserTeam,
+  b: GroupedUserTeam,
+): number =>
+  (a.roles[0] ? teamRolePriorities[a.roles[0]] : 0) -
+  (b.roles[0] ? teamRolePriorities[b.roles[0]] : 0);
 
 export const groupUserTeamsByTeamId = (
   teams: UserTeam[],

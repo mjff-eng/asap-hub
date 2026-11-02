@@ -12,6 +12,8 @@ export const formatDateAndWeekday = (date: Date): string =>
 export const formatDateAndTime = (date: Date): string =>
   format(date, "d/M/y 'at' HH:mm");
 
+export const weekdayShortDateFormat = 'eee, dd MMM yyyy';
+
 export const formatDateToTimezone = (
   date: string,
   form: string,
