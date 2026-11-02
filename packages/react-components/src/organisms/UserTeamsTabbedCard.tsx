@@ -1,4 +1,4 @@
-import { TeamRole, UserTeam } from '@asap-hub/model';
+import { UserTeam } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import React, { Fragment } from 'react';
@@ -7,8 +7,12 @@ import { InactiveBadgeIcon } from '../icons';
 import { TabbedCard } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
 import { colour } from '../colors';
-import { groupUserTeamsByTeamId, GroupedUserTeam, splitListBy } from '../utils';
-import { formatDateToTimezone } from '../date';
+import {
+  byTeamRolePriority,
+  groupUserTeamsByTeamId,
+  splitListBy,
+} from '../utils';
+import { formatDateToTimezone, weekdayShortDateFormat } from '../date';
 
 const MAX_TEAMS = 5;
 
@@ -85,18 +89,6 @@ const rolesColumnStyle = css({
   },
 });
 
-const priorities: Record<TeamRole, number> = {
-  'Lead PI (Core Leadership)': 1,
-  'Co-PI (Core Leadership)': 2,
-  'Collaborating PI': 3,
-  'Project Manager': 4,
-  'Data Manager': 5,
-  'Key Personnel': 6,
-  'ASAP Staff': 7,
-  'Scientific Advisory Board': 8,
-  Trainee: 9,
-};
-
 type UserTeamsTabbedCardProps = {
   userAlumni: boolean;
   teams: UserTeam[];
@@ -112,12 +104,10 @@ const UserTeamsTabbedCard: React.FC<UserTeamsTabbedCardProps> = ({
     (team) =>
       userAlumni || !!team?.teamInactiveSince || !!team?.inactiveSinceDate,
   );
-  const sortByPriority = (a: GroupedUserTeam, b: GroupedUserTeam) =>
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    priorities[a.roles[0]!] - priorities[b.roles[0]!];
-  const activeTeams = groupUserTeamsByTeamId(rawActive).sort(sortByPriority);
+  const activeTeams =
+    groupUserTeamsByTeamId(rawActive).sort(byTeamRolePriority);
   const inactiveTeams =
-    groupUserTeamsByTeamId(rawInactive).sort(sortByPriority);
+    groupUserTeamsByTeamId(rawInactive).sort(byTeamRolePriority);
   return (
     <div id="user-teams-tabbed-card">
       <TabbedCard
@@ -176,7 +166,7 @@ const UserTeamsTabbedCard: React.FC<UserTeamsTabbedCardProps> = ({
                     showDateLeftColumn &&
                     formatDateToTimezone(
                       (inactiveSinceDate || teamInactiveSince) as string,
-                      'eee, dd MMM yyyy',
+                      weekdayShortDateFormat,
                     );
                   return (
                     <Fragment key={`team-${idx}`}>
