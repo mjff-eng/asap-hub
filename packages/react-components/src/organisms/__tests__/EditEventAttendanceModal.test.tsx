@@ -398,6 +398,147 @@ describe('EditEventAttendanceModal', () => {
     ).toBeInTheDocument();
   });
 
+  describe('added teams confirmation', () => {
+    it('Should confirm a team added to the additional teams', async () => {
+      renderModal();
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(await screen.findByText('Searched Team'));
+
+      expect(
+        screen.getByText('Added Searched Team to additional teams'),
+      ).toBeInTheDocument();
+    });
+
+    it('Should not name a section when the event has no hosting group', async () => {
+      renderModal({ teams: [] });
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(await screen.findByText('Searched Team'));
+
+      expect(screen.getByText('Added Searched Team')).toBeInTheDocument();
+    });
+
+    it('Should count only the teams a group actually added', async () => {
+      renderModal({
+        teams: [
+          { teamId: 'sgt-1', teamName: 'Group Search Team', attended: true },
+        ],
+      });
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(await screen.findByText('Searched Group'));
+
+      expect(
+        screen.getByText('Added 1 team from Searched Group'),
+      ).toBeInTheDocument();
+    });
+
+    it('Should not confirm when nothing was added', async () => {
+      renderModal({
+        teams: [
+          { teamId: 'searched-1', teamName: 'Searched Team', attended: true },
+        ],
+      });
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(
+        await screen.findByRole('option', { name: /Searched Team/ }),
+      );
+
+      expect(
+        screen.queryByRole('button', { name: 'Undo' }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('Should not confirm when a group adds nothing', async () => {
+      renderModal({
+        teams: [
+          { teamId: 'sgt-1', teamName: 'Group Search Team', attended: true },
+          { teamId: 'sgt-2', teamName: 'Other Group Team', attended: true },
+        ],
+      });
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(await screen.findByText('Searched Group'));
+
+      expect(
+        screen.queryByRole('button', { name: 'Undo' }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('Should remove the added teams on undo', async () => {
+      renderModal();
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(await screen.findByText('Searched Group'));
+      expect(
+        screen.getByText('Added 2 teams from Searched Group'),
+      ).toBeInTheDocument();
+
+      await userEvent.click(screen.getByRole('button', { name: 'Undo' }));
+
+      expect(
+        screen.queryByRole('link', { name: 'Group Search Team' }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('link', { name: 'Other Group Team' }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByText('2 Expected')).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Undo' }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('Should keep the added teams when dismissed', async () => {
+      renderModal();
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(await screen.findByText('Searched Team'));
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Dismiss message' }),
+      );
+
+      expect(
+        screen.queryByRole('button', { name: 'Undo' }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Searched Team' }),
+      ).toBeInTheDocument();
+    });
+
+    it('Should drop the confirmation when one of its teams is removed', async () => {
+      renderModal();
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(await screen.findByText('Searched Group'));
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Remove Group Search Team' }),
+      );
+
+      expect(
+        screen.queryByRole('button', { name: 'Undo' }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Other Group Team' }),
+      ).toBeInTheDocument();
+    });
+
+    it('Should keep the confirmation when another team is removed', async () => {
+      renderModal();
+
+      await userEvent.type(screen.getByRole('combobox'), 'Sea');
+      await userEvent.click(await screen.findByText('Searched Team'));
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Remove Team Beta' }),
+      );
+
+      expect(
+        screen.getByText('Added Searched Team to additional teams'),
+      ).toBeInTheDocument();
+    });
+  });
+
   it('Should flag a fully-added group in the search results', async () => {
     renderModal({
       teams: [

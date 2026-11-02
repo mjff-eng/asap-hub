@@ -19,7 +19,7 @@ import ExternalSpeakerAffiliationCard, {
 } from '../molecules/ExternalSpeakerAffiliationCard';
 import PendingSpeakerCard from '../molecules/PendingSpeakerCard';
 import SpeakerTeamRow from '../molecules/SpeakerTeamRow';
-import SpeakerToast from '../molecules/SpeakerToast';
+import InlineToast from '../molecules/InlineToast';
 import SpeakerUserRow, {
   avatar24Styles,
   chevronSpacerStyles,
@@ -526,7 +526,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
   const renderBanner = ({ displayName, user }: PendingSpeaker) => {
     if (user && user.affiliationOptions.length === 0) {
       return (
-        <SpeakerToast
+        <InlineToast
           accent="error"
           message="This speaker is not a member on any CRN team or individual project. They cannot be added as a speaker until they belong to one."
           onDismiss={() => setPendingSpeaker(null)}
@@ -654,7 +654,7 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
 
         <section css={speakersSectionStyles}>
           {addedSpeaker && (
-            <SpeakerToast
+            <InlineToast
               message={
                 addedSpeaker.destination
                   ? `Added ${addedSpeaker.speakerName} to ${addedSpeaker.destination}`

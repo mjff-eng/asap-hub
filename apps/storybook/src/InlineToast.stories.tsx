@@ -1,9 +1,9 @@
-import { SpeakerToast } from '@asap-hub/react-components';
+import { InlineToast } from '@asap-hub/react-components';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-const meta: Meta<typeof SpeakerToast> = {
-  title: 'Molecules / Events / Speaker Toast',
-  component: SpeakerToast,
+const meta: Meta<typeof InlineToast> = {
+  title: 'Molecules / Events / Inline Toast',
+  component: InlineToast,
   // The toast stretches to its container, so the frame stands in for the
   // modal's 712px content column.
   decorators: [
@@ -15,7 +15,7 @@ const meta: Meta<typeof SpeakerToast> = {
   ],
 };
 
-type Story = StoryObj<typeof SpeakerToast>;
+type Story = StoryObj<typeof InlineToast>;
 
 export const Added: Story = {
   args: {
