@@ -36,25 +36,21 @@ const mutedIconStyles = css({
 const alertStyles = css({
   backgroundColor: colour.background.warning,
   color: colour.foreground.warning,
-  fill: colour.foreground.warning,
 });
 
 const infoStyles = css({
   backgroundColor: colour.background.info,
   color: colour.foreground.info,
-  fill: colour.foreground.info,
 });
 
 const liveStyles = css({
-  backgroundColor: colour.background.success,
-  color: colour.foreground.success,
-  fill: colour.foreground.success,
+  backgroundColor: colour.background.brand,
+  color: colour.foreground.brand,
 });
 
 const leadStyles = css({
   backgroundColor: colour.background.tertiary,
   color: colour.foreground.tertiary,
-  fill: colour.foreground.tertiary,
 });
 
 const toastContentStyles = css({

@@ -21,10 +21,11 @@ const buttonStyles = css({
 });
 
 const copyButtonStyles = css({
-  backgroundColor: 'inherit',
-  borderColor: colour.brand.crn[100],
+  backgroundColor: colour.background.button.secondary.default,
+  borderColor: colour.foreground.brand,
   ':hover, :focus': {
-    borderColor: colour.border.brand,
+    backgroundColor: colour.background.button.secondary.hover,
+    borderColor: colour.border.button.secondary.hover,
   },
   path: {
     fill: colour.foreground.brand,

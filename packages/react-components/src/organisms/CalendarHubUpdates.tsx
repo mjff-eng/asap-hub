@@ -39,7 +39,7 @@ const CalendarHubUpdates: FC<CalendarHubUpdatesProps> = ({ calendar }) => {
   }
 
   return (
-    <Card padding={false} accent="highlight" overrideStyles={cardStyles}>
+    <Card padding={false} accent="brand" overrideStyles={cardStyles}>
       <div css={containerStyles}>
         <Headline3 noMargin>CRN Hub Updates</Headline3>
         <div css={rowStyles}>
