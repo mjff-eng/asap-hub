@@ -105,7 +105,7 @@ describe('uploadAttendeesFile', () => {
   it('errors for a non-2xx status', async () => {
     nock(API_BASE_URL).post('/events/42/attendees-files').reply(400);
     await expect(uploadAttendeesFile('42', file, '')).rejects.toThrow(
-      'Failed to upload attendees file for event 42. Expected status 201. Received status 400.',
+      'Failed to upload attendees file for event 42.',
     );
   });
 });

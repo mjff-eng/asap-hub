@@ -20,6 +20,7 @@ import {
 import { useCurrentUserCRN, useFlags } from '@asap-hub/react-context';
 import { events, useRouteParams } from '@asap-hub/routing';
 import { Frame, useBackHref } from '@asap-hub/frontend-utils';
+import { EventUpdateDetailsRequest } from '@asap-hub/model';
 import { isEventProjectManager } from '@asap-hub/validation';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
@@ -42,7 +43,6 @@ import {
   useTeamsForMatching,
   useUploadAttendeesFiles,
 } from './state';
-import { EventUpdateDetailsRequest } from '@asap-hub/model';
 
 const Event: React.FC = () => {
   const { eventId } = useRouteParams(events({}).event);

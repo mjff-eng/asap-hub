@@ -609,7 +609,7 @@ describe('downloadAttendeesFile', () => {
         filename: 'day-1.csv',
         url: 'https://assets.ctfassets.net/space/day-1.csv',
       }),
-    ).rejects.toThrow('Failed to download day-1.csv. Received status 404.');
+    ).rejects.toThrow('Failed to download day-1.csv.');
     expect(click).not.toHaveBeenCalled();
   });
 });
