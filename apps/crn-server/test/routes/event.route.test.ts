@@ -262,12 +262,24 @@ describe('/events/ routes', () => {
   });
 
   describe('PATCH /events/{event_id}', () => {
+    const projectManager = {
+      ...createUserResponse(),
+      techSupport: false,
+      interestGroups: [
+        {
+          id: getInterestGroupResponse().id,
+          name: 'Group 1',
+          active: true,
+          role: 'Project Manager' as const,
+        },
+      ],
+    };
+
     test('Should update attendance and return the updated event for a tech support user', async () => {
       userMockFactory.mockReturnValueOnce({
         ...createUserResponse(),
         techSupport: true,
       });
-      eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
       eventControllerMock.updateEventDetails.mockResolvedValueOnce(
         getEventResponse(),
       );
@@ -282,25 +294,18 @@ describe('/events/ routes', () => {
         { attendance: [{ teamId: 'team-1', attended: true }] },
       );
       expect(response.body).toEqual(getEventResponse());
+      expect(eventControllerMock.fetchById).not.toHaveBeenCalled();
     });
 
-    test('Should update attendance and attendees files for a project manager of the hosting interest group', async () => {
+    test('Should update attendance and attendees files for a tech support user', async () => {
       const payload = {
         attendance: [{ teamId: 'team-1', attended: true }],
         attendeesFileIds: ['asset-1'],
       };
       userMockFactory.mockReturnValueOnce({
         ...createUserResponse(),
-        interestGroups: [
-          {
-            id: getInterestGroupResponse().id,
-            name: 'Group 1',
-            active: true,
-            role: 'Project Manager',
-          },
-        ],
+        techSupport: true,
       });
-      eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
       eventControllerMock.updateEventDetails.mockResolvedValueOnce(
         getEventResponse(),
       );
@@ -314,12 +319,11 @@ describe('/events/ routes', () => {
       );
     });
 
-    test('Should return 403 when the logged in user is neither tech support nor the project manager', async () => {
+    test('Should return 403 when the logged in user is not a tech support user', async () => {
       userMockFactory.mockReturnValueOnce({
         ...createUserResponse(),
         techSupport: false,
       });
-      eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
 
       const response = await supertest(app)
         .patch('/events/123')
@@ -329,9 +333,19 @@ describe('/events/ routes', () => {
       expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
     });
 
+    test('Should return 403 when a project manager who is not tech support updates the attendees files', async () => {
+      userMockFactory.mockReturnValueOnce(projectManager);
+
+      const response = await supertest(app)
+        .patch('/events/123')
+        .send({ attendeesFileIds: ['asset-1'] });
+
+      expect(response.status).toBe(403);
+      expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
+    });
+
     test('Should return 403 when there is no logged in user', async () => {
       userMockFactory.mockReturnValueOnce(undefined);
-      eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
 
       const response = await supertest(app)
         .patch('/events/123')
@@ -472,16 +486,9 @@ describe('/events/ routes', () => {
   });
 
   describe('POST /events/{event_id}/attendees-files', () => {
-    const projectManager = {
+    const techSupportUser = {
       ...createUserResponse(),
-      interestGroups: [
-        {
-          id: getInterestGroupResponse().id,
-          name: 'Group 1',
-          active: true,
-          role: 'Project Manager' as const,
-        },
-      ],
+      techSupport: true,
     };
     const attendeesFile = {
       id: 'asset-1',
@@ -489,9 +496,8 @@ describe('/events/ routes', () => {
       url: '//assets.ctfassets.net/attendees.csv',
     };
 
-    test('Should upload the file for a project manager of the hosting interest group', async () => {
-      userMockFactory.mockReturnValueOnce(projectManager);
-      eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
+    test('Should upload the file for a tech support user', async () => {
+      userMockFactory.mockReturnValueOnce(techSupportUser);
       eventControllerMock.createAttendeesFile.mockResolvedValueOnce(
         attendeesFile,
       );
@@ -513,11 +519,7 @@ describe('/events/ routes', () => {
     });
 
     test('Should accept an xlsx file', async () => {
-      userMockFactory.mockReturnValueOnce({
-        ...createUserResponse(),
-        techSupport: true,
-      });
-      eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
+      userMockFactory.mockReturnValueOnce(techSupportUser);
       eventControllerMock.createAttendeesFile.mockResolvedValueOnce({
         ...attendeesFile,
         filename: 'attendees.xlsx',
@@ -530,8 +532,19 @@ describe('/events/ routes', () => {
       expect(response.status).toBe(201);
     });
 
-    test('Should return 403 when the user is neither tech support nor the project manager', async () => {
-      eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
+    test('Should return 403 when the user is not a tech support user', async () => {
+      userMockFactory.mockReturnValueOnce({
+        ...createUserResponse(),
+        techSupport: false,
+        interestGroups: [
+          {
+            id: getInterestGroupResponse().id,
+            name: 'Group 1',
+            active: true,
+            role: 'Project Manager' as const,
+          },
+        ],
+      });
 
       const response = await supertest(app)
         .post('/events/123/attendees-files')
@@ -542,8 +555,7 @@ describe('/events/ routes', () => {
     });
 
     test('Should return 400 when no file is sent', async () => {
-      userMockFactory.mockReturnValueOnce(projectManager);
-      eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
+      userMockFactory.mockReturnValueOnce(techSupportUser);
 
       const response = await supertest(app).post('/events/123/attendees-files');
 
@@ -552,8 +564,7 @@ describe('/events/ routes', () => {
     });
 
     test('Should return 400 when the file is not a CSV or XLSX', async () => {
-      userMockFactory.mockReturnValueOnce(projectManager);
-      eventControllerMock.fetchById.mockResolvedValueOnce(getEventResponse());
+      userMockFactory.mockReturnValueOnce(techSupportUser);
 
       const response = await supertest(app)
         .post('/events/123/attendees-files')

@@ -70,7 +70,6 @@ const Event: React.FC = () => {
     const teams = toAttendanceRows(event.attendance);
     const isTechSupport = !!user?.techSupport;
     const isProjectManager = isEventProjectManager(user, event);
-    const canEditAttendance = isTechSupport || isProjectManager;
     const attendeesFiles = event.attendeesFiles ?? [];
     const openAttendanceEditor = () => setIsEditingAttendance(true);
     const openSpeakersEditor = () => setIsEditingSpeakers(true);
@@ -84,7 +83,7 @@ const Event: React.FC = () => {
               ? () => downloadEventAttendance(event, teams)
               : undefined
           }
-          onEdit={canEditAttendance ? openAttendanceEditor : undefined}
+          onEdit={isTechSupport ? openAttendanceEditor : undefined}
         />
         {isEditingAttendance && (
           <EditEventAttendanceModal

@@ -2,7 +2,6 @@ import {
   EventAttendeesFile,
   EventResponse,
   ListEventResponse,
-  UserResponse,
 } from '@asap-hub/model';
 import { isEventProjectManager } from '@asap-hub/validation';
 import Boom from '@hapi/boom';
@@ -18,11 +17,6 @@ import EventController from '../controllers/event.controller';
 const upload = multer();
 
 const allowedAttendeesFileExtensions = ['.csv', '.xlsx'];
-
-const canEditAttendance = (
-  loggedInUser: UserResponse | undefined,
-  event: EventResponse,
-) => !!loggedInUser?.techSupport || isEventProjectManager(loggedInUser, event);
 
 export const eventRouteFactory = (eventController: EventController): Router => {
   const eventRoutes = Router();
@@ -64,14 +58,16 @@ export const eventRouteFactory = (eventController: EventController): Router => {
         throw Boom.forbidden();
       }
 
-      const event = await eventController.fetchById(eventId);
-
-      if (isAttendanceWrite && !canEditAttendance(loggedInUser, event)) {
+      if (isAttendanceWrite && !loggedInUser?.techSupport) {
         throw Boom.forbidden();
       }
 
-      if (isSpeakerWrite && !isEventProjectManager(loggedInUser, event)) {
-        throw Boom.forbidden();
+      if (isSpeakerWrite) {
+        const event = await eventController.fetchById(eventId);
+
+        if (!isEventProjectManager(loggedInUser, event)) {
+          throw Boom.forbidden();
+        }
       }
 
       const result = await eventController.updateEventDetails(eventId, payload);
@@ -88,11 +84,9 @@ export const eventRouteFactory = (eventController: EventController): Router => {
     >,
     async (req, res) => {
       const { params, file, loggedInUser } = req;
-      const { eventId } = validateEventParameters(params);
+      validateEventParameters(params);
 
-      const event = await eventController.fetchById(eventId);
-
-      if (!canEditAttendance(loggedInUser, event)) {
+      if (!loggedInUser?.techSupport) {
         throw Boom.forbidden();
       }
 

@@ -691,7 +691,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
         );
       };
 
-      it('hides the upload entry point from a user who is neither tech support nor the project manager', async () => {
+      it('hides the upload entry point from a non tech support user', async () => {
         mockGetEvent.mockResolvedValue(eventWithOneTeam());
 
         const { findByText, queryByRole } = render(<Event />, {
@@ -851,7 +851,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
         mockGetEvent.mockResolvedValue(eventWithSourceList());
 
         const rendered = render(<Event />, {
-          wrapper: projectManagerWrapper,
+          wrapper: createWrapper({ techSupport: true }),
         });
         await userEvent.click(
           await rendered.findByRole('button', { name: 'Edit attendance' }),
@@ -868,7 +868,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
         mockDownloadAttendeesFile.mockResolvedValue();
 
         const rendered = render(<Event />, {
-          wrapper: projectManagerWrapper,
+          wrapper: createWrapper({ techSupport: true }),
         });
         await userEvent.click(
           await rendered.findByRole('button', { name: 'Edit attendance' }),
@@ -888,16 +888,17 @@ describe('the NEW_EVENT_PAGE flag', () => {
       });
     });
 
-    it('opens the attendance editor for the interest group project manager', async () => {
+    it('hides the attendance editor from an interest group project manager without tech support', async () => {
       mockGetEvent.mockResolvedValue(eventWithOneTeam());
 
-      const { findByRole } = render(<Event />, {
+      const { findByText, queryByRole } = render(<Event />, {
         wrapper: projectManagerWrapper,
       });
 
+      expect(await findByText('Team One')).toBeVisible();
       expect(
-        await findByRole('button', { name: 'Edit attendance' }),
-      ).toBeVisible();
+        queryByRole('button', { name: 'Edit attendance' }),
+      ).not.toBeInTheDocument();
     });
 
     it('closes the attendance modal without saving when dismissed', async () => {
