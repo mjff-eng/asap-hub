@@ -52,14 +52,6 @@ const infoTriggerStyles = css({
   },
 });
 
-const recurringPillStyles = css([
-  pillStyles,
-  {
-    backgroundColor: colour.background.info,
-    color: colour.foreground.info,
-  },
-]);
-
 const dayCountPillStyles = css([
   pillStyles,
   {
@@ -70,18 +62,13 @@ const dayCountPillStyles = css([
 
 type EventTimeProps = Pick<
   EventResponse,
-  | 'startDate'
-  | 'startDateTimeZone'
-  | 'endDate'
-  | 'endDateTimeZone'
-  | 'recurring'
+  'startDate' | 'startDateTimeZone' | 'endDate' | 'endDateTimeZone'
 >;
 const EventTime: React.FC<EventTimeProps> = ({
   startDate,
   startDateTimeZone,
   endDate,
   endDateTimeZone,
-  recurring,
 }) => {
   const crossesDay = eventCrossesCalendarDay(startDate, endDate);
   const isMultiDay = getEventDurationMs(startDate, endDate) >= ONE_DAY_IN_MS;
@@ -117,12 +104,6 @@ const EventTime: React.FC<EventTimeProps> = ({
           <>
             <span css={gapStyles}> </span>
             <span css={dayCountPillStyles}>{pluralize(dayCount, 'day')}</span>
-          </>
-        )}
-        {recurring && (
-          <>
-            <span css={gapStyles}> </span>
-            <span css={recurringPillStyles}>Recurring</span>
           </>
         )}
       </li>

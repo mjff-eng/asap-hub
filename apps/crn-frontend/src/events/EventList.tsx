@@ -51,6 +51,7 @@ const EventList: React.FC<EventListProps> = ({
       renderPageHref={renderPageHref}
       numberOfPages={numberOfPages}
       events={items.map(eventMapper)}
+      showOnlineEventsNotice={!past}
     />
   );
 };

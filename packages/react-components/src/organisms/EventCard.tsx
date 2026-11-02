@@ -2,6 +2,7 @@ import { ComponentProps } from 'react';
 
 import { BasicEvent, eventMaterialTypes } from '@asap-hub/model';
 
+import { InPersonPill } from '../atoms';
 import {
   ToastCard,
   EventInfo,
@@ -48,7 +49,7 @@ const EventCard: React.FC<EventCardProps> = ({
   joinMeetingTooltipPosition,
   ...props
 }) => {
-  const { hasStarted, hasFinished } = useEventLiveStatus(
+  const { hasStarted, hasFinished, isStartingSoon } = useEventLiveStatus(
     props.startDate,
     props.endDate,
   );
@@ -69,9 +70,7 @@ const EventCard: React.FC<EventCardProps> = ({
       if (props.hideMeetingLink) {
         return {
           type: 'live',
-          toastContent: (
-            <span>This in-person event is currently happening.</span>
-          ),
+          toastContent: <span>This in-person event is happening now.</span>,
         };
       }
       return {
@@ -83,6 +82,22 @@ const EventCard: React.FC<EventCardProps> = ({
             tooltipPosition={joinMeetingTooltipPosition}
           />
         ),
+      };
+    }
+    if (isStartingSoon) {
+      return {
+        type: 'upcoming',
+        toastContent: <span>This event starts in less than 24 hours.</span>,
+        ...(props.hideMeetingLink
+          ? {}
+          : {
+              toastAction: (
+                <JoinMeetingButton
+                  meetingLink={props.meetingLink}
+                  tooltipPosition={joinMeetingTooltipPosition}
+                />
+              ),
+            }),
       };
     }
     if (!hasStarted && hasSpeakersToBeAnnounced) {
@@ -120,7 +135,12 @@ const EventCard: React.FC<EventCardProps> = ({
 
   return (
     <ToastCard {...toastCardProps(displayToast)}>
-      <EventInfo {...props} status={status} />
+      <EventInfo
+        {...props}
+        status={status}
+        dateBlockMuted={hasFinished}
+        titleSuffix={props.hideMeetingLink ? <InPersonPill /> : undefined}
+      />
     </ToastCard>
   );
 };

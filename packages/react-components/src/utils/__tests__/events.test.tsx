@@ -3,6 +3,7 @@ import { addDays, addHours, addMinutes, parseISO, subDays } from 'date-fns';
 import {
   considerEndedAfter,
   MEETING_LINK_REFRESH_INTERVAL_SECONDS,
+  useEventLiveStatus,
   useMeetingLinkRefresh,
 } from '../index';
 
@@ -32,6 +33,36 @@ describe('considerEndedAfter', () => {
     expect(considerEndedAfter(dateNow.toISOString())).not.toEqual(
       addHours(parseISO(dateNow.toISOString()), 2),
     );
+  });
+});
+
+describe('useEventLiveStatus', () => {
+  const renderStatus = (startDate: Date) =>
+    renderHook(() =>
+      useEventLiveStatus(
+        startDate.toISOString(),
+        addHours(startDate, 1).toISOString(),
+      ),
+    ).result.current;
+
+  it('is starting soon less than 24 hours before the start', () => {
+    expect(renderStatus(addHours(new Date(), 3))).toEqual({
+      hasStarted: false,
+      hasFinished: false,
+      isStartingSoon: true,
+    });
+  });
+
+  it('is not starting soon more than 24 hours before the start', () => {
+    expect(renderStatus(addHours(new Date(), 25)).isStartingSoon).toBe(false);
+  });
+
+  it('is not starting soon once the event has started', () => {
+    expect(renderStatus(addMinutes(new Date(), 1))).toEqual({
+      hasStarted: true,
+      hasFinished: false,
+      isStartingSoon: false,
+    });
   });
 });
 

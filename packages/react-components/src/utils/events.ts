@@ -14,11 +14,14 @@ export function considerEndedAfter(endDate: string): Date {
   return addHours(parseISO(endDate), EVENT_CONSIDERED_PAST_HOURS_AFTER_EVENT);
 }
 
+export const getMeetingLinkAvailableFrom = (startDate: string): Date =>
+  subHours(parseISO(startDate), MEETING_LINK_AVAILABLE_HOURS_BEFORE_EVENT);
+
 export const useEventLiveStatus = (
   startDate: string,
   endDate: string,
   enabled = true,
-): { hasStarted: boolean; hasFinished: boolean } => {
+): { hasStarted: boolean; hasFinished: boolean; isStartingSoon: boolean } => {
   const considerStartedAfter = subMinutes(
     parseISO(startDate),
     EVENT_CONSIDERED_IN_PROGRESS_MINUTES_BEFORE_EVENT,
@@ -26,12 +29,17 @@ export const useEventLiveStatus = (
 
   const hasStarted = useDateHasPassed(considerStartedAfter, enabled);
   const hasFinished = useDateHasPassed(considerEndedAfter(endDate), enabled);
+  const isWithinMeetingLinkWindow = useDateHasPassed(
+    getMeetingLinkAvailableFrom(startDate),
+    enabled,
+  );
 
-  return { hasStarted, hasFinished };
+  return {
+    hasStarted,
+    hasFinished,
+    isStartingSoon: isWithinMeetingLinkWindow && !hasStarted,
+  };
 };
-
-export const getMeetingLinkAvailableFrom = (startDate: string): Date =>
-  subHours(parseISO(startDate), MEETING_LINK_AVAILABLE_HOURS_BEFORE_EVENT);
 
 export const useMeetingLinkRefresh = ({
   meetingLink,
