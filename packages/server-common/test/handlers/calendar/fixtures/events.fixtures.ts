@@ -31,6 +31,7 @@ export const getEventDataObject = (
   endDateTimestamp: 1261672254,
   startDate: '2009-12-24T16:20:14.000Z',
   startDateTimestamp: 1261671614,
+  startMonth: '2009-12',
   meetingLink: 'https://zoom.com/room/123',
   hideMeetingLink: false,
   status: 'Confirmed',

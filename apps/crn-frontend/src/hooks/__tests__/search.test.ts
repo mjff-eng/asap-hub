@@ -129,6 +129,16 @@ describe('useSearch', () => {
       expect(result.current.filters).toEqual(new Set());
     });
 
+    it('can replace all filters', () => {
+      const { result } = renderHook(() => useSearch(), {
+        wrapper: createWrapper(['/test?filter=test123']),
+      });
+      act(() => {
+        result.current.setFilters(['2026', '2025-04']);
+      });
+      expect(result.current.filters).toEqual(new Set(['2026', '2025-04']));
+    });
+
     it('resets the pagination when changed', () => {
       const { result } = renderHook(
         () => ({

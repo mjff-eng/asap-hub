@@ -1,9 +1,13 @@
 import { events } from '@asap-hub/routing';
 import { css } from '@emotion/react';
-import { ComponentProps } from 'react';
+import { ComponentProps, useState } from 'react';
 import { Display, Paragraph, TabLink } from '../atoms';
-import { TabNav } from '../molecules';
-import { EventSearch } from '../organisms';
+import { SearchField, TabNav } from '../molecules';
+import {
+  EventMonthFilter,
+  EventMonthFilterSelection,
+  EventSearch,
+} from '../organisms';
 import { rem, smallDesktopScreen } from '../pixels';
 import { queryParamString } from '../routing';
 import PageConstraints from './PageConstraints';
@@ -13,48 +17,111 @@ const textStyles = css({
   maxWidth: rem(smallDesktopScreen.width),
 });
 
-type EventsPageHeaderProps = ComponentProps<typeof EventSearch>;
+const searchRowStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  gap: rem(18),
+  '> :first-of-type': { flex: 1 },
+});
+
+const yearOf = (month: string) => Number(month.slice(0, 4));
+
+// The hub launched in 2020
+const FIRST_YEAR = 2020;
+
+type EventsPageHeaderProps = Omit<
+  ComponentProps<typeof EventSearch>,
+  'children'
+> & {
+  monthCounts?: Readonly<Record<string, number>>;
+  monthFilter?: EventMonthFilterSelection;
+  onChangeMonthFilter?: (selection: EventMonthFilterSelection) => void;
+};
 const EventsPageHeader: React.FC<EventsPageHeaderProps> = ({
   searchQuery,
   onChangeSearchQuery,
-}) => (
-  <header>
-    <PageInfoContainer
-      nav={
-        <TabNav>
-          <TabLink
-            href={events({}).upcoming({}).$ + queryParamString(searchQuery)}
-          >
-            Upcoming Events
-          </TabLink>
-          <TabLink href={events({}).past({}).$ + queryParamString(searchQuery)}>
-            Past Events
-          </TabLink>
-          <TabLink href={events({}).calendar({}).$}>
-            Subscribe to Calendars
-          </TabLink>
-        </TabNav>
-      }
-    >
-      <Display styleAsHeading={2}>Calendar & Events</Display>
-      <div css={textStyles}>
-        <Paragraph accent="tertiary">
-          Find out about upcoming events from ASAP and Groups. You can easily
-          add specific calendars to your own Google Calendar to easily stay
-          updated.
-        </Paragraph>
-      </div>
-    </PageInfoContainer>
+  monthCounts = {},
+  monthFilter = new Set(),
+  onChangeMonthFilter,
+}) => {
+  const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState(currentYear);
 
-    {searchQuery === undefined ? null : (
-      <PageConstraints noPaddingBottom>
-        <EventSearch
-          searchQuery={searchQuery}
-          onChangeSearchQuery={onChangeSearchQuery}
-        />
-      </PageConstraints>
-    )}
-  </header>
-);
+  // Events per year since the first year (2020), e.g. { 2020: 0, …, 2026: 27 }
+  const yearCounts = Object.entries(monthCounts).reduce<Record<number, number>>(
+    (counts, [month, count]) => ({
+      ...counts,
+      [yearOf(month)]: (counts[yearOf(month)] ?? 0) + count,
+    }),
+    Object.fromEntries(
+      Array.from({ length: currentYear - FIRST_YEAR + 1 }, (_, i) => [
+        FIRST_YEAR + i,
+        0,
+      ]),
+    ),
+  );
+
+  // Events per month in the selected year, by month index, e.g. { 0: 7, 3: 10 }
+  const monthCountsInYear = Object.fromEntries(
+    Object.entries(monthCounts)
+      .filter(([month]) => yearOf(month) === year)
+      .map(([month, count]) => [Number(month.slice(5, 7)) - 1, count]),
+  );
+
+  return (
+    <header>
+      <PageInfoContainer
+        nav={
+          <TabNav>
+            <TabLink
+              href={events({}).upcoming({}).$ + queryParamString(searchQuery)}
+            >
+              Upcoming Events
+            </TabLink>
+            <TabLink
+              href={events({}).past({}).$ + queryParamString(searchQuery)}
+            >
+              Past Events
+            </TabLink>
+            <TabLink href={events({}).calendar({}).$}>
+              Subscribe to Calendars
+            </TabLink>
+          </TabNav>
+        }
+      >
+        <Display styleAsHeading={2}>Calendar & Events</Display>
+        <div css={textStyles}>
+          <Paragraph accent="tertiary">
+            Find out about upcoming events from ASAP and Groups. You can easily
+            add specific calendars to your own Google Calendar to easily stay
+            updated.
+          </Paragraph>
+        </div>
+      </PageInfoContainer>
+
+      {searchQuery === undefined ? null : (
+        <PageConstraints noPaddingBottom>
+          <div role="search" css={searchRowStyles}>
+            <SearchField
+              placeholder="Search by topic, presenting team, …"
+              value={searchQuery}
+              onChange={onChangeSearchQuery}
+            />
+            {onChangeMonthFilter && (
+              <EventMonthFilter
+                year={year}
+                yearCounts={yearCounts}
+                monthCounts={monthCountsInYear}
+                selection={monthFilter}
+                onChangeYear={setYear}
+                onChangeSelection={onChangeMonthFilter}
+              />
+            )}
+          </div>
+        </PageConstraints>
+      )}
+    </header>
+  );
+};
 
 export default EventsPageHeader;

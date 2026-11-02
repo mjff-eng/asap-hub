@@ -13,7 +13,9 @@ import {
 } from '@asap-hub/model';
 import { SpeakerGroup } from '@asap-hub/react-components';
 import {
+  keepPreviousData,
   useMutation,
+  useQuery,
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
@@ -26,6 +28,7 @@ import { toAttendanceSearchOptions } from './attendance-rows';
 import {
   getAttendanceSearchHits,
   getEvent,
+  getEventMonthCounts,
   getEvents,
   getTeamsForMatching,
   patchEvent,
@@ -135,4 +138,30 @@ export const useTeamsForMatching = () => {
       }),
     [client, queryClient],
   );
+};
+
+/**
+ * Event counts per start month (`YYYY-MM`) for the month filter.
+ * Uses `useQuery` so a new search doesn't swap the page header for a loader.
+ */
+export const useEventMonthCounts = ({
+  options,
+  enabled,
+}: {
+  options: GetEventListOptions;
+  enabled?: boolean;
+}) => {
+  const { client } = useAlgolia();
+  const { searchQuery, before, after, constraint } = options;
+  const { data } = useQuery({
+    queryKey: [
+      ...eventQueryKeys.all,
+      'month-counts',
+      { searchQuery, before, after, constraint },
+    ],
+    queryFn: () => getEventMonthCounts(client, options),
+    placeholderData: keepPreviousData,
+    enabled,
+  });
+  return data ?? {};
 };

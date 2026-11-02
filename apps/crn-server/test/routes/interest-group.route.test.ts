@@ -155,6 +155,7 @@ describe('/interest-groups/ route', () => {
             startDate: '2020-12-11T14:33:50Z',
             startDateTimeZone: 'Europe/London',
             startDateTimestamp: 1577808190,
+            startMonth: '2020-12',
             endDate: '2020-12-11T14:33:50Z',
             endDateTimeZone: 'Europe/London',
             endDateTimestamp: 1577808190,

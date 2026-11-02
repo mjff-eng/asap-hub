@@ -1,5 +1,6 @@
 import { events, searchQueryParam } from '@asap-hub/routing';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { StaticRouter } from 'react-router';
 import EventsPageHeader from '../EventsPageHeader';
 
@@ -28,4 +29,75 @@ it('preserves search query when navigating', () => {
       searchQueryParam,
     ),
   ).toBe('searchterm');
+});
+
+describe('month filter', () => {
+  const year = new Date().getFullYear();
+
+  it('is not shown without onChangeMonthFilter', () => {
+    render(<EventsPageHeader searchQuery="" />);
+    expect(
+      screen.queryByRole('button', { name: /filter/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows the event counts of the current year', async () => {
+    render(
+      <EventsPageHeader
+        searchQuery=""
+        monthCounts={{
+          [`${year}-01`]: 7,
+          [`${year}-04`]: 3,
+          [`${year - 1}-02`]: 2,
+        }}
+        onChangeMonthFilter={jest.fn()}
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: /filter/i }));
+
+    expect(screen.getByRole('button', { name: /jan/i })).toHaveTextContent(
+      '7 events',
+    );
+    expect(screen.getByRole('button', { name: /apr/i })).toHaveTextContent(
+      '3 events',
+    );
+    expect(screen.getByText(`All of ${year}`).parentElement).toHaveTextContent(
+      '10 events',
+    );
+  });
+
+  it('lists every year since 2020, disabling years without events', async () => {
+    render(
+      <EventsPageHeader
+        searchQuery=""
+        monthCounts={{ '2021-03': 12 }}
+        onChangeMonthFilter={jest.fn()}
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: /filter/i }));
+    await userEvent.click(
+      screen.getByRole('button', { name: `Select year, ${year}` }),
+    );
+
+    expect(screen.getByRole('button', { name: /^2020/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /^2021/ })).toBeEnabled();
+    expect(
+      screen.getByRole('button', { name: new RegExp(`^${year}`) }),
+    ).toBeDisabled();
+  });
+
+  it('calls onChangeMonthFilter with the selected month', async () => {
+    const onChangeMonthFilter = jest.fn();
+    render(
+      <EventsPageHeader
+        searchQuery=""
+        monthCounts={{ [`${year}-01`]: 7 }}
+        onChangeMonthFilter={onChangeMonthFilter}
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: /filter/i }));
+    await userEvent.click(screen.getByRole('button', { name: /jan/i }));
+
+    expect(onChangeMonthFilter).toHaveBeenCalledWith(new Set([`${year}-01`]));
+  });
 });

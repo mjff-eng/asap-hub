@@ -506,6 +506,17 @@ describe('Events Contentful Data Provider', () => {
       });
     });
 
+    test('Should set startMonth from the start date in UTC', async () => {
+      const contentfulGraphQLResponse = getContentfulGraphqlEvent();
+      contentfulGraphQLResponse.startDate = '2009-12-31T22:00:00.000-05:00';
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+        events: contentfulGraphQLResponse,
+      });
+
+      const result = await eventDataProvider.fetchById(eventId);
+      expect(result?.startMonth).toEqual('2010-01');
+    });
+
     describe('Attendance', () => {
       test('Should parse attendance and filter out entries with a null team', async () => {
         const contentfulGraphQLResponse = getContentfulGraphqlEvent();

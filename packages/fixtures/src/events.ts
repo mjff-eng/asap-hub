@@ -96,6 +96,7 @@ export const createEventResponse = (
   startDate: new Date().toISOString(),
   startDateTimeZone: 'Europe/London',
   startDateTimestamp: new Date().getTime(),
+  startMonth: new Date().toISOString().slice(0, 7),
   endDate: isEventInThePast
     ? subHours(new Date(), 2).toISOString()
     : addHours(new Date(), 1).toISOString(),

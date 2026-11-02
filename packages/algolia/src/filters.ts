@@ -69,3 +69,36 @@ export const getEventFilters = (
 
   return getFilter(filterList, constraints);
 };
+
+/**
+ * Builds the Algolia filter for the events month filter.
+ *
+ * Events are matched on their `startMonth` facet (UTC, `YYYY-MM`).
+ * A whole year is expanded into its 12 months, as Algolia cannot match a prefix such as `2026-*`.
+ *
+ * @param selection - Selected keys, each a month (`YYYY-MM`) or a year (`YYYY`)
+ * @returns The filter, or `undefined` when nothing is selected
+ *
+ * @example
+ * getEventStartMonthFilter(['2026-04', '2025-12']);
+ * // 'startMonth:"2026-04" OR startMonth:"2025-12"'
+ *
+ * getEventStartMonthFilter(['2026']);
+ * // 'startMonth:"2026-01" OR ... OR startMonth:"2026-12"'
+ */
+export const getEventStartMonthFilter = (
+  selection: Iterable<string>,
+): string | undefined => {
+  const months = [...selection].flatMap((key) =>
+    key.length === 4
+      ? Array.from(
+          { length: 12 },
+          (_, month) => `${key}-${String(month + 1).padStart(2, '0')}`,
+        )
+      : [key],
+  );
+
+  return months.length
+    ? months.map((month) => `startMonth:"${month}"`).join(' OR ')
+    : undefined;
+};
