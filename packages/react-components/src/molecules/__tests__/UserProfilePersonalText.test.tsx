@@ -204,6 +204,26 @@ it('renders inactive teams as "Former Roles" when user is alumni', () => {
   );
 });
 
+it('renders "Former roles" without the badge in the compact variant', () => {
+  const { getByText, queryByTitle } = render(
+    <UserProfilePersonalText
+      {...props}
+      variant="compact"
+      isAlumni={true}
+      teams={[
+        {
+          id: '42',
+          displayName: 'Former',
+          role: 'Lead PI (Core Leadership)',
+        },
+      ]}
+    />,
+  );
+
+  expect(getByText('Former roles')).toBeInTheDocument();
+  expect(queryByTitle('Alumni Member')).not.toBeInTheDocument();
+});
+
 it('renders inactive teams as "Former Roles" when teams have inactive dates', () => {
   const { container, getByText } = render(
     <UserProfilePersonalText

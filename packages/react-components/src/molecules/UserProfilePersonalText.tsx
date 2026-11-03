@@ -218,8 +218,14 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
                   marginTop: rem(16),
                 })}
               >
-                <Subtitle noMargin>Former Roles</Subtitle>
-                <span css={badgeStyles}>{alumniBadgeIcon}</span>
+                {isCompact ? (
+                  <Subtitle noMargin>Former roles</Subtitle>
+                ) : (
+                  <>
+                    <Subtitle noMargin>Former Roles</Subtitle>
+                    <span css={badgeStyles}>{alumniBadgeIcon}</span>
+                  </>
+                )}
               </div>
             ) : null}
             {visibleInactiveTeams.map(

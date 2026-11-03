@@ -9,6 +9,7 @@ import { colour } from '../colors';
 import { formatDateToTimezone } from '../date';
 import {
   alumniBadgeIcon,
+  CircleAlertIcon,
   editSquareIcon,
   mailIcon,
   MapPinIcon,
@@ -25,7 +26,7 @@ import {
 import { Toast } from '../organisms';
 import { badgesAnchorId } from '../organisms/UserProfileBadges';
 import { rem, tabletScreen } from '../pixels';
-import { captionRegularStyles } from '../text';
+import { captionRegularStyles, fontStyles } from '../text';
 import PageInfoContainer from './PageInfoContainer';
 
 const desktopQuery = `@media (min-width: ${tabletScreen.min}px)`;
@@ -33,6 +34,10 @@ const desktopQuery = `@media (min-width: ${tabletScreen.min}px)`;
 const AVATAR_SIZE = 96;
 const AVATAR_SIZE_DESKTOP = 120;
 const LOCATION_ICON_SIZE = 20;
+
+const alumniToastStyles = css({
+  fontWeight: 500,
+});
 
 const noTeamAffiliationTooltip = {
   icon: <MessageAlertIcon />,
@@ -96,11 +101,13 @@ const avatarStyles = css({
 
 const nameStyles = css(gapAbove(32), {
   gridArea: 'name',
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  columnGap: rem(12),
-  rowGap: rem(8),
+});
+
+const alumniTagStyles = css(fontStyles, {
+  display: 'inline-flex',
+  verticalAlign: 'middle',
+  marginLeft: rem(12),
+  fontWeight: 'normal',
 });
 
 const degreeStyles = css({
@@ -226,26 +233,22 @@ const UserProfileHeaderNew: React.FC<UserProfileHeaderNewProps> = ({
   return (
     <>
       {alumniSinceDate && (
-        <Toast accent="warning">
-          Records indicate the individual transitioned to alumni status on{' '}
-          <strong>
+        <Toast accent="warning" icon={<CircleAlertIcon />}>
+          <span css={alumniToastStyles}>
+            Records indicate the individual transitioned to alumni status on{' '}
             {formatDateToTimezone(alumniSinceDate, 'do MMMM yyyy')}
-          </strong>
-          {alumniLocation && (
-            <span>
-              , with their final affiliation noted at{' '}
-              <strong>{alumniLocation}</strong>
-            </span>
-          )}
-          . Because this individual can not access the Hub, current details may
-          not be up to date. The profile was last modified on{' '}
-          <strong>
+            {alumniLocation &&
+              `, with their final affiliation noted at ${alumniLocation}`}
+            .
+            <br />
+            Because this individual can not access the Hub, current details may
+            not be up to date. The profile was last modified on{' '}
             {formatDateToTimezone(
               alumniLastUpdated || lastModifiedDate,
               'do MMMM yyyy',
             )}
-          </strong>
-          .
+            .
+          </span>
         </Toast>
       )}
       <header>
@@ -313,8 +316,12 @@ const UserProfileHeaderNew: React.FC<UserProfileHeaderNewProps> = ({
                     , Degree
                   </span>
                 ) : null}
+                {isAlumni && (
+                  <span css={alumniTagStyles}>
+                    <StateTag icon={alumniBadgeIcon} label="Alumni" />
+                  </span>
+                )}
               </Display>
-              {isAlumni && <StateTag icon={alumniBadgeIcon} label="Alumni" />}
             </div>
 
             {editPersonalInfoHref && (

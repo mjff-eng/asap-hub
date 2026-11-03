@@ -246,6 +246,18 @@ describe('alumni', () => {
     expect(screen.getByText('Alumni')).toBeVisible();
   });
 
+  it('lists former roles without the alumni badge', () => {
+    renderHeader({
+      ...alumniProps,
+      teams: [
+        { id: 't1', role: 'Lead PI (Core Leadership)', displayName: 'A' },
+      ],
+    });
+    const heading = screen.getByText('Former roles');
+    expect(heading).toBeVisible();
+    expect(heading.parentElement?.querySelector('svg')).toBeNull();
+  });
+
   it('shows the alumni toast', () => {
     renderHeader({ ...alumniProps, alumniLocation: 'Some University' });
     expect(
@@ -255,6 +267,7 @@ describe('alumni', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/final affiliation noted at/)).toBeInTheDocument();
     expect(screen.getByText(/1st September 2021/)).toBeInTheDocument();
+    expect(screen.getByTitle('Alert circle')).toBeInTheDocument();
   });
 
   it('prefers alumniLastUpdated over lastModifiedDate in the toast', () => {
