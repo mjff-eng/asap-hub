@@ -117,23 +117,6 @@ describe('Index Users on Project event handler', () => {
     ]);
   });
 
-  test('Should ignore project members that could not be resolved to a user', async () => {
-    projectControllerMock.fetchById.mockResolvedValueOnce({
-      ...getExpectedTraineeProject(),
-      members: [
-        { id: 'user-trainee', displayName: 'Trainee' },
-        { id: 'unknown-user-membership-1', displayName: '' },
-      ],
-    });
-    mockAlgoliaUsers([]);
-
-    await indexHandler(getProjectEvent('trainee-1', 'ProjectsPublished'));
-
-    expect(userControllerMock.fetchByIdForAlgoliaList.mock.calls).toEqual([
-      ['user-trainee'],
-    ]);
-  });
-
   test('Should only reindex the users found in Algolia when the project is unpublished', async () => {
     mockAlgoliaUsers(['user-1']);
 

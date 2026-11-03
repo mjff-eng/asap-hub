@@ -35,7 +35,6 @@ type ProjectUsersPayload = {
   resourceId: string;
 };
 
-const UNRESOLVED_USER_ID_PREFIX = 'unknown-user-';
 const MAX_PROJECTS_PER_MEMBERSHIP = 20;
 
 const isProjectEvent = (
@@ -51,9 +50,7 @@ const isIndividualProject = (
 
 const getUserMemberIds = (project: ProjectResponse): string[] =>
   isIndividualProject(project)
-    ? (project.members ?? [])
-        .map(({ id }) => id)
-        .filter((id) => !id.startsWith(UNRESOLVED_USER_ID_PREFIX))
+    ? (project.members ?? []).map(({ id }) => id)
     : [];
 
 const ignoreNotFound = <T>(promise: Promise<T>): Promise<T | null> =>
