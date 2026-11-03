@@ -5,6 +5,7 @@ import {
 } from '@asap-hub/fixtures';
 import { EventResponse } from '@asap-hub/model';
 import {
+  EventAttendanceTeam,
   SpeakerGroup,
   SpeakerGroupUser,
   SpeakerProjectGroup,
@@ -12,7 +13,10 @@ import {
 } from '@asap-hub/react-components';
 
 import {
+  downloadEventAttendance,
   downloadEventSpeakers,
+  eventAttendanceFields,
+  eventAttendanceToCSV,
   eventSpeakersFields,
   eventSpeakersToCSV,
 } from '../export';
@@ -389,5 +393,144 @@ describe('downloadEventSpeakers', () => {
       expect.stringMatching(/^EventSpeakers_event_\d{6}\.csv$/),
       expect.anything(),
     );
+  });
+});
+
+const attendanceTeam = (
+  overrides: Partial<EventAttendanceTeam> = {},
+): EventAttendanceTeam => ({
+  teamId: 'team-1',
+  teamName: 'Alessi',
+  attended: true,
+  isFromInterestGroup: true,
+  ...overrides,
+});
+
+describe('eventAttendanceToCSV', () => {
+  test('Should render every column, listing inactive teams without a label', () => {
+    const row = eventAttendanceToCSV(
+      getEvent({
+        interestGroup: {
+          ...createInterestGroupResponse(),
+          name: 'Parkinson IG',
+        },
+      }),
+      [
+        attendanceTeam(),
+        attendanceTeam({
+          teamId: 'team-2',
+          teamName: 'Barabasi',
+          attended: false,
+        }),
+        attendanceTeam({
+          teamId: 'team-3',
+          teamName: 'Old Team',
+          attended: false,
+          isTeamInactive: true,
+        }),
+        attendanceTeam({
+          teamId: 'team-4',
+          teamName: 'Banteng',
+          isFromInterestGroup: false,
+        }),
+      ],
+    );
+
+    expect(row).toEqual({
+      eventTitle: 'Kick-off',
+      description: 'Intro session',
+      startDate: '2026-08-19T10:00:00.000Z',
+      endDate: '2026-08-19T11:00:00.000Z',
+      interestGroupName: 'Parkinson IG',
+      attendancePercentage: '33%',
+      interestGroupTeams: 'Alessi (Y); Barabasi (N); Old Team (N)',
+      additionalTeams: 'Banteng (Y)',
+    });
+  });
+
+  test('Should list every team as additional when none came from the interest group', () => {
+    const row = eventAttendanceToCSV(getEvent({ interestGroup: undefined }), [
+      attendanceTeam({ isFromInterestGroup: undefined }),
+      attendanceTeam({
+        teamId: 'team-2',
+        teamName: 'Barabasi',
+        attended: false,
+        isFromInterestGroup: false,
+      }),
+    ]);
+
+    expect(row).toMatchObject({
+      interestGroupName: 'NA',
+      attendancePercentage: 'NA',
+      interestGroupTeams: 'NA',
+      additionalTeams: 'Alessi (Y); Barabasi (N)',
+    });
+  });
+
+  test('Should report 0% when no interest group team attended', () => {
+    const row = eventAttendanceToCSV(getEvent(), [
+      attendanceTeam({ attended: false }),
+    ]);
+
+    expect(row).toMatchObject({
+      attendancePercentage: '0%',
+      interestGroupTeams: 'Alessi (N)',
+      additionalTeams: 'NA',
+    });
+  });
+
+  test('Should fill the attendance columns with NA when no attendance is recorded', () => {
+    const row = eventAttendanceToCSV(getEvent(), []);
+
+    expect(row).toMatchObject({
+      eventTitle: 'Kick-off',
+      attendancePercentage: 'NA',
+      interestGroupTeams: 'NA',
+      additionalTeams: 'NA',
+    });
+  });
+});
+
+describe('downloadEventAttendance', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('Should keep the declared column order, which drives the CSV header row', () => {
+    expect(Object.keys(eventAttendanceFields)).toEqual([
+      'eventTitle',
+      'description',
+      'startDate',
+      'endDate',
+      'interestGroupName',
+      'attendancePercentage',
+      'interestGroupTeams',
+      'additionalTeams',
+    ]);
+  });
+
+  test('Should open a dated stream with headers and write one row', () => {
+    const write = jest.fn();
+    const end = jest.fn();
+    mockCreateCsvFileStream.mockReturnValueOnce({
+      write,
+      end,
+    } as unknown as ReturnType<typeof createCsvFileStream>);
+
+    downloadEventAttendance(getEvent(), [attendanceTeam()]);
+
+    expect(mockCreateCsvFileStream).toHaveBeenCalledWith(
+      expect.stringMatching(/^EventAttendance_Kick_off_\d{6}\.csv$/),
+      { columns: eventAttendanceFields, header: true },
+    );
+    expect(write).toHaveBeenCalledTimes(1);
+    expect(write).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventTitle: 'Kick-off',
+        attendancePercentage: '100%',
+        interestGroupTeams: 'Alessi (Y)',
+      }),
+    );
+    expect(end).toHaveBeenCalledTimes(1);
   });
 });

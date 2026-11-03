@@ -176,8 +176,31 @@ const useHorizontalOverflow = () => {
   return [setElement, overflowing] as const;
 };
 
-const attendedCount = (teams: EventAttendanceTeam[]) =>
+const attendedCount = (teams: ReadonlyArray<EventAttendanceTeam>) =>
   teams.filter(({ attended }) => attended).length;
+
+// The Attendance card, the Edit Attendance modal and the attendance CSV all
+// split and count teams here, so the download always matches what is on screen.
+export const summarizeAttendance = (
+  teams: ReadonlyArray<EventAttendanceTeam>,
+) => {
+  const interestGroupTeams = teams.filter(
+    ({ isFromInterestGroup }) => isFromInterestGroup,
+  );
+  const additionalTeams = teams.filter(
+    ({ isFromInterestGroup }) => !isFromInterestGroup,
+  );
+  const interestGroupAttended = attendedCount(interestGroupTeams);
+
+  return {
+    interestGroupTeams,
+    additionalTeams,
+    interestGroupAttended,
+    attendancePercentage: interestGroupTeams.length
+      ? Math.round((interestGroupAttended / interestGroupTeams.length) * 100)
+      : 0,
+  };
+};
 
 const TeamRows: React.FC<{
   teams: readonly EventAttendanceTeam[];
@@ -277,19 +300,13 @@ const EventAttendance: React.FC<EventAttendanceProps> = ({
   onEdit,
 }) => {
   const [tableRef, teamsOverflowing] = useHorizontalOverflow();
-  const interestGroupTeams: EventAttendanceTeam[] = [];
-  const additionalTeams: EventAttendanceTeam[] = [];
-  teams.forEach((team) =>
-    (team.isFromInterestGroup ? interestGroupTeams : additionalTeams).push(
-      team,
-    ),
-  );
+  const {
+    interestGroupTeams,
+    additionalTeams,
+    interestGroupAttended,
+    attendancePercentage,
+  } = summarizeAttendance(teams);
   const hasInterestGroupRows = interestGroupTeams.length > 0;
-  const interestGroupAttended = attendedCount(interestGroupTeams);
-  const attendancePercentage =
-    interestGroupTeams.length > 0
-      ? Math.round((interestGroupAttended / interestGroupTeams.length) * 100)
-      : 0;
 
   const header = (
     <div css={[headerStyles, { alignSelf: 'stretch' }]}>

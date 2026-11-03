@@ -25,7 +25,7 @@ import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 
 import { toAttendanceRows } from './attendance-rows';
-import { downloadEventSpeakers } from './export';
+import { downloadEventAttendance, downloadEventSpeakers } from './export';
 import { mapGroupsToSpeakersUpdate } from './map-groups-to-speakers-update';
 import { matchTeamNames } from './match-team-names';
 import { parseTeamRows } from './parse-team-list';
@@ -70,6 +70,11 @@ const Event: React.FC = () => {
         <EventAttendance
           teams={teams}
           interestGroupName={event.interestGroup?.name}
+          onExport={
+            isTechSupport
+              ? () => downloadEventAttendance(event, teams)
+              : undefined
+          }
           onEdit={isTechSupport ? openAttendanceEditor : undefined}
         />
         {isEditingAttendance && (
