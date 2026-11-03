@@ -200,6 +200,7 @@ export { default as UserProfileInterestGroups } from './UserProfileInterestGroup
 export { default as UserProfilePlaceholderCard } from './UserProfilePlaceholderCard';
 export { default as UserProfileRecentWorks } from './UserProfileRecentWorks';
 export { default as UserProfileRole } from './UserProfileRole';
+export { default as UserProfileRoleNew } from './UserProfileRoleNew';
 export { default as UserProjectsCard } from './UserProjectsCard';
 export { default as UserTeamsTabbedCard } from './UserTeamsTabbedCard';
 export { default as WelcomeCard } from './WelcomeCard';

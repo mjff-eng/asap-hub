@@ -1,7 +1,11 @@
 import { css } from '@emotion/react';
 import { UserResponse } from '@asap-hub/model';
 
-import { UserProfileBiographyNew, UserProfileExpertiseNew } from '../organisms';
+import {
+  UserProfileBiographyNew,
+  UserProfileExpertiseNew,
+  UserProfileRoleNew,
+} from '../organisms';
 import { rem } from '../pixels';
 
 const containerStyles = css({
@@ -14,6 +18,7 @@ type Props = UserResponse & {
   readonly editHrefs?: {
     readonly biography?: string;
     readonly expertiseAndResources?: string;
+    readonly role?: string;
   };
 };
 
@@ -24,6 +29,7 @@ const UserProfileOverview: React.FC<Props> = ({ editHrefs, ...props }) => (
       {...props}
       editHref={editHrefs?.expertiseAndResources}
     />
+    <UserProfileRoleNew {...props} editHref={editHrefs?.role} />
   </div>
 );
 

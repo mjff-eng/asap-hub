@@ -3,6 +3,7 @@ import { UserResponse } from '@asap-hub/model';
 import {
   BiographyModal,
   ExpertiseAndResourcesModal,
+  RoleModal,
   UserProfileOverview,
 } from '@asap-hub/react-components';
 import { useUserProfileContext } from '@asap-hub/react-context';
@@ -33,6 +34,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
             ? {
                 biography: route.editBiography({}).$,
                 expertiseAndResources: route.editExpertiseAndResources({}).$,
+                role: route.editRole({}).$,
               }
             : undefined
         }
@@ -60,6 +62,18 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
                   backHref={route.$}
                   onSave={(updates) => patchUser(updates)}
                   suggestions={researchTags}
+                />
+              </Frame>
+            }
+          />
+          <Route
+            path={route.editRole.template}
+            element={
+              <Frame title="Edit Role">
+                <RoleModal
+                  {...user}
+                  backHref={route.$}
+                  onSave={(updates) => patchUser(updates)}
                 />
               </Frame>
             }

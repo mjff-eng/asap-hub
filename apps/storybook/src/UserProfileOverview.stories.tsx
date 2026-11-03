@@ -20,6 +20,10 @@ const props = {
     { id: '4', name: 'Image analysis' },
     { id: '5', name: 'LRRK2' },
   ],
+  responsibilities:
+    'Tess is a Co-PI on her CRN team and leads its imaging work across three sites. She also co-chairs the Imaging working group.',
+  researchInterests:
+    'Tess studies how alpha-synuclein spreads between neurons and whether slowing that spread can protect dopaminergic cells.',
   questions: [
     'Are alpha-synuclein deposits the cause or consequence of something deeper wrong with neurons?',
     'How much do we have to knock down extracellular alpha-synuclein to measurably slow cell to cell transmission (if this approach even works)?',
@@ -31,16 +35,23 @@ export const Normal = () => <UserProfileOverview {...props} />;
 export const OwnProfile = () => (
   <UserProfileOverview
     {...props}
-    editHrefs={{ biography: '#edit', expertiseAndResources: '#edit' }}
+    editHrefs={{
+      biography: '#edit',
+      expertiseAndResources: '#edit',
+      role: '#edit',
+    }}
   />
 );
 
 export const Empty = () => (
   <UserProfileOverview
     {...props}
-    biography={undefined}
     questions={[]}
-    expertiseAndResourceDescription={undefined}
     tags={[]}
+    biography={undefined}
+    expertiseAndResourceDescription={undefined}
+    responsibilities={undefined}
+    researchInterests={undefined}
+    reachOut={undefined}
   />
 );

@@ -299,6 +299,7 @@ export {
   UserProfilePlaceholderCard,
   UserProfileRecentWorks,
   UserProfileRole,
+  UserProfileRoleNew,
   UserProjectsCard,
   UserTeamsTabbedCard,
   WorkingGroupCard,
