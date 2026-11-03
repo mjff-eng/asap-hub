@@ -23,6 +23,7 @@ import {
   ResearchTagDataProvider,
 } from '../data-providers/types';
 import { fetchAll } from '../utils/fetch-all';
+import { createExternalAuthorOncePerName } from '../utils/external-author';
 import { ExternalAuthorDataProvider } from '../data-providers/types/external-authors.data-provider.types';
 
 export default class ResearchOutputController {
@@ -448,18 +449,22 @@ export default class ResearchOutputController {
 
   private mapAuthorsPostRequestToId = async (
     data: AuthorPostRequest[],
-  ): Promise<AuthorUpsertDataObject[]> =>
-    Promise.all(
+  ): Promise<AuthorUpsertDataObject[]> => {
+    const createExternalAuthor = createExternalAuthorOncePerName(
+      this.externalAuthorDataProvider,
+    );
+    return Promise.all(
       data.map(async (author) => {
         if ('userId' in author || 'externalAuthorId' in author) return author;
 
-        const externalAuthorId = await this.externalAuthorDataProvider.create({
-          name: author.externalAuthorName,
-        });
+        const externalAuthorId = await createExternalAuthor(
+          author.externalAuthorName,
+        );
 
         return { externalAuthorId };
       }),
     );
+  };
 
   private convertDataProviderWorkingGroupsToResponseType = (
     workingGroups: Pick<WorkingGroupResponse, 'id' | 'title'>[],

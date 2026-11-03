@@ -13,6 +13,7 @@ import {
 
 import { AssetDataProvider, EventDataProvider } from '../data-providers/types';
 import { ExternalAuthorDataProvider } from '../data-providers/types/external-authors.data-provider.types';
+import { createExternalAuthorOncePerName } from '../utils/external-author';
 
 export default class EventController {
   constructor(
@@ -101,17 +102,19 @@ export default class EventController {
 
   private createNewExternalAuthors = (
     speakers: EventSpeakerAddItem[],
-  ): Promise<EventSpeakerAddDataObject[]> =>
-    Promise.all(
+  ): Promise<EventSpeakerAddDataObject[]> => {
+    const createExternalAuthor = createExternalAuthorOncePerName(
+      this.externalAuthorDataProvider,
+    );
+    return Promise.all(
       speakers.map(async (speaker) => {
         if (!('externalAuthorName' in speaker)) {
           return speaker;
         }
         const { externalAuthorName, ...affiliation } = speaker;
-        const externalAuthorId = await this.externalAuthorDataProvider.create({
-          name: externalAuthorName,
-        });
+        const externalAuthorId = await createExternalAuthor(externalAuthorName);
         return { ...affiliation, externalAuthorId };
       }),
     );
+  };
 }
