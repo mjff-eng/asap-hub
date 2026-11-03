@@ -2,6 +2,7 @@ import { Frame } from '@asap-hub/frontend-utils';
 import { UserResponse } from '@asap-hub/model';
 import {
   BiographyModal,
+  ExpertiseAndResourcesModal,
   UserProfileOverview,
 } from '@asap-hub/react-components';
 import { useUserProfileContext } from '@asap-hub/react-context';
@@ -9,6 +10,7 @@ import { network } from '@asap-hub/routing';
 import { Route, Routes } from 'react-router';
 
 import { usePatchUserById } from './state';
+import { useResearchTags } from '../../shared-state';
 
 type OverviewProps = {
   user: UserResponse;
@@ -20,13 +22,19 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
   const route = network({}).users({}).user({ userId: user.id }).overview({});
 
   const patchUser = usePatchUserById(user.id);
+  const researchTags = useResearchTags();
 
   return (
     <>
       <UserProfileOverview
         {...user}
         editHrefs={
-          isOwnProfile ? { biography: route.editBiography({}).$ } : undefined
+          isOwnProfile
+            ? {
+                biography: route.editBiography({}).$,
+                expertiseAndResources: route.editExpertiseAndResources({}).$,
+              }
+            : undefined
         }
       />
       {isOwnProfile && (
@@ -39,6 +47,19 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
                   biography={user.biography}
                   backHref={route.$}
                   onSave={(biography) => patchUser({ biography })}
+                />
+              </Frame>
+            }
+          />
+          <Route
+            path={route.editExpertiseAndResources.template}
+            element={
+              <Frame title="Edit Expertise and Resources">
+                <ExpertiseAndResourcesModal
+                  {...user}
+                  backHref={route.$}
+                  onSave={(updates) => patchUser(updates)}
+                  suggestions={researchTags}
                 />
               </Frame>
             }

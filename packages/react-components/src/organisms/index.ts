@@ -195,6 +195,7 @@ export { default as UserProductivityTable } from './UserProductivityTable';
 export { default as UserProfileBadges } from './UserProfileBadges';
 export { default as UserProfileBiography } from './UserProfileBiography';
 export { default as UserProfileBiographyNew } from './UserProfileBiographyNew';
+export { default as UserProfileExpertiseNew } from './UserProfileExpertiseNew';
 export { default as UserProfileInterestGroups } from './UserProfileInterestGroups';
 export { default as UserProfilePlaceholderCard } from './UserProfilePlaceholderCard';
 export { default as UserProfileRecentWorks } from './UserProfileRecentWorks';

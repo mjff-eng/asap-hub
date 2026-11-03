@@ -294,6 +294,7 @@ export {
   UserProductivityTable,
   UserProfileBiography,
   UserProfileBiographyNew,
+  UserProfileExpertiseNew,
   UserProfileInterestGroups,
   UserProfilePlaceholderCard,
   UserProfileRecentWorks,
