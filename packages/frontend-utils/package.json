@@ -40,7 +40,7 @@
     "@asap-hub/eslint-config-asap-hub": "workspace:*",
     "@asap-hub/model": "workspace:*",
     "@asap-hub/react-components": "workspace:*",
-    "@babel/core": "7.28.6",
+    "@babel/core": "7.29.6",
     "@babel/preset-react": "7.28.5",
     "@sentry/react": "^8.0.0",
     "@tanstack/react-query": "5.90.21",
