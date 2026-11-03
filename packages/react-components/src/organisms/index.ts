@@ -33,7 +33,11 @@ export type {
   SpeakerSearchOption,
   SpeakerTeamOption,
 } from './EditEventSpeakersModal';
-export { groupFindings, groupLabel } from './speaker-group';
+export {
+  groupFindings,
+  groupLabel,
+  summarizeSpeakerGroups,
+} from './speaker-group';
 export type {
   SpeakerExternalGroup,
   SpeakerGroup,
