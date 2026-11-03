@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Headline3, Headline4, Avatar, Link, Button } from '../atoms';
 import { tabletScreen, rem } from '../pixels';
 import {
-  userPlaceholderIcon,
+  externalUserAvatarIcon,
   chevronCircleDownIcon,
   chevronCircleUpIcon,
   alumniBadgeIcon,
@@ -217,7 +217,7 @@ const SpeakerList: React.FC<SpeakerListProps> = ({ speakers, endDate }) => {
                 {'user' in speaker ? (
                   <Avatar {...speaker.user} imageUrl={speaker.user.avatarUrl} />
                 ) : (
-                  <div css={placeholderStyle}>{userPlaceholderIcon}</div>
+                  <div css={placeholderStyle}>{externalUserAvatarIcon}</div>
                 )}
                 {('user' in speaker && (
                   <Link

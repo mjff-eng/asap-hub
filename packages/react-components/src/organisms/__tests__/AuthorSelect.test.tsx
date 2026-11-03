@@ -88,7 +88,7 @@ it('renders a author multi select, passing through props for external author', (
   expect(getByLabelText(/Subtitle/i)).toBeVisible();
   expect(getByLabelText(/Description/i)).toBeVisible();
   expect(getByText('Andy Smith (Non CRN)')).toBeVisible();
-  expect(getByTitle('User Placeholder')).toBeInTheDocument();
+  expect(getByTitle('External user')).toBeInTheDocument();
 });
 
 it('renders a author multi select, passing through props for external author with a different label', () => {
@@ -117,7 +117,7 @@ it('renders a author multi select, passing through props for external author wit
   expect(getByLabelText(/Subtitle/i)).toBeVisible();
   expect(getByLabelText(/Description/i)).toBeVisible();
   expect(getByText('Andy Smith (Non GP2)')).toBeVisible();
-  expect(getByTitle('User Placeholder')).toBeInTheDocument();
+  expect(getByTitle('External user')).toBeInTheDocument();
 });
 
 it('renders a new author option for new values', async () => {
