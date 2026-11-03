@@ -281,7 +281,7 @@ it('renders the external variant without a team icon and without role badges on 
   expect(screen.queryByText('Lead PI')).not.toBeInTheDocument();
   expect(screen.queryByText('Multiple roles')).not.toBeInTheDocument();
   expect(screen.getAllByText('Non CRN')).toHaveLength(2);
-  expect(screen.getAllByTitle('User Placeholder')).toHaveLength(2);
+  expect(screen.getAllByTitle('External user')).toHaveLength(2);
 });
 
 it('caps the speaker list and reveals the rest on demand', () => {

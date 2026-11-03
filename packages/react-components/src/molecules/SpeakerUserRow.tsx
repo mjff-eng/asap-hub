@@ -7,8 +7,8 @@ import { statePillStyles } from '../atoms/SpeakerRoleBadge';
 import {
   alumniBadgeIcon,
   binIcon,
+  externalUserAvatarIcon,
   tickInCircleIcon,
-  userPlaceholderIcon,
 } from '../icons';
 import { InvalidTickIcon } from '../icons/invalid-tick-icon';
 import {
@@ -217,7 +217,7 @@ const SpeakerUserRow: React.FC<SpeakerUserRowProps> = ({
       <div css={userInfoStyles}>
         <span css={flexRowGap8Styles}>
           {isExternal ? (
-            <span css={placeholderAvatarStyles}>{userPlaceholderIcon}</span>
+            <span css={placeholderAvatarStyles}>{externalUserAvatarIcon}</span>
           ) : (
             <Avatar
               firstName={firstName}
