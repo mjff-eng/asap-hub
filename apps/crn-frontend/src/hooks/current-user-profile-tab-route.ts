@@ -11,7 +11,12 @@ export const useCurrentUserProfileTabRoute = () => {
   }
   const route = network({}).users({}).user;
   const tabRoutes = route({ userId: user.id });
-  return [tabRoutes.about, tabRoutes.research, tabRoutes.outputs].find(
+  return [
+    tabRoutes.about,
+    tabRoutes.research,
+    tabRoutes.overview,
+    tabRoutes.outputs,
+  ].find(
     (possibleTabRoute) =>
       !relative(possibleTabRoute({}).$, pathname).startsWith('..'),
   );
