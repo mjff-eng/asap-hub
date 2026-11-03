@@ -55,7 +55,7 @@ const gapAbove = (mobile: number, desktop: number = 0) =>
 const containerStyles = css({
   display: 'grid',
   rowGap: 0,
-  columnGap: rem(12),
+  columnGap: rem(16),
   alignItems: 'start',
   grid: `
     "avatar       avatar      " auto
@@ -141,13 +141,13 @@ const contactStyles = css(gapAbove(32, 24), {
   '> a': { flexGrow: 1 },
 });
 
-const copyStyles = css(gapAbove(8, 24), {
+const copyStyles = css(gapAbove(16, 24), {
   gridArea: 'copy',
   display: 'flex',
   alignItems: 'center',
 });
 
-const editContactStyles = css(gapAbove(8, 24), {
+const editContactStyles = css(gapAbove(16, 24), {
   gridArea: 'edit-contact',
 });
 
