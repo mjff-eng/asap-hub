@@ -10,6 +10,8 @@ import { getSocialLinks } from './SocialIcons';
 
 const ICON_COLOR = colour.neutral[600];
 const ICON_SIZE = 20;
+// 1.5px rendered stroke on the globe's 24-unit viewBox at ICON_SIZE.
+const LABEL_ICON_STROKE_WIDTH = (1.5 * 24) / ICON_SIZE;
 
 const containerStyles = css({
   display: 'flex',
@@ -67,7 +69,10 @@ const ExternalProfiles: React.FC<ExternalProfilesProps> = (social) => {
     <div css={containerStyles}>
       <span css={labelStyles}>
         <span css={labelIconStyles}>
-          <GlobeIcon color={colour.foreground.tertiary} />
+          <GlobeIcon
+            color={colour.foreground.tertiary}
+            strokeWidth={LABEL_ICON_STROKE_WIDTH}
+          />
         </span>
         External profiles:
       </span>

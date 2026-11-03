@@ -111,13 +111,16 @@ const degreePlaceholderStyles = css({
   color: colour.foreground.disabled,
 });
 
-const editButtonStyles = css({
-  justifySelf: 'start',
+const buttonIconStyles = css({
   'a > svg': {
     height: rem(20),
     paddingTop: rem(2),
     paddingBottom: rem(2),
   },
+});
+
+const editButtonStyles = css(buttonIconStyles, {
+  justifySelf: 'start',
   [desktopQuery]: {
     justifySelf: 'end',
   },
@@ -135,7 +138,7 @@ const socialStyles = css(gapAbove(16, 16), {
   gridArea: 'social',
 });
 
-const contactStyles = css(gapAbove(32, 24), {
+const contactStyles = css(gapAbove(32, 24), buttonIconStyles, {
   gridArea: 'contact',
   display: 'flex',
   '> a': { flexGrow: 1 },

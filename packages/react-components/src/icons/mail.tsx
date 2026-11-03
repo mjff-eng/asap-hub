@@ -1,5 +1,7 @@
 /* istanbul ignore file */
 
+// Rendered at 20px inside the small header buttons, where 1.8 user units
+// on the 24-unit viewBox come out as a 1.5px stroke.
 const mail = (
   <svg
     width="24px"
@@ -8,7 +10,8 @@ const mail = (
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
-    strokeWidth="1.3"
+    stroke="currentColor"
+    strokeWidth="1.8"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
