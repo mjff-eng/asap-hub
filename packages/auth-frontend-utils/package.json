@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.28.6",
-    "auth0-js": "9.30.0",
+    "auth0-js": "10.0.0",
     "camelcase": "6.3.0",
     "pify": "5.0.0",
     "util": "0.12.5"
