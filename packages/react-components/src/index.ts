@@ -321,6 +321,7 @@ export {
   AnalyticsPageHeader,
   BasicLayout,
   BiographyModal,
+  BiographyQuestionsModal,
   ComplianceDashboard,
   ComplianceReportForm,
   ContactInfoModal,

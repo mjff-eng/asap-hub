@@ -25,7 +25,11 @@ type Props = UserResponse & {
 
 const UserProfileOverview: React.FC<Props> = ({ editHrefs, ...props }) => (
   <div css={containerStyles}>
-    <UserProfileBiographyNew {...props} editHref={editHrefs?.biography} />
+    <UserProfileBiographyNew
+      {...props}
+      questions={props.role === 'Staff' ? [] : props.questions}
+      editHref={editHrefs?.biography}
+    />
     <UserProfileExpertiseNew
       {...props}
       editHref={editHrefs?.expertiseAndResources}

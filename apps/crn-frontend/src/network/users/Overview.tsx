@@ -1,7 +1,7 @@
 import { Frame } from '@asap-hub/frontend-utils';
 import { UserResponse } from '@asap-hub/model';
 import {
-  BiographyModal,
+  BiographyQuestionsModal,
   ExpertiseAndResourcesModal,
   RoleModal,
   UserProfileOverview,
@@ -45,10 +45,10 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
             path={route.editBiography.template}
             element={
               <Frame title="Edit Biography">
-                <BiographyModal
-                  biography={user.biography}
+                <BiographyQuestionsModal
+                  {...user}
                   backHref={route.$}
-                  onSave={(biography) => patchUser({ biography })}
+                  onSave={(updates) => patchUser(updates)}
                 />
               </Frame>
             }

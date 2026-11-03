@@ -11,6 +11,7 @@ export { default as AnalyticsOpenSciencePageBody } from './AnalyticsOpenScienceP
 export { default as AnalyticsPageHeader } from './AnalyticsPageHeader';
 export { default as BasicLayout } from './BasicLayout';
 export { default as BiographyModal } from './BiographyModal';
+export { default as BiographyQuestionsModal } from './BiographyQuestionsModal';
 export { default as ComplianceDashboard } from './ComplianceDashboard';
 export { default as ComplianceReportForm } from './ComplianceReportForm';
 export {
