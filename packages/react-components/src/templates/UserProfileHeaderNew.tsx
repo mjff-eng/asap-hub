@@ -103,6 +103,14 @@ const nameStyles = css(gapAbove(32), {
   rowGap: rem(8),
 });
 
+const degreeStyles = css({
+  whiteSpace: 'nowrap',
+});
+
+const degreePlaceholderStyles = css({
+  color: colour.foreground.disabled,
+});
+
 const editButtonStyles = css({
   justifySelf: 'start',
   'a > svg': {
@@ -293,22 +301,16 @@ const UserProfileHeaderNew: React.FC<UserProfileHeaderNewProps> = ({
             </div>
 
             <div css={nameStyles}>
-              <div css={{ display: 'flex' }}>
-                <Display styleAsHeading={2} noMargin>
-                  {fullDisplayName}
-                </Display>
+              <Display styleAsHeading={2} noMargin>
+                {fullDisplayName}
                 {degree ? (
-                  <Display styleAsHeading={2} noMargin>
-                    , {degree}
-                  </Display>
+                  <span css={degreeStyles}>, {degree}</span>
                 ) : isOwnProfile ? (
-                  <div css={{ color: colour.foreground.disabled }}>
-                    <Display styleAsHeading={2} noMargin>
-                      , Degree
-                    </Display>
-                  </div>
+                  <span css={[degreeStyles, degreePlaceholderStyles]}>
+                    , Degree
+                  </span>
                 ) : null}
-              </div>
+              </Display>
               {isAlumni && <StateTag icon={alumniBadgeIcon} label="Alumni" />}
             </div>
 

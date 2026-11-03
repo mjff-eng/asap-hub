@@ -59,6 +59,12 @@ const compactLocationStyles = css({
   padding: 0,
 });
 
+const compactIconStyles = css({
+  width: 'auto',
+  height: 'auto',
+  paddingRight: rem(8),
+});
+
 const badgeStyles = css({
   lineHeight: rem(8),
   marginLeft: rem(8),
@@ -256,7 +262,9 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
       </div>
       {(country || stateOrProvince || city || isOwnProfile) && (
         <span css={[locationStyles, isCompact && compactLocationStyles]}>
-          <span css={iconStyles}>{locationIconOverride}</span>
+          <span css={[iconStyles, isCompact && compactIconStyles]}>
+            {locationIconOverride}
+          </span>
           {country || stateOrProvince || city ? (
             <Ellipsis>
               {formatUserLocation(city, stateOrProvince, country)}

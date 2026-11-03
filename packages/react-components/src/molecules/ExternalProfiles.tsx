@@ -5,7 +5,7 @@ import { cloneElement } from 'react';
 import { Link } from '../atoms';
 import { colour } from '../colors';
 import { GlobeIcon } from '../icons';
-import { lineHeight, rem, tabletScreen } from '../pixels';
+import { rem, tabletScreen } from '../pixels';
 import { getSocialLinks } from './SocialIcons';
 
 const ICON_COLOR = colour.neutral[600];
@@ -27,14 +27,14 @@ const containerStyles = css({
 const labelStyles = css({
   display: 'flex',
   alignItems: 'center',
-  gap: rem(6),
+  gap: rem(8),
   whiteSpace: 'nowrap',
 });
 
 const labelIconStyles = css({
   display: 'inline-flex',
-  width: rem(lineHeight),
-  height: rem(lineHeight),
+  width: rem(ICON_SIZE),
+  height: rem(ICON_SIZE),
   svg: { width: '100%', height: '100%' },
 });
 
