@@ -298,6 +298,7 @@ export {
   UserProfileInterestGroups,
   UserProfilePlaceholderCard,
   UserProfileRecentWorks,
+  UserProfileRecentWorksNew,
   UserProfileRole,
   UserProfileRoleNew,
   UserProjectsCard,

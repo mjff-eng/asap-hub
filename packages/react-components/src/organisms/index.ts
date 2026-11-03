@@ -199,6 +199,7 @@ export { default as UserProfileExpertiseNew } from './UserProfileExpertiseNew';
 export { default as UserProfileInterestGroups } from './UserProfileInterestGroups';
 export { default as UserProfilePlaceholderCard } from './UserProfilePlaceholderCard';
 export { default as UserProfileRecentWorks } from './UserProfileRecentWorks';
+export { default as UserProfileRecentWorksNew } from './UserProfileRecentWorksNew';
 export { default as UserProfileRole } from './UserProfileRole';
 export { default as UserProfileRoleNew } from './UserProfileRoleNew';
 export { default as UserProjectsCard } from './UserProjectsCard';

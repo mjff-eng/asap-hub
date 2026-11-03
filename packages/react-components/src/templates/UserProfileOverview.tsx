@@ -4,6 +4,7 @@ import { UserResponse } from '@asap-hub/model';
 import {
   UserProfileBiographyNew,
   UserProfileExpertiseNew,
+  UserProfileRecentWorksNew,
   UserProfileRoleNew,
 } from '../organisms';
 import { rem } from '../pixels';
@@ -30,6 +31,7 @@ const UserProfileOverview: React.FC<Props> = ({ editHrefs, ...props }) => (
       editHref={editHrefs?.expertiseAndResources}
     />
     <UserProfileRoleNew {...props} editHref={editHrefs?.role} />
+    <UserProfileRecentWorksNew {...props} />
   </div>
 );
 

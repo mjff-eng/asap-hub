@@ -24,6 +24,18 @@ const props = {
     'Tess is a Co-PI on her CRN team and leads its imaging work across three sites. She also co-chairs the Imaging working group.',
   researchInterests:
     'Tess studies how alpha-synuclein spreads between neurons and whether slowing that spread can protect dopaminergic cells.',
+  orcid: '0000-0002-1825-0097',
+  orcidWorks: [
+    {
+      id: '1',
+      doi: 'https://doi.org/10.1000/1',
+      title:
+        'Alpha-synuclein transfer between iPSC-derived neurons in co-culture',
+      type: 'JOURNAL_ARTICLE' as const,
+      publicationDate: { year: '2025', month: '03', day: '14' },
+      lastModifiedDate: '2025-03-14T00:00:00Z',
+    },
+  ],
   questions: [
     'Are alpha-synuclein deposits the cause or consequence of something deeper wrong with neurons?',
     'How much do we have to knock down extracellular alpha-synuclein to measurably slow cell to cell transmission (if this approach even works)?',
@@ -53,5 +65,6 @@ export const Empty = () => (
     responsibilities={undefined}
     researchInterests={undefined}
     reachOut={undefined}
+    orcidWorks={[]}
   />
 );
