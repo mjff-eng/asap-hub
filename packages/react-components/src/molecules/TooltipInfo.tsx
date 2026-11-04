@@ -1,4 +1,5 @@
 import { css, SerializedStyles } from '@emotion/react';
+import { ReactNode } from 'react';
 
 import { Info } from '..';
 import { rem } from '../pixels';
@@ -24,6 +25,7 @@ type TooltipInfoProps = {
   background?: string;
   openOnHover?: boolean;
   floating?: boolean;
+  icon?: ReactNode;
 };
 
 const TooltipInfo: React.FC<TooltipInfoProps> = ({
@@ -34,6 +36,7 @@ const TooltipInfo: React.FC<TooltipInfoProps> = ({
   background,
   openOnHover,
   floating,
+  icon,
 }) => (
   <span
     css={[infoWrapperStyle, overrideWrapperStyles]}
@@ -44,6 +47,7 @@ const TooltipInfo: React.FC<TooltipInfoProps> = ({
       background={background}
       openOnHover={openOnHover}
       floating={floating}
+      icon={icon}
     >
       <span css={[infoStyle, overrideTooltipStyles]}>{children}</span>
     </Info>

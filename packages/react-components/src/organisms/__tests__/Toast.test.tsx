@@ -10,6 +10,23 @@ it('renders the children and default icon', () => {
   expect(getByTitle('Error Icon')).toBeInTheDocument();
 });
 
+it('renders a custom icon in place of the accent icon', () => {
+  const { getByTitle, queryByTitle } = render(
+    <Toast
+      accent="warning"
+      icon={
+        <svg>
+          <title>Custom</title>
+        </svg>
+      }
+    >
+      Text
+    </Toast>,
+  );
+  expect(getByTitle('Custom')).toBeInTheDocument();
+  expect(queryByTitle('Warning')).not.toBeInTheDocument();
+});
+
 it('does not render a close button by default', () => {
   const { queryByText } = render(<Toast>error message</Toast>);
   expect(queryByText(/close/i)).not.toBeInTheDocument();

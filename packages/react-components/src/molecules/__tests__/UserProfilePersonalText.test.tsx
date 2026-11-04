@@ -33,6 +33,22 @@ it('shows user location', () => {
   expect(getByTitle(/location/i)).toBeInTheDocument();
 });
 
+it('renders a custom location icon when one is provided', () => {
+  const { getByTitle, queryByTitle } = render(
+    <UserProfilePersonalText
+      {...props}
+      city="Toronto"
+      locationIcon={
+        <svg>
+          <title>Custom Pin</title>
+        </svg>
+      }
+    />,
+  );
+  expect(getByTitle('Custom Pin')).toBeInTheDocument();
+  expect(queryByTitle(/location/i)).toBe(null);
+});
+
 it('does not show the location icon if no location is available', () => {
   const { queryByTitle } = render(<UserProfilePersonalText {...props} />);
   expect(queryByTitle(/location/i)).toBe(null);
@@ -186,6 +202,58 @@ it('renders inactive teams as "Former Roles" when user is alumni', () => {
   expect(container).toHaveTextContent(
     'Lead PI (Core Leadership) on Team Former',
   );
+});
+
+it('renders "Former roles" without the badge in the compact variant', () => {
+  const { getByText, queryByTitle } = render(
+    <UserProfilePersonalText
+      {...props}
+      variant="compact"
+      isAlumni={true}
+      teams={[
+        {
+          id: '42',
+          displayName: 'Former',
+          role: 'Lead PI (Core Leadership)',
+        },
+      ]}
+    />,
+  );
+
+  expect(getByText('Former roles')).toBeInTheDocument();
+  expect(queryByTitle('Alumni Member')).not.toBeInTheDocument();
+});
+
+it('only adds a top margin to "Former roles" when there is content above it', () => {
+  const inactiveTeam = {
+    id: '42',
+    displayName: 'Former',
+    role: 'Lead PI (Core Leadership)' as const,
+  };
+  const { getByText, rerender } = render(
+    <UserProfilePersonalText
+      {...props}
+      variant="compact"
+      isAlumni={true}
+      teams={[inactiveTeam]}
+    />,
+  );
+  expect(
+    getComputedStyle(getByText('Former roles').parentElement!).marginTop,
+  ).toBe('0px');
+
+  rerender(
+    <UserProfilePersonalText
+      {...props}
+      variant="compact"
+      isAlumni={true}
+      labs={[{ id: 'l1', name: 'Manzini' }]}
+      teams={[inactiveTeam]}
+    />,
+  );
+  expect(
+    getComputedStyle(getByText('Former roles').parentElement!).marginTop,
+  ).not.toBe('0px');
 });
 
 it('renders inactive teams as "Former Roles" when teams have inactive dates', () => {

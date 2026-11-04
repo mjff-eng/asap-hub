@@ -115,12 +115,14 @@ interface ToastProps {
   onClose?: () => void;
   accent?: ToastAccents;
   rounded?: boolean;
+  icon?: ReactNode;
 }
 const Toast: React.FC<ToastProps> = ({
   children,
   onClose,
   accent = 'error',
   rounded,
+  icon = accentIcons[accent],
 }) => (
   <section css={[styles, accentStyles[accent], rounded && roundedStyles]}>
     {onClose && (
@@ -138,7 +140,7 @@ const Toast: React.FC<ToastProps> = ({
         css({ gap: rem(16), alignItems: 'flex-start', marginBlock: rem(12) }),
       ]}
     >
-      <div css={[iconStyles]}>{accentIcons[accent]}</div>
+      <div css={[iconStyles]}>{icon}</div>
       <div css={[wrapStyles, !onClose && { justifyContent: 'center' }]}>
         <Paragraph noMargin>{children}</Paragraph>
         {onClose && <span css={crossPlaceholderStyles}> </span>}

@@ -1,4 +1,5 @@
 import { Auth0, Auth0User } from '@asap-hub/auth';
+import { disable } from '@asap-hub/flags';
 import {
   Auth0Provider,
   WhenReady,
@@ -69,6 +70,7 @@ const originalWarn = console.warn;
 // eslint-disable-next-line no-console -- storing original console methods to restore after filtering errors
 const originalError = console.error;
 beforeEach(() => {
+  disable('NEW_USER_DETAIL_PAGE');
   jest.clearAllMocks();
   jest.spyOn(console, 'warn').mockImplementation((...args) => {
     const message = args[0];
