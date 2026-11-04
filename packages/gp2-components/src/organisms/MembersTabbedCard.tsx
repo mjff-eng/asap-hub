@@ -30,10 +30,11 @@ type MembersTabbedCardProps = {
 const { rem } = pixels;
 
 const cardStyles = css({ padding: rem(24) });
-const memberListStyles = css({ paddingTop: rem(32) });
-const tabDescriptionStyles = css({ fontWeight: 'bold', margin: `${rem(8)} 0` });
-const emptyLeaderStyles = css({ marginTop: rem(-1), marginBottom: rem(44) });
-const emptyMemberStyles = css({ marginTop: rem(-1), marginBottom: rem(12) });
+const memberListStyles = css({ paddingTop: rem(24) });
+const tabDescriptionStyles = css({ fontWeight: 'bold', marginTop: rem(8) });
+const labelSpacingStyles = css({ marginBottom: rem(16) });
+const emptyLeaderStyles = css({ marginBottom: rem(44) });
+const emptyMemberStyles = css({ marginBottom: rem(12) });
 const nameStyles = css({ overflowWrap: 'anywhere' });
 
 const mapMember = ({
@@ -90,6 +91,7 @@ const MembersTabbedCard: React.FC<MembersTabbedCardProps> = ({
             Leaders
           </Paragraph>
         }
+        overrideDescriptionStyles={labelSpacingStyles}
         activeTabIndex={activeTabIndex}
         tabs={[
           {
@@ -125,6 +127,7 @@ const MembersTabbedCard: React.FC<MembersTabbedCardProps> = ({
               Members
             </Paragraph>
           }
+          overrideDescriptionStyles={labelSpacingStyles}
           activeTabIndex={activeTabIndex}
           tabs={[
             {

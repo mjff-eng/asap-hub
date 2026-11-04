@@ -242,8 +242,8 @@ describe('Projects Routes', () => {
     ).toBeVisible();
 
     // Navigate to Resource Projects tab
-    const resourceTab = await screen.findByText('Resource Projects', {
-      selector: 'p',
+    const resourceTab = await screen.findByRole('link', {
+      name: /Resource Projects/,
     });
     await act(async () => {
       await userEvent.click(resourceTab);
@@ -257,8 +257,8 @@ describe('Projects Routes', () => {
     ).toBeVisible();
 
     // Navigate to Trainee Projects tab
-    const traineeTab = await screen.findByText('Trainee Projects', {
-      selector: 'p',
+    const traineeTab = await screen.findByRole('link', {
+      name: /Trainee Projects/,
     });
     await userEvent.click(traineeTab);
 
@@ -293,8 +293,8 @@ describe('Projects Routes', () => {
 
     expect(searchBox.value).toEqual('biomarker');
 
-    const resourceTab = await screen.findByText('Resource Projects', {
-      selector: 'p',
+    const resourceTab = await screen.findByRole('link', {
+      name: /Resource Projects/,
     });
     await act(async () => {
       await userEvent.click(resourceTab);

@@ -61,8 +61,8 @@ it('renders tutorials list page when the tutorials tab is selected', async () =>
 
   renderDiscoverPage(discover({}).$);
 
-  const tutorialsAnchorTab = await screen.findByText(/Tutorials/i, {
-    selector: 'p',
+  const tutorialsAnchorTab = await screen.findByRole('link', {
+    name: /Tutorials/i,
   });
 
   expect(tutorialsAnchorTab).toBeVisible();
