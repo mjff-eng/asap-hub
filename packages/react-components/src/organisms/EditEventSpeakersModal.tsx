@@ -268,7 +268,9 @@ const addedSpeakerMessage = ({
   alreadyAdded,
 }: AddedSpeaker) => {
   if (alreadyAdded) {
-    return `${speakerName} is already added to ${destination}`;
+    return destination
+      ? `${speakerName} is already added to ${destination}`
+      : `${speakerName} is already added as an External Guest`;
   }
   return destination
     ? `Added ${speakerName} to ${destination}`
@@ -396,10 +398,11 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       roles: affiliation.role ? [affiliation.role] : [],
       preliminaryFindingsShared: false,
     };
-    const before = latestGroups.current;
-    const after = updateGroups((current) => {
+    let duplicate: SpeakerGroupUser | undefined;
+    updateGroups((current) => {
       const existingGroup = current.find(
-        (group) => group.id === affiliation.id && group.variant !== 'external',
+        (group): group is SpeakerTeamGroup | SpeakerProjectGroup =>
+          group.id === affiliation.id && group.variant !== 'external',
       );
       if (!existingGroup) {
         const newGroup: SpeakerGroup =
@@ -421,16 +424,14 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
               };
         return withExternalGroupLast([...current, newGroup]);
       }
-      if (
-        existingGroup.variant === 'external' ||
-        existingGroup.users.some(
-          (row) =>
-            row.id === user.userId ||
-            (isExternal &&
-              row.isExternal &&
-              isSameExternalSpeaker(row, user.displayName, externalAuthorId)),
-        )
-      ) {
+      duplicate = existingGroup.users.find(
+        (row) =>
+          row.id === user.userId ||
+          (isExternal &&
+            row.isExternal &&
+            isSameExternalSpeaker(row, user.displayName, externalAuthorId)),
+      );
+      if (duplicate) {
         return current;
       }
       const updatedGroup: SpeakerGroup = {
@@ -445,11 +446,11 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     expandSection(affiliation.variant);
     setPendingSpeaker(null);
     setAddedSpeaker({
-      speakerName: user.displayName,
+      speakerName: duplicate?.displayName ?? user.displayName,
       destination: affiliation.name,
       groupId: affiliation.id,
-      userId: user.userId,
-      alreadyAdded: after === before,
+      userId: duplicate?.id ?? user.userId,
+      alreadyAdded: !!duplicate,
     });
   };
 
@@ -478,8 +479,8 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       externalAuthorId,
       preliminaryFindingsShared: false,
     };
-    const before = latestGroups.current;
-    const after = updateGroups((current) => {
+    let duplicate: SpeakerGroupExternalUser | undefined;
+    updateGroups((current) => {
       const externalGroup = current.find(
         (group): group is SpeakerExternalGroup => group.variant === 'external',
       );
@@ -489,11 +490,10 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
           { id: 'external', variant: 'external', users: [newUser] },
         ];
       }
-      if (
-        externalGroup.users.some((row) =>
-          isSameExternalSpeaker(row, name, externalAuthorId),
-        )
-      ) {
+      duplicate = externalGroup.users.find((row) =>
+        isSameExternalSpeaker(row, name, externalAuthorId),
+      );
+      if (duplicate) {
         return current;
       }
       return current.map((group) =>
@@ -504,15 +504,12 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     });
     expandSection('external');
     setPendingSpeaker(null);
-    setAddedSpeaker(
-      after === before
-        ? null
-        : {
-            speakerName: name,
-            groupId: 'external',
-            userId: newUser.id,
-          },
-    );
+    setAddedSpeaker({
+      speakerName: duplicate?.displayName ?? name,
+      groupId: 'external',
+      userId: duplicate?.id ?? newUser.id,
+      alreadyAdded: !!duplicate,
+    });
   };
 
   const handleSelectSearchOption = (option: SpeakerSearchOption) => {

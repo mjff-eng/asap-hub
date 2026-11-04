@@ -569,7 +569,7 @@ describe('EditEventSpeakersModal', () => {
     expect(screen.getByText('Guest Two')).toBeInTheDocument();
   });
 
-  it('Should not duplicate an external guest whose name is already in the External section', async () => {
+  it('Should tell the PM an external guest is already in the External section instead of adding them again', async () => {
     renderModal({ groups: [getExternalGroup()] });
 
     await searchNonCrn('guest one');
@@ -578,7 +578,18 @@ describe('EditEventSpeakersModal', () => {
     );
 
     expect(screen.getAllByText('Guest One')).toHaveLength(1);
-    expect(screen.queryByText(/as an External Guest/)).not.toBeInTheDocument();
+    expect(
+      screen.getByText('Guest One is already added as an External Guest'),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: 'Undo' }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Guest One' }),
+    );
+
+    expect(screen.queryByText(/already added/)).not.toBeInTheDocument();
   });
 
   it('Should not duplicate an existing external author kept twice as an external guest', async () => {
@@ -652,6 +663,12 @@ describe('EditEventSpeakersModal', () => {
     expect(
       screen.getByText('Bob is already added to Team Omega'),
     ).toBeVisible();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Remove Bob' }));
+
+    expect(
+      screen.queryByText('Bob is already added to Team Omega'),
+    ).not.toBeInTheDocument();
   });
 
   it('Should cancel the pending addition when the external banner is dismissed', async () => {
