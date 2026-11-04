@@ -128,13 +128,41 @@ describe('editing the biography and open questions', () => {
 });
 
 describe('editing expertise and resources', () => {
+  // Five tags is the minimum the modal accepts.
+  const tags = ['1', '2', '3', '4', '5'].map((id) => ({ id, name: id }));
   const user = {
     ...createUserResponse(),
     expertiseAndResourceDescription: 'Expertise Description',
+    tags,
   };
 
-  it('opens and closes the dialog', async () => {
+  it('saves the changes from the dialog', async () => {
+    mockGetResearchTags.mockResolvedValue(tags);
     await renderOverview(user);
+
+    await userEvent.click(
+      screen.getByLabelText('Edit expertise and resources'),
+    );
+    await userEvent.type(
+      screen.getByDisplayValue('Expertise Description'),
+      ' 2',
+    );
+    await userEvent.click(screen.getByText(/save/i));
+
+    await waitFor(() =>
+      expect(mockPatchUser).toHaveBeenCalledWith(
+        user.id,
+        {
+          tagIds: ['1', '2', '3', '4', '5'],
+          expertiseAndResourceDescription: 'Expertise Description 2',
+        },
+        expect.any(String),
+      ),
+    );
+  });
+
+  it('opens and closes the dialog', async () => {
+    await renderOverview({ ...user, tags: [] });
 
     await userEvent.click(
       screen.getByLabelText('Edit expertise and resources'),
