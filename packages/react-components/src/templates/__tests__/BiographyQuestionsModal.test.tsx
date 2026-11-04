@@ -58,6 +58,22 @@ it('saves the biography and the non empty questions together', async () => {
   );
 });
 
+it('shows the required field messages when saving empty fields', async () => {
+  const onSave = jest.fn();
+  const { getByText, findByText } = renderModal({
+    onSave,
+    biography: undefined,
+    questions: [],
+  });
+
+  await userEvent.click(getByText('Save'));
+
+  expect(await findByText('Please add your biography')).toBeVisible();
+  expect(getByText('Please add your first Open Question')).toBeVisible();
+  expect(getByText('Please add your second Open Question')).toBeVisible();
+  expect(onSave).not.toHaveBeenCalled();
+});
+
 it('does not save when a required question is empty', async () => {
   const onSave = jest.fn();
   const { getByText } = renderModal({ onSave, questions: [] });

@@ -38,7 +38,7 @@ type Props = Pick<UserResponse, 'biography' | 'questions'> & {
 
 const UserProfileBiographyNew: React.FC<Props> = ({
   biography,
-  questions = [],
+  questions,
   editHref,
 }) => (
   <Card padding={false} title="Biography">

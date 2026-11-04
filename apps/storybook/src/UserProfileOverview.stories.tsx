@@ -5,10 +5,8 @@ export default {
   title: 'Templates / User Profile / Overview',
 };
 
-const userFixture = createUserResponse();
-
 const props = {
-  ...userFixture,
+  ...createUserResponse(),
   biography:
     'Tess W. B. Goetz, PhD is an Assistant Professor at Yale University. Based in the department of Biology, Tess investigates how image sampling can advance sectors and industries through multi-levelled and networked innovation. Her work increasingly explores the intersection between biology systems and transitions theory to consider new methodological opportunities.',
   expertiseAndResourceDescription:

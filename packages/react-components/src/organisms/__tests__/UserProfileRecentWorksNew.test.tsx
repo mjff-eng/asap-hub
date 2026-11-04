@@ -86,3 +86,11 @@ it('hides the ORCID number on the own profile without an ORCID', () => {
   renderCard({ orcid: undefined }, true);
   expect(screen.queryByText(/Your ORCID is/)).not.toBeInTheDocument();
 });
+
+it('renders the empty state when the user has no works', () => {
+  renderCard({ orcidWorks: undefined });
+  expect(
+    screen.getByRole('heading', { name: 'Recent Publications (0)' }),
+  ).toBeInTheDocument();
+  expect(screen.getByText('No publications yet.')).toBeVisible();
+});

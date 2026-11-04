@@ -56,3 +56,10 @@ it('does not render the edit link without an edit href', () => {
     screen.queryByRole('link', { name: 'Edit expertise and resources' }),
   ).not.toBeInTheDocument();
 });
+
+it('hides the tags when the user has none', () => {
+  render(<UserProfileExpertiseNew {...props} tags={undefined} />);
+  expect(
+    screen.queryByRole('heading', { name: 'Tags' }),
+  ).not.toBeInTheDocument();
+});
