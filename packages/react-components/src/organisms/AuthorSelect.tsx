@@ -7,7 +7,7 @@ import { Avatar } from '../atoms';
 import { MultiSelectOptionsType } from '../atoms/MultiSelect';
 import { colour } from '../colors';
 import { borderWidth } from '../form';
-import { crossIcon, plusIcon, userPlaceholderIcon } from '../icons';
+import { crossIcon, externalUserAvatarIcon, plusIcon } from '../icons';
 import LabeledMultiSelect, {
   LabeledMultiSelectProps,
 } from '../molecules/LabeledMultiSelect';
@@ -47,7 +47,7 @@ const LabelWithAvatar = ({
     </>
   ) : (
     <>
-      <div css={externalAuthorStyles}>{userPlaceholderIcon}</div>
+      <div css={externalAuthorStyles}>{externalUserAvatarIcon}</div>
       <span>
         {children} ({externalLabel})
       </span>
