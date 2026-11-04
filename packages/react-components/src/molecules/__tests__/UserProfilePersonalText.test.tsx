@@ -224,6 +224,38 @@ it('renders "Former roles" without the badge in the compact variant', () => {
   expect(queryByTitle('Alumni Member')).not.toBeInTheDocument();
 });
 
+it('only adds a top margin to "Former roles" when there is content above it', () => {
+  const inactiveTeam = {
+    id: '42',
+    displayName: 'Former',
+    role: 'Lead PI (Core Leadership)' as const,
+  };
+  const { getByText, rerender } = render(
+    <UserProfilePersonalText
+      {...props}
+      variant="compact"
+      isAlumni={true}
+      teams={[inactiveTeam]}
+    />,
+  );
+  expect(
+    getComputedStyle(getByText('Former roles').parentElement!).marginTop,
+  ).toBe('0px');
+
+  rerender(
+    <UserProfilePersonalText
+      {...props}
+      variant="compact"
+      isAlumni={true}
+      labs={[{ id: 'l1', name: 'Manzini' }]}
+      teams={[inactiveTeam]}
+    />,
+  );
+  expect(
+    getComputedStyle(getByText('Former roles').parentElement!).marginTop,
+  ).not.toBe('0px');
+});
+
 it('renders inactive teams as "Former Roles" when teams have inactive dates', () => {
   const { container, getByText } = render(
     <UserProfilePersonalText

@@ -152,6 +152,13 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
     : inactiveTeams.slice(0, MAX_TEAMS);
 
   const isCompact = variant === 'compact';
+  const hasContentAboveFormerRoles = !!(
+    jobTitle ||
+    institution ||
+    isOwnProfile ||
+    labsList ||
+    activeTeams.length
+  );
 
   return (
     <div>
@@ -215,7 +222,7 @@ const UserProfilePersonalText: FC<UserProfilePersonalTextProps> = ({
                 css={css({
                   display: 'flex',
                   alignItems: 'center',
-                  marginTop: rem(16),
+                  marginTop: hasContentAboveFormerRoles ? rem(16) : 0,
                 })}
               >
                 {isCompact ? (

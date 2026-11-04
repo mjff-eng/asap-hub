@@ -11,7 +11,8 @@ import { getSocialLinks } from './SocialIcons';
 const ICON_COLOR = colour.neutral[600];
 const ICON_SIZE = 20;
 // 1.5px rendered stroke on the globe's 24-unit viewBox at ICON_SIZE.
-const LABEL_ICON_STROKE_WIDTH = (1.5 * 24) / ICON_SIZE;
+// Shared by the label globe and the website globes so they match.
+const GLOBE_STROKE_WIDTH = (1.5 * 24) / ICON_SIZE;
 
 const containerStyles = css({
   display: 'flex',
@@ -71,7 +72,7 @@ const ExternalProfiles: React.FC<ExternalProfilesProps> = (social) => {
         <span css={labelIconStyles}>
           <GlobeIcon
             color={colour.foreground.tertiary}
-            strokeWidth={LABEL_ICON_STROKE_WIDTH}
+            strokeWidth={GLOBE_STROKE_WIDTH}
           />
         </span>
         External profiles:
@@ -79,7 +80,14 @@ const ExternalProfiles: React.FC<ExternalProfilesProps> = (social) => {
       <ul css={listStyles} aria-label="External profiles">
         {links.map(({ link, icon }) => (
           <li key={link} css={iconStyles}>
-            <Link href={link}>{cloneElement(icon, { color: ICON_COLOR })}</Link>
+            <Link href={link}>
+              {cloneElement(icon, {
+                color: ICON_COLOR,
+                ...(icon.type === GlobeIcon && {
+                  strokeWidth: GLOBE_STROKE_WIDTH,
+                }),
+              })}
+            </Link>
           </li>
         ))}
       </ul>
