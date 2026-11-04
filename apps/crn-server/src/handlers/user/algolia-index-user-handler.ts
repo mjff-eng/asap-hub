@@ -4,7 +4,7 @@ import {
   toUserListItem,
   UserEvent,
   TeamMembershipEvent,
-  UserResponse,
+  UserListItemSource,
 } from '@asap-hub/model';
 import { EventBridgeHandler, UserPayload } from '@asap-hub/server-common';
 import { isBoom } from '@hapi/boom';
@@ -40,13 +40,13 @@ const isNotFoundError = (e: unknown): e is Error =>
   (isBoom(e) && e.output.statusCode === 404) || e instanceof NotFoundError;
 
 const shouldIndexUser = (
-  user: Pick<UserResponse, 'onboarded' | 'role'>,
+  user: Pick<UserListItemSource, 'onboarded' | 'role'>,
 ): boolean => Boolean(user.onboarded) && user.role !== 'Hidden';
 
 async function fetchUserFromTeamMembership(
   userController: UserController,
   membershipId: string,
-): Promise<UserResponse> {
+): Promise<UserListItemSource> {
   const userList = await userController.fetch({
     filter: { teamMembershipId: membershipId },
     take: 1,
@@ -73,7 +73,7 @@ async function fetchUserFromEvent(
   userController: UserController,
   detailType: string,
   payload: IndexUserPayload | TeamMembershipPayload,
-): Promise<UserResponse> {
+): Promise<UserListItemSource> {
   logger.info({ payload, detailType }, 'Fetching user from event payload');
   if (isTeamMembershipEvent(detailType)) {
     return fetchUserFromTeamMembership(userController, payload.resourceId);
@@ -84,7 +84,7 @@ async function fetchUserFromEvent(
 
 async function syncUserToAlgolia(
   algolia: AlgoliaClient<'crn'>,
-  user: UserResponse,
+  user: UserListItemSource,
 ): Promise<void> {
   if (shouldIndexUser(user)) {
     await algolia.save({ data: toUserListItem(user), type: 'user' });

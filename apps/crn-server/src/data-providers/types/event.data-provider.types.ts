@@ -3,7 +3,7 @@ import {
   EventCreateDataObject,
   EventDataObject,
   EventUpdateDataObject,
-  EventUpdateDetailsRequest,
+  EventUpdateDetailsDataObject,
   FetchEventsOptions,
   InterestGroupTeamMembership,
 } from '@asap-hub/model';
@@ -25,7 +25,7 @@ export type EventDataProvider = DataProvider<
 > & {
   updateEventDetails: (
     id: string,
-    data: EventUpdateDetailsRequest,
+    data: EventUpdateDetailsDataObject,
   ) => Promise<void>;
   fetchInterestGroupMembershipsByCalendarId: (
     calendarId: string,

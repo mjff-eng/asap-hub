@@ -13,9 +13,11 @@ import { eventDataProviderMock } from '../mocks/event.data-provider.mock';
 describe('Event controller', () => {
   const assetDataProviderMock =
     getDataProviderMock() as unknown as jest.Mocked<AssetDataProvider>;
+  const externalAuthorDataProviderMock = getDataProviderMock();
   const eventController = new Events(
     eventDataProviderMock,
     assetDataProviderMock,
+    externalAuthorDataProviderMock,
   );
 
   afterEach(() => {
@@ -150,6 +152,86 @@ describe('Event controller', () => {
         payload,
       );
       expect(result).toEqual(getEventResponse());
+    });
+
+    test('Should create an external author for each new name and add every speaker by id', async () => {
+      eventDataProviderMock.fetchById.mockResolvedValue(getEventDataObject());
+      externalAuthorDataProviderMock.create
+        .mockResolvedValueOnce('external-author-new-1')
+        .mockResolvedValueOnce('external-author-new-2');
+
+      await eventController.updateEventDetails('7', {
+        speakersToAdd: [
+          { userId: 'user-1', teamId: 'team-1' },
+          { externalAuthorId: 'external-author-1', projectId: 'project-1' },
+          { externalAuthorName: 'Riley Stone', teamId: 'team-2' },
+          { externalAuthorName: 'Sam Rivera', preliminaryDataShared: true },
+        ],
+        speakersToRemove: ['speaker-1'],
+      });
+
+      expect(externalAuthorDataProviderMock.create.mock.calls).toEqual([
+        [{ name: 'Riley Stone' }],
+        [{ name: 'Sam Rivera' }],
+      ]);
+      expect(eventDataProviderMock.updateEventDetails).toHaveBeenCalledWith(
+        '7',
+        {
+          speakersToAdd: [
+            { userId: 'user-1', teamId: 'team-1' },
+            { externalAuthorId: 'external-author-1', projectId: 'project-1' },
+            { externalAuthorId: 'external-author-new-1', teamId: 'team-2' },
+            {
+              externalAuthorId: 'external-author-new-2',
+              preliminaryDataShared: true,
+            },
+          ],
+          speakersToRemove: ['speaker-1'],
+        },
+      );
+    });
+
+    test('Should create one external author for a new name added to more than one group', async () => {
+      eventDataProviderMock.fetchById.mockResolvedValue(getEventDataObject());
+      externalAuthorDataProviderMock.create.mockResolvedValueOnce(
+        'external-author-new-1',
+      );
+
+      await eventController.updateEventDetails('7', {
+        speakersToAdd: [
+          { externalAuthorName: 'Riley Stone', teamId: 'team-1' },
+          { externalAuthorName: 'Riley Stone', projectId: 'project-1' },
+        ],
+      });
+
+      expect(externalAuthorDataProviderMock.create.mock.calls).toEqual([
+        [{ name: 'Riley Stone' }],
+      ]);
+      expect(eventDataProviderMock.updateEventDetails).toHaveBeenCalledWith(
+        '7',
+        {
+          speakersToAdd: [
+            { externalAuthorId: 'external-author-new-1', teamId: 'team-1' },
+            {
+              externalAuthorId: 'external-author-new-1',
+              projectId: 'project-1',
+            },
+          ],
+        },
+      );
+    });
+
+    test('Should not update the event when creating an external author fails', async () => {
+      externalAuthorDataProviderMock.create.mockRejectedValueOnce(
+        new Error('Contentful error'),
+      );
+
+      await expect(
+        eventController.updateEventDetails('7', {
+          speakersToAdd: [{ externalAuthorName: 'Riley Stone' }],
+        }),
+      ).rejects.toThrow('Contentful error');
+      expect(eventDataProviderMock.updateEventDetails).not.toHaveBeenCalled();
     });
   });
 

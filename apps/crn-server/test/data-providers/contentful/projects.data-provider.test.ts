@@ -12,6 +12,7 @@ import {
   parseContentfulAims,
   processTraineeProjectMembers,
   type ProjectMembershipItem,
+  type UserProjectMembershipItem,
 } from '../../../src/data-providers/contentful/project.data-provider';
 import {
   FetchProjectMilestonesOptions,
@@ -1557,7 +1558,7 @@ describe('parseProjectUserMember', () => {
         avatar: { url: 'https://example.com/avatar.png' },
         alumniSinceDate: '2024-01-01',
       },
-    } as unknown as ProjectMembershipItem;
+    } as unknown as UserProjectMembershipItem;
 
     expect(parseProjectUserMember(membership)).toEqual({
       id: 'user-1',
@@ -1604,7 +1605,7 @@ describe('parseProjectUserMember', () => {
           ],
         },
       },
-    } as unknown as ProjectMembershipItem;
+    } as unknown as UserProjectMembershipItem;
 
     expect(parseProjectUserMember(membership)).toEqual({
       id: 'user-1',
@@ -1620,21 +1621,6 @@ describe('parseProjectUserMember', () => {
         date: '2025-09-11',
         iconUrl: 'https://example.com/avatar.jpg',
       },
-    });
-  });
-
-  it('returns placeholder when membership is not a user', () => {
-    const membership = {
-      sys: { id: 'membership-users-2' },
-      role: 'Contributor',
-      projectMember: {
-        __typename: 'Teams',
-      },
-    } as unknown as ProjectMembershipItem;
-
-    expect(parseProjectUserMember(membership)).toEqual({
-      id: 'unknown-user-membership-users-2',
-      displayName: '',
     });
   });
 });

@@ -124,7 +124,11 @@ const getController = (entity: keyof EntityResponsesCRN) => {
       externalAuthorDataProvider,
     ),
     'external-author': new ExternalAuthors(externalAuthorDataProvider),
-    event: new Events(eventDataProvider, assetDataProvider),
+    event: new Events(
+      eventDataProvider,
+      assetDataProvider,
+      externalAuthorDataProvider,
+    ),
     team: new Teams(teamDataProvider),
     'working-group': new WorkingGroups(workingGroupDataProvider),
     'interest-group': new InterestGroups(

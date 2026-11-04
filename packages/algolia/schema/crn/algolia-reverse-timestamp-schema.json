@@ -24,7 +24,8 @@
     "apcRequested",
     "apcCoverageRequestStatus",
     "project.id",
-    "startMonth"
+    "startMonth",
+    "individualProjects.id"
   ],
   "attributesToIndex": [
     "name",

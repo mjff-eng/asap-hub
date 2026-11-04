@@ -142,18 +142,23 @@ export const parseContentfulAims = (
   return aims.length > 0 ? aims : undefined;
 };
 
+export type UserProjectMembershipItem = ProjectMembershipItem & {
+  projectMember: Extract<
+    NonNullable<ProjectMembershipItem['projectMember']>,
+    { __typename: 'Users' }
+  >;
+};
+
+const isUserMembership = <T extends ProjectMembershipItem>(
+  membership: T,
+): membership is T & UserProjectMembershipItem =>
+  membership.projectMember?.__typename === 'Users';
+
 // Parse project member from Contentful membership
 export const parseProjectUserMember = (
-  membership: ProjectMembershipItem,
+  membership: UserProjectMembershipItem,
 ): ProjectMember => {
   const { projectMember } = membership;
-
-  if (!projectMember || projectMember.__typename !== 'Users') {
-    return {
-      id: `unknown-user-${membership.sys?.id ?? 'missing'}`,
-      displayName: '',
-    };
-  }
 
   const memberAwards = cleanArray(projectMember.teamsCollection?.items).map(
     (teamMembership) => ({ awards: parseAwardsCollection(teamMembership) }),
@@ -199,7 +204,7 @@ export const processTraineeProjectMembers = (
   members: ProjectMembershipItem[],
 ): ProjectMember[] => {
   const userMembers = members
-    .filter((m) => m.projectMember?.__typename === 'Users')
+    .filter(isUserMembership)
     .map((m) => parseProjectUserMember(m));
 
   const { trainees, mentors, unassigned } =
@@ -310,7 +315,7 @@ export const parseContentfulProject = (
       }
 
       const userMembers = members
-        .filter((m) => m.projectMember?.__typename === 'Users')
+        .filter(isUserMembership)
         .map((m) => parseProjectUserMember(m));
 
       return {
@@ -527,7 +532,7 @@ export const parseContentfulProjectDetail = (
 
       // Parse user members for non-team-based projects
       const userMembers: ProjectMember[] = members
-        .filter((m) => m.projectMember?.__typename === 'Users')
+        .filter(isUserMembership)
         .map((m) => parseProjectUserMember(m));
 
       return {

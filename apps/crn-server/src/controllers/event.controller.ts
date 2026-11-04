@@ -3,6 +3,8 @@ import {
   EventAttendeesFile,
   EventCreateRequest,
   EventResponse,
+  EventSpeakerAddDataObject,
+  EventSpeakerAddItem,
   EventUpdateDetailsRequest,
   EventUpdateRequest,
   FetchEventsOptions,
@@ -10,11 +12,14 @@ import {
 } from '@asap-hub/model';
 
 import { AssetDataProvider, EventDataProvider } from '../data-providers/types';
+import { ExternalAuthorDataProvider } from '../data-providers/types/external-authors.data-provider.types';
+import { createExternalAuthorOncePerName } from '../utils/external-author';
 
 export default class EventController {
   constructor(
     private dataProvider: EventDataProvider,
     private assetDataProvider: AssetDataProvider,
+    private externalAuthorDataProvider: ExternalAuthorDataProvider,
   ) {}
 
   async fetch(options: FetchEventsOptions): Promise<ListEventResponse> {
@@ -44,9 +49,14 @@ export default class EventController {
 
   async updateEventDetails(
     eventId: string,
-    data: EventUpdateDetailsRequest,
+    { speakersToAdd, ...data }: EventUpdateDetailsRequest,
   ): Promise<EventResponse> {
-    await this.dataProvider.updateEventDetails(eventId, data);
+    await this.dataProvider.updateEventDetails(eventId, {
+      ...data,
+      ...(speakersToAdd && {
+        speakersToAdd: await this.createNewExternalAuthors(speakersToAdd),
+      }),
+    });
     return this.fetchById(eventId);
   }
 
@@ -89,4 +99,22 @@ export default class EventController {
 
     return event || null;
   }
+
+  private createNewExternalAuthors = (
+    speakers: EventSpeakerAddItem[],
+  ): Promise<EventSpeakerAddDataObject[]> => {
+    const createExternalAuthor = createExternalAuthorOncePerName(
+      this.externalAuthorDataProvider,
+    );
+    return Promise.all(
+      speakers.map(async (speaker) => {
+        if (!('externalAuthorName' in speaker)) {
+          return speaker;
+        }
+        const { externalAuthorName, ...affiliation } = speaker;
+        const externalAuthorId = await createExternalAuthor(externalAuthorName);
+        return { ...affiliation, externalAuthorId };
+      }),
+    );
+  };
 }

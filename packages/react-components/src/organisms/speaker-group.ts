@@ -17,6 +17,8 @@ export type SpeakerGroupUser = {
   readonly isAlumni?: boolean;
   // Matched no CRN user, so no profile to link to and no role to show.
   readonly isExternal?: boolean;
+  // Set when an existing external author is reused; otherwise one is created on save.
+  readonly externalAuthorId?: string;
   readonly preliminaryFindingsShared: boolean;
 };
 
@@ -24,6 +26,7 @@ export type SpeakerGroupExternalUser = {
   readonly id: string;
   readonly speakerIds?: string[];
   readonly displayName: string;
+  readonly externalAuthorId?: string;
   readonly preliminaryFindingsShared: boolean;
 };
 

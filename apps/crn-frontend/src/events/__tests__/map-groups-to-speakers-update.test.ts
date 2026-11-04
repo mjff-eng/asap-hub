@@ -2,6 +2,7 @@ import {
   SpeakerGroup,
   SpeakerGroupExternalUser,
   SpeakerGroupUser,
+  SpeakerProjectGroup,
   SpeakerTeamGroup,
 } from '@asap-hub/react-components';
 
@@ -28,14 +29,120 @@ const teamGroup = (
   ...overrides,
 });
 
+const projectSpeakerGroup = (
+  overrides: Partial<SpeakerProjectGroup> = {},
+): SpeakerGroup => ({
+  id: 'project-1',
+  variant: 'project',
+  projectName: 'Project One',
+  users: [],
+  ...overrides,
+});
+
 const externalGroup = (users: SpeakerGroupExternalUser[]): SpeakerGroup => ({
   id: 'external',
   variant: 'external',
   users,
 });
 
+const newSpeaker = (overrides: Partial<SpeakerGroupUser> = {}) =>
+  speaker({
+    id: 'user-2',
+    speakerIds: [],
+    displayName: 'User Two',
+    ...overrides,
+  });
+
+const newGuest = (
+  overrides: Partial<SpeakerGroupExternalUser> = {},
+): SpeakerGroupExternalUser => ({
+  id: 'external-1-Guest',
+  speakerIds: [],
+  displayName: 'Guest',
+  preliminaryFindingsShared: false,
+  ...overrides,
+});
+
 describe('mapGroupsToSpeakersUpdate', () => {
-  test('Should skip a session guest, who has no speaker entry to persist', () => {
+  describe('speakersToAdd', () => {
+    test('Should add CRN users with the team or project they were added to', () => {
+      const original = [teamGroup()];
+      const saved = [
+        teamGroup({ users: [speaker(), newSpeaker()] }),
+        projectSpeakerGroup({ users: [newSpeaker({ id: 'user-3' })] }),
+      ];
+
+      expect(
+        mapGroupsToSpeakersUpdate(original, saved, false).speakersToAdd,
+      ).toEqual([
+        { userId: 'user-2', teamId: 'team-1' },
+        { userId: 'user-3', projectId: 'project-1' },
+      ]);
+    });
+
+    test('Should add external speakers by external author id or by name', () => {
+      const saved = [
+        teamGroup({
+          users: [
+            newSpeaker({
+              id: 'external-1-Riley',
+              displayName: 'Riley Stone',
+              isExternal: true,
+              externalAuthorId: 'external-author-1',
+            }),
+          ],
+        }),
+        projectSpeakerGroup({
+          users: [
+            newSpeaker({
+              id: 'external-2-Sam',
+              displayName: 'Sam Rivera',
+              isExternal: true,
+            }),
+          ],
+        }),
+        externalGroup([
+          newGuest({ externalAuthorId: 'external-author-2' }),
+          newGuest({ id: 'external-3-Guest' }),
+        ]),
+      ];
+
+      expect(mapGroupsToSpeakersUpdate([], saved, false).speakersToAdd).toEqual(
+        [
+          { externalAuthorId: 'external-author-1', teamId: 'team-1' },
+          { externalAuthorName: 'Sam Rivera', projectId: 'project-1' },
+          { externalAuthorId: 'external-author-2' },
+          { externalAuthorName: 'Guest' },
+        ],
+      );
+    });
+
+    test('Should send the preliminary findings of new speakers on a past event', () => {
+      const saved = [
+        teamGroup({
+          users: [speaker(), newSpeaker({ preliminaryFindingsShared: true })],
+        }),
+        externalGroup([newGuest()]),
+      ];
+
+      expect(
+        mapGroupsToSpeakersUpdate([teamGroup()], saved, true).speakersToAdd,
+      ).toEqual([
+        { userId: 'user-2', teamId: 'team-1', preliminaryDataShared: true },
+        { externalAuthorName: 'Guest', preliminaryDataShared: false },
+      ]);
+    });
+
+    test('Should not send speakersToAdd when no speaker was added', () => {
+      const groups = [teamGroup()];
+
+      expect(
+        mapGroupsToSpeakersUpdate(groups, groups, true),
+      ).not.toHaveProperty('speakersToAdd');
+    });
+  });
+
+  test('Should leave a speaker added in this session out of preliminaryDataShared', () => {
     const groups = [
       teamGroup({
         users: [

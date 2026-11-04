@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ExternalSpeakerAffiliationCard, {
@@ -12,17 +12,22 @@ const affiliationOptions: ReadonlyArray<AffiliationOption> = [
 
 const defaultProps = {
   displayName: 'Jane Doe',
-  affiliationOptions,
+  loadAffiliationOptions: jest.fn(async () => affiliationOptions),
   onSelectAffiliation: jest.fn(),
   onKeepAsExternalGuest: jest.fn(),
   onDismiss: jest.fn(),
 };
 
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => {
+  jest.clearAllMocks();
+  defaultProps.loadAffiliationOptions.mockImplementation(
+    async () => affiliationOptions,
+  );
+});
 
 const selectOption = async (name: string) => {
-  await userEvent.click(screen.getByRole('combobox'));
-  await userEvent.click(screen.getByText(name));
+  await userEvent.type(screen.getByRole('combobox'), name.slice(0, 3));
+  await userEvent.click(await screen.findByText(name));
 };
 
 it('Should dismiss with a cross rather than a bin', () => {
@@ -55,6 +60,25 @@ it('Should render the speaker name, the Non CRN pill and the explanatory copy', 
   ).toBeVisible();
 });
 
+it('Should search teams and projects with the typed text', async () => {
+  render(<ExternalSpeakerAffiliationCard {...defaultProps} />);
+
+  await userEvent.type(screen.getByRole('combobox'), 'Alp');
+
+  await waitFor(() =>
+    expect(defaultProps.loadAffiliationOptions).toHaveBeenLastCalledWith('Alp'),
+  );
+});
+
+it('Should tell when the search finds no team or project', async () => {
+  defaultProps.loadAffiliationOptions.mockImplementation(async () => []);
+  render(<ExternalSpeakerAffiliationCard {...defaultProps} />);
+
+  await userEvent.type(screen.getByRole('combobox'), 'Zeta');
+
+  expect(await screen.findByText('Sorry, no matches for Zeta.')).toBeVisible();
+});
+
 it('Should call onSelectAffiliation with the chosen team', async () => {
   render(<ExternalSpeakerAffiliationCard {...defaultProps} />);
 
@@ -80,15 +104,11 @@ it('Should call onSelectAffiliation with the chosen project', async () => {
 });
 
 it('Should tell apart a team and a project that share an id', async () => {
-  render(
-    <ExternalSpeakerAffiliationCard
-      {...defaultProps}
-      affiliationOptions={[
-        { id: 'shared-1', name: 'Team Alpha', variant: 'team' },
-        { id: 'shared-1', name: 'Project Beta', variant: 'project' },
-      ]}
-    />,
-  );
+  defaultProps.loadAffiliationOptions.mockImplementation(async () => [
+    { id: 'shared-1', name: 'Team Alpha', variant: 'team' },
+    { id: 'shared-1', name: 'Project Beta', variant: 'project' },
+  ]);
+  render(<ExternalSpeakerAffiliationCard {...defaultProps} />);
 
   await selectOption('Project Beta');
 
@@ -108,29 +128,6 @@ it('Should call onKeepAsExternalGuest without an affiliation', async () => {
 
   expect(defaultProps.onKeepAsExternalGuest).toHaveBeenCalledTimes(1);
   expect(defaultProps.onSelectAffiliation).not.toHaveBeenCalled();
-});
-
-it('Should render no affiliation select and no "select a team" copy when there are no options', () => {
-  render(
-    <ExternalSpeakerAffiliationCard
-      {...defaultProps}
-      affiliationOptions={[]}
-    />,
-  );
-
-  expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
-  expect(
-    screen.queryByText(/Select the team or project they represented/),
-  ).not.toBeInTheDocument();
-  expect(
-    screen.getByText(/not a member on any CRN team or individual project/),
-  ).toBeVisible();
-  expect(
-    screen.getByText('This does not add them to a team or project.'),
-  ).toBeVisible();
-  expect(
-    screen.getByRole('button', { name: 'Keep as External Guest' }),
-  ).toBeVisible();
 });
 
 it('Should disable every control when not enabled', () => {

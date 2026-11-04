@@ -49,6 +49,7 @@ import {
   EventCreateDataObject,
   EventDataObject,
   EventSpeaker,
+  EventSpeakerAddDataObject,
   EventSpeakerExternalUserData,
   EventSpeakerProjectData,
   EventSpeakerTeam,
@@ -56,7 +57,7 @@ import {
   EventSpeakerUserData,
   EventTeamAttendance,
   EventUpdateDataObject,
-  EventUpdateDetailsRequest,
+  EventUpdateDetailsDataObject,
   FetchEventsOptions,
   getInterestGroupTeamIdsForEvent,
   InterestGroupTeamMembership,
@@ -428,6 +429,28 @@ export class EventContentfulDataProvider implements EventDataProvider {
     }
   }
 
+  private async createSpeakerEntry(
+    environment: Environment,
+    speaker: EventSpeakerAddDataObject,
+  ) {
+    const { teamId, projectId, preliminaryDataShared } = speaker;
+    const userOrExternalAuthorId =
+      'userId' in speaker ? speaker.userId : speaker.externalAuthorId;
+    try {
+      const newEntry = await environment.createEntry('eventSpeakers', {
+        fields: addLocaleToFields({
+          user: createLink(userOrExternalAuthorId),
+          ...(teamId && { team: createLink(teamId) }),
+          ...(projectId && { project: createLink(projectId) }),
+          preliminaryDataShared: !!preliminaryDataShared,
+        }),
+      });
+      return await newEntry.publish();
+    } catch (e) {
+      throw new Error(`Error creating speaker entry: ${e}`);
+    }
+  }
+
   async fetchUpcomingEventsByCalendarId(
     calendarId: string,
     now: Date,
@@ -541,7 +564,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
 
   async updateEventDetails(
     id: string,
-    data: EventUpdateDetailsRequest,
+    data: EventUpdateDetailsDataObject,
   ): Promise<void> {
     const environment = await this.getRestClient();
     const event = await environment.getEntry(id);
@@ -580,13 +603,20 @@ export class EventContentfulDataProvider implements EventDataProvider {
       );
     }
 
+    const speakersToAdd = data.speakersToAdd ?? [];
+    const speakersToRemove = data.speakersToRemove ?? [];
+    const addedSpeakers = await Promise.all(
+      speakersToAdd.map((speaker) =>
+        this.createSpeakerEntry(environment, speaker),
+      ),
+    );
+
     // Deleting is irreversible, so it runs only once the other speaker writes succeed.
-    if (data.speakersToRemove && data.speakersToRemove.length > 0) {
-      patchFields.speakers = await this.buildSpeakerLinks(
-        environment,
-        event,
-        data.speakersToRemove,
-      );
+    if (speakersToAdd.length > 0 || speakersToRemove.length > 0) {
+      patchFields.speakers = [
+        ...(await this.buildSpeakerLinks(environment, event, speakersToRemove)),
+        ...addedSpeakers.map((speakerEntry) => createLink(speakerEntry.sys.id)),
+      ];
     }
 
     const fetchEventById = () => this.fetchEventById(id);
@@ -629,7 +659,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
   private async buildAttendanceLinks(
     environment: Environment,
     event: Entry,
-    attendanceData: NonNullable<EventUpdateDetailsRequest['attendance']>,
+    attendanceData: NonNullable<EventUpdateDetailsDataObject['attendance']>,
   ) {
     const existingLinks: Link<'Entry'>[] =
       event.fields.attendance?.['en-US'] || [];
@@ -814,7 +844,7 @@ export class EventContentfulDataProvider implements EventDataProvider {
     environment: Environment,
     event: Entry,
     preliminaryDataShared: NonNullable<
-      EventUpdateDetailsRequest['preliminaryDataShared']
+      EventUpdateDetailsDataObject['preliminaryDataShared']
     >,
     speakersToRemove: string[],
   ): Promise<SpeakerPreliminaryDataSharedUpdate[]> {

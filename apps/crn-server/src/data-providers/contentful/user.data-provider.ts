@@ -4,6 +4,7 @@ import {
   inactiveUserMembershipStatus,
   InterestGroupMembership,
   isProjectType,
+  isTeamType,
   isUserDegree,
   isUserRole,
   LabResponse,
@@ -14,6 +15,7 @@ import {
   TeamRole,
   UserDataObject,
   UserListItemDataObject,
+  UserListItemProject,
   UserListItemTeam,
   UserProjectMembership,
   UserSocialLinks,
@@ -831,6 +833,10 @@ export const parseContentfulGraphQlUserListItem = (
         {
           id: teamItem?.team?.sys.id || '',
           displayName: teamItem?.team?.displayName || '',
+          teamType: isTeamType(teamItem.team.teamType)
+            ? teamItem.team.teamType
+            : undefined,
+          teamInactiveSince: teamItem.team.inactiveSince ?? undefined,
           role: teamItem?.role,
           ...(awards.length ? { awards } : {}),
         },
@@ -838,6 +844,23 @@ export const parseContentfulGraphQlUserListItem = (
     },
     [],
   );
+
+  const individualProjects = cleanArray(
+    item.linkedFrom?.projectMembershipCollection?.items,
+  ).reduce((projects: UserListItemProject[], membership) => {
+    const project = toUserProjectMembership(
+      getProjectFromDirectMembership(membership),
+    );
+    // Discovery Projects belong to a team, so the user reaches them through
+    // their teams and they are never an individual affiliation.
+    if (!project || project.projectType === 'Discovery Project') {
+      return projects;
+    }
+    return [
+      ...projects,
+      { ...project, ...(membership.role ? { role: membership.role } : {}) },
+    ];
+  }, []);
 
   const tags = parseResearchTags(item.researchTagsCollection?.items || []);
   return {
@@ -872,6 +895,7 @@ export const parseContentfulGraphQlUserListItem = (
     techSupport: !!item.techSupport,
     social: parseSocialLinks(item.userSocials),
     teams: userTeams,
+    individualProjects,
     tags,
     _tags: tags.map((tag) => tag.name),
   };
