@@ -32,7 +32,7 @@ const flattenStyles = (
 
 const textStyles = flattenStyles(casTextStyles, []);
 
-const loadedWeights = [400, 700];
+const loadedWeights = [400, 500, 600, 700];
 
 const styleSummary = ({
   family,
@@ -103,8 +103,8 @@ export const TextStyles = () => (
       </table>
       <p style={muted}>
         The apps load Roboto and Roboto Slab at weights{' '}
-        {loadedWeights.join(' and ')} only, so the browser draws the other
-        weights with the closest of those two.
+        {loadedWeights.join(', ')} only, so the browser draws any other weight
+        with the closest loaded one.
       </p>
     </Section>
   </Page>
