@@ -649,7 +649,9 @@ describe('EditEventSpeakersModal', () => {
     expect(
       screen.queryByText('Added Bob to Team Omega'),
     ).not.toBeInTheDocument();
-    expect(screen.getByText('Bob is already added to Team Omega')).toBeVisible();
+    expect(
+      screen.getByText('Bob is already added to Team Omega'),
+    ).toBeVisible();
   });
 
   it('Should cancel the pending addition when the external banner is dismissed', async () => {
@@ -1346,7 +1348,9 @@ describe('EditEventSpeakersModal', () => {
     await searchNonCrn('Bob');
 
     expect(
-      screen.getByText(/Select the team or individual project they represented/),
+      screen.getByText(
+        /Select the team or individual project they represented/,
+      ),
     ).toBeVisible();
     expect(
       screen.getByRole('button', { name: 'Keep as External Guest' }),
