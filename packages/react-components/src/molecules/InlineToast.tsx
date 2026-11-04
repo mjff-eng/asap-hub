@@ -1,10 +1,12 @@
-import { css } from '@emotion/react';
+import { css, CSSObject } from '@emotion/react';
+import { ReactNode } from 'react';
 
 import { Button } from '../atoms';
 import { colour } from '../colors';
 import {
   circleFilledCheckIcon,
   circleFilledCrossIcon,
+  CircleInfoIcon,
   crossIcon,
 } from '../icons';
 import { mobileScreen, rem } from '../pixels';
@@ -13,18 +15,47 @@ import { mobileScreen, rem } from '../pixels';
 const toastText = colour.foreground.primary;
 const toastRule = colour.neutral[300];
 
-const toastStyles = (accent: 'success' | 'error', hasUndo: boolean) =>
+type Accent = 'success' | 'error' | 'neutral';
+
+type AccentStyles = {
+  readonly background: string;
+  readonly text: string;
+  readonly icon: ReactNode;
+  readonly radius: number;
+  readonly message?: CSSObject;
+};
+
+const accents: Record<Accent, AccentStyles> = {
+  success: {
+    background: colour.background.success,
+    text: toastText,
+    icon: circleFilledCheckIcon,
+    radius: 8,
+  },
+  error: {
+    background: colour.background.error,
+    text: toastText,
+    icon: circleFilledCrossIcon,
+    radius: 8,
+  },
+  neutral: {
+    background: colour.background.neutral,
+    text: colour.foreground.neutral,
+    icon: <CircleInfoIcon size={24} color={colour.neutral[700]} />,
+    radius: 4,
+    message: { fontSize: rem(16), lineHeight: 24 / 16, fontWeight: 500 },
+  },
+};
+
+const toastStyles = (accent: Accent, hasUndo: boolean) =>
   css({
     display: 'flex',
     alignItems: 'flex-start',
     gap: rem(12),
     padding: rem(16),
-    borderRadius: rem(8),
-    backgroundColor:
-      accent === 'success'
-        ? colour.background.success
-        : colour.background.error,
-    color: toastText,
+    borderRadius: rem(accents[accent].radius),
+    backgroundColor: accents[accent].background,
+    color: accents[accent].text,
     fontSize: rem(17),
     lineHeight: 24 / 17,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
@@ -57,11 +88,15 @@ const mobileTextStyles = {
   },
 };
 
-const messageStyles = css({
-  flexGrow: 1,
-  minWidth: 0,
-  ...mobileTextStyles,
-});
+// The size goes on the message, not the toast: rem() emits em, so a smaller
+// toast font would also shrink its padding and gap.
+const messageStyles = (accent: Accent) =>
+  css({
+    flexGrow: 1,
+    minWidth: 0,
+    ...accents[accent].message,
+    ...mobileTextStyles,
+  });
 
 const actionsStyles = css({
   display: 'flex',
@@ -86,29 +121,30 @@ const ruleStyles = css({
   backgroundColor: toastRule,
 });
 
-const dismissStyles = css({
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexShrink: 0,
-  width: rem(24),
-  height: rem(24),
-  minWidth: rem(24),
-  maxWidth: rem(24),
-  margin: 0,
-  padding: 0,
-  border: 'none',
-  backgroundColor: 'transparent',
-  '> svg': { width: rem(20), height: rem(20) },
-  'svg path': { stroke: toastText },
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
-    flexGrow: 0,
+const dismissStyles = (accent: Accent) =>
+  css({
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    width: rem(24),
+    height: rem(24),
     minWidth: rem(24),
-  },
-});
+    maxWidth: rem(24),
+    margin: 0,
+    padding: 0,
+    border: 'none',
+    backgroundColor: 'transparent',
+    '> svg': { width: rem(20), height: rem(20) },
+    'svg path': { stroke: accents[accent].text },
+    [`@media (max-width: ${mobileScreen.max}px)`]: {
+      flexGrow: 0,
+      minWidth: rem(24),
+    },
+  });
 
 type InlineToastProps = {
-  readonly accent?: 'success' | 'error';
+  readonly accent?: Accent;
   readonly message: string;
   readonly onUndo?: () => void;
   readonly onDismiss: () => void;
@@ -123,10 +159,8 @@ const InlineToast: React.FC<InlineToastProps> = ({
   enabled = true,
 }) => (
   <div css={toastStyles(accent, !!onUndo)} role="status">
-    <span css={iconStyles}>
-      {accent === 'success' ? circleFilledCheckIcon : circleFilledCrossIcon}
-    </span>
-    <span css={messageStyles}>{message}</span>
+    <span css={iconStyles}>{accents[accent].icon}</span>
+    <span css={messageStyles(accent)}>{message}</span>
     <span css={actionsStyles}>
       {onUndo && (
         <>
@@ -147,7 +181,7 @@ const InlineToast: React.FC<InlineToastProps> = ({
         enabled={enabled}
         aria-label="Dismiss message"
         onClick={onDismiss}
-        overrideStyles={dismissStyles}
+        overrideStyles={dismissStyles(accent)}
       >
         {crossIcon}
       </Button>
