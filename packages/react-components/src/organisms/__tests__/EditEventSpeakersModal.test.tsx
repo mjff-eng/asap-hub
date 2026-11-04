@@ -1346,7 +1346,7 @@ describe('EditEventSpeakersModal', () => {
     await searchNonCrn('Bob');
 
     expect(
-      screen.getByText(/Select the team or project they represented/),
+      screen.getByText(/Select the team or individual project they represented/),
     ).toBeVisible();
     expect(
       screen.getByRole('button', { name: 'Keep as External Guest' }),
