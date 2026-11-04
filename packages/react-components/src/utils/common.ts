@@ -177,3 +177,19 @@ export const getActiveProjectManager = (
 // Clamp a percentage value into the 0–100 range.
 export const clampPercentage = (value: number): number =>
   Math.min(100, Math.max(0, value));
+
+/**
+ * Triggers a download of the given blob in the browser.
+ * @param blob The content to download.
+ * @param filename The name the browser saves the file as.
+ */
+export const triggerDownloadFile = (blob: Blob, filename: string): void => {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  // Defer so the click-triggered download can read the blob before the URL is
+  // revoked (a synchronous revoke cancels it in Firefox/Safari).
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+};

@@ -18,6 +18,7 @@ import {
   getEvents,
   getTeamsForMatching,
   patchEvent,
+  uploadAttendeesFile,
 } from '../api';
 
 jest.mock('../../config');
@@ -75,6 +76,36 @@ describe('patchEvent', () => {
     nock(API_BASE_URL).patch('/events/42').reply(500);
     await expect(patchEvent('42', { attendance }, '')).rejects.toThrow(
       'Failed to update event 42. Expected status 2xx. Received status 500.',
+    );
+  });
+});
+
+describe('uploadAttendeesFile', () => {
+  const file = 'day-1.csv' as unknown as File;
+  const attendeesFile = {
+    id: 'asset-1',
+    filename: 'day-1.csv',
+    url: '//assets.ctfassets.net/day-1.csv',
+  };
+
+  it('makes an authorized multipart POST request with the file', async () => {
+    nock(API_BASE_URL, { reqheaders: { authorization: 'Bearer x' } })
+      .post(
+        '/events/42/attendees-files',
+        (body) => typeof body === 'string' && body.includes('day-1.csv'),
+      )
+      .reply(201, attendeesFile);
+
+    expect(await uploadAttendeesFile('42', file, 'Bearer x')).toEqual(
+      attendeesFile,
+    );
+    expect(nock.isDone()).toBe(true);
+  });
+
+  it('errors for a non-2xx status', async () => {
+    nock(API_BASE_URL).post('/events/42/attendees-files').reply(400);
+    await expect(uploadAttendeesFile('42', file, '')).rejects.toThrow(
+      'Failed to upload attendees file for event 42.',
     );
   });
 });

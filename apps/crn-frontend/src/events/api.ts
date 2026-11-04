@@ -9,6 +9,7 @@ import {
   GetEventListOptions,
 } from '@asap-hub/frontend-utils';
 import {
+  EventAttendeesFile,
   EventResponse,
   EventUpdateDetailsRequest,
   ListEventResponse,
@@ -116,6 +117,33 @@ export const patchEvent = async (
     );
   }
   return resp.json();
+};
+
+export const uploadAttendeesFile = async (
+  id: string,
+  file: File,
+  authorization: string,
+): Promise<EventAttendeesFile> => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch(`${API_BASE_URL}/events/${id}/attendees-files`, {
+    method: 'POST',
+    headers: {
+      authorization,
+      ...createSentryHeaders(),
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new BackendError(
+      `Failed to upload attendees file for event ${id}.`,
+      await response.json().catch(() => undefined),
+      response.status,
+    );
+  }
+  return response.json();
 };
 
 // Fetch the whole team corpus once per upload; matchTeamNames resolves in memory.

@@ -3832,6 +3832,8 @@ export type Events = Entry &
     _id: Scalars['ID'];
     attendanceCollection?: Maybe<EventsAttendanceCollection>;
     attendanceCursorCollection?: Maybe<EventsAttendanceCursorCollection>;
+    attendeesFilesCollection?: Maybe<AssetCollection>;
+    attendeesFilesCursorCollection?: Maybe<AssetCursorCollection>;
     calendar?: Maybe<Calendars>;
     contentfulMetadata: ContentfulMetadata;
     description?: Maybe<Scalars['String']>;
@@ -3889,6 +3891,25 @@ export type EventsAttendanceCursorCollectionArgs = {
   preview?: InputMaybe<Scalars['Boolean']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
   where?: InputMaybe<AttendanceFilter>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/events) */
+export type EventsAttendeesFilesCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/events) */
+export type EventsAttendeesFilesCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/events) */
@@ -4166,6 +4187,7 @@ export type EventsFilter = {
   OR?: InputMaybe<Array<InputMaybe<EventsFilter>>>;
   attendance?: InputMaybe<CfAttendanceNestedFilter>;
   attendanceCollection_exists?: InputMaybe<Scalars['Boolean']>;
+  attendeesFilesCollection_exists?: InputMaybe<Scalars['Boolean']>;
   calendar?: InputMaybe<CfCalendarsNestedFilter>;
   calendar_exists?: InputMaybe<Scalars['Boolean']>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
@@ -24397,6 +24419,7 @@ export type CfEventsNestedFilter = {
   AND?: InputMaybe<Array<InputMaybe<CfEventsNestedFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<CfEventsNestedFilter>>>;
   attendanceCollection_exists?: InputMaybe<Scalars['Boolean']>;
+  attendeesFilesCollection_exists?: InputMaybe<Scalars['Boolean']>;
   calendar_exists?: InputMaybe<Scalars['Boolean']>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
   description?: InputMaybe<Scalars['String']>;
@@ -28379,6 +28402,15 @@ export type EventsContentFragment = Pick<
       >;
     }
   >;
+  attendeesFilesCollection?: Maybe<{
+    items: Array<
+      Maybe<
+        Pick<Asset, 'fileName' | 'url'> & {
+          sys: Pick<Sys, 'id' | 'firstPublishedAt'>;
+        }
+      >
+    >;
+  }>;
   notes?: Maybe<
     Pick<EventsNotes, 'json'> & {
       links: {
@@ -28801,6 +28833,15 @@ export type FetchEventByIdQuery = {
           >;
         }
       >;
+      attendeesFilesCollection?: Maybe<{
+        items: Array<
+          Maybe<
+            Pick<Asset, 'fileName' | 'url'> & {
+              sys: Pick<Sys, 'id' | 'firstPublishedAt'>;
+            }
+          >
+        >;
+      }>;
       notes?: Maybe<
         Pick<EventsNotes, 'json'> & {
           links: {
@@ -29284,6 +29325,15 @@ export type FetchEventsQuery = {
                 >;
               }
             >;
+            attendeesFilesCollection?: Maybe<{
+              items: Array<
+                Maybe<
+                  Pick<Asset, 'fileName' | 'url'> & {
+                    sys: Pick<Sys, 'id' | 'firstPublishedAt'>;
+                  }
+                >
+              >;
+            }>;
             notes?: Maybe<
               Pick<EventsNotes, 'json'> & {
                 links: {
@@ -29935,6 +29985,15 @@ export type FetchEventsByUserIdQuery = {
                             >;
                           }
                         >;
+                        attendeesFilesCollection?: Maybe<{
+                          items: Array<
+                            Maybe<
+                              Pick<Asset, 'fileName' | 'url'> & {
+                                sys: Pick<Sys, 'id' | 'firstPublishedAt'>;
+                              }
+                            >
+                          >;
+                        }>;
                         notes?: Maybe<
                           Pick<EventsNotes, 'json'> & {
                             links: {
@@ -30686,6 +30745,15 @@ export type FetchEventsByExternalAuthorIdQuery = {
                             >;
                           }
                         >;
+                        attendeesFilesCollection?: Maybe<{
+                          items: Array<
+                            Maybe<
+                              Pick<Asset, 'fileName' | 'url'> & {
+                                sys: Pick<Sys, 'id' | 'firstPublishedAt'>;
+                              }
+                            >
+                          >;
+                        }>;
                         notes?: Maybe<
                           Pick<EventsNotes, 'json'> & {
                             links: {
@@ -31437,6 +31505,15 @@ export type FetchEventsByTeamIdQuery = {
                             >;
                           }
                         >;
+                        attendeesFilesCollection?: Maybe<{
+                          items: Array<
+                            Maybe<
+                              Pick<Asset, 'fileName' | 'url'> & {
+                                sys: Pick<Sys, 'id' | 'firstPublishedAt'>;
+                              }
+                            >
+                          >;
+                        }>;
                         notes?: Maybe<
                           Pick<EventsNotes, 'json'> & {
                             links: {
@@ -32585,7 +32662,10 @@ export type FetchInterestGroupsQuery = {
                 Maybe<
                   Pick<InterestGroupsTeams, 'startDate' | 'endDate'> & {
                     team?: Maybe<
-                      Pick<Teams, 'displayName' | 'teamType' | 'inactiveSince'> & {
+                      Pick<
+                        Teams,
+                        'displayName' | 'teamType' | 'inactiveSince'
+                      > & {
                         sys: Pick<Sys, 'id'>;
                         linkedFrom?: Maybe<{
                           projectMembershipCollection?: Maybe<{
@@ -32733,7 +32813,10 @@ export type FetchInterestGroupsByUserIdQuery = {
                         Maybe<
                           Pick<InterestGroupsTeams, 'startDate' | 'endDate'> & {
                             team?: Maybe<
-                              Pick<Teams, 'displayName' | 'teamType' | 'inactiveSince'> & {
+                              Pick<
+                                Teams,
+                                'displayName' | 'teamType' | 'inactiveSince'
+                              > & {
                                 sys: Pick<Sys, 'id'>;
                                 linkedFrom?: Maybe<{
                                   projectMembershipCollection?: Maybe<{
@@ -32922,9 +33005,15 @@ export type FetchInterestGroupsByTeamIdQuery = {
                       teamsCollection?: Maybe<{
                         items: Array<
                           Maybe<
-                            Pick<InterestGroupsTeams, 'startDate' | 'endDate'> & {
+                            Pick<
+                              InterestGroupsTeams,
+                              'startDate' | 'endDate'
+                            > & {
                               team?: Maybe<
-                                Pick<Teams, 'displayName' | 'teamType' | 'inactiveSince'> & {
+                                Pick<
+                                  Teams,
+                                  'displayName' | 'teamType' | 'inactiveSince'
+                                > & {
                                   sys: Pick<Sys, 'id'>;
                                   linkedFrom?: Maybe<{
                                     projectMembershipCollection?: Maybe<{
@@ -41950,6 +42039,69 @@ export const EventsContentFragmentDoc = {
                           ],
                         },
                       },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'attendeesFilesCollection' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: { kind: 'IntValue', value: '20' },
+              },
+            ],
+            directives: [
+              {
+                kind: 'Directive',
+                name: { kind: 'Name', value: 'include' },
+                arguments: [
+                  {
+                    kind: 'Argument',
+                    name: { kind: 'Name', value: 'if' },
+                    value: {
+                      kind: 'Variable',
+                      name: { kind: 'Name', value: 'singleEvent' },
+                    },
+                  },
+                ],
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'sys' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'firstPublishedAt' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileName' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'url' } },
                     ],
                   },
                 },

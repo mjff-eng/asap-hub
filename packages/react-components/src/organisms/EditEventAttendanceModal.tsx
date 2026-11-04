@@ -1,3 +1,4 @@
+import { EventAttendeesFile } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { useMemo, useState } from 'react';
@@ -30,7 +31,7 @@ import {
 import { useSectionExpansion } from '../hooks';
 import { ConfirmableModalFooter, InlineToast, Modal } from '../molecules';
 import { mobileScreen, rem } from '../pixels';
-import { pluralizeTeams } from '../utils';
+import { pluralizeTeams, triggerDownloadFile } from '../utils';
 import { EventAttendanceTeam, summarizeAttendance } from './EventAttendance';
 import { teamIcon } from './shared-event-card';
 import {
@@ -39,10 +40,7 @@ import {
 } from './shared-event-card-styles';
 import SourceLists from './SourceLists';
 import Toast from './Toast';
-import UploadListModal, {
-  UploadListResult,
-  UploadListSourceFile,
-} from './UploadListModal';
+import UploadListModal, { UploadListResult } from './UploadListModal';
 
 type AddedTeams = {
   readonly message: string;
@@ -64,8 +62,9 @@ type EditEventAttendanceModalProps = {
   interestGroupName?: string;
   loadSearchOptions: (inputValue: string) => Promise<AttendanceSearchOption[]>;
   onUploadList?: (files: File[]) => Promise<UploadListResult>;
-  sourceLists?: UploadListSourceFile[];
-  onSave: (teams: EventAttendanceTeam[]) => void | Promise<void>;
+  sourceLists?: EventAttendeesFile[];
+  onDownloadSourceList?: (file: EventAttendeesFile) => void | Promise<void>;
+  onSave: (teams: EventAttendanceTeam[], files: File[]) => void | Promise<void>;
   onDismiss: () => void;
 };
 
@@ -562,17 +561,20 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   loadSearchOptions,
   onUploadList,
   sourceLists = [],
+  onDownloadSourceList,
   onSave,
   onDismiss,
 }) => {
   const [rows, setRows] = useState<EventAttendanceTeam[]>(() => [...teams]);
   const [showUploadList, setShowUploadList] = useState(false);
-  const [sourceFiles, setSourceFiles] =
-    useState<UploadListSourceFile[]>(sourceLists);
   const [isSaving, setIsSaving] = useState(false);
   const [hasSaveError, setHasSaveError] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [addedTeams, setAddedTeams] = useState<AddedTeams | null>(null);
+  const [sourceFiles, setSourceFiles] = useState<{
+    stored: EventAttendeesFile[];
+    pending: File[];
+  }>({ stored: sourceLists, pending: [] });
 
   const isEditMode = teams.length > 0;
   const title = isEditMode ? 'Edit Attendance' : 'Add Attendance';
@@ -580,7 +582,6 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   const attendedCount = rows.filter((team) => team.attended).length;
   const hasRows = rows.length > 0;
   const allAttended = hasRows && attendedCount === rows.length;
-  const saveEnabled = hasRows && !isSaving;
   const editingEnabled = !isCancelling && !isSaving;
   const addedTeamIds = useMemo(
     () => new Set(rows.map((team) => team.teamId)),
@@ -628,25 +629,10 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   ) => {
     applyUploadedTeams(uploadedTeams);
     setAddedTeams(null);
-    const addedDate = new Date().toLocaleDateString('en-GB');
-    setSourceFiles((current) => [
-      ...current,
-      ...files.map((file, index) => ({
-        id: `${file.name}-${current.length + index}`,
-        filename: file.name,
-        addedDate,
-        onDownload: () => {
-          const url = URL.createObjectURL(file);
-          const anchor = document.createElement('a');
-          anchor.href = url;
-          anchor.download = file.name;
-          anchor.click();
-          // Defer so the click-triggered download can read the blob before the
-          // URL is revoked (a synchronous revoke cancels it in Firefox/Safari).
-          setTimeout(() => URL.revokeObjectURL(url), 0);
-        },
-      })),
-    ]);
+    setSourceFiles((prev) => ({
+      ...prev,
+      pending: [...prev.pending, ...files],
+    }));
     setShowUploadList(false);
   };
 
@@ -714,7 +700,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
     setIsSaving(true);
     setHasSaveError(false);
     try {
-      await onSave(rows);
+      await onSave(rows, sourceFiles.pending);
     } catch {
       setHasSaveError(true);
     } finally {
@@ -723,12 +709,32 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
   };
 
   const isDirty =
+    sourceFiles.pending.length > 0 ||
     rows.length !== teams.length ||
     rows.some(
       (row, index) =>
         row.teamId !== teams[index]?.teamId ||
         row.attended !== teams[index]?.attended,
     );
+
+  const saveEnabled = (hasRows || isDirty) && !isSaving;
+
+  const sourceFilesList = [
+    ...sourceFiles.stored.map((file) => ({
+      id: file.id,
+      filename: file.filename,
+      addedDate: file.addedDate
+        ? new Date(file.addedDate).toLocaleDateString('en-GB')
+        : undefined,
+      onDownload: () => onDownloadSourceList?.(file),
+    })),
+    ...sourceFiles.pending.map((file, index) => ({
+      id: `${file.name}-${sourceFiles.stored.length + index}`,
+      filename: file.name,
+      addedDate: new Date().toLocaleDateString('en-GB'),
+      onDownload: () => triggerDownloadFile(file, file.name),
+    })),
+  ];
 
   const handleCancel = () => (isDirty ? setIsCancelling(true) : onDismiss());
 
@@ -893,7 +899,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
           )}
         </section>
 
-        <SourceLists files={sourceFiles} />
+        <SourceLists files={sourceFilesList} />
       </div>
 
       <ConfirmableModalFooter

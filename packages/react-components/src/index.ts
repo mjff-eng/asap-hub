@@ -410,6 +410,7 @@ export {
 export * from './theme';
 export {
   noop,
+  triggerDownloadFile,
   getIconForDocumentType,
   formatUserLocation,
   toUserSocialUrl,

@@ -1,5 +1,6 @@
 import { NotFoundError } from '@asap-hub/errors';
 import {
+  EventAttendeesFile,
   EventCreateRequest,
   EventResponse,
   EventUpdateDetailsRequest,
@@ -8,10 +9,13 @@ import {
   ListEventResponse,
 } from '@asap-hub/model';
 
-import { EventDataProvider } from '../data-providers/types';
+import { AssetDataProvider, EventDataProvider } from '../data-providers/types';
 
 export default class EventController {
-  constructor(private dataProvider: EventDataProvider) {}
+  constructor(
+    private dataProvider: EventDataProvider,
+    private assetDataProvider: AssetDataProvider,
+  ) {}
 
   async fetch(options: FetchEventsOptions): Promise<ListEventResponse> {
     return this.dataProvider.fetch(options);
@@ -44,6 +48,27 @@ export default class EventController {
   ): Promise<EventResponse> {
     await this.dataProvider.updateEventDetails(eventId, data);
     return this.fetchById(eventId);
+  }
+
+  async createAttendeesFile({
+    content,
+    contentType,
+    filename,
+  }: {
+    content: Buffer;
+    contentType: string;
+    filename: string;
+  }): Promise<EventAttendeesFile> {
+    const { id, url } = await this.assetDataProvider.create({
+      id: '',
+      title: 'Attendees File',
+      description: 'Attendees File',
+      content,
+      contentType,
+      filename,
+    });
+
+    return { id, filename, url };
   }
 
   async fetchByGoogleId(googleId: string): Promise<EventResponse | null> {

@@ -25,8 +25,13 @@ import {
   getEvent,
   getTeamsForMatching,
   patchEvent,
+  uploadAttendeesFile,
 } from '../api';
-import { downloadEventAttendance, downloadEventSpeakers } from '../export';
+import {
+  downloadAttendeesFile,
+  downloadEventAttendance,
+  downloadEventSpeakers,
+} from '../export';
 
 jest.mock('../api');
 jest.mock('../export');
@@ -54,6 +59,12 @@ const id = '42';
 
 const mockGetEvent = getEvent as jest.MockedFunction<typeof getEvent>;
 const mockPatchEvent = patchEvent as jest.MockedFunction<typeof patchEvent>;
+const mockUploadAttendeesFile = uploadAttendeesFile as jest.MockedFunction<
+  typeof uploadAttendeesFile
+>;
+const mockDownloadAttendeesFile = downloadAttendeesFile as jest.MockedFunction<
+  typeof downloadAttendeesFile
+>;
 const mockGetTeamsForMatching = getTeamsForMatching as jest.MockedFunction<
   typeof getTeamsForMatching
 >;
@@ -66,6 +77,12 @@ beforeEach(() => {
   mockGetEvent.mockClear();
   mockPatchEvent.mockClear();
   mockGetTeamsForMatching.mockClear();
+  mockUploadAttendeesFile.mockClear();
+  mockUploadAttendeesFile.mockResolvedValue({
+    id: 'asset-new',
+    filename: 'teams.csv',
+    url: '//assets.ctfassets.net/teams.csv',
+  });
   mockGetEvent.mockResolvedValue({
     ...createEventResponse(),
     id,
@@ -739,6 +756,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
               attendance: [
                 { id: 'attendance-1', teamId: 't1', attended: true },
               ],
+              attendeesFileIds: ['asset-new'],
             },
             expect.anything(),
           ),
@@ -768,11 +786,119 @@ describe('the NEW_EVENT_PAGE flag', () => {
                 { id: 'attendance-1', teamId: 't1', attended: false },
                 { id: undefined, teamId: 't2', attended: true },
               ],
+              attendeesFileIds: ['asset-new'],
             },
             expect.anything(),
           ),
         );
+        expect(mockUploadAttendeesFile).toHaveBeenCalledWith(
+          id,
+          expect.objectContaining({ name: 'teams.csv' }),
+          expect.anything(),
+        );
       });
+
+      it('keeps the saved source lists when saving a new one', async () => {
+        mockGetEvent.mockResolvedValue({
+          ...eventWithOneTeam(),
+          attendeesFiles: [
+            {
+              id: 'asset-saved',
+              filename: 'day-1.csv',
+              url: '//assets.ctfassets.net/day-1.csv',
+            },
+          ],
+        });
+        mockPatchEvent.mockResolvedValue({ ...createEventResponse(), id });
+        mockGetTeamsForMatching.mockResolvedValue([
+          { ...createTeamListItemResponse(), id: 't2', displayName: 'Alessi' },
+        ]);
+
+        const { container, modal } = await openUploadList();
+        await uploadCsv(container, 'Team Name,Attendance\nAlessi,Yes\n');
+
+        await userEvent.click(
+          await modal().findByRole('button', { name: 'Add Attendees' }),
+        );
+        await userEvent.click(modal().getByRole('button', { name: 'Save' }));
+
+        await waitFor(() =>
+          expect(mockPatchEvent).toHaveBeenCalledWith(
+            id,
+            expect.objectContaining({
+              attendeesFileIds: ['asset-saved', 'asset-new'],
+            }),
+            expect.anything(),
+          ),
+        );
+      });
+    });
+
+    describe('source lists', () => {
+      const eventWithSourceList = () => ({
+        ...eventWithOneTeam(),
+        attendeesFiles: [
+          {
+            id: 'asset-saved',
+            filename: 'day-1.csv',
+            url: '//assets.ctfassets.net/day-1.csv',
+            addedDate: '2026-10-01T10:00:00.000Z',
+          },
+        ],
+      });
+
+      it('shows the saved source lists in the attendance modal', async () => {
+        mockGetEvent.mockResolvedValue(eventWithSourceList());
+
+        const rendered = render(<Event />, {
+          wrapper: createWrapper({ techSupport: true }),
+        });
+        await userEvent.click(
+          await rendered.findByRole('button', { name: 'Edit attendance' }),
+        );
+        const modal = within(rendered.getByRole('dialog'));
+
+        expect(modal.getByText('Source lists')).toBeVisible();
+        expect(modal.getByText('day-1.csv')).toBeVisible();
+        expect(modal.getByText('Added 01/10/2026')).toBeVisible();
+      });
+
+      it('downloads a saved source list', async () => {
+        mockGetEvent.mockResolvedValue(eventWithSourceList());
+        mockDownloadAttendeesFile.mockResolvedValue();
+
+        const rendered = render(<Event />, {
+          wrapper: createWrapper({ techSupport: true }),
+        });
+        await userEvent.click(
+          await rendered.findByRole('button', { name: 'Edit attendance' }),
+        );
+        await userEvent.click(
+          within(rendered.getByRole('dialog')).getByRole('button', {
+            name: /Download/,
+          }),
+        );
+
+        expect(mockDownloadAttendeesFile).toHaveBeenCalledWith(
+          expect.objectContaining({
+            filename: 'day-1.csv',
+            url: '//assets.ctfassets.net/day-1.csv',
+          }),
+        );
+      });
+    });
+
+    it('hides the attendance editor from an interest group project manager without tech support', async () => {
+      mockGetEvent.mockResolvedValue(eventWithOneTeam());
+
+      const { findByText, queryByRole } = render(<Event />, {
+        wrapper: projectManagerWrapper,
+      });
+
+      expect(await findByText('Team One')).toBeVisible();
+      expect(
+        queryByRole('button', { name: 'Edit attendance' }),
+      ).not.toBeInTheDocument();
     });
 
     it('closes the attendance modal without saving when dismissed', async () => {

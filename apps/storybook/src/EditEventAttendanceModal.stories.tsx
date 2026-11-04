@@ -19,9 +19,8 @@ const buildSourceLists = (count: number) =>
   Array.from({ length: count }, (_, index) => ({
     id: `file-${index}`,
     filename: `attendees-day-${index + 1}.csv`,
-    addedDate: `1${index}/03/2025`,
-    // Round-trip so the Download spinner is visible.
-    onDownload: () => delay(1000),
+    url: `//assets.example.com/attendees-day-${index + 1}.csv`,
+    addedDate: `2025-03-1${index}T10:00:00.000Z`,
   }));
 
 type ControlArgs = AttendanceCounts & {
@@ -84,6 +83,7 @@ const meta: Meta<ControlArgs> = {
       interestGroupName={interestGroupName || undefined}
       loadSearchOptions={loadAttendanceSearchOptions}
       sourceLists={buildSourceLists(sourceLists)}
+      onDownloadSourceList={() => delay(1000)}
       onUploadList={
         canUpload ? async () => ({ matched: [], unmatched: [] }) : undefined
       }

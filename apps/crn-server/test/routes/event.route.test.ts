@@ -262,6 +262,19 @@ describe('/events/ routes', () => {
   });
 
   describe('PATCH /events/{event_id}', () => {
+    const projectManager = {
+      ...createUserResponse(),
+      techSupport: false,
+      interestGroups: [
+        {
+          id: getInterestGroupResponse().id,
+          name: 'Group 1',
+          active: true,
+          role: 'Project Manager' as const,
+        },
+      ],
+    };
+
     test('Should update attendance and return the updated event for a tech support user', async () => {
       userMockFactory.mockReturnValueOnce({
         ...createUserResponse(),
@@ -284,6 +297,28 @@ describe('/events/ routes', () => {
       expect(eventControllerMock.fetchById).not.toHaveBeenCalled();
     });
 
+    test('Should update attendance and attendees files for a tech support user', async () => {
+      const payload = {
+        attendance: [{ teamId: 'team-1', attended: true }],
+        attendeesFileIds: ['asset-1'],
+      };
+      userMockFactory.mockReturnValueOnce({
+        ...createUserResponse(),
+        techSupport: true,
+      });
+      eventControllerMock.updateEventDetails.mockResolvedValueOnce(
+        getEventResponse(),
+      );
+
+      const response = await supertest(app).patch('/events/123').send(payload);
+
+      expect(response.status).toBe(200);
+      expect(eventControllerMock.updateEventDetails).toHaveBeenCalledWith(
+        '123',
+        payload,
+      );
+    });
+
     test('Should return 403 when the logged in user is not a tech support user', async () => {
       userMockFactory.mockReturnValueOnce({
         ...createUserResponse(),
@@ -293,6 +328,17 @@ describe('/events/ routes', () => {
       const response = await supertest(app)
         .patch('/events/123')
         .send({ attendance: [{ teamId: 'team-1', attended: true }] });
+
+      expect(response.status).toBe(403);
+      expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
+    });
+
+    test('Should return 403 when a project manager who is not tech support updates the attendees files', async () => {
+      userMockFactory.mockReturnValueOnce(projectManager);
+
+      const response = await supertest(app)
+        .patch('/events/123')
+        .send({ attendeesFileIds: ['asset-1'] });
 
       expect(response.status).toBe(403);
       expect(eventControllerMock.updateEventDetails).not.toHaveBeenCalled();
@@ -436,6 +482,96 @@ describe('/events/ routes', () => {
         });
 
       expect(response.status).toBe(400);
+    });
+  });
+
+  describe('POST /events/{event_id}/attendees-files', () => {
+    const techSupportUser = {
+      ...createUserResponse(),
+      techSupport: true,
+    };
+    const attendeesFile = {
+      id: 'asset-1',
+      filename: 'attendees.csv',
+      url: '//assets.ctfassets.net/attendees.csv',
+    };
+
+    test('Should upload the file for a tech support user', async () => {
+      userMockFactory.mockReturnValueOnce(techSupportUser);
+      eventControllerMock.createAttendeesFile.mockResolvedValueOnce(
+        attendeesFile,
+      );
+
+      const response = await supertest(app)
+        .post('/events/123/attendees-files')
+        .attach('file', Buffer.from('Team\nTeam A'), {
+          filename: 'attendees.csv',
+          contentType: 'text/csv',
+        });
+
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(attendeesFile);
+      expect(eventControllerMock.createAttendeesFile).toHaveBeenCalledWith({
+        content: Buffer.from('Team\nTeam A'),
+        contentType: 'text/csv',
+        filename: 'attendees.csv',
+      });
+    });
+
+    test('Should accept an xlsx file', async () => {
+      userMockFactory.mockReturnValueOnce(techSupportUser);
+      eventControllerMock.createAttendeesFile.mockResolvedValueOnce({
+        ...attendeesFile,
+        filename: 'attendees.xlsx',
+      });
+
+      const response = await supertest(app)
+        .post('/events/123/attendees-files')
+        .attach('file', Buffer.from('xlsx'), 'attendees.xlsx');
+
+      expect(response.status).toBe(201);
+    });
+
+    test('Should return 403 when the user is not a tech support user', async () => {
+      userMockFactory.mockReturnValueOnce({
+        ...createUserResponse(),
+        techSupport: false,
+        interestGroups: [
+          {
+            id: getInterestGroupResponse().id,
+            name: 'Group 1',
+            active: true,
+            role: 'Project Manager' as const,
+          },
+        ],
+      });
+
+      const response = await supertest(app)
+        .post('/events/123/attendees-files')
+        .attach('file', Buffer.from('Team'), 'attendees.csv');
+
+      expect(response.status).toBe(403);
+      expect(eventControllerMock.createAttendeesFile).not.toHaveBeenCalled();
+    });
+
+    test('Should return 400 when no file is sent', async () => {
+      userMockFactory.mockReturnValueOnce(techSupportUser);
+
+      const response = await supertest(app).post('/events/123/attendees-files');
+
+      expect(response.status).toBe(400);
+      expect(eventControllerMock.createAttendeesFile).not.toHaveBeenCalled();
+    });
+
+    test('Should return 400 when the file is not a CSV or XLSX', async () => {
+      userMockFactory.mockReturnValueOnce(techSupportUser);
+
+      const response = await supertest(app)
+        .post('/events/123/attendees-files')
+        .attach('file', Buffer.from('%PDF'), 'attendees.pdf');
+
+      expect(response.status).toBe(400);
+      expect(eventControllerMock.createAttendeesFile).not.toHaveBeenCalled();
     });
   });
 });

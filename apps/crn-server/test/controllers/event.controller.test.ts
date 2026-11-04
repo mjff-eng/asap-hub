@@ -6,10 +6,17 @@ import {
   getListEventDataObject,
   getListEventResponse,
 } from '../fixtures/events.fixtures';
+import { AssetDataProvider } from '../../src/data-providers/types';
+import { getDataProviderMock } from '../mocks/data-provider.mock';
 import { eventDataProviderMock } from '../mocks/event.data-provider.mock';
 
 describe('Event controller', () => {
-  const eventController = new Events(eventDataProviderMock);
+  const assetDataProviderMock =
+    getDataProviderMock() as unknown as jest.Mocked<AssetDataProvider>;
+  const eventController = new Events(
+    eventDataProviderMock,
+    assetDataProviderMock,
+  );
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -174,6 +181,36 @@ describe('Event controller', () => {
       await expect(eventController.fetchByGoogleId(googleId)).rejects.toThrow(
         `Event with google id ${googleId} exists but could not be parsed`,
       );
+    });
+  });
+
+  describe('Create attendees file method', () => {
+    test('Should create a published asset and return the file details', async () => {
+      assetDataProviderMock.create.mockResolvedValueOnce({
+        id: 'asset-1',
+        filename: 'attendees.csv',
+        url: '//assets.ctfassets.net/attendees.csv',
+      });
+
+      const result = await eventController.createAttendeesFile({
+        content: Buffer.from('Team'),
+        contentType: 'text/csv',
+        filename: 'attendees.csv',
+      });
+
+      expect(result).toEqual({
+        id: 'asset-1',
+        filename: 'attendees.csv',
+        url: '//assets.ctfassets.net/attendees.csv',
+      });
+      expect(assetDataProviderMock.create).toHaveBeenCalledWith({
+        id: '',
+        title: 'Attendees File',
+        description: 'Attendees File',
+        content: Buffer.from('Team'),
+        contentType: 'text/csv',
+        filename: 'attendees.csv',
+      });
     });
   });
 });

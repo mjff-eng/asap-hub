@@ -2,6 +2,7 @@
 import {
   addLocaleToFields,
   createLink,
+  getLinkAssets,
   Entry,
   Environment,
   EventsFilter,
@@ -555,6 +556,10 @@ export class EventContentfulDataProvider implements EventDataProvider {
       );
     }
 
+    if (data.attendeesFileIds) {
+      patchFields.attendeesFiles = getLinkAssets(data.attendeesFileIds);
+    }
+
     let unlinkedSpeakers: EventSpeakerUnlinkItem[] = [];
     if (data.speakersToUnlink && data.speakersToUnlink.length > 0) {
       unlinkedSpeakers = await this.unlinkSpeakers(
@@ -592,6 +597,14 @@ export class EventContentfulDataProvider implements EventDataProvider {
         result.sys.publishedVersion || Infinity,
         fetchEventById,
         'events',
+      );
+    }
+
+    if (data.attendeesFileIds && data.attendeesFileIds.length > 0) {
+      await pollContentfulGqlUntil<FetchEventByIdQuery>(
+        fetchEventById,
+        (result) => areAttendeesFilesLinked(result, data.attendeesFileIds!),
+        `Event ${id} attendees files linked`,
       );
     }
 
@@ -872,6 +885,19 @@ export const areSpeakersPreliminaryDataSharedSynced = (
     const current = sharedBySpeakerId.get(speakerId);
     return current === undefined || current === shared;
   });
+};
+
+export const areAttendeesFilesLinked = (
+  result: FetchEventByIdQuery,
+  attendeesFileIds: string[],
+): boolean => {
+  const linkedIds = new Set(
+    (result.events?.attendeesFilesCollection?.items ?? []).flatMap((item) =>
+      item ? [item.sys.id] : [],
+    ),
+  );
+
+  return attendeesFileIds.every((fileId) => linkedIds.has(fileId));
 };
 
 export const areSpeakersUnlinked = (
@@ -1255,6 +1281,18 @@ export const parseGraphQLEvent = (item: EventItem): EventDataObject | null => {
             item.attendanceCollection.items.filter(
               (x: AttendanceItem | null): x is AttendanceItem => x !== null,
             ),
+          ),
+        }
+      : {}),
+    ...(item.attendeesFilesCollection
+      ? {
+          attendeesFiles: cleanArray(item.attendeesFilesCollection.items).map(
+            (file) => ({
+              id: file.sys.id,
+              filename: file.fileName ?? '',
+              url: file.url ?? '',
+              addedDate: file.sys.firstPublishedAt ?? undefined,
+            }),
           ),
         }
       : {}),

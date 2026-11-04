@@ -89,6 +89,13 @@ export type EventTeamAttendance = {
   isFromInterestGroup?: boolean;
 };
 
+export type EventAttendeesFile = {
+  id: string;
+  filename: string;
+  url: string;
+  addedDate?: string;
+};
+
 export type EventPreviousAttendance = {
   teamsAttended: number;
   teamsTotal: number;
@@ -123,6 +130,7 @@ export interface EventDataObject extends BasicEvent {
       | ResearchOutputResponse['workingGroups'];
   })[];
   attendance?: EventTeamAttendance[];
+  attendeesFiles?: EventAttendeesFile[];
   previousEventAttendance?: EventPreviousAttendance;
 }
 
@@ -182,6 +190,7 @@ export type EventSpeakerUnlinkItem = {
 
 export type EventUpdateDetailsRequest = {
   attendance?: EventAttendanceUpdateItem[];
+  attendeesFileIds?: string[];
   speakersToRemove?: string[];
   speakersToUnlink?: EventSpeakerUnlinkItem[];
   preliminaryDataShared?: EventPreliminaryDataSharingUpdateItem[];

@@ -1,13 +1,22 @@
-import { EventResponse, ListEventResponse } from '@asap-hub/model';
+import {
+  EventAttendeesFile,
+  EventResponse,
+  ListEventResponse,
+} from '@asap-hub/model';
 import { isEventProjectManager } from '@asap-hub/validation';
 import Boom from '@hapi/boom';
-import { Response, Router } from 'express';
+import { RequestHandler, Response, Router } from 'express';
+import multer from 'multer';
 import {
   validateEventFetchParameters,
   validateEventParameters,
   validateEventUpdateDetailsPayload,
 } from '../validation/event.validation';
 import EventController from '../controllers/event.controller';
+
+const upload = multer();
+
+const allowedAttendeesFileExtensions = ['.csv', '.xlsx'];
 
 export const eventRouteFactory = (eventController: EventController): Router => {
   const eventRoutes = Router();
@@ -37,7 +46,9 @@ export const eventRouteFactory = (eventController: EventController): Router => {
       const { eventId } = validateEventParameters(params);
       const payload = validateEventUpdateDetailsPayload(body);
 
-      const isAttendanceWrite = payload.attendance !== undefined;
+      const isAttendanceWrite =
+        payload.attendance !== undefined ||
+        payload.attendeesFileIds !== undefined;
       const isSpeakerWrite =
         payload.speakersToRemove !== undefined ||
         payload.speakersToUnlink !== undefined ||
@@ -62,6 +73,40 @@ export const eventRouteFactory = (eventController: EventController): Router => {
       const result = await eventController.updateEventDetails(eventId, payload);
 
       res.json(result);
+    },
+  );
+
+  eventRoutes.post<{ eventId: string }, EventAttendeesFile>(
+    '/events/:eventId/attendees-files',
+    upload.single('file') as unknown as RequestHandler<
+      { eventId: string },
+      EventAttendeesFile
+    >,
+    async (req, res) => {
+      const { params, file, loggedInUser } = req;
+      validateEventParameters(params);
+
+      if (!loggedInUser?.techSupport) {
+        throw Boom.forbidden();
+      }
+
+      const filename = file?.originalname.toLowerCase() ?? '';
+      if (
+        !file ||
+        !allowedAttendeesFileExtensions.some((extension) =>
+          filename.endsWith(extension),
+        )
+      ) {
+        throw Boom.badRequest('No file provided or file is not a CSV or XLSX.');
+      }
+
+      const attendeesFile = await eventController.createAttendeesFile({
+        content: file.buffer,
+        contentType: file.mimetype,
+        filename: file.originalname,
+      });
+
+      res.status(201).json(attendeesFile);
     },
   );
 
