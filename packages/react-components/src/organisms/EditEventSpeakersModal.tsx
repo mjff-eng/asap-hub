@@ -356,11 +356,10 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
 
   const updateGroups = (
     update: (current: SpeakerGroup[]) => SpeakerGroup[],
-  ): SpeakerGroup[] => {
+  ) => {
     const next = update(latestGroups.current);
     latestGroups.current = next;
     setSpeakerGroups(next);
-    return next;
   };
 
   const isEditMode = speakerGroups.some((group) => group.users.length > 0);
