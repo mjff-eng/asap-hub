@@ -259,6 +259,20 @@ type AddedSpeaker = {
   readonly destination?: string;
   readonly groupId: string;
   readonly userId: string;
+  readonly alreadyAdded?: boolean;
+};
+
+const addedSpeakerMessage = ({
+  speakerName,
+  destination,
+  alreadyAdded,
+}: AddedSpeaker) => {
+  if (alreadyAdded) {
+    return `${speakerName} is already added to ${destination}`;
+  }
+  return destination
+    ? `Added ${speakerName} to ${destination}`
+    : `Added ${speakerName} as an External Guest`;
 };
 
 const renderSearchOption = (
@@ -430,16 +444,13 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     setExpandedIds((current) => new Set(current).add(affiliation.id));
     expandSection(affiliation.variant);
     setPendingSpeaker(null);
-    setAddedSpeaker(
-      after === before
-        ? null
-        : {
-            speakerName: user.displayName,
-            destination: affiliation.name,
-            groupId: affiliation.id,
-            userId: user.userId,
-          },
-    );
+    setAddedSpeaker({
+      speakerName: user.displayName,
+      destination: affiliation.name,
+      groupId: affiliation.id,
+      userId: user.userId,
+      alreadyAdded: after === before,
+    });
   };
 
   const nextGuestId = (name: string) => {
@@ -731,12 +742,13 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
         <section css={speakersSectionStyles}>
           {addedSpeaker && (
             <InlineToast
-              message={
-                addedSpeaker.destination
-                  ? `Added ${addedSpeaker.speakerName} to ${addedSpeaker.destination}`
-                  : `Added ${addedSpeaker.speakerName} as an External Guest`
+              accent={addedSpeaker.alreadyAdded ? 'neutral' : 'success'}
+              message={addedSpeakerMessage(addedSpeaker)}
+              onUndo={
+                addedSpeaker.alreadyAdded
+                  ? undefined
+                  : () => undoAddedSpeaker(addedSpeaker)
               }
-              onUndo={() => undoAddedSpeaker(addedSpeaker)}
               onDismiss={() => setAddedSpeaker(null)}
               enabled={!isCancelling}
             />

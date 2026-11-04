@@ -649,6 +649,7 @@ describe('EditEventSpeakersModal', () => {
     expect(
       screen.queryByText('Added Bob to Team Omega'),
     ).not.toBeInTheDocument();
+    expect(screen.getByText('Bob is already added to Team Omega')).toBeVisible();
   });
 
   it('Should cancel the pending addition when the external banner is dismissed', async () => {
@@ -1146,7 +1147,7 @@ describe('EditEventSpeakersModal', () => {
     );
   });
 
-  it('Should not toast or duplicate a speaker who is already in the group', async () => {
+  it('Should tell the PM a speaker is already in the group instead of adding them again', async () => {
     renderModal({ groups: [] });
 
     await search('John', 'John Smith');
@@ -1158,9 +1159,33 @@ describe('EditEventSpeakersModal', () => {
     await search('John', 'John Smith');
 
     expect(
-      screen.queryByText('Added John Smith to Team Beta'),
+      screen.getByText('John Smith is already added to Team Beta'),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: 'Undo' }),
     ).not.toBeInTheDocument();
     expect(screen.getAllByText('John Smith')).toHaveLength(1);
+  });
+
+  it('Should tell the PM a speaker is already in the individual project picked from several affiliations', async () => {
+    renderModal({
+      groups: [
+        getProjectGroup({
+          id: 'project-7',
+          projectName: 'Project Seven',
+          users: [getUser({ id: 'user-3', displayName: 'Alex Kim' })],
+        }),
+      ],
+    });
+
+    await search('Alex', 'Alex Kim');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'plus Project Seven' }),
+    );
+
+    expect(
+      screen.getByText('Alex Kim is already added to Project Seven'),
+    ).toBeVisible();
   });
 
   it('Should keep external speaker ids distinct when a speaker is removed between two additions', async () => {
