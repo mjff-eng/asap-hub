@@ -123,11 +123,7 @@ const UserInterestGroupCard: React.FC<UserInterestGroupCardProps> = ({
     <TabbedCard
       title="Interest Groups"
       description={
-        <Paragraph
-          noMargin
-          accent="tertiary"
-          styles={css({ margin: '0 0 8px' })}
-        >
+        <Paragraph noMargin accent="tertiary">
           Interest groups allow teams to share findings with other teams about
           topics of interest. Find out the membership status of this member.
         </Paragraph>

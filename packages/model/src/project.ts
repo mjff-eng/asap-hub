@@ -10,7 +10,10 @@ export type ProjectTool = {
   url: string;
 };
 
-export type ProjectStatus = 'Active' | 'Completed' | 'Closed';
+export const projectStatuses = ['Active', 'Completed', 'Closed'] as const;
+export type ProjectStatus = (typeof projectStatuses)[number];
+export const isProjectStatus = (value: unknown): value is ProjectStatus =>
+  (projectStatuses as readonly string[]).includes(value as string);
 
 export const projectTypes = [
   'Discovery Project',

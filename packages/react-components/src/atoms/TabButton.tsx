@@ -1,41 +1,27 @@
 import { ReactNode } from 'react';
 import { css } from '@emotion/react';
-import { layoutStyles } from '../text';
-import { rem } from '../pixels';
-import { colour } from '../colors';
+import { rem, lineHeight } from '../pixels';
+import { tabStyles, tabActiveStyles } from './tab-styles';
 
 const styles = css({
-  display: 'inline-block',
-  paddingTop: rem(12),
-  paddingBottom: rem(12),
+  appearance: 'none',
+  border: 'none',
+  background: 'none',
+  margin: 0,
+  font: 'inherit',
+  lineHeight: rem(lineHeight),
 
-  color: colour.foreground.tertiary,
-  textDecoration: 'none',
-  whiteSpace: 'nowrap',
   cursor: 'pointer',
 });
 
 const activeStyles = css({
-  paddingBottom: rem(12 - 4),
-  borderBottom: `solid ${rem(4)} ${colour.foreground.brand}`,
-
-  color: colour.foreground.primary,
   cursor: 'default',
-  fontWeight: 'bold',
 });
 
 const disabledStyles = css({
   cursor: 'unset',
 });
 
-const resetButtonStyles = css({
-  appearance: 'none',
-  border: 'none',
-  background: 'none',
-
-  padding: 0,
-  margin: 0,
-});
 interface TabButtonProps {
   readonly children: ReactNode;
   active?: boolean;
@@ -49,16 +35,18 @@ const TabButton: React.FC<TabButtonProps> = ({
   onClick,
 }) => (
   <button
+    type="button"
     onClick={onClick}
     disabled={disabled}
     css={[
-      resetButtonStyles,
       styles,
+      tabStyles,
+      active && tabActiveStyles,
       active && activeStyles,
       disabled && disabledStyles,
     ]}
   >
-    <p css={layoutStyles}>{children}</p>
+    <span>{children}</span>
   </button>
 );
 

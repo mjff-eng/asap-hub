@@ -7,7 +7,7 @@ import { rem, tabletScreen } from '../pixels';
 import { splitListBy } from '../utils';
 
 const containerStyles = css({
-  paddingTop: `${rem(33)}`,
+  paddingTop: rem(24),
   display: 'grid',
   rowGap: rem(12),
   [`@media (min-width: ${tabletScreen.min}px)`]: {
@@ -17,7 +17,11 @@ const containerStyles = css({
 
 const tabDescriptionStyles = css({
   fontWeight: 'bold',
-  margin: '8px 0',
+  marginTop: rem(16),
+});
+
+const labelSpacingStyles = css({
+  marginBottom: rem(16),
 });
 type Leaders = WorkingGroupResponse['leaders'];
 type Members = WorkingGroupResponse['members'];
@@ -59,6 +63,7 @@ const GroupLeadersTabbedCard: React.FC<GroupLeadersTabbedCardProps> = ({
             Leaders
           </Paragraph>
         }
+        overrideDescriptionStyles={labelSpacingStyles}
         activeTabIndex={isComplete ? 1 : 0}
         tabs={[
           {
@@ -66,7 +71,7 @@ const GroupLeadersTabbedCard: React.FC<GroupLeadersTabbedCardProps> = ({
             items: activeLeaders,
             disabled: isComplete,
             empty: (
-              <Paragraph accent="tertiary">
+              <Paragraph accent="tertiary" noMargin>
                 There are no active leaders.
               </Paragraph>
             ),
@@ -75,7 +80,7 @@ const GroupLeadersTabbedCard: React.FC<GroupLeadersTabbedCardProps> = ({
             tabTitle: `Past Leaders (${inactiveLeaders.length})`,
             items: inactiveLeaders,
             empty: (
-              <Paragraph accent="tertiary">
+              <Paragraph accent="tertiary" noMargin>
                 There are no past leaders.
               </Paragraph>
             ),
@@ -105,6 +110,7 @@ const GroupLeadersTabbedCard: React.FC<GroupLeadersTabbedCardProps> = ({
             Members
           </Paragraph>
         }
+        overrideDescriptionStyles={labelSpacingStyles}
         activeTabIndex={isComplete ? 1 : 0}
         tabs={[
           {
@@ -113,7 +119,7 @@ const GroupLeadersTabbedCard: React.FC<GroupLeadersTabbedCardProps> = ({
             truncateFrom: 8,
             disabled: isComplete,
             empty: (
-              <Paragraph accent="tertiary">
+              <Paragraph accent="tertiary" noMargin>
                 There are no active members.
               </Paragraph>
             ),
@@ -123,7 +129,7 @@ const GroupLeadersTabbedCard: React.FC<GroupLeadersTabbedCardProps> = ({
             items: inactiveMembers,
             truncateFrom: 8,
             empty: (
-              <Paragraph accent="tertiary">
+              <Paragraph accent="tertiary" noMargin>
                 There are no past members.
               </Paragraph>
             ),

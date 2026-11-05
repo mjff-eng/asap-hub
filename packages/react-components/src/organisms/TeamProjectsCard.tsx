@@ -23,10 +23,6 @@ const descriptionStyles = css({
   marginTop: 0,
 });
 
-const headerParagraphStyles = css({
-  marginBottom: rem(8),
-});
-
 const cardContentStyles = css({
   paddingBlock: rem(32),
 });
@@ -87,7 +83,7 @@ const TeamProjectsCard: React.FC<TeamProjectsCardProps> = ({
     <TabbedCard
       title="Projects"
       description={
-        <Paragraph accent="tertiary" noMargin styles={headerParagraphStyles}>
+        <Paragraph accent="tertiary" noMargin>
           Explore projects where a team has received funding.
         </Paragraph>
       }

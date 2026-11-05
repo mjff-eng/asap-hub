@@ -55,6 +55,8 @@ export {
 } from './atoms';
 export type { MultiSelectOptionsType, MultiSelectProps } from './atoms';
 export type { ManuscriptVersionOption } from './templates';
+export type { LabMembership } from './organisms';
+export type { MembershipCardTab, MembershipTableColumn } from './molecules';
 export type {
   ResearchOutputToast,
   ResearchOutputToastLocationState,
@@ -290,6 +292,8 @@ export {
   ToolCard,
   UserCollaborationTable,
   UserInterestGroupCard,
+  UserInterestGroupsMembershipCard,
+  UserLabsMembershipCard,
   UserNavigation,
   UserProductivityTable,
   UserProfileBiography,
@@ -298,7 +302,10 @@ export {
   UserProfileRecentWorks,
   UserProfileRole,
   UserProjectsCard,
+  UserProjectsMembershipCard,
+  UserTeamsMembershipCard,
   UserTeamsTabbedCard,
+  UserWorkingGroupsMembershipCard,
   WorkingGroupCard,
   WorkingGroupMembers,
   WorkingGroupsTabbedCard,
@@ -400,6 +407,7 @@ export {
   UserProfileAbout,
   UserProfileHeaderNew,
   UserProfilePage,
+  UserProfileMemberships,
   UserProfileResearch,
   UserProfileResearchOutputs,
   UserProfileSearchAndFilter,

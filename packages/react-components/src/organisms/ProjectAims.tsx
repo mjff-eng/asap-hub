@@ -100,9 +100,9 @@ const AimsList: FC<{
   );
 };
 
-// The `TabNav` component comes with padding and margin in its inner components,
-// so we use a smaller margin when we render it.
-const MULTI_TAB_MARGIN = 12;
+// Space between the description and the tab bar, measured to the top of the
+// tab buttons (which carry their own top padding).
+const MULTI_TAB_MARGIN = 40;
 
 // If we don't render the `TabNav`, this is the margin we want to use, both cases should have the
 // same bottom spacing with the next component.

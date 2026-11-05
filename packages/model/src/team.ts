@@ -27,6 +27,18 @@ const teamType = ['Discovery Team', 'Resource Team'] as const;
 
 export type TeamRole = (typeof teamRole)[number];
 
+export const teamRolePriorities: Record<TeamRole, number> = {
+  'Lead PI (Core Leadership)': 1,
+  'Co-PI (Core Leadership)': 2,
+  'Collaborating PI': 3,
+  'Project Manager': 4,
+  'Data Manager': 5,
+  'Key Personnel': 6,
+  'ASAP Staff': 7,
+  'Scientific Advisory Board': 8,
+  Trainee: 9,
+};
+
 export const isPIRole = (role: unknown): role is TeamPIRole =>
   typeof role === 'string' && (piRole as readonly string[]).includes(role);
 
