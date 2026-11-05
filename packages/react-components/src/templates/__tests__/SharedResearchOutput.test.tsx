@@ -201,6 +201,7 @@ describe('Grant Document page', () => {
     id: 'project-id',
     title: 'Project title',
     projectType: 'Discovery Project' as const,
+    teams: [{ id: 'project-team-id', displayName: 'Project Team' }],
   };
   const grantProps: ComponentProps<typeof SharedResearchOutput> = {
     ...props,
@@ -209,11 +210,12 @@ describe('Grant Document page', () => {
     type: 'Proposal',
     title: 'Grant title',
     description: 'Output description',
-    link: 'https://example.com/grant.pdf',
+    link: 'https://example.com/output-link',
     grantDocument: {
       grantType: 'original',
       project,
       original: originalGrant,
+      pdfUrl: 'https://example.com/grant.pdf',
     },
   };
   const supplementToastText = /This is an original grant proposal/;
@@ -246,6 +248,16 @@ describe('Grant Document page', () => {
     expect(
       screen.queryByRole('link', { name: /access output/i }),
     ).not.toBeInTheDocument();
+  });
+
+  it('shows the project team in the header instead of the output teams', () => {
+    renderGrantPage({
+      teams: [{ id: 'output-team-id', displayName: 'Output Team' }],
+    });
+    expect(
+      screen.getByRole('link', { name: 'Team Project Team' }),
+    ).toHaveAttribute('href', '/network/teams/project-team-id');
+    expect(screen.queryByText('Team Output Team')).not.toBeInTheDocument();
   });
 
   it('renders breadcrumbs to shared research above the header', () => {
@@ -326,6 +338,7 @@ describe('Grant Document page', () => {
         project,
         original: originalGrant,
         supplement: supplementGrant,
+        pdfUrl: 'https://example.com/grant.pdf',
       },
     });
     const headings = screen
@@ -340,7 +353,7 @@ describe('Grant Document page', () => {
     ]);
   });
 
-  it('views the output link as a PDF only when there is a link', async () => {
+  it('views the grant PDF only when the grant document has one', async () => {
     const { rerender } = renderGrantPage();
     expect(
       await screen.findByRole('region', { name: 'Grant Document PDF' }),
@@ -348,7 +361,14 @@ describe('Grant Document page', () => {
 
     rerender(
       <MemoryRouter>
-        <SharedResearchOutput {...grantProps} link={undefined} />
+        <SharedResearchOutput
+          {...grantProps}
+          grantDocument={{
+            grantType: 'original',
+            project,
+            original: originalGrant,
+          }}
+        />
       </MemoryRouter>,
     );
     expect(

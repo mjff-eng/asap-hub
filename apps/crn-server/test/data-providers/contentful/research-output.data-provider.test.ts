@@ -1,6 +1,7 @@
 import {
   Entry,
   Environment,
+  FETCH_RESEARCH_OUTPUT_BY_ID,
   FetchResearchOutputByIdQuery,
   getContentfulGraphqlClientMockServer,
   patch,
@@ -12,9 +13,11 @@ import {
 } from '../../../src/data-providers/contentful/research-output.data-provider';
 import { getEntry } from '../../fixtures/contentful.fixtures';
 import {
+  getContentfulResearchOutputGrantDocumentGraphqlResponse,
   getContentfulResearchOutputGraphqlResponse,
   getResearchOutputCreateDataObject,
   getResearchOutputDataObject,
+  getResearchOutputGrantDocument,
   getResearchOutputUpdateDataObject,
 } from '../../fixtures/research-output.fixtures';
 import { getContentfulGraphqlClientMock } from '../../mocks/contentful-graphql-client.mock';
@@ -1204,6 +1207,186 @@ describe('Research Outputs Data Provider', () => {
           },
         }),
       );
+    });
+
+    describe('grant document', () => {
+      const getGrantDocumentOutput = (
+        grantData = getContentfulResearchOutputGrantDocumentGraphqlResponse(),
+      ) => {
+        const output = getContentfulResearchOutputGraphqlResponse();
+        return {
+          ...output,
+          ...grantData,
+          documentType: 'Grant Document',
+          linkedFrom: { ...output.linkedFrom, ...grantData.linkedFrom },
+        };
+      };
+
+      test('can call the query with grant data from mock server', async () => {
+        const grantDocumentOutput = getGrantDocumentOutput();
+        const grantDocumentMockServer = getContentfulGraphqlClientMockServer({
+          ResearchOutputs: () => ({
+            ...grantDocumentOutput,
+            relatedResearchCollection: () =>
+              researchOutputGraphqlResponse.relatedResearchCollection,
+            linkedFrom: () => grantDocumentOutput.linkedFrom,
+          }),
+        });
+        const dataProvider = new ResearchOutputContentfulDataProvider(
+          grantDocumentMockServer,
+          grantDocumentMockServer,
+          contentfulRestClientMock,
+        );
+
+        const result = await dataProvider.fetchById('1', {
+          includeGrantDocument: true,
+        });
+
+        expect(result?.documentType).toEqual('Grant Document');
+      });
+
+      test('Should not ask for grant data unless requested', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          researchOutputs: getContentfulResearchOutputGraphqlResponse(),
+        });
+
+        const result = await researchOutputDataProvider.fetchById('1');
+
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+          FETCH_RESEARCH_OUTPUT_BY_ID,
+          expect.objectContaining({ includeGrantDocument: false }),
+        );
+        expect(result?.grantDocument).toBeUndefined();
+      });
+
+      test('Should ignore grant data for other document types', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          researchOutputs: {
+            ...getGrantDocumentOutput(),
+            documentType: 'Article',
+          },
+        });
+
+        const result = await researchOutputDataProvider.fetchById('1', {
+          includeGrantDocument: true,
+        });
+
+        expect(result?.grantDocument).toBeUndefined();
+      });
+
+      test('Should map an original grant document with its supplement grant and the project team', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          researchOutputs: getGrantDocumentOutput(),
+        });
+
+        const result = await researchOutputDataProvider.fetchById('1', {
+          includeGrantDocument: true,
+        });
+
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledTimes(1);
+        expect(contentfulGraphqlClientMock.request).toHaveBeenCalledWith(
+          FETCH_RESEARCH_OUTPUT_BY_ID,
+          expect.objectContaining({
+            id: '1',
+            preview: false,
+            includeGrantDocument: true,
+          }),
+        );
+        expect(result?.grantDocument).toEqual(getResearchOutputGrantDocument());
+      });
+
+      test('Should map a supplement grant document', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          researchOutputs: getGrantDocumentOutput(
+            getContentfulResearchOutputGrantDocumentGraphqlResponse({
+              grantType: 'supplement',
+            }),
+          ),
+        });
+
+        const result = await researchOutputDataProvider.fetchById('1', {
+          includeGrantDocument: true,
+        });
+
+        expect(result?.grantDocument).toEqual({
+          ...getResearchOutputGrantDocument(),
+          grantType: 'supplement',
+        });
+      });
+
+      test('Should leave out the supplement grant and the PDF when the project has neither', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          researchOutputs: getGrantDocumentOutput(
+            getContentfulResearchOutputGrantDocumentGraphqlResponse({
+              withSupplementGrant: false,
+              withGrantPdf: false,
+            }),
+          ),
+        });
+
+        const result = await researchOutputDataProvider.fetchById('1', {
+          includeGrantDocument: true,
+        });
+
+        expect(result?.grantDocument).toEqual({
+          ...getResearchOutputGrantDocument(),
+          supplement: undefined,
+          pdfUrl: undefined,
+        });
+      });
+
+      test('Should not return grant data when no project links to the output', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          researchOutputs: getGrantDocumentOutput({
+            grantPdf: null,
+            linkedFrom: {
+              projectsCollection: { items: [] },
+              supplementGrantCollection: { items: [] },
+            },
+          }),
+        });
+
+        const result = await researchOutputDataProvider.fetchById('1', {
+          includeGrantDocument: true,
+        });
+
+        expect(result?.grantDocument).toBeUndefined();
+      });
+
+      test('Should not return grant data when the project type is unknown', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          researchOutputs: getGrantDocumentOutput(
+            getContentfulResearchOutputGrantDocumentGraphqlResponse({
+              projectType: null,
+            }),
+          ),
+        });
+
+        const result = await researchOutputDataProvider.fetchById('1', {
+          includeGrantDocument: true,
+        });
+
+        expect(result?.grantDocument).toBeUndefined();
+      });
+
+      test('Should ask the preview client for grant data on a draft', async () => {
+        contentfulGraphqlClientMock.request.mockResolvedValueOnce({
+          researchOutputs: null,
+        });
+        contentfulGraphqlPreviewClientMock.request.mockResolvedValueOnce({
+          researchOutputs: getGrantDocumentOutput(),
+        });
+
+        const result = await researchOutputDataProvider.fetchById('1', {
+          includeGrantDocument: true,
+        });
+
+        expect(contentfulGraphqlPreviewClientMock.request).toHaveBeenCalledWith(
+          FETCH_RESEARCH_OUTPUT_BY_ID,
+          { id: '1', preview: true, includeGrantDocument: true },
+        );
+        expect(result?.grantDocument).toEqual(getResearchOutputGrantDocument());
+      });
     });
   });
   describe('create', () => {

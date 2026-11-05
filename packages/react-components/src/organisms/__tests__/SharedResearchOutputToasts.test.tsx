@@ -329,3 +329,29 @@ it('should render the grant ended toast', async () => {
 
   expect(screen.queryByText(toastText)).not.toBeInTheDocument();
 });
+
+it('should render both grant toasts when the supplement grant has ended', async () => {
+  const user = userEvent.setup();
+  const endedText = 'The funding period for this grant has closed.';
+  render(
+    <SharedResearchOutputToasts
+      {...defaultProps}
+      published
+      supplementGrantHref="/shared-research/supplement-id"
+      grantEnded
+    />,
+  );
+
+  expect(screen.getByText(/This is an original grant proposal/)).toBeVisible();
+  expect(screen.getByText(endedText)).toBeVisible();
+
+  const [closeSupplementToast] = screen.getAllByRole('button', {
+    name: 'Close',
+  });
+  await user.click(closeSupplementToast as HTMLElement);
+
+  expect(
+    screen.queryByText(/This is an original grant proposal/),
+  ).not.toBeInTheDocument();
+  expect(screen.getByText(endedText)).toBeVisible();
+});

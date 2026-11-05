@@ -1,4 +1,5 @@
 import {
+  GrantType,
   ListPublicOutputResponse,
   ListResearchOutputResponse,
   ListResponse,
@@ -7,6 +8,7 @@ import {
   ResearchOutputDataObject,
   ResearchOutputDraftDataObject,
   ResearchOutputEvent,
+  ResearchOutputGrantDocument,
   ResearchOutputPostRequest,
   ResearchOutputPublishedDataObject,
   ResearchOutputPutRequest,
@@ -17,6 +19,7 @@ import {
 } from '@asap-hub/model';
 import {
   ContentfulWebhookPayload,
+  GrantDocumentContentFragment,
   ResearchOutputsContentFragment,
 } from '@asap-hub/contentful';
 import {
@@ -532,6 +535,97 @@ export const getContentfulResearchOutputGraphqlResponse =
       ],
     },
     workingGroup: null,
+  });
+
+export const getContentfulResearchOutputGrantDocumentGraphqlResponse = ({
+  grantType = 'original',
+  withSupplementGrant = true,
+  withGrantPdf = true,
+  projectType = 'Discovery Project',
+}: {
+  grantType?: GrantType;
+  withSupplementGrant?: boolean;
+  withGrantPdf?: boolean;
+  projectType?: string | null;
+} = {}): GrantDocumentContentFragment => {
+  const projectsCollection = {
+    items: [
+      {
+        sys: { id: 'project-id' },
+        title: 'Project title',
+        projectType,
+        originalGrant: 'Original grant overview',
+        startDate: '2021-01-01T00:00:00.000Z',
+        endDate: '2024-12-31T00:00:00.000Z',
+        membersCollection: {
+          items: [
+            {
+              projectMember: {
+                __typename: 'Teams' as const,
+                sys: { id: 'project-team-id' },
+                displayName: 'Project Team',
+              },
+            },
+            { projectMember: { __typename: 'Users' as const } },
+          ],
+        },
+        proposal: {
+          sys: { id: 'original-output-id' },
+          title: 'Original grant title',
+        },
+        supplementGrant: withSupplementGrant
+          ? {
+              title: 'Supplement grant title',
+              description: 'Supplement grant overview',
+              startDate: '2025-01-01T00:00:00.000Z',
+              endDate: '2026-12-31T00:00:00.000Z',
+              proposal: { sys: { id: 'supplement-output-id' } },
+            }
+          : null,
+      },
+    ],
+  };
+
+  return {
+    grantPdf: withGrantPdf
+      ? { url: 'https://assets.ctfassets.net/grant.pdf' }
+      : null,
+    linkedFrom:
+      grantType === 'original'
+        ? { projectsCollection, supplementGrantCollection: { items: [] } }
+        : {
+            projectsCollection: { items: [] },
+            supplementGrantCollection: {
+              items: [{ linkedFrom: { projectsCollection } }],
+            },
+          },
+  };
+};
+
+export const getResearchOutputGrantDocument =
+  (): ResearchOutputGrantDocument => ({
+    grantType: 'original',
+    project: {
+      id: 'project-id',
+      title: 'Project title',
+      projectType: 'Discovery Project',
+      teams: [{ id: 'project-team-id', displayName: 'Project Team' }],
+    },
+    original: {
+      researchOutputId: 'original-output-id',
+      title: 'Original grant title',
+      description: 'Original grant overview',
+      startDate: '2021-01-01T00:00:00.000Z',
+      endDate: '2024-12-31T00:00:00.000Z',
+    },
+    supplement: {
+      researchOutputId: 'supplement-output-id',
+      title: 'Supplement grant title',
+      description: 'Supplement grant overview',
+      startDate: '2025-01-01T00:00:00.000Z',
+      endDate: '2026-12-31T00:00:00.000Z',
+    },
+    pdfUrl: 'https://assets.ctfassets.net/grant.pdf',
   });
 
 export const getResearchOutputContentfulWebhookDetail = (

@@ -286,6 +286,76 @@ export const researchOutputContentQueryFragment = gql`
   }
 `;
 
+const grantDocumentProjectQueryFragment = gql`
+  fragment GrantDocumentProject on Projects {
+    sys {
+      id
+    }
+    title
+    projectType
+    originalGrant
+    startDate
+    endDate
+    membersCollection(limit: 100) {
+      items {
+        projectMember {
+          __typename
+          ... on Teams {
+            sys {
+              id
+            }
+            displayName
+          }
+        }
+      }
+    }
+    proposal {
+      sys {
+        id
+      }
+      title
+    }
+    supplementGrant {
+      title
+      description
+      startDate
+      endDate
+      proposal {
+        sys {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const grantDocumentQueryFragment = gql`
+  fragment GrantDocumentContent on ResearchOutputs {
+    grantPdf {
+      url
+    }
+    linkedFrom {
+      projectsCollection(limit: 1) {
+        items {
+          ...GrantDocumentProject
+        }
+      }
+      supplementGrantCollection(limit: 1) {
+        items {
+          linkedFrom {
+            projectsCollection(limit: 1) {
+              items {
+                ...GrantDocumentProject
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ${grantDocumentProjectQueryFragment}
+`;
+
 export const FETCH_RESEARCH_OUTPUT_BY_ID = gql`
   query FetchResearchOutputById(
     $id: String!
@@ -293,12 +363,15 @@ export const FETCH_RESEARCH_OUTPUT_BY_ID = gql`
     $fetchPMs: Boolean = true
     $singleOutput: Boolean = true
     $relatedResearchWhere: ResearchOutputsFilter = {}
+    $includeGrantDocument: Boolean = false
   ) {
     researchOutputs(id: $id, preview: $preview) {
       ...ResearchOutputsContent
+      ...GrantDocumentContent @include(if: $includeGrantDocument)
     }
   }
   ${researchOutputContentQueryFragment}
+  ${grantDocumentQueryFragment}
 `;
 
 export const FETCH_RESEARCH_OUTPUTS = gql`

@@ -326,6 +326,7 @@ describe('isGrantEnded', () => {
     id: 'project-1',
     title: 'Project',
     projectType: 'Discovery Project' as const,
+    teams: [],
   };
   const original = {
     title: 'Original',
@@ -386,5 +387,22 @@ describe('isGrantEnded', () => {
         new Date(2025, 0, 1),
       ),
     ).toBe(false);
+  });
+
+  it('is true once the supplement has ended, even without an original end date', () => {
+    expect(
+      isGrantEnded(
+        {
+          grantType: 'original',
+          project,
+          original: { title: 'Original' },
+          supplement: {
+            title: 'Supplement',
+            endDate: '2026-09-30T00:00:00.000-08:00',
+          },
+        },
+        new Date(2026, 9, 1),
+      ),
+    ).toBe(true);
   });
 });
