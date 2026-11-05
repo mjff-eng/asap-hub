@@ -554,6 +554,7 @@ export type ResearchOutputFetchOptions = {
   filter?: ResearchOutputFilter;
   relatedResearchFilter?: ResearchOutputFilter;
   includeDrafts?: boolean;
+  includeGrantDocument?: boolean;
 };
 
 export const ERROR_UNIQUE_LINK = {

@@ -34,6 +34,7 @@ export type CreateResearchOutputOptions = UpdateResearchOutputOptions;
 export type FetchResearchOutputOptions =
   FetchOptions<FetchResearchOutputFilter> & {
     includeDrafts?: boolean;
+    includeGrantDocument?: boolean;
     relatedResearchFilter?: {
       sharingStatus?: ResearchOutputSharingStatus;
       asapFunded?: 'Yes' | 'No' | 'Not Sure';
