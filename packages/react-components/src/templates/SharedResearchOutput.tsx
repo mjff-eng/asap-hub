@@ -302,7 +302,7 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
             <GrantDocumentHeaderCard
               title={props.title}
               documentType={props.documentType}
-              teams={props.teams}
+              teams={grantDocument.project.teams}
               addedDate={props.addedDate}
               created={props.created}
               lastUpdatedPartial={props.lastUpdatedPartial}
@@ -457,7 +457,9 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
           )}
           {grantDocument && (
             <>
-              {props.link && <GrantDocumentPdfCard link={props.link} />}
+              {grantDocument.pdfUrl && (
+                <GrantDocumentPdfCard link={grantDocument.pdfUrl} />
+              )}
               {grantDocument.supplement && (
                 <GrantDocumentGrantsCard
                   grantType={grantDocument.grantType}
