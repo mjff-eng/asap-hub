@@ -123,11 +123,7 @@ const UserTeamsTabbedCard: React.FC<UserTeamsTabbedCardProps> = ({
       <TabbedCard
         title="Teams and Roles"
         description={
-          <Paragraph
-            noMargin
-            accent="tertiary"
-            styles={css({ margin: '0 0 8px' })}
-          >
+          <Paragraph noMargin accent="tertiary">
             Teams are a constellation of labs focus on a specific grant
             proposal. Find out teams status and the member's current and past
             roles within them.
