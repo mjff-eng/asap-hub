@@ -13,7 +13,7 @@ import { colour } from '../../colors';
 
 import UploadListModal, { UploadListResult } from '../UploadListModal';
 
-// m1 is new; a1/a2 are resolved teams already on the table (see currentIds).
+// m1 is new; a1/a2 are resolved teams already on the table (see currentTeams).
 const uploadResult: UploadListResult = {
   matched: [
     {
@@ -39,7 +39,10 @@ const uploadResult: UploadListResult = {
   ],
 };
 
-const currentIds = new Set(['a1', 'a2']);
+const currentTeams = [
+  { teamId: 'a1', teamName: 'Genetics', attended: false },
+  { teamId: 'a2', teamName: 'Proteomics', attended: true },
+];
 
 const onUploadList = jest.fn(async () => uploadResult);
 const onAddAttendees = jest.fn();
@@ -58,7 +61,7 @@ const renderModal = (
         onUploadList={onUploadList}
         onAddAttendees={onAddAttendees}
         onBack={onBack}
-        currentTeamIds={currentIds}
+        currentTeams={currentTeams}
         {...overrides}
       />
     </StaticRouter>,
@@ -117,8 +120,8 @@ describe('UploadListModal', () => {
     expect(screen.getByRole('button', { name: 'Add Attendees' })).toBeEnabled();
   });
 
-  it('Should treat every resolved team as new when currentTeamIds is omitted', async () => {
-    const { container } = renderModal({ currentTeamIds: undefined });
+  it('Should treat every resolved team as new when currentTeams is omitted', async () => {
+    const { container } = renderModal({ currentTeams: undefined });
 
     await upload(makeFile('teams.csv'), container);
 
@@ -128,7 +131,7 @@ describe('UploadListModal', () => {
 
   it('Should render a seeded result without any upload', () => {
     renderModal({
-      initialFiles: [makeFile('seeded.csv')],
+      initialFile: makeFile('seeded.csv'),
       initialResult: uploadResult,
     });
 
@@ -143,7 +146,7 @@ describe('UploadListModal', () => {
 
   it('Should render seeded sections expanded when initialSectionsOpen is set', () => {
     renderModal({
-      initialFiles: [makeFile('seeded.csv')],
+      initialFile: makeFile('seeded.csv'),
       initialResult: uploadResult,
       initialSectionsOpen: true,
     });
@@ -169,9 +172,10 @@ describe('UploadListModal', () => {
     expect(screen.getByRole('button', { name: 'Add' })).toBeDisabled();
 
     resolveUpload(uploadResult);
-    await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'plus Add' })).toBeEnabled(),
-    );
+    expect(await screen.findByText('teams.csv')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'plus Add' }),
+    ).not.toBeInTheDocument();
   });
 
   it('Should show a size error and add no chip when the file is too large', async () => {
@@ -227,43 +231,9 @@ describe('UploadListModal', () => {
     expect(screen.queryByText('5 Teams')).not.toBeInTheDocument();
   });
 
-  it('Should not show the Add spinner while re-parsing after a chip is removed', async () => {
-    let resolveReparse: (result: UploadListResult) => void = () => undefined;
-    const reparseMock = jest
-      .fn<Promise<UploadListResult>, [File[]]>()
-      .mockResolvedValueOnce(uploadResult)
-      .mockImplementationOnce(
-        () =>
-          new Promise((resolve) => {
-            resolveReparse = resolve;
-          }),
-      );
-    const { container } = renderModal({ onUploadList: reparseMock });
-
-    await userEvent.upload(
-      container.querySelector('input[type="file"]') as HTMLInputElement,
-      [makeFile('a.csv'), makeFile('b.csv')],
-    );
-    expect(
-      await screen.findByRole('button', { name: 'plus Add' }),
-    ).toBeEnabled();
-
-    // Removing a chip re-parses in the background; the Add button keeps its
-    // plus icon and stays enabled (no spinner) throughout.
-    await userEvent.click(
-      screen.getAllByRole('button', { name: 'Cross' })[0] as HTMLElement,
-    );
-    expect(screen.getByRole('button', { name: 'plus Add' })).toBeEnabled();
-
-    resolveReparse(uploadResult);
-    await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'plus Add' })).toBeEnabled(),
-    );
-  });
-
-  it('Should ignore a parse that resolves after its file was removed', async () => {
+  it('Should not let the file be removed while it is parsing', async () => {
     let resolveUpload: (result: UploadListResult) => void = () => undefined;
-    const pendingUpload = jest.fn<Promise<UploadListResult>, [File[]]>(
+    const pendingUpload = jest.fn<Promise<UploadListResult>, [File]>(
       () =>
         new Promise((resolve) => {
           resolveUpload = resolve;
@@ -272,15 +242,12 @@ describe('UploadListModal', () => {
     const { container } = renderModal({ onUploadList: pendingUpload });
 
     await upload(makeFile('teams.csv'), container);
-    // Remove the chip while its parse is still in flight.
-    await userEvent.click(screen.getByRole('button', { name: 'Cross' }));
+    expect(screen.getByRole('button', { name: 'Cross' })).toBeDisabled();
 
-    // The now-stale parse resolves; its result must not repopulate the panel.
     resolveUpload(uploadResult);
     await waitFor(() =>
-      expect(screen.queryByText('teams.csv')).not.toBeInTheDocument(),
+      expect(screen.getByRole('button', { name: 'Cross' })).toBeEnabled(),
     );
-    expect(screen.queryByText('5 Teams')).not.toBeInTheDocument();
   });
 
   it('Should clear the result when the upload parse fails', async () => {
@@ -304,7 +271,7 @@ describe('UploadListModal', () => {
 
   it('Should clear the read error once a later upload succeeds', async () => {
     const onUploadListRetry = jest
-      .fn<Promise<UploadListResult>, [File[]]>()
+      .fn<Promise<UploadListResult>, [File]>()
       .mockRejectedValueOnce(new Error('nope'))
       .mockResolvedValue(uploadResult);
     const { container } = renderModal({ onUploadList: onUploadListRetry });
@@ -318,64 +285,133 @@ describe('UploadListModal', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
-  it('Should keep the size error visible when the valid file parses', async () => {
+  describe('when every team in the file is already in the list', () => {
+    const fileTeams = [
+      { teamId: 'a1', teamName: 'A', attended: true },
+      { teamId: 'a2', teamName: 'B', attended: false },
+    ];
+    const uploadAlreadyIn = () =>
+      jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: fileTeams,
+          unmatched: [],
+        }),
+      );
+
+    it('Should explain there is nothing to add when the attendance is the same', async () => {
+      const { container } = renderModal({
+        currentTeams: fileTeams,
+        onUploadList: uploadAlreadyIn(),
+      });
+
+      await upload(makeFile('teams.csv'), container);
+
+      expect(await screen.findByRole('status')).toHaveTextContent(
+        "Every team in this file is already in your list with the same attendance, so there's nothing to add. Replace the file to try a different one, or cancel to close without changing your list.",
+      );
+      expect(
+        screen.getByRole('button', { name: 'Add Attendees' }),
+      ).toBeDisabled();
+      expect(screen.queryByText('teams.csv')).not.toBeInTheDocument();
+      expect(screen.queryByText('2 Teams')).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'plus Add' })).toBeEnabled();
+    });
+
+    it('Should list the teams whose attendance will change', async () => {
+      const { container } = renderModal({
+        currentTeams: [
+          { teamId: 'a1', teamName: 'A', attended: false },
+          { teamId: 'a2', teamName: 'B', attended: false },
+        ],
+        onUploadList: uploadAlreadyIn(),
+      });
+
+      await upload(makeFile('teams.csv'), container);
+
+      await userEvent.click(
+        await screen.findByRole('button', {
+          name: /1 already in your list • attendance will change/,
+        }),
+      );
+      expect(screen.getByRole('link', { name: 'A' })).toBeInTheDocument();
+      expect(screen.getByText('Attended')).toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: 'B' })).not.toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Updating overwrites the current attendance. Remove a row to keep it as it is.',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Add Attendees' }),
+      ).toBeEnabled();
+    });
+
+    it('Should only send the teams whose attendance changes', async () => {
+      const { container } = renderModal({
+        currentTeams: [
+          { teamId: 'a1', teamName: 'A', attended: false },
+          { teamId: 'a2', teamName: 'B', attended: false },
+        ],
+        onUploadList: uploadAlreadyIn(),
+      });
+
+      await upload(makeFile('teams.csv'), container);
+      await userEvent.click(
+        await screen.findByRole('button', { name: 'Add Attendees' }),
+      );
+
+      expect(onAddAttendees).toHaveBeenCalledWith(
+        [{ teamId: 'a1', teamName: 'A', attended: true }],
+        expect.objectContaining({ name: 'teams.csv' }),
+      );
+    });
+
+    it('Should disable Add Attendees once every changing team is removed', async () => {
+      const { container } = renderModal({
+        currentTeams: [
+          { teamId: 'a1', teamName: 'A', attended: false },
+          { teamId: 'a2', teamName: 'B', attended: false },
+        ],
+        onUploadList: uploadAlreadyIn(),
+      });
+
+      await upload(makeFile('teams.csv'), container);
+      await userEvent.click(
+        await screen.findByRole('button', {
+          name: /already in your list/,
+        }),
+      );
+      await userEvent.click(screen.getByRole('button', { name: 'Remove A' }));
+
+      expect(
+        screen.getByRole('button', { name: 'Add Attendees' }),
+      ).toBeDisabled();
+    });
+  });
+
+  it('Should replace the current file with a newly picked one', async () => {
     const { container } = renderModal();
 
     const fileInput = container.querySelector(
       'input[type="file"]',
     ) as HTMLInputElement;
-    await userEvent.upload(fileInput, [
-      makeFile('huge.csv', 11 * 1000 * 1000),
-      makeFile('fine.csv'),
-    ]);
+    expect(fileInput).not.toHaveAttribute('multiple');
 
-    expect(await screen.findByText('5 Teams')).toBeInTheDocument();
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'The file size exceeds the limit of 10 MB. Please upload a smaller file.',
+    await upload(makeFile('first.csv'), container);
+    expect(await screen.findByText('first.csv')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'plus Add' }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Cross' }));
+    await upload(makeFile('second.csv'), container);
+
+    expect(await screen.findByText('second.csv')).toBeInTheDocument();
+    expect(screen.queryByText('first.csv')).not.toBeInTheDocument();
+    expect(onUploadList).toHaveBeenLastCalledWith(
+      expect.objectContaining({ name: 'second.csv' }),
     );
-  });
-
-  it('Should explain an empty card when every team is already in', async () => {
-    const { container } = renderModal({
-      currentTeamIds: new Set(['a1', 'a2', 'a3']),
-      onUploadList: jest.fn(
-        async (): Promise<UploadListResult> => ({
-          matched: [
-            { teamId: 'a1', teamName: 'A', attended: true },
-            { teamId: 'a2', teamName: 'B', attended: false },
-            { teamId: 'a3', teamName: 'C', attended: true },
-          ],
-          unmatched: [],
-        }),
-      ),
-    });
-
-    await upload(makeFile('teams.csv'), container);
-
-    expect(
-      await screen.findByText(
-        'All 3 teams in this list are already in the attendance table.',
-      ),
-    ).toBeInTheDocument();
-    expect(screen.getByText('3 Teams')).toBeInTheDocument();
-  });
-
-  it('Should name a single already-added team without counting it', async () => {
-    const { container } = renderModal({
-      currentTeamIds: new Set(['a1']),
-      onUploadList: jest.fn(
-        async (): Promise<UploadListResult> => ({
-          matched: [{ teamId: 'a1', teamName: 'A', attended: true }],
-          unmatched: [],
-        }),
-      ),
-    });
-
-    await upload(makeFile('teams.csv'), container);
-
-    expect(
-      await screen.findByText('This team is already in the attendance table.'),
-    ).toBeInTheDocument();
   });
 
   it('Should not claim teams were already in after the user deletes them', async () => {
@@ -623,7 +659,7 @@ describe('UploadListModal', () => {
               suggestion: {
                 teamId: 'a1',
                 teamName: 'Genetics',
-                attended: false,
+                attended: true,
               },
             },
           ],
@@ -652,15 +688,16 @@ describe('UploadListModal', () => {
     expect(onAddAttendeesMock).toHaveBeenCalledWith(
       [
         expect.objectContaining({ teamId: 'm1' }),
-        expect.objectContaining({ teamId: 'a1', attended: false }),
+        expect.objectContaining({ teamId: 'a1', attended: true }),
       ],
-      [expect.objectContaining({ name: 'teams.csv' })],
+      expect.objectContaining({ name: 'teams.csv' }),
     );
   });
 
   it('Should give a promoted update precedence over the already-in file row', async () => {
     const onAddAttendeesMock = jest.fn();
     const { container } = renderModal({
+      currentTeams: [{ teamId: 'a1', teamName: 'Genetics', attended: true }],
       onAddAttendees: onAddAttendeesMock,
       onUploadList: jest.fn(
         async (): Promise<UploadListResult> => ({
@@ -703,7 +740,7 @@ describe('UploadListModal', () => {
     );
     expect(onAddAttendeesMock).toHaveBeenCalledWith(
       [expect.objectContaining({ teamId: 'a1', attended: false })],
-      [expect.objectContaining({ name: 'teams.csv' })],
+      expect.objectContaining({ name: 'teams.csv' }),
     );
   });
 
@@ -759,7 +796,7 @@ describe('UploadListModal', () => {
         expect.objectContaining({ teamId: 'a1', attended: true }),
         expect.objectContaining({ teamId: 'a2', attended: false }),
       ],
-      [expect.objectContaining({ name: 'teams.csv' })],
+      expect.objectContaining({ name: 'teams.csv' }),
     );
   });
 
@@ -767,7 +804,7 @@ describe('UploadListModal', () => {
     const { container } = renderModal({
       onUploadList: jest.fn(
         async (): Promise<UploadListResult> => ({
-          matched: [{ teamId: 'a1', teamName: 'Genetics', attended: false }],
+          matched: [{ teamId: 'a1', teamName: 'Genetics', attended: true }],
           unmatched: [],
         }),
       ),
@@ -783,8 +820,8 @@ describe('UploadListModal', () => {
     await userEvent.click(addButton);
 
     expect(onAddAttendees).toHaveBeenCalledWith(
-      [expect.objectContaining({ teamId: 'a1', attended: false })],
-      [expect.objectContaining({ name: 'teams.csv' })],
+      [expect.objectContaining({ teamId: 'a1', attended: true })],
+      expect.objectContaining({ name: 'teams.csv' }),
     );
   });
 
@@ -881,7 +918,7 @@ describe('UploadListModal', () => {
   describe('disabled state during cancel confirmation', () => {
     const enterCancelConfirmation = async () => {
       const { container } = renderModal({
-        initialFiles: [makeFile('teams.csv')],
+        initialFile: makeFile('teams.csv'),
         initialResult: uploadResult,
         initialSectionsOpen: true,
       });
@@ -889,15 +926,16 @@ describe('UploadListModal', () => {
       return container;
     };
 
-    it('Should disable the file upload Add button', async () => {
+    it('Should not show the file upload Add button while a file is loaded', async () => {
       await enterCancelConfirmation();
-      const allButtons = screen.getAllByRole('button');
-      const uploadAddButton = allButtons.find(
-        (btn) =>
-          (btn as HTMLButtonElement).type === 'submit' &&
-          btn.textContent?.includes('Add'),
-      );
-      expect(uploadAddButton).toBeDisabled();
+      const uploadAddButton = screen
+        .getAllByRole('button')
+        .find(
+          (btn) =>
+            (btn as HTMLButtonElement).type === 'submit' &&
+            btn.textContent?.endsWith('Add'),
+        );
+      expect(uploadAddButton).toBeUndefined();
     });
 
     it('Should disable the file input', async () => {

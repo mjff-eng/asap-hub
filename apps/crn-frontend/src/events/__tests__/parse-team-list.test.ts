@@ -248,27 +248,23 @@ describe('parseSheet', () => {
 });
 
 describe('parseTeamRows', () => {
-  it('Should concatenate rows across files in order', async () => {
+  it('Should read the rows of a CSV file', async () => {
     await expect(
-      parseTeamRows([
-        csvFile('Team Name,Attendance\nAguzzi,Yes\n', 'first.csv'),
-        xlsxFile([['Team Name'], ['Alessi']], 'second.xlsx'),
-      ]),
-    ).resolves.toEqual([
-      { name: 'Aguzzi', attended: true },
-      { name: 'Alessi', attended: false },
-    ]);
+      parseTeamRows(csvFile('Team Name,Attendance\nAguzzi,Yes\n', 'list.csv')),
+    ).resolves.toEqual([{ name: 'Aguzzi', attended: true }]);
   });
 
-  it('Should return nothing when no files are given', async () => {
-    await expect(parseTeamRows([])).resolves.toEqual([]);
+  it('Should read the rows of an XLSX file', async () => {
+    await expect(
+      parseTeamRows(xlsxFile([['Team Name'], ['Alessi']], 'list.xlsx')),
+    ).resolves.toEqual([{ name: 'Alessi', attended: false }]);
   });
 
   it('Should reject with the error the reader reports', async () => {
     const error = new Error('unreadable');
     withFailingFileReader(error);
 
-    await expect(parseTeamRows([csvFile('Team Name\nAguzzi\n')])).rejects.toBe(
+    await expect(parseTeamRows(csvFile('Team Name\nAguzzi\n'))).rejects.toBe(
       error,
     );
   });
@@ -277,7 +273,7 @@ describe('parseTeamRows', () => {
     withFailingFileReader(null);
 
     await expect(
-      parseTeamRows([csvFile('Team Name\nAguzzi\n', 'broken.csv')]),
+      parseTeamRows(csvFile('Team Name\nAguzzi\n', 'broken.csv')),
     ).rejects.toThrow('Could not read broken.csv');
   });
 });

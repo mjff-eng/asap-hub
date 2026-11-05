@@ -147,6 +147,7 @@ export { default as ResourceProjectIcon } from './resource-project';
 export { default as ResourceTeamIcon } from './resource-team';
 export { default as protocol } from './protocol';
 export { default as protocolsIcon } from './protocols';
+export { default as refreshSmallIcon } from './refresh-small';
 export { default as replyIcon } from './reply';
 export { default as reportIcon } from './report';
 export { default as ResearcherIdIcon } from './researcher-id';
