@@ -160,7 +160,10 @@ export const researchOutputRouteFactory = (
 
       const { researchOutputId } = validateResearchOutputParameters(params);
 
-      const result = await researchOutputController.fetchById(researchOutputId);
+      const result = await researchOutputController.fetchById(
+        researchOutputId,
+        { includeGrantDocument: true },
+      );
 
       if (
         !result.published &&

@@ -1,11 +1,13 @@
 import {
   convertBooleanToDecision,
   convertDecisionToBoolean,
+  isProjectType,
   isResearchOutputDocumentType,
   ListResearchOutputDataObject,
   ProjectType,
   ResearchOutputCreateDataObject,
   ResearchOutputDataObject,
+  ResearchOutputGrantDocument,
   researchOutputMapType,
   ResearchOutputPublishingEntities,
   ResearchOutputUpdateDataObject,
@@ -190,6 +192,7 @@ export class ResearchOutputContentfulDataProvider
   private async fetchOutputById(
     id: string,
     relatedResearchWhere: ResearchOutputsFilter = {},
+    includeGrantDocument = false,
   ) {
     return this.contentfulClient.request<
       FetchResearchOutputByIdQuery,
@@ -198,6 +201,7 @@ export class ResearchOutputContentfulDataProvider
       id,
       preview: false,
       relatedResearchWhere,
+      includeGrantDocument,
     });
   }
 
@@ -218,9 +222,11 @@ export class ResearchOutputContentfulDataProvider
       }
     }
 
+    const includeGrantDocument = !!options?.includeGrantDocument;
     const { researchOutputs } = await this.fetchOutputById(
       id,
       relatedResearchWhere,
+      includeGrantDocument,
     );
 
     if (!researchOutputs) {
@@ -228,14 +234,18 @@ export class ResearchOutputContentfulDataProvider
         await this.contentfulPreviewClient.request<
           FetchResearchOutputByIdQuery,
           FetchResearchOutputByIdQueryVariables
-        >(FETCH_RESEARCH_OUTPUT_BY_ID, { id, preview: true });
+        >(FETCH_RESEARCH_OUTPUT_BY_ID, {
+          id,
+          preview: true,
+          includeGrantDocument,
+        });
       if (!draftResearchOutput) {
         return null;
       }
-      return parseGraphQLResearchOutput(draftResearchOutput);
+      return withGrantDocument(draftResearchOutput);
     }
 
-    return parseGraphQLResearchOutput(researchOutputs);
+    return withGrantDocument(researchOutputs);
   }
 
   async create(
@@ -374,6 +384,71 @@ export const mapOutputVersions = (items: (OutputVersionItem | null)[]) =>
       accession: output?.accession || '',
       doi: output?.doi || '',
     }));
+
+const withGrantDocument = (
+  item: ResearchOutputItem,
+): ResearchOutputDataObject => {
+  const researchOutput = parseGraphQLResearchOutput(item);
+
+  return researchOutput.documentType === 'Grant Document'
+    ? { ...researchOutput, grantDocument: parseGrantDocument(item) }
+    : researchOutput;
+};
+
+const parseGrantDocument = (
+  researchOutput: ResearchOutputItem,
+): ResearchOutputGrantDocument | undefined => {
+  const supplementProject =
+    researchOutput.linkedFrom?.supplementGrantCollection?.items[0]?.linkedFrom
+      ?.projectsCollection?.items[0];
+  const project =
+    supplementProject ??
+    researchOutput.linkedFrom?.projectsCollection?.items[0];
+
+  if (!project || !isProjectType(project.projectType)) {
+    return undefined;
+  }
+
+  const { proposal, supplementGrant, membersCollection } = project;
+  const teams = cleanArray(membersCollection?.items).flatMap(
+    ({ projectMember }) =>
+      projectMember?.__typename === 'Teams'
+        ? [
+            {
+              id: projectMember.sys.id,
+              displayName: projectMember.displayName || '',
+            },
+          ]
+        : [],
+  );
+
+  return {
+    grantType: supplementProject ? 'supplement' : 'original',
+    project: {
+      id: project.sys.id,
+      title: project.title || '',
+      projectType: project.projectType,
+      teams,
+    },
+    original: {
+      researchOutputId: proposal?.sys.id,
+      title: proposal?.title || '',
+      description: project.originalGrant || undefined,
+      startDate: project.startDate || undefined,
+      endDate: project.endDate || undefined,
+    },
+    supplement: supplementGrant
+      ? {
+          researchOutputId: supplementGrant.proposal?.sys.id,
+          title: supplementGrant.title || '',
+          description: supplementGrant.description || undefined,
+          startDate: supplementGrant.startDate || undefined,
+          endDate: supplementGrant.endDate || undefined,
+        }
+      : undefined,
+    pdfUrl: researchOutput.grantPdf?.url || undefined,
+  };
+};
 
 const mapRelatedResearch = (
   items: (RelatedResearchItem | null)[],
