@@ -273,6 +273,7 @@ describe('a grant document with grant data', () => {
         id: 'project-1',
         title: 'Grant Project',
         projectType: 'Discovery Project',
+        teams: [],
       },
       original: {
         title: 'Original grant',

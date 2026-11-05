@@ -17,6 +17,7 @@ const project = {
   id: 'project-1',
   title: 'Discovery Project Title',
   projectType: 'Discovery Project' as const,
+  teams: [{ id: 'team-1', displayName: 'Alpha' }],
 };
 
 const originalGrant = {

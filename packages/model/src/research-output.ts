@@ -261,9 +261,12 @@ export type ResearchOutputGrant = {
 
 export type ResearchOutputGrantDocument = {
   grantType: GrantType;
-  project: Pick<ProjectDataObject, 'id' | 'title' | 'projectType'>;
+  project: Pick<ProjectDataObject, 'id' | 'title' | 'projectType'> & {
+    teams: Pick<TeamResponse, 'id' | 'displayName'>[];
+  };
   original: ResearchOutputGrant;
   supplement?: ResearchOutputGrant;
+  pdfUrl?: string;
 };
 
 export type ResearchOutputDataObject = ResearchOutputCoreObject & {

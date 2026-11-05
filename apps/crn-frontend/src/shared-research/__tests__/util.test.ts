@@ -326,6 +326,7 @@ describe('isGrantEnded', () => {
     id: 'project-1',
     title: 'Project',
     projectType: 'Discovery Project' as const,
+    teams: [],
   };
   const original = {
     title: 'Original',

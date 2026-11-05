@@ -201,6 +201,7 @@ describe('Grant Document page', () => {
     id: 'project-id',
     title: 'Project title',
     projectType: 'Discovery Project' as const,
+    teams: [{ id: 'project-team-id', displayName: 'Project Team' }],
   };
   const grantProps: ComponentProps<typeof SharedResearchOutput> = {
     ...props,
