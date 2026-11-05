@@ -149,7 +149,10 @@ describe('avatar', () => {
     const badgeLink = screen.getByRole('link', {
       name: /open science champion badge/i,
     });
-    expect(badgeLink.getAttribute('href')).toContain('#badges');
+    expect(badgeLink).toHaveAttribute(
+      'href',
+      `${network({}).users({}).user({ userId: 'u1' }).overview({}).$}#badges`,
+    );
     expect(badgeLink.querySelector('img')).toHaveAttribute('src', 'new');
   });
 });

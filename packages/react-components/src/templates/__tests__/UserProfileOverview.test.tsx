@@ -39,6 +39,38 @@ it('hides the open questions for staff', () => {
   ).not.toBeInTheDocument();
 });
 
+it('renders the badges card when a team has an award', () => {
+  render(
+    <UserProfileOverview
+      {...props}
+      teams={[
+        {
+          id: 'team-1',
+          displayName: 'Team 1',
+          role: 'Project Manager',
+          awards: [
+            {
+              name: 'Open Science Champion',
+              date: '2024-01-01',
+              iconUrl: 'icon',
+            },
+          ],
+        },
+      ]}
+    />,
+  );
+
+  expect(screen.getByRole('heading', { name: 'Badges' })).toBeVisible();
+});
+
+it('does not render the badges card without awards', () => {
+  render(<UserProfileOverview {...props} teams={[]} />);
+
+  expect(
+    screen.queryByRole('heading', { name: 'Badges' }),
+  ).not.toBeInTheDocument();
+});
+
 it('passes each edit href to its card', () => {
   render(
     <UserProfileOverview

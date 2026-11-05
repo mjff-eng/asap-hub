@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
-import { UserResponse } from '@asap-hub/model';
+import { getUserAwards, UserResponse } from '@asap-hub/model';
 
 import {
+  UserProfileBadges,
   UserProfileBiographyNew,
   UserProfileExpertiseNew,
   UserProfileRecentWorksNew,
@@ -35,6 +36,7 @@ const UserProfileOverview: React.FC<Props> = ({ editHrefs, ...props }) => (
       editHref={editHrefs?.expertiseAndResources}
     />
     <UserProfileRoleNew {...props} editHref={editHrefs?.role} />
+    <UserProfileBadges badges={getUserAwards(props.teams)} />
     <UserProfileRecentWorksNew {...props} />
   </div>
 );

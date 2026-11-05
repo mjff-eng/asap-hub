@@ -297,7 +297,7 @@ const UserProfileHeaderNew: React.FC<UserProfileHeaderNewProps> = ({
                     ? {
                         name: latestAward.name,
                         iconUrl: latestAward.iconUrl,
-                        href: `${tabRoutes.research({}).$}#${badgesAnchorId}`,
+                        href: `${tabRoutes.overview({}).$}#${badgesAnchorId}`,
                       }
                     : undefined
                 }
