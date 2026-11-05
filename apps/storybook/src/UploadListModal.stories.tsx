@@ -67,7 +67,7 @@ const commonArgs = {
   onBack: () => undefined,
 };
 
-const seedFiles = [new File([], 'attendees.csv')];
+const seedFile = new File([], 'attendees.csv');
 
 // Starts on the empty step; the parse mock delays ~1s so the Add spinner shows.
 export const Default: Story = {
@@ -84,7 +84,7 @@ export const Default: Story = {
 export const AllMatched: Story = {
   args: {
     ...commonArgs,
-    initialFiles: seedFiles,
+    initialFile: seedFile,
     initialResult: { ...fullResult, unmatched: [] },
     initialSectionsOpen: true,
   },
@@ -93,12 +93,34 @@ export const AllMatched: Story = {
 export const NoMatches: Story = {
   args: {
     ...commonArgs,
-    initialFiles: seedFiles,
+    initialFile: seedFile,
     initialResult: {
       matched: [],
       unmatched: fullResult.unmatched,
     },
     initialSectionsOpen: true,
+  },
+};
+
+export const AttendanceWillChange: Story = {
+  args: {
+    ...commonArgs,
+    currentTeams: [
+      { teamId: 'm1', teamName: 'Aguzzi', attended: false },
+      { teamId: 'm2', teamName: 'Alessi', attended: false },
+    ],
+    initialFile: seedFile,
+    initialResult: fullResult,
+    initialSectionsOpen: true,
+  },
+};
+
+export const NothingToChange: Story = {
+  args: {
+    ...commonArgs,
+    currentTeams: fullResult.matched,
+    initialFile: seedFile,
+    initialResult: { ...fullResult, unmatched: [] },
   },
 };
 
