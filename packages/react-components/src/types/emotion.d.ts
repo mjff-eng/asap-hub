@@ -29,7 +29,6 @@ declare module '@emotion/react' {
       };
       TabLink?: {
         styles: SerializedStyles;
-        layoutStyles: SerializedStyles;
       };
       ExternalLink?: {
         styles: SerializedStyles;

@@ -3,12 +3,13 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { colour } from '../colors';
-import { Card, Display, Link, Paragraph, TabButton } from '../atoms';
+import { Card, Display, Headline3, Link, Paragraph, TabButton } from '../atoms';
 import { TabNav } from '../molecules';
 import { rem } from '../pixels';
 
 const tabsContainerStyles = css({
   display: 'flex',
+  marginTop: rem(40),
   borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
@@ -65,7 +66,7 @@ const ProjectDetailOverview: React.FC<ProjectDetailOverviewProps> = ({
   return (
     <Card>
       <div>
-        <Display styleAsHeading={3}>Overview</Display>
+        <Headline3 noMargin>Overview</Headline3>
 
         {supplementGrant?.grantTitle ? (
           <>
@@ -101,7 +102,7 @@ const ProjectDetailOverview: React.FC<ProjectDetailOverviewProps> = ({
             </div>
           </>
         ) : (
-          <div css={css({ marginTop: rem(24) })}>
+          <div css={css({ marginTop: rem(36) })}>
             <ProjectDetailOverviewContent
               description={originalGrant.originalGrant}
               proposalURL={originalGrant.proposalId}

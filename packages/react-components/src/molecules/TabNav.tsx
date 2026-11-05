@@ -1,11 +1,6 @@
 import { css } from '@emotion/react';
 
-import {
-  vminLinearCalc,
-  mobileScreen,
-  largeDesktopScreen,
-  rem,
-} from '../pixels';
+import { rem } from '../pixels';
 import { colour, colourWithAlpha } from '../colors';
 
 const shadowWidth = 18;
@@ -54,13 +49,7 @@ const styles = css({
   listStyle: 'none',
 
   '> li:not(:last-of-type)': {
-    paddingRight: vminLinearCalc(
-      mobileScreen,
-      18,
-      largeDesktopScreen,
-      30,
-      'px',
-    ),
+    paddingRight: rem(4),
   },
 });
 

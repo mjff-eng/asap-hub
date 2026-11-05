@@ -18,13 +18,12 @@ const cardContentStyles = css({
 
 const subtitleStyles = css({
   marginTop: rem(24),
-  marginBottom: rem(12),
+  marginBottom: rem(40),
 });
 
 const tabsContainerStyles = css({
   display: 'flex',
   borderBottom: `1px solid ${colour.border.tertiary}`,
-  marginTop: rem(8),
 });
 
 const tabContentStyles = css({

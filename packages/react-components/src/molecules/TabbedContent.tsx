@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { css } from '@emotion/react';
+import { css, SerializedStyles } from '@emotion/react';
 import { ReactNode, useEffect, useState } from 'react';
 import { Headline3, TabButton, Button } from '../atoms';
 import { colour } from '../colors';
@@ -12,6 +12,15 @@ const headerStyles = css({
   borderBottom: `1px solid ${colour.border.tertiary}`,
 });
 
+const titleStyles = css({
+  marginBottom: rem(24),
+});
+
+const descriptionStyles = (description?: ReactNode) =>
+  css({
+    marginBottom: description ? rem(40) : rem(16),
+  });
+
 const showMoreStyles = css({
   display: 'flex',
   justifyContent: 'center',
@@ -21,7 +30,7 @@ const showMoreStyles = css({
 });
 
 const emptyContainer = css({
-  paddingTop: rem(32),
+  paddingTop: rem(24),
 });
 
 export type TabProps<T> = {
@@ -35,6 +44,7 @@ export type TabProps<T> = {
 type TabbedCardProps<T> = {
   title?: string;
   description?: ReactNode;
+  overrideDescriptionStyles?: SerializedStyles;
   tabs: TabProps<T>[];
   activeTabIndex?: number;
   onTabChange?: (index: number) => void;
@@ -45,6 +55,7 @@ type TabbedCardProps<T> = {
 export const TabbedContent = <T extends object>({
   title,
   description,
+  overrideDescriptionStyles,
   tabs,
   activeTabIndex = 0,
   onTabChange,
@@ -62,11 +73,13 @@ export const TabbedContent = <T extends object>({
 
   return (
     <div>
-      <div css={[headerStyles]}>
-        <div css={{ marginBottom: rem(24) }}>
+      <div css={headerStyles}>
+        <div css={titleStyles}>
           <Headline3 noMargin>{title}</Headline3>
         </div>
-        {description}
+        <div css={[descriptionStyles(description), overrideDescriptionStyles]}>
+          {description}
+        </div>
         <TabNav>
           {tabs.map(({ tabTitle, disabled }, index) => (
             <TabButton
