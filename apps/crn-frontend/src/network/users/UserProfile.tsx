@@ -4,7 +4,11 @@ import {
   UserProfilePage,
   NoEvents,
 } from '@asap-hub/react-components';
-import { useCurrentUserCRN, UserProfileContext } from '@asap-hub/react-context';
+import {
+  useCurrentUserCRN,
+  useFlags,
+  UserProfileContext,
+} from '@asap-hub/react-context';
 import { events, network, useRouteParams } from '@asap-hub/routing';
 import { ComponentProps, FC, lazy } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router';
@@ -20,6 +24,8 @@ import { useManageUserAvatar } from './useManageUserAvatar';
 
 const loadResearch = () =>
   import(/* webpackChunkName: "network-profile-research" */ './Research');
+const loadOverview = () =>
+  import(/* webpackChunkName: "network-profile-overview" */ './Overview');
 const loadAbout = () =>
   import(/* webpackChunkName: "network-profile-about" */ './About');
 const loadOutputs = () =>
@@ -29,6 +35,7 @@ const loadEditing = () =>
 const loadEventsList = () =>
   import(/* webpackChunkName: "network-events" */ '../EventsEmbedList');
 const Research = lazy(loadResearch);
+const Overview = lazy(loadOverview);
 const About = lazy(loadAbout);
 const Outputs = lazy(loadOutputs);
 const Editing = lazy(loadEditing);
@@ -43,6 +50,8 @@ const UserProfile: FC<UserProfileProps> = ({ currentTime }) => {
   const { userId } = useRouteParams(route);
 
   const tabRoute = useCurrentUserProfileTabRoute();
+  const { isEnabled } = useFlags();
+  const isNewUserDetailPageEnabled = isEnabled('NEW_USER_DETAIL_PAGE');
 
   const user = useUserById(userId);
   const currentUser = useCurrentUserCRN();
@@ -126,6 +135,21 @@ const UserProfile: FC<UserProfileProps> = ({ currentTime }) => {
                       </Frame>
                     }
                   />
+                  {isNewUserDetailPageEnabled && (
+                    <Route
+                      path="overview/*"
+                      element={
+                        <Frame title="Overview">
+                          <>
+                            <Overview user={user} />
+                            {isOwnProfile && tabRoute && (
+                              <Editing user={user} backHref={tabRoute({}).$} />
+                            )}
+                          </>
+                        </Frame>
+                      }
+                    />
+                  )}
                   <Route
                     path="about/*"
                     element={
@@ -202,7 +226,14 @@ const UserProfile: FC<UserProfileProps> = ({ currentTime }) => {
                   <Route
                     index
                     element={
-                      <Navigate to={route({ userId }).research({}).$} replace />
+                      <Navigate
+                        to={
+                          isNewUserDetailPageEnabled
+                            ? route({ userId }).overview({}).$
+                            : route({ userId }).research({}).$
+                        }
+                        replace
+                      />
                     }
                   />
                 </Routes>

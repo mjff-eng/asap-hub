@@ -264,7 +264,7 @@ const UserProfileHeaderNew: React.FC<UserProfileHeaderNewProps> = ({
           }
           nav={
             <TabNav>
-              <TabLink href={tabRoutes.research({}).$}>Overview</TabLink>
+              <TabLink href={tabRoutes.overview({}).$}>Overview</TabLink>
               <TabLink href={tabRoutes.about({}).$}>Memberships</TabLink>
               <TabLink href={tabRoutes.outputs({}).$}>
                 Outputs
@@ -297,7 +297,7 @@ const UserProfileHeaderNew: React.FC<UserProfileHeaderNewProps> = ({
                     ? {
                         name: latestAward.name,
                         iconUrl: latestAward.iconUrl,
-                        href: `${tabRoutes.research({}).$}#${badgesAnchorId}`,
+                        href: `${tabRoutes.overview({}).$}#${badgesAnchorId}`,
                       }
                     : undefined
                 }
