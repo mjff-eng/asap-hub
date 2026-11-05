@@ -37869,12 +37869,123 @@ export type ResearchOutputsContentFragment = Pick<
   }>;
 };
 
+export type GrantDocumentProjectFragment = Pick<
+  Projects,
+  'title' | 'projectType' | 'originalGrant' | 'startDate' | 'endDate'
+> & {
+  sys: Pick<Sys, 'id'>;
+  membersCollection?: Maybe<{
+    items: Array<
+      Maybe<{
+        projectMember?: Maybe<
+          | ({ __typename: 'Teams' } & Pick<Teams, 'displayName'> & {
+                sys: Pick<Sys, 'id'>;
+              })
+          | { __typename: 'Users' }
+        >;
+      }>
+    >;
+  }>;
+  proposal?: Maybe<Pick<ResearchOutputs, 'title'> & { sys: Pick<Sys, 'id'> }>;
+  supplementGrant?: Maybe<
+    Pick<SupplementGrant, 'title' | 'description' | 'startDate' | 'endDate'> & {
+      proposal?: Maybe<{ sys: Pick<Sys, 'id'> }>;
+    }
+  >;
+};
+
+export type GrantDocumentContentFragment = {
+  grantPdf?: Maybe<Pick<Asset, 'url'>>;
+  linkedFrom?: Maybe<{
+    projectsCollection?: Maybe<{
+      items: Array<
+        Maybe<
+          Pick<
+            Projects,
+            'title' | 'projectType' | 'originalGrant' | 'startDate' | 'endDate'
+          > & {
+            sys: Pick<Sys, 'id'>;
+            membersCollection?: Maybe<{
+              items: Array<
+                Maybe<{
+                  projectMember?: Maybe<
+                    | ({ __typename: 'Teams' } & Pick<Teams, 'displayName'> & {
+                          sys: Pick<Sys, 'id'>;
+                        })
+                    | { __typename: 'Users' }
+                  >;
+                }>
+              >;
+            }>;
+            proposal?: Maybe<
+              Pick<ResearchOutputs, 'title'> & { sys: Pick<Sys, 'id'> }
+            >;
+            supplementGrant?: Maybe<
+              Pick<
+                SupplementGrant,
+                'title' | 'description' | 'startDate' | 'endDate'
+              > & { proposal?: Maybe<{ sys: Pick<Sys, 'id'> }> }
+            >;
+          }
+        >
+      >;
+    }>;
+    supplementGrantCollection?: Maybe<{
+      items: Array<
+        Maybe<{
+          linkedFrom?: Maybe<{
+            projectsCollection?: Maybe<{
+              items: Array<
+                Maybe<
+                  Pick<
+                    Projects,
+                    | 'title'
+                    | 'projectType'
+                    | 'originalGrant'
+                    | 'startDate'
+                    | 'endDate'
+                  > & {
+                    sys: Pick<Sys, 'id'>;
+                    membersCollection?: Maybe<{
+                      items: Array<
+                        Maybe<{
+                          projectMember?: Maybe<
+                            | ({ __typename: 'Teams' } & Pick<
+                                Teams,
+                                'displayName'
+                              > & { sys: Pick<Sys, 'id'> })
+                            | { __typename: 'Users' }
+                          >;
+                        }>
+                      >;
+                    }>;
+                    proposal?: Maybe<
+                      Pick<ResearchOutputs, 'title'> & { sys: Pick<Sys, 'id'> }
+                    >;
+                    supplementGrant?: Maybe<
+                      Pick<
+                        SupplementGrant,
+                        'title' | 'description' | 'startDate' | 'endDate'
+                      > & { proposal?: Maybe<{ sys: Pick<Sys, 'id'> }> }
+                    >;
+                  }
+                >
+              >;
+            }>;
+          }>;
+        }>
+      >;
+    }>;
+  }>;
+};
+
 export type FetchResearchOutputByIdQueryVariables = Exact<{
   id: Scalars['String'];
   preview?: InputMaybe<Scalars['Boolean']>;
   fetchPMs?: InputMaybe<Scalars['Boolean']>;
   singleOutput?: InputMaybe<Scalars['Boolean']>;
   relatedResearchWhere?: InputMaybe<ResearchOutputsFilter>;
+  includeGrantDocument?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 export type FetchResearchOutputByIdQuery = {
@@ -38140,6 +38251,92 @@ export type FetchResearchOutputByIdQuery = {
             >
           >;
         }>;
+        projectsCollection?: Maybe<{
+          items: Array<
+            Maybe<
+              Pick<
+                Projects,
+                | 'title'
+                | 'projectType'
+                | 'originalGrant'
+                | 'startDate'
+                | 'endDate'
+              > & {
+                sys: Pick<Sys, 'id'>;
+                membersCollection?: Maybe<{
+                  items: Array<
+                    Maybe<{
+                      projectMember?: Maybe<
+                        | ({ __typename: 'Teams' } & Pick<
+                            Teams,
+                            'displayName'
+                          > & { sys: Pick<Sys, 'id'> })
+                        | { __typename: 'Users' }
+                      >;
+                    }>
+                  >;
+                }>;
+                proposal?: Maybe<
+                  Pick<ResearchOutputs, 'title'> & { sys: Pick<Sys, 'id'> }
+                >;
+                supplementGrant?: Maybe<
+                  Pick<
+                    SupplementGrant,
+                    'title' | 'description' | 'startDate' | 'endDate'
+                  > & { proposal?: Maybe<{ sys: Pick<Sys, 'id'> }> }
+                >;
+              }
+            >
+          >;
+        }>;
+        supplementGrantCollection?: Maybe<{
+          items: Array<
+            Maybe<{
+              linkedFrom?: Maybe<{
+                projectsCollection?: Maybe<{
+                  items: Array<
+                    Maybe<
+                      Pick<
+                        Projects,
+                        | 'title'
+                        | 'projectType'
+                        | 'originalGrant'
+                        | 'startDate'
+                        | 'endDate'
+                      > & {
+                        sys: Pick<Sys, 'id'>;
+                        membersCollection?: Maybe<{
+                          items: Array<
+                            Maybe<{
+                              projectMember?: Maybe<
+                                | ({ __typename: 'Teams' } & Pick<
+                                    Teams,
+                                    'displayName'
+                                  > & { sys: Pick<Sys, 'id'> })
+                                | { __typename: 'Users' }
+                              >;
+                            }>
+                          >;
+                        }>;
+                        proposal?: Maybe<
+                          Pick<ResearchOutputs, 'title'> & {
+                            sys: Pick<Sys, 'id'>;
+                          }
+                        >;
+                        supplementGrant?: Maybe<
+                          Pick<
+                            SupplementGrant,
+                            'title' | 'description' | 'startDate' | 'endDate'
+                          > & { proposal?: Maybe<{ sys: Pick<Sys, 'id'> }> }
+                        >;
+                      }
+                    >
+                  >;
+                }>;
+              }>;
+            }>
+          >;
+        }>;
       }>;
       relatedEventsCollection?: Maybe<{
         items: Array<
@@ -38171,6 +38368,7 @@ export type FetchResearchOutputByIdQuery = {
           }>;
         }>;
       }>;
+      grantPdf?: Maybe<Pick<Asset, 'url'>>;
     }
   >;
 };
@@ -50227,6 +50425,306 @@ export const ResearchOutputsContentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<ResearchOutputsContentFragment, unknown>;
+export const GrantDocumentProjectFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'GrantDocumentProject' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Projects' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'sys' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'projectType' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'originalGrant' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'endDate' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'membersCollection' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: { kind: 'IntValue', value: '100' },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'projectMember' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: '__typename' },
+                            },
+                            {
+                              kind: 'InlineFragment',
+                              typeCondition: {
+                                kind: 'NamedType',
+                                name: { kind: 'Name', value: 'Teams' },
+                              },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'sys' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: { kind: 'Name', value: 'id' },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'displayName',
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'proposal' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'sys' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'supplementGrant' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'endDate' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'proposal' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'sys' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GrantDocumentProjectFragment, unknown>;
+export const GrantDocumentContentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'GrantDocumentContent' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'ResearchOutputs' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'grantPdf' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'linkedFrom' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'projectsCollection' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'limit' },
+                      value: { kind: 'IntValue', value: '1' },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'items' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: {
+                                kind: 'Name',
+                                value: 'GrantDocumentProject',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'supplementGrantCollection' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'limit' },
+                      value: { kind: 'IntValue', value: '1' },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'items' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'linkedFrom' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'projectsCollection',
+                                    },
+                                    arguments: [
+                                      {
+                                        kind: 'Argument',
+                                        name: { kind: 'Name', value: 'limit' },
+                                        value: { kind: 'IntValue', value: '1' },
+                                      },
+                                    ],
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'items',
+                                          },
+                                          selectionSet: {
+                                            kind: 'SelectionSet',
+                                            selections: [
+                                              {
+                                                kind: 'FragmentSpread',
+                                                name: {
+                                                  kind: 'Name',
+                                                  value: 'GrantDocumentProject',
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    ...GrantDocumentProjectFragmentDoc.definitions,
+  ],
+} as unknown as DocumentNode<GrantDocumentContentFragment, unknown>;
 export const ResearchTagsContentFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -73728,6 +74226,15 @@ export const FetchResearchOutputByIdDocument = {
           },
           defaultValue: { kind: 'ObjectValue', fields: [] },
         },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'includeGrantDocument' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+          defaultValue: { kind: 'BooleanValue', value: false },
+        },
       ],
       selectionSet: {
         kind: 'SelectionSet',
@@ -73760,6 +74267,29 @@ export const FetchResearchOutputByIdDocument = {
                   kind: 'FragmentSpread',
                   name: { kind: 'Name', value: 'ResearchOutputsContent' },
                 },
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'GrantDocumentContent' },
+                  directives: [
+                    {
+                      kind: 'Directive',
+                      name: { kind: 'Name', value: 'include' },
+                      arguments: [
+                        {
+                          kind: 'Argument',
+                          name: { kind: 'Name', value: 'if' },
+                          value: {
+                            kind: 'Variable',
+                            name: {
+                              kind: 'Name',
+                              value: 'includeGrantDocument',
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                },
               ],
             },
           },
@@ -73767,6 +74297,7 @@ export const FetchResearchOutputByIdDocument = {
       },
     },
     ...ResearchOutputsContentFragmentDoc.definitions,
+    ...GrantDocumentContentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<
   FetchResearchOutputByIdQuery,
