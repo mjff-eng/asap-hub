@@ -7,7 +7,7 @@ import { colour } from '../colors';
 import { CircleInfoIcon, ExternalLinkIcon, OrcidIcon } from '../icons';
 import { mailToSupport } from '../mail';
 import { LinkHeadline } from '../molecules';
-import { rem } from '../pixels';
+import { mobileScreen, rem } from '../pixels';
 import {
   bodyTextStyles,
   cardContentStyles,
@@ -15,6 +15,13 @@ import {
   emptyStateTextStyles,
 } from './shared-user-profile-card-styles';
 import { formatOrcidPublicationDate, orcidWorkTypeLabels } from './orcid-works';
+
+const worksHeaderStyles = css({
+  [`@media (max-width: ${mobileScreen.max}px)`]: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+});
 
 const viaOrcidStyles = css({
   display: 'flex',
@@ -93,7 +100,7 @@ const UserProfileRecentWorksNew: React.FC<Props> = ({
   return (
     <Card padding={false} title="Recent Publications">
       <div css={cardContentStyles}>
-        <div css={cardHeaderStyles}>
+        <div css={[cardHeaderStyles, worksHeaderStyles]}>
           <Headline2 styleAsHeading={3} noMargin>
             Recent Publications ({orcidWorks.length})
           </Headline2>

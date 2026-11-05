@@ -16,7 +16,7 @@ const questionFields = [
   {
     required: true,
     placeholder:
-      'Does alpha-synuclein represent a pathologically relevant stimulator of microglial activation?',
+      'Example: Does alpha-synuclein represent a pathologically relevant stimulator of microglial activation?',
     validationMessage: 'Please add your second Open Question',
   },
   {
