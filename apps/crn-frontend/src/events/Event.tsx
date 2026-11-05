@@ -96,9 +96,9 @@ const Event: React.FC = () => {
             loadSearchOptions={(search) =>
               searchAttendance(search, event.endDate, event.interestGroup?.id)
             }
-            onUploadList={async (files: File[]) => {
+            onUploadList={async (file: File) => {
               const [rows, corpus] = await Promise.all([
-                parseTeamRows(files),
+                parseTeamRows(file),
                 fetchTeamsForMatching(),
               ]);
               return matchTeamNames(rows, corpus);
