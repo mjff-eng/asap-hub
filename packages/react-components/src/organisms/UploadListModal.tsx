@@ -335,9 +335,7 @@ const formatTooltipStyles = css({
   paddingTop: 0,
   paddingBottom: 0,
   textAlign: 'left',
-  fontSize: rem(14),
-  fontWeight: 400,
-  lineHeight: rem(16),
+  lineHeight: 16 / 14,
 });
 
 const unmatchedHelpStyles = css({

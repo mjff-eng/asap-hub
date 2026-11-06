@@ -6,7 +6,6 @@ import { Link, Tooltip } from '../atoms';
 import { colour } from '../colors';
 import { useTooltipTrigger } from '../hooks';
 import { rem, mobileScreen, tabletScreen } from '../pixels';
-import { captionRegularStyles } from '../text';
 
 const containerStyles = css({
   [`@media (max-width: ${mobileScreen.max}px)`]: {
@@ -33,10 +32,6 @@ const tooltipBubbleStyles = css({
   },
 });
 
-const tooltipTextStyles = css(captionRegularStyles, {
-  display: 'block',
-});
-
 const isValidMeetingLink = (meetingLink?: string): meetingLink is string =>
   !!meetingLink && new RegExp(urlExpression).test(meetingLink);
 
@@ -61,11 +56,9 @@ const JoinMeetingButton: React.FC<JoinMeetingButtonProps> = ({
         background={colour.foreground['color-blue']}
         textStyles={tooltipBubbleStyles}
       >
-        <span css={tooltipTextStyles}>
-          We’re sorry but we couldn’t find the link to this event.
-          <br />
-          Please contact ASAP for more information.
-        </span>
+        We’re sorry but we couldn’t find the link to this event.
+        <br />
+        Please contact ASAP for more information.
       </Tooltip>
     </div>
   );

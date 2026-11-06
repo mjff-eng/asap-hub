@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import { Tooltip } from '../atoms';
 import { colour } from '../colors';
 import { rem } from '../pixels';
+import { fontStyles } from '../text';
 
 const buttonStyles = css({
   padding: 0,
@@ -15,6 +16,7 @@ const buttonStyles = css({
 });
 
 const hoverBodyStyles = css({
+  ...fontStyles,
   display: 'grid',
   gridRowGap: rem(8),
   padding: `${rem(3)} ${rem(4)}`,

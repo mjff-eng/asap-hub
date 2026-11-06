@@ -76,11 +76,6 @@ export const fontStyles = {
   fontSize: `${body.fontSize}px`,
   lineHeight: rem(body.lineHeight),
 } as const;
-export const captionRegularStyles = {
-  fontFamily: `'Nunito Sans', ${fontStyles.fontFamily}`,
-  fontSize: rem(14),
-  lineHeight: 24 / 14,
-} as const;
 export const layoutStyles = {
   marginTop: '12px',
   marginBottom: '12px',

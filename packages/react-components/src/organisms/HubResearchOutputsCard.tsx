@@ -23,9 +23,7 @@ const tooltipTextStyles = css({
   paddingTop: 0,
   paddingBottom: 0,
   textAlign: 'center',
-  fontSize: rem(14),
   lineHeight: 16 / 14,
-  fontWeight: 'normal',
 });
 
 const tableStyles = css({
