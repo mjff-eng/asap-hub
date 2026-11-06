@@ -1,0 +1,121 @@
+name: demo sls package action
+description: Package the demo-hub serverless stack
+
+inputs:
+  aws-access-key-id:
+    description: 'AWS Access Key ID'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key'
+    required: true
+  aws-region:
+    description: 'AWS Region'
+    required: true
+  environment-name:
+    description: 'The environment name'
+    required: true
+  demo-hostname:
+    description: 'Demo Hostname'
+    required: true
+  demo-hosted-zone-name:
+    description: 'Demo Route53 hosted zone name'
+    required: true
+  demo-aws-acm-certificate-arn:
+    description: 'Arn for the AWS ACM Certificate covering the demo hostname'
+    required: true
+  demo-auth0-domain:
+    description: 'Demo Auth0 Domain'
+    required: true
+  demo-auth0-client-id:
+    description: 'Demo Auth0 Client ID'
+    required: true
+  demo-auth0-audience:
+    description: 'Demo Auth0 Audience'
+    required: true
+  demo-cloudfront-public-key-b64:
+    description: 'Demo CloudFront signing public key, base64 encoded PEM'
+    required: true
+  demo-ses-region:
+    description: 'Demo SES Region'
+    required: true
+  demo-email-sender:
+    description: 'Demo SES sender address'
+    required: true
+  demo-vpc-id:
+    description: 'Demo encoder VPC id'
+    required: true
+  demo-subnet-ids:
+    description: 'Demo encoder subnet ids, comma separated'
+    required: true
+  sls-stage:
+    description: 'Serverless Stage'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup
+      id: setup
+      uses: ./.github/actions/setup-environment
+      with:
+        environment-name: ${{ inputs.environment-name }}
+    - name: Cache build output
+      uses: ./.github/actions/cache-unplugged
+      with:
+        environment-name: ${{ inputs.environment-name }}
+    - name: Cache build definitions
+      uses: ./.github/actions/cache-build
+      with:
+        cache-prefix: ${{ steps.setup.outputs.cache-prefix-definitions }}
+        environment-name: ${{ inputs.environment-name }}
+    - name: Cache transpile output
+      uses: ./.github/actions/cache-build
+      with:
+        cache-prefix: ${{ steps.setup.outputs.cache-prefix-transpile }}
+        environment-name: ${{ inputs.environment-name }}
+    # the PEM cannot live verbatim in .github/environment (one key=value per
+    # line), so it is stored base64 encoded and decoded back here
+    - name: Decode CloudFront public key
+      id: cloudfront-key
+      shell: bash
+      env:
+        CLOUDFRONT_PUBLIC_KEY_B64: ${{ inputs.demo-cloudfront-public-key-b64 }}
+      run: |
+        {
+          echo 'value<<CLOUDFRONT_PUBLIC_KEY_EOF'
+          printf '%s' "$CLOUDFRONT_PUBLIC_KEY_B64" | base64 -d
+          echo
+          echo 'CLOUDFRONT_PUBLIC_KEY_EOF'
+        } >> $GITHUB_OUTPUT
+    - name: Generate package
+      shell: bash
+      run: |
+        yarn workspace @asap-hub/demo-server run pnpify serverless package --package $PWD/demo-server-sls-package
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
+        AWS_ACM_CERTIFICATE_ARN: ${{ inputs.demo-aws-acm-certificate-arn }}
+        AWS_REGION: ${{ inputs.aws-region }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
+        CLOUDFRONT_PUBLIC_KEY: ${{ steps.cloudfront-key.outputs.value }}
+        CURRENT_REVISION: ${{ github.sha }}
+        DEMO_AUTH0_AUDIENCE: ${{ inputs.demo-auth0-audience }}
+        DEMO_AUTH0_CLIENT_ID: ${{ inputs.demo-auth0-client-id }}
+        DEMO_AUTH0_DOMAIN: ${{ inputs.demo-auth0-domain }}
+        DEMO_HOSTNAME: ${{ inputs.demo-hostname }}
+        DEMO_SUBNET_IDS: ${{ inputs.demo-subnet-ids }}
+        DEMO_VPC_ID: ${{ inputs.demo-vpc-id }}
+        EMAIL_SENDER: ${{ inputs.demo-email-sender }}
+        HOSTED_ZONE_NAME: ${{ inputs.demo-hosted-zone-name }}
+        NODE_ENV: 'production'
+        # Leave headroom for the esbuild native process (not bound by this
+        # flag) — an 8GB heap cap starved it and got it OOM-killed
+        NODE_OPTIONS: '--max-old-space-size=6144'
+        SES_REGION: ${{ inputs.demo-ses-region }}
+        SLS_STAGE: ${{ inputs.sls-stage }}
+        S3_SYNC_ENABLED: 'false'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: demo-server-sls-package-${{ inputs.environment-name }}
+        path: 'demo-server-sls-package'
+        retention-days: 1
+        overwrite: true

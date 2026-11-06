@@ -1,0 +1,63 @@
+{
+  "name": "@asap-hub/demo-server",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "build:babel": "../../scripts/build-babel.sh build",
+    "build:encoder": "esbuild encoder/render.ts --bundle --platform=node --target=node20 --format=cjs --outfile=encoder/dist/render.js",
+    "watch:babel": "../../scripts/build-babel.sh watch",
+    "typecheck": "tsc",
+    "test": "WORKSPACE_PATH=apps/demo-server yarn workspace asap-hub test:workspace",
+    "test:coverage": "WORKSPACE_PATH=apps/demo-server; yarn workspace asap-hub test:workspace --coverage --coverageDirectory=./$WORKSPACE_PATH/coverage/",
+    "local:setup": "ts-node ./scripts/local-setup.ts",
+    "invite": "ts-node ./scripts/invite.ts"
+  },
+  "dependenciesMeta": {
+    "serverless": {
+      "built": false
+    },
+    "serverless-s3-sync": {
+      "unplugged": true
+    }
+  },
+  "dependencies": {
+    "@asap-hub/demo-timeline": "workspace:*",
+    "@aws-sdk/client-dynamodb": "^3.687.0",
+    "@aws-sdk/client-ecs": "^3.758.0",
+    "@aws-sdk/client-s3": "^3.758.0",
+    "@aws-sdk/client-ses": "^3.306.0",
+    "@aws-sdk/client-ssm": "^3.758.0",
+    "@aws-sdk/cloudfront-signer": "^3.758.0",
+    "@aws-sdk/lib-dynamodb": "^3.687.0",
+    "@aws-sdk/s3-request-presigner": "^3.758.0",
+    "@babel/runtime-corejs3": "7.28.6",
+    "@yarnpkg/pnpify": "3.1.8",
+    "electrodb": "^3.9.3",
+    "express": "4.20.0",
+    "serverless-http": "2.7.0",
+    "uuid": "8.3.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "7.28.6",
+    "@babel/preset-typescript": "7.28.5",
+    "@serverless/typescript": "3.38.0",
+    "@types/aws-lambda": "8.10.159",
+    "@types/express": "4.17.21",
+    "@types/jest": "29.5.14",
+    "@types/node": "20.10.5",
+    "@types/serverless": "3.12.27",
+    "@types/supertest": "2.0.16",
+    "@types/uuid": "8.3.4",
+    "esbuild": "^0.25.0",
+    "serverless": "3.38.0",
+    "serverless-esbuild": "^1.57.2",
+    "serverless-offline": "13.10.0",
+    "serverless-s3-sync": "3.2.0",
+    "supertest": "6.3.3",
+    "ts-node": "10.9.2"
+  }
+}

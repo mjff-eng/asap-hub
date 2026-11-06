@@ -178,6 +178,14 @@ export const onExecutePostLogin = async (
   event: Auth0PostLoginEventWithSecrets,
   api: Auth0PostLoginApi,
 ) => {
+  // the demo hub manages its own users in DynamoDB, so fetching metadata from
+  // the CRN/GP2 API would deny anyone without a Contentful record
+  if (
+    event.secrets.DEMO_CLIENT_ID &&
+    event.client.client_id === event.secrets.DEMO_CLIENT_ID
+  ) {
+    return true;
+  }
   try {
     if (event.client.name === 'ASAP KR-Sync') {
       const apiUrl = event.secrets.API_URL ?? '##API_URL##';
