@@ -307,7 +307,7 @@ const UserProfileHeaderNew: React.FC<UserProfileHeaderNewProps> = ({
             </div>
 
             <div css={nameStyles}>
-              <Display styleAsHeading={2} noMargin>
+              <Display styleAsHeading={4} noMargin>
                 {fullDisplayName}
                 {degree ? (
                   <span css={degreeStyles}>, {degree}</span>
