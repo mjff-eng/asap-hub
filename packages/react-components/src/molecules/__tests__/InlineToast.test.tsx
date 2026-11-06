@@ -1,6 +1,8 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { colour } from '../../colors';
+import { rem } from '../../pixels';
 import InlineToast from '../InlineToast';
 
 const defaultProps = {
@@ -31,6 +33,31 @@ it('Should render an error icon for the error accent', () => {
 
   expect(screen.getByTitle('Error')).toBeInTheDocument();
   expect(screen.queryByTitle('Success')).not.toBeInTheDocument();
+});
+
+it('Should render the neutral accent with an info icon and neutral styles', () => {
+  render(
+    <InlineToast
+      {...defaultProps}
+      accent="neutral"
+      message="Jane Doe is already added to Team Alpha"
+      onUndo={undefined}
+    />,
+  );
+
+  expect(screen.getByTitle('Info circle')).toBeInTheDocument();
+  const toast = screen.getByRole('status');
+  expect(toast).toHaveStyleRule('background-color', colour.background.neutral);
+  expect(toast).toHaveStyleRule('color', colour.foreground.neutral);
+  expect(toast).toHaveStyleRule('border-radius', rem(4));
+  const message = screen.getByText('Jane Doe is already added to Team Alpha');
+  expect(message).toHaveStyleRule('font-size', rem(16));
+  expect(message).toHaveStyleRule('font-weight', '500');
+  expect(
+    screen.getByRole('button', { name: 'Dismiss message' }),
+  ).toHaveStyleRule('stroke', colour.foreground.neutral, {
+    target: 'svg path',
+  });
 });
 
 it('Should omit Undo when there is nothing to undo', () => {

@@ -181,8 +181,8 @@ const ExternalSpeakerAffiliationCard: React.FC<
     </div>
     <div css={messageStyles}>
       <Paragraph noMargin styles={bodyStyles}>
-        This speaker is not a member on any CRN team or individual project.
-        Select the team or project they represented for this meeting or choose
+        This speaker is not a member on any CRN team or project. Select the team
+        or individual project they represented for this meeting or choose
         &quot;External Guest&quot; to proceed without an affiliation.
       </Paragraph>
       <Paragraph noMargin styles={disclaimerStyles}>
