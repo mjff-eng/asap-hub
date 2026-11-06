@@ -90,7 +90,7 @@ const textStyle = ({
   lineHeight,
   fontWeight,
 }: CasTextStyle): CSSObject => ({
-  fontFamily: casFontFamily[family],
+  fontFamily: `${casFontFamily[family]}, ${fontStyles.fontFamily}`,
   fontSize: `${fontSize}px`,
   lineHeight: `${lineHeight}px`,
   fontWeight,
@@ -112,7 +112,6 @@ export const headlineStyles = {
   6: textStyle(casTextStyles.heading[6].bold),
   'body/bold': {
     ...fontStyles,
-    fontFamily: casFontFamily.body,
     fontWeight: casTextStyles.body.bold.fontWeight,
   } as CSSObject,
   'body/regular': {

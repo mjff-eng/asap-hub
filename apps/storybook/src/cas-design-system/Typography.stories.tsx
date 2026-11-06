@@ -206,7 +206,7 @@ export const HubComponents = () => (
                   {figmaStyle}
                   {style && <div style={muted}>{styleSummary(style)}</div>}
                 </td>
-                {/* Paragraph and Caption size in em, so they need the app's base font around them, not the page's 14px */}
+                {/* Paragraph sizes in em, so it needs the app's base font around it, not the page's 14px */}
                 <td style={{ ...cell, ...text.fontStyles }}>{sample}</td>
               </tr>
             );
