@@ -35,7 +35,7 @@ const ProjectDetailOverviewContent: React.FC<
   ProjectDetailOverviewContentProps
 > = ({ title, description, proposalURL }) => (
   <>
-    <Display styleAsHeading={4}>{title}</Display>
+    <Display styleAsHeading={6}>{title}</Display>
     <Paragraph accent="tertiary">{description}</Paragraph>
     {proposalURL ? (
       <div css={buttonContainerStyles}>
@@ -65,7 +65,7 @@ const ProjectDetailOverview: React.FC<ProjectDetailOverviewProps> = ({
   return (
     <Card>
       <div>
-        <Display styleAsHeading={3}>Overview</Display>
+        <Display styleAsHeading={5}>Overview</Display>
 
         {supplementGrant?.grantTitle ? (
           <>

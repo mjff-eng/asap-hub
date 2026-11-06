@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import { colour } from '../../colors';
+import { perRem } from '../../pixels';
 import InPersonPill from '../InPersonPill';
 
 it('renders the In person label', () => {
@@ -11,7 +12,7 @@ it('renders the In person label', () => {
 it('uses 16px text', () => {
   render(<InPersonPill />);
   expect(screen.getByText('In person')).toHaveStyle({
-    fontSize: `${16 / 17}em`,
+    fontSize: `${16 / perRem}em`,
   });
 });
 

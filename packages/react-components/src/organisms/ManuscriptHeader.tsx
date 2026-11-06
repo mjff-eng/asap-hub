@@ -65,7 +65,7 @@ const ManuscriptHeader: React.FC<ManuscriptHeaderProps> = ({
             />
           </div>
         )}
-        <Display styleAsHeading={2}>{title}</Display>
+        <Display styleAsHeading={4}>{title}</Display>
         <div>
           <Paragraph noMargin accent="tertiary">
             {getDescription()}

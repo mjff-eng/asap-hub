@@ -1,8 +1,6 @@
 import { render } from '@testing-library/react';
 
 import Headline2 from '../Headline2';
-import { viewportCalc } from '../../test-utils';
-import { largeDesktopScreen } from '../../pixels';
 
 it('renders the text in an <h2>', () => {
   const { getByText } = render(<Headline2>text</Headline2>);
@@ -18,9 +16,7 @@ it('applies the text margin', () => {
 it('renders the text in large font', () => {
   const { getByText } = render(<Headline2>text</Headline2>);
   const { fontSize } = getComputedStyle(getByText('text'));
-  expect(viewportCalc(fontSize, largeDesktopScreen)).toMatchInlineSnapshot(
-    `"30px"`,
-  );
+  expect(fontSize).toMatchInlineSnapshot(`"32px"`);
 });
 
 it('removes the text margin', () => {

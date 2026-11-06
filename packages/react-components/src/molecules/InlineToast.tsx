@@ -25,8 +25,8 @@ const toastStyles = (accent: 'success' | 'error', hasUndo: boolean) =>
         ? colour.background.success
         : colour.background.error,
     color: toastText,
-    fontSize: rem(17),
-    lineHeight: 24 / 17,
+    fontSize: rem(16),
+    lineHeight: 24 / 16,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       // A grid, not flex-wrap: the icon has to stay on the message's first
       // line however far the message wraps.

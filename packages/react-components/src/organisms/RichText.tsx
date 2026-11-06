@@ -95,7 +95,7 @@ const RichText: React.FC<RichTextProps | PoorTextProps> = ({
       <div css={styles}>
         {toc && hasTocItems && (
           <span css={tableOfContentsStyles}>
-            <Headline2 styleAsHeading={4}>Contents</Headline2>
+            <Headline2 styleAsHeading={6}>Contents</Headline2>
           </span>
         )}
         <>{result}</>

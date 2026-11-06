@@ -26,7 +26,7 @@ import {
 import { Toast } from '../organisms';
 import { badgesAnchorId } from '../organisms/UserProfileBadges';
 import { rem, tabletScreen } from '../pixels';
-import { captionRegularStyles, fontStyles } from '../text';
+import { fontStyles } from '../text';
 import PageInfoContainer from './PageInfoContainer';
 
 const desktopQuery = `@media (min-width: ${tabletScreen.min}px)`;
@@ -43,7 +43,7 @@ const noTeamAffiliationTooltip = {
   icon: <MessageAlertIcon />,
   width: 296,
   background: colour.foreground.secondary,
-  overrideTooltipStyles: css(captionRegularStyles, {
+  overrideTooltipStyles: css({
     textAlign: 'center',
     background: colour.foreground.secondary,
     paddingTop: rem(3),
@@ -307,7 +307,7 @@ const UserProfileHeaderNew: React.FC<UserProfileHeaderNewProps> = ({
             </div>
 
             <div css={nameStyles}>
-              <Display styleAsHeading={2} noMargin>
+              <Display styleAsHeading={4} noMargin>
                 {fullDisplayName}
                 {degree ? (
                   <span css={degreeStyles}>, {degree}</span>

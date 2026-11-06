@@ -73,8 +73,8 @@ const itemStyles = css({
   width: '100%',
   gridTemplateColumns: 'min-content 1fr min-content',
   gridGap: rem(12),
-  fontSize: rem(17),
-  lineHeight: `${24 / 17}em`,
+  fontSize: rem(16),
+  lineHeight: `${24 / 16}em`,
   textAlign: 'left',
   textWrap: 'wrap',
 });

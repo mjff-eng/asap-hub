@@ -23,9 +23,7 @@ const tooltipTextStyles = css({
   paddingTop: 0,
   paddingBottom: 0,
   textAlign: 'center',
-  fontSize: rem(14),
   lineHeight: 16 / 14,
-  fontWeight: 'normal',
 });
 
 const tableStyles = css({
@@ -42,7 +40,7 @@ const tableStyles = css({
 const headerCellStyles = css({
   textAlign: 'left',
   color: colour.foreground.primary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   lineHeight: rem(24),
   letterSpacing: rem(0.1),
@@ -57,7 +55,7 @@ const cellStyles = css({
   padding: `${rem(20)} 0`,
   verticalAlign: 'middle',
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
 });
@@ -105,12 +103,12 @@ const mobileFieldStyles = css({
   flexDirection: 'column',
   gap: rem(8),
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
 });
 
 const mobileLabelStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 700,
   lineHeight: rem(16),
   letterSpacing: rem(0.1),

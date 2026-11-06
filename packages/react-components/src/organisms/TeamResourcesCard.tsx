@@ -77,7 +77,7 @@ const TeamResourcesCard: React.FC<TeamResourcesCardProps> = ({
   return (
     <Card overrideStyles={cardStyles}>
       <div css={overviewStyles}>
-        <Headline2 styleAsHeading={3} noMargin>
+        <Headline2 styleAsHeading={5} noMargin>
           {resourceTitle}
         </Headline2>
 

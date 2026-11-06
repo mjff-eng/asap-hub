@@ -60,7 +60,7 @@ const shortTextStyles = css({
 });
 
 const footerStyles = css({
-  ...captionStyles,
+  ...captionStyles.regular,
   color: colour.foreground.tertiary,
   justifySelf: 'flex-end',
 });
@@ -89,11 +89,13 @@ const NewsCard: React.FC<
       ? discover({}).tutorials({}).tutorial({ tutorialId: id }).$
       : news({}).article({ articleId: id }).$;
   const titleComponent = text ? (
-    <LinkHeadline href={href} level={4} noMargin>
+    <LinkHeadline styleAsHeading={5} href={href} level={4} noMargin>
       {title}
     </LinkHeadline>
   ) : (
-    <Headline4 noMargin>{title}</Headline4>
+    <Headline4 styleAsHeading={5} noMargin>
+      {title}
+    </Headline4>
   );
   const newsLink = text && href;
 

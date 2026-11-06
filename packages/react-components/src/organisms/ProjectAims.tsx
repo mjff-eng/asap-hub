@@ -36,7 +36,7 @@ const headerRowStyles = css({
 });
 
 const headerLabelStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   color: colour.foreground.primary,
 });
@@ -133,7 +133,9 @@ const ProjectAims: FC<ProjectAimsProps> = ({
   return (
     <Card padding={false} title="Aims">
       <div css={contentStyles}>
-        <Headline3 noMargin>Aims</Headline3>
+        <Headline3 styleAsHeading={5} noMargin>
+          Aims
+        </Headline3>
         <Paragraph
           noMargin
           accent="tertiary"

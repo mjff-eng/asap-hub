@@ -31,7 +31,7 @@ const UserProfileBiography: React.FC<UserProfileBiographyProps> = ({
           flexDirection: 'column',
         }}
       >
-        <Headline2 styleAsHeading={3}>Biography</Headline2>
+        <Headline2 styleAsHeading={5}>Biography</Headline2>
         {biography ? (
           <Paragraph accent="tertiary">{biography}</Paragraph>
         ) : (

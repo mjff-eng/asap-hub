@@ -4,6 +4,7 @@ import { ThemeProvider } from '@emotion/react';
 
 import Link from '../Link';
 import { colour } from '../../colors';
+import { perRem } from '../../pixels';
 
 it('renders the text in an anchor', () => {
   const { getByText } = render(<Link href="/">text</Link>);
@@ -101,7 +102,7 @@ describe('when button-styled', () => {
       getComputedStyle(getByRole('link')).marginTop.replace(/em$/, ''),
     );
 
-    expect(buttonWithMargin).toBe(1.0588235294117647);
+    expect(buttonWithMargin).toBe(18 / perRem);
 
     rerender(
       <Link href="/" buttonStyle noMargin>

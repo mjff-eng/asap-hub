@@ -3,6 +3,7 @@ import { css, SerializedStyles } from '@emotion/react';
 
 import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
+import { captionStyles } from '../text';
 
 const triangleHeight = 5;
 
@@ -75,6 +76,10 @@ const bubbleStyles = css({
     marginRight: rem(12),
   },
 });
+const contentStyles = css({
+  ...captionStyles.regular,
+  display: 'block',
+});
 
 interface TooltipProps {
   children: ReactNode;
@@ -135,7 +140,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             textStyles,
           ]}
         >
-          {children}
+          <span css={contentStyles}>{children}</span>
         </span>
       </span>
     </span>

@@ -1,5 +1,6 @@
 import {
   accents,
+  Display,
   drawerQuery,
   Paragraph,
   pixels,
@@ -86,14 +87,7 @@ const PageBanner: React.FC<PageBannerProp> = ({
       css={[cardStyles, accents.default, noBorderTop && { borderTopWidth: 0 }]}
     >
       <div css={[textContainerStyles(noMarginBottom)]}>
-        <h1
-          css={css({
-            fontSize: '39px',
-            lineHeight: '48px',
-          })}
-        >
-          {title}
-        </h1>
+        <Display>{title}</Display>
         {description && <Paragraph accent="tertiary">{description}</Paragraph>}
         {children}
       </div>

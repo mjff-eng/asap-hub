@@ -35,9 +35,6 @@ const containerStyles = css({
 });
 const titleStyles = css({
   margin: `8px 0`,
-  fontWeight: 'bold',
-  fontSize: '26px',
-  lineHeight: '32px',
 });
 
 const bottomBorderStyles = css({
@@ -70,6 +67,7 @@ const WorkingGroupCard: React.FC<WorkingGroupCardProps> = ({
       <div css={containerStyles}>
         <div>
           <LinkHeadline
+            styleAsHeading={5}
             href={workingGroupHref}
             level={3}
             css={titleStyles}

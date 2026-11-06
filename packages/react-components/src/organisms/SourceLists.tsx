@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { Button, Paragraph } from '../atoms';
+import { Button, Headline3, Paragraph } from '../atoms';
 import { colour } from '../colors';
 import { ExportIcon, linkIcon } from '../icons';
 import { mobileScreen, rem } from '../pixels';
@@ -20,14 +20,6 @@ const textStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(8),
-});
-
-const titleStyles = css({
-  margin: 0,
-  fontSize: rem(17),
-  fontWeight: 700,
-  lineHeight: rem(24),
-  color: colour.foreground.primary,
 });
 
 const countStyles = css({
@@ -76,7 +68,7 @@ const fileStyles = css({
 
 const nameStyles = css({
   display: 'block',
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
   color: colour.foreground.primary,
@@ -84,7 +76,7 @@ const nameStyles = css({
 
 const dateStyles = css({
   display: 'block',
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   lineHeight: rem(24),
   color: colour.foreground.quaternary,
@@ -139,12 +131,12 @@ const SourceLists: React.FC<SourceListsProps> = ({ files }) => {
   return (
     <section css={sectionStyles}>
       <div css={textStyles}>
-        <h3 css={titleStyles}>
+        <Headline3 styleAsHeading="body/bold" noMargin>
           Source lists{' '}
           <span css={countStyles}>
             • {files.length} {files.length === 1 ? 'File' : 'Files'}
           </span>
-        </h3>
+        </Headline3>
         <Paragraph noMargin accent="tertiary">
           The lists you uploaded. The panel shows teams, so open a file to check
           an individual. These are the files as uploaded, not the current

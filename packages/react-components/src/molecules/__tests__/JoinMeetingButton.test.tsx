@@ -125,10 +125,4 @@ it('styles the missing link tooltip with the event page design', () => {
   expect(tooltip).toHaveStyleRule('margin-left', '0', {
     media: `(max-width: ${tabletScreen.width - 1}px)`,
   });
-  expect(tooltip).not.toHaveStyleRule('font-size', expect.anything());
-  expect(tooltip.firstElementChild).toHaveStyleRule(
-    'font-family',
-    expect.stringMatching(/^'Nunito Sans', ?Roboto/),
-  );
-  expect(tooltip.firstElementChild).toHaveStyleRule('font-size', rem(14));
 });

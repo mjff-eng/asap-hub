@@ -47,7 +47,7 @@ export const textSizes: Record<SizeVariant, CSSObject> = {
     fontSize: rem(13.6),
   },
   large: {
-    fontSize: rem(17),
+    fontSize: rem(16),
   },
 };
 

@@ -4,6 +4,7 @@ import {
   CopyButton,
   drawerQuery,
   ExternalLinkIcon,
+  Headline2,
   informationIcon,
   Link,
   mail,
@@ -174,7 +175,7 @@ const ProjectDetailHeader: React.FC<ProjectDetailHeaderProps> = ({
           opportunitiesAvailable={opportunitiesAvailable}
         />
         <Subtitle>Project</Subtitle>
-        <h2>{title}</h2>
+        <Headline2 styleAsHeading={4}>{title}</Headline2>
         <div css={infoContainerStyles}>
           <ProjectSummaryFooter
             members={members}

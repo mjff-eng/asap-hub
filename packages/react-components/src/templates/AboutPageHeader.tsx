@@ -11,7 +11,7 @@ const textStyles = css({
 const AboutPageHeader: React.FC = () => (
   <PageInfoContainer>
     <header>
-      <Display styleAsHeading={2}>About ASAP</Display>
+      <Display>About ASAP</Display>
       <div css={textStyles}>
         <Paragraph accent="tertiary">
           Find out more about the ASAP team, the Hub and the Scientific Advisory

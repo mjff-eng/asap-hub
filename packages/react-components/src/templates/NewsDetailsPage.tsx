@@ -79,7 +79,7 @@ const NewsDetailsPage: React.FC<NewsDetailsPageProps> = ({
       <div css={containerStyles}>
         <Card>
           <Pill>{type}</Pill>
-          <Display styleAsHeading={3}>{title}</Display>
+          <Display styleAsHeading={4}>{title}</Display>
           {publishDateComponent}
           <div css={richTextContainer}>
             <RichText text={text} />
@@ -89,7 +89,9 @@ const NewsDetailsPage: React.FC<NewsDetailsPageProps> = ({
         </Card>
         {!!tags.length && (
           <Card>
-            <Headline3 noMargin>Tags</Headline3>
+            <Headline3 styleAsHeading={5} noMargin>
+              Tags
+            </Headline3>
             <div css={descriptionStyles}>
               <Paragraph accent="tertiary">
                 Explore keywords related to skills, techniques, resources, and

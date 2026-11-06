@@ -42,7 +42,7 @@ const TeamProfileOverviewContent: React.FC<TeamProfileOverviewContentProps> = ({
   researchOutputURL,
 }) => (
   <>
-    <Headline2 styleAsHeading={4}>{title}</Headline2>
+    <Headline2 styleAsHeading={6}>{title}</Headline2>
     <Paragraph>{description}</Paragraph>
     {researchOutputURL ? (
       <div css={stretchOnMobile}>
@@ -77,7 +77,7 @@ const ProjectProfileOverview: React.FC<TeamProfileOverviewProps> = ({
   return (
     <Card>
       <div>
-        <Display styleAsHeading={3}>Project Overview</Display>
+        <Display styleAsHeading={5}>Project Overview</Display>
 
         {supplementGrant?.title ? (
           <>

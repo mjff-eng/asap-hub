@@ -11,7 +11,7 @@ export const descriptionContainerStyles = css({
 });
 
 export const mobileLabelStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 'bold',
   color: colour.foreground.primary,
   display: 'none',
@@ -23,7 +23,7 @@ export const mobileLabelStyles = css({
 export const clampedDescriptionStyles = (isExpanded: boolean) =>
   css({
     color: colour.foreground.tertiary,
-    fontSize: rem(17),
+    fontSize: rem(16),
     lineHeight: rem(24),
     margin: 0,
     ...(isExpanded
@@ -42,7 +42,7 @@ export const readMoreButtonStyles = css({
   color: colour.foreground.brand,
   cursor: 'pointer',
   padding: 0,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 400,
   display: 'inline',
   textAlign: 'left',
@@ -94,7 +94,7 @@ export const articlesIconButtonStyles = css({
 });
 
 export const articlesTitleStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   color: colour.foreground.tertiary,
   lineHeight: rem(26),
 });
@@ -147,7 +147,7 @@ export const articlesItemTextContainerStyles = css({
 });
 
 export const articlesItemLinkStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(24),
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -157,7 +157,7 @@ export const articlesItemLinkStyles = css({
 
 export const noArticlesTextStyles = css({
   fontStyle: 'italic',
-  fontSize: rem(17),
+  fontSize: rem(16),
   lineHeight: rem(26),
   color: colour.foreground.tertiary,
 });

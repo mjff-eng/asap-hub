@@ -10,7 +10,7 @@ interface Headline2Props {
 }
 const Headline2: React.FC<Headline2Props> = ({
   children,
-  styleAsHeading = 2,
+  styleAsHeading = 3,
   id,
   noMargin = false,
   overrideStyles,

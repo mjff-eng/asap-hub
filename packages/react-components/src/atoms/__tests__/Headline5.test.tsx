@@ -16,7 +16,7 @@ it('applies the text margin', () => {
 it('renders the text in bold', () => {
   const { getByText } = render(<Headline5>text</Headline5>);
   const { fontWeight } = getComputedStyle(getByText('text'));
-  expect(fontWeight).toMatchInlineSnapshot(`"bold"`);
+  expect(fontWeight).toMatchInlineSnapshot(`"700"`);
 });
 
 it('removes the text margin', () => {

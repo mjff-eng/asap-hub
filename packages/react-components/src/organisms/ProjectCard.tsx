@@ -37,12 +37,6 @@ const headerStyles = css({
   marginBottom: rem(15),
 });
 
-const titleStyles = css({
-  '& h3': {
-    lineHeight: rem(16),
-  },
-});
-
 const metadataStyles = css({
   display: 'flex',
   flexDirection: 'column',
@@ -60,7 +54,7 @@ const metadataRowStyles = css({
   display: 'flex',
   alignItems: 'flex-start',
   gap: rem(8),
-  fontSize: rem(17),
+  fontSize: rem(16),
   color: colour.foreground.tertiary,
 });
 
@@ -147,11 +141,9 @@ const ProjectCard: FC<ProjectCardProps> = (project) => {
 
         {/* Title */}
 
-        <div css={titleStyles}>
-          <LinkHeadline level={3} styleAsHeading={4} href={getHref()} noMargin>
-            {project.title}
-          </LinkHeadline>
-        </div>
+        <LinkHeadline level={3} styleAsHeading={5} href={getHref()} noMargin>
+          {project.title}
+        </LinkHeadline>
 
         {/* Google Drive Link for Resource Projects */}
         {project.projectType === 'Resource Project' &&

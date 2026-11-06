@@ -15,6 +15,18 @@ it('shows a tooltip with the children when shown', () => {
   expect(getByRole('tooltip')).toHaveTextContent('text');
 });
 
+it('uses the caption style for the text, not the bubble', () => {
+  const { getByRole, getByText } = render(<Tooltip shown>text</Tooltip>);
+  expect(getByText('text')).toHaveStyle({
+    fontSize: '14px',
+    lineHeight: '24px',
+  });
+  expect(getByRole('tooltip')).not.toHaveStyleRule(
+    'font-size',
+    expect.anything(),
+  );
+});
+
 it('applies width as rem when width is a number', () => {
   const width = 34;
   const { getByRole } = render(
