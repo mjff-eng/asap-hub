@@ -41,15 +41,17 @@ const SearchField: React.FC<SearchProps> = ({
   onChange,
   placeholder,
 }) => {
-  const [inputValue, setInputValue] = useState(value);
-
-  useEffect(() => {
-    setInputValue(value);
-  }, [value]);
+  const [typedValue, setTypedValue] = useState<string | null>(null);
+  const inputValue = typedValue ?? value;
 
   const handleChange = (newValue: string) => {
-    setInputValue(newValue);
+    setTypedValue(newValue);
     onChange?.(newValue);
+  };
+
+  const handleClear = () => {
+    setTypedValue(null);
+    onChange?.('');
   };
 
   const [debouncedValue] = useDebounce(value, 5000);
@@ -76,6 +78,7 @@ const SearchField: React.FC<SearchProps> = ({
       <TextField
         value={inputValue}
         onChange={handleChange}
+        onBlur={() => setTypedValue(null)}
         placeholder={placeholder}
         maxLength={MAX_ALGOLIA_QUERY_LENGTH}
         type="search"
@@ -83,7 +86,7 @@ const SearchField: React.FC<SearchProps> = ({
         rightIndicator={
           inputValue ? (
             <div css={rightIndicatorStyles}>
-              <Button linkStyle onClick={() => handleChange('')}>
+              <Button linkStyle onClick={handleClear}>
                 {crossIcon}
               </Button>
             </div>

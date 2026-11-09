@@ -23,11 +23,23 @@ describe('typing', () => {
     expect(onChange).toHaveBeenLastCalledWith('ver');
   });
 
-  it('shows the value prop when it changes from outside', () => {
+  it('ignores value prop changes while typing', () => {
+    const { getByRole, rerender } = render(
+      <SearchField placeholder="p" value="" />,
+    );
+    fireEvent.change(getByRole('searchbox'), { target: { value: 've' } });
+
+    rerender(<SearchField placeholder="p" value="v" />);
+
+    expect(getByRole('searchbox')).toHaveValue('ve');
+  });
+
+  it('shows the value prop after the field loses focus', () => {
     const { getByRole, rerender } = render(
       <SearchField placeholder="p" value="" />,
     );
     fireEvent.change(getByRole('searchbox'), { target: { value: 'typed' } });
+    fireEvent.blur(getByRole('searchbox'));
 
     rerender(<SearchField placeholder="p" value="from url" />);
 
