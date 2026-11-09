@@ -8,6 +8,46 @@ it('renders a search field, passing through props', () => {
   expect(getByRole('searchbox')).toHaveAttribute('placeholder', 'test');
 });
 
+describe('typing', () => {
+  it('keeps every typed character while the value prop lags behind', () => {
+    const onChange = jest.fn();
+    const { getByRole } = render(
+      <SearchField placeholder="p" value="" onChange={onChange} />,
+    );
+
+    fireEvent.change(getByRole('searchbox'), { target: { value: 'v' } });
+    fireEvent.change(getByRole('searchbox'), { target: { value: 've' } });
+    fireEvent.change(getByRole('searchbox'), { target: { value: 'ver' } });
+
+    expect(getByRole('searchbox')).toHaveValue('ver');
+    expect(onChange).toHaveBeenLastCalledWith('ver');
+  });
+
+  it('shows the value prop when it changes from outside', () => {
+    const { getByRole, rerender } = render(
+      <SearchField placeholder="p" value="" />,
+    );
+    fireEvent.change(getByRole('searchbox'), { target: { value: 'typed' } });
+
+    rerender(<SearchField placeholder="p" value="from url" />);
+
+    expect(getByRole('searchbox')).toHaveValue('from url');
+  });
+
+  it('empties the input when the X is clicked', () => {
+    const onChange = jest.fn();
+    const { getByRole } = render(
+      <SearchField placeholder="p" value="" onChange={onChange} />,
+    );
+    fireEvent.change(getByRole('searchbox'), { target: { value: 'typed' } });
+
+    fireEvent.click(getByRole('button'));
+
+    expect(getByRole('searchbox')).toHaveValue('');
+    expect(onChange).toHaveBeenLastCalledWith('');
+  });
+});
+
 describe('GTM data', () => {
   beforeAll(() => {
     jest.useFakeTimers();

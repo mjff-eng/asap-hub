@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { ComponentProps, useEffect } from 'react';
+import { ComponentProps, useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import {
   SEARCH_EVENT,
@@ -35,14 +35,30 @@ type SearchProps = Pick<
   Required<Pick<ComponentProps<typeof TextField>, 'placeholder'>> & {
     padding?: boolean;
   };
-const SearchField: React.FC<SearchProps> = ({ padding = true, ...props }) => {
-  const [debouncedValue] = useDebounce(props.value, 5000);
+const SearchField: React.FC<SearchProps> = ({
+  padding = true,
+  value,
+  onChange,
+  placeholder,
+}) => {
+  const [inputValue, setInputValue] = useState(value);
 
   useEffect(() => {
-    if (props.value && props.value === debouncedValue) {
+    setInputValue(value);
+  }, [value]);
+
+  const handleChange = (newValue: string) => {
+    setInputValue(newValue);
+    onChange?.(newValue);
+  };
+
+  const [debouncedValue] = useDebounce(value, 5000);
+
+  useEffect(() => {
+    if (value && value === debouncedValue) {
       window.dataLayer?.push({
-        [SEARCH_QUERY_KEY]: props.value,
-        [SEARCH_PLACEHOLDER_KEY]: props.placeholder,
+        [SEARCH_QUERY_KEY]: value,
+        [SEARCH_PLACEHOLDER_KEY]: placeholder,
         event: SEARCH_EVENT,
       });
     }
@@ -53,22 +69,21 @@ const SearchField: React.FC<SearchProps> = ({ padding = true, ...props }) => {
         [SEARCH_PLACEHOLDER_KEY]: undefined,
       });
     };
-  }, [debouncedValue, props.placeholder, props.value]);
+  }, [debouncedValue, placeholder, value]);
 
   return (
     <div css={[clearButtonStyles, !padding && { padding: 0 }]}>
       <TextField
-        {...props}
+        value={inputValue}
+        onChange={handleChange}
+        placeholder={placeholder}
         maxLength={MAX_ALGOLIA_QUERY_LENGTH}
         type="search"
         leftIndicator={searchIcon}
         rightIndicator={
-          props.value ? (
+          inputValue ? (
             <div css={rightIndicatorStyles}>
-              <Button
-                linkStyle
-                onClick={() => props.onChange && props.onChange('')}
-              >
+              <Button linkStyle onClick={() => handleChange('')}>
                 {crossIcon}
               </Button>
             </div>
