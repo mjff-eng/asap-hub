@@ -59,7 +59,8 @@ const orcidContactStyles = css({
   margin: 0,
   fontSize: rem(14),
   color: colour.foreground.secondary,
-  svg: { width: rem(16), height: rem(16), verticalAlign: 'middle' },
+  a: { fontWeight: 600 },
+  svg: { width: rem(23), height: rem(23), verticalAlign: rem(-5.5) },
 });
 
 const workListStyles = css({
@@ -116,7 +117,10 @@ const UserProfileRecentWorksNew: React.FC<Props> = ({
               <p css={orcidNumberStyles}>Your ORCID is: {orcid}</p>
               <p css={orcidContactStyles}>
                 If this is incorrect please{' '}
-                <Link href={mailToSupport({ subject: 'Orcid change request' })}>
+                <Link
+                  href={mailToSupport({ subject: 'Orcid change request' })}
+                  applyIconTheme
+                >
                   contact ASAP <ExternalLinkIcon />
                 </Link>
               </p>
