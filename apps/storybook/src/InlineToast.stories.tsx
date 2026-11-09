@@ -45,6 +45,14 @@ export const BlockedSpeaker: Story = {
   },
 };
 
+export const AlreadyAdded: Story = {
+  args: {
+    accent: 'neutral',
+    message: 'Jordan Lee is already added to Aguzzi',
+    onDismiss: () => {},
+  },
+};
+
 // Both actions are disabled while the modal confirms a cancel.
 export const Disabled: Story = {
   args: {

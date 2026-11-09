@@ -259,6 +259,22 @@ type AddedSpeaker = {
   readonly destination?: string;
   readonly groupId: string;
   readonly userId: string;
+  readonly alreadyAdded?: boolean;
+};
+
+const addedSpeakerMessage = ({
+  speakerName,
+  destination,
+  alreadyAdded,
+}: AddedSpeaker) => {
+  if (alreadyAdded) {
+    return destination
+      ? `${speakerName} is already added to ${destination}`
+      : `${speakerName} is already added as an External Guest`;
+  }
+  return destination
+    ? `Added ${speakerName} to ${destination}`
+    : `Added ${speakerName} as an External Guest`;
 };
 
 const renderSearchOption = (
@@ -340,11 +356,10 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
 
   const updateGroups = (
     update: (current: SpeakerGroup[]) => SpeakerGroup[],
-  ): SpeakerGroup[] => {
+  ) => {
     const next = update(latestGroups.current);
     latestGroups.current = next;
     setSpeakerGroups(next);
-    return next;
   };
 
   const isEditMode = speakerGroups.some((group) => group.users.length > 0);
@@ -382,10 +397,11 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       roles: affiliation.role ? [affiliation.role] : [],
       preliminaryFindingsShared: false,
     };
-    const before = latestGroups.current;
-    const after = updateGroups((current) => {
+    let duplicate: SpeakerGroupUser | undefined;
+    updateGroups((current) => {
       const existingGroup = current.find(
-        (group) => group.id === affiliation.id && group.variant !== 'external',
+        (group): group is SpeakerTeamGroup | SpeakerProjectGroup =>
+          group.id === affiliation.id && group.variant !== 'external',
       );
       if (!existingGroup) {
         const newGroup: SpeakerGroup =
@@ -407,16 +423,14 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
               };
         return withExternalGroupLast([...current, newGroup]);
       }
-      if (
-        existingGroup.variant === 'external' ||
-        existingGroup.users.some(
-          (row) =>
-            row.id === user.userId ||
-            (isExternal &&
-              row.isExternal &&
-              isSameExternalSpeaker(row, user.displayName, externalAuthorId)),
-        )
-      ) {
+      duplicate = existingGroup.users.find(
+        (row) =>
+          row.id === user.userId ||
+          (isExternal &&
+            row.isExternal &&
+            isSameExternalSpeaker(row, user.displayName, externalAuthorId)),
+      );
+      if (duplicate) {
         return current;
       }
       const updatedGroup: SpeakerGroup = {
@@ -430,16 +444,13 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     setExpandedIds((current) => new Set(current).add(affiliation.id));
     expandSection(affiliation.variant);
     setPendingSpeaker(null);
-    setAddedSpeaker(
-      after === before
-        ? null
-        : {
-            speakerName: user.displayName,
-            destination: affiliation.name,
-            groupId: affiliation.id,
-            userId: user.userId,
-          },
-    );
+    setAddedSpeaker({
+      speakerName: duplicate?.displayName ?? user.displayName,
+      destination: affiliation.name,
+      groupId: affiliation.id,
+      userId: duplicate?.id ?? user.userId,
+      alreadyAdded: !!duplicate,
+    });
   };
 
   const nextGuestId = (name: string) => {
@@ -467,8 +478,8 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
       externalAuthorId,
       preliminaryFindingsShared: false,
     };
-    const before = latestGroups.current;
-    const after = updateGroups((current) => {
+    let duplicate: SpeakerGroupExternalUser | undefined;
+    updateGroups((current) => {
       const externalGroup = current.find(
         (group): group is SpeakerExternalGroup => group.variant === 'external',
       );
@@ -478,11 +489,10 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
           { id: 'external', variant: 'external', users: [newUser] },
         ];
       }
-      if (
-        externalGroup.users.some((row) =>
-          isSameExternalSpeaker(row, name, externalAuthorId),
-        )
-      ) {
+      duplicate = externalGroup.users.find((row) =>
+        isSameExternalSpeaker(row, name, externalAuthorId),
+      );
+      if (duplicate) {
         return current;
       }
       return current.map((group) =>
@@ -493,15 +503,12 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
     });
     expandSection('external');
     setPendingSpeaker(null);
-    setAddedSpeaker(
-      after === before
-        ? null
-        : {
-            speakerName: name,
-            groupId: 'external',
-            userId: newUser.id,
-          },
-    );
+    setAddedSpeaker({
+      speakerName: duplicate?.displayName ?? name,
+      groupId: 'external',
+      userId: duplicate?.id ?? newUser.id,
+      alreadyAdded: !!duplicate,
+    });
   };
 
   const handleSelectSearchOption = (option: SpeakerSearchOption) => {
@@ -731,12 +738,13 @@ const EditEventSpeakersModal: React.FC<EditEventSpeakersModalProps> = ({
         <section css={speakersSectionStyles}>
           {addedSpeaker && (
             <InlineToast
-              message={
-                addedSpeaker.destination
-                  ? `Added ${addedSpeaker.speakerName} to ${addedSpeaker.destination}`
-                  : `Added ${addedSpeaker.speakerName} as an External Guest`
+              accent={addedSpeaker.alreadyAdded ? 'neutral' : 'success'}
+              message={addedSpeakerMessage(addedSpeaker)}
+              onUndo={
+                addedSpeaker.alreadyAdded
+                  ? undefined
+                  : () => undoAddedSpeaker(addedSpeaker)
               }
-              onUndo={() => undoAddedSpeaker(addedSpeaker)}
               onDismiss={() => setAddedSpeaker(null)}
               enabled={!isCancelling}
             />

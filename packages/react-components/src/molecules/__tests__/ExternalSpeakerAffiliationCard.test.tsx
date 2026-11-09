@@ -49,7 +49,9 @@ it('Should render the speaker name, the Non CRN pill and the explanatory copy', 
   expect(screen.getByText('Jane Doe')).toBeVisible();
   expect(screen.getByText('Non CRN')).toBeVisible();
   expect(
-    screen.getByText(/not a member on any CRN team or individual project/),
+    screen.getByText(
+      /not a member on any CRN team or project\. Select the team or individual project they represented/,
+    ),
   ).toBeVisible();
   expect(
     screen.getByText('This does not add them to a team or project.'),
