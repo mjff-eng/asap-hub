@@ -1,5 +1,5 @@
 import { Auth0, Auth0User } from '@asap-hub/auth';
-import { disable } from '@asap-hub/flags';
+import { disable, enable } from '@asap-hub/flags';
 import {
   Auth0Provider,
   WhenReady,
@@ -179,6 +179,19 @@ it('by default renders the research tab', async () => {
     questions: ['What?'],
   });
   expect(await screen.findByText('What?')).toBeVisible();
+});
+
+it('by default renders the overview tab with the new user detail page', async () => {
+  enable('NEW_USER_DETAIL_PAGE');
+  await renderUserProfile({
+    ...createUserResponse(),
+    biography: 'My Bio',
+  });
+
+  expect(await screen.findByText('My Bio')).toBeVisible();
+  expect(
+    screen.getByRole('heading', { name: 'Expertise and Resources' }),
+  ).toBeInTheDocument();
 });
 
 it('navigates to the background tab', async () => {

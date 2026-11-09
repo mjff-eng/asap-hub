@@ -149,7 +149,10 @@ describe('avatar', () => {
     const badgeLink = screen.getByRole('link', {
       name: /open science champion badge/i,
     });
-    expect(badgeLink.getAttribute('href')).toContain('#badges');
+    expect(badgeLink).toHaveAttribute(
+      'href',
+      `${network({}).users({}).user({ userId: 'u1' }).overview({}).$}#badges`,
+    );
     expect(badgeLink.querySelector('img')).toHaveAttribute('src', 'new');
   });
 });
@@ -219,12 +222,12 @@ describe('tabs', () => {
     ]);
   });
 
-  it('points overview and memberships at the research and about routes', () => {
+  it('points overview and memberships at the overview and about routes', () => {
     renderHeader({ id: 'u1' });
     const tabRoutes = network({}).users({}).user({ userId: 'u1' });
     expect(screen.getByRole('link', { name: 'Overview' })).toHaveAttribute(
       'href',
-      tabRoutes.research({}).$,
+      tabRoutes.overview({}).$,
     );
     expect(screen.getByRole('link', { name: 'Memberships' })).toHaveAttribute(
       'href',

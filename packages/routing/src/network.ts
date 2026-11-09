@@ -4,8 +4,8 @@ const user = (() => {
   const editPersonalInfo = route('/edit-personal-info', {}, {});
   const editContactInfo = route('/edit-contact-info', {}, {});
   const editOnboarded = route('/edit-onboarded', {}, {});
-
   const editBiography = route('/edit-biography', {}, {});
+
   const about = route(
     '/about',
     {},
@@ -30,6 +30,21 @@ const user = (() => {
     { teamId: stringParser },
     {},
   );
+
+  const overview = route(
+    '/overview',
+    {},
+    {
+      editPersonalInfo,
+      editContactInfo,
+      editOnboarded,
+      editBiography,
+      editQuestions,
+      editExpertiseAndResources,
+      editRole,
+    },
+  );
+
   const research = route(
     '/research',
     {},
@@ -65,7 +80,7 @@ const user = (() => {
   return route(
     '/:userId',
     { userId: stringParser },
-    { about, research, outputs, upcoming, past },
+    { about, research, overview, outputs, upcoming, past },
   );
 })();
 const users = route('/users', {}, { user });
