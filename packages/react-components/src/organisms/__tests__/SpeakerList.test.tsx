@@ -119,6 +119,7 @@ describe('When rendering the speaker list', () => {
       expect(screen.getByText('External Speaker')).toBeVisible();
       expect(screen.getByText('Jhonny External')).toBeVisible();
       expect(screen.getByText('Guest')).toBeVisible();
+      expect(screen.getByTitle('External user')).toBeInTheDocument();
     });
     it('Renders show more button for more than 5 speakers', async () => {
       const event = {
