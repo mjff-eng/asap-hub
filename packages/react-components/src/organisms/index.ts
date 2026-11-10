@@ -123,7 +123,6 @@ export { default as ProjectContributors } from './ProjectContributors';
 export { default as ProjectDetailOverview } from './ProjectDetailOverview';
 export { default as ProjectAims } from './ProjectAims';
 export { default as ProjectMilestonesTable } from './ProjectMilestonesTable';
-export { default as ProjectProfileOverview } from './ProjectProfileOverview';
 export { default as QuestionsSection } from './QuestionsSection';
 export { default as DiscussionModal } from './DiscussionModal';
 export { default as RecentSharedOutputs } from './RecentSharedOutputs';

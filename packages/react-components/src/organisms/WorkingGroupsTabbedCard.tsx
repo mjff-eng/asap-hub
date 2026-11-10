@@ -36,11 +36,7 @@ const WorkingGroupsTabbedCard: React.FC<WorkingGroupsTabbedCardProps> = ({
     <TabbedCard
       title="Working Groups"
       description={
-        <Paragraph
-          noMargin
-          accent="tertiary"
-          styles={css({ margin: '0 0 8px' })}
-        >
+        <Paragraph noMargin accent="tertiary">
           Working groups allow CRN members to work together to solve problems.
           Find out the membership status of this member.
         </Paragraph>
