@@ -109,6 +109,7 @@ export { default as UserProfileAbout } from './UserProfileAbout';
 export { default as UserProfileHeader } from './UserProfileHeader';
 export { default as UserProfileHeaderNew } from './UserProfileHeaderNew';
 export { default as UserProfileOverview } from './UserProfileOverview';
+export { default as UserProfileMemberships } from './UserProfileMemberships';
 export { default as UserProfilePage } from './UserProfilePage';
 export { default as UserProfileResearch } from './UserProfileResearch';
 export { default as UserProfileResearchOutputs } from './UserProfileResearchOutputs';

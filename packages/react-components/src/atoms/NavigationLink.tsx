@@ -1,13 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css, keyframes, Theme } from '@emotion/react';
 import { PropsWithChildren } from 'react';
-import { NavLink, useLocation } from 'react-router';
+import { NavLink, useInRouterContext, useLocation } from 'react-router';
 import { activePrimaryStyles } from '../button';
 import { colour } from '../colors';
 import { crossQuery } from '../layout';
 import { useBlockedClick } from '../navigation';
 import { lineHeight, rem } from '../pixels';
-import { useHasRouter } from '../routing';
 import { isInternalLink } from '../utils';
 import RailTooltip from './RailTooltip';
 
@@ -134,7 +133,7 @@ export const Navigation: React.FC<NavigationProps & PropsWithChildren> = ({
   const [internal, url] = isInternalLink(href);
   const location = useLocation();
 
-  if (useHasRouter() && internal) {
+  if (useInRouterContext() && internal) {
     // Use prefix matching to highlight parent sections when viewing subsections
     // e.g., /network should be highlighted when at /network/interest-groups
     const linkPath = url.split('#')[0];

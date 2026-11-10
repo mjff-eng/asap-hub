@@ -124,15 +124,6 @@ export const queryParamString = (searchQuery: string | undefined): string => {
   return searchQueryParamString;
 };
 
-export const useHasRouter = (): boolean => {
-  try {
-    useLocation();
-    return true;
-  } catch {
-    return false;
-  }
-};
-
 export const usePushFromPathname = (pathname: string): NavigateFunction => {
   const navigate = useNavigate();
   const location = useLocation();

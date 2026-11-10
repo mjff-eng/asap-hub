@@ -1,5 +1,7 @@
 import {
+  isProjectStatus,
   isProjectType,
+  projectStatuses,
   projectTypes,
   isProjectLead,
   isProjectMember,
@@ -581,6 +583,25 @@ describe('Project Model', () => {
           discoveryProject(),
         ),
       ).toBe(false);
+    });
+  });
+
+  describe('isProjectStatus', () => {
+    it.each(projectStatuses)(
+      'should return true for valid project status "%s"',
+      (status) => {
+        expect(isProjectStatus(status)).toBe(true);
+      },
+    );
+
+    it.each([
+      ['invalid string', 'Archived'],
+      ['empty string', ''],
+      ['undefined', undefined],
+      ['null', null],
+      ['number', 123],
+    ])('should return false for %s', (_label, value) => {
+      expect(isProjectStatus(value)).toBe(false);
     });
   });
 
