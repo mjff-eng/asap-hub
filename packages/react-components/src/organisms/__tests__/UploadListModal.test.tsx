@@ -584,7 +584,7 @@ describe('UploadListModal', () => {
     expect(screen.getByText(/did you mean/)).toBeInTheDocument();
     expect(screen.getByText(/no close match/)).toBeInTheDocument();
     expect(
-      screen.getByText(/Add a suggested team to include it/),
+      screen.getByText(/Add or update a suggested team to include it/),
     ).toBeInTheDocument();
 
     const notMatchedSection = screen
@@ -616,7 +616,7 @@ describe('UploadListModal', () => {
               suggestion: {
                 teamId: 'a1',
                 teamName: 'Genetics',
-                attended: false,
+                attended: true,
               },
             },
           ],
@@ -637,6 +637,72 @@ describe('UploadListModal', () => {
     expect(
       within(section).queryByRole('button', { name: /Add/ }),
     ).not.toBeInTheDocument();
+  });
+
+  it('Should show a suggestion as already up to date when its attendance is the same', async () => {
+    const { container } = renderModal({
+      onUploadList: jest.fn(
+        async (): Promise<UploadListResult> => ({
+          matched: [],
+          unmatched: [
+            {
+              name: 'Genetcs',
+              suggestion: {
+                teamId: 'a1',
+                teamName: 'Genetics',
+                attended: false,
+              },
+            },
+          ],
+        }),
+      ),
+    });
+    await upload(makeFile('teams.csv'), container);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /not matched/ }),
+    );
+
+    const section = screen.getByText('1 not matched').closest('button')
+      ?.parentElement as HTMLElement;
+    expect(within(section).getByText('Already up to date')).toBeInTheDocument();
+    expect(
+      within(section).queryByRole('button', { name: /Update|Add/ }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Add Attendees' }),
+    ).toBeDisabled();
+  });
+
+  it('Should return a removed suggested team to the not-matched list', async () => {
+    const { container } = renderModal();
+    await upload(makeFile('teams.csv'), container);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /not matched/ }),
+    );
+    const notMatchedSection = screen
+      .getByText('2 not matched')
+      .closest('button')?.parentElement as HTMLElement;
+    await userEvent.click(
+      within(notMatchedSection).getByRole('button', { name: /Add/ }),
+    );
+    expect(screen.getByText('1 not matched')).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: /will be added and marked if attended/,
+      }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Remove Imaging Suggestion' }),
+    );
+
+    expect(
+      screen.queryByRole('link', { name: 'Imaging Suggestion' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('2 not matched')).toBeInTheDocument();
+    expect(screen.getByText(/did you mean/)).toBeInTheDocument();
   });
 
   it('Should count a promoted update as already in and send it on save', async () => {

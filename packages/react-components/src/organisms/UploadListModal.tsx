@@ -304,6 +304,18 @@ const unmatchedMetaStyles = css({
   color: colour.foreground.tertiary,
 });
 
+const upToDateStyles = css({
+  display: 'inline-flex',
+  alignItems: 'center',
+  verticalAlign: 'top',
+  gap: rem(8),
+  marginLeft: rem(48),
+  color: colour.foreground.tertiary,
+  '> svg': {
+    flexShrink: 0,
+  },
+});
+
 const suggestionLinkStyles = css({
   color: colour.foreground.brand,
 });
@@ -311,7 +323,9 @@ const suggestionLinkStyles = css({
 const addSuggestionButtonStyles = css({
   flexGrow: 0,
   flexShrink: 0,
+  minWidth: rem(90),
   alignItems: 'center',
+  justifyContent: 'center',
   gap: rem(8),
   lineHeight: rem(24),
   color: colour.foreground.tertiary,
@@ -331,7 +345,7 @@ const infoBoxStyles = css({
   padding: rem(16),
   borderRadius: rem(4),
   marginTop: rem(16),
-  backgroundColor: colour.background.info,
+  backgroundColor: colour.background.neutral,
   '> svg': {
     flexShrink: 0,
   },
@@ -339,7 +353,7 @@ const infoBoxStyles = css({
 
 const infoBoxTextStyles = css({
   margin: 0,
-  color: colour.foreground.info,
+  color: colour.foreground.neutral,
   fontSize: rem(16),
   fontWeight: 500,
   lineHeight: rem(24),
@@ -502,8 +516,17 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
   const promoteSuggestion = (teamId: string) =>
     setAddedSuggestionIds((prev) => new Set(prev).add(teamId));
 
-  const removeMatchedTeam = (teamId: string) =>
+  const removeMatchedTeam = (teamId: string) => {
+    if (addedSuggestionIds.has(teamId)) {
+      setAddedSuggestionIds((prev) => {
+        const next = new Set(prev);
+        next.delete(teamId);
+        return next;
+      });
+      return;
+    }
     setRemovedMatchedIds((prev) => new Set(prev).add(teamId));
+  };
 
   const isPromoted = (
     team: UploadListUnmatchedTeam,
@@ -516,6 +539,9 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
 
   const changesAttendance = (team: EventAttendanceTeam) =>
     currentAttendance.get(team.teamId) !== team.attended;
+
+  const suggestionChangesAttendance = (suggestion: UploadListSuggestion) =>
+    currentAttendance.get(suggestion.teamId) !== suggestion.attended;
 
   const alreadyIn = result
     ? result.matched.filter((team) => currentAttendance.has(team.teamId))
@@ -713,7 +739,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
 
         {nothingToChange && (
           <div css={infoBoxStyles} role="status">
-            <CircleInfoIcon color={colour.foreground.info} size={24} />
+            <CircleInfoIcon color={colour.foreground.neutral} size={24} />
             <p css={infoBoxTextStyles}>
               Every team in this file is already in your list with the same
               attendance, so there&apos;s nothing to add. Replace the file to
@@ -928,36 +954,48 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
                                       • no close match
                                     </span>
                                   )}
-                                </span>
-                                {suggestion && (
-                                  <Button
-                                    small
-                                    noMargin
-                                    enabled={!isCancelling}
-                                    overrideStyles={addSuggestionButtonStyles}
-                                    onClick={() =>
-                                      promoteSuggestion(suggestion.teamId)
-                                    }
-                                  >
-                                    {currentAttendance.has(
-                                      suggestion.teamId,
-                                    ) ? (
-                                      'Update'
-                                    ) : (
-                                      <>
-                                        {plusIcon}
-                                        Add
-                                      </>
+                                  {suggestion &&
+                                    !suggestionChangesAttendance(
+                                      suggestion,
+                                    ) && (
+                                      <span css={upToDateStyles}>
+                                        {tickSmallIcon}
+                                        Already up to date
+                                      </span>
                                     )}
-                                  </Button>
-                                )}
+                                </span>
+                                {suggestion &&
+                                  suggestionChangesAttendance(suggestion) && (
+                                    <Button
+                                      small
+                                      noMargin
+                                      enabled={!isCancelling}
+                                      overrideStyles={addSuggestionButtonStyles}
+                                      onClick={() =>
+                                        promoteSuggestion(suggestion.teamId)
+                                      }
+                                    >
+                                      {currentAttendance.has(
+                                        suggestion.teamId,
+                                      ) ? (
+                                        'Update'
+                                      ) : (
+                                        <>
+                                          {plusIcon}
+                                          Add
+                                        </>
+                                      )}
+                                    </Button>
+                                  )}
                               </div>
                             );
                           })}
                         </div>
                         <p css={unmatchedHelpStyles}>
-                          Add a suggested team to include it, or fix the name in
-                          your file and upload again.
+                          Add or update a suggested team to include it. For a
+                          team already up to date, there&apos;s nothing to do.
+                          If a suggestion is wrong, fix the name in your file
+                          and upload again.
                         </p>
                       </div>
                     )}
