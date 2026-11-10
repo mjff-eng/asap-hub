@@ -1,16 +1,10 @@
-import {
-  MemoryRouter,
-  useNavigate,
-  useLocation,
-  StaticRouter,
-} from 'react-router';
+import { MemoryRouter, useNavigate, useLocation } from 'react-router';
 import { renderHook, waitFor } from '@testing-library/react';
 import { searchQueryParam } from '@asap-hub/routing';
 import { ReactNode, useEffect, act } from 'react';
 
 import {
   queryParamString,
-  useHasRouter,
   usePushFromHere,
   usePushFromPathname,
   useScrollToHash,
@@ -50,25 +44,6 @@ describe('queryParamString', () => {
 
   it('returns an empty string if no query params needed', () => {
     expect(queryParamString(undefined)).toBe('');
-  });
-});
-
-describe('useHasRouter', () => {
-  it('returns false if there is no Router context', () => {
-    const {
-      result: { current },
-    } = renderHook(useHasRouter);
-    expect(current).toBe(false);
-  });
-
-  it('returns true if there is a Router context', () => {
-    const wrapper = ({ children }: { children: ReactNode }) => (
-      <StaticRouter location="/">{children}</StaticRouter>
-    );
-    const {
-      result: { current },
-    } = renderHook(useHasRouter, { wrapper });
-    expect(current).toBe(true);
   });
 });
 

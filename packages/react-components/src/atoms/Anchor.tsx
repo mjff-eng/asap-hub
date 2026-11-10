@@ -1,9 +1,8 @@
 import { AnchorHTMLAttributes } from 'react';
-import { Link, LinkProps } from 'react-router';
+import { Link, LinkProps, useInRouterContext } from 'react-router';
 import { css } from '@emotion/react';
 
 import { isInternalLink } from '../utils';
-import { useHasRouter } from '../routing';
 import { useBlockedClick } from '../navigation';
 
 const resetStyles = css({
@@ -34,7 +33,7 @@ const Anchor: React.FC<AnchorProps> = ({
   const blockedClick = useBlockedClick(onClick);
   const [internal, url] =
     enabled && href ? isInternalLink(href) : [false, undefined];
-  if (useHasRouter() && url && internal && !openInNewTab) {
+  if (useInRouterContext() && url && internal && !openInNewTab) {
     return (
       <Link {...props} to={url} css={resetStyles} onClick={blockedClick} />
     );
