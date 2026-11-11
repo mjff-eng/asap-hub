@@ -345,6 +345,7 @@ describe('/research-outputs/ route', () => {
 
       expect(researchOutputControllerMock.fetchById).toHaveBeenCalledWith(
         researchOutputId,
+        { includeGrantDocument: true },
       );
     });
     test('Should return 404 when you are trying to get a draft and are not part of the team', async () => {

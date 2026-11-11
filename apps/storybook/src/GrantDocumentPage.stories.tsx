@@ -17,6 +17,7 @@ const project = {
   id: 'project-1',
   title: 'Discovery Project Title',
   projectType: 'Discovery Project' as const,
+  teams: [{ id: 'team-1', displayName: 'Alpha' }],
 };
 
 const originalGrant = {
@@ -37,13 +38,15 @@ const supplementGrant = {
   endDate: '2099-12-31T00:00:00.000-08:00',
 };
 
+const pdfUrl =
+  'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
+
 const props = (): ComponentProps<typeof SharedResearchOutput> => ({
   ...createResearchOutputResponse(),
   id: 'original-output',
   documentType: 'Grant Document',
   type: 'Proposal',
   title: 'Understanding the molecular mechanisms of Parkinson’s disease',
-  link: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
   publishingEntity: 'Project',
   keywords: ['Neurodegeneration', 'Mitochondria', 'Endocytosis'],
   backHref: '#',
@@ -57,6 +60,7 @@ export const OriginalOnly = () => (
       grantType: 'original',
       project,
       original: { ...originalGrant, endDate: undefined },
+      pdfUrl,
     }}
   />
 );
@@ -69,6 +73,7 @@ export const OriginalWithSupplement = () => (
       project,
       original: originalGrant,
       supplement: supplementGrant,
+      pdfUrl,
     }}
   />
 );
@@ -82,6 +87,7 @@ export const Supplement = () => (
       project,
       original: originalGrant,
       supplement: supplementGrant,
+      pdfUrl,
     }}
   />
 );
@@ -89,7 +95,12 @@ export const Supplement = () => (
 export const GrantEnded = () => (
   <SharedResearchOutput
     {...props()}
-    grantDocument={{ grantType: 'original', project, original: originalGrant }}
+    grantDocument={{
+      grantType: 'original',
+      project,
+      original: originalGrant,
+      pdfUrl,
+    }}
     grantEnded
   />
 );

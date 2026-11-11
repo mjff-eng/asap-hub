@@ -9,6 +9,7 @@ type PageInfoContainerProps = {
   children: ReactNode;
   nav?: ReactNode;
   breadcrumbs?: ReactNode;
+  noPaddingBottom?: boolean;
 };
 
 const containerStyles = css({
@@ -31,11 +32,12 @@ const PageInfoContainer: React.FC<PageInfoContainerProps> = ({
   children,
   nav,
   breadcrumbs,
+  noPaddingBottom = !!nav,
 }) => (
   <PageConstraints
     unconstrainedStyles={containerStyles}
     as="div"
-    noPaddingBottom={!!nav}
+    noPaddingBottom={noPaddingBottom}
     noPaddingTop={!!breadcrumbs}
   >
     {breadcrumbs && <div css={breadcrumbsContainerStyles}>{breadcrumbs}</div>}
