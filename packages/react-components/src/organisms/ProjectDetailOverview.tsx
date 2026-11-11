@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { colour } from '../colors';
-import { Card, Display, Headline3, Link, Paragraph, TabButton } from '../atoms';
+import { Card, Display, Link, Paragraph, TabButton } from '../atoms';
 import { TabNav } from '../molecules';
 import { rem } from '../pixels';
 
