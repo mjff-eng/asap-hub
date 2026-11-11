@@ -269,6 +269,44 @@ describe('UploadListModal', () => {
     );
   });
 
+  it('Should upload an in-memory copy of the selected file', async () => {
+    const readText = (file: File) =>
+      new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsText(file);
+      });
+    const selectedFile = new File(['Team,Yes'], 'teams.csv', {
+      type: 'text/csv',
+    });
+    const { container } = renderModal();
+
+    await upload(selectedFile, container);
+
+    await waitFor(() => expect(onUploadList).toHaveBeenCalledTimes(1));
+    const [uploadedFile] = onUploadList.mock.calls[0] as unknown as [File];
+    expect(uploadedFile).not.toBe(selectedFile);
+    expect(uploadedFile.name).toBe('teams.csv');
+    expect(uploadedFile.type).toBe('text/csv');
+    expect(await readText(uploadedFile)).toBe('Team,Yes');
+  });
+
+  it('Should show the read error when the selected file cannot be read', async () => {
+    jest
+      .spyOn(FileReader.prototype, 'readAsArrayBuffer')
+      .mockImplementationOnce(function failRead(this: FileReader) {
+        this.dispatchEvent(new ProgressEvent('error'));
+      });
+    const { container } = renderModal();
+
+    await upload(makeFile('teams.csv'), container);
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Something went wrong reading this file. Please try again.',
+    );
+    expect(onUploadList).not.toHaveBeenCalled();
+  });
+
   it('Should clear the read error once a later upload succeeds', async () => {
     const onUploadListRetry = jest
       .fn<Promise<UploadListResult>, [File]>()
@@ -908,20 +946,11 @@ describe('UploadListModal', () => {
     );
   });
 
-  // The back arrow, Cancel and the header X all route through the same
-  // requestClose handler, so verify each control returns to the parent.
+  // The back arrow and Cancel route through the same requestClose handler,
+  // so verify each control returns to the parent.
   it.each<[string, () => HTMLElement]>([
     ['the back arrow', () => screen.getByRole('button', { name: 'Back' })],
     ['Cancel', () => screen.getByRole('button', { name: 'Cancel' })],
-    [
-      'the header close button',
-      () =>
-        screen
-          .getAllByRole('button', { name: 'Close' })
-          .find(
-            (button) => !(button as HTMLButtonElement).disabled,
-          ) as HTMLElement,
-    ],
   ])(
     'Should return to the parent from %s when nothing has changed',
     async (_label, getControl) => {

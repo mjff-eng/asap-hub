@@ -10,7 +10,6 @@ import {
   CircleInfoIcon,
   InactiveBadgeIcon,
   InvalidTickIcon,
-  crossIcon,
   crossSmallIcon,
   chevronLeftIcon,
   plusIcon,
@@ -423,6 +422,23 @@ const suggestionToTeam = (
   isTeamInactive: suggestion.isTeamInactive,
 });
 
+// A picked File is read from disk lazily, so Chrome refuses to send it
+// (ERR_UPLOAD_FILE_CHANGED) if the file is edited before the attendance is saved.
+// Copying the bytes up front decouples the upload from the disk file.
+const copyFileToMemory = (file: File): Promise<File> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () =>
+      resolve(
+        new File([reader.result as ArrayBuffer], file.name, {
+          type: file.type,
+          lastModified: file.lastModified,
+        }),
+      );
+    reader.onerror = () => reject(reader.error);
+    reader.readAsArrayBuffer(file);
+  });
+
 const dedupeByTeamId = (
   teams: EventAttendanceTeam[],
 ): EventAttendanceTeam[] => {
@@ -508,7 +524,12 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
     if (selectionError) return;
 
     setIsUploading(true);
-    runUpload(selectedFile);
+    void copyFileToMemory(selectedFile)
+      .then(runUpload)
+      .catch(() => {
+        setIsUploading(false);
+        setError('Something went wrong reading this file. Please try again.');
+      });
   };
 
   const removeFile = () => runUpload(null);
@@ -658,16 +679,6 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
             Upload a list
           </Headline2>
         </div>
-        <Button
-          small
-          noMargin
-          aria-label="Close"
-          enabled={!isSaving}
-          onClick={requestClose}
-          overrideStyles={css([iconButtonStyles, headerIconStyles])}
-        >
-          {crossIcon}
-        </Button>
       </header>
 
       <div css={bodyStyles}>
