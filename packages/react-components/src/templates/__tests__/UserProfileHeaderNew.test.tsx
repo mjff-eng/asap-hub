@@ -77,9 +77,21 @@ describe('contact', () => {
     );
   });
 
-  it('copies the email to the clipboard', async () => {
+  it('copies the contact email to the clipboard', async () => {
     Object.assign(navigator, { clipboard: { writeText: jest.fn() } });
-    renderHeader({ email: 'me@example.com' });
+    renderHeader({
+      email: 'me@example.com',
+      contactEmail: 'contact@example.com',
+    });
+    await userEvent.click(screen.getByRole('button', { name: 'Copy' }));
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+      'contact@example.com',
+    );
+  });
+
+  it('copies the email when there is no contact email', async () => {
+    Object.assign(navigator, { clipboard: { writeText: jest.fn() } });
+    renderHeader({ email: 'me@example.com', contactEmail: undefined });
     await userEvent.click(screen.getByRole('button', { name: 'Copy' }));
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
       'me@example.com',
