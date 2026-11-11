@@ -39,7 +39,7 @@
     "@asap-hub/eslint-config-asap-hub": "workspace:*",
     "@asap-hub/fixtures": "workspace:*",
     "@asap-hub/react-context": "workspace:*",
-    "@babel/core": "7.28.6",
+    "@babel/core": "7.29.6",
     "@babel/preset-react": "7.28.5",
     "@emotion/babel-plugin": "11.11.0",
     "@emotion/jest": "^11.10.5",

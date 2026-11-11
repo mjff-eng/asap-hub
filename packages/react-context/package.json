@@ -30,7 +30,7 @@
   "devDependencies": {
     "@asap-hub/dom-test-utils": "workspace:*",
     "@asap-hub/eslint-config-asap-hub": "workspace:*",
-    "@babel/core": "7.28.6",
+    "@babel/core": "7.29.6",
     "@babel/preset-react": "7.28.5",
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "^6.9.0",
