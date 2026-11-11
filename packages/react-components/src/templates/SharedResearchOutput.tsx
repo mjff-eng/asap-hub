@@ -298,7 +298,7 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
       />
       {grantDocument && (
         <header>
-          <PageInfoContainer breadcrumbs={breadcrumbs}>
+          <PageInfoContainer breadcrumbs={breadcrumbs} noPaddingBottom>
             <GrantDocumentHeaderCard
               title={props.title}
               documentType={props.documentType}

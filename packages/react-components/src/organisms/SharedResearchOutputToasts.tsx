@@ -129,10 +129,7 @@ const SharedResearchOutputToasts: React.FC<SharedResearchOutputToastsProps> = ({
                 }`}</Toast>
       )}
       {supplementGrantHref && showSupplementGrantToast && (
-        <Toast
-          accent="warning"
-          onClose={() => setShowSupplementGrantToast(false)}
-        >
+        <Toast accent="info" onClose={() => setShowSupplementGrantToast(false)}>
           This is an original grant proposal. A{' '}
           <span css={underlineStyles}>
             <Anchor href={supplementGrantHref}>supplement version</Anchor>
