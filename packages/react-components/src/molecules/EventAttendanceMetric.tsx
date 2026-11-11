@@ -28,7 +28,7 @@ export const valueStyles = css({
   fontWeight: 'bold',
   fontSize: rem(32),
   // A ratio, not `rem`: line-height in `em` resolves against the element's own
-  // font size, so `rem(40)` here would render 40/17 x 32px.
+  // font size, so `rem(40)` here would render 40/16 x 32px.
   lineHeight: 40 / 32,
   color: colour.foreground.primary,
   [`@media (max-width: ${mobileScreen.max}px)`]: {

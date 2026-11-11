@@ -108,7 +108,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
     <>
       {announcements.length > 0 ? (
         <div css={columnContainer}>
-          <Headline2>Announcements</Headline2>
+          <Headline2 styleAsHeading={5}>Announcements</Headline2>
           <Paragraph accent="tertiary" noMargin>
             Latest admin announcements.
           </Paragraph>
@@ -119,7 +119,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
       ) : null}
 
       <div css={columnContainer}>
-        <Headline2>Reminders</Headline2>
+        <Headline2 styleAsHeading={5}>Reminders</Headline2>
         <Paragraph accent="tertiary" noMargin>
           Latest reminders about published outputs and upcoming events.
         </Paragraph>
@@ -132,7 +132,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         </div>
       </div>
       <div css={columnContainer}>
-        <Headline2>GP2 Hub Stats</Headline2>
+        <Headline2 styleAsHeading={5}>GP2 Hub Stats</Headline2>
         <Paragraph accent="tertiary" noMargin>
           Here are the latest stats from the GP2 Hub.
         </Paragraph>
@@ -162,7 +162,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
       </div>
       {guides && (
         <div css={columnContainer}>
-          <Headline2>Tools and Tutorials</Headline2>
+          <Headline2 styleAsHeading={5}>Tools and Tutorials</Headline2>
           <Paragraph accent="tertiary" noMargin>
             Here are some quick links to GP2 Hub resources.
           </Paragraph>
@@ -190,7 +190,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         </div>
       )}
       <div css={columnContainer}>
-        <Headline2 styleAsHeading={3}>Upcoming Events</Headline2>
+        <Headline2 styleAsHeading={5}>Upcoming Events</Headline2>
         <div css={infoStyles}>
           Here are some of the upcoming GP2 Hub events.
         </div>
@@ -207,7 +207,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         )}
       </div>
       <div css={columnContainer}>
-        <Headline2 styleAsHeading={3}>Past Events</Headline2>
+        <Headline2 styleAsHeading={5}>Past Events</Headline2>
         <div css={infoStyles}>
           Explore previous events and learn about what was discussed.
         </div>
@@ -224,7 +224,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         )}
       </div>
       <div>
-        <Headline2 styleAsHeading={3}>Recent Outputs</Headline2>
+        <Headline2 styleAsHeading={5}>Recent Outputs</Headline2>
         <div css={infoStyles}>
           Explore the latest outputs and learn more about them.
         </div>
@@ -248,7 +248,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
         )}
       </div>
       <div css={columnContainer}>
-        <Headline2>Latest Users</Headline2>
+        <Headline2 styleAsHeading={5}>Latest Users</Headline2>
         <Paragraph accent="tertiary" noMargin>
           Explore and learn more about the latest users on the hub.
         </Paragraph>
@@ -272,7 +272,7 @@ const DashboardPageBody: React.FC<DashboardPageBodyProps> = ({
       </div>
       {latestNews ? (
         <div css={columnContainer}>
-          <Headline2>Latest News</Headline2>
+          <Headline2 styleAsHeading={5}>Latest News</Headline2>
           <Paragraph accent="tertiary" noMargin>
             Here is the latest GP2 news.
           </Paragraph>

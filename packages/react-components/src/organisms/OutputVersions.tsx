@@ -152,7 +152,9 @@ const OutputVersions: React.FC<OutputVersionsProps> = ({
               ...(displayShowMoreButton ? [{ paddingBottom: 0 }] : []),
             ]}
           >
-            <Headline2 noMargin>Version History</Headline2>
+            <Headline2 styleAsHeading={5} noMargin>
+              Version History
+            </Headline2>
             <div css={descriptionStyles}>
               {versionAction ? (
                 <Paragraph noMargin>

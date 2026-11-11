@@ -25,7 +25,7 @@ const memberInfoStyles = css({
 });
 
 const nameStyles = css({
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontWeight: 500,
   color: colour.foreground.brand,
   textDecoration: 'none',
@@ -36,7 +36,7 @@ const nameStyles = css({
 
 const noRoleStyles = css({
   color: colour.foreground.tertiary,
-  fontSize: rem(17),
+  fontSize: rem(16),
   fontStyle: 'italic',
 });
 

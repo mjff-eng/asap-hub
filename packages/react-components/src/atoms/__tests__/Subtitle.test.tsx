@@ -16,5 +16,5 @@ it('applies the text margin', () => {
 it('renders the text in regular sized font', () => {
   const { getByText } = render(<Subtitle>text</Subtitle>);
   const { fontSize } = getComputedStyle(getByText('text'));
-  expect(fontSize).toMatchInlineSnapshot(`"17px"`);
+  expect(fontSize).toMatchInlineSnapshot(`"16px"`);
 });

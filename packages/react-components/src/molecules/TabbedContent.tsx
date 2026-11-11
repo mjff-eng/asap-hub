@@ -75,7 +75,9 @@ export const TabbedContent = <T extends object>({
     <div>
       <div css={headerStyles}>
         <div css={titleStyles}>
-          <Headline3 noMargin>{title}</Headline3>
+          <Headline3 styleAsHeading={5} noMargin>
+            {title}
+          </Headline3>
         </div>
         <div css={[descriptionStyles(description), overrideDescriptionStyles]}>
           {description}

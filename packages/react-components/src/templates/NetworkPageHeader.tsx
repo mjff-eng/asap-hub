@@ -244,7 +244,7 @@ const NetworkPageHeader: React.FC<NetworkPageHeaderProps> = ({
           </TabNav>
         }
       >
-        <Display styleAsHeading={2}>Network</Display>
+        <Display>Network</Display>
         <div css={textStyles}>
           <Paragraph accent="tertiary">
             Explore the ASAP Network and collaborate!

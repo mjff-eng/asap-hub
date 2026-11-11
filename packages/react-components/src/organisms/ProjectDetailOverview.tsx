@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { colour } from '../colors';
-import { Card, Display, Headline3, Link, Paragraph, TabButton } from '../atoms';
+import { Card, Display, Link, Paragraph, TabButton } from '../atoms';
 import { TabNav } from '../molecules';
 import { rem } from '../pixels';
 
@@ -36,7 +36,7 @@ const ProjectDetailOverviewContent: React.FC<
   ProjectDetailOverviewContentProps
 > = ({ title, description, proposalURL }) => (
   <>
-    <Display styleAsHeading={4}>{title}</Display>
+    <Display styleAsHeading={6}>{title}</Display>
     <Paragraph accent="tertiary">{description}</Paragraph>
     {proposalURL ? (
       <div css={buttonContainerStyles}>
@@ -66,7 +66,7 @@ const ProjectDetailOverview: React.FC<ProjectDetailOverviewProps> = ({
   return (
     <Card>
       <div>
-        <Headline3 noMargin>Overview</Headline3>
+        <Display styleAsHeading={5}>Overview</Display>
 
         {supplementGrant?.grantTitle ? (
           <>

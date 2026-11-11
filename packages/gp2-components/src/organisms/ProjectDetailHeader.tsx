@@ -13,6 +13,7 @@ import {
   TabLink,
   TabNav,
   colour,
+  text,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 
@@ -174,7 +175,7 @@ const ProjectDetailHeader: React.FC<ProjectDetailHeaderProps> = ({
           opportunitiesAvailable={opportunitiesAvailable}
         />
         <Subtitle>Project</Subtitle>
-        <h2>{title}</h2>
+        <h2 css={text.headlineStyles[4]}>{title}</h2>
         <div css={infoContainerStyles}>
           <ProjectSummaryFooter
             members={members}

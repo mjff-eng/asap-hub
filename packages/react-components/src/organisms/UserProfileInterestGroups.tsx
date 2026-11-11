@@ -19,7 +19,7 @@ const UserProfileInterestGroups: FC<UserProfileInterestGroupsProps> = ({
         flexDirection: 'column',
       }}
     >
-      <Headline2 styleAsHeading={3}>{firstName}’s Groups</Headline2>
+      <Headline2 styleAsHeading={5}>{firstName}’s Groups</Headline2>
       <Paragraph accent="tertiary">
         {firstName}’s team is collaborating with other teams via groups, which
         meet frequently

@@ -11,7 +11,7 @@ it('renders the In person label', () => {
 it('uses 16px text', () => {
   render(<InPersonPill />);
   expect(screen.getByText('In person')).toHaveStyle({
-    fontSize: `${16 / 17}em`,
+    fontSize: `1em`,
   });
 });
 

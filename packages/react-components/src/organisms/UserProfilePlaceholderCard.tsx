@@ -25,7 +25,7 @@ const UserProfilePlaceholderCard: React.FC<UserProfilePlaceholderCardProps> = ({
       {title && (
         <h4
           css={
-            (headlineStyles[5],
+            (headlineStyles['body/bold'],
             [{ margin: 0, color: colour.foreground.tertiary }])
           }
         >

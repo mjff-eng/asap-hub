@@ -8,7 +8,7 @@ interface Headline3Props {
 }
 const Headline3: React.FC<Headline3Props> = ({
   children,
-  styleAsHeading = 3,
+  styleAsHeading = 4,
   id,
   noMargin = false,
 }) => (

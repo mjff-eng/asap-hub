@@ -55,7 +55,7 @@ const OutputAdditionalInformationCard: React.FC<
   publishDate,
 }) => (
   <Card>
-    <Headline2 styleAsHeading={4}>Additional Information</Headline2>
+    <Headline2 styleAsHeading={5}>Additional Information</Headline2>
     <ol css={additionalInformationListStyles}>
       {gp2Supported === "Don't Know" || gp2Supported === undefined || (
         <>

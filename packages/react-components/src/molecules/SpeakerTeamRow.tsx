@@ -69,7 +69,6 @@ const labelStyles = css({
   flexShrink: 0,
   fontSize: rem(16),
   lineHeight: 24 / 16,
-  // `em` against the 16px label text, since `rem()` assumes 17px.
   gap: `${8 / 16}em`,
   '> svg': {
     width: `${24 / 16}em`,

@@ -83,7 +83,7 @@ const SharedResearchListCard: React.FC<SharedResearchListCardProps> = ({
                   sharedResearch({}).researchOutput({ researchOutputId: id }).$
                 }
               >
-                <Headline2 styleAsHeading={5}>{title}</Headline2>
+                <Headline2 styleAsHeading="body/bold">{title}</Headline2>
               </Anchor>
             </AlgoliaHit>
           </li>

@@ -110,7 +110,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             </Button>
           )}
         </div>
-        <Headline3>{title}</Headline3>
+        <Headline3 styleAsHeading={5}>{title}</Headline3>
       </header>
       <div css={[paddingStyles, { paddingTop: 0 }]}>
         <Paragraph accent="tertiary">{description}</Paragraph>

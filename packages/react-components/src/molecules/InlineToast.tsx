@@ -56,8 +56,8 @@ const toastStyles = (accent: Accent, hasUndo: boolean) =>
     borderRadius: rem(accents[accent].radius),
     backgroundColor: accents[accent].background,
     color: accents[accent].text,
-    fontSize: rem(17),
-    lineHeight: 24 / 17,
+    fontSize: rem(16),
+    lineHeight: 24 / 16,
     [`@media (max-width: ${mobileScreen.max}px)`]: {
       // A grid, not flex-wrap: the icon has to stay on the message's first
       // line however far the message wraps.

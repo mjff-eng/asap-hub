@@ -12,12 +12,12 @@ const InterestGroupInformation: React.FC<InterestGroupInformationProps> = ({
   tags,
 }) => (
   <Card>
-    <Headline3>Interest Group Description</Headline3>
+    <Headline3 styleAsHeading={5}>Interest Group Description</Headline3>
     <Paragraph accent="tertiary">
       <span css={{ whiteSpace: 'pre-line' }}>{description}</span>
     </Paragraph>
     <Divider />
-    <Headline3>Tags</Headline3>
+    <Headline3 styleAsHeading={5}>Tags</Headline3>
     <div
       css={{
         marginTop: rem(12),

@@ -11,7 +11,7 @@ const containerStyles = css({
 
 const labTextStyles = css({
   color: colour.foreground.quaternary,
-  fontSize: rem(17),
+  fontSize: rem(16),
 });
 
 type LabsListProps = {
