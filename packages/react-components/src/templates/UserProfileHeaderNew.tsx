@@ -377,7 +377,9 @@ const UserProfileHeaderNew: React.FC<UserProfileHeaderNewProps> = ({
                   <CopyButton
                     hoverTooltipText="Copy Email"
                     clickTooltipText="Email Copied"
-                    onClick={() => navigator.clipboard.writeText(email)}
+                    onClick={() =>
+                      navigator.clipboard.writeText(contactEmail || email)
+                    }
                   />
                 </div>
                 {editContactInfoHref && (

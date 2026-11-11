@@ -44,18 +44,40 @@ it('prefers an explicit contact email address', () => {
     'mailto:contact@example.com',
   );
 });
-it('copy button adds email to clipboard', async () => {
-  Object.assign(navigator, {
-    clipboard: {
-      writeText: jest.fn(),
-    },
+describe('copy button', () => {
+  beforeEach(() => {
+    Object.assign(navigator, { clipboard: { writeText: jest.fn() } });
   });
-  jest.spyOn(navigator.clipboard, 'writeText');
-  render(<UserProfileHeader {...boilerplateProps} email="me@example.com" />);
-  const copyButton = screen.getByRole('button', { name: 'Copy' });
-  expect(copyButton).toBeVisible();
-  await userEvent.click(copyButton);
-  expect(navigator.clipboard.writeText).toHaveBeenCalledWith('me@example.com');
+
+  it('copies the contact email to the clipboard', async () => {
+    render(
+      <UserProfileHeader
+        {...boilerplateProps}
+        email="me@example.com"
+        contactEmail="contact@example.com"
+      />,
+    );
+    const copyButton = screen.getByRole('button', { name: 'Copy' });
+    expect(copyButton).toBeVisible();
+    await userEvent.click(copyButton);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+      'contact@example.com',
+    );
+  });
+
+  it('falls back to the email when there is no contact email', async () => {
+    render(
+      <UserProfileHeader
+        {...boilerplateProps}
+        email="me@example.com"
+        contactEmail={undefined}
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Copy' }));
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+      'me@example.com',
+    );
+  });
 });
 describe('an edit button', () => {
   it('is not rendered by default', () => {
