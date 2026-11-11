@@ -151,9 +151,7 @@ describe('search functionality', () => {
 
     await userEvent.type(input, 'test');
 
-    const CallArgs = mockOnChangeSearchQuery.mock.calls;
-
-    expect(CallArgs.join('')).toBe('test');
+    expect(mockOnChangeSearchQuery).toHaveBeenLastCalledWith('test');
   });
 
   it('does not render the search box when showSearch is false', () => {

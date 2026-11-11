@@ -19,8 +19,11 @@ it('renders the search box and filters button', () => {
 it('calls the onChangeQuery when search input changes', async () => {
   const { getByRole } = render(<ResearchOutputsSearch {...props} />);
   await userEvent.type(getByRole('searchbox'), 'searchterm');
-  [...'searchterm'].forEach((letter, index) =>
-    expect(props.onChangeSearch).toHaveBeenNthCalledWith(index + 1, letter),
+  [...'searchterm'].forEach((_, index) =>
+    expect(props.onChangeSearch).toHaveBeenNthCalledWith(
+      index + 1,
+      'searchterm'.slice(0, index + 1),
+    ),
   );
 });
 it('calls the onChangeFilter when filter is selected', async () => {
