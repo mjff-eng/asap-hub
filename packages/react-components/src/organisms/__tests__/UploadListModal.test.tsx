@@ -242,7 +242,7 @@ describe('UploadListModal', () => {
     const { container } = renderModal({ onUploadList: pendingUpload });
 
     await upload(makeFile('teams.csv'), container);
-    expect(screen.getByRole('button', { name: 'Cross' })).toBeDisabled();
+    expect(await screen.findByRole('button', { name: 'Cross' })).toBeDisabled();
 
     resolveUpload(uploadResult);
     await waitFor(() =>
@@ -772,7 +772,7 @@ describe('UploadListModal', () => {
     });
     await upload(makeFile('teams.csv'), container);
 
-    expect(screen.getByText('0 already in')).toBeInTheDocument();
+    expect(await screen.findByText('0 already in')).toBeInTheDocument();
 
     await userEvent.click(
       await screen.findByRole('button', { name: /not matched/ }),
