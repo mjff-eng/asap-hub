@@ -48,7 +48,7 @@
     "stream": "npm:stream-browserify@3.0.0",
     "use-debounce": "8.0.4",
     "use-deep-compare-effect": "1.6.1",
-    "uuid": "8.3.2",
+    "uuid": "11.1.1",
     "vite": "5.4.21",
     "xlsx": "^0.18.5"
   },
