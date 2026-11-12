@@ -55,8 +55,12 @@ export {
 } from './atoms';
 export type { MultiSelectOptionsType, MultiSelectProps } from './atoms';
 export type { ManuscriptVersionOption } from './templates';
-export type { LabMembership } from './organisms';
-export type { MembershipCardTab, MembershipTableColumn } from './molecules';
+export type {
+  CalendarOwner,
+  EventRelatedResearchItem,
+  LabMembership,
+} from './organisms';
+export type { MembershipCardTab, ResponsiveTableColumn } from './molecules';
 export type {
   ResearchOutputToast,
   ResearchOutputToastLocationState,
@@ -98,6 +102,7 @@ export {
   EventMaterialsList,
   EventNumberOfSpeakers,
   EventOwner,
+  getCalendarOwner,
   EventTeams,
   EventTime,
   ExportButton,
@@ -139,6 +144,7 @@ export {
   ProjectMembers,
   ProjectOutputBody,
   ReminderItem,
+  ResponsiveTable,
   RolesList,
   SearchField,
   StatusBadge,
@@ -187,6 +193,7 @@ export {
   summarizeAttendance,
   SourceLists,
   UploadListModal,
+  EventCalendarCard,
   EventCard,
   EventConversation,
   EventMaterials,
@@ -253,6 +260,7 @@ export {
   RecentSharedOutputs,
   RelatedEventsCard,
   RelatedResearchCard,
+  EventRelatedResearchCard,
   RemindersCard,
   RepresentationOfPresentersTable,
   ResearchOutputExtraInformationCard,

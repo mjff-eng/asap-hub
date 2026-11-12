@@ -6,8 +6,8 @@ import { LabIcon, TeamIcon } from '../icons';
 import {
   MembershipCard,
   MembershipName,
-  MembershipTable,
-  MembershipTableColumn,
+  ResponsiveTable,
+  ResponsiveTableColumn,
 } from '../molecules';
 import { splitListBy } from '../utils';
 
@@ -21,7 +21,7 @@ export type LabMembership = LabResponse & {
   readonly inactiveSinceDate?: string;
 };
 
-const labColumn = (userId: string): MembershipTableColumn<LabMembership> => ({
+const labColumn = (userId: string): ResponsiveTableColumn<LabMembership> => ({
   key: 'lab',
   title: 'Lab',
   render: ({ name, labPrincipalInvestigatorId }) => (
@@ -38,7 +38,7 @@ const labColumn = (userId: string): MembershipTableColumn<LabMembership> => ({
   ),
 });
 
-const teamColumn: MembershipTableColumn<LabMembership> = {
+const teamColumn: ResponsiveTableColumn<LabMembership> = {
   key: 'team',
   title: 'Team',
   width: '30%',
@@ -53,7 +53,7 @@ const teamColumn: MembershipTableColumn<LabMembership> = {
     ) : null,
 };
 
-const dateLeftColumn: MembershipTableColumn<LabMembership> = {
+const dateLeftColumn: ResponsiveTableColumn<LabMembership> = {
   key: 'dateLeft',
   title: 'Date left',
   width: '30%',
@@ -100,7 +100,7 @@ const UserLabsMembershipCard: React.FC<LabsMembershipCardProps> = ({
       ]}
     >
       {({ data, activeTabIndex }) => (
-        <MembershipTable
+        <ResponsiveTable
           columns={activeTabIndex === 1 ? formerColumns : currentColumns}
           rows={data}
           getRowKey={(lab) => lab.id}

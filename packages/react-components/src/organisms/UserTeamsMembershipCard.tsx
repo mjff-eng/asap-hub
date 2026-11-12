@@ -7,8 +7,8 @@ import { InactiveBadgeIcon, TeamIcon } from '../icons';
 import {
   MembershipCard,
   MembershipName,
-  MembershipTable,
-  MembershipTableColumn,
+  ResponsiveTable,
+  ResponsiveTableColumn,
 } from '../molecules';
 import { rem } from '../pixels';
 import {
@@ -26,7 +26,7 @@ const rolesStyles = css({
 const dateLeft = ({ inactiveSinceDate, teamInactiveSince }: GroupedUserTeam) =>
   inactiveSinceDate || teamInactiveSince;
 
-const teamColumn: MembershipTableColumn<GroupedUserTeam> = {
+const teamColumn: ResponsiveTableColumn<GroupedUserTeam> = {
   key: 'team',
   title: 'Team',
   render: ({ id, displayName, teamInactiveSince }) => (
@@ -40,7 +40,7 @@ const teamColumn: MembershipTableColumn<GroupedUserTeam> = {
   ),
 };
 
-const roleColumn: MembershipTableColumn<GroupedUserTeam> = {
+const roleColumn: ResponsiveTableColumn<GroupedUserTeam> = {
   key: 'role',
   title: 'Role',
   width: '33%',
@@ -53,7 +53,7 @@ const roleColumn: MembershipTableColumn<GroupedUserTeam> = {
   ),
 };
 
-const dateLeftColumn: MembershipTableColumn<GroupedUserTeam> = {
+const dateLeftColumn: ResponsiveTableColumn<GroupedUserTeam> = {
   key: 'dateLeft',
   title: 'Date left',
   width: '33%',
@@ -102,7 +102,7 @@ const UserTeamsMembershipCard: React.FC<TeamsMembershipCardProps> = ({
       ]}
     >
       {({ data, activeTabIndex }) => (
-        <MembershipTable
+        <ResponsiveTable
           columns={activeTabIndex === 1 ? formerColumns : currentColumns}
           rows={data}
           getRowKey={(team) => team.id}

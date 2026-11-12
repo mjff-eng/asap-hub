@@ -4,10 +4,15 @@ export { default as CollapsibleTable } from './CollapsibleTable';
 export { default as ContactSupport } from './ContactSupport';
 export { default as EditableCard } from './EditableCard';
 export { default as EmptyState } from './EmptyState';
-export { default as EventOwner } from './EventOwner';
+export {
+  default as EventOwner,
+  getCalendarOwner,
+  isCalendarOwnerActive,
+} from './EventOwner';
 export { default as EventSpeakers } from './EventSpeakers';
 export { default as HeaderLogo } from './HeaderLogo';
 export { default as IconWithLabel } from './IconWithLabel';
+export { default as ImageBanner } from './ImageBanner';
 export { default as NavigationLink } from './NavigationLink';
 export { default as SocialIcons } from './SocialIcons';
 export { default as StatusPill } from './StatusPill';

@@ -20,7 +20,7 @@ const props: ComponentProps<typeof EventDetailPage> = {
   eventOwner: <div>ASAP Team</div>,
   eventConversation: <div>Event Conversation</div>,
   displayCalendar: false,
-  getIconForDocumentType: jest.fn(),
+  calendarOwner: { name: 'Calendar Owner', icon: <span>Owner Icon</span> },
   aboutHref,
   meetingMaterialsHref,
   selectedTab: 'about',
@@ -100,6 +100,13 @@ it('renders the about section with description and tags', () => {
   expect(screen.getByText('About this event')).toBeVisible();
   expect(screen.getByText('My Desc')).toBeVisible();
   expect(screen.getAllByText('My Tag').length).toBeGreaterThan(0);
+});
+
+it('shows the tags only in the about section, not in the hero', () => {
+  renderPage(
+    <EventDetailPage {...props} description="My Desc" tags={['My Tag']} />,
+  );
+  expect(screen.getAllByText('My Tag')).toHaveLength(1);
 });
 
 it('renders the description without the always-on collapse toggle', () => {
@@ -236,9 +243,33 @@ it('renders calendar list when displayCalendar is true', () => {
       {...props}
       displayCalendar
       calendar={{ ...createCalendarResponse(), name: 'Event Calendar' }}
+      calendarOwner={{
+        name: 'My Interest Group',
+        href: '/network/interest-groups/ig-1',
+        icon: <span>Interest Group Icon</span>,
+      }}
     />,
   );
-  expect(screen.getByText('Event Calendar')).toBeInTheDocument();
+  expect(
+    screen.getByRole('link', { name: 'My Interest Group' }),
+  ).toHaveAttribute('href', '/network/interest-groups/ig-1');
+  expect(screen.getByText('Interest Group Icon')).toBeVisible();
+  expect(screen.queryByText('Event Calendar')).not.toBeInTheDocument();
+  expect(screen.queryByText('●')).not.toBeInTheDocument();
+});
+
+it('shows the calendar owner name without a link when there is no href', () => {
+  renderPage(
+    <EventDetailPage
+      {...props}
+      displayCalendar
+      calendarOwner={{ name: 'Event Calendar', icon: <span>Icon</span> }}
+    />,
+  );
+  expect(screen.getByText('Event Calendar')).toBeVisible();
+  expect(
+    screen.queryByRole('link', { name: 'Event Calendar' }),
+  ).not.toBeInTheDocument();
 });
 
 it('renders related research when there are items to display', () => {
@@ -257,7 +288,87 @@ it('renders related research when there are items to display', () => {
       ]}
     />,
   );
-  expect(screen.getByText('My Research')).toBeVisible();
+  expect(
+    within(screen.getByTestId('event-related-research')).getByText(
+      'My Research',
+    ),
+  ).toBeVisible();
+});
+
+describe('related research table', () => {
+  const relatedResearch: ComponentProps<
+    typeof EventDetailPage
+  >['relatedResearch'] = [
+    {
+      id: 'preprint-1',
+      title: 'A preprint',
+      type: 'Preprint',
+      documentType: 'Article',
+      teams: [{ id: 'team-1', displayName: 'Team A' }],
+      workingGroups: [],
+    },
+    {
+      id: 'dataset-1',
+      title: 'A dataset',
+      type: 'Clinical',
+      documentType: 'Dataset',
+      teams: [{ id: 'team-1', displayName: 'Team A' }],
+      workingGroups: [{ id: 'wg-1', title: 'WG A' }],
+    },
+    {
+      id: 'protocol-1',
+      title: 'A protocol',
+      type: 'Assay',
+      documentType: 'Protocol',
+      teams: [
+        { id: 'team-1', displayName: 'Team A' },
+        { id: 'team-2', displayName: 'Team B' },
+      ],
+      workingGroups: [],
+    },
+  ];
+
+  it('shows the output, type and source columns', () => {
+    renderPage(
+      <EventDetailPage {...props} relatedResearch={relatedResearch} />,
+    );
+    ['Output', 'Type', 'From'].forEach((title) =>
+      expect(screen.getAllByText(title)[0]).toBeInTheDocument(),
+    );
+    expect(screen.queryByText('Status')).not.toBeInTheDocument();
+    const table = screen.getByTestId('event-related-research');
+    expect(
+      within(table).getByRole('link', { name: 'A preprint' }),
+    ).toHaveAttribute('href', expect.stringContaining('preprint-1'));
+    expect(within(table).getByText('Preprint')).toBeInTheDocument();
+    expect(within(table).getByText('Dataset')).toBeInTheDocument();
+    expect(within(table).queryByText('Clinical')).not.toBeInTheDocument();
+    expect(within(table).queryByText('Assay')).not.toBeInTheDocument();
+  });
+
+  it('links to the working group before the teams', () => {
+    renderPage(
+      <EventDetailPage {...props} relatedResearch={relatedResearch} />,
+    );
+    expect(screen.getByRole('link', { name: 'WG A' })).toHaveAttribute(
+      'href',
+      expect.stringContaining('wg-1'),
+    );
+    expect(screen.getByRole('link', { name: 'Team A' })).toHaveAttribute(
+      'href',
+      expect.stringContaining('team-1'),
+    );
+  });
+
+  it('shows multiple teams without a link', () => {
+    renderPage(
+      <EventDetailPage {...props} relatedResearch={relatedResearch} />,
+    );
+    expect(screen.getByText('Multiple teams')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Multiple teams' }),
+    ).not.toBeInTheDocument();
+  });
 });
 
 it('renders related tutorials when there are items to display', () => {
@@ -326,4 +437,111 @@ it('shows the missing meeting link tooltip below the join button', () => {
   expect(button.nextElementSibling).toContainElement(
     screen.getByText(/couldn’t find the link to this event/),
   );
+});
+
+describe('options for other hubs', () => {
+  it('renders the hero banner before the event header', () => {
+    renderPage(
+      <EventDetailPage
+        {...props}
+        title="My Event"
+        heroBanner={<div>Hero Banner</div>}
+      />,
+    );
+    const article = screen.getByRole('article');
+    expect(article.firstElementChild).toHaveTextContent('Hero Banner');
+    expect(
+      screen.getByRole('heading', { name: 'My Event' }),
+    ).toBeInTheDocument();
+  });
+
+  it('hides the breadcrumbs', () => {
+    renderPage(<EventDetailPage {...props} hideBreadcrumbs />);
+    expect(
+      screen.queryByRole('navigation', { name: 'breadcrumbs' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders the hero event without a card when plainHero is set', () => {
+    renderPage(<EventDetailPage {...props} title="My Event" plainHero />);
+    const heroCard = screen
+      .getByRole('heading', { name: 'My Event' })
+      .closest('section')!;
+    expect(getComputedStyle(heroCard).borderStyle).toBe('none');
+  });
+
+  it('renders the event toast above the hero banner when toastAboveBanner is set', () => {
+    renderPage(
+      <EventDetailPage
+        {...props}
+        title="My Event"
+        status="Cancelled"
+        heroBanner={<div>Hero Banner</div>}
+        toastAboveBanner
+      />,
+    );
+    const article = screen.getByRole('article');
+    expect(article.firstElementChild).toHaveTextContent(
+      'The event has been cancelled.',
+    );
+    expect(article.children[1]).toHaveTextContent('Hero Banner');
+    expect(screen.getAllByText('The event has been cancelled.')).toHaveLength(
+      1,
+    );
+  });
+
+  it('renders the event toast inside the hero card by default', () => {
+    renderPage(
+      <EventDetailPage
+        {...props}
+        title="My Event"
+        status="Cancelled"
+        heroBanner={<div>Hero Banner</div>}
+      />,
+    );
+    const heroCard = screen
+      .getByRole('heading', { name: 'My Event' })
+      .closest('section')!;
+    expect(heroCard).toHaveTextContent('The event has been cancelled.');
+  });
+
+  it('renders the hero event inside a card by default', () => {
+    renderPage(<EventDetailPage {...props} title="My Event" />);
+    const heroCard = screen
+      .getByRole('heading', { name: 'My Event' })
+      .closest('section')!;
+    expect(getComputedStyle(heroCard).borderStyle).toBe('solid');
+  });
+
+  it('renders a custom related research card in place of the default one', () => {
+    renderPage(
+      <EventDetailPage
+        {...props}
+        relatedResearchCard={<div>Custom Related Research</div>}
+      />,
+    );
+    expect(screen.getByText('Custom Related Research')).toBeVisible();
+    expect(
+      screen.queryByText(
+        'Find all shared research outputs related to this event.',
+      ),
+    ).not.toBeInTheDocument();
+  });
+
+  it('does not render the related tutorials card when there are none', () => {
+    renderPage(<EventDetailPage {...props} relatedTutorials={undefined} />);
+    expect(
+      screen.queryByRole('heading', { name: 'Related Tutorials' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('hides the calendar instructions in the support section', () => {
+    renderPage(<EventDetailPage {...props} hideCalendarInstructions />);
+    expect(
+      screen.queryByRole('link', { name: 'Apple Calendar' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Contact tech support' }),
+    ).toBeVisible();
+  });
 });

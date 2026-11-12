@@ -26,7 +26,7 @@ const listStyles = css({
 });
 
 const rowStyles = css({
-  color: colour.foreground.tertiary,
+  color: colour.foreground.secondary,
   overflow: 'hidden',
   lineHeight: rem(32),
 });
