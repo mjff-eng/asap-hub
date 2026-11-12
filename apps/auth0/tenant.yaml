@@ -13,6 +13,8 @@ actions:
     secrets:
       - name: AUTH0_ADDITIONAL_CLAIM_DOMAIN
         value: '##AUTH0_ADDITIONAL_CLAIM_DOMAIN##'
+      - name: DEMO_CLIENT_ID
+        value: '##DEMO_CLIENT_ID##'
       - name: AUTH0_SHARED_SECRET
         value: '##AUTH0_SHARED_SECRET##'
       - name: API_URL

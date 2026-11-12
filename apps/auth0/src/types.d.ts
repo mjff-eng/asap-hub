@@ -28,6 +28,7 @@ type Auth0Secrets = {
     API_URL: string; // https://api-dev.hub.asap.science / https://api-dev.gp2.asap.science
     AUTH0_SHARED_SECRET: string;
     AUTH0_ADDITIONAL_CLAIM_DOMAIN?: string; // 'https://dev.hub.asap.science' / https://dev.gp2.asap.science in development to allow local login
+    DEMO_CLIENT_ID?: string; // demo hub application in the dev tenant; its users have no Contentful record
   };
 };
 
