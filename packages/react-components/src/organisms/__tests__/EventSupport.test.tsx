@@ -49,3 +49,14 @@ it('uses a custom tech support email', () => {
     screen.getByRole('link', { name: 'Contact tech support' }),
   ).toHaveAttribute('href', 'mailto:techsupport@gp2.org');
 });
+
+it('hides the calendar setup instructions', () => {
+  render(<EventSupport hideCalendarInstructions />);
+
+  expect(
+    screen.queryByRole('link', { name: 'Apple Calendar' }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole('link', { name: 'Contact tech support' }),
+  ).toBeVisible();
+});

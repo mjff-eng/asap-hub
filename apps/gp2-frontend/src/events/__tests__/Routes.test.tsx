@@ -1,14 +1,17 @@
 import { mockConsoleError } from '@asap-hub/dom-test-utils';
 import { gp2 } from '@asap-hub/fixtures';
+import { enable } from '@asap-hub/flags';
+import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { createTestQueryClient } from '@asap-hub/frontend-utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { subDays } from 'date-fns';
 import { Suspense } from 'react';
 import { MemoryRouter, Route, Routes as RouterRoutes } from 'react-router';
 import { Auth0Provider, WhenReady } from '../../auth/test-utils';
 import { createEventListAlgoliaResponse } from '../../__fixtures__/algolia';
-import { getEvents } from '../api';
+import { getEvent, getEvents } from '../api';
 import { getCalendars } from '../calendar/api';
 import Routes from '../Routes';
 
@@ -22,13 +25,13 @@ beforeAll(async () => {
   await import('../EventDirectory');
   await import('../Event');
 });
-const renderRoutes = async () => {
+const renderRoutes = async (path = '/events') => {
   render(
     <QueryClientProvider client={createTestQueryClient()}>
       <Suspense fallback="loading">
         <Auth0Provider user={{}}>
           <WhenReady>
-            <MemoryRouter initialEntries={['/events']}>
+            <MemoryRouter initialEntries={[path]}>
               <RouterRoutes>
                 <Route path="/events/*" element={<Routes />} />
               </RouterRoutes>
@@ -110,5 +113,31 @@ describe('Routes', () => {
 
     await userEvent.click(pastEventsLink);
     expect(await screen.findByText('No past events available.')).toBeVisible();
+  });
+
+  it('keeps the event mounted when switching between event tabs', async () => {
+    enable('NEW_EVENT_PAGE');
+    const mockGetEvent = getEvent as jest.MockedFunction<typeof getEvent>;
+    mockGetEvent.mockResolvedValue({
+      ...gp2.createEventResponse(),
+      id: 'event-1',
+      title: 'Kool Event',
+      startDate: subDays(new Date(), 3).toISOString(),
+      endDate: subDays(new Date(), 3).toISOString(),
+      notes: 'My Notes',
+    });
+    await renderRoutes(
+      gp2Routing.events({}).event({ eventId: 'event-1' }).about({}).$,
+    );
+
+    const heading = await screen.findByRole('heading', { name: 'Kool Event' });
+    await userEvent.click(
+      screen.getByRole('link', { name: 'Meeting Materials' }),
+    );
+
+    expect(
+      await screen.findByRole('heading', { name: 'Notes' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Kool Event' })).toBe(heading);
   });
 });

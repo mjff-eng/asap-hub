@@ -60,7 +60,7 @@ const EventAbout: React.FC<EventAboutProps> = ({
             <Headline2 noMargin styleAsHeading={5}>
               Tags
             </Headline2>
-            <div css={{ marginTop: rem(24), marginBottom: rem(32) }}>
+            <div css={{ marginTop: rem(24), marginBottom: rem(24) }}>
               <Paragraph noMargin accent="tertiary">
                 {TAGS_COPY}
               </Paragraph>

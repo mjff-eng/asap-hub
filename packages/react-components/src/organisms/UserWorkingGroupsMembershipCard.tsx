@@ -5,12 +5,12 @@ import { WorkingGroupsIcon } from '../icons';
 import {
   MembershipCard,
   MembershipName,
-  MembershipTable,
-  MembershipTableColumn,
+  ResponsiveTable,
+  ResponsiveTableColumn,
 } from '../molecules';
 import { splitListBy } from '../utils';
 
-const columns: ReadonlyArray<MembershipTableColumn<WorkingGroupMembership>> = [
+const columns: ReadonlyArray<ResponsiveTableColumn<WorkingGroupMembership>> = [
   {
     key: 'name',
     title: 'Name',
@@ -65,7 +65,7 @@ const UserWorkingGroupsMembershipCard: React.FC<
       ]}
     >
       {({ data }) => (
-        <MembershipTable
+        <ResponsiveTable
           columns={columns}
           rows={data}
           getRowKey={(group) => group.id}

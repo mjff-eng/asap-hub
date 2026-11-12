@@ -20,6 +20,17 @@ const toastStyles = css({
   },
 });
 
+const plainCardStyles = css({
+  borderStyle: 'none',
+  boxShadow: 'none',
+  background: 'transparent',
+});
+
+const plainToastStyles = css({
+  borderRadius: `${borderRadius}px`,
+  marginBottom: rem(16),
+});
+
 const iconStyles = css({
   display: 'inline-block',
   width: rem(24),
@@ -86,13 +97,49 @@ const accentMap = {
   upcoming: upcomingStyles,
 };
 
-interface ToastCardProps {
-  readonly children: ReactNode;
-  readonly toastContent?: ReactNode;
+const fullWidthToastStyles = css({
+  borderRadius: 0,
+});
+
+type ToastBarProps = {
+  readonly toastContent: ReactNode;
   readonly toastAction?: ReactNode;
   readonly type?: Type;
-  readonly accent?: ComponentProps<typeof Card>['accent'];
   readonly mutedIcon?: boolean;
+  readonly variant?: 'card' | 'plain' | 'fullWidth';
+};
+
+export const ToastBar: React.FC<ToastBarProps> = ({
+  toastContent,
+  toastAction,
+  type = 'alert',
+  mutedIcon = false,
+  variant = 'card',
+}) => (
+  <span
+    css={[
+      toastStyles,
+      accentMap[type],
+      variant === 'plain' && plainToastStyles,
+      variant === 'fullWidth' && fullWidthToastStyles,
+    ]}
+  >
+    <span css={toastContentStyles}>
+      {iconMap[type] && (
+        <span css={[iconStyles, mutedIcon && mutedIconStyles]}>
+          {iconMap[type]}
+        </span>
+      )}
+      {toastContent}
+    </span>
+    {toastAction}
+  </span>
+);
+
+interface ToastCardProps extends Partial<Omit<ToastBarProps, 'variant'>> {
+  readonly children: ReactNode;
+  readonly accent?: ComponentProps<typeof Card>['accent'];
+  readonly plain?: boolean;
 }
 const ToastCard: React.FC<ToastCardProps> = ({
   children,
@@ -101,24 +148,23 @@ const ToastCard: React.FC<ToastCardProps> = ({
   type = 'alert',
   accent,
   mutedIcon = false,
+  plain = false,
 }) => (
-  <Card padding={false} accent={accent}>
+  <Card
+    padding={false}
+    accent={accent}
+    overrideStyles={plain ? plainCardStyles : undefined}
+  >
     {toastContent && (
-      <>
-        <span css={[toastStyles, accentMap[type]]}>
-          <span css={toastContentStyles}>
-            {iconMap[type] && (
-              <span css={[iconStyles, mutedIcon && mutedIconStyles]}>
-                {iconMap[type]}
-              </span>
-            )}
-            {toastContent}
-          </span>
-          {toastAction}
-        </span>
-      </>
+      <ToastBar
+        toastContent={toastContent}
+        toastAction={toastAction}
+        type={type}
+        mutedIcon={mutedIcon}
+        variant={plain ? 'plain' : 'card'}
+      />
     )}
-    <div className="children" css={[paddingStyles]}>
+    <div className="children" css={[!plain && paddingStyles]}>
       {children}
     </div>
   </Card>

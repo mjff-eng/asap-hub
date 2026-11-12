@@ -1,5 +1,5 @@
 import { FC, Suspense, lazy, useEffect, useState } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router';
+import { Navigate, Route, Routes, useParams } from 'react-router';
 
 import { EventsPage } from '@asap-hub/gp2-components';
 import { Loading } from '@asap-hub/react-components';
@@ -21,10 +21,11 @@ const Events: FC<Record<string, never>> = () => {
   }, []);
 
   const [currentTime] = useState(new Date());
-  const { pathname } = useLocation();
+  const { '*': subpath = '' } = useParams();
+  const [suspenseKey] = subpath.split('/');
 
   return (
-    <Suspense key={pathname} fallback={<Loading />}>
+    <Suspense key={suspenseKey} fallback={<Loading />}>
       <Routes>
         <Route
           path={gp2.events({}).calendar.template}
@@ -53,7 +54,7 @@ const Events: FC<Record<string, never>> = () => {
           }
         />
         <Route
-          path={gp2.events({}).event.template}
+          path={`${gp2.events({}).event.template}/*`}
           element={
             <Frame title="Event">
               <Event />
