@@ -31,6 +31,7 @@ export const getContentfulGraphqlCalendar = (): NonNullable<
     syncToken: 'sync-token',
     expirationDate: 1617196357000,
   },
+  gp2Calendar: false,
   linkedFrom: {
     projectsCollection: {
       items: getContentfulProjectsCollection().items,
@@ -81,6 +82,7 @@ export const getCalendarDataObject = (): gp2.CalendarDataObject => ({
   version: 42,
   projects: [{ id: '7', title: 'a project title', status: 'Active' }],
   workingGroups: [{ id: '11', title: 'a working group title' }],
+  gp2Calendar: false,
 });
 
 export const getCalendarCreateDataObject = (): CalendarCreateDataObject => {
@@ -89,6 +91,7 @@ export const getCalendarCreateDataObject = (): CalendarCreateDataObject => {
     version: __,
     projects: ___,
     workingGroups: ____,
+    gp2Calendar: _____,
     ...data
   } = getCalendarDataObject();
   return data;
@@ -105,6 +108,7 @@ export const getCalendarResponse = (): gp2.CalendarResponse => ({
   name: 'Tech 4a - iPSCs - 3D & Co-cultures',
   projects: [{ id: '7', title: 'a project title', status: 'Active' }],
   workingGroups: [{ id: '11', title: 'a working group title' }],
+  gp2Calendar: false,
 });
 
 export const getListCalendarResponse = (): gp2.ListCalendarResponse => ({

@@ -155,6 +155,7 @@ export const parseGraphQlCalendarToDataObject = (
   channelId: item.googleApiMetadata?.channelId,
   expirationDate: item.googleApiMetadata?.expirationDate,
   syncToken: item.googleApiMetadata?.syncToken,
+  gp2Calendar: Boolean(item.gp2Calendar),
   ...parseContentfulGraphqlCalendarPartialToDataObject(item),
   ...parseContentfulWorkingGroupsProjects(item),
 });

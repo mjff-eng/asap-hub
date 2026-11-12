@@ -10,10 +10,16 @@ const containerStyles = css({
   gap: rem(24),
 });
 
-const EventSupport: React.FC = () => (
+type EventSupportProps = {
+  email?: string;
+};
+
+const EventSupport: React.FC<EventSupportProps> = ({
+  email = TECH_SUPPORT_EMAIL,
+}) => (
   <div css={containerStyles}>
     <CtaCard
-      href={createMailTo(TECH_SUPPORT_EMAIL)}
+      href={createMailTo(email)}
       buttonText="Contact tech support"
       displayCopy
     >

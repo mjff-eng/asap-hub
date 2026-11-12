@@ -41,3 +41,11 @@ it('copies the tech support email', async () => {
     expect.stringMatching(/techsupport@asap.science/i),
   );
 });
+
+it('uses a custom tech support email', () => {
+  render(<EventSupport email="techsupport@gp2.org" />);
+
+  expect(
+    screen.getByRole('link', { name: 'Contact tech support' }),
+  ).toHaveAttribute('href', 'mailto:techsupport@gp2.org');
+});
