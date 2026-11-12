@@ -280,6 +280,46 @@ describe('the NEW_EVENT_PAGE flag', () => {
     expect(await findByText('The event has been cancelled.')).toBeVisible();
   });
 
+  it('links the calendar subscription to the interest group', async () => {
+    enable('NEW_EVENT_PAGE');
+    mockGetEvent.mockResolvedValue({
+      ...createEventResponse(),
+      id,
+      interestGroup: {
+        ...createInterestGroupResponse(),
+        id: 'ig-1',
+        name: 'My Interest Group',
+        active: true,
+      },
+    });
+    const { findByRole } = render(<Event />, { wrapper });
+    const heading = await findByRole('heading', {
+      name: 'Subscribe to this group’s calendar',
+    });
+    const card = heading.parentElement!.parentElement!;
+    expect(
+      within(card).getByRole('link', { name: 'My Interest Group' }),
+    ).toHaveAttribute('href', expect.stringMatching(/ig-1$/));
+  });
+
+  it('hides the calendar subscription for an inactive interest group', async () => {
+    enable('NEW_EVENT_PAGE');
+    mockGetEvent.mockResolvedValue({
+      ...createEventResponse(),
+      id,
+      title: 'My Event',
+      interestGroup: {
+        ...createInterestGroupResponse(),
+        active: false,
+      },
+    });
+    const { findAllByText, queryByRole } = render(<Event />, { wrapper });
+    expect((await findAllByText('My Event'))[0]).toBeVisible();
+    expect(
+      queryByRole('heading', { name: 'Subscribe to this group’s calendar' }),
+    ).not.toBeInTheDocument();
+  });
+
   it('keeps the current page without the banner when disabled', async () => {
     disable('NEW_EVENT_PAGE');
     mockGetEvent.mockResolvedValue({

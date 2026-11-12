@@ -5,6 +5,7 @@ import { BasicEvent, eventMaterialTypes } from '@asap-hub/model';
 import { InPersonPill } from '../atoms';
 import {
   ToastCard,
+  ToastBar,
   EventInfo,
   EventMaterialsList,
   JoinMeetingButton,
@@ -24,6 +25,8 @@ type EventCardProps = ComponentProps<typeof EventInfo> &
     | 'meetingMaterials'
   > & {
     displayToast?: boolean;
+    plain?: boolean;
+    displayMaterialsToast?: boolean;
     hasSpeakersToBeAnnounced: boolean;
     joinMeetingTooltipPosition?: ComponentProps<
       typeof JoinMeetingButton
@@ -42,13 +45,18 @@ const materialOrder: MaterialType[] = [
   'presentation',
 ];
 
-const EventCard: React.FC<EventCardProps> = ({
+type EventToastProps = Omit<
+  EventCardProps,
+  'displayToast' | 'plain' | 'titleLimit' | 'titleAsLink'
+>;
+
+const useEventCardToast = ({
   status,
-  displayToast = true,
+  displayMaterialsToast = true,
   hasSpeakersToBeAnnounced,
   joinMeetingTooltipPosition,
   ...props
-}) => {
+}: EventToastProps) => {
   const { hasStarted, hasFinished, isStartingSoon } = useEventLiveStatus(
     props.startDate,
     props.endDate,
@@ -107,7 +115,7 @@ const EventCard: React.FC<EventCardProps> = ({
       };
     }
 
-    if (hasFinished) {
+    if (hasFinished && displayMaterialsToast) {
       const isMaterialAvailable = (
         key: (typeof eventMaterialTypes)[number],
       ): boolean => {
@@ -133,15 +141,43 @@ const EventCard: React.FC<EventCardProps> = ({
     return {};
   };
 
+  return { toastCardProps, hasFinished };
+};
+
+const EventCard: React.FC<EventCardProps> = ({
+  displayToast = true,
+  plain = false,
+  ...props
+}) => {
+  const { toastCardProps, hasFinished } = useEventCardToast(props);
+  const {
+    displayMaterialsToast,
+    hasSpeakersToBeAnnounced,
+    joinMeetingTooltipPosition,
+    ...infoProps
+  } = props;
+
   return (
-    <ToastCard {...toastCardProps(displayToast)}>
+    <ToastCard {...toastCardProps(displayToast)} plain={plain}>
       <EventInfo
-        {...props}
-        status={status}
+        {...infoProps}
         dateBlockMuted={hasFinished}
         titleSuffix={props.hideMeetingLink ? <InPersonPill /> : undefined}
       />
     </ToastCard>
+  );
+};
+
+export const EventToast: React.FC<
+  EventToastProps & Pick<ComponentProps<typeof ToastBar>, 'variant'>
+> = ({ variant = 'fullWidth', ...props }) => {
+  const { toastCardProps } = useEventCardToast(props);
+  const { toastContent, accent, ...toastProps } = toastCardProps(true);
+  if (!toastContent) {
+    return null;
+  }
+  return (
+    <ToastBar {...toastProps} toastContent={toastContent} variant={variant} />
   );
 };
 

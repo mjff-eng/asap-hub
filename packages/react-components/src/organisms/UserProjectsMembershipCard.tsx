@@ -4,13 +4,13 @@ import { Pill } from '../atoms';
 import {
   MembershipCard,
   MembershipName,
-  MembershipTable,
-  MembershipTableColumn,
+  ResponsiveTable,
+  ResponsiveTableColumn,
 } from '../molecules';
 import { getProjectIcon, getProjectRoute } from '../utils';
 import { getStatusPillAccent } from './ProjectCard';
 
-const columns: ReadonlyArray<MembershipTableColumn<UserProjectMembership>> = [
+const columns: ReadonlyArray<ResponsiveTableColumn<UserProjectMembership>> = [
   {
     key: 'name',
     title: 'Project Name',
@@ -65,7 +65,7 @@ const UserProjectsMembershipCard: React.FC<ProjectsMembershipCardProps> = ({
     truncateFrom={6}
   >
     {({ data }) => (
-      <MembershipTable
+      <ResponsiveTable
         columns={columns}
         rows={data}
         getRowKey={(project) => project.id}

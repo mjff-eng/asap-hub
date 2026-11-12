@@ -3,7 +3,7 @@ import { EventResponse } from '@asap-hub/model';
 import {
   EventDetailPage,
   eventMapper,
-  getIconForDocumentType,
+  getCalendarOwner,
 } from '@asap-hub/react-components';
 import { createEventResponse } from '@asap-hub/fixtures';
 import { addHours, subDays, subHours } from 'date-fns';
@@ -20,8 +20,8 @@ export default {
 const pageProps = (
   overrides: Partial<EventResponse> = {},
   fixtureOptions: Parameters<typeof createEventResponse>[0] = {},
-): ComponentProps<typeof EventDetailPage> => ({
-  ...eventMapper({
+): ComponentProps<typeof EventDetailPage> => {
+  const event = {
     ...createEventResponse(fixtureOptions),
     tags: [
       { id: 't1', name: 'Neurological Diseases' },
@@ -30,14 +30,17 @@ const pageProps = (
       { id: 't4', name: 'Neuroimaging' },
     ],
     ...overrides,
-  }),
-  hasFinished: false,
-  displayCalendar: true,
-  getIconForDocumentType: () => getIconForDocumentType('Article'),
-  aboutHref: '/events/1/about',
-  meetingMaterialsHref: '/events/1/meeting-materials',
-  selectedTab: 'about',
-});
+  };
+  return {
+    ...eventMapper(event),
+    calendarOwner: getCalendarOwner(event),
+    hasFinished: false,
+    displayCalendar: true,
+    aboutHref: '/events/1/about',
+    meetingMaterialsHref: '/events/1/meeting-materials',
+    selectedTab: 'about',
+  };
+};
 
 export const Normal = () => {
   const isEventInThePast = boolean('Has the event passed', false);

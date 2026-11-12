@@ -35,6 +35,32 @@ const inactiveBadgeStyles = {
   marginLeft: rem(8),
 };
 
+export const getCalendarOwner = ({
+  interestGroup,
+  workingGroup,
+  calendar,
+}: Pick<EventResponse, 'interestGroup' | 'workingGroup' | 'calendar'>) => {
+  if (interestGroup) {
+    return {
+      name: interestGroup.name,
+      href: network({})
+        .interestGroups({})
+        .interestGroup({ interestGroupId: interestGroup.id }).$,
+      icon: <InterestGroupsIcon />,
+    };
+  }
+  if (workingGroup) {
+    return {
+      name: workingGroup.title,
+      href: network({})
+        .workingGroups({})
+        .workingGroup({ workingGroupId: workingGroup.id }).$,
+      icon: <WorkingGroupsIcon />,
+    };
+  }
+  return { name: calendar.name, icon: asapEventIcon };
+};
+
 const EventOwner: React.FC<
   Pick<EventResponse, 'interestGroup' | 'workingGroup'>
 > = ({ interestGroup, workingGroup }) => (

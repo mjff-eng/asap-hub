@@ -60,7 +60,9 @@ export type {
   UploadListUnmatchedTeam,
   UploadListSourceFile,
 } from './UploadListModal';
-export { default as EventCard } from './EventCard';
+export { default as EventCalendarCard } from './EventCalendarCard';
+export type { CalendarOwner } from './EventCalendarCard';
+export { default as EventCard, EventToast } from './EventCard';
 export { default as EventConversation } from './EventConversation';
 export { default as EventMaterials } from './EventMaterials';
 export { default as EventMonthFilter } from './EventMonthFilter';
@@ -128,6 +130,8 @@ export { default as DiscussionModal } from './DiscussionModal';
 export { default as RecentSharedOutputs } from './RecentSharedOutputs';
 export { default as RelatedEventsCard } from './RelatedEventsCard';
 export { default as RelatedResearchCard } from './RelatedResearchCard';
+export { default as EventRelatedResearchCard } from './EventRelatedResearchCard';
+export type { EventRelatedResearchItem } from './EventRelatedResearchCard';
 export { default as RelatedTutorialsCard } from './RelatedTutorialsCard';
 export { default as RemindersCard } from './RemindersCard';
 export { default as RepresentationOfPresentersTable } from './RepresentationOfPresentersTable';

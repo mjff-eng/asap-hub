@@ -36,6 +36,19 @@ const getProperties = ({
       };
 };
 
+export const getCalendarOwner = ({
+  calendar,
+  ...owner
+}: EventOwnerProps & Pick<gp2Model.EventResponse, 'calendar'>) => {
+  const { title, href, icon } = getProperties(owner);
+  return { name: href ? title : calendar.name, href, icon };
+};
+
+export const isCalendarOwnerActive = ({
+  project,
+  workingGroup,
+}: EventOwnerProps) => !!workingGroup || project?.status !== 'Completed';
+
 const EventOwner: React.FC<EventOwnerProps> = ({ project, workingGroup }) => {
   const { title, href, icon } = getProperties({ project, workingGroup });
 

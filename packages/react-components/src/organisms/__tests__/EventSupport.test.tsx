@@ -41,3 +41,14 @@ it('copies the tech support email', async () => {
     expect.stringMatching(/techsupport@asap.science/i),
   );
 });
+
+it('hides the calendar setup instructions', () => {
+  render(<EventSupport hideCalendarInstructions />);
+
+  expect(
+    screen.queryByRole('link', { name: 'Apple Calendar' }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole('link', { name: 'Contact tech support' }),
+  ).toBeVisible();
+});

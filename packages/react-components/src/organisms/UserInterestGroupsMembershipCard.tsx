@@ -5,8 +5,8 @@ import { InterestGroupsIcon } from '../icons';
 import {
   MembershipCard,
   MembershipName,
-  MembershipTable,
-  MembershipTableColumn,
+  ResponsiveTable,
+  ResponsiveTableColumn,
 } from '../molecules';
 import { splitListBy } from '../utils';
 
@@ -15,7 +15,7 @@ const userRole = (group: InterestGroupResponse, userId: string) =>
 
 const columns = (
   userId: string,
-): ReadonlyArray<MembershipTableColumn<InterestGroupResponse>> => [
+): ReadonlyArray<ResponsiveTableColumn<InterestGroupResponse>> => [
   {
     key: 'name',
     title: 'Name',
@@ -73,7 +73,7 @@ const UserInterestGroupsMembershipCard: React.FC<
       ]}
     >
       {({ data }) => (
-        <MembershipTable
+        <ResponsiveTable
           columns={columns(userId)}
           rows={data}
           getRowKey={(group) => group.id}

@@ -4,7 +4,7 @@ import { createEventResponse } from '@asap-hub/fixtures';
 import { findParentWithStyle } from '@asap-hub/dom-test-utils';
 import { addDays, addHours, addMinutes, subDays, subMinutes } from 'date-fns';
 
-import EventCard from '../EventCard';
+import EventCard, { EventToast } from '../EventCard';
 import { colour } from '../../colors';
 
 const mockIsEnabled = jest.fn();
@@ -337,6 +337,21 @@ describe('past events', () => {
       expect(screen.getByText(label).closest('a')).toBeNull();
     });
   });
+  it('does not toast the materials when displayMaterialsToast is false', () => {
+    render(
+      <EventCard
+        {...props}
+        status="Confirmed"
+        meetingLink="http://example.com"
+        notes="My Notes"
+        displayMaterialsToast={false}
+        startDate={subDays(new Date(), 2).toISOString()}
+        endDate={subDays(new Date(), 1).toISOString()}
+      />,
+    );
+    expect(screen.queryByTitle(/paper/i)).not.toBeInTheDocument();
+    expect(screen.queryByText('Notes')).not.toBeInTheDocument();
+  });
   it('toasts the names of the available materials', () => {
     render(
       <EventCard
@@ -455,5 +470,40 @@ describe('past events', () => {
     expect(screen.queryByText(/cancelled/)).not.toBeInTheDocument();
     expect(screen.queryByText(/happening now/)).not.toBeInTheDocument();
     expect(screen.queryByText(/currently happening/)).not.toBeInTheDocument();
+  });
+});
+
+describe('EventToast', () => {
+  it('renders the toast on its own', () => {
+    render(<EventToast {...props} status="Cancelled" />);
+    expect(screen.getByText('The event has been cancelled.')).toBeVisible();
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+  });
+
+  it('renders the join meeting action for a live event', () => {
+    render(
+      <EventToast
+        {...props}
+        status="Confirmed"
+        meetingLink="http://example.com"
+        startDate={subMinutes(new Date(), 5).toISOString()}
+        endDate={addHours(new Date(), 1).toISOString()}
+      />,
+    );
+    expect(screen.getByText('This event is happening now.')).toBeVisible();
+    expect(screen.getByRole('link', { name: /join/i })).toBeInTheDocument();
+  });
+
+  it('renders nothing when there is no toast to show', () => {
+    const { container } = render(
+      <EventToast
+        {...props}
+        status="Confirmed"
+        hasSpeakersToBeAnnounced={false}
+        startDate={addDays(new Date(), 5).toISOString()}
+        endDate={addDays(new Date(), 6).toISOString()}
+      />,
+    );
+    expect(container).toBeEmptyDOMElement();
   });
 });

@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import ToastCard from '../ToastCard';
+import ToastCard, { ToastBar } from '../ToastCard';
 import { colour } from '../../colors';
 
 it('renders a toast card with children', () => {
@@ -79,4 +79,35 @@ it('does not renders a toast card when no toast content provided', () => {
     <ToastCard type="attachment">content</ToastCard>,
   );
   expect(queryByTitle(/paper ?clip/i)).not.toBeInTheDocument();
+});
+
+describe('plain', () => {
+  it('renders the children without the card border and padding', () => {
+    const { getByText, container } = render(
+      <ToastCard plain>content</ToastCard>,
+    );
+    const card = container.querySelector('section')!;
+    expect(getComputedStyle(card).borderStyle).toBe('none');
+    expect(getComputedStyle(card).boxShadow).toBe('none');
+    expect(getComputedStyle(getByText('content')).paddingTop).toBe('');
+  });
+
+  it('still renders the toast', () => {
+    const { getByText } = render(
+      <ToastCard plain type="info" toastContent="explanation text">
+        content
+      </ToastCard>,
+    );
+    expect(getByText('explanation text')).toBeVisible();
+  });
+});
+
+describe('ToastBar', () => {
+  it('defaults to an alert toast', () => {
+    const { getByTitle, getByText } = render(
+      <ToastBar toastContent="explanation text" />,
+    );
+    expect(getByTitle(/warning/i)).toBeInTheDocument();
+    expect(getByText('explanation text')).toBeVisible();
+  });
 });
