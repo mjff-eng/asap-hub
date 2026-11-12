@@ -376,18 +376,15 @@ const attendanceStatusStyles = css({
     height: rem(20),
     flexShrink: 0,
   },
+  '> svg [stroke]': {
+    stroke: 'currentColor',
+  },
 });
 
-// Caption/C1 from the designs: four lines at 16px with nothing between them,
-// so the shared 6px row gap is dropped here.
 const formatTooltipStyles = css({
   gap: 0,
   paddingTop: 0,
   paddingBottom: 0,
-  textAlign: 'left',
-  fontSize: rem(14),
-  fontWeight: 400,
-  lineHeight: rem(16),
 });
 
 const unmatchedHelpStyles = css({
@@ -690,8 +687,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
           <TooltipInfo
             openOnHover
             floating
-            width={296}
-            background={colour.neutral[900]}
+            icon={<CircleInfoIcon size={20} />}
             overrideTooltipStyles={formatTooltipStyles}
           >
             <span>Your file needs two columns.</span>
@@ -881,9 +877,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
                                 {team.attended ? (
                                   tickInCircleIcon
                                 ) : (
-                                  <InvalidTickIcon
-                                    color={colour.neutral[100]}
-                                  />
+                                  <InvalidTickIcon />
                                 )}
                                 {team.attended ? 'Attended' : 'Not attended'}
                               </span>
