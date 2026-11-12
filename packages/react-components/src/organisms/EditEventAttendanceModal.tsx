@@ -61,7 +61,7 @@ type EditEventAttendanceModalProps = {
   teams?: EventAttendanceTeam[];
   interestGroupName?: string;
   loadSearchOptions: (inputValue: string) => Promise<AttendanceSearchOption[]>;
-  onUploadList?: (files: File[]) => Promise<UploadListResult>;
+  onUploadList?: (file: File) => Promise<UploadListResult>;
   sourceLists?: EventAttendeesFile[];
   onDownloadSourceList?: (file: EventAttendeesFile) => void | Promise<void>;
   onSave: (teams: EventAttendanceTeam[], files: File[]) => void | Promise<void>;
@@ -622,14 +622,11 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
 
   const handleUploadAddAttendees = (
     uploadedTeams: EventAttendanceTeam[],
-    files: File[],
+    file: File,
   ) => {
     applyUploadedTeams(uploadedTeams);
     setAddedTeams(null);
-    setSourceFiles((prev) => ({
-      ...prev,
-      pending: [...prev.pending, ...files],
-    }));
+    setSourceFiles((prev) => ({ ...prev, pending: [...prev.pending, file] }));
     setShowUploadList(false);
   };
 
@@ -741,7 +738,7 @@ const EditEventAttendanceModal: React.FC<EditEventAttendanceModalProps> = ({
         onUploadList={onUploadList}
         onAddAttendees={handleUploadAddAttendees}
         onBack={() => setShowUploadList(false)}
-        currentTeamIds={addedTeamIds}
+        currentTeams={rows}
       />
     );
   }

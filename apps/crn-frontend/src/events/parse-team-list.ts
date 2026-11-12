@@ -113,11 +113,5 @@ const readFile = (file: File): Promise<ArrayBuffer | string> =>
     }
   });
 
-export const parseTeamRows = async (
-  files: File[],
-): Promise<ParsedTeamRow[]> => {
-  const perFile = await Promise.all(
-    files.map(async (file) => parseSheet(await readFile(file))),
-  );
-  return perFile.flat();
-};
+export const parseTeamRows = async (file: File): Promise<ParsedTeamRow[]> =>
+  parseSheet(await readFile(file));

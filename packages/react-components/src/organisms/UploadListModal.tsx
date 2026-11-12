@@ -7,11 +7,14 @@ import { colour } from '../colors';
 import {
   binIcon,
   chevronDownIcon,
+  CircleInfoIcon,
   InactiveBadgeIcon,
-  crossIcon,
+  InvalidTickIcon,
   crossSmallIcon,
   chevronLeftIcon,
   plusIcon,
+  refreshSmallIcon,
+  tickInCircleIcon,
   tickSmallIcon,
 } from '../icons';
 import { ConfirmableModalFooter, Modal, TooltipInfo } from '../molecules';
@@ -54,18 +57,18 @@ export type UploadListSourceFile = {
 };
 
 type UploadListModalProps = {
-  onUploadList: (files: File[]) => Promise<UploadListResult>;
+  onUploadList: (file: File) => Promise<UploadListResult>;
   onAddAttendees: (
     teams: EventAttendanceTeam[],
-    files: File[],
+    file: File,
   ) => void | Promise<void>;
   onBack: () => void;
-  // Team ids already on the table (including unsaved additions), shown as
+  // Teams already on the table (including unsaved additions), shown as
   // "already in" rather than new.
-  currentTeamIds?: ReadonlySet<string>;
+  currentTeams?: ReadonlyArray<EventAttendanceTeam>;
   maxFileSizeMb?: number;
   accept?: string;
-  initialFiles?: File[];
+  initialFile?: File | null;
   initialResult?: UploadListResult | null;
   initialSectionsOpen?: boolean;
 };
@@ -300,6 +303,18 @@ const unmatchedMetaStyles = css({
   color: colour.foreground.tertiary,
 });
 
+const upToDateStyles = css({
+  display: 'inline-flex',
+  alignItems: 'center',
+  verticalAlign: 'top',
+  gap: rem(8),
+  marginLeft: rem(48),
+  color: colour.foreground.tertiary,
+  '> svg': {
+    flexShrink: 0,
+  },
+});
+
 const suggestionLinkStyles = css({
   color: colour.foreground.brand,
 });
@@ -307,7 +322,9 @@ const suggestionLinkStyles = css({
 const addSuggestionButtonStyles = css({
   flexGrow: 0,
   flexShrink: 0,
+  minWidth: rem(90),
   alignItems: 'center',
+  justifyContent: 'center',
   gap: rem(8),
   lineHeight: rem(24),
   color: colour.foreground.tertiary,
@@ -320,24 +337,54 @@ const addSuggestionButtonStyles = css({
   ...buttonIconGapReset,
 });
 
-const emptyResultStyles = css({
+const infoBoxStyles = css({
+  display: 'flex',
+  alignItems: 'flex-start',
+  gap: rem(12),
+  padding: rem(16),
+  borderRadius: rem(4),
+  marginTop: rem(16),
+  backgroundColor: colour.background.neutral,
+  '> svg': {
+    flexShrink: 0,
+  },
+});
+
+const infoBoxTextStyles = css({
   margin: 0,
-  color: colour.foreground.tertiary,
+  color: colour.foreground.neutral,
   fontSize: rem(16),
-  fontWeight: 400,
+  fontWeight: 500,
   lineHeight: rem(24),
 });
 
-// Caption/C1 from the designs: four lines at 16px with nothing between them,
-// so the shared 6px row gap is dropped here.
+const changingTeamStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  gap: rem(32),
+});
+const attendanceStatusStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  gap: rem(8),
+  width: rem(127),
+  color: colour.foreground.tertiary,
+  fontSize: rem(16),
+  lineHeight: rem(24),
+  '> svg': {
+    width: rem(20),
+    height: rem(20),
+    flexShrink: 0,
+  },
+  '> svg [stroke]': {
+    stroke: 'currentColor',
+  },
+});
+
 const formatTooltipStyles = css({
   gap: 0,
   paddingTop: 0,
   paddingBottom: 0,
-  textAlign: 'left',
-  fontSize: rem(14),
-  fontWeight: 400,
-  lineHeight: rem(16),
 });
 
 const unmatchedHelpStyles = css({
@@ -372,6 +419,23 @@ const suggestionToTeam = (
   isTeamInactive: suggestion.isTeamInactive,
 });
 
+// A picked File is read from disk lazily, so Chrome refuses to send it
+// (ERR_UPLOAD_FILE_CHANGED) if the file is edited before the attendance is saved.
+// Copying the bytes up front decouples the upload from the disk file.
+const copyFileToMemory = (file: File): Promise<File> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () =>
+      resolve(
+        new File([reader.result as ArrayBuffer], file.name, {
+          type: file.type,
+          lastModified: file.lastModified,
+        }),
+      );
+    reader.onerror = () => reject(reader.error);
+    reader.readAsArrayBuffer(file);
+  });
+
 const dedupeByTeamId = (
   teams: EventAttendanceTeam[],
 ): EventAttendanceTeam[] => {
@@ -385,20 +449,18 @@ const dedupeByTeamId = (
   });
 };
 
-const noTeamIds: ReadonlySet<string> = new Set();
-
 const UploadListModal: React.FC<UploadListModalProps> = ({
   onUploadList,
   onAddAttendees,
   onBack,
-  currentTeamIds = noTeamIds,
+  currentTeams = [],
   maxFileSizeMb = defaultMaxFileSizeMb,
   accept = defaultAccept,
-  initialFiles = [],
+  initialFile = null,
   initialResult = null,
   initialSectionsOpen = false,
 }) => {
-  const [files, setFiles] = useState<File[]>(initialFiles);
+  const [file, setFile] = useState<File | null>(initialFile);
   const [result, setResult] = useState<UploadListResult | null>(initialResult);
   const [error, setError] = useState<string | null>(null);
   const [addedSuggestionIds, setAddedSuggestionIds] = useState<
@@ -409,90 +471,98 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
   >(() => new Set());
   const [matchedOpen, setMatchedOpen] = useState(initialSectionsOpen);
   const [unmatchedOpen, setUnmatchedOpen] = useState(initialSectionsOpen);
+  const [changingOpen, setChangingOpen] = useState(initialSectionsOpen);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const uploadInputRef = useRef<HTMLInputElement>(null);
-  const uploadSeq = useRef(0);
 
   const allowedExtensions = getAllowedExtensions(accept);
   const maxBytes = maxFileSizeMb * 1000 * 1000;
 
-  // selectionError is whatever the file selection itself decided (size or
-  // extension). It is restored on success so a successful parse clears only a
-  // previous read failure, not the warning about the files that were skipped.
-  const runUpload = (
-    nextFiles: File[],
-    selectionError: string | null = null,
-  ) => {
-    setFiles(nextFiles);
-    // A new file set invalidates the per-team edits made against the old result.
+  const runUpload = (nextFile: File | null) => {
+    setFile(nextFile);
     setAddedSuggestionIds(new Set());
     setRemovedMatchedIds(new Set());
-    // Bump the sequence first so any parse still in flight (e.g. the file was
-    // removed before it resolved) can no longer write its result.
-    const seq = uploadSeq.current + 1;
-    uploadSeq.current = seq;
-    if (nextFiles.length === 0) {
+
+    if (!nextFile) {
       setResult(null);
       setIsUploading(false);
       return;
     }
-    void onUploadList(nextFiles)
+
+    void onUploadList(nextFile)
       .then((uploadResult) => {
-        if (seq === uploadSeq.current) {
-          setResult(uploadResult);
-          setError(selectionError);
-          setIsUploading(false);
-        }
+        setResult(uploadResult);
+        setError(null);
       })
       .catch(() => {
-        if (seq === uploadSeq.current) {
-          setResult(null);
-          setError('Something went wrong reading this file. Please try again.');
-          setIsUploading(false);
-        }
+        setResult(null);
+        setError('Something went wrong reading this file. Please try again.');
+      })
+      .finally(() => setIsUploading(false));
+  };
+
+  const onFileChange = (selectedFile: File) => {
+    const isInvalid = !hasAllowedExtension(selectedFile, allowedExtensions);
+    const isTooLarge = selectedFile.size > maxBytes;
+
+    let selectionError: string | null = null;
+
+    if (isTooLarge) {
+      selectionError = `The file size exceeds the limit of ${maxFileSizeMb} MB. Please upload a smaller file.`;
+    }
+
+    if (isInvalid) {
+      selectionError = 'CSV or XLSX files only.';
+    }
+
+    setError(selectionError);
+    if (selectionError) return;
+
+    setIsUploading(true);
+    void copyFileToMemory(selectedFile)
+      .then(runUpload)
+      .catch(() => {
+        setIsUploading(false);
+        setError('Something went wrong reading this file. Please try again.');
       });
   };
 
-  const handleFilesSelected = (selected: File[]) => {
-    const valid = selected.filter(
-      (file) =>
-        hasAllowedExtension(file, allowedExtensions) && file.size <= maxBytes,
-    );
-    const tooLarge = selected.some(
-      (file) =>
-        hasAllowedExtension(file, allowedExtensions) && file.size > maxBytes,
-    );
-    let selectionError: string | null = null;
-    if (tooLarge) {
-      selectionError = `The file size exceeds the limit of ${maxFileSizeMb} MB. Please upload a smaller file.`;
-    } else if (valid.length < selected.length) {
-      selectionError = 'CSV or XLSX files only.';
-    }
-    setError(selectionError);
-    if (valid.length > 0) {
-      setIsUploading(true);
-      runUpload([...files, ...valid], selectionError);
-    }
-  };
-
-  const removeFile = (index: number) =>
-    runUpload(files.filter((_, fileIndex) => fileIndex !== index));
+  const removeFile = () => runUpload(null);
 
   const promoteSuggestion = (teamId: string) =>
     setAddedSuggestionIds((prev) => new Set(prev).add(teamId));
 
-  const removeMatchedTeam = (teamId: string) =>
+  const removeMatchedTeam = (teamId: string) => {
+    if (addedSuggestionIds.has(teamId)) {
+      setAddedSuggestionIds((prev) => {
+        const next = new Set(prev);
+        next.delete(teamId);
+        return next;
+      });
+      return;
+    }
     setRemovedMatchedIds((prev) => new Set(prev).add(teamId));
+  };
 
   const isPromoted = (
     team: UploadListUnmatchedTeam,
   ): team is UploadListUnmatchedTeam & { suggestion: UploadListSuggestion } =>
     !!team.suggestion && addedSuggestionIds.has(team.suggestion.teamId);
 
+  const currentAttendance = new Map(
+    currentTeams.map((team) => [team.teamId, team.attended]),
+  );
+
+  const changesAttendance = (team: EventAttendanceTeam) =>
+    currentAttendance.get(team.teamId) !== team.attended;
+
+  const suggestionChangesAttendance = (suggestion: UploadListSuggestion) =>
+    currentAttendance.get(suggestion.teamId) !== suggestion.attended;
+
   const alreadyIn = result
-    ? result.matched.filter((team) => currentTeamIds.has(team.teamId))
+    ? result.matched.filter((team) => currentAttendance.has(team.teamId))
     : [];
   const newMatchedCount = result ? result.matched.length - alreadyIn.length : 0;
 
@@ -502,22 +572,33 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
         .map((team) => suggestionToTeam(team.suggestion))
     : [];
   const promotedUpdates = promotedTeams.filter((team) =>
-    currentTeamIds.has(team.teamId),
+    currentAttendance.has(team.teamId),
   );
   const promotedNew = promotedTeams.filter(
-    (team) => !currentTeamIds.has(team.teamId),
+    (team) => !currentAttendance.has(team.teamId),
   );
 
   const matchedTeams: EventAttendanceTeam[] = result
     ? [
         ...result.matched.filter(
           (team) =>
-            !currentTeamIds.has(team.teamId) &&
+            !currentAttendance.has(team.teamId) &&
             !removedMatchedIds.has(team.teamId),
         ),
         ...promotedNew,
       ]
     : [];
+
+  const changingTeams = dedupeByTeamId([...promotedUpdates, ...alreadyIn])
+    .filter(changesAttendance)
+    .filter((team) => !removedMatchedIds.has(team.teamId));
+
+  const nothingToChange =
+    !!result &&
+    result.matched.length > 0 &&
+    result.unmatched.length === 0 &&
+    newMatchedCount === 0 &&
+    !alreadyIn.some(changesAttendance);
 
   const alreadyInCount = new Set([
     ...alreadyIn.map((team) => team.teamId),
@@ -542,22 +623,15 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
       ? 'No team names found. Check that the file has a Team Name column.'
       : null);
 
-  const hasSections = matchedTeams.length > 0 || remainingUnmatched.length > 0;
-  // Describes the file, not the current view: once the user deletes the rows
-  // themselves there is nothing to explain, so no message is shown.
-  const alreadyInMessage =
-    alreadyInCount === 1
-      ? 'This team is already in the attendance table.'
-      : `All ${pluralizeTeams(
-          alreadyInCount,
-        )} in this list are already in the attendance table.`;
-  const emptyResultMessage = newMatchedCount === 0 ? alreadyInMessage : null;
+  const hasSections =
+    matchedTeams.length > 0 ||
+    changingTeams.length > 0 ||
+    remainingUnmatched.length > 0;
 
-  const isDirty = files.length > 0 || matchedTeams.length > 0;
+  const isDirty = !!file || matchedTeams.length > 0;
   const addEnabled =
-    (matchedTeams.length > 0 ||
-      alreadyIn.length > 0 ||
-      promotedUpdates.length > 0) &&
+    !!file &&
+    (matchedTeams.length > 0 || changingTeams.length > 0) &&
     !isSaving;
 
   const requestClose = () => {
@@ -569,11 +643,12 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
   };
 
   const handleAddAttendees = async () => {
+    if (!file) return;
     setIsSaving(true);
     try {
       await onAddAttendees(
-        dedupeByTeamId([...matchedTeams, ...promotedUpdates, ...alreadyIn]),
-        files,
+        dedupeByTeamId([...matchedTeams, ...changingTeams]),
+        file,
       );
     } catch {
       // The caller surfaces the error; the modal only needs to unlock so the
@@ -601,16 +676,6 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
             Upload a list
           </Headline2>
         </div>
-        <Button
-          small
-          noMargin
-          aria-label="Close"
-          enabled={!isSaving}
-          onClick={requestClose}
-          overrideStyles={css([iconButtonStyles, headerIconStyles])}
-        >
-          {crossIcon}
-        </Button>
       </header>
 
       <div css={bodyStyles}>
@@ -622,8 +687,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
           <TooltipInfo
             openOnHover
             floating
-            width={296}
-            background={colour.neutral[900]}
+            icon={<CircleInfoIcon size={20} />}
             overrideTooltipStyles={formatTooltipStyles}
           >
             <span>Your file needs two columns.</span>
@@ -634,17 +698,14 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
         </Paragraph>
 
         <section css={uploadSectionStyles}>
-          {files.length > 0 && (
+          {file && !nothingToChange && (
             <div css={chipsStyles}>
-              {files.map((file, index) => (
-                <Tag
-                  key={`${file.name}-${index}`}
-                  enabled={!isCancelling}
-                  onRemove={() => removeFile(index)}
-                >
-                  {file.name}
-                </Tag>
-              ))}
+              <Tag
+                enabled={!isCancelling && !isUploading}
+                onRemove={removeFile}
+              >
+                {file.name}
+              </Tag>
             </div>
           )}
           <input
@@ -652,31 +713,30 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
             type="file"
             accept={accept}
             aria-label="Add a list"
-            multiple
             hidden
             disabled={isCancelling}
-            onChange={(event) => {
-              const selected = Array.from(event.target.files ?? []);
-              if (selected.length > 0) {
-                handleFilesSelected(selected);
-              }
+            onChange={({ target }) => {
+              const [selectedFile] = Array.from(target.files ?? []);
+              if (selectedFile) onFileChange(selectedFile);
               if (uploadInputRef.current) {
                 uploadInputRef.current.value = '';
               }
             }}
           />
-          <Button
-            small
-            primary
-            noMargin
-            enabled={!isUploading && !isCancelling}
-            loading={isUploading}
-            overrideStyles={addButtonStyles}
-            onClick={() => uploadInputRef.current?.click()}
-          >
-            {!isUploading && plusIcon}
-            Add
-          </Button>
+          {(!file || nothingToChange || isUploading) && (
+            <Button
+              small
+              primary
+              noMargin
+              enabled={!isUploading && !isCancelling}
+              loading={isUploading}
+              overrideStyles={addButtonStyles}
+              onClick={() => uploadInputRef.current?.click()}
+            >
+              {!isUploading && plusIcon}
+              Add
+            </Button>
+          )}
           {shownError && (
             <p css={errorStyles} role="alert">
               {shownError}
@@ -684,7 +744,19 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
           )}
         </section>
 
-        {result && !yieldedNothing && (
+        {nothingToChange && (
+          <div css={infoBoxStyles} role="status">
+            <CircleInfoIcon color={colour.foreground.neutral} size={24} />
+            <p css={infoBoxTextStyles}>
+              Every team in this file is already in your list with the same
+              attendance, so there&apos;s nothing to add. Replace the file to
+              try a different one, or cancel to close without changing your
+              list.
+            </p>
+          </div>
+        )}
+
+        {result && !yieldedNothing && !nothingToChange && (
           <div css={resultStyles}>
             <div css={summaryStyles}>
               <span css={summaryStrongStyles}>
@@ -695,10 +767,6 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
               <span css={summarySeparatorStyles}>•</span>
               <span>{alreadyInCount} already in</span>
             </div>
-
-            {!hasSections && emptyResultMessage && (
-              <p css={emptyResultStyles}>{emptyResultMessage}</p>
-            )}
 
             {hasSections && (
               <div css={resultCardStyles(!isCancelling)}>
@@ -759,9 +827,83 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
                   </>
                 )}
 
-                {matchedTeams.length > 0 && remainingUnmatched.length > 0 && (
+                {matchedTeams.length > 0 && changingTeams.length > 0 && (
                   <div css={dividerStyles} />
                 )}
+
+                {changingTeams.length > 0 && (
+                  <>
+                    <button
+                      type="button"
+                      css={sectionHeaderStyles}
+                      aria-expanded={changingOpen}
+                      onClick={() => setChangingOpen((open) => !open)}
+                    >
+                      <span css={sectionHeaderLabelStyles}>
+                        {refreshSmallIcon}
+                        <span>
+                          <strong>
+                            {changingTeams.length} already in your list
+                          </strong>{' '}
+                          • attendance will change
+                        </span>
+                      </span>
+                      <span css={chevronStyles(changingOpen)}>
+                        {chevronDownIcon}
+                      </span>
+                    </button>
+                    {changingOpen && (
+                      <div css={sectionBodyStyles}>
+                        {changingTeams.map((team) => (
+                          <div key={team.teamId} css={matchedRowStyles}>
+                            <span css={changingTeamStyles}>
+                              <span css={matchedTeamStyles}>
+                                {teamIcon(team.teamType)}
+                                <Link
+                                  openInNewTab
+                                  href={
+                                    network({})
+                                      .teams({})
+                                      .team({ teamId: team.teamId }).$
+                                  }
+                                >
+                                  <span css={matchedTeamNameStyles}>
+                                    {team.teamName}
+                                  </span>
+                                </Link>
+                                {team.isTeamInactive && <InactiveBadgeIcon />}
+                              </span>
+                              <span css={attendanceStatusStyles}>
+                                {team.attended ? (
+                                  tickInCircleIcon
+                                ) : (
+                                  <InvalidTickIcon />
+                                )}
+                                {team.attended ? 'Attended' : 'Not attended'}
+                              </span>
+                            </span>
+                            <Button
+                              noMargin
+                              enabled={!isCancelling}
+                              aria-label={`Remove ${team.teamName}`}
+                              onClick={() => removeMatchedTeam(team.teamId)}
+                              overrideStyles={deleteButtonStyles(!isCancelling)}
+                            >
+                              {binIcon}
+                            </Button>
+                          </div>
+                        ))}
+                        <p css={unmatchedHelpStyles}>
+                          Updating overwrites the current attendance. Remove a
+                          row to keep it as it is.
+                        </p>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {(matchedTeams.length > 0 || changingTeams.length > 0) &&
+                  remainingUnmatched.length > 0 && <div css={dividerStyles} />}
 
                 {remainingUnmatched.length > 0 && (
                   <>
@@ -817,34 +959,48 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
                                       • no close match
                                     </span>
                                   )}
-                                </span>
-                                {suggestion && (
-                                  <Button
-                                    small
-                                    noMargin
-                                    enabled={!isCancelling}
-                                    overrideStyles={addSuggestionButtonStyles}
-                                    onClick={() =>
-                                      promoteSuggestion(suggestion.teamId)
-                                    }
-                                  >
-                                    {currentTeamIds.has(suggestion.teamId) ? (
-                                      'Update'
-                                    ) : (
-                                      <>
-                                        {plusIcon}
-                                        Add
-                                      </>
+                                  {suggestion &&
+                                    !suggestionChangesAttendance(
+                                      suggestion,
+                                    ) && (
+                                      <span css={upToDateStyles}>
+                                        {tickSmallIcon}
+                                        Already up to date
+                                      </span>
                                     )}
-                                  </Button>
-                                )}
+                                </span>
+                                {suggestion &&
+                                  suggestionChangesAttendance(suggestion) && (
+                                    <Button
+                                      small
+                                      noMargin
+                                      enabled={!isCancelling}
+                                      overrideStyles={addSuggestionButtonStyles}
+                                      onClick={() =>
+                                        promoteSuggestion(suggestion.teamId)
+                                      }
+                                    >
+                                      {currentAttendance.has(
+                                        suggestion.teamId,
+                                      ) ? (
+                                        'Update'
+                                      ) : (
+                                        <>
+                                          {plusIcon}
+                                          Add
+                                        </>
+                                      )}
+                                    </Button>
+                                  )}
                               </div>
                             );
                           })}
                         </div>
                         <p css={unmatchedHelpStyles}>
-                          Add a suggested team to include it, or fix the name in
-                          your file and upload again.
+                          Add or update a suggested team to include it. For a
+                          team already up to date, there&apos;s nothing to do.
+                          If a suggestion is wrong, fix the name in your file
+                          and upload again.
                         </p>
                       </div>
                     )}
@@ -864,9 +1020,7 @@ const UploadListModal: React.FC<UploadListModalProps> = ({
         onCancel={requestClose}
         cancelEnabled={!isSaving}
         confirmLabel="Add Attendees"
-        onConfirm={() => {
-          void handleAddAttendees();
-        }}
+        onConfirm={handleAddAttendees}
         confirmEnabled={addEnabled}
         confirmLoading={isSaving}
       />
