@@ -58,6 +58,14 @@ it('displays the event with given id', async () => {
   expect(mockGetEvent.mock.calls).toEqual([[id, expect.anything()]]);
 });
 
+it('links to the GP2 tech support email', async () => {
+  mockGetEvent.mockResolvedValue({ ...gp2.createEventResponse(), id });
+  await renderEvent();
+  expect(
+    screen.getByRole('link', { name: 'Contact tech support' }),
+  ).toHaveAttribute('href', 'mailto:techsupport@gp2.org');
+});
+
 it('falls back to the not found page for a missing event', async () => {
   mockGetEvent.mockResolvedValue(undefined);
   await renderEvent();

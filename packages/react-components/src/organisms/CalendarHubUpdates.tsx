@@ -27,13 +27,16 @@ const rowStyles = css({
   },
 });
 
-const description =
-  'Subscribe to the official CRN calendar for community-wide sessions run by the ASAP team.';
-
 interface CalendarHubUpdatesProps {
   calendar?: BasicCalendarResponse;
+  title?: string;
+  description?: string;
 }
-const CalendarHubUpdates: FC<CalendarHubUpdatesProps> = ({ calendar }) => {
+const CalendarHubUpdates: FC<CalendarHubUpdatesProps> = ({
+  calendar,
+  title = 'CRN Hub Updates',
+  description = 'Subscribe to the official CRN calendar for community-wide sessions run by the ASAP team.',
+}) => {
   if (!calendar) {
     return null;
   }
@@ -42,7 +45,7 @@ const CalendarHubUpdates: FC<CalendarHubUpdatesProps> = ({ calendar }) => {
     <Card padding={false} accent="brand" overrideStyles={cardStyles}>
       <div css={containerStyles}>
         <Headline3 styleAsHeading={5} noMargin>
-          CRN Hub Updates
+          {title}
         </Headline3>
         <div css={rowStyles}>
           <Paragraph accent="secondary" noMargin>

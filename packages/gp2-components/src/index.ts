@@ -91,6 +91,7 @@ export {
   ProjectResources,
   ProjectsPage,
   ProjectPageList,
+  SubscribeToCalendarsPage,
   Theme,
   TagSearchPage,
   TagSearchPageList,

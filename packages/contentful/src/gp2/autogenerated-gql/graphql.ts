@@ -482,6 +482,7 @@ export type Calendars = Entry &
     contentfulMetadata: ContentfulMetadata;
     googleApiMetadata?: Maybe<Scalars['JSON']>;
     googleCalendarId?: Maybe<Scalars['String']>;
+    gp2Calendar?: Maybe<Scalars['Boolean']>;
     linkedFrom?: Maybe<CalendarsLinkingCollections>;
     name?: Maybe<Scalars['String']>;
     sys: Sys;
@@ -501,6 +502,12 @@ export type CalendarsGoogleApiMetadataArgs = {
 
 /** [See type definition](https://app.contentful.com/spaces/6ekgyp1432o9/content_types/calendars) */
 export type CalendarsGoogleCalendarIdArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/6ekgyp1432o9/content_types/calendars) */
+export type CalendarsGp2CalendarArgs = {
   locale?: InputMaybe<Scalars['String']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
@@ -548,6 +555,9 @@ export type CalendarsFilter = {
   googleCalendarId_not?: InputMaybe<Scalars['String']>;
   googleCalendarId_not_contains?: InputMaybe<Scalars['String']>;
   googleCalendarId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  gp2Calendar?: InputMaybe<Scalars['Boolean']>;
+  gp2Calendar_exists?: InputMaybe<Scalars['Boolean']>;
+  gp2Calendar_not?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   name_contains?: InputMaybe<Scalars['String']>;
   name_exists?: InputMaybe<Scalars['Boolean']>;
@@ -872,6 +882,8 @@ export enum CalendarsOrder {
   ColorDesc = 'color_DESC',
   GoogleCalendarIdAsc = 'googleCalendarId_ASC',
   GoogleCalendarIdDesc = 'googleCalendarId_DESC',
+  Gp2CalendarAsc = 'gp2Calendar_ASC',
+  Gp2CalendarDesc = 'gp2Calendar_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
@@ -11161,6 +11173,9 @@ export type CfCalendarsNestedFilter = {
   googleCalendarId_not?: InputMaybe<Scalars['String']>;
   googleCalendarId_not_contains?: InputMaybe<Scalars['String']>;
   googleCalendarId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  gp2Calendar?: InputMaybe<Scalars['Boolean']>;
+  gp2Calendar_exists?: InputMaybe<Scalars['Boolean']>;
+  gp2Calendar_not?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   name_contains?: InputMaybe<Scalars['String']>;
   name_exists?: InputMaybe<Scalars['Boolean']>;
@@ -12194,7 +12209,11 @@ export type FetchAnnouncementsQuery = {
 
 export type CalendarsContentDataFragment = Pick<
   Calendars,
-  'googleCalendarId' | 'name' | 'color' | 'googleApiMetadata'
+  | 'googleCalendarId'
+  | 'name'
+  | 'color'
+  | 'googleApiMetadata'
+  | 'gp2Calendar'
 > & {
   sys: Pick<
     Sys,
@@ -12222,7 +12241,11 @@ export type FetchCalendarByIdQuery = {
   calendars?: Maybe<
     Pick<
       Calendars,
-      'googleCalendarId' | 'name' | 'color' | 'googleApiMetadata'
+      | 'googleCalendarId'
+      | 'name'
+      | 'color'
+      | 'googleApiMetadata'
+      | 'gp2Calendar'
     > & {
       sys: Pick<
         Sys,
@@ -12260,7 +12283,11 @@ export type FetchCalendarsQuery = {
         Maybe<
           Pick<
             Calendars,
-            'googleCalendarId' | 'name' | 'color' | 'googleApiMetadata'
+            | 'googleCalendarId'
+            | 'name'
+            | 'color'
+            | 'googleApiMetadata'
+            | 'gp2Calendar'
           > & {
             sys: Pick<
               Sys,
@@ -18102,6 +18129,7 @@ export const CalendarsContentDataFragmentDoc = {
           { kind: 'Field', name: { kind: 'Name', value: 'name' } },
           { kind: 'Field', name: { kind: 'Name', value: 'color' } },
           { kind: 'Field', name: { kind: 'Name', value: 'googleApiMetadata' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'gp2Calendar' } },
           {
             kind: 'Field',
             name: { kind: 'Name', value: 'linkedFrom' },

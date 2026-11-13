@@ -262,6 +262,7 @@ type Calendars implements Entry & _Node {
   contentfulMetadata: ContentfulMetadata!
   googleApiMetadata(locale: String, useFallbackLocale: Boolean): JSON
   googleCalendarId(locale: String, useFallbackLocale: Boolean): String
+  gp2Calendar(locale: String, useFallbackLocale: Boolean): Boolean
   linkedFrom(allowedLocales: [String]): CalendarsLinkingCollections
   name(locale: String, useFallbackLocale: Boolean): String
   sys: Sys!
@@ -299,6 +300,9 @@ input CalendarsFilter {
   googleCalendarId_not: String
   googleCalendarId_not_contains: String
   googleCalendarId_not_in: [String]
+  gp2Calendar: Boolean
+  gp2Calendar_exists: Boolean
+  gp2Calendar_not: Boolean
   name: String
   name_contains: String
   name_exists: Boolean
@@ -535,6 +539,8 @@ enum CalendarsOrder {
   color_DESC
   googleCalendarId_ASC
   googleCalendarId_DESC
+  gp2Calendar_ASC
+  gp2Calendar_DESC
   name_ASC
   name_DESC
   sys_firstPublishedAt_ASC
@@ -7054,6 +7060,9 @@ input cfCalendarsNestedFilter {
   googleCalendarId_not: String
   googleCalendarId_not_contains: String
   googleCalendarId_not_in: [String]
+  gp2Calendar: Boolean
+  gp2Calendar_exists: Boolean
+  gp2Calendar_not: Boolean
   name: String
   name_contains: String
   name_exists: Boolean
