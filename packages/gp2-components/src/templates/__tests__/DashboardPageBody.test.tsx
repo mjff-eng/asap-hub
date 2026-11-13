@@ -255,9 +255,8 @@ describe('DashboardPageBody', () => {
             latestStats={mockStats}
             upcomingEvents={gp2
               .createListEventResponse(1)
-              .items.map(({ speakers, ...event }) => ({
+              .items.map((event) => ({
                 ...event,
-                hasSpeakersToBeAnnounced: speakers.length === 0,
                 eventOwner: <div>GP2 Team</div>,
                 tags: event.tags.map((k) => k.name),
               }))}
@@ -289,9 +288,8 @@ describe('DashboardPageBody', () => {
             latestStats={mockStats}
             upcomingEvents={gp2
               .createListEventResponse(4)
-              .items.map(({ speakers, ...event }) => ({
+              .items.map((event) => ({
                 ...event,
-                hasSpeakersToBeAnnounced: speakers.length === 0,
                 eventOwner: <div>GP2 Team</div>,
                 tags: event.tags.map((k) => k.name),
               }))}

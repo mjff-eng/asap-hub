@@ -16,7 +16,7 @@ export const eventsContentQueryFragment = gql`
     startDate
     startDateTimeZone
     meetingLink
-    hideMeetingLink
+    inPerson
     eventLink
     status
     hidden

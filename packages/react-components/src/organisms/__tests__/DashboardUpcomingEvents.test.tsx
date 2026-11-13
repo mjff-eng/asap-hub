@@ -10,7 +10,6 @@ it('shows the event cards and the view all link', () => {
       }).items.map((event) => ({
         ...event,
         tags: [],
-        hasSpeakersToBeAnnounced: false,
         eventOwner: <div>ASAP Team</div>,
       }))}
     />,
@@ -27,7 +26,6 @@ it('does not show the link where there are 3 ore less upcoming events', () => {
       upcomingEvents={createListEventResponse(3).items.map((event) => ({
         ...event,
         tags: [],
-        hasSpeakersToBeAnnounced: false,
         eventOwner: <div>ASAP Team</div>,
       }))}
     />,

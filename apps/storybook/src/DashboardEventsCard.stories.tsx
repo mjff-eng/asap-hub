@@ -51,7 +51,7 @@ const liveInPersonEvent = toEventItem({
   startDate: new Date().toISOString(),
   endDate: addHours(new Date(), 1).toISOString(),
   meetingLink: undefined,
-  hideMeetingLink: true,
+  inPerson: true,
 });
 
 const futureVirtualEvent = toEventItem({
@@ -68,7 +68,7 @@ const pastInPersonEvent = toEventItem({
   startDate: subHours(new Date(), 3).toISOString(),
   endDate: subHours(new Date(), 2).toISOString(),
   meetingLink: undefined,
-  hideMeetingLink: true,
+  inPerson: true,
   notes: 'Meeting notes',
   videoRecording: 'Video recording',
   presentation: 'Presentation',

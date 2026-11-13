@@ -1000,8 +1000,8 @@ export enum AttendanceLinkingCollectionsEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -1051,8 +1051,8 @@ export enum AttendanceLinkingCollectionsEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -1673,8 +1673,8 @@ export enum CalendarsLinkingCollectionsEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -1724,8 +1724,8 @@ export enum CalendarsLinkingCollectionsEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -3699,8 +3699,8 @@ export enum EventSpeakersLinkingCollectionsEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -3750,8 +3750,8 @@ export enum EventSpeakersLinkingCollectionsEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -3842,7 +3842,7 @@ export type Events = Entry &
     eventLink?: Maybe<Scalars['String']>;
     googleId?: Maybe<Scalars['String']>;
     hidden?: Maybe<Scalars['Boolean']>;
-    hideMeetingLink?: Maybe<Scalars['Boolean']>;
+    inPerson?: Maybe<Scalars['Boolean']>;
     lastUpdated?: Maybe<Scalars['DateTime']>;
     linkedFrom?: Maybe<EventsLinkingCollections>;
     meetingLink?: Maybe<Scalars['String']>;
@@ -3957,7 +3957,7 @@ export type EventsHiddenArgs = {
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/events) */
-export type EventsHideMeetingLinkArgs = {
+export type EventsInPersonArgs = {
   locale?: InputMaybe<Scalars['String']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
@@ -4231,9 +4231,9 @@ export type EventsFilter = {
   hidden?: InputMaybe<Scalars['Boolean']>;
   hidden_exists?: InputMaybe<Scalars['Boolean']>;
   hidden_not?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink_exists?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink_not?: InputMaybe<Scalars['Boolean']>;
+  inPerson?: InputMaybe<Scalars['Boolean']>;
+  inPerson_exists?: InputMaybe<Scalars['Boolean']>;
+  inPerson_not?: InputMaybe<Scalars['Boolean']>;
   lastUpdated?: InputMaybe<Scalars['DateTime']>;
   lastUpdated_exists?: InputMaybe<Scalars['Boolean']>;
   lastUpdated_gt?: InputMaybe<Scalars['DateTime']>;
@@ -4625,8 +4625,8 @@ export enum EventsOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -7482,11 +7482,19 @@ export type LabMembership = Entry &
   _Node & {
     _id: Scalars['ID'];
     contentfulMetadata: ContentfulMetadata;
+    endDate?: Maybe<Scalars['DateTime']>;
     lab?: Maybe<Labs>;
     linkedFrom?: Maybe<LabMembershipLinkingCollections>;
     role?: Maybe<Scalars['String']>;
+    startDate?: Maybe<Scalars['DateTime']>;
     sys: Sys;
   };
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/labMembership) */
+export type LabMembershipEndDateArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/labMembership) */
 export type LabMembershipLabArgs = {
@@ -7503,6 +7511,12 @@ export type LabMembershipLinkedFromArgs = {
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/labMembership) */
 export type LabMembershipRoleArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/labMembership) */
+export type LabMembershipStartDateArgs = {
   locale?: InputMaybe<Scalars['String']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
@@ -7524,6 +7538,15 @@ export type LabMembershipFilter = {
   AND?: InputMaybe<Array<InputMaybe<LabMembershipFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<LabMembershipFilter>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  endDate_exists?: InputMaybe<Scalars['Boolean']>;
+  endDate_gt?: InputMaybe<Scalars['DateTime']>;
+  endDate_gte?: InputMaybe<Scalars['DateTime']>;
+  endDate_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  endDate_lt?: InputMaybe<Scalars['DateTime']>;
+  endDate_lte?: InputMaybe<Scalars['DateTime']>;
+  endDate_not?: InputMaybe<Scalars['DateTime']>;
+  endDate_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   lab?: InputMaybe<CfLabsNestedFilter>;
   lab_exists?: InputMaybe<Scalars['Boolean']>;
   role?: InputMaybe<Scalars['String']>;
@@ -7533,6 +7556,15 @@ export type LabMembershipFilter = {
   role_not?: InputMaybe<Scalars['String']>;
   role_not_contains?: InputMaybe<Scalars['String']>;
   role_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
+  startDate_exists?: InputMaybe<Scalars['Boolean']>;
+  startDate_gt?: InputMaybe<Scalars['DateTime']>;
+  startDate_gte?: InputMaybe<Scalars['DateTime']>;
+  startDate_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  startDate_lt?: InputMaybe<Scalars['DateTime']>;
+  startDate_lte?: InputMaybe<Scalars['DateTime']>;
+  startDate_not?: InputMaybe<Scalars['DateTime']>;
+  startDate_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   sys?: InputMaybe<SysFilter>;
 };
 
@@ -7714,8 +7746,12 @@ export enum LabMembershipLinkingCollectionsUsersCursorCollectionOrder {
 }
 
 export enum LabMembershipOrder {
+  EndDateAsc = 'endDate_ASC',
+  EndDateDesc = 'endDate_DESC',
   RoleAsc = 'role_ASC',
   RoleDesc = 'role_DESC',
+  StartDateAsc = 'startDate_ASC',
+  StartDateDesc = 'startDate_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -7912,8 +7948,12 @@ export type LabsLinkingCollectionsUsersCursorCollectionArgs = {
 };
 
 export enum LabsLinkingCollectionsLabMembershipCollectionOrder {
+  EndDateAsc = 'endDate_ASC',
+  EndDateDesc = 'endDate_DESC',
   RoleAsc = 'role_ASC',
   RoleDesc = 'role_DESC',
+  StartDateAsc = 'startDate_ASC',
+  StartDateDesc = 'startDate_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -7925,8 +7965,12 @@ export enum LabsLinkingCollectionsLabMembershipCollectionOrder {
 }
 
 export enum LabsLinkingCollectionsLabMembershipCursorCollectionOrder {
+  EndDateAsc = 'endDate_ASC',
+  EndDateDesc = 'endDate_DESC',
   RoleAsc = 'role_ASC',
   RoleDesc = 'role_DESC',
+  StartDateAsc = 'startDate_ASC',
+  StartDateDesc = 'startDate_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -14989,7 +15033,6 @@ export type ResearchOutputs = Entry &
     statusChangedBy?: Maybe<Users>;
     subtype?: Maybe<ResearchTags>;
     sys: Sys;
-    tags?: Maybe<Array<Maybe<Scalars['String']>>>;
     teamsCollection?: Maybe<ResearchOutputsTeamsCollection>;
     teamsCursorCollection?: Maybe<ResearchOutputsTeamsCursorCollection>;
     title?: Maybe<Scalars['String']>;
@@ -15411,12 +15454,6 @@ export type ResearchOutputsSubtypeArgs = {
   preview?: InputMaybe<Scalars['Boolean']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
   where?: InputMaybe<ResearchTagsFilter>;
-};
-
-/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/researchOutputs) */
-export type ResearchOutputsTagsArgs = {
-  locale?: InputMaybe<Scalars['String']>;
-  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/researchOutputs) */
@@ -15860,10 +15897,6 @@ export type ResearchOutputsFilter = {
   subtype?: InputMaybe<CfResearchTagsNestedFilter>;
   subtype_exists?: InputMaybe<Scalars['Boolean']>;
   sys?: InputMaybe<SysFilter>;
-  tags_contains_all?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  tags_contains_none?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  tags_contains_some?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  tags_exists?: InputMaybe<Scalars['Boolean']>;
   teams?: InputMaybe<CfTeamsNestedFilter>;
   teamsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   title?: InputMaybe<Scalars['String']>;
@@ -16590,8 +16623,8 @@ export enum ResearchOutputsRelatedEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -16647,8 +16680,8 @@ export enum ResearchOutputsRelatedEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -17247,8 +17280,8 @@ export enum ResearchTagsLinkingCollectionsEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -17298,8 +17331,8 @@ export enum ResearchTagsLinkingCollectionsEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -20810,8 +20843,8 @@ export enum TutorialsRelatedEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -20867,8 +20900,8 @@ export enum TutorialsRelatedEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   LastUpdatedAsc = 'lastUpdated_ASC',
   LastUpdatedDesc = 'lastUpdated_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
@@ -21153,6 +21186,8 @@ export type Users = Entry &
     firstName?: Maybe<Scalars['String']>;
     institution?: Maybe<Scalars['String']>;
     jobTitle?: Maybe<Scalars['String']>;
+    labMembershipsCollection?: Maybe<UsersLabMembershipsCollection>;
+    labMembershipsCursorCollection?: Maybe<UsersLabMembershipsCursorCollection>;
     labsCollection?: Maybe<UsersLabsCollection>;
     labsCursorCollection?: Maybe<UsersLabsCursorCollection>;
     lastName?: Maybe<Scalars['String']>;
@@ -21160,8 +21195,6 @@ export type Users = Entry &
     linkedFrom?: Maybe<UsersLinkingCollections>;
     middleName?: Maybe<Scalars['String']>;
     nickname?: Maybe<Scalars['String']>;
-    oldLabsCollection?: Maybe<UsersOldLabsCollection>;
-    oldLabsCursorCollection?: Maybe<UsersOldLabsCursorCollection>;
     onboarded?: Maybe<Scalars['Boolean']>;
     openScienceTeamMember?: Maybe<Scalars['Boolean']>;
     orcid?: Maybe<Scalars['String']>;
@@ -21306,6 +21339,31 @@ export type UsersJobTitleArgs = {
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/users) */
+export type UsersLabMembershipsCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Array<InputMaybe<UsersLabMembershipsCollectionOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<LabMembershipFilter>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/users) */
+export type UsersLabMembershipsCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<UsersLabMembershipsCursorCollectionOrder>>
+  >;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<LabMembershipFilter>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/users) */
 export type UsersLabsCollectionArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   locale?: InputMaybe<Scalars['String']>;
@@ -21355,29 +21413,6 @@ export type UsersMiddleNameArgs = {
 export type UsersNicknameArgs = {
   locale?: InputMaybe<Scalars['String']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/users) */
-export type UsersOldLabsCollectionArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  locale?: InputMaybe<Scalars['String']>;
-  order?: InputMaybe<Array<InputMaybe<UsersOldLabsCollectionOrder>>>;
-  preview?: InputMaybe<Scalars['Boolean']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
-  where?: InputMaybe<LabMembershipFilter>;
-};
-
-/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/users) */
-export type UsersOldLabsCursorCollectionArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  locale?: InputMaybe<Scalars['String']>;
-  order?: InputMaybe<Array<InputMaybe<UsersOldLabsCursorCollectionOrder>>>;
-  pageNext?: InputMaybe<Scalars['String']>;
-  pagePrev?: InputMaybe<Scalars['String']>;
-  preview?: InputMaybe<Scalars['Boolean']>;
-  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
-  where?: InputMaybe<LabMembershipFilter>;
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/users) */
@@ -21678,6 +21713,8 @@ export type UsersFilter = {
   jobTitle_not?: InputMaybe<Scalars['String']>;
   jobTitle_not_contains?: InputMaybe<Scalars['String']>;
   jobTitle_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  labMemberships?: InputMaybe<CfLabMembershipNestedFilter>;
+  labMembershipsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   labs?: InputMaybe<CfLabsNestedFilter>;
   labsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   lastName?: InputMaybe<Scalars['String']>;
@@ -21710,8 +21747,6 @@ export type UsersFilter = {
   nickname_not?: InputMaybe<Scalars['String']>;
   nickname_not_contains?: InputMaybe<Scalars['String']>;
   nickname_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  oldLabs?: InputMaybe<CfLabMembershipNestedFilter>;
-  oldLabsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   onboarded?: InputMaybe<Scalars['Boolean']>;
   onboarded_exists?: InputMaybe<Scalars['Boolean']>;
   onboarded_not?: InputMaybe<Scalars['Boolean']>;
@@ -21800,6 +21835,53 @@ export type UsersFilter = {
   userSocials?: InputMaybe<CfSocialsNestedFilter>;
   userSocials_exists?: InputMaybe<Scalars['Boolean']>;
 };
+
+export type UsersLabMembershipsCollection = {
+  items: Array<Maybe<LabMembership>>;
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
+  total: Scalars['Int'];
+};
+
+export enum UsersLabMembershipsCollectionOrder {
+  EndDateAsc = 'endDate_ASC',
+  EndDateDesc = 'endDate_DESC',
+  RoleAsc = 'role_ASC',
+  RoleDesc = 'role_DESC',
+  StartDateAsc = 'startDate_ASC',
+  StartDateDesc = 'startDate_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export type UsersLabMembershipsCursorCollection = {
+  items: Array<Maybe<LabMembership>>;
+  limit: Scalars['Int'];
+  pages: CursorPages;
+};
+
+export enum UsersLabMembershipsCursorCollectionOrder {
+  EndDateAsc = 'endDate_ASC',
+  EndDateDesc = 'endDate_DESC',
+  RoleAsc = 'role_ASC',
+  RoleDesc = 'role_DESC',
+  StartDateAsc = 'startDate_ASC',
+  StartDateDesc = 'startDate_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
 
 export type UsersLabsCollection = {
   items: Array<Maybe<Labs>>;
@@ -22972,45 +23054,6 @@ export enum UsersLinkingCollectionsWorkingGroupMembersCollectionOrder {
 export enum UsersLinkingCollectionsWorkingGroupMembersCursorCollectionOrder {
   InactiveSinceDateAsc = 'inactiveSinceDate_ASC',
   InactiveSinceDateDesc = 'inactiveSinceDate_DESC',
-  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
-  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
-  SysIdAsc = 'sys_id_ASC',
-  SysIdDesc = 'sys_id_DESC',
-  SysPublishedAtAsc = 'sys_publishedAt_ASC',
-  SysPublishedAtDesc = 'sys_publishedAt_DESC',
-  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
-  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
-}
-
-export type UsersOldLabsCollection = {
-  items: Array<Maybe<LabMembership>>;
-  limit: Scalars['Int'];
-  skip: Scalars['Int'];
-  total: Scalars['Int'];
-};
-
-export enum UsersOldLabsCollectionOrder {
-  RoleAsc = 'role_ASC',
-  RoleDesc = 'role_DESC',
-  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
-  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
-  SysIdAsc = 'sys_id_ASC',
-  SysIdDesc = 'sys_id_DESC',
-  SysPublishedAtAsc = 'sys_publishedAt_ASC',
-  SysPublishedAtDesc = 'sys_publishedAt_DESC',
-  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
-  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
-}
-
-export type UsersOldLabsCursorCollection = {
-  items: Array<Maybe<LabMembership>>;
-  limit: Scalars['Int'];
-  pages: CursorPages;
-};
-
-export enum UsersOldLabsCursorCollectionOrder {
-  RoleAsc = 'role_ASC',
-  RoleDesc = 'role_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -24462,9 +24505,9 @@ export type CfEventsNestedFilter = {
   hidden?: InputMaybe<Scalars['Boolean']>;
   hidden_exists?: InputMaybe<Scalars['Boolean']>;
   hidden_not?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink_exists?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink_not?: InputMaybe<Scalars['Boolean']>;
+  inPerson?: InputMaybe<Scalars['Boolean']>;
+  inPerson_exists?: InputMaybe<Scalars['Boolean']>;
+  inPerson_not?: InputMaybe<Scalars['Boolean']>;
   lastUpdated?: InputMaybe<Scalars['DateTime']>;
   lastUpdated_exists?: InputMaybe<Scalars['Boolean']>;
   lastUpdated_gt?: InputMaybe<Scalars['DateTime']>;
@@ -24739,6 +24782,15 @@ export type CfLabMembershipNestedFilter = {
   AND?: InputMaybe<Array<InputMaybe<CfLabMembershipNestedFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<CfLabMembershipNestedFilter>>>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  endDate_exists?: InputMaybe<Scalars['Boolean']>;
+  endDate_gt?: InputMaybe<Scalars['DateTime']>;
+  endDate_gte?: InputMaybe<Scalars['DateTime']>;
+  endDate_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  endDate_lt?: InputMaybe<Scalars['DateTime']>;
+  endDate_lte?: InputMaybe<Scalars['DateTime']>;
+  endDate_not?: InputMaybe<Scalars['DateTime']>;
+  endDate_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   lab_exists?: InputMaybe<Scalars['Boolean']>;
   role?: InputMaybe<Scalars['String']>;
   role_contains?: InputMaybe<Scalars['String']>;
@@ -24747,6 +24799,15 @@ export type CfLabMembershipNestedFilter = {
   role_not?: InputMaybe<Scalars['String']>;
   role_not_contains?: InputMaybe<Scalars['String']>;
   role_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
+  startDate_exists?: InputMaybe<Scalars['Boolean']>;
+  startDate_gt?: InputMaybe<Scalars['DateTime']>;
+  startDate_gte?: InputMaybe<Scalars['DateTime']>;
+  startDate_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  startDate_lt?: InputMaybe<Scalars['DateTime']>;
+  startDate_lte?: InputMaybe<Scalars['DateTime']>;
+  startDate_not?: InputMaybe<Scalars['DateTime']>;
+  startDate_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   sys?: InputMaybe<SysFilter>;
 };
 
@@ -25518,10 +25579,6 @@ export type CfResearchOutputsNestedFilter = {
   statusChangedBy_exists?: InputMaybe<Scalars['Boolean']>;
   subtype_exists?: InputMaybe<Scalars['Boolean']>;
   sys?: InputMaybe<SysFilter>;
-  tags_contains_all?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  tags_contains_none?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  tags_contains_some?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  tags_exists?: InputMaybe<Scalars['Boolean']>;
   teamsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   title?: InputMaybe<Scalars['String']>;
   title_contains?: InputMaybe<Scalars['String']>;
@@ -26064,6 +26121,7 @@ export type CfUsersNestedFilter = {
   jobTitle_not?: InputMaybe<Scalars['String']>;
   jobTitle_not_contains?: InputMaybe<Scalars['String']>;
   jobTitle_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  labMembershipsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   labsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   lastName?: InputMaybe<Scalars['String']>;
   lastName_contains?: InputMaybe<Scalars['String']>;
@@ -26095,7 +26153,6 @@ export type CfUsersNestedFilter = {
   nickname_not?: InputMaybe<Scalars['String']>;
   nickname_not_contains?: InputMaybe<Scalars['String']>;
   nickname_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  oldLabsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   onboarded?: InputMaybe<Scalars['Boolean']>;
   onboarded_exists?: InputMaybe<Scalars['Boolean']>;
   onboarded_not?: InputMaybe<Scalars['Boolean']>;
@@ -28369,7 +28426,7 @@ export type EventsContentFragment = Pick<
   | 'startDate'
   | 'startDateTimeZone'
   | 'meetingLink'
-  | 'hideMeetingLink'
+  | 'inPerson'
   | 'eventLink'
   | 'status'
   | 'hidden'
@@ -28800,7 +28857,7 @@ export type FetchEventByIdQuery = {
       | 'startDate'
       | 'startDateTimeZone'
       | 'meetingLink'
-      | 'hideMeetingLink'
+      | 'inPerson'
       | 'eventLink'
       | 'status'
       | 'hidden'
@@ -29291,7 +29348,7 @@ export type FetchEventsQuery = {
             | 'startDate'
             | 'startDateTimeZone'
             | 'meetingLink'
-            | 'hideMeetingLink'
+            | 'inPerson'
             | 'eventLink'
             | 'status'
             | 'hidden'
@@ -29946,7 +30003,7 @@ export type FetchEventsByUserIdQuery = {
                         | 'startDate'
                         | 'startDateTimeZone'
                         | 'meetingLink'
-                        | 'hideMeetingLink'
+                        | 'inPerson'
                         | 'eventLink'
                         | 'status'
                         | 'hidden'
@@ -30706,7 +30763,7 @@ export type FetchEventsByExternalAuthorIdQuery = {
                         | 'startDate'
                         | 'startDateTimeZone'
                         | 'meetingLink'
-                        | 'hideMeetingLink'
+                        | 'inPerson'
                         | 'eventLink'
                         | 'status'
                         | 'hidden'
@@ -31466,7 +31523,7 @@ export type FetchEventsByTeamIdQuery = {
                         | 'startDate'
                         | 'startDateTimeZone'
                         | 'meetingLink'
-                        | 'hideMeetingLink'
+                        | 'inPerson'
                         | 'eventLink'
                         | 'status'
                         | 'hidden'
@@ -42285,7 +42342,7 @@ export const EventsContentFragmentDoc = {
           { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
           { kind: 'Field', name: { kind: 'Name', value: 'startDateTimeZone' } },
           { kind: 'Field', name: { kind: 'Name', value: 'meetingLink' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'hideMeetingLink' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'inPerson' } },
           { kind: 'Field', name: { kind: 'Name', value: 'eventLink' } },
           { kind: 'Field', name: { kind: 'Name', value: 'status' } },
           { kind: 'Field', name: { kind: 'Name', value: 'hidden' } },

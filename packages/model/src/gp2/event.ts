@@ -54,7 +54,7 @@ export type EventCreateDataObject = Pick<
   | 'endDateTimeZone'
   | 'status'
   | 'meetingLink'
-  | 'hideMeetingLink'
+  | 'inPerson'
 > & {
   googleId: string;
   calendar: string;

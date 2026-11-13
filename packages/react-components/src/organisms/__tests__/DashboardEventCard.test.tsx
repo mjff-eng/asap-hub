@@ -22,7 +22,7 @@ it('shows the live dot and a Join event now button for a live event with a meeti
       {...props}
       {...liveWindow}
       meetingLink="https://example.com/meeting"
-      hideMeetingLink={false}
+      inPerson={false}
     />,
   );
   expect(screen.getByTitle('Live')).toBeInTheDocument();
@@ -38,7 +38,7 @@ it('shows the live dot and an In person pill, but no button, for a live in-perso
       {...props}
       {...liveWindow}
       meetingLink="https://example.com/meeting"
-      hideMeetingLink
+      inPerson
     />,
   );
   expect(screen.getByTitle('Live')).toBeInTheDocument();
@@ -54,7 +54,7 @@ it('shows neither the In person pill nor the button for a live online event with
       {...props}
       {...liveWindow}
       meetingLink={undefined}
-      hideMeetingLink={false}
+      inPerson={false}
     />,
   );
   expect(screen.getByTitle('Live')).toBeInTheDocument();
@@ -86,7 +86,7 @@ it('shows the In person pill for a past in-person event', () => {
       variant="past"
       startDate={subHours(new Date(), 3).toISOString()}
       endDate={subHours(new Date(), 2).toISOString()}
-      hideMeetingLink
+      inPerson
     />,
   );
   expect(screen.getByText('In person')).toBeVisible();
@@ -101,7 +101,7 @@ it('does not show the In person pill for a past online event without a meeting l
       startDate={subHours(new Date(), 3).toISOString()}
       endDate={subHours(new Date(), 2).toISOString()}
       meetingLink={undefined}
-      hideMeetingLink={false}
+      inPerson={false}
     />,
   );
   expect(screen.queryByText('In person')).not.toBeInTheDocument();

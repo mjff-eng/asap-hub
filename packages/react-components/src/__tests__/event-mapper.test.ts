@@ -61,28 +61,4 @@ describe('eventMapper', () => {
       }).thumbnail,
     ).toEqual('https://example.com/event.png');
   });
-
-  describe('hasSpeakersToBeAnnounced', () => {
-    const team = { id: 't1', displayName: 'Team One' };
-    const user = { id: 'u1', displayName: 'User One' };
-
-    it('is true for a team slot without a speaker', () => {
-      expect(
-        eventMapper({ ...createEventResponse(), speakers: [{ team }] })
-          .hasSpeakersToBeAnnounced,
-      ).toBe(true);
-    });
-
-    it('is false when every speaker is known, including an external guest linked to a team', () => {
-      expect(
-        eventMapper({
-          ...createEventResponse(),
-          speakers: [
-            { id: 's1', team, user, role: 'Lead PI' },
-            { id: 's2', externalUser: { name: 'Guest' }, team },
-          ],
-        }).hasSpeakersToBeAnnounced,
-      ).toBe(false);
-    });
-  });
 });

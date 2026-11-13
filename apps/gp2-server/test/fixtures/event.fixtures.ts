@@ -28,7 +28,7 @@ export const getContentfulGraphqlEvent = (): NonNullable<
   startDate: '2009-12-24T16:20:14.000Z',
   startDateTimeZone: 'UTC',
   meetingLink: 'https://zoom.com/room/123',
-  hideMeetingLink: false,
+  inPerson: false,
   eventLink: 'https://zoom.com/room/123',
   status: 'Confirmed',
   hidden: false,
@@ -378,7 +378,7 @@ export const getEventDataObject = (): gp2Model.EventDataObject => ({
   startDate: '2009-12-24T16:20:14.000Z',
   startDateTimestamp: 1261671614,
   meetingLink: 'https://zoom.com/room/123',
-  hideMeetingLink: false,
+  inPerson: false,
   status: 'Confirmed',
   hidden: false,
   tags: [{ id: 'id-1', name: 'Cohort' }],
@@ -438,7 +438,7 @@ export const getEventCreateDataObject = (): gp2Model.EventCreateDataObject => ({
   status: 'Confirmed' as EventStatus,
   hidden: false,
   meetingLink: 'https://zweem.com',
-  hideMeetingLink: false,
+  inPerson: false,
 });
 
 export const getEventWebhookPayload = (

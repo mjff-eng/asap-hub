@@ -15,7 +15,6 @@ const meetingMaterialsHref = '/events/1/meeting-materials';
 const props: ComponentProps<typeof EventDetailPage> = {
   ...createEventResponse(),
   hasFinished: false,
-  hasSpeakersToBeAnnounced: false,
   tags: [],
   eventOwner: <div>ASAP Team</div>,
   eventConversation: <div>Event Conversation</div>,
@@ -141,7 +140,7 @@ it('does not render a separate join card for an upcoming event', () => {
       startDate={addDays(new Date(), 1).toISOString()}
       endDate={addDays(new Date(), 2).toISOString()}
       meetingLink="link"
-      hideMeetingLink={false}
+      inPerson={false}
     />,
   );
   expect(screen.queryByText(/join this event/i)).not.toBeInTheDocument();
@@ -317,7 +316,7 @@ it('shows the missing meeting link tooltip below the join button', () => {
       {...props}
       status="Confirmed"
       meetingLink={undefined}
-      hideMeetingLink={false}
+      inPerson={false}
       startDate={subMinutes(new Date(), 1).toISOString()}
       endDate={addMinutes(new Date(), 30).toISOString()}
     />,

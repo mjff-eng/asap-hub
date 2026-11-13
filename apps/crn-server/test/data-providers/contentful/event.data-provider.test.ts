@@ -3020,7 +3020,7 @@ describe('Events Contentful Data Provider', () => {
           hidden: {
             'en-US': false,
           },
-          hideMeetingLink: {
+          inPerson: {
             'en-US': false,
           },
           startDate: {

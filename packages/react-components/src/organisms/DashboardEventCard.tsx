@@ -49,7 +49,7 @@ type DashboardEventCardProps = Pick<
   | 'endDate'
   | 'endDateTimeZone'
   | 'meetingLink'
-  | 'hideMeetingLink'
+  | 'inPerson'
   | 'notes'
   | 'videoRecording'
   | 'presentation'
@@ -61,7 +61,7 @@ type DashboardEventCardProps = Pick<
 const DashboardEventCard: React.FC<DashboardEventCardProps> = ({
   status,
   meetingLink,
-  hideMeetingLink,
+  inPerson,
   notes,
   videoRecording,
   presentation,
@@ -93,9 +93,9 @@ const DashboardEventCard: React.FC<DashboardEventCardProps> = ({
             <LiveIcon color={colour.utilitarian.red[600]} size={16} />
           ) : undefined
         }
-        titleSuffix={hideMeetingLink ? <InPersonPill /> : undefined}
+        titleSuffix={inPerson ? <InPersonPill /> : undefined}
         titleAction={
-          live && meetingLink && !hideMeetingLink ? (
+          live && meetingLink && !inPerson ? (
             <div css={buttonWrapperStyles}>
               <Link href={meetingLink} noMargin primary buttonStyle small>
                 <span css={buttonContentStyles}>

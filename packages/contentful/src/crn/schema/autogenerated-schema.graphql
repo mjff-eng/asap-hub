@@ -519,8 +519,8 @@ enum AttendanceLinkingCollectionsEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -570,8 +570,8 @@ enum AttendanceLinkingCollectionsEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -914,8 +914,8 @@ enum CalendarsLinkingCollectionsEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -965,8 +965,8 @@ enum CalendarsLinkingCollectionsEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -2452,8 +2452,8 @@ enum EventSpeakersLinkingCollectionsEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -2503,8 +2503,8 @@ enum EventSpeakersLinkingCollectionsEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -2594,7 +2594,7 @@ type Events implements Entry & _Node {
   eventLink(locale: String, useFallbackLocale: Boolean): String
   googleId(locale: String, useFallbackLocale: Boolean): String
   hidden(locale: String, useFallbackLocale: Boolean): Boolean
-  hideMeetingLink(locale: String, useFallbackLocale: Boolean): Boolean
+  inPerson(locale: String, useFallbackLocale: Boolean): Boolean
   lastUpdated(locale: String, useFallbackLocale: Boolean): DateTime
   linkedFrom(allowedLocales: [String]): EventsLinkingCollections
   meetingLink(locale: String, useFallbackLocale: Boolean): String
@@ -2723,9 +2723,9 @@ input EventsFilter {
   hidden: Boolean
   hidden_exists: Boolean
   hidden_not: Boolean
-  hideMeetingLink: Boolean
-  hideMeetingLink_exists: Boolean
-  hideMeetingLink_not: Boolean
+  inPerson: Boolean
+  inPerson_exists: Boolean
+  inPerson_not: Boolean
   lastUpdated: DateTime
   lastUpdated_exists: Boolean
   lastUpdated_gt: DateTime
@@ -3044,8 +3044,8 @@ enum EventsOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -5026,9 +5026,11 @@ scalar JSON
 type LabMembership implements Entry & _Node {
   _id: ID!
   contentfulMetadata: ContentfulMetadata!
+  endDate(locale: String, useFallbackLocale: Boolean): DateTime
   lab(locale: String, preview: Boolean, useFallbackLocale: Boolean, where: LabsFilter): Labs
   linkedFrom(allowedLocales: [String]): LabMembershipLinkingCollections
   role(locale: String, useFallbackLocale: Boolean): String
+  startDate(locale: String, useFallbackLocale: Boolean): DateTime
   sys: Sys!
 }
 
@@ -5049,6 +5051,15 @@ input LabMembershipFilter {
   AND: [LabMembershipFilter]
   OR: [LabMembershipFilter]
   contentfulMetadata: ContentfulMetadataFilter
+  endDate: DateTime
+  endDate_exists: Boolean
+  endDate_gt: DateTime
+  endDate_gte: DateTime
+  endDate_in: [DateTime]
+  endDate_lt: DateTime
+  endDate_lte: DateTime
+  endDate_not: DateTime
+  endDate_not_in: [DateTime]
   lab: cfLabsNestedFilter
   lab_exists: Boolean
   role: String
@@ -5058,6 +5069,15 @@ input LabMembershipFilter {
   role_not: String
   role_not_contains: String
   role_not_in: [String]
+  startDate: DateTime
+  startDate_exists: Boolean
+  startDate_gt: DateTime
+  startDate_gte: DateTime
+  startDate_in: [DateTime]
+  startDate_lt: DateTime
+  startDate_lte: DateTime
+  startDate_not: DateTime
+  startDate_not_in: [DateTime]
   sys: SysFilter
 }
 
@@ -5199,8 +5219,12 @@ enum LabMembershipLinkingCollectionsUsersCursorCollectionOrder {
 }
 
 enum LabMembershipOrder {
+  endDate_ASC
+  endDate_DESC
   role_ASC
   role_DESC
+  startDate_ASC
+  startDate_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -5264,8 +5288,12 @@ type LabsLinkingCollections {
 }
 
 enum LabsLinkingCollectionsLabMembershipCollectionOrder {
+  endDate_ASC
+  endDate_DESC
   role_ASC
   role_DESC
+  startDate_ASC
+  startDate_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -5277,8 +5305,12 @@ enum LabsLinkingCollectionsLabMembershipCollectionOrder {
 }
 
 enum LabsLinkingCollectionsLabMembershipCursorCollectionOrder {
+  endDate_ASC
+  endDate_DESC
   role_ASC
   role_DESC
+  startDate_ASC
+  startDate_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -9138,7 +9170,6 @@ type ResearchOutputs implements Entry & _Node {
   statusChangedBy(locale: String, preview: Boolean, useFallbackLocale: Boolean, where: UsersFilter): Users
   subtype(locale: String, preview: Boolean, useFallbackLocale: Boolean, where: ResearchTagsFilter): ResearchTags
   sys: Sys!
-  tags(locale: String, useFallbackLocale: Boolean): [String]
   teamsCollection(limit: Int = 100, locale: String, order: [ResearchOutputsTeamsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: TeamsFilter): ResearchOutputsTeamsCollection
   teamsCursorCollection(limit: Int = 100, locale: String, order: [ResearchOutputsTeamsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: TeamsFilter): ResearchOutputsTeamsCursorCollection
   title(locale: String, useFallbackLocale: Boolean): String
@@ -9500,10 +9531,6 @@ input ResearchOutputsFilter {
   subtype: cfResearchTagsNestedFilter
   subtype_exists: Boolean
   sys: SysFilter
-  tags_contains_all: [String]
-  tags_contains_none: [String]
-  tags_contains_some: [String]
-  tags_exists: Boolean
   teams: cfTeamsNestedFilter
   teamsCollection_exists: Boolean
   title: String
@@ -10078,8 +10105,8 @@ enum ResearchOutputsRelatedEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -10135,8 +10162,8 @@ enum ResearchOutputsRelatedEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -10493,8 +10520,8 @@ enum ResearchTagsLinkingCollectionsEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -10544,8 +10571,8 @@ enum ResearchTagsLinkingCollectionsEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -13058,8 +13085,8 @@ enum TutorialsRelatedEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -13115,8 +13142,8 @@ enum TutorialsRelatedEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   lastUpdated_ASC
   lastUpdated_DESC
   meetingLink_ASC
@@ -13400,6 +13427,8 @@ type Users implements Entry & _Node {
   firstName(locale: String, useFallbackLocale: Boolean): String
   institution(locale: String, useFallbackLocale: Boolean): String
   jobTitle(locale: String, useFallbackLocale: Boolean): String
+  labMembershipsCollection(limit: Int = 100, locale: String, order: [UsersLabMembershipsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: LabMembershipFilter): UsersLabMembershipsCollection
+  labMembershipsCursorCollection(limit: Int = 100, locale: String, order: [UsersLabMembershipsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: LabMembershipFilter): UsersLabMembershipsCursorCollection
   labsCollection(limit: Int = 100, locale: String, order: [UsersLabsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: LabsFilter): UsersLabsCollection
   labsCursorCollection(limit: Int = 100, locale: String, order: [UsersLabsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: LabsFilter): UsersLabsCursorCollection
   lastName(locale: String, useFallbackLocale: Boolean): String
@@ -13407,8 +13436,6 @@ type Users implements Entry & _Node {
   linkedFrom(allowedLocales: [String]): UsersLinkingCollections
   middleName(locale: String, useFallbackLocale: Boolean): String
   nickname(locale: String, useFallbackLocale: Boolean): String
-  oldLabsCollection(limit: Int = 100, locale: String, order: [UsersOldLabsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: LabMembershipFilter): UsersOldLabsCollection
-  oldLabsCursorCollection(limit: Int = 100, locale: String, order: [UsersOldLabsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: LabMembershipFilter): UsersOldLabsCursorCollection
   onboarded(locale: String, useFallbackLocale: Boolean): Boolean
   openScienceTeamMember(locale: String, useFallbackLocale: Boolean): Boolean
   orcid(locale: String, useFallbackLocale: Boolean): String
@@ -13583,6 +13610,8 @@ input UsersFilter {
   jobTitle_not: String
   jobTitle_not_contains: String
   jobTitle_not_in: [String]
+  labMemberships: cfLabMembershipNestedFilter
+  labMembershipsCollection_exists: Boolean
   labs: cfLabsNestedFilter
   labsCollection_exists: Boolean
   lastName: String
@@ -13615,8 +13644,6 @@ input UsersFilter {
   nickname_not: String
   nickname_not_contains: String
   nickname_not_in: [String]
-  oldLabs: cfLabMembershipNestedFilter
-  oldLabsCollection_exists: Boolean
   onboarded: Boolean
   onboarded_exists: Boolean
   onboarded_not: Boolean
@@ -13702,6 +13729,53 @@ input UsersFilter {
   techSupport_not: Boolean
   userSocials: cfSocialsNestedFilter
   userSocials_exists: Boolean
+}
+
+type UsersLabMembershipsCollection {
+  items: [LabMembership]!
+  limit: Int!
+  skip: Int!
+  total: Int!
+}
+
+enum UsersLabMembershipsCollectionOrder {
+  endDate_ASC
+  endDate_DESC
+  role_ASC
+  role_DESC
+  startDate_ASC
+  startDate_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+type UsersLabMembershipsCursorCollection {
+  items: [LabMembership]!
+  limit: Int!
+  pages: CursorPages!
+}
+
+enum UsersLabMembershipsCursorCollectionOrder {
+  endDate_ASC
+  endDate_DESC
+  role_ASC
+  role_DESC
+  startDate_ASC
+  startDate_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
 }
 
 type UsersLabsCollection {
@@ -14474,45 +14548,6 @@ enum UsersLinkingCollectionsWorkingGroupMembersCollectionOrder {
 enum UsersLinkingCollectionsWorkingGroupMembersCursorCollectionOrder {
   inactiveSinceDate_ASC
   inactiveSinceDate_DESC
-  sys_firstPublishedAt_ASC
-  sys_firstPublishedAt_DESC
-  sys_id_ASC
-  sys_id_DESC
-  sys_publishedAt_ASC
-  sys_publishedAt_DESC
-  sys_publishedVersion_ASC
-  sys_publishedVersion_DESC
-}
-
-type UsersOldLabsCollection {
-  items: [LabMembership]!
-  limit: Int!
-  skip: Int!
-  total: Int!
-}
-
-enum UsersOldLabsCollectionOrder {
-  role_ASC
-  role_DESC
-  sys_firstPublishedAt_ASC
-  sys_firstPublishedAt_DESC
-  sys_id_ASC
-  sys_id_DESC
-  sys_publishedAt_ASC
-  sys_publishedAt_DESC
-  sys_publishedVersion_ASC
-  sys_publishedVersion_DESC
-}
-
-type UsersOldLabsCursorCollection {
-  items: [LabMembership]!
-  limit: Int!
-  pages: CursorPages!
-}
-
-enum UsersOldLabsCursorCollectionOrder {
-  role_ASC
-  role_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -15589,9 +15624,9 @@ input cfEventsNestedFilter {
   hidden: Boolean
   hidden_exists: Boolean
   hidden_not: Boolean
-  hideMeetingLink: Boolean
-  hideMeetingLink_exists: Boolean
-  hideMeetingLink_not: Boolean
+  inPerson: Boolean
+  inPerson_exists: Boolean
+  inPerson_not: Boolean
   lastUpdated: DateTime
   lastUpdated_exists: Boolean
   lastUpdated_gt: DateTime
@@ -15858,6 +15893,15 @@ input cfLabMembershipNestedFilter {
   AND: [cfLabMembershipNestedFilter]
   OR: [cfLabMembershipNestedFilter]
   contentfulMetadata: ContentfulMetadataFilter
+  endDate: DateTime
+  endDate_exists: Boolean
+  endDate_gt: DateTime
+  endDate_gte: DateTime
+  endDate_in: [DateTime]
+  endDate_lt: DateTime
+  endDate_lte: DateTime
+  endDate_not: DateTime
+  endDate_not_in: [DateTime]
   lab_exists: Boolean
   role: String
   role_contains: String
@@ -15866,6 +15910,15 @@ input cfLabMembershipNestedFilter {
   role_not: String
   role_not_contains: String
   role_not_in: [String]
+  startDate: DateTime
+  startDate_exists: Boolean
+  startDate_gt: DateTime
+  startDate_gte: DateTime
+  startDate_in: [DateTime]
+  startDate_lt: DateTime
+  startDate_lte: DateTime
+  startDate_not: DateTime
+  startDate_not_in: [DateTime]
   sys: SysFilter
 }
 
@@ -16597,10 +16650,6 @@ input cfResearchOutputsNestedFilter {
   statusChangedBy_exists: Boolean
   subtype_exists: Boolean
   sys: SysFilter
-  tags_contains_all: [String]
-  tags_contains_none: [String]
-  tags_contains_some: [String]
-  tags_exists: Boolean
   teamsCollection_exists: Boolean
   title: String
   title_contains: String
@@ -17133,6 +17182,7 @@ input cfUsersNestedFilter {
   jobTitle_not: String
   jobTitle_not_contains: String
   jobTitle_not_in: [String]
+  labMembershipsCollection_exists: Boolean
   labsCollection_exists: Boolean
   lastName: String
   lastName_contains: String
@@ -17164,7 +17214,6 @@ input cfUsersNestedFilter {
   nickname_not: String
   nickname_not_contains: String
   nickname_not_in: [String]
-  oldLabsCollection_exists: Boolean
   onboarded: Boolean
   onboarded_exists: Boolean
   onboarded_not: Boolean

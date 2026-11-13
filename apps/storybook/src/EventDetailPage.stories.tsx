@@ -53,7 +53,7 @@ export const Normal = () => {
         },
       )}
       hasFinished={isEventInThePast}
-      hideMeetingLink={boolean('Hide Meeting Link', false)}
+      inPerson={boolean('In Person', false)}
       displayCalendar={boolean('display calendar', true)}
     />
   );

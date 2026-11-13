@@ -111,7 +111,7 @@ export const createEventResponse = (
   title: `${customTitle} ${itemIndex}`,
   lastModifiedDate: new Date().toISOString(),
   meetingLink: 'https://example.com/meeting',
-  hideMeetingLink: false,
+  inPerson: false,
   notes: 'Meeting notes go here',
   notesUpdatedAt: new Date().toISOString(),
   presentation: 'Presentation',
