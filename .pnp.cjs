@@ -7794,7 +7794,7 @@ const RAW_RUNTIME_STATE =
     ],\
     [\
       "js-cookie",\
-      "npm:3.0.5"\
+      "npm:3.0.8"\
     ],\
     [\
       "js-sdsl",\
@@ -13197,7 +13197,7 @@ const RAW_RUNTIME_STATE =
           ["core-js", null],\
           ["csv-stringify", "npm:6.4.5"],\
           ["date-fns", "npm:2.30.0"],\
-          ["js-cookie", "npm:3.0.5"],\
+          ["js-cookie", "npm:3.0.8"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:18.3.1"],\
           ["react-error-boundary", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:4.1.2"],\
@@ -13251,7 +13251,7 @@ const RAW_RUNTIME_STATE =
           ["@types/uuid", "npm:8.3.4"],\
           ["csv-stringify", "npm:6.4.5"],\
           ["date-fns", "npm:2.30.0"],\
-          ["js-cookie", "npm:3.0.5"],\
+          ["js-cookie", "npm:3.0.8"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:70ee702ae21962651e36bbfc38610149cb09f8829834f72efabf6ff499ef36bdf828f0ce38bc9269076bac68bed4fbc3b604042ba63016aed4c3a27d5308300f#npm:18.3.1"],\
           ["react-error-boundary", "virtual:3a393e218825bde954376ca1a828a8b21ca2967b8d720dd56f28d8017fc081fa726c0b293069a94a55394c33a36ded19a9a4675c0d537b344c90f8add76eb926#npm:4.1.2"],\
@@ -58123,10 +58123,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:3.0.5", {\
-        "packageLocation": "./.yarn/cache/js-cookie-npm-3.0.5-8fc8fcc9b4-366494b163.zip/node_modules/js-cookie/",\
+      ["npm:3.0.8", {\
+        "packageLocation": "./.yarn/cache/js-cookie-npm-3.0.8-bf3f157352-6bc10dc1ef.zip/node_modules/js-cookie/",\
         "packageDependencies": [\
-          ["js-cookie", "npm:3.0.5"]\
+          ["js-cookie", "npm:3.0.8"]\
         ],\
         "linkType": "HARD"\
       }]\
