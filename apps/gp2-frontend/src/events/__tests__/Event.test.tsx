@@ -145,8 +145,12 @@ describe('the NEW_EVENT_PAGE flag', () => {
     ).toBeInTheDocument();
     expect(screen.queryByText('Calendar & Events')).not.toBeInTheDocument();
     expect(
-      screen.queryByText(/set up your calendar manually/i),
-    ).not.toBeInTheDocument();
+      screen.getByText(/set up your calendar manually/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Apple Calendar' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Outlook' })).toBeInTheDocument();
   });
 
   it('does not show the speakers card when the event has no speakers', async () => {

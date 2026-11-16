@@ -236,6 +236,13 @@ it('hides the about content on the Meeting Materials tab', () => {
   expect(screen.queryByText('Speakers Card')).not.toBeInTheDocument();
 });
 
+it('uses the custom support email in the tech support card', () => {
+  renderPage(<EventDetailPage {...props} supportEmail="support@gp2.org" />);
+  expect(
+    screen.getByRole('link', { name: 'Contact tech support' }),
+  ).toHaveAttribute('href', 'mailto:support@gp2.org');
+});
+
 it('renders calendar list when displayCalendar is true', () => {
   renderPage(
     <EventDetailPage
@@ -532,15 +539,5 @@ describe('options for other hubs', () => {
     expect(
       screen.queryByRole('heading', { name: 'Related Tutorials' }),
     ).not.toBeInTheDocument();
-  });
-
-  it('hides the calendar instructions in the support section', () => {
-    renderPage(<EventDetailPage {...props} hideCalendarInstructions />);
-    expect(
-      screen.queryByRole('link', { name: 'Apple Calendar' }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: 'Contact tech support' }),
-    ).toBeVisible();
   });
 });

@@ -101,13 +101,13 @@ type EventDetailPageProps = ComponentProps<typeof EventCard> &
     readonly relatedResearchCard?: ReactNode;
     readonly displayCalendar: boolean;
     readonly calendarOwner: CalendarOwner;
-    readonly hideCalendarInstructions?: boolean;
     readonly heroBanner?: ReactNode;
     readonly hideBreadcrumbs?: boolean;
     readonly plainHero?: boolean;
     readonly hideMaterialsToast?: boolean;
     readonly toastAboveBanner?: boolean;
     readonly eventConversation?: ReactNode;
+    readonly supportEmail?: string;
     readonly eventAttendance?: ReactNode;
     readonly eventSpeakers?: ReactNode;
     readonly hasFinished?: boolean;
@@ -121,11 +121,11 @@ const EventDetailPage = ({
   hasFinished,
   calendar,
   eventConversation,
+  supportEmail,
   eventAttendance,
   eventSpeakers,
   displayCalendar,
   calendarOwner,
-  hideCalendarInstructions,
   heroBanner,
   hideBreadcrumbs = false,
   plainHero = false,
@@ -236,9 +236,7 @@ const EventDetailPage = ({
                   owner={calendarOwner}
                 />
               )}
-              <EventSupport
-                hideCalendarInstructions={hideCalendarInstructions}
-              />
+              <EventSupport email={supportEmail} />
             </>
           )}
         </div>

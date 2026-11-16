@@ -47,8 +47,6 @@ const Event: React.FC = () => {
       const pageProps = {
         ...eventProps,
         tags: tags.map(({ name }) => name),
-        hasSpeakersToBeAnnounced:
-          speakers.length === 0 || speakers.some(({ speaker }) => !speaker),
         eventOwner: (
           <EventOwner project={project} workingGroup={workingGroup} />
         ),
@@ -60,7 +58,6 @@ const Event: React.FC = () => {
           workingGroup,
           calendar: event.calendar,
         }),
-        hideCalendarInstructions: true,
         hideBreadcrumbs: true,
         plainHero: true,
         hideMaterialsToast: true,
@@ -72,6 +69,7 @@ const Event: React.FC = () => {
         relatedResearchCard: (
           <EventRelatedOutputsCard relatedOutputs={relatedOutputs ?? []} />
         ),
+        supportEmail: mail.INVITE_SUPPORT_EMAIL,
         aboutHref: eventRoute.about({}).$,
         meetingMaterialsHref: eventRoute.meetingMaterials({}).$,
       };

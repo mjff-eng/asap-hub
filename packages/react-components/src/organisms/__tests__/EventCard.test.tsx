@@ -478,7 +478,6 @@ describe('EventToast', () => {
       <EventToast
         {...props}
         status="Confirmed"
-        hasSpeakersToBeAnnounced={false}
         startDate={addDays(new Date(), 5).toISOString()}
         endDate={addDays(new Date(), 6).toISOString()}
       />,
