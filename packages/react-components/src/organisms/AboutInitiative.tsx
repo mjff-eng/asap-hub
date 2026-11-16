@@ -196,7 +196,7 @@ const AboutInitiative: React.FC = () => (
             ASAP is managed by the{' '}
             <strong>Coalition for Aligning Science</strong> (CAS) and
             implemented in partnership with the{' '}
-            <strong>Michael J Fox Foundation</strong> (MJFF).
+            <strong>Michael J. Fox Foundation</strong> (MJFF).
           </Paragraph>
           <Paragraph accent="primary">
             You will interact with individuals from both teams through the
