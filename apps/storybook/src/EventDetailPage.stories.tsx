@@ -96,3 +96,17 @@ export const PastWithMaterials = () => (
     selectedTab="meeting-materials"
   />
 );
+
+export const AllEmpty = () => (
+  <EventDetailPage
+    {...pageProps(
+      { description: '', tags: [], relatedResearch: [] },
+      {
+        numberOfSpeakers: 0,
+        numberOfExternalSpeakers: 0,
+        numberOfUnknownSpeakers: 0,
+      },
+    )}
+    relatedTutorials={[]}
+  />
+);

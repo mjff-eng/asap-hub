@@ -5,6 +5,7 @@ import { Button, Card, Headline3, Link, Paragraph, Pill } from '../atoms';
 import { colour } from '../colors';
 import { ResponsiveTable, ResponsiveTableColumn } from '../molecules';
 import { rem } from '../pixels';
+import { casTextStyles } from '../cas-tokens.generated';
 
 const TRUNCATE_FROM = 5;
 
@@ -15,6 +16,10 @@ const containerStyles = css({
 const descriptionStyles = css({
   marginTop: rem(16),
   marginBottom: rem(24),
+});
+
+const emptyStateStyles = css({
+  fontWeight: casTextStyles.body.medium.fontWeight,
 });
 
 const sourceStyles = css({
@@ -62,7 +67,7 @@ const columns: ReadonlyArray<ResponsiveTableColumn<EventRelatedResearchItem>> =
     {
       key: 'output',
       title: 'Output',
-      width: '40%',
+      width: '50%',
       render: ({ title, href }) => (
         <Link ellipsed href={href}>
           {title}
@@ -72,7 +77,7 @@ const columns: ReadonlyArray<ResponsiveTableColumn<EventRelatedResearchItem>> =
     {
       key: 'type',
       title: 'Type',
-      width: '30%',
+      width: '20%',
       render: ({ documentType, type }) => (
         <span css={typeStyles}>
           {documentType}
@@ -126,8 +131,8 @@ const EventRelatedResearchCard: React.FC<EventRelatedResearchCardProps> = ({
           </Paragraph>
         </div>
         {relatedResearch.length === 0 ? (
-          <Paragraph noMargin accent="tertiary">
-            <b>No related research available.</b>
+          <Paragraph noMargin accent="primary" styles={emptyStateStyles}>
+            No related research available.
           </Paragraph>
         ) : (
           <ResponsiveTable

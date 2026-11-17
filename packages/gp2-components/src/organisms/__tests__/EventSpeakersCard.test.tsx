@@ -61,3 +61,12 @@ it('starts with every speaker collapsed and expands one at a time', async () => 
     screen.getByRole('button', { name: 'Show details for John Doe 1' }),
   ).toHaveAttribute('aria-expanded', 'false');
 });
+
+it('renders an empty state when there are no speakers', () => {
+  render(<EventSpeakersCard speakers={[]} />);
+  expect(screen.getByRole('heading', { name: 'Speakers' })).toBeVisible();
+  expect(
+    screen.getByText('No speakers have been added for this event yet.'),
+  ).toBeVisible();
+  expect(screen.queryByTestId('event-speakers')).not.toBeInTheDocument();
+});

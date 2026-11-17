@@ -54,8 +54,8 @@ it('hides the show more toggle with the expandable variant while the text fits',
   expect(queryByRole('button')).not.toBeInTheDocument();
 });
 
-it('omits the description and divider with the expandable variant when there is none', () => {
-  const { queryByText, getByText } = render(
+it('shows an empty state with the expandable variant when there is no description', () => {
+  const { getByText } = render(
     <EventAbout
       {...props}
       variant="expandable"
@@ -63,7 +63,10 @@ it('omits the description and divider with the expandable variant when there is 
       tags={['Tag A']}
     />,
   );
-  expect(queryByText(/About/i)).not.toBeInTheDocument();
+  expect(getByText('About this event')).toBeVisible();
+  expect(
+    getByText('No description has been added for this event yet.'),
+  ).toBeVisible();
   expect(getByText('Tag A')).toBeVisible();
 });
 

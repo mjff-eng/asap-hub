@@ -6,6 +6,7 @@ import {
   colour,
   Headline3,
   Link,
+  Paragraph,
   pixels,
   ResponsiveTable,
   ResponsiveTableColumn,
@@ -39,6 +40,10 @@ const avatarStyles = css({
     width: rem(24),
     height: rem(24),
   },
+});
+
+const emptyStateStyles = css({
+  fontWeight: 500,
 });
 
 const externalSpeakerStyles = css({
@@ -98,20 +103,26 @@ const EventSpeakersCard: React.FC<EventSpeakersCardProps> = ({ speakers }) => (
       Speakers
     </Headline3>
     <div css={tableStyles}>
-      <ResponsiveTable
-        columns={columns}
-        rows={speakers}
-        getRowKey={(eventSpeaker) =>
-          `${speakers.indexOf(eventSpeaker)}-${getSpeakerName(eventSpeaker)}`
-        }
-        getToggleLabel={(eventSpeaker, expanded) =>
-          `${expanded ? 'Hide' : 'Show'} details for ${getSpeakerName(
-            eventSpeaker,
-          )}`
-        }
-        dividers={false}
-        testId="event-speakers"
-      />
+      {speakers.length === 0 ? (
+        <Paragraph noMargin accent="primary" styles={emptyStateStyles}>
+          No speakers have been added for this event yet.
+        </Paragraph>
+      ) : (
+        <ResponsiveTable
+          columns={columns}
+          rows={speakers}
+          getRowKey={(eventSpeaker) =>
+            `${speakers.indexOf(eventSpeaker)}-${getSpeakerName(eventSpeaker)}`
+          }
+          getToggleLabel={(eventSpeaker, expanded) =>
+            `${expanded ? 'Hide' : 'Show'} details for ${getSpeakerName(
+              eventSpeaker,
+            )}`
+          }
+          dividers={false}
+          testId="event-speakers"
+        />
+      )}
     </div>
   </Card>
 );

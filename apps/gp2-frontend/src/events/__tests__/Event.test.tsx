@@ -153,7 +153,7 @@ describe('the NEW_EVENT_PAGE flag', () => {
     expect(screen.getByRole('link', { name: 'Outlook' })).toBeInTheDocument();
   });
 
-  it('does not show the speakers card when the event has no speakers', async () => {
+  it('shows the speakers empty state when the event has no speakers', async () => {
     mockGetEvent.mockResolvedValue({
       ...gp2.createEventResponse({
         numberOfInternalSpeakers: 0,
@@ -169,8 +169,11 @@ describe('the NEW_EVENT_PAGE flag', () => {
       await screen.findByRole('heading', { name: 'Speakerless Event' }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole('heading', { name: 'Speakers' }),
-    ).not.toBeInTheDocument();
+      screen.getByRole('heading', { name: 'Speakers' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('No speakers have been added for this event yet.'),
+    ).toBeInTheDocument();
   });
 
   it('links the calendar subscription to the working group', async () => {

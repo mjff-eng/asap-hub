@@ -63,9 +63,7 @@ const Event: React.FC = () => {
         hideMaterialsToast: true,
         toastAboveBanner: true,
         heroBanner: <ImageBanner image={workingGroupsImage} />,
-        eventSpeakers: speakers.length ? (
-          <EventSpeakersCard speakers={speakers} />
-        ) : undefined,
+        eventSpeakers: <EventSpeakersCard speakers={speakers} />,
         relatedResearchCard: (
           <EventRelatedOutputsCard relatedOutputs={relatedOutputs ?? []} />
         ),

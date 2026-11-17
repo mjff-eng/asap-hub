@@ -207,11 +207,9 @@ const EventDetailPage = ({
             <EventMaterials {...props} />
           ) : (
             <>
-              {(props.description || props.tags.length > 0) && (
-                <Card>
-                  <EventAbout {...props} variant="expandable" />
-                </Card>
-              )}
+              <Card>
+                <EventAbout {...props} variant="expandable" />
+              </Card>
               {eventSpeakers}
               {eventAttendance}
               {children && <Card>{children}</Card>}

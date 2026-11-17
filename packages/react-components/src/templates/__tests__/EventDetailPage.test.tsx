@@ -135,9 +135,13 @@ it('shows the about section before the children section', () => {
   );
 });
 
-it('omits the about section without description and tags', () => {
+it('shows the about section empty state without description and tags', () => {
   renderPage(<EventDetailPage {...props} description="" tags={[]} />);
-  expect(screen.queryByText('About this event')).not.toBeInTheDocument();
+  expect(screen.getByText('About this event')).toBeVisible();
+  expect(
+    screen.getByText('No description has been added for this event yet.'),
+  ).toBeVisible();
+  expect(screen.queryByText('Tags')).not.toBeInTheDocument();
 });
 
 it('does not render a separate join card for an upcoming event', () => {
