@@ -1,3 +1,7 @@
+export { default as aboutApproachBackgroundImage } from './about-asap/about-approach-background.png';
+export { default as aboutApproachBackgroundMobileImage } from './about-asap/about-approach-background-mobile.png';
+export { default as aboutApproachDiagramImage } from './about-asap/about-approach-diagram.png';
+export { default as aboutApproachDiagramMobileImage } from './about-asap/about-approach-diagram-mobile.png';
 export { default as appleCalendarIconImage } from './apple-calendar.png';
 export { default as asapPaddedWhiteImage } from './asap-padded-white';
 export { default as asapPaddedImage } from './asap-padded';

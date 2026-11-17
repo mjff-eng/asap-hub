@@ -1,4 +1,5 @@
 export * from './auth';
+export { default as AboutInitiative } from './AboutInitiative';
 export { default as AdditionalMaterials } from './AdditionalMaterials';
 export { default as APCCoverageModal } from './APCCoverageModal';
 export { default as AuthorSelect } from './AuthorSelect';

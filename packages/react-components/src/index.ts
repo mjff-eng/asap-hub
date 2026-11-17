@@ -159,6 +159,7 @@ export {
   TabbedContent,
 } from './molecules';
 export {
+  AboutInitiative,
   AdditionalMaterials,
   articlesToOptions,
   AuthorSelect,

@@ -1,3 +1,4 @@
+import { disable, enable } from '@asap-hub/flags';
 import { Suspense } from 'react';
 import { render, waitFor, screen } from '@testing-library/react';
 import { createTestQueryClient } from '@asap-hub/frontend-utils';
@@ -14,6 +15,9 @@ import { getDiscover } from '../api';
 
 jest.mock('../api');
 mockConsoleError();
+beforeEach(() => {
+  disable('ABOUT_ASAP_TABS');
+});
 afterEach(() => {
   jest.clearAllMocks();
 });
@@ -26,13 +30,13 @@ const props: DiscoverResponse = {
   scientificAdvisoryBoard: [],
 };
 
-const renderPage = async () => {
+const renderPage = async (initialEntry = '/about') => {
   render(
     <QueryClientProvider client={createTestQueryClient()}>
       <Suspense fallback="loading">
         <Auth0Provider user={{}}>
           <WhenReady>
-            <MemoryRouter initialEntries={['/about']}>
+            <MemoryRouter initialEntries={[initialEntry]}>
               <Routes>
                 <Route path={`${about.template}/*`} element={<About />} />
               </Routes>
@@ -78,5 +82,44 @@ describe('the About page', () => {
     await renderPage();
     expect(mockGetDiscover).toHaveBeenCalled();
     expect(await screen.findByText(/Something went wrong/i)).toBeVisible();
+  });
+});
+
+describe('the About page with tabs', () => {
+  beforeEach(() => {
+    enable('ABOUT_ASAP_TABS');
+  });
+
+  it('does not render the tabs when the flag is disabled', async () => {
+    disable('ABOUT_ASAP_TABS');
+    mockGetDiscover.mockResolvedValue(props);
+
+    await renderPage();
+    expect(
+      screen.queryByRole('link', { name: 'The initiative' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('redirects to the initiative tab by default', async () => {
+    await renderPage();
+    expect(
+      await screen.findByRole('heading', {
+        name: 'Changing the way science is typically done',
+      }),
+    ).toBeVisible();
+    expect(screen.getByRole('link', { name: 'The initiative' })).toBeVisible();
+    expect(screen.getByRole('link', { name: "Who's involved" })).toBeVisible();
+  });
+
+  it("renders the who's involved tab without the initiative content", async () => {
+    await renderPage(about({}).whosInvolved({}).$);
+    expect(
+      await screen.findByRole('link', { name: "Who's involved" }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('heading', {
+        name: 'Changing the way science is typically done',
+      }),
+    ).not.toBeInTheDocument();
   });
 });
