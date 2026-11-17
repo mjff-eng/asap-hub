@@ -97,9 +97,6 @@ const renderPage = ({
         <EventDetailPage
           {...eventProps}
           tags={tags.map(({ name }) => name)}
-          hasSpeakersToBeAnnounced={
-            speakers.length === 0 || speakers.some(({ speaker }) => !speaker)
-          }
           eventOwner={
             <EventOwner project={project} workingGroup={workingGroup} />
           }
