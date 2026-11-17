@@ -6,7 +6,7 @@ import {
   ImageBanner,
   isCalendarOwnerActive,
   Layout,
-  workingGroupsImage,
+  eventDetailBannerImage,
 } from '@asap-hub/gp2-components';
 import { gp2 as gp2Fixtures } from '@asap-hub/fixtures';
 import { gp2 as gp2Model } from '@asap-hub/model';
@@ -115,7 +115,7 @@ const renderPage = ({
           plainHero
           hideMaterialsToast
           toastAboveBanner
-          heroBanner={<ImageBanner image={workingGroupsImage} />}
+          heroBanner={<ImageBanner image={eventDetailBannerImage} />}
           eventSpeakers={<EventSpeakersCard speakers={speakers} />}
           relatedResearchCard={
             <EventRelatedOutputsCard relatedOutputs={relatedOutputs ?? []} />

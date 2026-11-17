@@ -20,7 +20,7 @@ import {
   getSourceIcon,
   ImageBanner,
   isCalendarOwnerActive,
-  workingGroupsImage,
+  eventDetailBannerImage,
 } from '@asap-hub/gp2-components';
 import { useEventById } from './state';
 import Frame from '../Frame';
@@ -62,7 +62,7 @@ const Event: React.FC = () => {
         plainHero: true,
         hideMaterialsToast: true,
         toastAboveBanner: true,
-        heroBanner: <ImageBanner image={workingGroupsImage} />,
+        heroBanner: <ImageBanner image={eventDetailBannerImage} />,
         eventSpeakers: <EventSpeakersCard speakers={speakers} />,
         relatedResearchCard: (
           <EventRelatedOutputsCard relatedOutputs={relatedOutputs ?? []} />
