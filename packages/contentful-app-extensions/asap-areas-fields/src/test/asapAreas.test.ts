@@ -82,6 +82,26 @@ describe('getAsapAreaMemberIds', () => {
     });
   });
 
+  it('excludes past members and alumni', async () => {
+    const getMany = jest
+      .fn()
+      .mockResolvedValueOnce({ items: [entry('membership-1')] })
+      .mockResolvedValueOnce({ items: [entry('user-1')] });
+
+    await getAsapAreaMemberIds(mockSdk(getMany));
+
+    expect(getMany).toHaveBeenNthCalledWith(1, {
+      query: expect.objectContaining({
+        'fields.inactiveSinceDate[exists]': false,
+      }),
+    });
+    expect(getMany).toHaveBeenNthCalledWith(2, {
+      query: expect.objectContaining({
+        'fields.alumniSinceDate[exists]': false,
+      }),
+    });
+  });
+
   it('does not query users when no membership links the area', async () => {
     const getMany = jest.fn().mockResolvedValueOnce({ items: [] });
 

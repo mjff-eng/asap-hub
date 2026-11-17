@@ -40,6 +40,7 @@ export const getAsapAreaMemberIds = async (
     query: {
       content_type: 'teamMembership',
       'fields.asapAreas.sys.id': areaId,
+      'fields.inactiveSinceDate[exists]': false,
       limit: QUERY_LIMIT,
     },
   });
@@ -55,6 +56,7 @@ export const getAsapAreaMemberIds = async (
     query: {
       content_type: 'users',
       'fields.teams.sys.id[in]': membershipIds.join(','),
+      'fields.alumniSinceDate[exists]': false,
       order: 'fields.firstName,fields.lastName',
       limit: QUERY_LIMIT,
     },
