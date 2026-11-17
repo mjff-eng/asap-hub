@@ -32,7 +32,13 @@ const flattenStyles = (
 
 const textStyles = flattenStyles(casTextStyles, []);
 
-const loadedWeights = [400, 700];
+const loadedWeights: Record<string, number[]> = {
+  'Roboto Slab': [400, 600, 700, 900],
+  Roboto: [400, 500, 600, 700],
+};
+
+const isWeightLoaded = ({ family, fontWeight }: CasTextStyle) =>
+  (loadedWeights[casFontFamily[family]] ?? []).includes(fontWeight);
 
 const styleSummary = ({
   family,
@@ -80,7 +86,7 @@ export const TextStyles = () => (
               <td style={{ ...cell, ...mono }}>{name}</td>
               <td style={{ ...cell, ...mono }}>
                 {styleSummary(style)}
-                {!loadedWeights.includes(style.fontWeight) && (
+                {!isWeightLoaded(style) && (
                   <div>
                     <Chip kind="amber">weight not loaded</Chip>
                   </div>
@@ -102,9 +108,11 @@ export const TextStyles = () => (
         </tbody>
       </table>
       <p style={muted}>
-        The apps load Roboto and Roboto Slab at weights{' '}
-        {loadedWeights.join(' and ')} only, so the browser draws the other
-        weights with the closest of those two.
+        The apps load{' '}
+        {Object.entries(loadedWeights)
+          .map(([family, weights]) => `${family} at ${weights.join(', ')}`)
+          .join(' and ')}
+        . Any other weight is drawn with the closest loaded one.
       </p>
     </Section>
   </Page>
