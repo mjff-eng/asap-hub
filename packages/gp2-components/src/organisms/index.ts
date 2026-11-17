@@ -9,6 +9,8 @@ export { default as DashboardHeader } from './DashboardHeader';
 export { default as DashboardUserCard } from './DashboardUserCard';
 export { default as EditResourceModal } from './EditResourceModal';
 export { default as EmailSection } from './EmailSection';
+export { default as EventRelatedOutputsCard } from './EventRelatedOutputsCard';
+export { default as EventSpeakersCard } from './EventSpeakersCard';
 export { default as FilterPills } from './FilterPills';
 export { default as FiltersModal } from './FiltersModal';
 export { default as Form } from './Form';

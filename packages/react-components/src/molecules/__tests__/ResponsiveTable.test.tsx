@@ -1,14 +1,11 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import MembershipTable, {
-  MembershipName,
-  MembershipTableColumn,
-} from '../MembershipTable';
+import ResponsiveTable, { ResponsiveTableColumn } from '../ResponsiveTable';
 
 type Row = { id: string; name: string; role: string; dateLeft?: string };
 
-const columns: MembershipTableColumn<Row>[] = [
+const columns: ResponsiveTableColumn<Row>[] = [
   { key: 'name', title: 'Name', render: (row) => row.name },
   { key: 'role', title: 'Role', width: '30%', render: (row) => row.role },
   { key: 'dateLeft', title: 'Date left', render: (row) => row.dateLeft },
@@ -21,7 +18,7 @@ const rows: Row[] = [
 
 const renderTable = () =>
   render(
-    <MembershipTable
+    <ResponsiveTable
       columns={columns}
       rows={rows}
       getRowKey={(row) => row.id}
@@ -76,7 +73,7 @@ it('expands a mobile row to show the other columns, skipping blank ones', async 
 
 it('does not render an expand button when a row has nothing else to show', () => {
   render(
-    <MembershipTable
+    <ResponsiveTable
       columns={[columns[0]!, columns[2]!]}
       rows={[rows[1]!]}
       getRowKey={(row) => row.id}
@@ -87,35 +84,54 @@ it('does not render an expand button when a row has nothing else to show', () =>
 
 it('renders nothing without columns', () => {
   const { container } = render(
-    <MembershipTable columns={[]} rows={rows} getRowKey={(row) => row.id} />,
+    <ResponsiveTable columns={[]} rows={rows} getRowKey={(row) => row.id} />,
   );
   expect(container).toBeEmptyDOMElement();
 });
 
-describe('MembershipName', () => {
-  it('links the name and shows the badge and subtitle', () => {
-    render(
-      <MembershipName
-        icon={<svg data-testid="icon" />}
-        href="/teams/1"
-        badge={<span>inactive</span>}
-        subtitle="Lead PI of this lab"
-      >
-        Alpha
-      </MembershipName>,
-    );
-    expect(screen.getByRole('link', { name: 'Alpha' })).toHaveAttribute(
-      'href',
-      '/teams/1',
-    );
-    expect(screen.getByTestId('icon')).toBeInTheDocument();
-    expect(screen.getByText('inactive')).toBeInTheDocument();
-    expect(screen.getByText('Lead PI of this lab')).toBeInTheDocument();
-  });
+it('uses a custom toggle label per row', async () => {
+  render(
+    <ResponsiveTable
+      columns={columns}
+      rows={rows}
+      getRowKey={(row) => row.id}
+      getToggleLabel={(row, expanded) =>
+        `${expanded ? 'Hide' : 'Show'} details for ${row.name}`
+      }
+    />,
+  );
+  await userEvent.click(
+    screen.getByRole('button', { name: 'Show details for Alpha' }),
+  );
+  expect(
+    screen.getByRole('button', { name: 'Hide details for Alpha' }),
+  ).toHaveAttribute('aria-expanded', 'true');
+  expect(
+    screen.getByRole('button', { name: 'Show details for Beta' }),
+  ).toHaveAttribute('aria-expanded', 'false');
+});
 
-  it('renders plain text without an href', () => {
-    render(<MembershipName icon={null}>Alpha</MembershipName>);
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
-    expect(screen.getByText('Alpha')).toBeInTheDocument();
-  });
+it('removes the desktop row dividers when dividers is false', () => {
+  renderTable();
+  const [withDivider] = within(screen.getByTestId('table')).getAllByRole(
+    'cell',
+  );
+  expect(withDivider).toHaveStyleRule(
+    'border-bottom',
+    expect.stringContaining('solid'),
+  );
+
+  render(
+    <ResponsiveTable
+      columns={columns}
+      rows={rows}
+      getRowKey={(row) => row.id}
+      testId="no-dividers"
+      dividers={false}
+    />,
+  );
+  const [withoutDivider] = within(
+    screen.getByTestId('no-dividers'),
+  ).getAllByRole('cell');
+  expect(withoutDivider).toHaveStyleRule('border-bottom', 'none');
 });

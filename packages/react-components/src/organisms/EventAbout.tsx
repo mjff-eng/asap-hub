@@ -9,6 +9,7 @@ import { Divider, Headline2, Paragraph } from '../atoms';
 import { RichText, TagList } from '..';
 import { Collapsible, ExpandableText } from '../molecules';
 import { rem } from '../pixels';
+import { casTextStyles } from '../cas-tokens.generated';
 
 const TAGS_COPY =
   'Explore keywords related to skills, techniques, resources, and tools.';
@@ -17,6 +18,10 @@ const expandableColumnStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(24),
+});
+
+const emptyStateStyles = css({
+  fontWeight: casTextStyles.body.medium.fontWeight,
 });
 
 const expandableTextSpacingStyles = css({
@@ -42,25 +47,29 @@ const EventAbout: React.FC<EventAboutProps> = ({
   if (variant === 'expandable') {
     return (
       <div css={expandableColumnStyles}>
-        {description ? (
-          <div css={expandableColumnStyles}>
-            <Headline2 noMargin styleAsHeading={5}>
-              About this event
-            </Headline2>
+        <div css={expandableColumnStyles}>
+          <Headline2 noMargin styleAsHeading={5}>
+            About this event
+          </Headline2>
+          {description ? (
             <div css={expandableTextSpacingStyles}>
               <ExpandableText variant="arrow" toggleMarginTop={22}>
                 <RichText text={description} toc={false} />
               </ExpandableText>
             </div>
-          </div>
-        ) : null}
-        {description && tags.length ? <Divider /> : null}
+          ) : (
+            <Paragraph noMargin accent="primary" styles={emptyStateStyles}>
+              No description has been added for this event yet.
+            </Paragraph>
+          )}
+        </div>
+        {tags.length ? <Divider /> : null}
         {tags.length ? (
           <div>
             <Headline2 noMargin styleAsHeading={5}>
               Tags
             </Headline2>
-            <div css={{ marginTop: rem(24), marginBottom: rem(32) }}>
+            <div css={{ marginTop: rem(24), marginBottom: rem(24) }}>
               <Paragraph noMargin accent="tertiary">
                 {TAGS_COPY}
               </Paragraph>

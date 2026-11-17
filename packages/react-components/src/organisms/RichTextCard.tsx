@@ -6,10 +6,14 @@ import RichText from './RichText';
 import { ExpandableText } from '../molecules';
 import { rem } from '../pixels';
 
-const staticContentStyles = css({ marginTop: rem(24) });
+const contentStyles = css({
+  marginTop: rem(24),
+  'p:first-of-type': { marginTop: 0 },
+  'p:last-of-type': { marginBottom: 0 },
+});
 
-const StaticContent: React.FC<{ children: ReactNode }> = ({ children }) => (
-  <div css={staticContentStyles}>{children}</div>
+const Content: React.FC<{ children: ReactNode }> = ({ children }) => (
+  <div css={contentStyles}>{children}</div>
 );
 
 type RichTextCardProps = {
@@ -26,15 +30,15 @@ const RichTextCard: React.FC<RichTextCardProps> = ({
     <Headline2 noMargin styleAsHeading={5}>
       {title}
     </Headline2>
-    {collapsible ? (
-      <ExpandableText toggleMarginTop={12} variant="arrow">
+    <Content>
+      {collapsible ? (
+        <ExpandableText toggleMarginTop={22} variant="arrow">
+          <RichText text={text} />
+        </ExpandableText>
+      ) : (
         <RichText text={text} />
-      </ExpandableText>
-    ) : (
-      <StaticContent>
-        <RichText text={text} />
-      </StaticContent>
-    )}
+      )}
+    </Content>
   </Card>
 );
 

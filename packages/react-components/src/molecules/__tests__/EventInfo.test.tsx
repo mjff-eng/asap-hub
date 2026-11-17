@@ -131,6 +131,11 @@ it('displays the tags', () => {
   expect(screen.getByText(/one tag/i)).toBeInTheDocument();
 });
 
+it('hides the tags when hideTags is set', () => {
+  render(<EventInfo {...props} tags={['one tag']} hideTags />);
+  expect(screen.queryByText('one tag')).not.toBeInTheDocument();
+});
+
 it('renders all tags with the overflow element hidden by css beyond the limit', () => {
   render(
     <EventInfo

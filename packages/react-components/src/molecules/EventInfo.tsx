@@ -80,6 +80,7 @@ type EventInfoProps = ComponentProps<typeof EventTime> &
   Pick<BasicEvent, 'id' | 'title' | 'status' | 'thumbnail'> & {
     eventOwner: React.ReactNode;
     tags: string[];
+    hideTags?: boolean;
     titleLimit?: number | null;
     titleAsLink?: boolean;
     titleStyleAsHeading?: 4 | 5;
@@ -105,6 +106,7 @@ const EventInfo: React.FC<EventInfoProps> = ({
   eventSpeakers,
   eventTeams,
   tags,
+  hideTags = false,
   titlePrefix,
   titleSuffix,
   titleAction,
@@ -163,7 +165,7 @@ const EventInfo: React.FC<EventInfoProps> = ({
         {eventOwner}
         {eventTeams}
         {eventSpeakers}
-        {tags.length > 0 && (
+        {!hideTags && tags.length > 0 && (
           <div css={tagContainerStyles}>
             <TagList tags={tags} min={TAG_LIMIT} max={TAG_LIMIT} />
           </div>

@@ -27,7 +27,7 @@ const EventSupport: React.FC<EventSupportProps> = ({
       <br /> The tech support team is here to help.
     </CtaCard>
     <Paragraph noMargin accent="tertiary">
-      Having issues? Set up your calendar manually with these instructions for{' '}
+      Set up your calendar manually with these instructions for{' '}
       <Link href="https://support.apple.com/en-us/guide/calendar/icl1022/mac">
         Apple Calendar
       </Link>{' '}

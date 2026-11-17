@@ -1,11 +1,26 @@
-import { EventPage, mail, NotFoundPage } from '@asap-hub/react-components';
+import {
+  considerEndedAfter,
+  EventDetailPage,
+  EventPage,
+  mail,
+  NotFoundPage,
+  useDateHasPassed,
+} from '@asap-hub/react-components';
+import { useFlags } from '@asap-hub/react-context';
 import { gp2, useRouteParams } from '@asap-hub/routing';
+import { Navigate, Route, Routes } from 'react-router';
 
 import {
-  EventSpeakers,
   EventOwner,
+  EventRelatedOutputsCard,
+  EventSpeakers,
+  EventSpeakersCard,
+  getCalendarOwner,
   getIconForDocumentType,
   getSourceIcon,
+  ImageBanner,
+  isCalendarOwnerActive,
+  eventDetailBannerImage,
 } from '@asap-hub/gp2-components';
 import { useEventById } from './state';
 import Frame from '../Frame';
@@ -13,8 +28,75 @@ import Frame from '../Frame';
 const Event: React.FC = () => {
   const { eventId } = useRouteParams(gp2.events({}).event);
   const event = useEventById(eventId);
+  const { isEnabled } = useFlags();
+  const hasFinished = useDateHasPassed(
+    considerEndedAfter(event?.endDate || ''),
+  );
 
   if (event) {
+    if (isEnabled('NEW_EVENT_PAGE')) {
+      const {
+        speakers,
+        project,
+        workingGroup,
+        tags,
+        relatedOutputs,
+        ...eventProps
+      } = event;
+      const eventRoute = gp2.events({}).event({ eventId });
+      const pageProps = {
+        ...eventProps,
+        tags: tags.map(({ name }) => name),
+        eventOwner: (
+          <EventOwner project={project} workingGroup={workingGroup} />
+        ),
+        alwaysShowDateBlock: true,
+        hasFinished,
+        displayCalendar: isCalendarOwnerActive({ project, workingGroup }),
+        calendarOwner: getCalendarOwner({
+          project,
+          workingGroup,
+          calendar: event.calendar,
+        }),
+        hideBreadcrumbs: true,
+        plainHero: true,
+        hideMaterialsToast: true,
+        toastAboveBanner: true,
+        heroBanner: <ImageBanner image={eventDetailBannerImage} />,
+        eventSpeakers: <EventSpeakersCard speakers={speakers} />,
+        relatedResearchCard: (
+          <EventRelatedOutputsCard relatedOutputs={relatedOutputs ?? []} />
+        ),
+        supportEmail: mail.INVITE_SUPPORT_EMAIL,
+        aboutHref: eventRoute.about({}).$,
+        meetingMaterialsHref: eventRoute.meetingMaterials({}).$,
+      };
+
+      return (
+        <Frame title={event.title}>
+          <Routes>
+            <Route
+              index
+              element={<Navigate to={eventRoute.about({}).$} replace />}
+            />
+            <Route
+              path={eventRoute.about.template.replace(/^\//, '')}
+              element={<EventDetailPage {...pageProps} selectedTab="about" />}
+            />
+            <Route
+              path={eventRoute.meetingMaterials.template.replace(/^\//, '')}
+              element={
+                <EventDetailPage
+                  {...pageProps}
+                  selectedTab="meeting-materials"
+                />
+              }
+            />
+          </Routes>
+        </Frame>
+      );
+    }
+
     return (
       <Frame title={event.title}>
         <EventPage

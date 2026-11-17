@@ -1,11 +1,9 @@
 import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
 
-import { Link } from '../atoms';
 import { colour } from '../colors';
 import { chevronDownIcon, chevronUpIcon } from '../icons';
 import { rem, tabletScreen } from '../pixels';
-import { captionRegularStyles } from '../text';
 
 const mobileQuery = `@media (max-width: ${tabletScreen.min - 1}px)`;
 const desktopQuery = `@media (min-width: ${tabletScreen.min}px)`;
@@ -24,8 +22,7 @@ const headerCellStyles = css({
   verticalAlign: 'top',
   fontWeight: 700,
   color: colour.foreground.primary,
-  // 8px here plus the first row's 16px top padding gives the 24px gap
-  padding: `0 ${rem(24)} ${rem(8)} 0`,
+  padding: `0 ${rem(24)} ${rem(24)} 0`,
   ':last-of-type': { paddingRight: 0 },
 });
 
@@ -36,21 +33,38 @@ const cellStyles = css({
   color: colour.foreground.tertiary,
   overflowWrap: 'break-word',
   ':last-of-type': { paddingRight: 0 },
-  'tr:last-of-type > &': { borderBottom: 'none' },
+  'tr:first-of-type > &': { paddingTop: 0 },
+  'tr:last-of-type > &': { paddingBottom: 0, borderBottom: 'none' },
+});
+
+const noDividerCellStyles = css({
+  paddingTop: rem(8),
+  paddingBottom: rem(8),
+  borderBottom: 'none',
 });
 
 const listStyles = css({
   listStyle: 'none',
   margin: 0,
   padding: 0,
+  overflowWrap: 'anywhere',
+  '& li *': { WebkitLineClamp: 'unset' },
   [desktopQuery]: { display: 'none' },
 });
 
 const listItemStyles = css({
-  padding: `${rem(12)} ${rem(16)}`,
-  borderBottom: rowBorder,
-  ':first-of-type': { paddingTop: 0 },
-  ':last-of-type': { borderBottom: 'none', paddingBottom: 0 },
+  '& + &': {
+    marginTop: rem(12),
+    paddingTop: rem(12),
+    borderTop: rowBorder,
+  },
+});
+
+const itemStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: rem(16),
+  padding: rem(16),
 });
 
 const summaryStyles = css({
@@ -58,7 +72,6 @@ const summaryStyles = css({
   alignItems: 'flex-start',
   justifyContent: 'space-between',
   gap: rem(12),
-  padding: `${rem(16)} 0`,
 });
 
 const toggleStyles = css({
@@ -74,7 +87,7 @@ const toggleStyles = css({
 const fieldsStyles = css({
   display: 'grid',
   rowGap: rem(16),
-  padding: `0 0 ${rem(16)}`,
+  margin: 0,
 });
 
 const fieldLabelStyles = css({
@@ -84,63 +97,40 @@ const fieldLabelStyles = css({
 });
 
 const fieldValueStyles = css({
+  margin: 0,
   color: colour.foreground.tertiary,
 });
 
-const nameStyles = css({
-  display: 'flex',
-  alignItems: 'flex-start',
-  gap: rem(8),
-  color: colour.foreground.primary,
-});
-
-const nameIconStyles = css({
-  flexShrink: 0,
-  display: 'flex',
-  width: rem(24),
-  height: rem(24),
-  [mobileQuery]: { display: 'none' },
-});
-
-const nameTextStyles = css({
-  minWidth: 0,
-  overflowWrap: 'anywhere',
-});
-
-const nameBadgeStyles = css({
-  display: 'inline-flex',
-  verticalAlign: 'top',
-  marginLeft: rem(8),
-  lineHeight: 0,
-});
-
-const subtitleStyles = css(captionRegularStyles, {
-  color: colour.foreground.secondary,
-});
-
-export type MembershipTableColumn<T> = {
+export type ResponsiveTableColumn<T> = {
   readonly key: string;
   readonly title: string;
   readonly render: (row: T) => ReactNode;
   readonly width?: string;
 };
 
-type MembershipTableProps<T> = {
-  readonly columns: ReadonlyArray<MembershipTableColumn<T>>;
+type ResponsiveTableProps<T> = {
+  readonly columns: ReadonlyArray<ResponsiveTableColumn<T>>;
   readonly rows: ReadonlyArray<T>;
   readonly getRowKey: (row: T) => string;
   readonly testId?: string;
+  readonly dividers?: boolean;
+  readonly getToggleLabel?: (row: T, expanded: boolean) => string;
 };
 
 const isBlank = (value: ReactNode) =>
   value === null || value === undefined || value === false || value === '';
 
-const MembershipTable = <T,>({
+const defaultToggleLabel = (_row: unknown, expanded: boolean) =>
+  expanded ? 'Collapse' : 'Expand';
+
+const ResponsiveTable = <T,>({
   columns,
   rows,
   getRowKey,
   testId,
-}: MembershipTableProps<T>) => {
+  dividers = true,
+  getToggleLabel = defaultToggleLabel,
+}: ResponsiveTableProps<T>) => {
   const [expanded, setExpanded] = useState<ReadonlySet<string>>(new Set());
   const [primary, ...secondary] = columns;
 
@@ -178,7 +168,10 @@ const MembershipTable = <T,>({
           {rows.map((row) => (
             <tr key={getRowKey(row)}>
               {columns.map(({ key, render }) => (
-                <td key={key} css={cellStyles}>
+                <td
+                  key={key}
+                  css={[cellStyles, !dividers && noDividerCellStyles]}
+                >
                   {render(row)}
                 </td>
               ))}
@@ -196,30 +189,34 @@ const MembershipTable = <T,>({
             .filter(({ value }) => !isBlank(value));
           return (
             <li key={rowKey} css={listItemStyles}>
-              <div css={summaryStyles}>
-                <div css={{ minWidth: 0, flex: 1 }}>{primary.render(row)}</div>
-                {fields.length > 0 && (
-                  <button
-                    type="button"
-                    css={toggleStyles}
-                    aria-expanded={isExpanded}
-                    aria-label={isExpanded ? 'Collapse' : 'Expand'}
-                    onClick={() => toggle(rowKey)}
-                  >
-                    {isExpanded ? chevronUpIcon : chevronDownIcon}
-                  </button>
+              <div css={itemStyles}>
+                <div css={summaryStyles}>
+                  <div css={{ minWidth: 0, flex: 1 }}>
+                    {primary.render(row)}
+                  </div>
+                  {fields.length > 0 && (
+                    <button
+                      type="button"
+                      css={toggleStyles}
+                      aria-expanded={isExpanded}
+                      aria-label={getToggleLabel(row, isExpanded)}
+                      onClick={() => toggle(rowKey)}
+                    >
+                      {isExpanded ? chevronUpIcon : chevronDownIcon}
+                    </button>
+                  )}
+                </div>
+                {isExpanded && fields.length > 0 && (
+                  <dl css={fieldsStyles}>
+                    {fields.map(({ key, title, value }) => (
+                      <div key={key}>
+                        <dt css={fieldLabelStyles}>{title}</dt>
+                        <dd css={fieldValueStyles}>{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
                 )}
               </div>
-              {isExpanded && fields.length > 0 && (
-                <dl css={fieldsStyles}>
-                  {fields.map(({ key, title, value }) => (
-                    <div key={key}>
-                      <dt css={fieldLabelStyles}>{title}</dt>
-                      <dd css={[fieldValueStyles, { margin: 0 }]}>{value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
             </li>
           );
         })}
@@ -228,33 +225,4 @@ const MembershipTable = <T,>({
   );
 };
 
-type MembershipNameProps = {
-  readonly icon: ReactNode;
-  readonly children: ReactNode;
-  readonly href?: string;
-  readonly badge?: ReactNode;
-  readonly subtitle?: ReactNode;
-};
-
-export const MembershipName: React.FC<MembershipNameProps> = ({
-  icon,
-  children,
-  href,
-  badge,
-  subtitle,
-}) => (
-  <div>
-    <div css={nameStyles}>
-      <span css={nameIconStyles} aria-hidden="true">
-        {icon}
-      </span>
-      <div css={nameTextStyles}>
-        {href ? <Link href={href}>{children}</Link> : children}
-        {badge && <span css={nameBadgeStyles}>{badge}</span>}
-      </div>
-    </div>
-    {subtitle && <div css={subtitleStyles}>{subtitle}</div>}
-  </div>
-);
-
-export default MembershipTable;
+export default ResponsiveTable;
