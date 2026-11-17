@@ -37128,7 +37128,7 @@ const RAW_RUNTIME_STATE =
     ]],\
     ["@sentry/cli", [\
       ["npm:2.58.4", {\
-        "packageLocation": "./.yarn/cache/@sentry-cli-npm-2.58.4-9c599beaea-cf5df020ed.zip/node_modules/@sentry/cli/",\
+        "packageLocation": "./.yarn/unplugged/@sentry-cli-npm-2.58.4-9c599beaea/node_modules/@sentry/cli/",\
         "packageDependencies": [\
           ["@sentry/cli", "npm:2.58.4"],\
           ["@sentry/cli-darwin", "npm:2.58.4"],\
@@ -49916,7 +49916,7 @@ const RAW_RUNTIME_STATE =
     ]],\
     ["es5-ext", [\
       ["npm:0.10.64", {\
-        "packageLocation": "./.yarn/cache/es5-ext-npm-0.10.64-c30cdc3d60-0c5d865770.zip/node_modules/es5-ext/",\
+        "packageLocation": "./.yarn/unplugged/es5-ext-npm-0.10.64-c30cdc3d60/node_modules/es5-ext/",\
         "packageDependencies": [\
           ["es5-ext", "npm:0.10.64"],\
           ["es6-iterator", "npm:2.0.3"],\
@@ -49998,7 +49998,7 @@ const RAW_RUNTIME_STATE =
     ]],\
     ["esbuild", [\
       ["npm:0.21.5", {\
-        "packageLocation": "./.yarn/cache/esbuild-npm-0.21.5-d85dfbc965-d2ff2ca84d.zip/node_modules/esbuild/",\
+        "packageLocation": "./.yarn/unplugged/esbuild-npm-0.21.5-d85dfbc965/node_modules/esbuild/",\
         "packageDependencies": [\
           ["@esbuild/aix-ppc64", "npm:0.21.5"],\
           ["@esbuild/android-arm", "npm:0.21.5"],\
@@ -50028,7 +50028,7 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }],\
       ["npm:0.25.12", {\
-        "packageLocation": "./.yarn/cache/esbuild-npm-0.25.12-352393c4bd-bc9c03d64e.zip/node_modules/esbuild/",\
+        "packageLocation": "./.yarn/unplugged/esbuild-npm-0.25.12-352393c4bd/node_modules/esbuild/",\
         "packageDependencies": [\
           ["@esbuild/aix-ppc64", "npm:0.25.12"],\
           ["@esbuild/android-arm", "npm:0.25.12"],\
@@ -68730,7 +68730,7 @@ const RAW_RUNTIME_STATE =
     ]],\
     ["spawn-sync", [\
       ["npm:1.0.15", {\
-        "packageLocation": "./.yarn/cache/spawn-sync-npm-1.0.15-ae144228c0-5c8edbf102.zip/node_modules/spawn-sync/",\
+        "packageLocation": "./.yarn/unplugged/spawn-sync-npm-1.0.15-ae144228c0/node_modules/spawn-sync/",\
         "packageDependencies": [\
           ["concat-stream", "npm:1.6.2"],\
           ["os-shim", "npm:0.1.3"],\
