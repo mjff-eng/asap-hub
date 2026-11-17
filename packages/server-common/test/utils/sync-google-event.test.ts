@@ -28,10 +28,16 @@ describe('Sync calendar util hook', () => {
     status: 'Confirmed',
     calendar: calendarId,
     hidden: false,
-    hideMeetingLink: false,
+    inPerson: false,
     recurring: false,
     ...overrides,
   });
+
+  // inPerson is only sent on create, so update payloads do not carry it
+  const expectedUpdate = (overrides: Record<string, unknown> = {}) => {
+    const { inPerson, ...event } = expectedEvent(overrides);
+    return event;
+  };
 
   const existingEventWith = (overrides: Partial<EventResponse> = {}) => ({
     ...getEventResponse(),
@@ -104,7 +110,7 @@ describe('Sync calendar util hook', () => {
     expect(eventControllerMock.update).toHaveBeenCalledTimes(1);
     expect(eventControllerMock.update).toHaveBeenCalledWith(
       'event-id',
-      expectedEvent(),
+      expectedUpdate(),
     );
   });
 
@@ -149,14 +155,14 @@ describe('Sync calendar util hook', () => {
 
         expect(eventControllerMock.update).toHaveBeenCalledWith(
           'event-id',
-          expectedEvent({ status: expectedStatus, hidden: expectedHidden }),
+          expectedUpdate({ status: expectedStatus, hidden: expectedHidden }),
         );
       },
     );
   });
 
-  describe('Hide Meeting Link', () => {
-    test('Should create an event and mark the field hideMeetingLink as false', async () => {
+  describe('In Person', () => {
+    test('Should create an event and mark the field inPerson as false', async () => {
       eventControllerMock.fetchByGoogleId.mockResolvedValueOnce(null);
 
       await syncEvent(getGoogleEvent());
@@ -164,9 +170,35 @@ describe('Sync calendar util hook', () => {
       expect(eventControllerMock.update).not.toHaveBeenCalled();
       expect(eventControllerMock.create).toHaveBeenCalledTimes(1);
       expect(eventControllerMock.create).toHaveBeenCalledWith(
-        expectedEvent({ hideMeetingLink: false }),
+        expectedEvent({ inPerson: false }),
       );
     });
+
+    test('Should create a gp2 event and mark the field inPerson as false', async () => {
+      eventControllerMock.fetchByGoogleId.mockResolvedValueOnce(null);
+
+      await syncGp2Event(getGoogleEvent());
+
+      expect(eventControllerMock.create).toHaveBeenCalledWith(
+        expect.objectContaining({ inPerson: false }),
+      );
+    });
+
+    test.each(['crn', 'gp2'] as const)(
+      'Should not override the inPerson field when updating a %s event',
+      async (app) => {
+        eventControllerMock.fetchByGoogleId.mockResolvedValueOnce(
+          existingEventWith({ inPerson: true }),
+        );
+
+        await syncEventWith(app)(getGoogleEvent());
+
+        expect(eventControllerMock.update).toHaveBeenCalledWith(
+          'event-id',
+          expect.not.objectContaining({ inPerson: expect.anything() }),
+        );
+      },
+    );
   });
 
   describe('Should throw when a remote operation throws', () => {

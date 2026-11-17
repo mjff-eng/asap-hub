@@ -20,7 +20,6 @@ const props = (): ComponentProps<typeof EventsList> => {
         ...createEventResponse({}, i),
         tags: [],
         eventOwner: <div>ASAP Team</div>,
-        hasSpeakersToBeAnnounced: false,
       }))
       .slice(currentPageIndex * 10, currentPageIndex * 10 + 10),
     numberOfItems,

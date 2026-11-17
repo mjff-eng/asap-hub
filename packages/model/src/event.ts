@@ -157,7 +157,7 @@ export type EventCreateDataObject = Pick<
   | 'endDate'
   | 'endDateTimeZone'
   | 'status'
-  | 'hideMeetingLink'
+  | 'inPerson'
   | 'recurring'
 > & {
   googleId: string;

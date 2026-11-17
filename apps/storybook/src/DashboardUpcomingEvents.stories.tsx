@@ -16,7 +16,6 @@ export const Default = () => (
         ...event,
         tags: event.tags.map((tag) => tag.name),
         eventOwner: <div>ASAP Team</div>,
-        hasSpeakersToBeAnnounced: false,
       }),
     )}
   />

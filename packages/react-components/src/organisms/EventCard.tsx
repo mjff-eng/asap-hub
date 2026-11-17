@@ -17,14 +17,13 @@ type EventCardProps = ComponentProps<typeof EventInfo> &
     BasicEvent,
     | 'status'
     | 'meetingLink'
-    | 'hideMeetingLink'
+    | 'inPerson'
     | 'notes'
     | 'videoRecording'
     | 'presentation'
     | 'meetingMaterials'
   > & {
     displayToast?: boolean;
-    hasSpeakersToBeAnnounced: boolean;
     joinMeetingTooltipPosition?: ComponentProps<
       typeof JoinMeetingButton
     >['tooltipPosition'];
@@ -45,7 +44,6 @@ const materialOrder: MaterialType[] = [
 const EventCard: React.FC<EventCardProps> = ({
   status,
   displayToast = true,
-  hasSpeakersToBeAnnounced,
   joinMeetingTooltipPosition,
   ...props
 }) => {
@@ -67,7 +65,7 @@ const EventCard: React.FC<EventCardProps> = ({
       };
     }
     if (hasStarted && !hasFinished) {
-      if (props.hideMeetingLink) {
+      if (props.inPerson) {
         return {
           type: 'live',
           toastContent: <span>This in-person event is happening now.</span>,
@@ -88,7 +86,7 @@ const EventCard: React.FC<EventCardProps> = ({
       return {
         type: 'upcoming',
         toastContent: <span>This event starts in less than 24 hours.</span>,
-        ...(props.hideMeetingLink
+        ...(props.inPerson
           ? {}
           : {
               toastAction: (
@@ -100,13 +98,6 @@ const EventCard: React.FC<EventCardProps> = ({
             }),
       };
     }
-    if (!hasStarted && hasSpeakersToBeAnnounced) {
-      return {
-        type: 'info',
-        toastContent: 'More speakers to be announced.',
-      };
-    }
-
     if (hasFinished) {
       const isMaterialAvailable = (
         key: (typeof eventMaterialTypes)[number],
@@ -139,7 +130,7 @@ const EventCard: React.FC<EventCardProps> = ({
         {...props}
         status={status}
         dateBlockMuted={hasFinished}
-        titleSuffix={props.hideMeetingLink ? <InPersonPill /> : undefined}
+        titleSuffix={props.inPerson ? <InPersonPill /> : undefined}
       />
     </ToastCard>
   );

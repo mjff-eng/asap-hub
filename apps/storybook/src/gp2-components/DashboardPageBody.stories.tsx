@@ -20,14 +20,11 @@ export const Normal = () => (
     reminders={createListReminderResponse(number('Reminders', 3)).items}
     news={gp2.createNewsResponse()}
     latestStats={mockedDashboardStats}
-    upcomingEvents={gp2
-      .createListEventResponse(3)
-      .items.map(({ speakers, ...event }) => ({
-        ...event,
-        tags: event.tags.map(({ name }) => name),
-        hasSpeakersToBeAnnounced: !speakers.length,
-        eventOwner: <div>GP2 Team</div>,
-      }))}
+    upcomingEvents={gp2.createListEventResponse(3).items.map((event) => ({
+      ...event,
+      tags: event.tags.map(({ name }) => name),
+      eventOwner: <div>GP2 Team</div>,
+    }))}
     totalOfUpcomingEvents={3}
     pastEvents={gp2.createListEventResponse(3).items}
     totalOfPastEvents={3}

@@ -42,7 +42,7 @@ export interface BasicEvent {
       }[]
     | null;
   meetingLink?: string;
-  hideMeetingLink?: boolean;
+  inPerson?: boolean;
 
   calendar: BasicCalendarResponse;
   notesUpdatedAt?: string;

@@ -62,13 +62,13 @@ it('renders the event description', () => {
   expect(getByText('My Desc')).toBeVisible();
 });
 
-it("renders the join event button, when 'hideMeetingLink' is set to false", () => {
+it("renders the join event button, when 'inPerson' is set to false", () => {
   const { rerender } = render(
     <EventPage
       {...props}
       endDate={addDays(new Date(), 100).toISOString()}
       meetingLink={'link'}
-      hideMeetingLink={false}
+      inPerson={false}
     />,
   );
   expect(screen.getAllByText(/join the meeting/i)).not.toHaveLength(0);
@@ -78,7 +78,7 @@ it("renders the join event button, when 'hideMeetingLink' is set to false", () =
       {...props}
       endDate={addDays(new Date(), 100).toISOString()}
       meetingLink={'link'}
-      hideMeetingLink={true}
+      inPerson={true}
     />,
   );
   expect(screen.queryAllByText(/join the meeting/i)).toHaveLength(0);

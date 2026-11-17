@@ -33,7 +33,6 @@ export const eventMapper = ({
 }: gp2.EventResponse) => ({
   ...event,
   tags: event.tags.map(({ name }) => name),
-  hasSpeakersToBeAnnounced: speakers.length === 0,
   eventSpeakers: (
     <IconWithLabel icon={speakerIcon}>
       <Paragraph noMargin accent="tertiary">

@@ -71,7 +71,7 @@ describe('Event controller', () => {
         endDate,
         endDateTimeZone,
         status,
-        hideMeetingLink,
+        inPerson,
       } = getEventDataObject();
 
       eventDataProviderMock.fetchById.mockResolvedValue(getEventDataObject());
@@ -83,7 +83,7 @@ describe('Event controller', () => {
         endDate,
         endDateTimeZone,
         status,
-        hideMeetingLink,
+        inPerson,
         googleId,
         calendar,
         hidden,
@@ -98,7 +98,7 @@ describe('Event controller', () => {
         endDate,
         endDateTimeZone,
         status,
-        hideMeetingLink,
+        inPerson,
         googleId,
         calendar,
         hidden,

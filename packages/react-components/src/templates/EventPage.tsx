@@ -49,7 +49,7 @@ type EventPageProps<
     | 'videoRecording'
     | 'presentation'
     | 'meetingMaterials'
-    | 'hideMeetingLink'
+    | 'inPerson'
     | 'calendar'
   > &
   Pick<EventResponse, 'relatedTutorials'> & {
@@ -74,7 +74,7 @@ const EventPage = <
   backHref,
   lastModifiedDate,
   calendar,
-  hideMeetingLink,
+  inPerson,
   eventConversation,
   displayCalendar,
   children,
@@ -107,7 +107,7 @@ const EventPage = <
             </small>
           </Paragraph>
           {children}
-          {!hideMeetingLink && <JoinEvent {...props} />}
+          {!inPerson && <JoinEvent {...props} />}
           <EventAbout {...props} />
         </Card>
         {relatedResearch && relatedResearch?.length > 0 && (

@@ -21,7 +21,7 @@ export const Normal = () => (
     hasFinished={false}
     tags={[]}
     backHref="#"
-    hideMeetingLink={boolean('Hide Meeting Link', false)}
+    inPerson={boolean('In Person', false)}
     eventOwner={<div>ASAP Team</div>}
     displayCalendar={boolean('display calendar', true)}
     getIconForDocumentType={() => getIconForDocumentType('Article')}

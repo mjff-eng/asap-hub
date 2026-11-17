@@ -68,7 +68,6 @@ const dynamicSections = () => {
   ).items.map((event) => ({
     ...event,
     eventOwner: <div>ASAP Team</div>,
-    hasSpeakersToBeAnnounced: false,
     tags: event.tags.map((tag) => tag.name),
   }));
   const recentSharedOutputs = createListResearchOutputResponse(

@@ -34,7 +34,7 @@ export const getEventResponse = ({
   startDateTimestamp: 1261671614,
   startMonth: '2009-12',
   meetingLink: 'https://zoom.com/room/123',
-  hideMeetingLink: false,
+  inPerson: false,
   status: 'Confirmed',
   tags: [],
   title: 'Example Event',

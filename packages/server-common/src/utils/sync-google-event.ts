@@ -65,7 +65,6 @@ export const syncEventFactory =
       status: (googleEvent.status.charAt(0).toUpperCase() +
         googleEvent.status.slice(1)) as EventStatus,
       calendar: cmsCalendarId,
-      hideMeetingLink: false,
       // the GP2 content model has no recurring field, so only send it for CRN
       ...(isCRNEvent
         ? { recurring: Boolean(googleEvent.recurringEventId) }
@@ -95,9 +94,12 @@ export const syncEventFactory =
 
       const hidden = newEvent.status === 'Cancelled';
       if (isCRNEvent) {
+        // inPerson is owned by editors in the CMS, so it is only set on
+        // create and never sent on update.
         const crnEventToCreate = {
           ...newEvent,
           hidden,
+          inPerson: false,
         };
 
         logger.info(
@@ -110,7 +112,7 @@ export const syncEventFactory =
         return eventsController.create(crnEventToCreate);
       }
 
-      const gp2EventToCreate = { ...newEvent, hidden };
+      const gp2EventToCreate = { ...newEvent, hidden, inPerson: false };
 
       logger.info(
         {

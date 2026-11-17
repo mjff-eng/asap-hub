@@ -670,8 +670,8 @@ export enum CalendarsLinkingCollectionsEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
   MeetingLinkDesc = 'meetingLink_DESC',
   MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
@@ -719,8 +719,8 @@ export enum CalendarsLinkingCollectionsEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
   MeetingLinkDesc = 'meetingLink_DESC',
   MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
@@ -1846,8 +1846,8 @@ export enum EventSpeakersLinkingCollectionsEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
   MeetingLinkDesc = 'meetingLink_DESC',
   MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
@@ -1895,8 +1895,8 @@ export enum EventSpeakersLinkingCollectionsEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
   MeetingLinkDesc = 'meetingLink_DESC',
   MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
@@ -1973,7 +1973,7 @@ export type Events = Entry &
     eventLink?: Maybe<Scalars['String']>;
     googleId?: Maybe<Scalars['String']>;
     hidden?: Maybe<Scalars['Boolean']>;
-    hideMeetingLink?: Maybe<Scalars['Boolean']>;
+    inPerson?: Maybe<Scalars['Boolean']>;
     linkedFrom?: Maybe<EventsLinkingCollections>;
     meetingLink?: Maybe<Scalars['String']>;
     meetingMaterials?: Maybe<Scalars['JSON']>;
@@ -2050,7 +2050,7 @@ export type EventsHiddenArgs = {
 };
 
 /** [See type definition](https://app.contentful.com/spaces/6ekgyp1432o9/content_types/events) */
-export type EventsHideMeetingLinkArgs = {
+export type EventsInPersonArgs = {
   locale?: InputMaybe<Scalars['String']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
@@ -2271,9 +2271,9 @@ export type EventsFilter = {
   hidden?: InputMaybe<Scalars['Boolean']>;
   hidden_exists?: InputMaybe<Scalars['Boolean']>;
   hidden_not?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink_exists?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink_not?: InputMaybe<Scalars['Boolean']>;
+  inPerson?: InputMaybe<Scalars['Boolean']>;
+  inPerson_exists?: InputMaybe<Scalars['Boolean']>;
+  inPerson_not?: InputMaybe<Scalars['Boolean']>;
   meetingLink?: InputMaybe<Scalars['String']>;
   meetingLink_contains?: InputMaybe<Scalars['String']>;
   meetingLink_exists?: InputMaybe<Scalars['Boolean']>;
@@ -2554,8 +2554,8 @@ export enum EventsOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
   MeetingLinkDesc = 'meetingLink_DESC',
   MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
@@ -5432,8 +5432,8 @@ export enum OutputsRelatedEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
   MeetingLinkDesc = 'meetingLink_DESC',
   MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
@@ -5487,8 +5487,8 @@ export enum OutputsRelatedEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
   MeetingLinkDesc = 'meetingLink_DESC',
   MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
@@ -8269,8 +8269,8 @@ export enum TagsLinkingCollectionsEventsCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
   MeetingLinkDesc = 'meetingLink_DESC',
   MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
@@ -8318,8 +8318,8 @@ export enum TagsLinkingCollectionsEventsCursorCollectionOrder {
   GoogleIdDesc = 'googleId_DESC',
   HiddenAsc = 'hidden_ASC',
   HiddenDesc = 'hidden_DESC',
-  HideMeetingLinkAsc = 'hideMeetingLink_ASC',
-  HideMeetingLinkDesc = 'hideMeetingLink_DESC',
+  InPersonAsc = 'inPerson_ASC',
+  InPersonDesc = 'inPerson_DESC',
   MeetingLinkAsc = 'meetingLink_ASC',
   MeetingLinkDesc = 'meetingLink_DESC',
   MeetingMaterialsPermanentlyUnavailableAsc = 'meetingMaterialsPermanentlyUnavailable_ASC',
@@ -11274,9 +11274,9 @@ export type CfEventsNestedFilter = {
   hidden?: InputMaybe<Scalars['Boolean']>;
   hidden_exists?: InputMaybe<Scalars['Boolean']>;
   hidden_not?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink_exists?: InputMaybe<Scalars['Boolean']>;
-  hideMeetingLink_not?: InputMaybe<Scalars['Boolean']>;
+  inPerson?: InputMaybe<Scalars['Boolean']>;
+  inPerson_exists?: InputMaybe<Scalars['Boolean']>;
+  inPerson_not?: InputMaybe<Scalars['Boolean']>;
   meetingLink?: InputMaybe<Scalars['String']>;
   meetingLink_contains?: InputMaybe<Scalars['String']>;
   meetingLink_exists?: InputMaybe<Scalars['Boolean']>;
@@ -12375,7 +12375,7 @@ export type EventsContentDataFragment = Pick<
   | 'startDate'
   | 'startDateTimeZone'
   | 'meetingLink'
-  | 'hideMeetingLink'
+  | 'inPerson'
   | 'eventLink'
   | 'status'
   | 'hidden'
@@ -12650,7 +12650,7 @@ export type FetchEventByIdQuery = {
       | 'startDate'
       | 'startDateTimeZone'
       | 'meetingLink'
-      | 'hideMeetingLink'
+      | 'inPerson'
       | 'eventLink'
       | 'status'
       | 'hidden'
@@ -12951,7 +12951,7 @@ export type FetchEventsQuery = {
             | 'startDate'
             | 'startDateTimeZone'
             | 'meetingLink'
-            | 'hideMeetingLink'
+            | 'inPerson'
             | 'eventLink'
             | 'status'
             | 'hidden'
@@ -13350,7 +13350,7 @@ export type FetchEventsByUserIdQuery = {
                         | 'startDate'
                         | 'startDateTimeZone'
                         | 'meetingLink'
-                        | 'hideMeetingLink'
+                        | 'inPerson'
                         | 'eventLink'
                         | 'status'
                         | 'hidden'
@@ -13814,7 +13814,7 @@ export type FetchEventsByExternalUserIdQuery = {
                         | 'startDate'
                         | 'startDateTimeZone'
                         | 'meetingLink'
-                        | 'hideMeetingLink'
+                        | 'inPerson'
                         | 'eventLink'
                         | 'status'
                         | 'hidden'
@@ -18372,7 +18372,7 @@ export const EventsContentDataFragmentDoc = {
           { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
           { kind: 'Field', name: { kind: 'Name', value: 'startDateTimeZone' } },
           { kind: 'Field', name: { kind: 'Name', value: 'meetingLink' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'hideMeetingLink' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'inPerson' } },
           { kind: 'Field', name: { kind: 'Name', value: 'eventLink' } },
           { kind: 'Field', name: { kind: 'Name', value: 'status' } },
           { kind: 'Field', name: { kind: 'Name', value: 'hidden' } },

@@ -82,7 +82,7 @@ export const getContentfulGraphqlEvent = (
   startDate: '2009-12-24T16:20:14.000Z',
   startDateTimeZone: 'UTC',
   meetingLink: 'https://zoom.com/room/123',
-  hideMeetingLink: false,
+  inPerson: false,
   recurring: false,
   eventLink: 'https://zoom.com/room/123',
   status: 'Confirmed',
@@ -513,7 +513,7 @@ export const getEventDataObject = (
   startDateTimestamp: 1261671614,
   startMonth: '2009-12',
   meetingLink: 'https://zoom.com/room/123',
-  hideMeetingLink: false,
+  inPerson: false,
   status: 'Confirmed',
   hidden: false,
   recurring: false,
@@ -603,7 +603,7 @@ export const getEventCreateDataObject = (): EventCreateDataObject => ({
   calendar: 'calendar-id',
   status: 'Confirmed' as EventStatus,
   hidden: false,
-  hideMeetingLink: false,
+  inPerson: false,
 });
 
 export const getEventContentfulWebhookDetail = (
@@ -682,7 +682,7 @@ export const getEventContentfulWebhookDetail = (
       'en-US':
         'https://zoom.us/j/96449436221?pwd=MXpTbVJvdzRuMkhZM2YyMWxubStJdz09',
     },
-    hideMeetingLink: {
+    inPerson: {
       'en-US': false,
     },
     thumbnail: {

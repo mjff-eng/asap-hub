@@ -2,7 +2,7 @@ schema {
   query: Query
 }
 
-directive @contentSourceMaps on QUERY
+directive @contentSourceMaps(outsidePreview: Boolean) on QUERY
 
 directive @contentfulSchemaMetadata(contentTypePublishedCounters: JSON) on SCHEMA
 
@@ -333,8 +333,8 @@ enum CalendarsLinkingCollectionsEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   meetingLink_ASC
   meetingLink_DESC
   meetingMaterialsPermanentlyUnavailable_ASC
@@ -382,8 +382,8 @@ enum CalendarsLinkingCollectionsEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   meetingLink_ASC
   meetingLink_DESC
   meetingMaterialsPermanentlyUnavailable_ASC
@@ -1220,8 +1220,8 @@ enum EventSpeakersLinkingCollectionsEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   meetingLink_ASC
   meetingLink_DESC
   meetingMaterialsPermanentlyUnavailable_ASC
@@ -1269,8 +1269,8 @@ enum EventSpeakersLinkingCollectionsEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   meetingLink_ASC
   meetingLink_DESC
   meetingMaterialsPermanentlyUnavailable_ASC
@@ -1346,7 +1346,7 @@ type Events implements Entry & _Node {
   eventLink(locale: String, useFallbackLocale: Boolean): String
   googleId(locale: String, useFallbackLocale: Boolean): String
   hidden(locale: String, useFallbackLocale: Boolean): Boolean
-  hideMeetingLink(locale: String, useFallbackLocale: Boolean): Boolean
+  inPerson(locale: String, useFallbackLocale: Boolean): Boolean
   linkedFrom(allowedLocales: [String]): EventsLinkingCollections
   meetingLink(locale: String, useFallbackLocale: Boolean): String
   meetingMaterials(locale: String, useFallbackLocale: Boolean): JSON
@@ -1434,9 +1434,9 @@ input EventsFilter {
   hidden: Boolean
   hidden_exists: Boolean
   hidden_not: Boolean
-  hideMeetingLink: Boolean
-  hideMeetingLink_exists: Boolean
-  hideMeetingLink_not: Boolean
+  inPerson: Boolean
+  inPerson_exists: Boolean
+  inPerson_not: Boolean
   meetingLink: String
   meetingLink_contains: String
   meetingLink_exists: Boolean
@@ -1669,8 +1669,8 @@ enum EventsOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   meetingLink_ASC
   meetingLink_DESC
   meetingMaterialsPermanentlyUnavailable_ASC
@@ -3577,8 +3577,8 @@ enum OutputsRelatedEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   meetingLink_ASC
   meetingLink_DESC
   meetingMaterialsPermanentlyUnavailable_ASC
@@ -3632,8 +3632,8 @@ enum OutputsRelatedEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   meetingLink_ASC
   meetingLink_DESC
   meetingMaterialsPermanentlyUnavailable_ASC
@@ -5005,8 +5005,8 @@ enum TagsLinkingCollectionsEventsCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   meetingLink_ASC
   meetingLink_DESC
   meetingMaterialsPermanentlyUnavailable_ASC
@@ -5054,8 +5054,8 @@ enum TagsLinkingCollectionsEventsCursorCollectionOrder {
   googleId_DESC
   hidden_ASC
   hidden_DESC
-  hideMeetingLink_ASC
-  hideMeetingLink_DESC
+  inPerson_ASC
+  inPerson_DESC
   meetingLink_ASC
   meetingLink_DESC
   meetingMaterialsPermanentlyUnavailable_ASC
@@ -7163,9 +7163,9 @@ input cfEventsNestedFilter {
   hidden: Boolean
   hidden_exists: Boolean
   hidden_not: Boolean
-  hideMeetingLink: Boolean
-  hideMeetingLink_exists: Boolean
-  hideMeetingLink_not: Boolean
+  inPerson: Boolean
+  inPerson_exists: Boolean
+  inPerson_not: Boolean
   meetingLink: String
   meetingLink_contains: String
   meetingLink_exists: Boolean

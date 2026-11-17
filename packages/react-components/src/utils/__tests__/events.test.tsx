@@ -89,7 +89,7 @@ describe('useMeetingLinkRefresh', () => {
   it.each`
     description                                | options
     ${'the meeting link is already there'}     | ${{ ...upcomingEvent, meetingLink: 'https://example.com' }}
-    ${'the meeting link is hidden'}            | ${{ ...upcomingEvent, hideMeetingLink: true }}
+    ${'the event is in person'}                | ${{ ...upcomingEvent, inPerson: true }}
     ${'the meeting link is not available yet'} | ${{ startDate: addDays(new Date(), 2).toISOString(), endDate: addDays(new Date(), 3).toISOString() }}
     ${'the event has ended'}                   | ${{ startDate: subDays(new Date(), 2).toISOString(), endDate: subDays(new Date(), 1).toISOString() }}
   `('does not refresh when $description', ({ options }) => {

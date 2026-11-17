@@ -43,13 +43,13 @@ export const useEventLiveStatus = (
 
 export const useMeetingLinkRefresh = ({
   meetingLink,
-  hideMeetingLink = false,
+  inPerson = false,
   startDate,
   endDate,
   onRefresh,
 }: {
   meetingLink?: string;
-  hideMeetingLink?: boolean;
+  inPerson?: boolean;
   startDate: string;
   endDate: string;
   onRefresh: () => void;
@@ -60,7 +60,7 @@ export const useMeetingLinkRefresh = ({
   const hasEnded = useDateHasPassed(considerEndedAfter(endDate));
 
   useInterval(() => {
-    if (!hideMeetingLink && !meetingLink && startRefreshing && !hasEnded) {
+    if (!inPerson && !meetingLink && startRefreshing && !hasEnded) {
       onRefresh();
     }
   }, MEETING_LINK_REFRESH_INTERVAL_SECONDS * 1000);

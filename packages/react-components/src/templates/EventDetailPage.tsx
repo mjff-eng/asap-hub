@@ -94,7 +94,7 @@ const EventDetailPage = ({
   useScrollToHash();
   useMeetingLinkRefresh({
     meetingLink: props.meetingLink,
-    hideMeetingLink: props.hideMeetingLink,
+    inPerson: props.inPerson,
     startDate: props.startDate,
     endDate: props.endDate,
     onRefresh,

@@ -19,7 +19,6 @@ beforeEach(() => {
 
 const props: ComponentProps<typeof EventCard> = {
   ...createEventResponse(),
-  hasSpeakersToBeAnnounced: false,
   eventOwner: <div>ASAP Team</div>,
   tags: [],
 };
@@ -41,10 +40,10 @@ it('renders the event tags', () => {
 });
 
 it('shows the in person badge for in-person events only', () => {
-  const { rerender } = render(<EventCard {...props} hideMeetingLink />);
+  const { rerender } = render(<EventCard {...props} inPerson />);
   expect(screen.getByText('In person')).toBeVisible();
 
-  rerender(<EventCard {...props} hideMeetingLink={false} />);
+  rerender(<EventCard {...props} inPerson={false} />);
   expect(screen.queryByText('In person')).not.toBeInTheDocument();
 });
 
@@ -87,7 +86,7 @@ describe('current events', () => {
           {...props}
           status="Confirmed"
           meetingLink={meetingLink}
-          hideMeetingLink={false}
+          inPerson={false}
           startDate={subMinutes(new Date(), 1).toISOString()}
           endDate={addMinutes(new Date(), 1).toISOString()}
         />,
@@ -114,13 +113,13 @@ describe('current events', () => {
       'http://example.com',
     );
   });
-  it('toasts for in-person meetings when hideMeetingLink is set to true', () => {
+  it('toasts for in-person meetings when inPerson is set to true', () => {
     render(
       <EventCard
         {...props}
         status="Confirmed"
         meetingLink={undefined}
-        hideMeetingLink
+        inPerson
         startDate={subMinutes(new Date(), 1).toISOString()}
         endDate={addMinutes(new Date(), 1).toISOString()}
       />,
@@ -131,22 +130,17 @@ describe('current events', () => {
     expect(screen.queryByText('Join Meeting Now')).not.toBeInTheDocument();
   });
 
-  it('hides the meeting link when hideMeetingLink is set to true', () => {
+  it('hides the meeting link when inPerson is set to true', () => {
     render(
-      <EventCard
-        {...props}
-        meetingLink="http://example.com"
-        hideMeetingLink={true}
-      />,
+      <EventCard {...props} meetingLink="http://example.com" inPerson={true} />,
     );
 
     expect(screen.queryByText(/join/i)).toBeNull();
   });
-  it('toasts for meetings with speakers to be announced', () => {
+  it('does not toast that more speakers are to be announced', () => {
     render(
       <EventCard
         {...props}
-        hasSpeakersToBeAnnounced
         startDate={addDays(new Date(), 2).toISOString()}
         endDate={addHours(addDays(new Date(), 2), 1).toISOString()}
       />,
@@ -154,7 +148,7 @@ describe('current events', () => {
 
     expect(
       screen.queryByText(/more speakers to be announced/i),
-    ).toBeInTheDocument();
+    ).not.toBeInTheDocument();
   });
 });
 
@@ -201,27 +195,12 @@ describe('events starting in less than 24 hours', () => {
 
   it('toasts without a join button for in-person events', () => {
     render(
-      <EventCard
-        {...props}
-        {...startingSoon}
-        status="Confirmed"
-        hideMeetingLink
-      />,
+      <EventCard {...props} {...startingSoon} status="Confirmed" inPerson />,
     );
     expect(
       screen.getByText('This event starts in less than 24 hours.'),
     ).toBeVisible();
     expect(screen.queryByText('Join Meeting Now')).not.toBeInTheDocument();
-  });
-
-  it('takes precedence over the speakers to be announced toast', () => {
-    render(<EventCard {...props} {...startingSoon} hasSpeakersToBeAnnounced />);
-    expect(
-      screen.getByText('This event starts in less than 24 hours.'),
-    ).toBeVisible();
-    expect(
-      screen.queryByText(/more speakers to be announced/i),
-    ).not.toBeInTheDocument();
   });
 
   it('shows cancelled instead', () => {

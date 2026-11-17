@@ -104,7 +104,7 @@ const props = (): ComponentProps<typeof EventCard> => {
     meetingLink: boolean('has meeting link', true)
       ? 'http://example.com'
       : undefined,
-    hideMeetingLink: boolean('hide meeting Link', false),
+    inPerson: boolean('In Person', false),
     meetingMaterials:
       meetingMaterials === 'Yes'
         ? [{ title: 'example', url: 'http://example.com' }]
@@ -116,7 +116,6 @@ const props = (): ComponentProps<typeof EventCard> => {
       date('Start Date', addHours(new Date(), 23)),
     ).toISOString(),
     endDate: new Date(date('End Date', addHours(new Date(), 24))).toISOString(),
-    hasSpeakersToBeAnnounced: boolean('has speakers to be announced', false),
   };
 };
 
@@ -147,7 +146,7 @@ export const LiveWithoutMeetingLink = () => (
   <EventCard {...cardProps({ ...happeningNow, meetingLink: undefined })} />
 );
 export const LiveInPerson = () => (
-  <EventCard {...cardProps({ ...happeningNow, hideMeetingLink: true })} />
+  <EventCard {...cardProps({ ...happeningNow, inPerson: true })} />
 );
 export const StartingSoon = () => (
   <EventCard
@@ -155,19 +154,12 @@ export const StartingSoon = () => (
   />
 );
 export const StartingSoonInPerson = () => (
-  <EventCard {...cardProps({ ...startingSoon, hideMeetingLink: true })} />
+  <EventCard {...cardProps({ ...startingSoon, inPerson: true })} />
 );
 export const Cancelled = () => (
   <EventCard {...cardProps({ ...upcoming, status: 'Cancelled' })} />
 );
-export const SpeakersToBeAnnounced = () => (
-  <EventCard
-    {...cardProps(upcoming, {
-      numberOfSpeakers: 2,
-      numberOfUnknownSpeakers: 3,
-    })}
-  />
-);
+
 export const WithInactiveTeams = () => (
   <EventCard
     {...cardProps({

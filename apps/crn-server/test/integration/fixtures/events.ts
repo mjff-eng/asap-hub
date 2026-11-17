@@ -17,7 +17,7 @@ export const getEventFixture = (
     endDateTimeZone: 'Europe/Lisbon',
     status: 'Confirmed' as EventStatus,
     hidden: false,
-    hideMeetingLink: false,
+    inPerson: false,
     calendar: chance.string(),
     googleId: chance.string(),
     ...props,
