@@ -23,8 +23,7 @@ module.exports.up = (migration) => {
     'builtin',
     'entryLinksEditor',
     {
-      helpText:
-        'This field is to be populated for Team ASAP membership only',
+      helpText: 'This field is to be populated for Team ASAP membership only',
       bulkEditing: false,
       showLinkEntityAction: true,
       showCreateEntityAction: false,

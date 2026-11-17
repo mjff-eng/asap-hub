@@ -35,7 +35,8 @@ module.exports.up = (migration) => {
     });
 
   discover.changeFieldControl('asapAreas', 'builtin', 'entryLinksEditor', {
-    helpText: 'Drag to change the order the areas are shown on the About ASAP page.',
+    helpText:
+      'Drag to change the order the areas are shown on the About ASAP page.',
     bulkEditing: false,
     showLinkEntityAction: true,
     showCreateEntityAction: false,
