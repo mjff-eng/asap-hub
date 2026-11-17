@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#00222c" />
+    <meta name="description" content="Sprint demo recordings for ASAP" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>ASAP Demos</title>
+    <script>
+      (function () {
+        // system mode leaves the attribute off so the prefers-color-scheme
+        // rules own the palette; only an explicit choice is stamped
+        var mode = 'system';
+        try {
+          mode = localStorage.getItem('demo-hub.theme') || 'system';
+        } catch (error) {
+          mode = 'system';
+        }
+        if (mode === 'dark' || mode === 'light') {
+          document.documentElement.dataset.theme = mode;
+        } else {
+          delete document.documentElement.dataset.theme;
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>
