@@ -78,6 +78,7 @@ jobs:
           - working-group-deliverables
           - partial-last-updated
           - project-membership-role
+          - asap-areas-fields
     steps:
       - name: Checkout
         uses: actions/checkout@v4
