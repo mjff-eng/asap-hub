@@ -6,6 +6,7 @@ import { ProjectDataObject, ProjectResponse } from './project';
 export interface CalendarDataObject extends BasicCalendar {
   projects?: Pick<ProjectDataObject, 'id' | 'title' | 'status'>[];
   workingGroups?: Pick<WorkingGroupDataObject, 'id' | 'title'>[];
+  gp2Calendar?: boolean;
 }
 
 export type ListCalendarDataObject = ListResponse<CalendarDataObject>;
@@ -13,6 +14,7 @@ export type ListCalendarDataObject = ListResponse<CalendarDataObject>;
 export interface CalendarResponse extends BasicCalendarResponse {
   projects: Pick<ProjectResponse, 'id' | 'title' | 'status'>[];
   workingGroups: Pick<WorkingGroupResponse, 'id' | 'title'>[];
+  gp2Calendar: boolean;
 }
 
 export type ListCalendarResponse = ListResponse<CalendarResponse>;

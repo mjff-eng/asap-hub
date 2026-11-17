@@ -1,4 +1,4 @@
-import { EventPage, NotFoundPage } from '@asap-hub/react-components';
+import { EventPage, mail, NotFoundPage } from '@asap-hub/react-components';
 import { gp2, useRouteParams } from '@asap-hub/routing';
 
 import {
@@ -28,6 +28,7 @@ const Event: React.FC = () => {
           tableTitles={['Type of Output', 'Output Name', 'Source Type']}
           getSourceIcon={getSourceIcon}
           displayCalendar={true}
+          supportEmail={mail.INVITE_SUPPORT_EMAIL}
           eventOwner={
             <EventOwner
               project={event.project}

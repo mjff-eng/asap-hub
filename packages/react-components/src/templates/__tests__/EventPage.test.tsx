@@ -222,6 +222,21 @@ describe('footer', () => {
     );
   });
 
+  it('renders the footer cta with the given support email', () => {
+    const { getByText } = render(
+      <EventPage
+        {...props}
+        hasFinished={false}
+        supportEmail="techsupport@gp2.org"
+      />,
+    );
+
+    expect(getByText('Contact tech support').parentElement).toHaveAttribute(
+      'href',
+      'mailto:techsupport@gp2.org',
+    );
+  });
+
   it('adds the tech support email to clipboard when user clicks on copy button', async () => {
     const { getByTitle } = render(<EventPage {...props} hasFinished={false} />);
 

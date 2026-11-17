@@ -63,6 +63,7 @@ type EventPageProps<
       documentType: T[number]['documentType'],
     ) => EmotionJSX.Element;
     readonly hasFinished?: boolean;
+    readonly supportEmail?: string;
     readonly children?: ReactNode;
   };
 const EventPage = <
@@ -71,6 +72,7 @@ const EventPage = <
     | gp2.OutputResponse['relatedOutputs'],
 >({
   hasFinished,
+  supportEmail,
   backHref,
   lastModifiedDate,
   calendar,
@@ -135,7 +137,7 @@ const EventPage = <
             hideSupportText
           />
         )}
-        {!hasFinished && <EventSupport />}
+        {!hasFinished && <EventSupport email={supportEmail} />}
       </div>
     </div>
   );

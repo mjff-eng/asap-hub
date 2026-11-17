@@ -55,7 +55,12 @@ export default class CalendarsController {
 export const parseCalendarDataObjectToResponse = (
   calendarDataObject: Pick<
     gp2.CalendarDataObject,
-    'googleCalendarId' | 'color' | 'name' | 'projects' | 'workingGroups'
+    | 'googleCalendarId'
+    | 'color'
+    | 'name'
+    | 'projects'
+    | 'workingGroups'
+    | 'gp2Calendar'
   >,
 ): gp2.CalendarResponse => ({
   id: calendarDataObject.googleCalendarId,
@@ -63,4 +68,5 @@ export const parseCalendarDataObjectToResponse = (
   color: calendarDataObject.color,
   projects: calendarDataObject.projects || [],
   workingGroups: calendarDataObject.workingGroups || [],
+  gp2Calendar: Boolean(calendarDataObject.gp2Calendar),
 });

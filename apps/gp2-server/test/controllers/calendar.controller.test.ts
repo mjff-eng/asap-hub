@@ -155,6 +155,16 @@ describe('Calendars Controller', () => {
 
       expect(result).toEqual(getCalendarResponse());
     });
+
+    test('Should default a missing gp2Calendar flag to false', async () => {
+      const { gp2Calendar: _gp2Calendar, ...calendarDataObject } =
+        getCalendarDataObject();
+      calendarDataProviderMock.fetchById.mockResolvedValue(calendarDataObject);
+
+      const result = await calendarsController.fetchById('calendar-id');
+
+      expect(result.gp2Calendar).toBe(false);
+    });
   });
 
   describe('Update method', () => {

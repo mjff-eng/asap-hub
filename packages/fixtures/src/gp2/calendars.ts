@@ -10,6 +10,7 @@ export const createCalendarResponse = (
   name: `Calendar ${itemIndex}`,
   projects: [],
   workingGroups: [],
+  gp2Calendar: false,
   ...overrides,
 });
 

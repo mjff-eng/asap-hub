@@ -30,3 +30,20 @@ it('renders the title, the description and a subscribe button', () => {
     'https://calendar.google.com/calendar/r?cid=hub%40asap.science',
   );
 });
+
+it('renders a custom title and description', () => {
+  render(
+    <CalendarHubUpdates
+      calendar={{ id: 'hub@gp2.org', name: 'GP2 Hub', color: '#B1365F' }}
+      title="GP2 Hub Updates"
+      description="Subscribe to the official GP2 calendar."
+    />,
+  );
+
+  expect(
+    screen.getByRole('heading', { name: 'GP2 Hub Updates' }),
+  ).toBeVisible();
+  expect(
+    screen.getByText('Subscribe to the official GP2 calendar.'),
+  ).toBeVisible();
+});

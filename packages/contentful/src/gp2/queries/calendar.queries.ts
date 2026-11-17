@@ -14,6 +14,7 @@ export const calendarsContentQueryFragment = gql`
     name
     color
     googleApiMetadata
+    gp2Calendar
     linkedFrom {
       projectsCollection {
         items {

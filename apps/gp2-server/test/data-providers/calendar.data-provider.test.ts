@@ -315,6 +315,32 @@ describe('Calendars data provider', () => {
 
       expect(response.items[0]!.color).toBe('#333333');
     });
+
+    test('Should map the gp2Calendar flag', async () => {
+      const calendarResponse = getContentfulCalendarsGraphqlResponse();
+      calendarResponse.calendarsCollection!.items![0]!.gp2Calendar = true;
+
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+        calendarResponse,
+      );
+
+      const response = await calendarDataProvider.fetch();
+
+      expect(response.items[0]!.gp2Calendar).toBe(true);
+    });
+
+    test('Should default a missing gp2Calendar flag to false', async () => {
+      const calendarResponse = getContentfulCalendarsGraphqlResponse();
+      calendarResponse.calendarsCollection!.items![0]!.gp2Calendar = null;
+
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+        calendarResponse,
+      );
+
+      const response = await calendarDataProvider.fetch();
+
+      expect(response.items[0]!.gp2Calendar).toBe(false);
+    });
   });
 
   describe('Fetch-by-id method', () => {

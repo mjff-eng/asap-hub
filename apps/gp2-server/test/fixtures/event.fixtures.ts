@@ -400,6 +400,7 @@ export const getEventDataObject = (): gp2Model.EventDataObject => ({
     name: 'Tech 1 - Sequencing/omics',
     projects: [],
     workingGroups: [],
+    gp2Calendar: false,
   },
   speakers: [getEventSpeaker()],
   workingGroup: { id: '11', title: 'a working group title' },

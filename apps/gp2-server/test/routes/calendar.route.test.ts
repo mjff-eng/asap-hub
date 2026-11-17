@@ -44,6 +44,7 @@ const listCalendarResponse: gp2.ListCalendarResponse = {
       name: 'Kubernetes Meetups',
       projects: [],
       workingGroups: [],
+      gp2Calendar: false,
     },
     {
       id: 'calendar-id-2',
@@ -51,6 +52,7 @@ const listCalendarResponse: gp2.ListCalendarResponse = {
       name: 'Service Mesh Conferences',
       projects: [],
       workingGroups: [],
+      gp2Calendar: false,
     },
   ],
 };
