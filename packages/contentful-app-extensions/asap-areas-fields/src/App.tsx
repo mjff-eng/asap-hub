@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { getAsapAreaIds, getAsapAreaMemberIds } from './asapAreas';
 import OrderedReferencesField from './locations/OrderedReferencesField';
 import TeamAsapAreasField from './locations/TeamAsapAreasField';
+import TeamAsapMembersField from './locations/TeamAsapMembersField';
 
 const AsapAreaMembersField = () => (
   <OrderedReferencesField
@@ -25,6 +26,9 @@ export const getFieldComponent = (contentTypeId: string, fieldId: string) => {
   }
   if (contentTypeId === 'discover' && fieldId === 'asapAreas') {
     return AboutAsapAreasField;
+  }
+  if (contentTypeId === 'discover' && fieldId === 'members') {
+    return TeamAsapMembersField;
   }
   if (contentTypeId === 'teamMembership' && fieldId === 'asapAreas') {
     return TeamAsapAreasField;

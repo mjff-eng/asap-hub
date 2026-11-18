@@ -7,7 +7,7 @@ export type EntryLink = {
 
 const QUERY_LIMIT = 1000;
 
-const toLink = (id: string): EntryLink => ({
+export const toLink = (id: string): EntryLink => ({
   sys: { type: 'Link', linkType: 'Entry', id },
 });
 
@@ -31,15 +31,16 @@ export const isSameOrder = (
   (current ?? []).length === next.length &&
   next.every((link, index) => current?.[index]?.sys.id === link.sys.id);
 
-export const getAsapAreaMemberIds = async (
+// Users with an active membership matching the query, leaving out past members
+// (membership has Inactive Since) and alumni (user has Alumni Since Date).
+const getActiveMemberIds = async (
   sdk: FieldAppSDK,
+  membershipQuery: Record<string, string>,
 ): Promise<string[]> => {
-  const areaId = sdk.entry.getSys().id;
-
   const memberships = await sdk.cma.entry.getMany({
     query: {
       content_type: 'teamMembership',
-      'fields.asapAreas.sys.id': areaId,
+      ...membershipQuery,
       'fields.inactiveSinceDate[exists]': false,
       limit: QUERY_LIMIT,
     },
@@ -64,6 +65,17 @@ export const getAsapAreaMemberIds = async (
 
   return users.items.filter(isNotArchived).map((user) => user.sys.id);
 };
+
+export const getAsapAreaMemberIds = (sdk: FieldAppSDK): Promise<string[]> =>
+  getActiveMemberIds(sdk, {
+    'fields.asapAreas.sys.id': sdk.entry.getSys().id,
+  });
+
+export const getTeamAsapMemberIds = (
+  sdk: FieldAppSDK,
+  teamAsapId: string,
+): Promise<string[]> =>
+  getActiveMemberIds(sdk, { 'fields.team.sys.id': teamAsapId });
 
 export const getAsapAreaIds = async (sdk: FieldAppSDK): Promise<string[]> => {
   const areas = await sdk.cma.entry.getMany({

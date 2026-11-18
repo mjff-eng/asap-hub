@@ -1,5 +1,6 @@
 import { getFieldComponent } from '../App';
 import TeamAsapAreasField from '../locations/TeamAsapAreasField';
+import TeamAsapMembersField from '../locations/TeamAsapMembersField';
 
 jest.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: jest.fn(),
@@ -14,6 +15,10 @@ describe('getFieldComponent', () => {
     expect(getFieldComponent('teamMembership', 'asapAreas')).toBe(
       TeamAsapAreasField,
     );
+  });
+
+  it('uses the read-only Team ASAP members editor for About ASAP members', () => {
+    expect(getFieldComponent('discover', 'members')).toBe(TeamAsapMembersField);
   });
 
   it('uses an ordered list editor for area members and About ASAP areas', () => {
