@@ -1,6 +1,12 @@
 /* istanbul ignore file */
 const newsIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="#00202C">
+  <svg
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    width="1.5rem"
+    height="1.5rem"
+    fill="#00202C"
+  >
     <title>News</title>
     <path
       stroke="none"

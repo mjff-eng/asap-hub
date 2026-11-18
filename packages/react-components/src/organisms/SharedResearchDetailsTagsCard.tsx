@@ -10,7 +10,7 @@ import {
   Paragraph,
   TextEditor,
 } from '../atoms';
-import { rem } from '../pixels';
+import { rem, remUnit, unitlessLineHeight } from '../pixels';
 
 type SharedResearchDetailsTagsCardProps = Pick<
   ResearchOutputResponse,
@@ -65,10 +65,10 @@ const SharedResearchDetailsTagsCard: React.FC<
           enabled={false}
           isMarkdown
           editorStyles={css({
-            fontSize: '16px',
+            fontSize: remUnit(16),
             letterSpacing: '0.1px',
             color: colour.foreground.tertiary,
-            lineHeight: '24px',
+            lineHeight: unitlessLineHeight(16, 24),
           })}
         ></TextEditor>
         {descriptionMD === '' && <RichText poorText text={description} />}

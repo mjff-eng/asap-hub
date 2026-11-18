@@ -7,8 +7,8 @@ interface TwitterIconProps {
 
 const TwitterIcon: FC<TwitterIconProps> = ({ color = '#00222C' }) => (
   <svg
-    width={28}
-    height={28}
+    width="1.75rem"
+    height="1.75rem"
     viewBox="0 0 28 28"
     fill={color}
     xmlns="http://www.w3.org/2000/svg"

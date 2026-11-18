@@ -1,6 +1,12 @@
 /* istanbul ignore file */
 const noUsersIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" width={48} height={48} fill="none">
+  <svg
+    viewBox="0 0 48 48"
+    xmlns="http://www.w3.org/2000/svg"
+    width="3rem"
+    height="3rem"
+    fill="none"
+  >
     <path
       fill="url(#a)"
       fillRule="evenodd"

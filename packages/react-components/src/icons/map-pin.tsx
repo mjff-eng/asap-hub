@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 
 import { FC } from 'react';
+import { remUnit } from '../pixels';
 
 const VIEW_BOX_SIZE = 24;
 const RENDERED_STROKE_PX = 1.5;
@@ -10,11 +11,13 @@ interface MapPinIconProps {
   readonly size?: number;
 }
 
-// Stroke-based so the line weight stays at 1.5px whatever size it renders at.
+// Stroke-based so the line weight stays at 1.5px whatever size it renders at,
+// at the default browser font size. With a larger font size the icon and its
+// stroke scale together.
 const MapPinIcon: FC<MapPinIconProps> = ({ color = '#1C1F21', size = 16 }) => (
   <svg
-    width={size}
-    height={size}
+    width={remUnit(size)}
+    height={remUnit(size)}
     viewBox={`0 0 ${VIEW_BOX_SIZE} ${VIEW_BOX_SIZE}`}
     fill="none"
     stroke={color}

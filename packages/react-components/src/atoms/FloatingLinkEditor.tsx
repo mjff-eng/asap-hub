@@ -14,6 +14,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { colour } from '../colors';
+import { remUnit } from '../pixels';
 import { getSelectedNode } from './lexical-utils';
 
 const editorContainerStyles = css({
@@ -39,7 +40,7 @@ const inputStyles = css({
   border: `1px solid ${colour.border.tertiary}`,
   borderRadius: '4px',
   padding: '6px 8px',
-  fontSize: '14px',
+  fontSize: remUnit(14),
   outline: 'none',
   minWidth: '240px',
 });
@@ -50,7 +51,7 @@ const inputErrorStyles = css({
 
 const errorStyles = css({
   color: colour.foreground.error,
-  fontSize: '12px',
+  fontSize: remUnit(12),
   maxWidth: '300px',
 });
 
@@ -60,14 +61,14 @@ const buttonStyles = css({
   cursor: 'pointer',
   padding: '6px 10px',
   borderRadius: '4px',
-  fontSize: '13px',
+  fontSize: remUnit(13),
   '&:hover': {
     background: colour.background.tertiary,
   },
 });
 
 const linkPreviewStyles = css({
-  fontSize: '13px',
+  fontSize: remUnit(13),
   maxWidth: '300px',
   overflow: 'hidden',
   textOverflow: 'ellipsis',

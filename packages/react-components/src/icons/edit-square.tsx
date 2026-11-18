@@ -4,8 +4,8 @@
 // on the 24-unit viewBox come out as a 1.5px stroke.
 const editSquare = (
   <svg
-    width={24}
-    height={24}
+    width="1.5rem"
+    height="1.5rem"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"

@@ -1,7 +1,13 @@
 /* istanbul ignore file */
 
 const gp2Logo = (
-  <svg width={46} height={24} fill="#fff" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    viewBox="0 0 46 24"
+    width="2.875rem"
+    height="1.5rem"
+    fill="#fff"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>GP2 Logo</title>
     <path
       fill="url(#linear)"

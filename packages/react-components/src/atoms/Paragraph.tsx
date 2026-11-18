@@ -1,13 +1,13 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { colour } from '../colors';
 import { casTextStyles } from '../cas-tokens.generated';
-import { rem } from '../pixels';
+import { remUnit, unitlessLineHeight } from '../pixels';
 import { AccentColorName, layoutStyles } from '../text';
 
 const { fontSize, lineHeight } = casTextStyles.body.regular;
 const primaryStyles = css({
-  fontSize: rem(fontSize),
-  lineHeight: `${lineHeight / fontSize}em`,
+  fontSize: remUnit(fontSize),
+  lineHeight: unitlessLineHeight(fontSize, lineHeight),
 });
 
 type ParagraphProps = {

@@ -3,7 +3,7 @@ import { sharedResearch } from '@asap-hub/routing';
 import { ReactNode } from 'react';
 
 import { Display, Paragraph, Link } from '../atoms';
-import { mobileScreen } from '../pixels';
+import { mobileScreen, remUnit } from '../pixels';
 import { contentSidePaddingWithNavigation } from '../layout';
 import { LibraryIcon } from '../icons';
 import { colour } from '../colors';
@@ -19,7 +19,7 @@ const styles = css({
   },
 });
 const iconStyles = css({
-  svg: { width: 48, height: 48 },
+  svg: { width: remUnit(48), height: remUnit(48) },
 });
 
 type NoOutputsPageProps = {

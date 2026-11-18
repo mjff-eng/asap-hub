@@ -9,6 +9,13 @@ it('applies global styles to the body', () => {
   );
 });
 
+it('lets the root font size follow the browser font size setting', () => {
+  render(<GlobalStyles />);
+  const { fontSize, lineHeight } = getComputedStyle(document.documentElement);
+  expect(fontSize).toBe('1rem');
+  expect(lineHeight).toBe('1.5');
+});
+
 it('defines the CAS theme colours as CSS variables for CRN by default', () => {
   render(<GlobalStyles />);
   expect(

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 
 import { FC } from 'react';
+import { remUnit } from '../pixels';
 
 interface LabIconProps {
   readonly color?: string;
@@ -8,8 +9,8 @@ interface LabIconProps {
 }
 const Lab: FC<LabIconProps> = ({ color = '#4D646B', size = 24 }) => (
   <svg
-    width={size}
-    height={size}
+    width={remUnit(size)}
+    height={remUnit(size)}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

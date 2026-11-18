@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { Button } from '../atoms';
 import { colour } from '../colors';
 import { chevronLeftIcon, chevronRightIcon } from '../icons';
-import { rem } from '../pixels';
+import { rem, remUnit } from '../pixels';
 import {
   EventMonthFilterSelection,
   hasSelectionInYear,
@@ -215,7 +215,7 @@ const yearListStyles = css(listResetStyles, {
 });
 
 const selectionMarkerStyles = css({
-  fontSize: '10px',
+  fontSize: remUnit(10),
   marginRight: '4px',
   color: colour.foreground.brand,
 });

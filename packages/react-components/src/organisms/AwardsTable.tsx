@@ -7,7 +7,7 @@ import { colour } from '../colors';
 import { AlphabeticalSortingIcon, NumericalSortingIcon } from '../icons';
 import { AwardsTableRow, PageControls } from '../molecules';
 import { AwardsTableRowItem } from '../molecules/AwardsTableRow';
-import { rem } from '../pixels';
+import { rem, remUnit } from '../pixels';
 
 const container = css({
   overflowX: 'auto',
@@ -48,8 +48,8 @@ const headerStyles = css({
   },
   '& svg': {
     flexShrink: 0,
-    width: '24px',
-    height: '24px',
+    width: remUnit(24),
+    height: remUnit(24),
   },
 });
 

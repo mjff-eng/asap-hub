@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 
 import { Card, Paragraph, Button, Headline2, Anchor, Pill } from '../atoms';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem, tabletScreen, unitlessLineHeight } from '../pixels';
 import { getProjectRoute } from '../utils';
 import { getStatusPillAccent } from './ProjectCard';
 
@@ -33,7 +33,7 @@ const tableHeaderStyles = css({
   fontSize: rem(16),
   fontStyle: 'normal',
   fontWeight: 700,
-  lineHeight: '24px',
+  lineHeight: unitlessLineHeight(16, 24),
   letterSpacing: '0.1px',
   color: colour.foreground.primary,
 });
@@ -145,7 +145,7 @@ const mobileProjectField = css({
 const mobileFieldLabel = css({
   fontSize: rem(12),
   fontWeight: 700,
-  lineHeight: '16px',
+  lineHeight: unitlessLineHeight(12, 16),
   letterSpacing: '0.1px',
   color: colour.foreground.primary,
   textTransform: 'uppercase',

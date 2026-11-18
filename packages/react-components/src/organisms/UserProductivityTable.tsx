@@ -19,7 +19,7 @@ import {
   InactiveBadgeIcon,
   NumericalSortingIcon,
 } from '../icons';
-import { rem, tabletScreen } from '../pixels';
+import { rem, remUnit, tabletScreen } from '../pixels';
 import { getPerformanceIcon } from '../utils';
 
 const container = css({
@@ -89,7 +89,7 @@ const counterStyle = css({
   minWidth: rem(24),
   border: `1px solid ${colour.border.tertiary}`,
   borderRadius: '100%',
-  fontSize: '14px',
+  fontSize: remUnit(14),
   fontWeight: 'bold',
 
   justifyContent: 'center',

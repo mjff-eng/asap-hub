@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 const filterIcon = (
-  <svg width={24} height={24} viewBox="0 0 24 24" stroke="#4D646B">
+  <svg width="1.5rem" height="1.5rem" viewBox="0 0 24 24" stroke="#4D646B">
     <title>Filter</title>
     <g
       strokeWidth={1.3}

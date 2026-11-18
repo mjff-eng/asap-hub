@@ -6,7 +6,7 @@ interface TeamIconProps {
 }
 
 const TeamIcon: FC<TeamIconProps> = ({ color = '#4D646B' }) => (
-  <svg width={24} height={24} viewBox="0 0 24 24" stroke={color}>
+  <svg width="1.5rem" height="1.5rem" viewBox="0 0 24 24" stroke={color}>
     <title>Team</title>
     <g
       strokeWidth={1.3}

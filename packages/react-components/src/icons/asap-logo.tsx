@@ -1,7 +1,13 @@
 /* istanbul ignore file */
 
 const asapLogo = (
-  <svg width={64} height={23} fill="#fff" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    viewBox="0 0 64 23"
+    width="4rem"
+    height="1.4375rem"
+    fill="#fff"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>ASAP Logo</title>
     <g clipPath="url(#prefix__clip0)">
       <path

@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 import { FC } from 'react';
+import { remUnit } from '../pixels';
 
 interface LibraryIconProps {
   readonly color?: string;
@@ -11,8 +12,8 @@ const LibraryIcon: FC<LibraryIconProps> = ({
   size = 24,
 }) => (
   <svg
-    width={size}
-    height={size}
+    width={remUnit(size)}
+    height={remUnit(size)}
     viewBox="0 0 24 24"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"

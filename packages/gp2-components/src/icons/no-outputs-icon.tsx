@@ -1,8 +1,9 @@
 /* istanbul ignore file */
 const noOutputsIcon = (
   <svg
-    width={36}
-    height={36}
+    viewBox="0 0 36 36"
+    width="2.25rem"
+    height="2.25rem"
     fill="url(#myGradient)"
     xmlns="http://www.w3.org/2000/svg"
   >

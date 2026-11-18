@@ -9,8 +9,8 @@ const OutlookSvg = () => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
-      width={24}
-      height={24}
+      width="1.5rem"
+      height="1.5rem"
       viewBox="60 90.4 570.02 539.67"
     >
       <title>Outlook</title>

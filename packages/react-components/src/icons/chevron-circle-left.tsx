@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 const chevronCircleLeft = (
-  <svg width={24} height={24} viewBox="0 0 24 24">
+  <svg width="1.5rem" height="1.5rem" viewBox="0 0 24 24">
     <title>Chevron Left</title>
     <g transform="translate(-2 -1)" fill="none" fillRule="evenodd">
       <rect

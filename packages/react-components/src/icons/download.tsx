@@ -1,5 +1,5 @@
 const downloadIcon = (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <svg width="1.5rem" height="1.5rem" viewBox="0 0 24 24" fill="none">
     <path
       fillRule="evenodd"
       clipRule="evenodd"

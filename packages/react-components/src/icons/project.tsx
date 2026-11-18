@@ -1,4 +1,5 @@
 /* istanbul ignore file */
+import { remUnit } from '../pixels';
 
 interface ProjectIconProps {
   readonly width?: number;
@@ -12,8 +13,8 @@ const ProjectIcon: React.FC<ProjectIconProps> = ({
   color = '#00202C',
 }) => (
   <svg
-    width={width}
-    height={height}
+    width={remUnit(width)}
+    height={remUnit(height)}
     viewBox={`0 0 ${width} ${height}`}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

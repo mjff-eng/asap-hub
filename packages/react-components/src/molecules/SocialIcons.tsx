@@ -15,7 +15,7 @@ import {
   GoogleScholarIcon,
   GlobeIcon,
 } from '../icons';
-import { rem } from '../pixels';
+import { rem, remUnit } from '../pixels';
 
 const SOCIAL_ICON_COLOR = colour.neutral[600];
 const ROW_GAP = 12;
@@ -30,8 +30,8 @@ const socialContainerStyles = css({
 const iconStyles = css({
   paddingRight: rem(ROW_GAP),
   svg: {
-    width: '28px',
-    height: '28px',
+    width: remUnit(28),
+    height: remUnit(28),
   },
 });
 

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 
 import { colour } from '../colors';
+import { remUnit } from '../pixels';
 
 type ExternalLinkIconProps = {
   size?: number;
@@ -12,8 +13,8 @@ const ExternalLinkIcon: React.FC<ExternalLinkIconProps> = ({
   color = colour.neutral[900],
 }) => (
   <svg
-    width={size}
-    height={size}
+    width={remUnit(size)}
+    height={remUnit(size)}
     viewBox="0 0 24 24"
     fill="none"
     stroke={color}

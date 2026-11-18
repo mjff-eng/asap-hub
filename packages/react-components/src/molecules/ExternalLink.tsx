@@ -4,7 +4,7 @@ import { css, CSSObject } from '@emotion/react';
 import { Anchor } from '../atoms';
 import { ExternalLinkIcon } from '../icons';
 import { colour } from '../colors';
-import { mobileScreen, rem } from '../pixels';
+import { mobileScreen, rem, remUnit } from '../pixels';
 import { getLinkColors } from '../atoms/Link';
 
 const containerStyles = css({
@@ -18,7 +18,7 @@ const styles = (withLabel: boolean, noMargin: boolean, full: boolean) =>
     justifyContent: 'center',
     width: 'max-content',
     borderRadius: rem(36),
-    minWidth: '24px',
+    minWidth: remUnit(24),
     color: colour.foreground.brand,
     boxSizing: 'border-box',
     border: `${borderWidth}px solid ${colour.border.brand}`,
@@ -53,14 +53,14 @@ export const textSizes: Record<SizeVariant, CSSObject> = {
 
 export const containerSizes: Record<SizeVariant, CSSObject> = {
   default: {
-    height: '24px',
+    minHeight: remUnit(24),
     svg: {
       width: rem(17.8),
       height: rem(17.8),
     },
   },
   large: {
-    height: '24px',
+    minHeight: remUnit(24),
     svg: {
       width: rem(24),
       height: rem(24),

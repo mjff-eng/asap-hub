@@ -2,7 +2,7 @@
 import { css, CSSObject } from '@emotion/react';
 import { Ellipsis } from '.';
 import { colour } from '../colors';
-import { lineHeight, rem } from '../pixels';
+import { lineHeight, rem, remUnit } from '../pixels';
 
 const borderWidth = 1;
 const styles = css({
@@ -10,7 +10,7 @@ const styles = css({
   alignItems: 'center',
   width: 'fit-content',
   boxSizing: 'border-box',
-  height: lineHeight,
+  height: remUnit(lineHeight),
   margin: `${rem(12)} 0`,
   padding: `0 ${rem(8)}`,
   borderStyle: 'solid',

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Headline3, Paragraph } from '../atoms';
-import { rem } from '../pixels';
+import { rem, remUnit, unitlessLineHeight } from '../pixels';
 import { deskTopIcon } from '../icons';
 
 const containerStyles = css({
@@ -10,9 +10,9 @@ const containerStyles = css({
 });
 
 const headlineStyles = css({
-  fontSize: '26px',
+  fontSize: remUnit(26),
   margin: '16px 0',
-  lineHeight: '32px',
+  lineHeight: unitlessLineHeight(26, 32),
 });
 const AnalyticsMobilePage: React.FC = () => (
   <header css={containerStyles}>

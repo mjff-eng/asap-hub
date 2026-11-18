@@ -1,7 +1,13 @@
 /* istanbul ignore file */
 
 const tagSearchIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="#006A92">
+  <svg
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    width="1.5rem"
+    height="1.5rem"
+    fill="#006A92"
+  >
     <title>Tag Search</title>
     <path
       stroke="none"

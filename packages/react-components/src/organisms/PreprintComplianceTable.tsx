@@ -16,7 +16,7 @@ import {
   InactiveBadgeIcon,
   NumericalSortingIcon,
 } from '../icons';
-import { rem } from '../pixels';
+import { rem, remUnit } from '../pixels';
 import { getPerformanceMoodIcon } from '../utils';
 import StaticPerformanceCard from './StaticPerformanceCard';
 
@@ -56,8 +56,8 @@ const headerStyles = css({
   },
   '& svg': {
     flexShrink: 0,
-    width: '24px',
-    height: '24px',
+    width: remUnit(24),
+    height: remUnit(24),
   },
 });
 

@@ -12,7 +12,7 @@ import { add } from 'date-fns';
 
 import { dropdownChevronIcon } from '../icons';
 import DropdownButton from './DropdownButton';
-import { rem, tabletScreen } from '../pixels';
+import { rem, remUnit, tabletScreen } from '../pixels';
 import { MultiSelect, Paragraph, Subtitle } from '../atoms';
 import { formatDateToTimezone, noop, searchIcon } from '..';
 import ExportButton from './ExportButton';
@@ -31,7 +31,7 @@ const controlsContainerStyles = css({
 
   gap: rem(33),
   'span + svg': {
-    width: '11px',
+    width: remUnit(11),
     marginRight: '10px',
   },
   paddingBottom: rem(33),
@@ -52,7 +52,7 @@ const selectContainerStyles = css({
   alignItems: 'center',
   gap: rem(15),
   'span + svg': {
-    width: '11px',
+    width: remUnit(11),
     marginRight: '10px',
   },
   button: {

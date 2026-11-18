@@ -1,6 +1,12 @@
 /* istanbul ignore file */
 const noNewsIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" width={36} height={36} fill="none">
+  <svg
+    viewBox="0 0 36 36"
+    xmlns="http://www.w3.org/2000/svg"
+    width="2.25rem"
+    height="2.25rem"
+    fill="none"
+  >
     <path
       fill="url(#myGradient)"
       d="M15.3254 7.602C14.7731 7.602 14.3254 8.04972 14.3254 8.602C14.3254 9.15429 14.7731 9.602 15.3254 9.602H28.0834C28.6357 9.602 29.0834 9.15429 29.0834 8.602C29.0834 8.04972 28.6357 7.602 28.0834 7.602H15.3254Z"
