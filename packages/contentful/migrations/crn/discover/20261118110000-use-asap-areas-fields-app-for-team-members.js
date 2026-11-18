@@ -8,7 +8,7 @@ module.exports.up = (migration) => {
 
   discover.changeFieldControl('members', 'app', ASAP_AREAS_FIELDS_APP_ID, {
     helpText:
-      'Filled automatically with the current ASAP Team members. To add or remove someone, edit their Teams.',
+      'Filled automatically with the current ASAP Team members. Drag to change the order. To add or remove someone, edit their Teams.',
   });
 };
 

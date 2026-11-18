@@ -6,6 +6,7 @@ import React from 'react';
 import { EntryLink, toLink } from '../asapAreas';
 import TeamAsapMembersField, {
   LOAD_ERROR,
+  PUBLISH_ERROR,
   NO_MEMBERS,
   NO_TEAM_ASAP,
 } from '../locations/TeamAsapMembersField';
@@ -16,33 +17,28 @@ jest.mock('@contentful/react-apps-toolkit', () => ({
 
 jest.mock('@contentful/field-editor-reference', () => ({
   MultipleEntryReferenceEditor: ({
-    sdk,
+    isInitiallyDisabled,
+    hasCardEditActions,
     hasCardMoveActions,
     hasCardRemoveActions,
     renderCustomActions,
   }: {
-    sdk: FieldAppSDK;
+    isInitiallyDisabled: boolean;
+    hasCardEditActions: boolean;
     hasCardMoveActions: boolean;
     hasCardRemoveActions: boolean;
     renderCustomActions?: () => React.ReactElement;
-  }) => {
-    let disabledFromSubscription: boolean | undefined;
-    sdk.field.onIsDisabledChanged((disabled) => {
-      disabledFromSubscription = disabled;
-    });
-    return (
-      <div data-testid="reference-editor">
-        {[
-          sdk.field.getIsDisabled() && disabledFromSubscription
-            ? 'disabled'
-            : 'enabled',
-          hasCardMoveActions ? 'movable' : 'not movable',
-          hasCardRemoveActions ? 'removable' : 'not removable',
-          renderCustomActions ? 'no actions' : 'default actions',
-        ].join(', ')}
-      </div>
-    );
-  },
+  }) => (
+    <div data-testid="reference-editor">
+      {[
+        isInitiallyDisabled ? 'disabled' : 'draggable',
+        hasCardEditActions ? 'editable' : 'not editable',
+        hasCardMoveActions ? 'move menu' : 'no move menu',
+        hasCardRemoveActions ? 'removable' : 'not removable',
+        renderCustomActions ? 'no add actions' : 'default actions',
+      ].join(', ')}
+    </div>
+  ),
 }));
 
 const membershipsAndUsers = (userIds: string[]) =>
@@ -51,14 +47,22 @@ const membershipsAndUsers = (userIds: string[]) =>
     .mockResolvedValueOnce({ items: [{ sys: { id: 'membership-1' } }] })
     .mockResolvedValueOnce({ items: userIds.map((id) => ({ sys: { id } })) });
 
+const DRAFT = { version: 1 };
+const PUBLISHED = { version: 5, publishedVersion: 4 };
+const PUBLISHED_WITH_CHANGES = { version: 7, publishedVersion: 4 };
+
 const mockSdk = ({
   teamAsapId,
   value,
   getMany = membershipsAndUsers([]),
+  entrySys = DRAFT,
+  publish = jest.fn().mockResolvedValue(undefined),
 }: {
   teamAsapId?: string;
   value?: EntryLink[];
   getMany?: jest.Mock;
+  entrySys?: { version: number; publishedVersion?: number };
+  publish?: jest.Mock;
 }) => {
   let onTeamChanged: (value?: EntryLink) => void = () => {};
   const sdk = {
@@ -66,13 +70,10 @@ const mockSdk = ({
       getValue: jest.fn(() => value),
       setValue: jest.fn(),
       removeValue: jest.fn(),
-      getIsDisabled: jest.fn(() => false),
-      onIsDisabledChanged: jest.fn((cb: (disabled: boolean) => void) => {
-        cb(false);
-        return jest.fn();
-      }),
     },
     entry: {
+      getSys: jest.fn(() => entrySys),
+      publish,
       fields: {
         membersTeam: {
           getValue: jest.fn(() =>
@@ -104,17 +105,17 @@ describe('TeamAsapMembersField', () => {
     jest.clearAllMocks();
   });
 
-  it('renders a disabled list with no move, remove or add actions', async () => {
+  it('only allows dragging to reorder, with no edit, remove or add actions', async () => {
     mockSdk({ teamAsapId: 'team-asap' });
 
     render(<TeamAsapMembersField />);
 
     expect(await screen.findByTestId('reference-editor')).toHaveTextContent(
-      'disabled, not movable, not removable, no actions',
+      'draggable, not editable, no move menu, not removable, no add actions',
     );
   });
 
-  it('replaces the list with the current Team ASAP members', async () => {
+  it('keeps the saved order, drops people who left and appends new members', async () => {
     const getMany = membershipsAndUsers(['user-a', 'user-b']);
     const { sdk } = mockSdk({
       teamAsapId: 'team-asap',
@@ -126,8 +127,8 @@ describe('TeamAsapMembersField', () => {
 
     await waitFor(() =>
       expect(sdk.field.setValue).toHaveBeenCalledWith([
-        toLink('user-a'),
         toLink('user-b'),
+        toLink('user-a'),
       ]),
     );
     expect(getMany).toHaveBeenNthCalledWith(1, {
@@ -201,5 +202,74 @@ describe('TeamAsapMembersField', () => {
     expect(await screen.findByText(LOAD_ERROR)).toBeInTheDocument();
     expect(sdk.field.setValue).not.toHaveBeenCalled();
     expect(sdk.field.removeValue).not.toHaveBeenCalled();
+  });
+
+  describe('publishing', () => {
+    it('publishes the entry after updating the list when it had no other changes', async () => {
+      const { sdk } = mockSdk({
+        teamAsapId: 'team-asap',
+        getMany: membershipsAndUsers(['user-a']),
+        entrySys: PUBLISHED,
+      });
+
+      render(<TeamAsapMembersField />);
+
+      await waitFor(() => expect(sdk.entry.publish).toHaveBeenCalled());
+      expect(sdk.field.setValue).toHaveBeenCalledWith([toLink('user-a')]);
+    });
+
+    it('does not publish when the entry has other unpublished changes', async () => {
+      const { sdk } = mockSdk({
+        teamAsapId: 'team-asap',
+        getMany: membershipsAndUsers(['user-a']),
+        entrySys: PUBLISHED_WITH_CHANGES,
+      });
+
+      render(<TeamAsapMembersField />);
+
+      await waitFor(() => expect(sdk.field.setValue).toHaveBeenCalled());
+      expect(sdk.entry.publish).not.toHaveBeenCalled();
+    });
+
+    it('does not publish a draft entry', async () => {
+      const { sdk } = mockSdk({
+        teamAsapId: 'team-asap',
+        getMany: membershipsAndUsers(['user-a']),
+        entrySys: DRAFT,
+      });
+
+      render(<TeamAsapMembersField />);
+
+      await waitFor(() => expect(sdk.field.setValue).toHaveBeenCalled());
+      expect(sdk.entry.publish).not.toHaveBeenCalled();
+    });
+
+    it('does not publish when the list did not change', async () => {
+      const getMany = membershipsAndUsers(['user-a']);
+      const { sdk } = mockSdk({
+        teamAsapId: 'team-asap',
+        value: [toLink('user-a')],
+        getMany,
+        entrySys: PUBLISHED,
+      });
+
+      render(<TeamAsapMembersField />);
+
+      await waitFor(() => expect(getMany).toHaveBeenCalledTimes(2));
+      expect(sdk.entry.publish).not.toHaveBeenCalled();
+    });
+
+    it('shows a warning when publishing fails', async () => {
+      mockSdk({
+        teamAsapId: 'team-asap',
+        getMany: membershipsAndUsers(['user-a']),
+        entrySys: PUBLISHED,
+        publish: jest.fn().mockRejectedValue(new Error('validation')),
+      });
+
+      render(<TeamAsapMembersField />);
+
+      expect(await screen.findByText(PUBLISH_ERROR)).toBeInTheDocument();
+    });
   });
 });

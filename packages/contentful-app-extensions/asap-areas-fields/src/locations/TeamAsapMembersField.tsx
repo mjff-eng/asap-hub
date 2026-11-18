@@ -2,12 +2,12 @@ import { FieldAppSDK } from '@contentful/app-sdk';
 import { Note, Paragraph, Stack } from '@contentful/f36-components';
 import { MultipleEntryReferenceEditor } from '@contentful/field-editor-reference';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   EntryLink,
   getTeamAsapMemberIds,
   isSameOrder,
-  toLink,
+  mergeOrder,
 } from '../asapAreas';
 
 export const NO_TEAM_ASAP =
@@ -15,39 +15,28 @@ export const NO_TEAM_ASAP =
 export const NO_MEMBERS = 'Team ASAP has no current members.';
 export const LOAD_ERROR =
   'Could not refresh this list. Reload the entry to try again.';
+export const PUBLISH_ERROR =
+  'The member list was updated but could not be published. Publish this entry to show the changes on the Hub.';
 
-const noActions = () => <></>;
-
-// The reference editor re-enables itself from the field's real disabled
-// state, so the SDK it receives always reports the field as disabled. That
-// removes dragging, removing and adding while cards still open the user entry.
-const withReadOnlyField = (sdk: FieldAppSDK): FieldAppSDK => {
-  const field = new Proxy(sdk.field, {
-    get(target, prop) {
-      if (prop === 'getIsDisabled') return () => true;
-      if (prop === 'onIsDisabledChanged') {
-        return (callback: (disabled: boolean) => void) => {
-          callback(true);
-          return () => undefined;
-        };
-      }
-      const value = Reflect.get(target, prop, target);
-      return typeof value === 'function' ? value.bind(target) : value;
-    },
-  });
-  return new Proxy(sdk, {
-    get(target, prop) {
-      if (prop === 'field') return field;
-      return Reflect.get(target, prop, target);
-    },
-  });
+// True when the entry is published and has no other unpublished edits, so
+// publishing it only ships the member list change.
+const isPublishedWithoutChanges = (sdk: FieldAppSDK) => {
+  const sys = sdk.entry.getSys();
+  return (
+    'publishedVersion' in sys &&
+    !!sys.publishedVersion &&
+    sys.version === sys.publishedVersion + 1
+  );
 };
 
-type LoadState = 'loading' | 'loaded' | 'error';
+// Turning off both link actions makes the editor show a "no permission"
+// message, so the actions area is replaced with nothing instead.
+const noActions = () => <></>;
+
+type LoadState = 'loading' | 'loaded' | 'error' | 'publishError';
 
 const TeamAsapMembersField = () => {
   const sdk = useSDK<FieldAppSDK>();
-  const readOnlySdk = useMemo(() => withReadOnlyField(sdk), [sdk]);
   const [teamAsapId, setTeamAsapId] = useState<string | undefined>(
     sdk.entry.fields.membersTeam?.getValue()?.sys.id,
   );
@@ -74,17 +63,26 @@ const TeamAsapMembersField = () => {
     setLoadState('loading');
 
     getTeamAsapMemberIds(sdk, teamAsapId)
-      .then((ids) => {
+      .then(async (ids) => {
         if (cancelled) return;
         const current = sdk.field.getValue() as EntryLink[] | undefined;
-        const next = ids.map(toLink);
+        const next = mergeOrder(current, ids);
         setIsEmpty(next.length === 0);
         setLoadState('loaded');
         if (isSameOrder(current, next)) return;
+
+        const shouldPublish = isPublishedWithoutChanges(sdk);
         if (next.length) {
-          sdk.field.setValue(next);
+          await sdk.field.setValue(next);
         } else {
-          sdk.field.removeValue();
+          await sdk.field.removeValue();
+        }
+        if (!shouldPublish) return;
+
+        try {
+          await sdk.entry.publish();
+        } catch {
+          if (!cancelled) setLoadState('publishError');
         }
       })
       .catch(() => {
@@ -103,9 +101,9 @@ const TeamAsapMembersField = () => {
   return (
     <Stack flexDirection="column" spacing="spacingS" alignItems="stretch">
       <MultipleEntryReferenceEditor
-        sdk={readOnlySdk}
+        sdk={sdk}
         viewType="link"
-        isInitiallyDisabled={true}
+        isInitiallyDisabled={false}
         hasCardEditActions={false}
         hasCardMoveActions={false}
         hasCardRemoveActions={false}
@@ -120,6 +118,9 @@ const TeamAsapMembersField = () => {
       />
       {loadState === 'loaded' && isEmpty && <Paragraph>{NO_MEMBERS}</Paragraph>}
       {loadState === 'error' && <Note variant="negative">{LOAD_ERROR}</Note>}
+      {loadState === 'publishError' && (
+        <Note variant="warning">{PUBLISH_ERROR}</Note>
+      )}
     </Stack>
   );
 };

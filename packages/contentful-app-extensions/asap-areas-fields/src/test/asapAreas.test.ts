@@ -82,7 +82,7 @@ describe('getAsapAreaMemberIds', () => {
     });
   });
 
-  it('excludes past members and alumni', async () => {
+  it('uses the Teams page rules: active memberships with a role, published and onboarded users who are not alumni', async () => {
     const getMany = jest
       .fn()
       .mockResolvedValueOnce({ items: [entry('membership-1')] })
@@ -92,12 +92,15 @@ describe('getAsapAreaMemberIds', () => {
 
     expect(getMany).toHaveBeenNthCalledWith(1, {
       query: expect.objectContaining({
+        'fields.role[exists]': true,
         'fields.inactiveSinceDate[exists]': false,
       }),
     });
     expect(getMany).toHaveBeenNthCalledWith(2, {
       query: expect.objectContaining({
+        'fields.onboarded': true,
         'fields.alumniSinceDate[exists]': false,
+        'sys.publishedVersion[exists]': true,
       }),
     });
   });

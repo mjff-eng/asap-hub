@@ -31,8 +31,10 @@ export const isSameOrder = (
   (current ?? []).length === next.length &&
   next.every((link, index) => current?.[index]?.sys.id === link.sys.id);
 
-// Users with an active membership matching the query, leaving out past members
-// (membership has Inactive Since) and alumni (user has Alumni Since Date).
+// Users with an active membership matching the query. Uses the same rules as
+// the Teams page (team.data-provider.ts) so member counts match: the membership
+// has a role and no Inactive Since date, and the user is published, onboarded
+// and not alumni.
 const getActiveMemberIds = async (
   sdk: FieldAppSDK,
   membershipQuery: Record<string, string>,
@@ -41,6 +43,7 @@ const getActiveMemberIds = async (
     query: {
       content_type: 'teamMembership',
       ...membershipQuery,
+      'fields.role[exists]': true,
       'fields.inactiveSinceDate[exists]': false,
       limit: QUERY_LIMIT,
     },
@@ -57,7 +60,9 @@ const getActiveMemberIds = async (
     query: {
       content_type: 'users',
       'fields.teams.sys.id[in]': membershipIds.join(','),
+      'fields.onboarded': true,
       'fields.alumniSinceDate[exists]': false,
+      'sys.publishedVersion[exists]': true,
       order: 'fields.firstName,fields.lastName',
       limit: QUERY_LIMIT,
     },
