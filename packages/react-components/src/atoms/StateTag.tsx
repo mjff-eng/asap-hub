@@ -1,6 +1,6 @@
 import { css, CSSObject } from '@emotion/react';
 import { colour } from '../colors';
-import { lineHeight, rem } from '../pixels';
+import { lineHeight, rem, remUnit } from '../pixels';
 
 export type AccentVariant = 'default' | 'green' | 'blue';
 
@@ -22,8 +22,8 @@ export const accents: Record<AccentVariant, CSSObject> = {
 const styles = css({
   display: 'inline-flex',
   boxSizing: 'border-box',
-  padding: `${rem(3)} 0`,
-  height: `calc(${lineHeight}px + ${rem(6)})`,
+  padding: `${remUnit(3)} 0`,
+  minHeight: remUnit(lineHeight + 6),
   backgroundColor: colour.background.warning,
   color: colour.foreground.warning,
   borderRadius: rem(18),

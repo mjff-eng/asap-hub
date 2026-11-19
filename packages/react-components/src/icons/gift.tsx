@@ -1,7 +1,13 @@
 /* istanbul ignore file */
 
 const giftIcon = (
-  <svg width={24} height={24} fill="#00202C" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    viewBox="0 0 24 24"
+    width="1.5rem"
+    height="1.5rem"
+    fill="#00202C"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Gift</title>
     <path
       fillRule="evenodd"

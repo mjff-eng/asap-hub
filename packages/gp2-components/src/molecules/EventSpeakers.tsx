@@ -14,7 +14,7 @@ import {
 } from '@asap-hub/react-components';
 import { mobileQuery, nonMobileQuery } from '../layout';
 
-const { rem } = pixels;
+const { rem, remUnit } = pixels;
 
 const rowStyles = css({
   display: 'grid',
@@ -23,7 +23,7 @@ const rowStyles = css({
   rowGap: rem(24),
   gridTemplateColumns: '1fr',
   [nonMobileQuery]: {
-    gridTemplateColumns: '256px 1fr',
+    gridTemplateColumns: `${remUnit(256)} 1fr`,
     padding: `${rem(16)} 0 0`,
     borderBottom: 'none',
     columnGap: `${rem(16)}`,

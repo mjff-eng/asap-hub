@@ -59,7 +59,7 @@ it('renders a FigCaption 14px on a 24px line', () => {
     </figure>,
   );
   const { fontSize, lineHeight } = getComputedStyle(getByText('text'));
-  expect(parseFloat(fontSize) * 16).toBe(14);
+  expect(fontSize).toBe('0.875rem');
   expect(parseFloat(lineHeight) * 14).toBeCloseTo(24);
 });
 

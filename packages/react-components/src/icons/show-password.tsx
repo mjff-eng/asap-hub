@@ -1,6 +1,6 @@
 import { fontStyles } from '../text';
 
-const { fontFamily, fontSize } = fontStyles;
+const { fontFamily } = fontStyles;
 
 /* istanbul ignore file */
 
@@ -13,7 +13,9 @@ const showPasswordIcon = (
       stroke="none"
       style={{
         fontFamily,
-        fontSize,
+        // In units of the 43 x 24 viewBox, so the label keeps fitting whatever
+        // the browser font size setting; the svg itself scales with the layout
+        fontSize: 16,
 
         dominantBaseline: 'central',
         textAnchor: 'middle',

@@ -2,13 +2,13 @@ import { css } from '@emotion/react';
 
 import { CasTextStyle, casTextStyles } from '../cas-tokens.generated';
 import { colour } from '../colors';
-import { rem } from '../pixels';
+import { remUnit, unitlessLineHeight } from '../pixels';
 import { layoutStyles, AccentColorName } from '../text';
 
 const captionStyle = ({ fontSize, lineHeight, fontWeight }: CasTextStyle) =>
   css({
-    fontSize: rem(fontSize),
-    lineHeight: `${lineHeight / fontSize}em`,
+    fontSize: remUnit(fontSize),
+    lineHeight: unitlessLineHeight(fontSize, lineHeight),
     fontWeight,
   });
 const regularStyles = captionStyle(casTextStyles.caption.regular);

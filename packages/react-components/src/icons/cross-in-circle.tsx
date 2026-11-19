@@ -2,8 +2,8 @@
 
 const crossInCircle = (
   <svg
-    width="46"
-    height="46"
+    width="2.875rem"
+    height="2.875rem"
     viewBox="0 0 46 46"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

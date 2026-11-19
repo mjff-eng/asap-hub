@@ -8,6 +8,7 @@ import {
   largeDesktopScreen,
   mobileScreen,
   rem,
+  remUnit,
   vminLinearCalc,
 } from '../pixels';
 
@@ -32,7 +33,7 @@ const styles = css({
 });
 
 const iconStyles = css({
-  svg: { width: 48, height: 48 },
+  svg: { width: remUnit(48), height: remUnit(48) },
 });
 
 const ManuscriptWorkspaceUnavailablePage: React.FC<

@@ -2,6 +2,7 @@
 
 import { FC } from 'react';
 import IconProps from './props';
+import { remUnit } from '../pixels';
 
 interface LeadershipIconProps extends IconProps {
   readonly color?: string;
@@ -13,8 +14,8 @@ const Leadership: FC<LeadershipIconProps> = ({
   size = 24,
 }) => (
   <svg
-    width={size}
-    height={size}
+    width={remUnit(size)}
+    height={remUnit(size)}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

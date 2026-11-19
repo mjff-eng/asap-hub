@@ -1,7 +1,13 @@
 // this is going to be an issue
 
 const eventsIcon = (
-  <svg width={24} height={24} fill="#4D646B" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    viewBox="0 0 24 24"
+    width="1.5rem"
+    height="1.5rem"
+    fill="#4D646B"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <path
       fillRule="evenodd"
       clipRule="evenodd"

@@ -1,5 +1,11 @@
 const copyIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="none">
+  <svg
+    viewBox="0 0 16 16"
+    xmlns="http://www.w3.org/2000/svg"
+    width="1rem"
+    height="1rem"
+    fill="none"
+  >
     <title>Copy</title>
     <path
       fill="#00202C"

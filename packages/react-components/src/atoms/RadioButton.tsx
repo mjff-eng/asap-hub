@@ -12,8 +12,8 @@ const styles = css({
 
   appearance: 'none',
   outline: 'none',
-  // outer ring
-  borderRadius: '12px',
+  // outer ring, round at any size the font setting gives it
+  borderRadius: '50%',
   borderStyle: 'solid',
   borderWidth: rem(1),
   borderColor: colour.border.tertiary,

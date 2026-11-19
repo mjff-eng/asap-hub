@@ -2,8 +2,8 @@
 
 const edit = (
   <svg
-    width="18px"
-    height="18px"
+    width="1.125rem"
+    height="1.125rem"
     viewBox="0 0 18 18"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"

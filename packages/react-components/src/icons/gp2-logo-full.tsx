@@ -2,8 +2,8 @@
 
 const gp2LogoFull = (
   <svg
-    width="164"
-    height="32"
+    width="10.25rem"
+    height="2rem"
     viewBox="0 0 164 32"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

@@ -8,8 +8,8 @@ interface GlobeIconProps {
 
 const GlobeIcon: FC<GlobeIconProps> = ({ color = '#00222C', strokeWidth }) => (
   <svg
-    width={24}
-    height={24}
+    width="1.5rem"
+    height="1.5rem"
     viewBox="0 0 24 24"
     stroke={color}
     xmlns="http://www.w3.org/2000/svg"

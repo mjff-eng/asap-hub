@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 
 import { Tooltip } from '../atoms';
 import { colour } from '../colors';
-import { rem } from '../pixels';
+import { rem, remUnit } from '../pixels';
 
 const buttonStyles = css({
   padding: 0,
@@ -28,7 +28,7 @@ const counterStyle = css({
   minWidth: rem(24),
   border: `1px solid ${colour.border.tertiary}`,
   borderRadius: '100%',
-  fontSize: '14px',
+  fontSize: remUnit(14),
   fontWeight: 'bold',
 
   justifyContent: 'center',

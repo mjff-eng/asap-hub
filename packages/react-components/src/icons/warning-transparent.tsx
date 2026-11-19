@@ -2,8 +2,8 @@
 
 const warning = (
   <svg
-    width="42"
-    height="42"
+    width="2.625rem"
+    height="2.625rem"
     viewBox="0 0 42 42"
     xmlns="http://www.w3.org/2000/svg"
     stroke="black"

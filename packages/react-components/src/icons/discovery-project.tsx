@@ -1,4 +1,5 @@
 import React from 'react';
+import { remUnit } from '../pixels';
 
 interface DiscoveryProjectIconProps {
   readonly width?: number;
@@ -12,8 +13,8 @@ const DiscoveryProjectIcon: React.FC<DiscoveryProjectIconProps> = ({
   color = '#4D646B',
 }) => (
   <svg
-    width={width}
-    height={height}
+    width={remUnit(width)}
+    height={remUnit(height)}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

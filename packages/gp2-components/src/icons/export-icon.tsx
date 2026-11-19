@@ -1,7 +1,13 @@
 /* istanbul ignore file */
 
 const exportIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none">
+  <svg
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    width="1.5rem"
+    height="1.5rem"
+    fill="none"
+  >
     <title>Export</title>
     <path
       fill="#00202C"

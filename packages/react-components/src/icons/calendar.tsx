@@ -2,8 +2,8 @@
 
 const calendar = (
   <svg
-    height="24"
-    width="24"
+    height="1.5rem"
+    width="1.5rem"
     viewBox="0 0 24 24"
     fill="none"
     stroke="#4D646B"

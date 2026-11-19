@@ -4,8 +4,8 @@
 // on the 24-unit viewBox come out as a 1.5px stroke.
 const mail = (
   <svg
-    width="24px"
-    height="24px"
+    width="1.5rem"
+    height="1.5rem"
     viewBox="0 0 24 24"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"

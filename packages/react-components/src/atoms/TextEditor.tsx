@@ -33,6 +33,7 @@ import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPl
 import { $nodesOfType, EditorState } from 'lexical';
 import { colour } from '../colors';
 import { styles, useValidation, validationMessageStyles } from '../form';
+import { remUnit, unitlessLineHeight } from '../pixels';
 import { noop } from '../utils';
 import ToolbarPlugin from './TextEditorToolbar';
 import EditorRefPluginWrapper from './EditorRefPluginWrapper';
@@ -71,7 +72,7 @@ const containerStyles = css({
   width: '100%',
   color: colour.foreground.primary,
   position: 'relative',
-  lineHeight: '20px',
+  lineHeight: unitlessLineHeight(16, 20),
   fontWeight: 400,
   textAlign: 'left',
   borderTopLeftRadius: '10px',
@@ -128,7 +129,8 @@ const containerStyles = css({
     textDecoration: 'underline line-through',
   },
   '& .editor-heading-h1': {
-    fontSize: '24px',
+    fontSize: remUnit(24),
+    lineHeight: unitlessLineHeight(24, 32),
     color: colour.foreground.primary,
     fontWeight: 400,
     margin: 0,
@@ -143,7 +145,8 @@ const innerStyles = css({
 });
 const inputStyles = {
   minHeight: '150px',
-  fontSize: '15px',
+  fontSize: remUnit(15),
+  lineHeight: unitlessLineHeight(15, 20),
   caretColor: colour.foreground.primary,
   tabSize: 1,
   outline: 0,
@@ -157,7 +160,8 @@ const placeholderStyles = css({
   textOverflow: 'ellipsis',
   top: '15px',
   left: '10px',
-  fontSize: '15px',
+  fontSize: remUnit(15),
+  lineHeight: unitlessLineHeight(15, 20),
   userSelect: 'none',
   display: 'inline-block',
   pointerEvents: 'none',

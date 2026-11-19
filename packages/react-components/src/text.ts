@@ -6,7 +6,7 @@ import {
   casTextStyles,
   CasTextStyle,
 } from './cas-tokens.generated';
-import { rem } from './pixels';
+import { remUnit, unitlessLineHeight } from './pixels';
 
 export type TextChild = React.ReactText | boolean | null | undefined;
 export type TextChildren = TextChild | ReadonlyArray<TextChild>;
@@ -72,17 +72,19 @@ export const fontStyles = {
   WebkitFontSmoothing: 'antialiased',
   MozOsxFontSmoothing: 'auto',
 
-  // This value must be declared in pixels so that the rest of the UI inherits its base value from it
-  fontSize: `${body.fontSize}px`,
-  lineHeight: rem(body.lineHeight),
+  // In rem so that it follows the browser font size setting (16px by default),
+  // on <html> and on any element these styles are spread into, regardless of
+  // the parent's font size. The rest of the UI, sized in em and rem, inherits it.
+  fontSize: remUnit(body.fontSize),
+  lineHeight: unitlessLineHeight(body.fontSize, body.lineHeight),
 } as const;
 export const captionStyles = {
-  fontSize: rem(14),
+  fontSize: remUnit(14),
 };
 export const captionRegularStyles = {
   fontFamily: `'Nunito Sans', ${fontStyles.fontFamily}`,
-  fontSize: rem(14),
-  lineHeight: 24 / 14,
+  ...captionStyles,
+  lineHeight: unitlessLineHeight(14, 24),
 } as const;
 export const layoutStyles = {
   marginTop: '12px',
@@ -99,8 +101,8 @@ const textStyle = ({
   fontWeight,
 }: CasTextStyle): CSSObject => ({
   fontFamily: casFontFamily[family],
-  fontSize: `${fontSize}px`,
-  lineHeight: `${lineHeight}px`,
+  fontSize: remUnit(fontSize),
+  lineHeight: unitlessLineHeight(fontSize, lineHeight),
   fontWeight,
 });
 

@@ -2,8 +2,8 @@
 
 const crnLogoFullWhite = (
   <svg
-    width="177"
-    height="24"
+    width="11.0625rem"
+    height="1.5rem"
     viewBox="0 0 177 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

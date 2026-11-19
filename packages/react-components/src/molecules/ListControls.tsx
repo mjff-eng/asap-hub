@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
 import { dropdownChevronIcon } from '../icons';
 import DropdownButton from './DropdownButton';
-import { rem, tabletScreen } from '../pixels';
+import { rem, remUnit, tabletScreen } from '../pixels';
 
 const containerStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: rem(15),
   'span + svg': {
-    width: '11px',
+    width: remUnit(11),
     marginRight: '10px',
   },
   button: {

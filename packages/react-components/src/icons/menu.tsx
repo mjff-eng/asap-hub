@@ -2,8 +2,8 @@
 
 const menu = (
   <svg
-    width="20px"
-    height="16px"
+    width="1.25rem"
+    height="1rem"
     viewBox="0 0 20 16"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"

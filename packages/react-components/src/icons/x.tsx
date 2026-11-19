@@ -7,8 +7,8 @@ interface XIconProps {
 
 const XIcon: FC<XIconProps> = ({ color = '#00222C' }) => (
   <svg
-    width="24"
-    height="22"
+    width="1.5rem"
+    height="1.375rem"
     viewBox="0 0 24 22"
     fill={color}
     xmlns="http://www.w3.org/2000/svg"

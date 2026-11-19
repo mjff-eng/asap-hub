@@ -1,10 +1,32 @@
 import { createElement, Fragment, ReactNode } from 'react';
 
+import { casTextStyles } from '../cas-tokens.generated';
 import {
   isTextChildren,
   assertIsTextChildren,
   isAllowedChildren,
+  fontStyles,
+  headlineStyles,
 } from '../text';
+
+describe('fontStyles', () => {
+  it('sizes the text in rem so it follows the browser font size', () => {
+    expect(fontStyles.fontSize).toBe('1rem');
+  });
+  it('uses a unitless line height', () => {
+    expect(fontStyles.lineHeight).toBe(1.5);
+  });
+});
+
+describe.each([2, 3, 4, 5, 6] as const)('headlineStyles[%i]', (level) => {
+  const { fontSize, lineHeight } = casTextStyles.heading[level].bold;
+  it('sizes the text in rem so it follows the browser font size', () => {
+    expect(headlineStyles[level].fontSize).toBe(`${fontSize / 16}rem`);
+  });
+  it('uses a unitless line height', () => {
+    expect(headlineStyles[level].lineHeight).toBeCloseTo(lineHeight / fontSize);
+  });
+});
 
 describe.each([
   [undefined],

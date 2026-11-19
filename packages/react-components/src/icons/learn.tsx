@@ -1,7 +1,13 @@
 /* istanbul ignore file */
 
 export const learnIcon = (
-  <svg fill="#00202C" width={24} height={24} xmlns="http://www.w3.org/2000/svg">
+  <svg
+    viewBox="0 0 24 24"
+    fill="#00202C"
+    width="1.5rem"
+    height="1.5rem"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Learn</title>
     <path
       stroke="none"
