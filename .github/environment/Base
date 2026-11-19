@@ -5,6 +5,7 @@ aws-region=us-east-1
 cache-prefix-definitions=definitions-ouput
 cache-prefix-frontend=frontend-output
 cache-prefix-transpile=transpile-output
+contentful-app-asap-areas-fields=2wdfXj21Nu8SUg6scoSSkU
 contentful-app-auto-populate-date-field=5k7jEBXizWrEHPIebdDTJN
 contentful-app-clear-on-change=6en82KYFrsxlAIPqypMdOp
 contentful-app-conditional-field-validation=oXPp9wSsw0L6GzJS4yGkG

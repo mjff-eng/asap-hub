@@ -92,6 +92,9 @@ outputs:
   contentful-app-project-membership-role:
     description: 'Contentful App Extension Project Membership Role'
     value: ${{ steps.vars.outputs.contentful-app-project-membership-role }}
+  contentful-app-asap-areas-fields:
+    description: 'Contentful App Extension ASAP Areas Fields'
+    value: ${{ steps.vars.outputs.contentful-app-asap-areas-fields }}
   contentful-environment:
     description: 'Contentful Environment'
     value: ${{ steps.vars.outputs.contentful-environment }}
