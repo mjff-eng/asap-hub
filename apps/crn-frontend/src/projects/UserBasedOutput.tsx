@@ -11,6 +11,7 @@ import {
   OutputVersions,
   ResearchOutputForm,
   Toast,
+  utils,
 } from '@asap-hub/react-components';
 import { resolveResearchOutputAvailableActions } from '@asap-hub/react-context';
 import { OutputDocumentTypeParameter } from '@asap-hub/routing';
@@ -179,9 +180,15 @@ const UserBasedOutput: React.FC<UserBasedOutputProps> = ({
     return <Loading />;
   }
 
+  const breadcrumbs = utils.getProjectBreadcrumbs(project, projectId);
+
   if (showManuscriptOutputFlow) {
     return (
-      <OutputPageShell documentType={documentType} entityType="project">
+      <OutputPageShell
+        documentType={documentType}
+        entityType="project"
+        breadcrumbs={breadcrumbs}
+      >
         <ManuscriptOutputSelectionScreen
           projectId={projectId}
           onCreateManually={() => setShowManuscriptOutputFlow(false)}
@@ -198,6 +205,7 @@ const UserBasedOutput: React.FC<UserBasedOutputProps> = ({
     <OutputPageShell
       documentType={documentType}
       entityType="project"
+      breadcrumbs={breadcrumbs}
       banner={
         versionAction === 'create' &&
         !!researchOutput?.id && (

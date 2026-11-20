@@ -5,11 +5,12 @@ import {
   ResearchOutputEntityType,
 } from '@asap-hub/model';
 
-import { news } from '@asap-hub/routing';
+import { dashboard, news } from '@asap-hub/routing';
 import { Display, Link, Paragraph } from '../atoms';
 import { rem } from '../pixels';
 import { colour } from '../colors';
 import { contentSidePaddingWithNavigation } from '../layout';
+import { BreadcrumbItem, Breadcrumbs } from '../molecules';
 
 const headerStyles = css({
   padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(60)}`,
@@ -18,6 +19,14 @@ const headerStyles = css({
   marginBottom: rem(30),
   display: 'flex',
   justifyContent: 'center',
+});
+
+const headerWithBreadcrumbsStyles = css({
+  paddingTop: rem(12),
+});
+
+const breadcrumbsStyles = css({
+  marginBottom: rem(48),
 });
 
 const contentStyles = css({
@@ -92,6 +101,19 @@ const entityLabelMap: Record<ResearchOutputEntityType, string> = {
   project: 'Project',
 };
 
+const getDocumentLabel = (
+  entityType: ResearchOutputEntityType,
+  documentType: ResearchOutputDocumentType,
+) =>
+  documentType === 'Report' && entityType === 'working-group'
+    ? 'CRN Report'
+    : documentType;
+
+const getArticle = (documentType: ResearchOutputDocumentType, noun: string) => {
+  if (documentType === 'Bioinformatics') return '';
+  return /^[aeiou]/i.test(noun) ? 'an ' : 'a ';
+};
+
 const getHeaderText = (
   entityType: ResearchOutputEntityType,
   documentType: ResearchOutputDocumentType,
@@ -100,28 +122,49 @@ const getHeaderText = (
   const entityLabel = isProjectOutput
     ? entityLabelMap.project
     : entityLabelMap[entityType];
-  const documentLabel =
-    documentType === 'Report' && entityType === 'working-group'
-      ? 'CRN Report'
-      : documentType;
-  const article = documentType === 'Bioinformatics' ? '' : 'a ';
+
+  const article = getArticle(documentType, entityLabel);
+  const documentLabel = getDocumentLabel(entityType, documentType);
 
   return `Share ${article}${entityLabel} ${documentLabel}`;
+};
+
+const getBreadcrumbLabel = (
+  entityType: ResearchOutputEntityType,
+  documentType: ResearchOutputDocumentType,
+) => {
+  const documentLabel = getDocumentLabel(entityType, documentType);
+  return `Share ${getArticle(documentType, documentLabel)}${documentLabel}`;
 };
 
 type ResearchOutputHeaderProps = {
   entityType: ResearchOutputEntityType;
   documentType: ResearchOutputDocumentType;
   isProjectOutput?: boolean;
+  breadcrumbs?: ReadonlyArray<BreadcrumbItem>;
 };
 
 const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
   entityType,
   documentType,
   isProjectOutput = false,
+  breadcrumbs = [],
 }) => (
-  <header css={headerStyles}>
+  <header
+    css={[headerStyles, breadcrumbs.length > 0 && headerWithBreadcrumbsStyles]}
+  >
     <div css={contentStyles}>
+      {breadcrumbs.length > 0 && (
+        <div css={breadcrumbsStyles}>
+          <Breadcrumbs
+            homeHref={dashboard({}).$}
+            items={[
+              ...breadcrumbs,
+              { label: getBreadcrumbLabel(entityType, documentType) },
+            ]}
+          />
+        </div>
+      )}
       <Display styleAsHeading={4}>
         {getHeaderText(entityType, documentType, isProjectOutput)}
       </Display>

@@ -72,7 +72,7 @@ export const getProjectConfig = ({
 });
 
 export const getProjectBreadcrumbs = (
-  projectDetail: ProjectDetail | undefined,
+  projectDetail: Pick<ProjectDetail, 'title' | 'projectType'> | undefined,
   projectId: BaseProject['id'],
 ) =>
   projectDetail

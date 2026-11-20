@@ -145,6 +145,19 @@ const WorkingGroupOutput: React.FC<WorkingGroupOutputProps> = ({
           <ResearchOutputHeader
             documentType={documentType}
             entityType="working-group"
+            breadcrumbs={[
+              {
+                label: 'Working Groups',
+                href: network({}).workingGroups({}).$,
+              },
+              {
+                label: workingGroup.title,
+                href: network({})
+                  .workingGroups({})
+                  .workingGroup({ workingGroupId })
+                  .about({}).$,
+              },
+            ]}
           />
           {availableActions.showChangelogAndVersionHistory && (
             <OutputVersions

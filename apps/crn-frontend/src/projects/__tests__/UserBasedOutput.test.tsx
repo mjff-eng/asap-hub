@@ -315,6 +315,25 @@ describe('UserBasedOutput', () => {
     ).toBeInTheDocument();
   });
 
+  it('renders the breadcrumbs back to the project', async () => {
+    await renderPage();
+
+    expect(
+      screen.getByRole('link', { name: 'Trainee Projects' }),
+    ).toHaveAttribute('href', projects({}).traineeProjects({}).$);
+    expect(
+      screen.getByRole('link', { name: mockProject.title }),
+    ).toHaveAttribute(
+      'href',
+      projects({}).traineeProjects({}).traineeProject({ projectId }).about({})
+        .$,
+    );
+    expect(screen.getByText('Share Bioinformatics')).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+  });
+
   it('switches the document type based on the route parameter', async () => {
     await renderPage({
       outputDocumentType: 'dataset',

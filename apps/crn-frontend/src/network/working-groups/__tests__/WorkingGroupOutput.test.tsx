@@ -5,6 +5,7 @@ import {
 import {
   createResearchOutputResponse,
   createUserResponse,
+  createWorkingGroupResponse,
 } from '@asap-hub/fixtures';
 import { BackendError, createTestQueryClient } from '@asap-hub/frontend-utils';
 import {
@@ -300,6 +301,33 @@ it('Renders the working group research output form with relevant fields', async 
   expect(
     screen.getByText(/Add an abstract or a summary that describes this work./i),
   ).toBeVisible();
+});
+
+it('renders the breadcrumbs back to the working group', async () => {
+  mockGetWorkingGroup.mockResolvedValueOnce({
+    ...createWorkingGroupResponse({}),
+    id: 'wg1',
+    title: 'Example Working Group',
+  });
+  await renderPage({ outputDocumentType: 'report' });
+
+  expect(screen.getByRole('link', { name: 'Working Groups' })).toHaveAttribute(
+    'href',
+    network({}).workingGroups({}).$,
+  );
+  expect(
+    screen.getByRole('link', { name: 'Example Working Group' }),
+  ).toHaveAttribute(
+    'href',
+    network({})
+      .workingGroups({})
+      .workingGroup({ workingGroupId: 'wg1' })
+      .about({}).$,
+  );
+  expect(screen.getByText('Share a CRN Report')).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
 });
 
 it('displays the research output with one version in create mode', async () => {

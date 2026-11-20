@@ -13,11 +13,15 @@ import {
   UserResponse,
   ValidationErrorResponse,
 } from '@asap-hub/model';
-import { network, OutputDocumentTypeParameter } from '@asap-hub/routing';
+import {
+  network,
+  OutputDocumentTypeParameter,
+  projects,
+} from '@asap-hub/routing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { editorRef } from '@asap-hub/react-components';
-import { Suspense } from 'react';
+import { ComponentProps, Suspense } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { getGeneratedShortDescription } from '../../../shared-api/content-generator';
@@ -197,6 +201,7 @@ interface RenderPageOptions {
   researchOutputData?: ResearchOutputResponse;
   latestManuscriptVersion?: ManuscriptVersionResponse;
   isDuplicate?: boolean;
+  project?: ComponentProps<typeof TeamOutput>['project'];
 }
 
 beforeEach(() => {
@@ -216,6 +221,88 @@ it('Renders the research output', async () => {
   expect(
     screen.getByRole('heading', { name: /Share Team Bioinformatics/i }),
   ).toBeInTheDocument();
+});
+
+it('does not render breadcrumbs for a team output without a project', async () => {
+  await renderPage({
+    teamId: '42',
+    outputDocumentType: 'bioinformatics',
+  });
+
+  expect(
+    screen.queryByRole('navigation', { name: 'breadcrumbs' }),
+  ).not.toBeInTheDocument();
+});
+
+it('renders the breadcrumbs to the project the output is shared from', async () => {
+  await renderPage({
+    teamId: '42',
+    outputDocumentType: 'article',
+    project: {
+      id: 'project-1',
+      title: 'Workspace Project',
+      projectType: 'Discovery Project',
+    },
+  });
+
+  expect(
+    screen.getByRole('heading', { name: /Share a Project Article/i }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('link', { name: 'Discovery Projects' }),
+  ).toHaveAttribute('href', projects({}).discoveryProjects({}).$);
+  expect(
+    screen.getByRole('link', { name: 'Workspace Project' }),
+  ).toHaveAttribute(
+    'href',
+    projects({})
+      .discoveryProjects({})
+      .discoveryProject({ projectId: 'project-1' })
+      .about({}).$,
+  );
+  expect(screen.getByText('Share an Article')).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+});
+
+it("renders the breadcrumbs to the output team's project when editing", async () => {
+  await renderPage({
+    teamId: '42',
+    researchOutputData: {
+      ...baseResearchOutput,
+      documentType: 'Protocol',
+      teams: [
+        {
+          id: '42',
+          displayName: 'Jakobsson, J',
+          teamType: 'Discovery Team',
+          project: {
+            id: 'project-2',
+            title: 'Team Project',
+            projectType: 'Resource Project',
+            projectId: 'RP2',
+          },
+        },
+      ],
+    },
+    versionAction: 'edit',
+  });
+
+  expect(
+    screen.getByRole('link', { name: 'Resource Projects' }),
+  ).toHaveAttribute('href', projects({}).resourceProjects({}).$);
+  expect(screen.getByRole('link', { name: 'Team Project' })).toHaveAttribute(
+    'href',
+    projects({})
+      .resourceProjects({})
+      .resourceProject({ projectId: 'project-2' })
+      .about({}).$,
+  );
+  expect(screen.getByText('Share a Protocol')).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
 });
 
 it('Shows the not found page if the team does not exist', async () => {
@@ -517,6 +604,7 @@ async function renderPage({
   versionAction,
   latestManuscriptVersion,
   isDuplicate,
+  project,
 }: RenderPageOptions) {
   const path =
     network.template +
@@ -545,6 +633,7 @@ async function renderPage({
                       versionAction={versionAction}
                       latestManuscriptVersion={latestManuscriptVersion}
                       isDuplicate={isDuplicate}
+                      project={project}
                     />
                   }
                 />

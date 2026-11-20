@@ -16,6 +16,7 @@ import {
 import {
   network,
   OutputDocumentTypeParameter,
+  projects,
   sharedResearch,
 } from '@asap-hub/routing';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -735,6 +736,38 @@ describe('data wired into the page', () => {
 });
 
 describe('adding a version to an output that tracks a manuscript', () => {
+  it("shows the breadcrumbs to the original output team's project", async () => {
+    await renderPage({
+      researchOutputData: manuscriptOutput({
+        teams: [
+          {
+            id: TEAM_ID,
+            displayName: 'Jakobsson, J',
+            teamType: 'Discovery Team',
+            project: {
+              id: 'project-1',
+              title: 'Team Project',
+              projectType: 'Discovery Project',
+              projectId: 'DP1',
+            },
+          },
+        ],
+      }),
+      versionAction: 'create',
+      latestManuscriptVersion: preprintVersion({ lifecycle: 'Publication' }),
+    });
+
+    await onTheForm();
+
+    expect(screen.getByRole('link', { name: 'Team Project' })).toHaveAttribute(
+      'href',
+      projects({})
+        .discoveryProjects({})
+        .discoveryProject({ projectId: 'project-1' })
+        .about({}).$,
+    );
+  });
+
   it('waits for the manuscript version before rendering the form', async () => {
     await renderPage({
       researchOutputData: manuscriptOutput(),

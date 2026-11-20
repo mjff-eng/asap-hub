@@ -1,6 +1,7 @@
 import { toServerValidationError } from '@asap-hub/frontend-utils';
 import {
   ManuscriptVersionResponse,
+  ProjectDetail,
   researchOutputDocumentTypeToType,
   ResearchOutputResponse,
   ResearchOutputVersion,
@@ -12,6 +13,7 @@ import {
   OutputVersions,
   ResearchOutputForm,
   Toast,
+  utils,
 } from '@asap-hub/react-components';
 import { resolveResearchOutputAvailableActions } from '@asap-hub/react-context';
 import {
@@ -66,7 +68,7 @@ type TeamBasedOutputProps = {
   latestManuscriptVersion?: ManuscriptVersionResponse;
   versionAction?: 'create' | 'edit';
   isDuplicate?: boolean;
-  fromProjectWorkspace?: boolean;
+  project?: Pick<ProjectDetail, 'id' | 'title' | 'projectType'>;
 };
 
 const TeamBasedOutput: React.FC<TeamBasedOutputProps> = ({
@@ -75,7 +77,7 @@ const TeamBasedOutput: React.FC<TeamBasedOutputProps> = ({
   latestManuscriptVersion,
   versionAction: versionActionProp,
   isDuplicate = false,
-  fromProjectWorkspace = false,
+  project,
 }) => {
   const paramOutputDocumentType = useParamOutputDocumentType(teamId);
   const documentType =
@@ -145,7 +147,17 @@ const TeamBasedOutput: React.FC<TeamBasedOutputProps> = ({
   const isTeamBasedProjectOutput = !!(researchOutput ?? existingOutput)
     ?.teams?.[0]?.project;
 
-  const isProjectOutput = fromProjectWorkspace || isTeamBasedProjectOutput;
+  const isProjectOutput = !!project || isTeamBasedProjectOutput;
+
+  // A manuscript-mapped output carries the manuscript's teams, which have no
+  // project, so the original output's team is checked first.
+  const breadcrumbProject =
+    project ??
+    existingOutput?.teams?.[0]?.project ??
+    researchOutput?.teams?.[0]?.project;
+  const breadcrumbs = breadcrumbProject
+    ? utils.getProjectBreadcrumbs(breadcrumbProject, breadcrumbProject.id)
+    : [];
 
   const authorsRequired = isProjectOutput && documentType === 'Article';
 
@@ -205,6 +217,7 @@ const TeamBasedOutput: React.FC<TeamBasedOutputProps> = ({
         documentType={documentType}
         entityType="team"
         isProjectOutput={isProjectOutput}
+        breadcrumbs={breadcrumbs}
       >
         <ManuscriptOutputSelectionScreen
           teamId={teamId}
@@ -223,6 +236,7 @@ const TeamBasedOutput: React.FC<TeamBasedOutputProps> = ({
       entityType="team"
       documentType={documentType}
       isProjectOutput={isProjectOutput}
+      breadcrumbs={breadcrumbs}
       banner={
         versionAction === 'create' &&
         !!researchOutput?.id && (
