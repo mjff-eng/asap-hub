@@ -4,6 +4,7 @@ import {
   ResearchOutputEntityType,
 } from '@asap-hub/model';
 import {
+  BreadcrumbItem,
   ResearchOutputHeader,
   Toast,
   usePrevious,
@@ -15,6 +16,7 @@ type OutputPageShellProps = {
   documentType: ResearchOutputDocumentType;
   entityType: ResearchOutputEntityType;
   isProjectOutput?: boolean;
+  breadcrumbs?: ReadonlyArray<BreadcrumbItem>;
   banner?: ReactNode;
   children: ReactNode;
 };
@@ -23,6 +25,7 @@ const OutputPageShell: React.FC<OutputPageShellProps> = ({
   documentType,
   entityType,
   isProjectOutput = false,
+  breadcrumbs,
   banner,
   children,
 }) => {
@@ -49,6 +52,7 @@ const OutputPageShell: React.FC<OutputPageShellProps> = ({
           documentType={documentType}
           entityType={entityType}
           isProjectOutput={isProjectOutput}
+          breadcrumbs={breadcrumbs}
         />
         {children}
       </InnerToastContext.Provider>

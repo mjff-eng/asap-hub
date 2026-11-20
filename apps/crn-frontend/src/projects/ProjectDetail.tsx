@@ -2,7 +2,11 @@ import { FC, lazy, ReactNode } from 'react';
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router';
 import { expandUserTeamRoles } from '@asap-hub/auth';
 import { Frame, SearchFrame } from '@asap-hub/frontend-utils';
-import { isProjectLead, isProjectMember } from '@asap-hub/model';
+import {
+  isProjectLead,
+  isProjectMember,
+  ProjectDetail as ProjectDetailResponse,
+} from '@asap-hub/model';
 import {
   ProjectDetailPage,
   ProjectDetailAbout,
@@ -117,10 +121,10 @@ const ManuscriptsCount: FC<ManuscriptsCountProps & { enabled: boolean }> = ({
     <>{children({})}</>
   );
 
-const DuplicateOutput: FC<{ projectId: string; teamId?: string }> = ({
-  projectId,
-  teamId,
-}) => {
+const DuplicateOutput: FC<{
+  project: ProjectDetailResponse;
+  teamId?: string;
+}> = ({ project, teamId }) => {
   const { id } = useParams<{ id: string }>();
   const output = useResearchOutputById(id ?? '');
 
@@ -136,12 +140,12 @@ const DuplicateOutput: FC<{ projectId: string; teamId?: string }> = ({
     title: `Copy of ${output.title}`,
   };
 
-  if (output.project?.id === projectId) {
+  if (output.project?.id === project.id) {
     return (
       <UserBasedOutput
         researchOutputData={duplicatedOutput}
         isDuplicate
-        projectId={projectId}
+        projectId={project.id}
       />
     );
   }
@@ -151,7 +155,7 @@ const DuplicateOutput: FC<{ projectId: string; teamId?: string }> = ({
       <TeamBasedOutput
         researchOutputData={duplicatedOutput}
         isDuplicate
-        fromProjectWorkspace
+        project={project}
         teamId={teamId}
       />
     );
@@ -303,7 +307,10 @@ const ProjectDetail: FC<Props> = ({ config }) => {
                 if (isTeamBased) {
                   return teamId ? (
                     <Frame title="Share Output">
-                      <TeamBasedOutput teamId={teamId} fromProjectWorkspace />
+                      <TeamBasedOutput
+                        teamId={teamId}
+                        project={projectDetail}
+                      />
                     </Frame>
                   ) : (
                     <NotFoundPage />
@@ -321,7 +328,7 @@ const ProjectDetail: FC<Props> = ({ config }) => {
               element={
                 canShareOutput ? (
                   <Frame title="Duplicate Output">
-                    <DuplicateOutput projectId={projectId} teamId={teamId} />
+                    <DuplicateOutput project={projectDetail} teamId={teamId} />
                   </Frame>
                 ) : (
                   <NotFoundPage />

@@ -85,3 +85,59 @@ it('renders a Project header for a team-based project output', () => {
     screen.queryByRole('heading', { name: /Team/i }),
   ).not.toBeInTheDocument();
 });
+
+it('does not render breadcrumbs by default', () => {
+  render(<ResearchOutputHeader entityType="project" documentType="Article" />);
+  expect(
+    screen.queryByRole('navigation', { name: 'breadcrumbs' }),
+  ).not.toBeInTheDocument();
+});
+
+it.each<{
+  documentType: ResearchOutputDocumentType;
+  entityType: ResearchOutputEntityType;
+  label: string;
+}>([
+  {
+    documentType: 'Protocol',
+    entityType: 'project',
+    label: 'Share a Protocol',
+  },
+  { documentType: 'Article', entityType: 'project', label: 'Share an Article' },
+  {
+    documentType: 'Bioinformatics',
+    entityType: 'project',
+    label: 'Share Bioinformatics',
+  },
+  { documentType: 'Report', entityType: 'project', label: 'Share a Report' },
+  {
+    documentType: 'Report',
+    entityType: 'working-group',
+    label: 'Share a CRN Report',
+  },
+])(
+  'renders the breadcrumbs ending in $label for a $entityType $documentType',
+  ({ documentType, entityType, label }) => {
+    render(
+      <ResearchOutputHeader
+        entityType={entityType}
+        documentType={documentType}
+        breadcrumbs={[
+          { label: 'Discovery Projects', href: '/projects/discovery' },
+          { label: 'Project Title', href: '/projects/discovery/1/about' },
+        ]}
+      />,
+    );
+    expect(
+      screen.getByRole('navigation', { name: 'breadcrumbs' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Discovery Projects' }),
+    ).toHaveAttribute('href', '/projects/discovery');
+    expect(screen.getByRole('link', { name: 'Project Title' })).toHaveAttribute(
+      'href',
+      '/projects/discovery/1/about',
+    );
+    expect(screen.getByText(label)).toHaveAttribute('aria-current', 'page');
+  },
+);
