@@ -227,6 +227,7 @@ export {
   ManuscriptHeader,
   ManuscriptByStatus,
   ManuscriptVersionImportCard,
+  MeetAsapTeam,
   MenuHeader,
   MeetingRepAttendanceTable,
   MetricsCard,
