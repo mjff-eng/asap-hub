@@ -144,12 +144,17 @@ const TeamBasedOutput: React.FC<TeamBasedOutputProps> = ({
 
   const published = !!researchOutput?.published;
 
-  const teamProject = (researchOutput ?? existingOutput)?.teams?.[0]?.project;
-  const isTeamBasedProjectOutput = !!teamProject;
+  const isTeamBasedProjectOutput = !!(researchOutput ?? existingOutput)
+    ?.teams?.[0]?.project;
 
   const isProjectOutput = !!project || isTeamBasedProjectOutput;
 
-  const breadcrumbProject = teamProject ?? project;
+  // A manuscript-mapped output carries the manuscript's teams, which have no
+  // project, so the original output's team is checked first.
+  const breadcrumbProject =
+    project ??
+    existingOutput?.teams?.[0]?.project ??
+    researchOutput?.teams?.[0]?.project;
   const breadcrumbs = breadcrumbProject
     ? utils.getProjectBreadcrumbs(breadcrumbProject, breadcrumbProject.id)
     : [];
