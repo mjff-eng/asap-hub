@@ -323,12 +323,6 @@ const buildProjectsFromCsv = (
     let key = projectKey(projectId, projectTitle);
 
     try {
-      const grantType = normalizeGrantType(rawGrantType);
-      const milestoneKey = cell(row, milestoneColumns.milestoneDescription);
-      const status = normalizeMilestoneStatus(
-        cell(row, milestoneColumns.status),
-      );
-
       const keysOfProjectId = [
         ...(aimsCsvKeysByProjectId.get(projectId) ?? []),
       ];
@@ -347,6 +341,12 @@ const buildProjectsFromCsv = (
         }
         key = onlyKey;
       }
+
+      const grantType = normalizeGrantType(rawGrantType);
+      const milestoneKey = cell(row, milestoneColumns.milestoneDescription);
+      const status = normalizeMilestoneStatus(
+        cell(row, milestoneColumns.status),
+      );
 
       const project = projects[key];
 
