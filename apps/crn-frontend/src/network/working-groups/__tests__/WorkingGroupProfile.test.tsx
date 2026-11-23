@@ -419,8 +419,6 @@ describe('the calendar tab', () => {
   });
 
   it('redirects the old calendar url to the about tab', async () => {
-    jest.useRealTimers();
-
     const router = await renderWorkingGroupProfile(
       {},
       `${
@@ -435,8 +433,6 @@ describe('the calendar tab', () => {
       );
       expect(screen.getByRole('link', { name: 'About' })).toHaveClass('active');
     });
-
-    jest.useFakeTimers();
   });
 });
 
