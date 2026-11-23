@@ -1,7 +1,13 @@
 /* istanbul ignore file */
 
 const infoCircleIcon = (
-  <svg width={24} height={24} fill="#4D646B" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    viewBox="0 0 24 24"
+    width="1.5rem"
+    height="1.5rem"
+    fill="#4D646B"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Info</title>
     <path
       fillRule="evenodd"

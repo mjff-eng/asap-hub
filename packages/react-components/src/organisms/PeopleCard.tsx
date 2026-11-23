@@ -9,16 +9,16 @@ import {
   UserProfilePersonalText,
   ImageLink,
 } from '../molecules';
-import { tabletScreen, rem } from '../pixels';
+import { tabletScreen, rem, remUnit } from '../pixels';
 import { formatDate } from '../date';
 import { alumniBadgeIcon } from '../icons';
 
 const containerStyles = css({
   display: 'grid',
-  columnGap: '25px',
+  columnGap: remUnit(25),
   rowGap: '12px',
   [`@media (min-width: ${tabletScreen.min}px)`]: {
-    gridTemplateColumns: '90px auto',
+    gridTemplateColumns: `${remUnit(90)} auto`,
   },
 });
 

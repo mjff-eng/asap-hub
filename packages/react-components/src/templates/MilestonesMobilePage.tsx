@@ -2,15 +2,16 @@ import { css } from '@emotion/react';
 
 import { Headline3, Paragraph } from '../atoms';
 import { deskTopIcon } from '../icons';
+import { remUnit, unitlessLineHeight } from '../pixels';
 
 const containerStyles = css({
   textAlign: 'center',
 });
 
 const headlineStyles = css({
-  fontSize: '26px',
+  fontSize: remUnit(26),
   margin: '16px 0',
-  lineHeight: '32px',
+  lineHeight: unitlessLineHeight(26, 32),
 });
 
 const MilestonesMobilePage: React.FC = () => (

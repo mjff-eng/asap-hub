@@ -3,8 +3,8 @@
 const trainingPlaceholder = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={184}
-    height={184}
+    width="11.5rem"
+    height="11.5rem"
     viewBox="0 0 184 184"
   >
     <title>Training</title>

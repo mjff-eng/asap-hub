@@ -3,8 +3,8 @@
 const asapLogoMobile = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={96}
-    height={32}
+    width="6rem"
+    height="2rem"
     viewBox="0 0 96 32"
     fill="none"
   >

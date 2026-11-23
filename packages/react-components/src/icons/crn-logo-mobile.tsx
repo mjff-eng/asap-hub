@@ -2,8 +2,8 @@
 
 const asapCrnLogoMobile = (
   <svg
-    width="74"
-    height="32"
+    width="4.625rem"
+    height="2rem"
     viewBox="0 0 74 32"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

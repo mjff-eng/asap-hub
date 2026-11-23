@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 
 import { FC } from 'react';
+import { remUnit } from '../pixels';
 
 const VIEW_BOX_SIZE = 24;
 const RENDERED_STROKE_PX = 1.5;
@@ -15,8 +16,8 @@ const CircleAlertIcon: FC<CircleAlertIconProps> = ({
   size = VIEW_BOX_SIZE,
 }) => (
   <svg
-    width={size}
-    height={size}
+    width={remUnit(size)}
+    height={remUnit(size)}
     viewBox={`0 0 ${VIEW_BOX_SIZE} ${VIEW_BOX_SIZE}`}
     fill="none"
     stroke={color}

@@ -11,7 +11,7 @@ import {
   aboutApproachDiagramMobileImage,
 } from '../images';
 import { mailToSupport } from '../mail';
-import { mobileScreen, rem } from '../pixels';
+import { mobileScreen, rem, remUnit, unitlessLineHeight } from '../pixels';
 
 const mobileQuery = `@media (max-width: ${mobileScreen.max}px)`;
 
@@ -43,8 +43,11 @@ const titleStyles = css({
 const eyebrowStyles = css({
   margin: 0,
   fontFamily: casFontFamily.body,
-  fontSize: rem(casTextStyles.body.bold.fontSize),
-  lineHeight: `${casTextStyles.body.bold.lineHeight}px`,
+  fontSize: remUnit(casTextStyles.body.bold.fontSize),
+  lineHeight: unitlessLineHeight(
+    casTextStyles.body.bold.fontSize,
+    casTextStyles.body.bold.lineHeight,
+  ),
   fontWeight: casTextStyles.body.bold.fontWeight,
   textTransform: 'uppercase',
   color: colour.foreground.primary,
@@ -86,8 +89,11 @@ const columnDividerStyles = css({
 const statementStyles = css({
   margin: 0,
   fontFamily: casFontFamily.heading,
-  fontSize: rem(casTextStyles.heading[6].regular.fontSize),
-  lineHeight: `${casTextStyles.heading[6].regular.lineHeight}px`,
+  fontSize: remUnit(casTextStyles.heading[6].regular.fontSize),
+  lineHeight: unitlessLineHeight(
+    casTextStyles.heading[6].regular.fontSize,
+    casTextStyles.heading[6].regular.lineHeight,
+  ),
   fontWeight: casTextStyles.heading[6].regular.fontWeight,
   color: colour.foreground.primary,
 });

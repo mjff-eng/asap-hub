@@ -6,7 +6,7 @@ interface UserIconProps {
 }
 
 const UserIcon: FC<UserIconProps> = ({ color = '#4D646B' }) => (
-  <svg width={24} height={24} viewBox="0 0 24 24" stroke={color}>
+  <svg width="1.5rem" height="1.5rem" viewBox="0 0 24 24" stroke={color}>
     <title>Profile</title>
     <g fill="none" fillRule="evenodd" strokeWidth={1.3}>
       <g strokeLinecap="round" strokeLinejoin="round">

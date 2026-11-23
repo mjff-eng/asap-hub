@@ -7,8 +7,8 @@ interface WarningProps {
 
 const Warning: FC<WarningProps> = ({ color = '#CE801A' }) => (
   <svg
-    width="24"
-    height="24"
+    width="1.5rem"
+    height="1.5rem"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

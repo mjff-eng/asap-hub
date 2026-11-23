@@ -2,8 +2,8 @@
 
 const dropdownChevron = (
   <svg
-    width="11px"
-    height="8px"
+    width="0.6875rem"
+    height="0.5rem"
     viewBox="0 0 11 8"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"

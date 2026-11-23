@@ -3,8 +3,8 @@
 const desktop = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={40}
-    height={37}
+    width="2.5rem"
+    height="2.3125rem"
     viewBox="0 0 40 37"
     fill="none"
   >

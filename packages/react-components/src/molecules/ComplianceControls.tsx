@@ -9,7 +9,7 @@ import {
 import { css } from '@emotion/react';
 import { DropdownButton, ExportButton, ExportTooltip } from '.';
 import { dropdownChevronIcon } from '../icons';
-import { rem, tabletScreen } from '../pixels';
+import { rem, remUnit, tabletScreen } from '../pixels';
 
 const countContainerStyles = css({
   display: 'flex',
@@ -21,7 +21,7 @@ const filterContainerStyles = css({
   alignItems: 'center',
   gap: rem(15),
   'span + svg': {
-    width: '11px',
+    width: remUnit(11),
     marginRight: '10px',
   },
   button: {

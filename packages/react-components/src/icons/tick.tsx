@@ -2,8 +2,8 @@
 
 const tick = (
   <svg
-    width={10}
-    height={10}
+    width="0.625rem"
+    height="0.625rem"
     viewBox="0 0 10 10"
     fill="#FFFF"
     version="1.1"

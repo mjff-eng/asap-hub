@@ -65,7 +65,9 @@ const initialsStyle = css({
 const textStyle = css(fontStyles, headlineStyles[4], {
   dominantBaseline: 'central',
   textAnchor: 'middle',
-  fontSize: '2.25em',
+  // In units of the 90 x 90 viewBox, so the initials keep their size relative
+  // to the circle whatever the browser font size setting
+  fontSize: 36,
 });
 
 const placeholderColorStyle = css({

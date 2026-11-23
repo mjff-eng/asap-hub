@@ -3,8 +3,8 @@
 const breadcrumbSeparator = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={6}
-    height={7}
+    width="0.375rem"
+    height="0.4375rem"
     viewBox="0 0 6 7"
     fill="none"
     aria-hidden="true"

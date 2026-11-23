@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { css, keyframes } from '@emotion/react';
 
 import { colour } from '../colors';
+import { remUnit } from '../pixels';
 
 const pulse = keyframes({
   '0%': { transform: 'scale(0.5)', opacity: 0.5 },
@@ -30,8 +31,8 @@ const LiveIcon: FC<LiveIconProps> = ({
   size = 24,
 }) => (
   <svg
-    width={size}
-    height={size}
+    width={remUnit(size)}
+    height={remUnit(size)}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

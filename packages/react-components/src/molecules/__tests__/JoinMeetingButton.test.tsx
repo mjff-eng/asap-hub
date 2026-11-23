@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { colour } from '../../colors';
-import { rem, tabletScreen } from '../../pixels';
+import { rem, remUnit, tabletScreen } from '../../pixels';
 import JoinMeetingButton from '../JoinMeetingButton';
 
 it('links to the meeting when the meeting link is valid', () => {
@@ -130,5 +130,5 @@ it('styles the missing link tooltip with the event page design', () => {
     'font-family',
     expect.stringMatching(/^'Nunito Sans', ?Roboto/),
   );
-  expect(tooltip.firstElementChild).toHaveStyleRule('font-size', rem(14));
+  expect(tooltip.firstElementChild).toHaveStyleRule('font-size', remUnit(14));
 });

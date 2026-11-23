@@ -16,7 +16,7 @@ it('applies the text margin', () => {
 it('renders the text in large font', () => {
   const { getByText } = render(<Headline4>text</Headline4>);
   const { fontSize } = getComputedStyle(getByText('text'));
-  expect(fontSize).toMatchInlineSnapshot(`"20px"`);
+  expect(fontSize).toMatchInlineSnapshot(`"1.25rem"`);
 });
 
 it('removes the text margin', () => {

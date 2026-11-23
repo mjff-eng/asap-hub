@@ -9,8 +9,8 @@ describe('Article icon', () => {
 
     const svg = container.querySelector('svg');
     expect(svg).toBeVisible();
-    expect(svg).toHaveAttribute('width', '24');
-    expect(svg).toHaveAttribute('height', '24');
+    expect(svg).toHaveAttribute('width', '1.5rem');
+    expect(svg).toHaveAttribute('height', '1.5rem');
 
     const path = container.querySelector('path');
     expect(path).toHaveAttribute('fill', '#4D646B');
@@ -23,8 +23,8 @@ describe('Article icon', () => {
 
     const svg = container.querySelector('svg');
     expect(svg).toBeVisible();
-    expect(svg).toHaveAttribute('width', '40');
-    expect(svg).toHaveAttribute('height', '40');
+    expect(svg).toHaveAttribute('width', '2.5rem');
+    expect(svg).toHaveAttribute('height', '2.5rem');
 
     const path = container.querySelector('path');
     expect(path).toHaveAttribute('fill', '#989898');

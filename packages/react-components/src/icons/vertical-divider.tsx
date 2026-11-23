@@ -2,8 +2,8 @@
 
 const verticalDivider = (
   <svg
-    width="1px"
-    height="16px"
+    width="0.0625rem"
+    height="1rem"
     viewBox="0 0 1 16"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"

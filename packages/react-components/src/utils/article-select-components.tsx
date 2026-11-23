@@ -9,7 +9,7 @@ import {
 import { Pill } from '../atoms';
 import { colour } from '../colors';
 import { article } from '../icons';
-import { rem } from '../pixels';
+import { rem, remUnit } from '../pixels';
 import { getMultiValueStyles } from '../select';
 import type { ResearchOutputOption } from './research-output-form';
 
@@ -34,8 +34,8 @@ const optionGridStyles = (showPill: boolean) =>
 
 const articleSelectIconStyles = css({
   svg: {
-    width: '18px',
-    height: '18px',
+    width: remUnit(18),
+    height: remUnit(18),
     paddingLeft: rem(3),
     paddingTop: rem(4.5),
     stroke: colour.foreground.primary,

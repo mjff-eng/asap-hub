@@ -1,7 +1,7 @@
 const tag = (
   <svg
-    width="42"
-    height="34"
+    width="2.625rem"
+    height="2.125rem"
     viewBox="0 0 42 34"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

@@ -1,7 +1,13 @@
 /* istanbul ignore file */
 
 const userIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="#00202C" width={24} height={24}>
+  <svg
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="#00202C"
+    width="1.5rem"
+    height="1.5rem"
+  >
     <title>People</title>
     <path
       fillRule="evenodd"

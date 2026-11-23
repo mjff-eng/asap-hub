@@ -16,7 +16,7 @@ import {
   infoCircleYellowIcon,
 } from '..';
 
-import { rem, mobileScreen, formTargetWidth } from '../pixels';
+import { rem, remUnit, mobileScreen, formTargetWidth } from '../pixels';
 import { Portal } from '../utils/portal';
 
 import { colourWithAlpha, colour } from '../colors';
@@ -77,7 +77,7 @@ export const itemContentStyles = (type: StatusType = 'default') =>
     columnGap: rem(15),
     padding: `${rem(4)} ${rem(14)}`,
     fontWeight: 'normal',
-    fontSize: '14px',
+    fontSize: remUnit(14),
     margin: `${rem(8)} ${rem(16)} !important`,
     backgroundColor: colour.background.info,
     color: colour.foreground.info,

@@ -1,4 +1,7 @@
+import { pixels } from '@asap-hub/react-components';
 import { FC } from 'react';
+
+const { remUnit } = pixels;
 
 interface ArticleIconProps {
   readonly color?: string;
@@ -10,8 +13,8 @@ const ArticleIcon: FC<ArticleIconProps> = ({
   size = 24,
 }) => (
   <svg
-    width={size}
-    height={size}
+    width={remUnit(size)}
+    height={remUnit(size)}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
