@@ -118,7 +118,7 @@ it('renders the navigation for active and inactive groups', () => {
     within(screen.getByRole('navigation', { name: 'tabs' }))
       .getAllByRole('listitem')
       .map(({ textContent }) => textContent),
-  ).toEqual(['About', 'Calendar', 'Upcoming Events (3)', 'Past Events (2)']);
+  ).toEqual(['About', 'Upcoming Events (3)', 'Past Events (2)']);
 
   rerender(<InterestGroupProfileHeader {...props} active={false} />);
   expect(

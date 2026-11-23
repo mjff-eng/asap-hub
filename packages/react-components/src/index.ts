@@ -360,7 +360,6 @@ export {
   ForgotPasswordPage,
   GlobalStyles,
   GoogleTagManager,
-  GroupProfileCalendar,
   InterestGroupProfileAbout,
   InterestGroupProfilePage,
   Layout,

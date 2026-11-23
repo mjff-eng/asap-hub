@@ -19,7 +19,6 @@ export const Normal = () => {
     'Active Tab',
     {
       About: 'about',
-      Calendar: 'calendar',
       Upcoming: 'upcoming',
       Past: 'past',
     },
@@ -27,7 +26,6 @@ export const Normal = () => {
   );
   const routes = {
     about: route.about({}).$,
-    calendar: route.calendar({}).$,
     upcoming: route.upcoming({}).$,
     past: route.past({}).$,
   };

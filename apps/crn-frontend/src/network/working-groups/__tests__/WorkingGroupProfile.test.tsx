@@ -392,7 +392,6 @@ describe('the outputs tab', () => {
       await userEvent.click(outputTab);
     });
 
-    // Wait for route to change to outputs tab
     await waitFor(() => {
       expect(router.state.location.pathname).toContain('/outputs');
     });
@@ -401,7 +400,6 @@ describe('the outputs tab', () => {
       /This working group hasn’t shared any research yet!/i,
     );
 
-    // // Wait for the empty state message to appear
     await waitFor(() => {
       expect(text).toBeVisible();
     });
@@ -411,28 +409,34 @@ describe('the outputs tab', () => {
 });
 
 describe('the calendar tab', () => {
-  it('can be switched to', async () => {
-    jest.useRealTimers();
-
+  it('is not shown', async () => {
     await renderWorkingGroupProfile();
-    await userEvent.click(
-      await screen.findByText(/calendar/i, { selector: 'nav a *' }),
-    );
-    expect(
-      await screen.findByText(/subscribe to this working group's calendar/i),
-    ).toBeVisible();
 
-    jest.useFakeTimers();
+    expect(await screen.findByRole('link', { name: 'About' })).toBeVisible();
+    expect(
+      screen.queryByRole('link', { name: 'Calendar' }),
+    ).not.toBeInTheDocument();
   });
 
-  it('cannot be switched to if the working group is inactive', async () => {
-    mockGetWorkingGroup.mockResolvedValueOnce({
-      ...createWorkingGroupResponse(),
-      complete: true,
-    });
-    await renderWorkingGroupProfile();
+  it('redirects the old calendar url to the about tab', async () => {
+    jest.useRealTimers();
 
-    expect(screen.queryByText('Calendar')).not.toBeInTheDocument();
+    const router = await renderWorkingGroupProfile(
+      {},
+      `${
+        network({}).workingGroups({}).workingGroup({ workingGroupId }).$
+      }/calendar`,
+    );
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe(
+        network({}).workingGroups({}).workingGroup({ workingGroupId }).about({})
+          .$,
+      );
+      expect(screen.getByRole('link', { name: 'About' })).toHaveClass('active');
+    });
+
+    jest.useFakeTimers();
   });
 });
 
@@ -449,18 +453,12 @@ describe('the upcoming events tab', () => {
     jest.useFakeTimers();
   });
   it('cannot be switched to if the group is inactive', async () => {
-    await renderWorkingGroupProfile({
-      ...createWorkingGroupResponse(),
-      workingGroups: [
-        {
-          active: false,
-          id: '123',
-          name: 'test',
-          role: 'Chair',
-        },
-      ],
-    });
-    expect(screen.queryByText('Upcoming Events')).not.toBeInTheDocument();
+    await renderWorkingGroupProfile({}, undefined, { complete: true });
+
+    expect(await screen.findByRole('link', { name: 'About' })).toBeVisible();
+    expect(
+      screen.queryByRole('link', { name: /upcoming events/i }),
+    ).not.toBeInTheDocument();
   });
 });
 

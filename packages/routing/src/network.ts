@@ -131,14 +131,13 @@ const resourceTeams = route('/resource-teams', {}, {});
 
 const interestGroup = (() => {
   const about = route('/about', {}, {});
-  const calendar = route('/calendar', {}, {});
   const upcoming = route('/upcoming', {}, {});
   const past = route('/past', {}, {});
 
   return route(
     '/:interestGroupId',
     { interestGroupId: stringParser },
-    { about, calendar, upcoming, past },
+    { about, upcoming, past },
   );
 })();
 const interestGroups = route('/interest-groups', {}, { interestGroup });
@@ -153,7 +152,6 @@ const workingGroup = (() => {
     {},
   );
   const duplicateOutput = route('/duplicate/:id', { id: stringParser }, {});
-  const calendar = route('/calendar', {}, {});
   const upcoming = route('/upcoming', {}, {});
   const past = route('/past', {}, {});
 
@@ -166,7 +164,6 @@ const workingGroup = (() => {
       duplicateOutput,
       outputs,
       draftOutputs,
-      calendar,
       upcoming,
       past,
     },

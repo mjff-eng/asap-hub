@@ -115,7 +115,6 @@ const InterestGroupProfileHeader: React.FC<InterestGroupProfileHeaderProps> = ({
         nav={
           <TabNav>
             <TabLink href={route.about({}).$}>About</TabLink>
-            {active && <TabLink href={route.calendar({}).$}>Calendar</TabLink>}
             {active && (
               <TabLink
                 href={route.upcoming({}).$ + queryParamString(searchQuery)}

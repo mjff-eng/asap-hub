@@ -36,7 +36,6 @@ export { default as ExpertiseAndResourcesModal } from './ExpertiseAndResourcesMo
 export { default as ForgotPasswordPage } from './ForgotPasswordPage';
 export { default as GlobalStyles } from './GlobalStyles';
 export { default as GoogleTagManager } from './GoogleTagManager';
-export { default as GroupProfileCalendar } from './GroupProfileCalendar';
 export { default as InterestGroupProfileAbout } from './InterestGroupProfileAbout';
 export { default as InterestGroupProfileHeader } from './InterestGroupProfileHeader';
 export { default as InterestGroupProfilePage } from './InterestGroupProfilePage';
