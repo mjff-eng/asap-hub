@@ -94,7 +94,7 @@ export const layoutStyles = {
     display: 'none',
   },
 } as const;
-const textStyle = ({
+export const textStyle = ({
   family,
   fontSize,
   lineHeight,

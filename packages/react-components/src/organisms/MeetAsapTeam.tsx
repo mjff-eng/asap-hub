@@ -11,12 +11,13 @@ import {
   Headline2,
   Headline3,
 } from '../atoms';
-import { casFontFamily, casTextStyles } from '../cas-tokens.generated';
+import { CasTextStyle, casTextStyles } from '../cas-tokens.generated';
 import { colour } from '../colors';
 import { chevronDownIcon, mailIcon } from '../icons';
 import { createMailTo } from '../mail';
 import { SearchField } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
+import { textStyle } from '../text';
 
 const MEMBERS_LIMIT = 10;
 const ALL_MATCHING_AREAS = 'all-matching-areas';
@@ -24,18 +25,7 @@ const ALL_MATCHING_AREAS = 'all-matching-areas';
 const mobileQuery = `@media (max-width: ${tabletScreen.max}px)`;
 const desktopQuery = `@media (min-width: ${tabletScreen.max + 1}px)`;
 
-type TextStyle = {
-  readonly fontSize: number;
-  readonly lineHeight: number;
-  readonly fontWeight: number;
-};
-const text = ({ fontSize, lineHeight, fontWeight }: TextStyle) => ({
-  margin: 0,
-  fontFamily: casFontFamily.body,
-  fontSize: rem(fontSize),
-  lineHeight: `${lineHeight}px`,
-  fontWeight,
-});
+const text = (style: CasTextStyle) => ({ margin: 0, ...textStyle(style) });
 
 const buttonResetStyles = css({
   margin: 0,
@@ -139,7 +129,6 @@ const mobileAreasStyles = css({
 });
 
 const mobileAreasHeadingStyles = css(text(casTextStyles.heading[6].semibold), {
-  fontFamily: casFontFamily.heading,
   color: colour.foreground.primary,
 });
 
@@ -347,7 +336,6 @@ const emptyStateStyles = css({
 });
 
 const emptyStateTitleStyles = css(text(casTextStyles.heading[5].bold), {
-  fontFamily: casFontFamily.heading,
   color: colour.foreground.primary,
 });
 
