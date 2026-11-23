@@ -69,7 +69,7 @@ const useEventCardToast = ({
       return {
         toastContent: 'The event has been cancelled.',
         type: 'alert',
-        ...(hasFinished ? { accent: 'inactive' } : {}),
+        ...(hasFinished ? { accent: 'neutral200' } : {}),
       };
     }
     if (hasStarted && !hasFinished) {
