@@ -193,6 +193,24 @@ describe('Discover data provider', () => {
       expect(memberIds).toEqual(['area-user-1', 'area-user-2', 'area-user-3']);
     });
 
+    test('sorts missing members with the same first name by last name', async () => {
+      const memberIds = await fetchMemberIds({
+        membersCollection: { items: [] },
+        ...membersOf([
+          getContentfulGraphqlAsapAreaMembership({
+            id: 'area-user-2',
+            lastName: 'Smith',
+          }),
+          getContentfulGraphqlAsapAreaMembership({
+            id: 'area-user-1',
+            lastName: 'Adams',
+          }),
+        ]),
+      });
+
+      expect(memberIds).toEqual(['area-user-1', 'area-user-2']);
+    });
+
     test('leaves out people in the Members field who no longer have the area', async () => {
       const memberIds = await fetchMemberIds(
         membersOf([getContentfulGraphqlAsapAreaMembership()]),
