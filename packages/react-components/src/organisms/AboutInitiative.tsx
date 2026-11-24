@@ -181,7 +181,7 @@ const AboutInitiative: React.FC = () => (
         </div>
       </div>
     </Card>
-    <Card padding={false} overrideStyles={cardStyles}>
+    <Card shadow={false} padding={false} overrideStyles={cardStyles}>
       <div css={titleStyles}>
         <Headline2 styleAsHeading={4} noMargin>
           Management and Implementation
