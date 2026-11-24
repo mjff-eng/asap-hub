@@ -194,9 +194,6 @@ const WorkingGroupPageHeader: React.FC<WorkingGroupPageHeaderProps> = ({
             >
               About
             </TabLink>
-            {!complete && (
-              <TabLink href={route.calendar({}).$}>Calendar</TabLink>
-            )}
             <TabLink
               href={
                 network({})

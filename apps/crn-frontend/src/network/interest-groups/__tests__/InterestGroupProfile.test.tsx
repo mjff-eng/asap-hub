@@ -29,7 +29,7 @@ beforeEach(jest.clearAllMocks);
 
 const renderGroupProfile = async (
   interestGroupResponse = createInterestGroupResponse(),
-  { interestGroupId = interestGroupResponse.id } = {},
+  { interestGroupId = interestGroupResponse.id, subPath = '' } = {},
 ) => {
   mockGetInterestGroup.mockImplementation(async (id) =>
     id === interestGroupResponse.id ? interestGroupResponse : undefined,
@@ -42,9 +42,11 @@ const renderGroupProfile = async (
           <WhenReady>
             <MemoryRouter
               initialEntries={[
-                network({})
-                  .interestGroups({})
-                  .interestGroup({ interestGroupId }).$,
+                `${
+                  network({})
+                    .interestGroups({})
+                    .interestGroup({ interestGroupId }).$
+                }${subPath}`,
               ]}
             >
               <Routes>
@@ -132,21 +134,22 @@ it('generates a different deep link every time to avoid conflicts', async () => 
 });
 
 describe('the calendar tab', () => {
-  it('can be switched to', async () => {
-    const { findByText, findAllByText } = await renderGroupProfile(
-      createInterestGroupResponse(),
-    );
-    await userEvent.click(
-      await findByText(/calendar/i, { selector: 'nav a *' }),
-    );
-    expect(await findAllByText(/subscribe/i)).not.toHaveLength(0);
+  it('is not shown', async () => {
+    await renderGroupProfile(createInterestGroupResponse());
+    expect(await screen.findByRole('link', { name: 'About' })).toBeVisible();
+    expect(
+      screen.queryByRole('link', { name: 'Calendar' }),
+    ).not.toBeInTheDocument();
   });
-  it('cannot be switched to if the group is inactive', async () => {
-    const { queryByText } = await renderGroupProfile({
-      ...createInterestGroupResponse(),
-      active: false,
+
+  it('redirects the old calendar url to the about tab', async () => {
+    await renderGroupProfile(createInterestGroupResponse(), {
+      subPath: '/calendar',
     });
-    expect(await queryByText('Calendar')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: 'About' })).toHaveClass('active'),
+    );
+    expect(await screen.findAllByText(/description/i)).not.toHaveLength(0);
   });
 });
 
@@ -159,11 +162,14 @@ describe('the upcoming events tab', () => {
     expect(await findByText(/results/i)).toBeVisible();
   });
   it('cannot be switched to if the group is inactive', async () => {
-    const { queryByText } = await renderGroupProfile({
+    await renderGroupProfile({
       ...createInterestGroupResponse(),
       active: false,
     });
-    expect(await queryByText('Upcoming Events')).not.toBeInTheDocument();
+    expect(await screen.findByRole('link', { name: 'About' })).toBeVisible();
+    expect(
+      screen.queryByRole('link', { name: /upcoming events/i }),
+    ).not.toBeInTheDocument();
   });
 });
 
@@ -228,6 +234,5 @@ it('renders the not-found page when the interest group is not found', async () =
     expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
   });
 
-  // This covers line 94: return <NotFoundPage />;
   expect(await screen.findByText(/sorry.+page/i)).toBeVisible();
 });

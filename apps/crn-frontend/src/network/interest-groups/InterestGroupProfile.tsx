@@ -1,5 +1,4 @@
 import { FC, lazy, useEffect, useState } from 'react';
-import {} from 'react-router';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -15,13 +14,10 @@ import { useInterestGroupById } from './state';
 
 const loadAbout = () =>
   import(/* webpackChunkName: "network-group-about" */ './About');
-const loadCalendar = () =>
-  import(/* webpackChunkName: "network-group-calendar" */ './Calendar');
 const loadEventsList = () =>
   import(/* webpackChunkName: "network-events" */ '../EventsEmbedList');
 
 const About = lazy(loadAbout);
-const Calendar = lazy(loadCalendar);
 
 type InterestGroupProfileProps = {
   currentTime: Date;
@@ -38,7 +34,7 @@ const InterestGroupProfile: FC<InterestGroupProfileProps> = ({
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    loadAbout().then(loadCalendar).then(loadEventsList);
+    loadAbout().then(loadEventsList);
   }, []);
 
   const [upcomingEvents, pastEvents] = useUpcomingAndPastEvents(currentTime, {
@@ -72,12 +68,6 @@ const InterestGroupProfile: FC<InterestGroupProfileProps> = ({
             <About
               interestGroup={interestGroup}
               interestGroupTeamsElementId={groupTeamsElementId}
-            />
-          )}
-          Calendar={() => (
-            <Calendar
-              calendars={interestGroup.calendars}
-              groupType="interest"
             />
           )}
           currentTime={currentTime}

@@ -17,7 +17,6 @@ type OptionalPaths = 'calendar' | 'outputs' | 'draftOutputs' | 'metrics';
 
 type ProfileSwitchProps = {
   About: FC;
-  Calendar?: FC;
   currentTime: Date;
   displayName: string;
   eventConstraint: EventConstraint;
@@ -31,7 +30,6 @@ type ProfileSwitchProps = {
 
 const ProfileSwitch: FC<ProfileSwitchProps> = ({
   About,
-  Calendar,
   currentTime,
   displayName,
   eventConstraint,
@@ -56,14 +54,10 @@ const ProfileSwitch: FC<ProfileSwitchProps> = ({
             element={<Frame title="Metrics">{Metrics}</Frame>}
           />
         )}
-        {isActive && Calendar && (
+        {paths.calendar && (
           <Route
             path={paths.calendar}
-            element={
-              <Frame title="Calendar">
-                <Calendar />
-              </Frame>
-            }
+            element={<Navigate to={`../${paths.about}`} replace />}
           />
         )}
         {Outputs && (

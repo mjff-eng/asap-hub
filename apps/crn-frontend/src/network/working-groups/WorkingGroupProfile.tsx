@@ -22,8 +22,6 @@ import { useWorkingGroupById } from './state';
 
 const loadAbout = () =>
   import(/* webpackChunkName: "network-working-group-about" */ './About');
-const loadCalendar = () =>
-  import(/* webpackChunkName: "network-working-group-calendar" */ './Calendar');
 const loadOutputs = () =>
   import(/* webpackChunkName: "network-working-group-outputs" */ './Outputs');
 const loadWorkingGroupOutput = () =>
@@ -32,7 +30,6 @@ const loadWorkingGroupOutput = () =>
   );
 
 const About = lazy(loadAbout);
-const Calendar = lazy(loadCalendar);
 const Outputs = lazy(loadOutputs);
 const WorkingGroupOutput = lazy(loadWorkingGroupOutput);
 
@@ -79,10 +76,7 @@ const WorkingGroupProfile: FC<WorkingGroupProfileProps> = ({ currentTime }) => {
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    loadAbout()
-      .then(loadCalendar)
-      .then(loadOutputs)
-      .then(loadWorkingGroupOutput);
+    loadAbout().then(loadOutputs).then(loadWorkingGroupOutput);
   }, []);
 
   const [upcomingEventsResult, pastEventsResult] = useUpcomingAndPastEvents(
@@ -161,12 +155,6 @@ const WorkingGroupProfile: FC<WorkingGroupProfileProps> = ({ currentTime }) => {
                       }
                       membersListElementId={membersListElementId}
                       workingGroup={workingGroup}
-                    />
-                  )}
-                  Calendar={() => (
-                    <Calendar
-                      calendars={workingGroup.calendars}
-                      groupType="working"
                     />
                   )}
                   DraftOutputs={
