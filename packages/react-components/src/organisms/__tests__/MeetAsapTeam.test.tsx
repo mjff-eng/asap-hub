@@ -44,6 +44,9 @@ const areas = [
 const sidebar = () => within(screen.getByRole('navigation', { name: 'Areas' }));
 const search = (query: string) =>
   userEvent.type(screen.getByRole('searchbox'), query);
+const openPicker = (name: string) =>
+  userEvent.click(screen.getByRole('button', { name, expanded: false }));
+const sheet = () => within(screen.getByRole('dialog', { name: 'Areas' }));
 
 it('opens the first area by default', () => {
   render(<MeetAsapTeam areas={areas} />);
@@ -78,17 +81,48 @@ it('opens another area from the sidebar', async () => {
   ).not.toBeInTheDocument();
 });
 
-it('opens another area from the mobile select', async () => {
+it('opens another area from the mobile area picker', async () => {
   render(<MeetAsapTeam areas={areas} />);
 
-  await userEvent.selectOptions(
-    screen.getByRole('combobox', { name: 'Areas' }),
-    'leads',
+  await openPicker('Events (2)');
+
+  expect(
+    sheet().getByRole('button', { name: 'Events (2)', expanded: true }),
+  ).toBeVisible();
+  expect(
+    sheet()
+      .getAllByRole('listitem')
+      .map((item) => item.textContent),
+  ).toEqual(['Programmatic Leads (2)', 'Research Operations (1)']);
+
+  await userEvent.click(
+    sheet().getByRole('button', { name: 'Programmatic Leads (2)' }),
   );
 
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   expect(
     screen.getByRole('heading', { name: 'Programmatic Leads' }),
   ).toBeVisible();
+});
+
+it('closes the mobile area picker without changing the area', async () => {
+  render(<MeetAsapTeam areas={areas} />);
+
+  await openPicker('Events (2)');
+  await userEvent.keyboard('{Escape}');
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+  await openPicker('Events (2)');
+  await userEvent.click(screen.getByRole('button', { name: 'Close' }));
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+  await openPicker('Events (2)');
+  await userEvent.click(
+    sheet().getByRole('button', { name: 'Events (2)', expanded: true }),
+  );
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+  expect(screen.getByRole('heading', { name: 'Events' })).toBeVisible();
 });
 
 it('renders the primary and secondary emails and copies them', async () => {
@@ -195,17 +229,28 @@ it('filters the results to an area pill clicked on a result', async () => {
   expect(screen.getByText(/in Programmatic Leads/)).toBeVisible();
 });
 
-it('filters the results from the mobile select during search', async () => {
+it('filters the results from the mobile area picker during search', async () => {
   render(<MeetAsapTeam areas={areas} />);
 
   await search('sar');
-  const select = screen.getByRole('combobox', { name: 'Areas' });
-  expect(select).toHaveValue('all-matching-areas');
+  await openPicker('All matching areas (2)');
 
-  await userEvent.selectOptions(select, 'events');
+  expect(
+    sheet()
+      .getAllByRole('button')
+      .filter((button) => !button.hasAttribute('aria-expanded'))
+      .map((button) => button.textContent),
+  ).toEqual(['Events (1)', 'Programmatic Leads (2)']);
+  expect(sheet().getByText('No matches in')).toBeVisible();
+  expect(sheet().getByText('Research Operations')).toBeVisible();
+
+  await userEvent.click(sheet().getByRole('button', { name: 'Events (1)' }));
   expect(screen.getByText(/in Events/)).toBeVisible();
 
-  await userEvent.selectOptions(select, 'all-matching-areas');
+  await openPicker('Events (1)');
+  await userEvent.click(
+    sheet().getByRole('button', { name: 'All matching areas (2)' }),
+  );
   expect(screen.getByText('2 people match')).toBeVisible();
 });
 

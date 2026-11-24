@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { AsapAreaMember, AsapAreaResponse } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import {
   Anchor,
@@ -10,10 +10,11 @@ import {
   CopyButton,
   Headline2,
   Headline3,
+  Overlay,
 } from '../atoms';
 import { CasTextStyle, casTextStyles } from '../cas-tokens.generated';
 import { colour } from '../colors';
-import { chevronDownIcon, mailIcon } from '../icons';
+import { chevronDownIcon, chevronUpIcon, mailIcon } from '../icons';
 import { createMailTo } from '../mail';
 import { SearchField } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
@@ -132,33 +133,94 @@ const mobileAreasHeadingStyles = css(text(casTextStyles.heading[6].semibold), {
   color: colour.foreground.primary,
 });
 
-const selectWrapperStyles = css({
-  position: 'relative',
-  svg: {
-    position: 'absolute',
-    right: 0,
-    top: '50%',
-    width: rem(20),
-    height: rem(20),
-    transform: 'translateY(-50%)',
-    pointerEvents: 'none',
+const pickerTriggerStyles = css(
+  buttonResetStyles,
+  text(casTextStyles.body.bold),
+  {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: rem(16),
+    boxSizing: 'border-box',
+    width: '100%',
+    padding: `${rem(12)} 0`,
+    color: colour.foreground.primary,
+    span: {
+      display: 'flex',
+      flexShrink: 0,
+    },
+    svg: {
+      width: rem(20),
+      height: rem(20),
+    },
   },
-});
-
-const selectStyles = css(text(casTextStyles.body.bold), {
-  boxSizing: 'border-box',
-  width: '100%',
-  padding: `${rem(12)} ${rem(32)} ${rem(12)} 0`,
-  appearance: 'none',
-  color: colour.foreground.primary,
-  backgroundColor: colour.background.primary,
-  border: 'none',
-  cursor: 'pointer',
-});
+);
 
 const mobileDividerStyles = css({
   margin: `0 ${rem(-24)}`,
   borderBottom: `1px solid ${colour.border.card.default}`,
+});
+
+const sheetContainerStyles = css({
+  position: 'fixed',
+  inset: 0,
+  zIndex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-end',
+});
+
+const sheetOverlayStyles = css({
+  position: 'absolute',
+  inset: 0,
+});
+
+const sheetStyles = css({
+  position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
+  maxHeight: '80vh',
+  backgroundColor: colour.background.primary,
+});
+
+const sheetHeaderStyles = css(pickerTriggerStyles, {
+  padding: rem(24),
+  borderBottom: `1px solid ${colour.border.card.default}`,
+});
+
+const sheetBodyStyles = css({
+  overflowY: 'auto',
+  padding: `${rem(16)} 0 ${rem(24)}`,
+});
+
+const sheetListStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: rem(8),
+  margin: 0,
+  padding: `0 ${rem(24)}`,
+  listStyle: 'none',
+});
+
+const sheetOptionStyles = css(areaButtonStyles, {
+  minHeight: rem(64),
+});
+
+const noMatchesStyles = css({
+  padding: `${rem(16)} ${rem(24)} 0`,
+  ul: {
+    margin: 0,
+    padding: 0,
+    listStyle: 'none',
+  },
+  li: {
+    ...text(casTextStyles.caption.regular),
+    color: colour.foreground.tertiary,
+  },
+});
+
+const noMatchesHeadingStyles = css(text(casTextStyles.caption.bold), {
+  color: colour.foreground.quaternary,
 });
 
 const contentStyles = css({
@@ -504,6 +566,99 @@ const SearchResults: React.FC<{
     </div>
   );
 
+type AreaOption = {
+  readonly id: string;
+  readonly label: string;
+  readonly onSelect: () => void;
+};
+
+const AreaPicker: React.FC<{
+  readonly options: AreaOption[];
+  readonly currentId?: string;
+  readonly unmatchedAreas: AsapAreaResponse[];
+}> = ({ options, currentId, unmatchedAreas }) => {
+  const [open, setOpen] = useState(false);
+  const current = options.find((option) => option.id === currentId);
+
+  useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const closeOnEscape = (event: KeyboardEvent) =>
+      event.key === 'Escape' && setOpen(false);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [open]);
+
+  return (
+    <>
+      <button
+        type="button"
+        css={pickerTriggerStyles}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        onClick={() => setOpen(true)}
+      >
+        {current?.label}
+        <span aria-hidden="true">{chevronDownIcon}</span>
+      </button>
+      {open && (
+        <div css={sheetContainerStyles}>
+          <div css={sheetOverlayStyles}>
+            <Overlay onClick={() => setOpen(false)} />
+          </div>
+          <div role="dialog" aria-label="Areas" css={sheetStyles}>
+            <button
+              type="button"
+              css={sheetHeaderStyles}
+              aria-expanded
+              onClick={() => setOpen(false)}
+            >
+              {current?.label}
+              <span aria-hidden="true">{chevronUpIcon}</span>
+            </button>
+            <div css={sheetBodyStyles}>
+              <ul css={sheetListStyles}>
+                {options
+                  .filter((option) => option.id !== currentId)
+                  .map((option) => (
+                    <li key={option.id}>
+                      <button
+                        type="button"
+                        css={sheetOptionStyles}
+                        onClick={() => {
+                          option.onSelect();
+                          setOpen(false);
+                        }}
+                      >
+                        {option.label}
+                      </button>
+                    </li>
+                  ))}
+              </ul>
+              {unmatchedAreas.length > 0 && (
+                <div css={noMatchesStyles}>
+                  <p css={noMatchesHeadingStyles}>No matches in</p>
+                  <ul>
+                    {unmatchedAreas.map((area) => (
+                      <li key={area.id}>{area.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
 type MeetAsapTeamProps = {
   readonly areas: ReadonlyArray<AsapAreaResponse>;
 };
@@ -631,37 +786,39 @@ const MeetAsapTeam: React.FC<MeetAsapTeamProps> = ({ areas }) => {
         </nav>
         <div css={mobileAreasStyles}>
           <p css={mobileAreasHeadingStyles}>Areas</p>
-          <div css={selectWrapperStyles}>
-            <select
-              css={selectStyles}
-              aria-label="Areas"
-              value={
+          <div>
+            <AreaPicker
+              options={[
+                ...(isSearching
+                  ? [
+                      {
+                        id: ALL_MATCHING_AREAS,
+                        label: `All matching areas (${matches.length})`,
+                        onSelect: showAllMatches,
+                      },
+                    ]
+                  : []),
+                ...areas
+                  .filter(
+                    (area) => !isSearching || matchCountByArea.has(area.id),
+                  )
+                  .map((area) => ({
+                    id: area.id,
+                    label: areaLabel(area),
+                    onSelect: () => openArea(area.id),
+                  })),
+              ]}
+              currentId={
                 isSearching
                   ? searchArea?.id ?? ALL_MATCHING_AREAS
                   : selectedArea?.id
               }
-              onChange={({ target: { value } }) =>
-                value === ALL_MATCHING_AREAS
-                  ? showAllMatches()
-                  : openArea(value)
+              unmatchedAreas={
+                isSearching
+                  ? areas.filter((area) => !matchCountByArea.has(area.id))
+                  : []
               }
-            >
-              {isSearching && (
-                <option value={ALL_MATCHING_AREAS}>
-                  {`All matching areas (${matches.length})`}
-                </option>
-              )}
-              {areas.map((area) => (
-                <option
-                  key={area.id}
-                  value={area.id}
-                  disabled={isSearching && !matchCountByArea.has(area.id)}
-                >
-                  {areaLabel(area)}
-                </option>
-              ))}
-            </select>
-            {chevronDownIcon}
+            />
             <div css={mobileDividerStyles} />
           </div>
         </div>
