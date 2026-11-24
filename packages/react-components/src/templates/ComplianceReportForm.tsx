@@ -16,7 +16,11 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { Button, Card, Paragraph } from '../atoms';
 import { GlobeIcon } from '../icons';
-import { defaultPageLayoutPaddingStyle } from '../layout';
+import {
+  defaultContentTopPadding,
+  contentWidthStyles,
+  pageMarginStyles,
+} from '../layout';
 import {
   LabeledDropdown,
   LabeledTextEditor,
@@ -27,21 +31,20 @@ import { ConfirmModal } from '../organisms';
 import { mobileScreen, rem } from '../pixels';
 import { Option } from '../select';
 
-const mainStyles = css({
+const mainStyles = css(pageMarginStyles.crn, {
   display: 'flex',
   justifyContent: 'center',
-  padding: defaultPageLayoutPaddingStyle,
+  paddingTop: defaultContentTopPadding,
+  paddingBottom: defaultContentTopPadding,
 });
 
 const cardStyles = css({
   padding: `${rem(32)} ${rem(24)}`,
 });
 
-const contentStyles = css({
+const contentStyles = css(contentWidthStyles, {
   display: 'grid',
   gridTemplateColumns: '1fr',
-  width: '100%',
-  maxWidth: rem(800),
   justifyContent: 'center',
   gridAutoFlow: 'row',
   rowGap: rem(36),

@@ -5,6 +5,7 @@ import React, { Fragment } from 'react';
 import { Divider, Link } from '../atoms';
 import { colour } from '../colors';
 import { rem, tabletScreen } from '../pixels';
+import { pageGutter } from '../layout';
 
 const titleStyle = css({
   fontWeight: 'bold',
@@ -36,6 +37,7 @@ const listItemStyle = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     gridAutoFlow: 'column',
     gridTemplateColumns: '1fr 1fr',
+    columnGap: pageGutter,
 
     '&:not(:first-of-type)': {
       gridTemplateRows: '1fr',

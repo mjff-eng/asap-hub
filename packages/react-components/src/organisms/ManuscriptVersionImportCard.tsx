@@ -6,7 +6,7 @@ import { Card, Headline3, Paragraph, Pill } from '../atoms';
 import { mobileScreen, rem } from '../pixels';
 import { colour } from '../colors';
 import { ThemeVariant } from '../theme';
-import { contentSidePaddingWithNavigation } from '../layout';
+import { contentWidthStyles, pageMarginStyles } from '../layout';
 
 const container = css({
   display: 'grid',
@@ -39,15 +39,12 @@ export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
     ':active': { stroke: colour.foreground['primary-inverse'] },
   }),
 };
-const mainStyles = css({
-  padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} 0`,
+const mainStyles = css(pageMarginStyles.crn, {
+  paddingTop: rem(36),
   display: 'grid',
-  justifyContent: 'center',
 });
 
-const wrapperStyles = css({
-  maxWidth: rem(800),
-});
+const wrapperStyles = contentWidthStyles;
 
 const cardStyles = css({
   background: colour.neutral[50],

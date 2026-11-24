@@ -3,11 +3,12 @@ import { css } from '@emotion/react';
 import { BannerCard } from '../molecules';
 import { Display, Paragraph, Link } from '../atoms';
 import { rem } from '../pixels';
-import { contentSidePaddingWithoutNavigation } from '../layout';
+import { pageMarginStyles } from '../layout';
 
-const styles = css({
+const styles = css(pageMarginStyles.crn, {
   height: '100%',
-  padding: `${rem(24)} ${contentSidePaddingWithoutNavigation()}`,
+  paddingTop: rem(24),
+  paddingBottom: rem(24),
   maxWidth: rem(480),
 
   display: 'grid',

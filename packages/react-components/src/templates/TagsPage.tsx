@@ -8,7 +8,9 @@ const TagsPage: React.FC<
 > = ({ children, ...props }) => (
   <article>
     <TagsPageHeader {...props} />
-    <PageConstraints as="main">{children}</PageConstraints>
+    <PageConstraints width="content" as="main">
+      {children}
+    </PageConstraints>
   </article>
 );
 

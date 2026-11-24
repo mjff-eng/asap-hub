@@ -10,8 +10,10 @@ import {
   analytics,
 } from '@asap-hub/routing';
 
+import { casSidenav } from '../cas-layout';
 import {
   rem,
+  remUnit,
   vminLinearCalc,
   largeDesktopScreen,
   mobileScreen,
@@ -20,7 +22,7 @@ import {
 import { NavigationLink } from '../atoms';
 import RailTooltip from '../atoms/RailTooltip';
 import { colour } from '../colors';
-import { crossQuery, menuTransitionMs } from '../layout';
+import { mediaFrom, menuTransitionMs } from '../layout';
 import {
   networkIcon,
   discoverIcon,
@@ -32,6 +34,14 @@ import {
   ProjectIcon,
   collapseMenuIcon,
 } from '../icons';
+
+const railPadding = 16;
+const railItemPadding = 12;
+const railItemGap = 8;
+const collapsedRailPadding =
+  (casSidenav.closed - railItemPadding * 2 - lineHeight) / 2;
+const collapsedItemWidth = casSidenav.closed - collapsedRailPadding * 2;
+const railPaddingTransition = `padding ${menuTransitionMs}ms ease`;
 
 const listStyles = css({
   listStyle: 'none',
@@ -45,31 +55,44 @@ const listStyles = css({
     12,
     'px',
   )})`,
-  // 8px horizontal on desktop keeps the icon at a constant 8 + 16 = 24px from
-  // the rail edge in every state, and makes each collapsed item a 56px box.
-  [crossQuery]: {
-    paddingLeft: rem(8),
-    paddingRight: rem(8),
-  },
   li: {
     marginBottom: '3px',
   },
+  [mediaFrom.laptop]: {
+    paddingTop: remUnit(railPadding),
+    paddingLeft: remUnit(railPadding),
+    paddingRight: remUnit(railPadding),
+    transition: railPaddingTransition,
+    li: {
+      marginBottom: remUnit(railItemGap),
+    },
+    'li > a > div': {
+      padding: remUnit(railItemPadding),
+    },
+  },
 });
-// Fixed 56px so the item doesn't stretch when the rail widens for a scrollbar.
+const collapsedRailPaddingStyles = css({
+  [mediaFrom.laptop]: {
+    paddingLeft: remUnit(collapsedRailPadding),
+    paddingRight: remUnit(collapsedRailPadding),
+  },
+});
+// Fixed width so the item doesn't stretch when the rail widens for a scrollbar.
 const collapsedListStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     'li > a': {
       display: 'block',
-      width: rem(56),
+      width: remUnit(collapsedItemWidth),
     },
   },
 });
 
 const toggleContainerStyles = css({
   display: 'none',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'block',
-    padding: `0 ${rem(8)}`,
+    padding: `0 ${remUnit(railPadding)}`,
+    transition: railPaddingTransition,
   },
 });
 const dividerStyles = css({
@@ -79,10 +102,10 @@ const dividerStyles = css({
   maxWidth: '100%',
   margin: `${rem(12)} auto`,
 });
-// 16px left aligns it under the left-anchored icons rather than centring.
+// Aligned under the icons rather than centred.
 const collapsedDividerStyles = css({
   width: rem(24),
-  marginLeft: rem(16),
+  marginLeft: remUnit(railItemPadding),
   marginRight: 'auto',
 });
 const toggleButtonStyles = css({
@@ -104,10 +127,13 @@ const toggleButtonStyles = css({
   ':hover, :focus-visible': {
     backgroundColor: colour.background.tertiary,
   },
+  [mediaFrom.laptop]: {
+    padding: remUnit(railItemPadding),
+  },
 });
 const collapsedToggleButtonStyles = css({
-  [crossQuery]: {
-    width: rem(56),
+  [mediaFrom.laptop]: {
+    width: remUnit(collapsedItemWidth),
   },
 });
 const toggleButtonDisabledStyles = css({
@@ -136,7 +162,7 @@ const rotatedToggleIconStyles = css({
 });
 // Suppresses the browser's native <title> tooltip so only the styled one shows.
 const toggleIconNoTitleStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     svg: { pointerEvents: 'none' },
   },
 });
@@ -148,7 +174,7 @@ const labelFadeIn = keyframes({
   to: { opacity: 1 },
 });
 const labelFadeInStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     animation: `${labelFadeIn} 150ms ease-in backwards`,
   },
 });
@@ -174,7 +200,13 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
   const railSettled = collapsed && !animating;
   return (
     <nav>
-      <ul css={[listStyles, railSettled && collapsedListStyles]}>
+      <ul
+        css={[
+          listStyles,
+          collapsed && collapsedRailPaddingStyles,
+          railSettled && collapsedListStyles,
+        ]}
+      >
         <li>
           <NavigationLink
             href={network({}).$}
@@ -275,7 +307,9 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
         )}
       </ul>
       {onToggleCollapse && (
-        <div css={toggleContainerStyles}>
+        <div
+          css={[toggleContainerStyles, collapsed && collapsedRailPaddingStyles]}
+        >
           <hr css={[dividerStyles, collapsed && collapsedDividerStyles]} />
           <button
             type="button"

@@ -1,10 +1,11 @@
 import {
-  drawerQuery,
+  mediaBelow,
   NavigationLink as Link,
   pixels,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
+import { headerLinkStyles } from '../layout';
 
 const { rem } = pixels;
 
@@ -23,11 +24,14 @@ const NavigationLink: React.FC<ComponentProps<typeof Link>> = ({
 }) => (
   <>
     <span
-      css={css({
-        [drawerQuery]: {
-          display: 'none',
-        },
-      })}
+      css={[
+        headerLinkStyles,
+        css({
+          [mediaBelow.laptop]: {
+            display: 'none',
+          },
+        }),
+      ]}
     >
       <Link {...props} squareBorder>
         <span css={horizontalNavigationStyles}>
@@ -39,7 +43,7 @@ const NavigationLink: React.FC<ComponentProps<typeof Link>> = ({
     <span
       css={css({
         display: 'none',
-        [drawerQuery]: {
+        [mediaBelow.laptop]: {
           display: 'unset',
         },
       })}

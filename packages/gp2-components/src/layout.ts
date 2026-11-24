@@ -1,50 +1,61 @@
-import { pixels, colour } from '@asap-hub/react-components';
+import {
+  casHeader,
+  pixels,
+  colour,
+  mediaFrom,
+  pageContainerStyles,
+} from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 
 const {
   largeDesktopScreen,
   mobileScreen,
+  perRem,
   rem,
-  smallDesktopScreen,
+  remUnit,
   tabletScreen,
   vminLinearCalcClamped,
 } = pixels;
 
-export const smallDesktopQuery = `@media (min-width: ${
-  smallDesktopScreen.width
-}px) and (max-width: ${largeDesktopScreen.width - 1}px)`;
+// From the laptop breakpoint, where the navigation leaves the drawer, up to
+// the large desktop width. Both bounds are in em so they follow the browser
+// font size together with the navigation.
+export const smallDesktopQuery = `${mediaFrom.laptop} and (max-width: ${
+  (largeDesktopScreen.width - 1) / perRem
+}em)`;
 
-const headerMaxWidth = 748;
-const smallerScreenMaxMargin = 72;
+// A navigation link in the header, set on the element that wraps it. The
+// link's own vertical padding makes it taller than the header, so it takes
+// the header height instead and centres its content. The link is either an
+// anchor with the padding, or a router anchor around a div with the padding.
+export const headerLinkStyles = css({
+  '& > a, & > a > div': {
+    boxSizing: 'border-box',
+    height: remUnit(casHeader.gp2.height),
+    paddingTop: 0,
+    paddingBottom: 0,
+    display: 'flex',
+    alignItems: 'center',
+  },
+});
 
 export const mobileQuery = `@media (max-width: ${tabletScreen.width - 1}px)`;
 export const nonMobileQuery = `@media (min-width: ${tabletScreen.width}px)`;
-export const smallerScreenQuery = `@media (max-width: ${
-  headerMaxWidth + smallerScreenMaxMargin * 2 - 1
-}px)`;
+export const layoutContentVerticalPadding = vminLinearCalcClamped(
+  mobileScreen,
+  33,
+  tabletScreen,
+  48,
+  'px',
+);
 
-export const layoutContentStyles = {
-  width: headerMaxWidth,
-  padding: `${vminLinearCalcClamped(
-    mobileScreen,
-    33,
-    tabletScreen,
-    48,
-    'px',
-  )} 0`,
-  margin: `0 auto`,
-  [smallerScreenQuery]: {
-    maxWidth: headerMaxWidth,
-    width: 'auto',
-    margin: `0 ${vminLinearCalcClamped(
-      mobileScreen,
-      24,
-      tabletScreen,
-      smallerScreenMaxMargin,
-      'px',
-    )}`,
-  },
-};
+// The page content of every GP2 page: the GP2 page grid of the CAS Design
+// System (24px margins on mobile, 56px from tablet up, at most 900px wide and
+// centred) with the vertical padding shared by the pages.
+export const layoutContentStyles = css(pageContainerStyles.gp2, {
+  paddingTop: layoutContentVerticalPadding,
+  paddingBottom: layoutContentVerticalPadding,
+});
 
 export const detailHeaderStyles = css({
   display: 'flex',

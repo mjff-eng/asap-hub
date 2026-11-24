@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { contentSidePaddingWithoutNavigation } from '../layout';
+import { pageMarginStyles } from '../layout';
 import { Display, Link, Paragraph } from '../atoms';
 import {
   largeDesktopScreen,
@@ -10,10 +10,11 @@ import {
 } from '../pixels';
 import { BannerCard } from '../molecules';
 
-const layoutStyles = css({
+const layoutStyles = css(pageMarginStyles.crn, {
   flexGrow: 1,
   alignSelf: 'stretch',
-  padding: `${rem(24)} ${contentSidePaddingWithoutNavigation()}`,
+  paddingTop: rem(24),
+  paddingBottom: rem(24),
 
   display: 'grid',
   justifyContent: 'center',

@@ -21,13 +21,12 @@ import {
   mobileScreen,
   rem,
   vminLinearCalc,
-  smallDesktopScreen,
 } from '../pixels';
+import { mediaFrom } from '../layout';
 import { formatDateToTimezone } from '../date';
 import PageInfoContainer from './PageInfoContainer';
 
 const middleSizeQuery = '@media (min-width: 620px)';
-const bigSizeQuery = `@media (min-width: ${smallDesktopScreen.width}px)`;
 
 const containerStyles = css({
   display: 'grid',
@@ -50,7 +49,7 @@ const containerStyles = css({
     `,
   },
 
-  [bigSizeQuery]: {
+  [mediaFrom.laptop]: {
     grid: `
       "edit-personal-info personal-info personal-info avatar"
       "edit-contact-info  contact       social        avatar"
@@ -128,7 +127,7 @@ const avatarContainer = css({
   },
 
   // counteract the relativeAnchor left shift so the avatar stays flush right
-  [bigSizeQuery]: {
+  [mediaFrom.laptop]: {
     transform: `translateX(${rem(64)})`,
   },
 });
@@ -171,7 +170,7 @@ type UserProfileHeaderProps = Pick<
 const relativeAnchor = css({
   position: 'relative',
   left: 0,
-  [bigSizeQuery]: {
+  [mediaFrom.laptop]: {
     left: rem(-64),
   },
 });

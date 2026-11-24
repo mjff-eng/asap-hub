@@ -7,7 +7,7 @@ import { Divider, NavigationLink, Caption, Anchor } from '../atoms';
 import { UserIcon, feedbackIcon, logoutIcon } from '../icons';
 import { mailToFeedback } from '../mail';
 import { UserNavigationAssociationSection } from '../molecules';
-import { MAX_NAVIGATION_MENU_WIDTH, drawerQuery } from '../layout';
+import { MAX_NAVIGATION_MENU_WIDTH, mediaBelow } from '../layout';
 import { getProjectIcon } from '../utils';
 
 const containerStyles = css({
@@ -42,7 +42,7 @@ const bottomLinksStyles = css({
   padding: `${rem(12)} ${rem(12)} 0`,
   // Grey space below the footer links in the mobile drawer, so the fixed
   // cookie button has room and doesn't sit over them.
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     paddingBottom: rem(80),
   },
 });

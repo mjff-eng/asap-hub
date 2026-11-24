@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react';
 import { NavLink, useInRouterContext, useLocation } from 'react-router';
 import { activePrimaryStyles } from '../button';
 import { colour } from '../colors';
-import { crossQuery } from '../layout';
+import { mediaFrom } from '../layout';
 import { useBlockedClick } from '../navigation';
 import { lineHeight, rem } from '../pixels';
 import { isInternalLink } from '../utils';
@@ -41,19 +41,19 @@ const iconStyles = css({
   paddingRight: rem(16),
 });
 const collapsedIconStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     paddingRight: 0,
   },
 });
 // Suppresses the browser's native <title> tooltip so only the styled one shows.
 const iconNoTitleStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     svg: { pointerEvents: 'none' },
   },
 });
 
 const collapsedLabelStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'none',
   },
 });
@@ -63,7 +63,7 @@ const labelFadeIn = keyframes({
 });
 
 const labelFadeInStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     animation: `${labelFadeIn} 150ms ease-in backwards`,
   },
 });

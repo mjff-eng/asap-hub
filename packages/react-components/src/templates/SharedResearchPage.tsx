@@ -22,7 +22,9 @@ const SharedResearchPage: React.FC<SharedResearchPageProps> = ({
       onChangeFilter={onChangeFilter}
       filters={filters}
     />
-    <PageConstraints as="main">{children}</PageConstraints>
+    <PageConstraints width="content" as="main">
+      {children}
+    </PageConstraints>
   </article>
 );
 

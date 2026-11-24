@@ -1,6 +1,42 @@
-import { GlobalStyles, pixels } from '@asap-hub/react-components';
+import {
+  CasBreakpoint,
+  casBreakpoints,
+  GlobalStyles,
+} from '@asap-hub/react-components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Preview } from '@storybook/react-vite';
+
+// One viewport per CAS breakpoint, at the width of its Figma frame, which is
+// inside the breakpoint's range.
+const viewportSizes: Record<
+  CasBreakpoint,
+  { name: string; width: number; height: number }
+> = {
+  mobile: { name: 'Mobile', width: 393, height: 852 },
+  tablet: { name: 'Tablet', width: 800, height: 1024 },
+  laptop: { name: 'Laptop', width: 1280, height: 800 },
+  desktopL: { name: 'Desktop Large', width: 1440, height: 1080 },
+  desktopXL: { name: 'Desktop Extra Large', width: 1920, height: 1080 },
+};
+
+const breakpoints = Object.keys(casBreakpoints) as CasBreakpoint[];
+
+const viewportOptions = Object.fromEntries(
+  breakpoints.map((breakpoint, index) => {
+    const { name, width, height } = viewportSizes[breakpoint];
+    const next = breakpoints[index + 1];
+    const range = next
+      ? `${casBreakpoints[breakpoint]}–${casBreakpoints[next] - 1}px`
+      : `${casBreakpoints[breakpoint]}px +`;
+    return [
+      breakpoint,
+      {
+        name: `${name} · ${width}px (${range})`,
+        styles: { width: `${width}px`, height: `${height}px` },
+      },
+    ];
+  }),
+);
 
 const preview: Preview = {
   decorators: [
@@ -43,44 +79,13 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    viewport: {
-      options: {
-        mobile: {
-          name: 'Mobile',
-          styles: {
-            width: `${pixels.mobileScreen.width}px`,
-            height: `${pixels.mobileScreen.height}px`,
-          },
-        },
-        tablet: {
-          name: 'Tablet',
-          styles: {
-            width: `${pixels.tabletScreen.width}px`,
-            height: `${pixels.tabletScreen.height}px`,
-          },
-        },
-        smallDesktop: {
-          name: 'Small Desktop',
-          styles: {
-            width: `${pixels.smallDesktopScreen.width}px`,
-            height: `${pixels.smallDesktopScreen.height}px`,
-          },
-        },
-        largeDesktop: {
-          name: 'Large Desktop',
-          styles: {
-            width: `${pixels.largeDesktopScreen.width}px`,
-            height: `${pixels.largeDesktopScreen.height}px`,
-          },
-        },
-      },
-    },
+    viewport: { options: viewportOptions },
   },
 
   initialGlobals: {
     product: 'auto',
     viewport: {
-      value: 'smallDesktop',
+      value: 'laptop',
       isRotated: false,
     },
   },

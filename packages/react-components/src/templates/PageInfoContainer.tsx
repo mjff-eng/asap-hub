@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 import { colour } from '../colors';
-import PageConstraints from './PageConstraints';
+import PageConstraints, { PageWidth } from './PageConstraints';
 import { rem } from '../pixels';
 
 type PageInfoContainerProps = {
@@ -10,6 +10,7 @@ type PageInfoContainerProps = {
   nav?: ReactNode;
   breadcrumbs?: ReactNode;
   noPaddingBottom?: boolean;
+  width?: PageWidth;
 };
 
 const containerStyles = css({
@@ -33,12 +34,14 @@ const PageInfoContainer: React.FC<PageInfoContainerProps> = ({
   nav,
   breadcrumbs,
   noPaddingBottom = !!nav,
+  width,
 }) => (
   <PageConstraints
     unconstrainedStyles={containerStyles}
     as="div"
     noPaddingBottom={noPaddingBottom}
     noPaddingTop={!!breadcrumbs}
+    width={width}
   >
     {breadcrumbs && <div css={breadcrumbsContainerStyles}>{breadcrumbs}</div>}
     {children}

@@ -5,7 +5,7 @@ import { WorkingGroupResponse } from '@asap-hub/model';
 import { dashboard, network } from '@asap-hub/routing';
 import { useContext } from 'react';
 
-import { mobileScreen, rem, smallDesktopScreen } from '../pixels';
+import { mobileScreen, rem } from '../pixels';
 import {
   Link,
   Display,
@@ -43,7 +43,6 @@ const titleStyle = css({
   gap: rem(3),
   alignItems: 'flex-start',
   paddingBottom: rem(12),
-  maxWidth: rem(smallDesktopScreen.width),
 });
 
 const rowStyles = css({

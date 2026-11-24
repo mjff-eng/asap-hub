@@ -1,4 +1,4 @@
-import { crossQuery, Paragraph, pixels } from '@asap-hub/react-components';
+import { mediaFrom, Paragraph, pixels } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
@@ -25,7 +25,7 @@ const { rem } = pixels;
 const columnStyles = css({
   display: 'grid',
   gap: rem(32),
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     gridTemplateColumns: '1fr 1fr',
     rowGap: rem(32),
   },

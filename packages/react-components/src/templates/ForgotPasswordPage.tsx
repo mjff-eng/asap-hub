@@ -11,21 +11,24 @@ import {
   formTargetWidth,
   rem,
 } from '../pixels';
-import { contentSidePaddingWithoutNavigation } from '../layout';
+import { pageMarginStyles } from '../layout';
 import { colour } from '../colors';
 
-const styles = css({
+const verticalPadding = vminLinearCalc(
+  mobileScreen,
+  36,
+  largeDesktopScreen,
+  72,
+  'px',
+);
+
+const styles = css(pageMarginStyles.crn, {
   width: 'max-content',
   maxWidth: '100%',
 
   boxSizing: 'border-box',
-  padding: `${vminLinearCalc(
-    mobileScreen,
-    36,
-    largeDesktopScreen,
-    72,
-    'px',
-  )} ${contentSidePaddingWithoutNavigation()}`,
+  paddingTop: verticalPadding,
+  paddingBottom: verticalPadding,
 
   display: 'grid',
   gridTemplateColumns: '100%',

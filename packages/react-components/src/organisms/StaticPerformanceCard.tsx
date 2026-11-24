@@ -8,20 +8,17 @@ import {
   PercentageIcon,
   sadFaceIcon,
 } from '../icons';
-import { contentSidePaddingWithNavigation } from '../layout';
-import { rem, smallDesktopScreen } from '../pixels';
+import { mediaFrom } from '../layout';
+import { rem } from '../pixels';
 import CaptionCard from './CaptionCard';
 
 const containerStyles = css({
   display: 'grid',
-  gridTemplateColumns: 'repeat(4, auto)',
+  gridTemplateColumns: 'repeat(2, auto)',
   gap: rem(12),
   gridColumn: '1 / span 2',
-  [`@media (max-width: calc(${
-    smallDesktopScreen.width
-  }px + ${contentSidePaddingWithNavigation(2)}))`]: {
-    gridTemplateColumns: 'repeat(2, auto)',
-    gap: rem(12),
+  [mediaFrom.desktopL]: {
+    gridTemplateColumns: 'repeat(4, auto)',
   },
 });
 

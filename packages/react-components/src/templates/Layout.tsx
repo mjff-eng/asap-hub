@@ -18,8 +18,8 @@ import { colourWithAlpha, colour } from '../colors';
 import { MenuHeader, OnboardingFooter, ToastStack } from '../organisms';
 import { Overlay } from '../atoms';
 import {
-  crossQuery,
-  drawerQuery,
+  mediaFrom,
+  mediaBelow,
   networkContentTopPadding,
   menuTransitionMs,
   shortViewportQuery,
@@ -27,7 +27,8 @@ import {
 import { Loading } from '../molecules';
 import { usePrevious, useDismiss } from '../hooks';
 import { tagSearchIcon } from '../icons';
-import { rem } from '../pixels';
+import { rem, remUnit } from '../pixels';
+import { casSidenav } from '../cas-layout';
 import { Navigation } from '../atoms/NavigationLink';
 import { LoadingUserButton, LoadingMenu } from './LoadingLayout';
 import { useScrollToHash } from '../routing';
@@ -61,13 +62,9 @@ const OnMount: FC<{ onMount: () => void }> = ({ onMount }) => {
 
 const menuCollapsedStorageKey = 'asap-crn-menu-collapsed';
 
-// Fixed rail width when the desktop menu is collapsed (icon-only).
-const collapsedMenuWidth = 72;
 // Extra column width to host the scrollbar when the short-viewport rail
 // scrolls, so the bar sits beside the icons instead of squeezing them.
 const scrollbarAllowance = 16;
-// A length (not `max-content`) so the grid column can animate between states.
-const expandedMenuWidth = 268;
 
 export const styles = css({
   position: 'relative',
@@ -80,25 +77,27 @@ export const styles = css({
     "user-menu  content content"        1fr
     "footer     footer  footer"         auto   / max-content 1fr 72px`,
 
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     // Full-width top bar row so the logo doesn't shift as the sidebar collapses.
     grid: `
       "header     header   header"  max-content
       "main-menu  content  content" 1fr
-      "footer     footer   footer"  auto / ${rem(expandedMenuWidth)} 1fr 72px`,
+      "footer     footer   footer"  auto / ${remUnit(
+        casSidenav.open,
+      )} 1fr 72px`,
     transition: `grid-template-columns ${menuTransitionMs}ms ease`,
   },
 });
 // Desktop only; the mobile drawer overlays and ignores the column width.
 const collapsedStyles = css({
-  [crossQuery]: {
-    gridTemplateColumns: `${rem(collapsedMenuWidth)} 1fr 72px`,
+  [mediaFrom.laptop]: {
+    gridTemplateColumns: `${remUnit(casSidenav.closed)} 1fr 72px`,
   },
   // Widen the rail by the scrollbar strip when it scrolls, so the icons keep
   // their full width and stay centred.
   [shortViewportQuery]: {
-    gridTemplateColumns: `${rem(
-      collapsedMenuWidth + scrollbarAllowance,
+    gridTemplateColumns: `${remUnit(
+      casSidenav.closed + scrollbarAllowance,
     )} 1fr 72px`,
   },
 });
@@ -108,13 +107,13 @@ export const headerStyles = css({
 
   boxSizing: 'border-box',
   borderBottom: `1px solid ${colour.border.tertiary}`,
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'flex',
     alignItems: 'stretch',
   },
 });
 const headerMenuShownStyles = css({
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     borderBottom: '1px solid transparent', // box shadow only above drawer instead
   },
 });
@@ -122,7 +121,7 @@ const headerMenuShownStyles = css({
 export const contentStyles = css({
   gridRow: 'header-end / -2',
   gridColumn: '1 / -1',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     gridColumn: 'content',
     borderLeft: `1px solid ${colour.border.tertiary}`,
   },
@@ -140,7 +139,7 @@ const overlayStyles = css({
   gridColumn: '1 / -1',
 
   visibility: 'hidden',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'none',
   },
 });
@@ -149,7 +148,7 @@ const overlayMenuShownStyles = css({
 });
 
 export const userButtonStyles = css({
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     display: 'none',
   },
 
@@ -161,7 +160,7 @@ export const userButtonStyles = css({
   alignContent: 'center',
 
   // Sit at the right of the full-width header row, no dividing borders.
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     gridColumn: '2 / 3',
     gridRow: '1 / 2',
     justifySelf: 'end',
@@ -178,7 +177,7 @@ export const menuStyles = css({
   display: 'flex',
   flexDirection: 'column',
   maxWidth: '100vw',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     overflow: 'visible',
   },
   // Too short to fit the nav: scroll so every item is reachable, keeping the
@@ -189,7 +188,7 @@ export const menuStyles = css({
     overflowY: 'auto',
     paddingBottom: rem(72),
   },
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     maxWidth: rem(302),
     gridRow: `main-menu/-1`,
     gridColumn: 'main-menu/-2',
@@ -204,7 +203,7 @@ export const menuStyles = css({
   },
 });
 const menuMenuShownStyles = css({
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     visibility: 'visible',
     transform: 'translateX(0)',
     transition: `transform 250ms ease`,
@@ -215,7 +214,7 @@ const menuMenuShownStyles = css({
 const mainMenuStyles = css({
   gridArea: 'main-menu',
 
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     boxShadow: `0 -1px 0 ${colour.neutral[100]}`, // instead of header border bottom
     // Main nav gets 60% of the drawer height, the user nav 40%.
     flex: '3 3 0',
@@ -230,7 +229,7 @@ export const searchButtonAreaStyles = css({
   borderBottom: `1px solid ${colour.border.tertiary}`,
   borderLeft: `1px solid ${colour.border.tertiary}`,
   // The header spans full width on desktop, so pin this to the header row.
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     gridColumn: '3 / 4',
     gridRow: '1 / 2',
     zIndex: 1,
@@ -271,12 +270,12 @@ const userMenuStyles = css({
   backgroundColor: colour.background.primary,
   gridArea: 'user-menu',
   flexGrow: 1,
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     flex: '2 2 0',
     minHeight: 0,
     overflowY: 'auto',
   },
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     gridArea: 'content',
 
     display: 'none',
@@ -290,11 +289,11 @@ const userMenuStyles = css({
   },
 });
 const userMenuShownStyles = css({
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     backgroundColor: colour.background.tertiary,
   },
   // The 90vh cap and own scrollbar are for the desktop dropdown only.
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'unset',
     maxHeight: '95vh',
     overflowY: 'scroll',

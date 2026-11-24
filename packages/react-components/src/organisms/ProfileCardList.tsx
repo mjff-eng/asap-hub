@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 import { Link } from '../atoms';
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { editIcon } from '../icons';
 
 const CARDS_GAP = 32;
@@ -12,7 +13,7 @@ const containerStyles = css({
   flexFlow: 'column',
   gap: rem(CARDS_GAP),
 
-  [`@media (max-width: ${smallDesktopScreen.width - 1}px)`]: {
+  [mediaBelow.laptop]: {
     marginTop: rem(CARDS_GAP), // Leave space for the first card's pencil button
     gap: rem(CARDS_GAP * 3),
   },
@@ -33,7 +34,7 @@ const editButtonStyles = css({
   top: 0,
   left: `calc(100% + ${rem(CARDS_GAP)}  - ${rem(6.5)})`,
 
-  [`@media (max-width: ${smallDesktopScreen.width - 1}px)`]: {
+  [mediaBelow.laptop]: {
     top: 'unset',
     left: 'unset',
     right: 0,

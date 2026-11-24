@@ -8,16 +8,19 @@ import {
   rem,
   tabletScreen,
 } from '../pixels';
-import { contentSidePaddingWithNavigation } from '../layout';
+import { pageMarginStyles } from '../layout';
 
-const styles = css({
-  padding: `${vminLinearCalc(
-    mobileScreen,
-    36,
-    largeDesktopScreen,
-    72,
-    'px',
-  )} ${contentSidePaddingWithNavigation()}`,
+const verticalPadding = vminLinearCalc(
+  mobileScreen,
+  36,
+  largeDesktopScreen,
+  72,
+  'px',
+);
+
+const styles = css(pageMarginStyles.crn, {
+  paddingTop: verticalPadding,
+  paddingBottom: verticalPadding,
 
   display: 'grid',
   gridRowGap: rem(12),

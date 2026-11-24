@@ -11,6 +11,7 @@ import { hoverStyle } from './ImageLink';
 import { styles } from '../atoms/Link';
 import { hover } from './LinkHeadline';
 import UserAvatar from './UserAvatar';
+import { pageGutter } from '../layout';
 
 const containerStyles = css({
   margin: 0,
@@ -22,7 +23,7 @@ const containerStyles = css({
 const multiColumnContainerStyles = css({
   [`@media (min-width: ${tabletScreen.min}px)`]: {
     gridTemplateColumns: '1fr 1fr',
-    columnGap: rem(18),
+    columnGap: pageGutter,
   },
 });
 

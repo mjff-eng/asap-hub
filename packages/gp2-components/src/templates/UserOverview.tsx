@@ -1,5 +1,5 @@
 import { gp2 } from '@asap-hub/model';
-import { crossQuery, pixels } from '@asap-hub/react-components';
+import { mediaFrom, pixels } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import {
@@ -47,7 +47,7 @@ const containerStyles = css({
 const columnStyles = css({
   display: 'grid',
   gap: rem(32),
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     gridTemplateColumns: '1fr 1fr',
     rowGap: rem(32),
   },

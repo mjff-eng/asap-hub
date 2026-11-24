@@ -1,7 +1,7 @@
 import { gp2 as gp2Model } from '@asap-hub/model';
 import {
   Card,
-  crossQuery,
+  mediaFrom,
   LinkHeadline,
   pixels,
   TagList,
@@ -24,7 +24,7 @@ type ProjectCardProps = ComponentProps<typeof ProjectSummaryHeader> &
 const rowStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     flexDirection: 'row',
   },
 });
@@ -87,7 +87,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       css={[
         rowStyles,
         css({
-          [crossQuery]: {
+          [mediaFrom.laptop]: {
             gap: rem(32),
           },
           color: colour.foreground.tertiary,

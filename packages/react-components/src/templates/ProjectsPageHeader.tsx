@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { projects } from '@asap-hub/routing';
 
 import { Display, Paragraph, TabLink } from '../atoms';
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
 import { colour } from '../colors';
 import { SearchAndFilter } from '../organisms';
 import { TabNav } from '../molecules';
@@ -14,10 +14,7 @@ import {
 import { Option, Title } from '../organisms/CheckboxGroup';
 import PageInfoContainer from './PageInfoContainer';
 import PageConstraints from './PageConstraints';
-
-const descriptionStyles = css({
-  maxWidth: rem(smallDesktopScreen.width),
-});
+import { pageHeaderTextStyles } from '../layout';
 
 const projectTypeDescriptionStyles = css({
   marginBottom: rem(48),
@@ -60,6 +57,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
   return (
     <header>
       <PageInfoContainer
+        width="content"
         nav={
           <TabNav>
             <TabLink
@@ -105,7 +103,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
       >
         <div>
           <Display>Projects</Display>
-          <Paragraph accent="tertiary" styles={descriptionStyles}>
+          <Paragraph accent="tertiary" styles={pageHeaderTextStyles}>
             Projects are targeted efforts that translate recommendations into
             action to advance the PD field. They address critical research
             needs, drive discovery, or produce shared resources, often with
@@ -114,7 +112,7 @@ const ProjectsPageHeader: React.FC<ProjectsPageHeaderProps> = ({
         </div>
       </PageInfoContainer>
       {showSearch && (
-        <PageConstraints noPaddingBottom>
+        <PageConstraints width="content" noPaddingBottom>
           <Paragraph accent="tertiary" styles={projectTypeDescriptionStyles}>
             {projectDescriptions[page]}
           </Paragraph>

@@ -1,6 +1,6 @@
 import { gp2 as gp2Model } from '@asap-hub/model';
 import {
-  crossQuery,
+  mediaFrom,
   formatUserLocation,
   Link,
   pixels,
@@ -35,7 +35,7 @@ const containerStyles = css({
   display: 'flex',
   flexDirection: 'column',
   marginBottom: rem(9),
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     marginBottom: rem(17),
     rowGap: rem(9),
   },
@@ -43,7 +43,7 @@ const containerStyles = css({
 
 const dotDivider = css({
   display: 'none',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'unset',
   },
 });
@@ -51,7 +51,7 @@ const dotDivider = css({
 const rowStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     flexDirection: 'row',
     gap: rem(24),
   },
@@ -65,14 +65,14 @@ const listLabelStyles = css({
 
 const workingGroupsStyles = css({
   flexWrap: 'wrap',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     gap: '0.25rem',
     flexDirection: 'row',
   },
 });
 
 const workingGroupsLinkStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     width: 'fit-content',
     whiteSpace: 'nowrap',
   },

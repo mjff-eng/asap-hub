@@ -1,6 +1,6 @@
 import {
   ceruleanFernGradientStyles,
-  drawerQuery,
+  mediaBelow,
   pixels,
   colour,
 } from '@asap-hub/react-components';
@@ -14,7 +14,7 @@ const { rem } = pixels;
 
 const logoStyles = css({ padding: `0 ${rem(24)}` });
 const desktopNavigationStyles = css({
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     display: 'none',
   },
 });

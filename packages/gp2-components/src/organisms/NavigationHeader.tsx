@@ -1,7 +1,8 @@
 import {
+  casHeader,
+  mediaFrom,
   ceruleanFernGradientStyles,
-  crossQuery,
-  drawerQuery,
+  mediaBelow,
   MenuButton,
   pixels,
   noop,
@@ -13,13 +14,16 @@ import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { HeaderLogo } from '../molecules';
+import { headerLinkStyles } from '../layout';
 import MainNavigation from './MainNavigation';
 import UserNavigation from './UserNavigation';
 
-const { rem } = pixels;
+const { rem, remUnit } = pixels;
 const menuButtonWidth = 72;
 
 const mainContainerStyles = css({
+  boxSizing: 'border-box',
+  height: remUnit(casHeader.gp2.height),
   padding: 0,
   display: 'flex',
   flexDirection: 'row',
@@ -34,18 +38,21 @@ const navigationHeaderStyles = css({
   alignItems: 'center',
   gap: rem(72),
   margin: `0 ${rem(24)}`,
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     margin: 0,
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     gap: rem(24),
+  },
+  // Mobile only: from tablet up the gradient bar is the line under the header.
+  [mediaBelow.tablet]: {
     borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
 const menuButtonStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'none',
   },
 
@@ -59,15 +66,20 @@ const menuButtonStyles = css({
 });
 
 const desktopNavigationStyles = css({
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     display: 'none',
   },
 });
 
+// Shown from tablet up; the mobile frame has no gradient bar.
 const bottomBorderStyles = css({
-  height: rem(4),
+  display: 'none',
+  height: remUnit(casHeader.gp2.accentBar),
   width: '100%',
   ...ceruleanFernGradientStyles,
+  [mediaFrom.tablet]: {
+    display: 'block',
+  },
 });
 
 const searchButtonAreaStyles = css({
@@ -114,13 +126,19 @@ const NavigationHeader: React.FC<NavigationHeaderProps> = ({
           <UserNavigation {...userNavigationProps} />
         </div>
       </div>
-      <div css={searchButtonAreaStyles}>
+      <div
+        css={[
+          searchButtonAreaStyles,
+          headerLinkStyles,
+          desktopNavigationStyles,
+        ]}
+      >
         <NavigationLink squareBorder href={gp2Routing.tags({}).$}>
           <span css={searchIconStyles}>{tagSearchIcon}</span>
         </NavigationLink>
       </div>
     </div>
-    <div css={[bottomBorderStyles, desktopNavigationStyles]} />
+    <div css={bottomBorderStyles} />
   </header>
 );
 export default NavigationHeader;

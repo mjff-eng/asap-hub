@@ -3,7 +3,7 @@ import {
   chevronDownIcon,
   chevronUpIcon,
   colourWithAlpha,
-  drawerQuery,
+  mediaBelow,
   pixels,
   colour,
 } from '@asap-hub/react-components';
@@ -38,7 +38,7 @@ const userMenuStyles = css({
 
 const userMenuShownStyles = css({
   zIndex: 1,
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     backgroundColor: colour.background.tertiary,
   },
   display: 'unset',

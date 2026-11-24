@@ -2,7 +2,7 @@ import { gp2 as gp2Model } from '@asap-hub/model';
 import {
   Card,
   CopyButton,
-  drawerQuery,
+  mediaBelow,
   ExternalLinkIcon,
   informationIcon,
   Link,
@@ -56,7 +56,7 @@ const infoContainerStyles = css({
   display: 'flex',
   flexDirection: 'row',
   gap: rem(32),
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     display: 'unset',
   },
 });

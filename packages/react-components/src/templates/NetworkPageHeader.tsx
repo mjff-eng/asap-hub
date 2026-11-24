@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import {
   TeamRole,
   Role,
@@ -13,7 +12,6 @@ import { network } from '@asap-hub/routing';
 import { ReactNode, useMemo } from 'react';
 
 import { Display, Paragraph, TabLink } from '../atoms';
-import { rem } from '../pixels';
 import { SearchAndFilter } from '../organisms';
 import { Option, Title } from '../organisms/CheckboxGroup';
 import { TabNav } from '../molecules';
@@ -27,10 +25,7 @@ import {
 import { queryParamString } from '../routing';
 import PageInfoContainer from './PageInfoContainer';
 import PageConstraints from './PageConstraints';
-
-const textStyles = css({
-  maxWidth: rem(610),
-});
+import { pageHeaderTextStyles } from '../layout';
 
 type Page =
   | 'users'
@@ -201,6 +196,7 @@ const NetworkPageHeader: React.FC<NetworkPageHeaderProps> = ({
   return (
     <header>
       <PageInfoContainer
+        width="content"
         nav={
           <TabNav>
             <TabLink
@@ -245,17 +241,19 @@ const NetworkPageHeader: React.FC<NetworkPageHeaderProps> = ({
         }
       >
         <Display>Network</Display>
-        <div css={textStyles}>
+        <div css={pageHeaderTextStyles}>
           <Paragraph accent="tertiary">
             Explore the ASAP Network and collaborate!
           </Paragraph>
         </div>
       </PageInfoContainer>
       {pageDescription && (
-        <PageConstraints noPaddingBottom>{pageDescription}</PageConstraints>
+        <PageConstraints width="content" noPaddingBottom>
+          {pageDescription}
+        </PageConstraints>
       )}
       {showSearch && (
-        <PageConstraints noPaddingBottom>
+        <PageConstraints width="content" noPaddingBottom>
           <SearchAndFilter
             onChangeSearch={onChangeSearchQuery}
             searchQuery={searchQuery}

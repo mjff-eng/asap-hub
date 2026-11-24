@@ -3,22 +3,19 @@ import { css } from '@emotion/react';
 import { Link } from '../atoms';
 import { colour } from '../colors';
 import { crnLogoFull, crnLogoFullWhite, crnLogoMobile } from '../icons';
-import { contentSidePaddingWithNavigation } from '../layout';
-import { mobileScreen, rem } from '../pixels';
+import { pageMarginStyles } from '../layout';
+import { casHeader } from '../cas-layout';
+import { mobileScreen, remUnit } from '../pixels';
 
-const height = '72px';
+const height = remUnit(casHeader.crn.height);
 
 const containerStyles = (logoAlignment: 'center' | 'left') =>
-  css({
+  css(logoAlignment === 'left' && pageMarginStyles.crn, {
     height,
     flexGrow: 1,
     boxSizing: 'border-box',
     display: 'flex',
     justifyContent: logoAlignment === 'center' ? 'center' : 'flex-start',
-    padding:
-      logoAlignment === 'left'
-        ? `${rem(0)} ${contentSidePaddingWithNavigation()}`
-        : undefined,
   });
 const containerOpaqueStyles = css({
   backgroundColor: colour.background.primary,

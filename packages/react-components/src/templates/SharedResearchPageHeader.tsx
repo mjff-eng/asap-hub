@@ -1,20 +1,9 @@
-import { css } from '@emotion/react';
-
 import { Display, Paragraph } from '../atoms';
-import { mobileScreen, rem, smallDesktopScreen } from '../pixels';
 import { noop } from '../utils';
 import ResearchOutputsSearch from './ResearchOutputsSearch';
 import PageInfoContainer from './PageInfoContainer';
 import PageConstraints from './PageConstraints';
-
-const textStyles = css({
-  display: 'grid',
-  columnGap: rem(39),
-  rowGap: rem(9),
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
-    gridTemplateColumns: `minmax(auto, ${smallDesktopScreen.width}px) auto`,
-  },
-});
+import { pageHeaderTextStyles } from '../layout';
 
 type SharedResearchPageHeaderProps = {
   onChangeSearch?: (newQuery: string) => void;
@@ -30,9 +19,9 @@ const SharedResearchPageHeader: React.FC<SharedResearchPageHeaderProps> = ({
   onChangeFilter = noop,
 }) => (
   <header>
-    <PageInfoContainer>
+    <PageInfoContainer width="content">
       <Display>Shared Research</Display>
-      <div css={textStyles}>
+      <div css={pageHeaderTextStyles}>
         <Paragraph accent="tertiary">
           This page contains all shared research outputs. As grantees begin to
           share more items, this library will grow. Grantees should be mindful
@@ -42,7 +31,7 @@ const SharedResearchPageHeader: React.FC<SharedResearchPageHeaderProps> = ({
       </div>
     </PageInfoContainer>
 
-    <PageConstraints noPaddingBottom>
+    <PageConstraints width="content" noPaddingBottom>
       <ResearchOutputsSearch
         onChangeSearch={onChangeSearch}
         searchQuery={searchQuery}

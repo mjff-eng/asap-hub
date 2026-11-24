@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 
-import { largeDesktopScreen, rem } from '../pixels';
+import { rem } from '../pixels';
 import { Card, Paragraph } from '../atoms';
-import { contentSidePaddingWithNavigation } from '../layout';
+import { mediaFrom, pageGutter } from '../layout';
 import { colour } from '../colors';
 import { PercentageIcon } from '../icons';
 
@@ -11,14 +11,12 @@ const cardStyles = css({ marginBottom: rem(32) });
 const containerStyles = css({
   padding: rem(24),
   display: 'grid',
-  [`@media (max-width: calc(${
-    largeDesktopScreen.width
-  }px + ${contentSidePaddingWithNavigation(4)}))`]: {
-    gridTemplateColumns: '1fr',
+  gridTemplateColumns: '1fr',
+  [mediaFrom.desktopXL]: {
+    gridTemplateColumns: '1fr 1fr',
   },
-  gridTemplateColumns: '1fr 1fr',
   rowGap: rem(16),
-  columnGap: rem(16),
+  columnGap: pageGutter,
 });
 
 const captionLegend = css({

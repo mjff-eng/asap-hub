@@ -1,17 +1,12 @@
-import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { NewsFrequency, newsFrequency } from '@asap-hub/model';
 
 import { Display, Paragraph } from '../atoms';
-import { rem, smallDesktopScreen } from '../pixels';
 import { SearchAndFilter } from '../organisms';
 import { Option } from '../organisms/CheckboxGroup';
 import PageInfoContainer from './PageInfoContainer';
 import PageConstraints from './PageConstraints';
-
-const textStyles = css({
-  maxWidth: rem(smallDesktopScreen.width),
-});
+import { pageHeaderTextStyles } from '../layout';
 
 const newsFilters = [
   { title: 'TYPE OF NEWS' },
@@ -35,16 +30,16 @@ const NewsPageHeader: React.FC<NewsPageHeaderProps> = ({
   searchQuery,
 }) => (
   <header>
-    <PageInfoContainer>
+    <PageInfoContainer width="content">
       <Display>News</Display>
-      <div css={textStyles}>
+      <div css={pageHeaderTextStyles}>
         <Paragraph accent="tertiary">
           Stay up to date with all the latest activity from the CRN. You'll be
           able to access news and newsletters
         </Paragraph>
       </div>
     </PageInfoContainer>
-    <PageConstraints noPaddingBottom>
+    <PageConstraints width="content" noPaddingBottom>
       <SearchAndFilter
         onChangeSearch={onChangeSearch}
         searchPlaceholder="Enter news title, keyword, ..."

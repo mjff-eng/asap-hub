@@ -8,7 +8,9 @@ const ProjectsPage: React.FC<
 > = ({ children, ...props }) => (
   <article>
     <ProjectsPageHeader {...props} />
-    <PageConstraints as="main">{children}</PageConstraints>
+    <PageConstraints width="content" as="main">
+      {children}
+    </PageConstraints>
   </article>
 );
 

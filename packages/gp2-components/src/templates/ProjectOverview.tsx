@@ -2,7 +2,7 @@ import { gp2 } from '@asap-hub/model';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import {
   Card,
-  crossQuery,
+  mediaFrom,
   ExpandableText,
   Headline3,
   MembersList,
@@ -47,7 +47,7 @@ const columnStyles = css({
   display: 'grid',
   columnGap: rem(32),
   gridRowGap: rem(32),
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     gridTemplateColumns: '1fr 1fr',
     rowGap: rem(32),
   },

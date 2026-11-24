@@ -13,6 +13,7 @@ import {
   splitListBy,
 } from '../utils';
 import { formatDateToTimezone, weekdayShortDateFormat } from '../date';
+import { pageGutter } from '../layout';
 
 const MAX_TEAMS = 5;
 
@@ -34,6 +35,7 @@ const listItemStyle = css({
     gridTemplateColumns: '1fr 1fr',
     gridTemplateRows: 'auto 1fr',
     rowGap: rem(12),
+    columnGap: pageGutter,
 
     '&:not(:first-of-type)': {
       gridTemplateRows: '1fr',
