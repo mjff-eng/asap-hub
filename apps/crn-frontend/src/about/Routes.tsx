@@ -7,14 +7,18 @@ import { Navigate, Route, Routes } from 'react-router';
 
 const loadAbout = () => import(/* webpackChunkName: "about" */ './About');
 
+const loadWhosInvolved = () =>
+  import(/* webpackChunkName: "about-whos-involved" */ './WhosInvolved');
+
 const AboutBody = lazy(loadAbout);
+const WhosInvolvedBody = lazy(loadWhosInvolved);
 
 const About: FC<Record<string, never>> = () => {
   const { isEnabled } = useFlags();
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    loadAbout();
+    loadAbout().then(loadWhosInvolved);
   }, []);
 
   if (isEnabled('ABOUT_ASAP_TABS')) {
@@ -28,7 +32,16 @@ const About: FC<Record<string, never>> = () => {
             </AboutPage>
           }
         />
-        <Route path={about({}).whosInvolved.template} element={<AboutPage />} />
+        <Route
+          path={about({}).whosInvolved.template}
+          element={
+            <AboutPage>
+              <Frame title="Who's involved">
+                <WhosInvolvedBody />
+              </Frame>
+            </AboutPage>
+          }
+        />
         <Route
           path="*"
           element={<Navigate to={about({}).initiative({}).$} replace />}

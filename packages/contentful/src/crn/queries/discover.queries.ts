@@ -70,6 +70,49 @@ export const FETCH_DISCOVER = gql`
             ...PartialUsersContent
           }
         }
+        asapAreasCollection(limit: 20) {
+          items {
+            sys {
+              id
+            }
+            name
+            objective
+            primaryEmail
+            secondaryEmail
+            membersCollection(limit: 100) {
+              items {
+                sys {
+                  id
+                }
+              }
+            }
+            linkedFrom {
+              teamMembershipCollection(limit: 100) {
+                items {
+                  role
+                  inactiveSinceDate
+                  linkedFrom {
+                    usersCollection(limit: 1) {
+                      items {
+                        sys {
+                          id
+                        }
+                        onboarded
+                        alumniSinceDate
+                        firstName
+                        nickname
+                        lastName
+                        avatar {
+                          url
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

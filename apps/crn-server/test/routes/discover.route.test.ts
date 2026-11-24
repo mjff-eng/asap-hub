@@ -18,6 +18,7 @@ describe('/discover/ route', () => {
         aboutUs: '',
         members: [],
         scientificAdvisoryBoard: [],
+        asapAreas: [],
       });
 
       const response = await supertest(app).get('/discover');
@@ -27,6 +28,7 @@ describe('/discover/ route', () => {
         aboutUs: '',
         members: [],
         scientificAdvisoryBoard: [],
+        asapAreas: [],
       });
     });
 

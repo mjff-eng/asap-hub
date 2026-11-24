@@ -6,6 +6,8 @@ import {
   getContentfulGraphqlDiscover,
   getContentfulGraphqlDiscoverResponse,
   getContentfulGraphqlDiscoverMembers,
+  getContentfulGraphqlAsapArea,
+  getContentfulGraphqlAsapAreaMembership,
 } from '../../fixtures/discover.fixtures';
 import { getContentfulGraphqlClientMock } from '../../mocks/contentful-graphql-client.mock';
 
@@ -19,13 +21,16 @@ describe('Discover data provider', () => {
     test('it should return the Discover object from the mock server', async () => {
       const contentfulGraphqlClientMockServer =
         getContentfulGraphqlClientMockServer({
-          Discover: () => getContentfulGraphqlDiscover(),
+          Discover: () =>
+            getContentfulGraphqlDiscover({
+              asapAreasCollection: { items: [] },
+            }),
         });
       const dataProviderWithMockServer: DiscoverDataProvider =
         new DiscoverContentfulDataProvider(contentfulGraphqlClientMockServer);
       const result = await dataProviderWithMockServer.fetch();
 
-      const expectation = getDiscoverDataObject();
+      const expectation = { ...getDiscoverDataObject(), asapAreas: [] };
 
       expect(result).toMatchObject(expectation);
     });
@@ -76,6 +81,7 @@ describe('Discover data provider', () => {
           scientificAdvisoryBoardCollection: null,
           membersTeam: null,
           aboutUs: null,
+          asapAreasCollection: null,
         }),
       });
 
@@ -86,6 +92,7 @@ describe('Discover data provider', () => {
         scientificAdvisoryBoard: [],
         membersTeamId: undefined,
         aboutUs: '',
+        asapAreas: [],
       });
     });
 
@@ -117,6 +124,7 @@ describe('Discover data provider', () => {
         scientificAdvisoryBoard: [],
         membersTeamId: undefined,
         aboutUs: '',
+        asapAreas: [],
       });
     });
 
@@ -134,6 +142,113 @@ describe('Discover data provider', () => {
         scientificAdvisoryBoard: [],
         membersTeamId: undefined,
         aboutUs: '',
+        asapAreas: [],
+      });
+    });
+  });
+
+  describe('ASAP areas', () => {
+    const fetchAreas = async (areaProps = {}) => {
+      contentfulGraphqlClientMock.request.mockResolvedValueOnce(
+        getContentfulGraphqlDiscoverResponse({
+          asapAreasCollection: {
+            items: [null, getContentfulGraphqlAsapArea(areaProps)],
+          },
+        }),
+      );
+      return (await dataProvider.fetch()).asapAreas;
+    };
+
+    const fetchMemberIds = async (areaProps = {}) =>
+      (await fetchAreas(areaProps)).flatMap(({ members }) =>
+        members.map(({ id }) => id),
+      );
+
+    const membersOf = (
+      items: ReturnType<typeof getContentfulGraphqlAsapAreaMembership>[],
+    ) => ({ linkedFrom: { teamMembershipCollection: { items } } });
+
+    test('returns the areas with their members in the CMS order', async () => {
+      const areas = await fetchAreas();
+
+      expect(areas).toEqual(getDiscoverDataObject().asapAreas);
+    });
+
+    test('adds active members missing from the Members field at the end, sorted by name', async () => {
+      const memberIds = await fetchMemberIds({
+        membersCollection: { items: [null, { sys: { id: 'area-user-1' } }] },
+        ...membersOf([
+          getContentfulGraphqlAsapAreaMembership({
+            id: 'area-user-3',
+            firstName: 'Zoe',
+          }),
+          getContentfulGraphqlAsapAreaMembership({
+            id: 'area-user-2',
+            firstName: 'Amy',
+          }),
+          getContentfulGraphqlAsapAreaMembership(),
+        ]),
+      });
+
+      expect(memberIds).toEqual(['area-user-1', 'area-user-2', 'area-user-3']);
+    });
+
+    test('leaves out people in the Members field who no longer have the area', async () => {
+      const memberIds = await fetchMemberIds(
+        membersOf([getContentfulGraphqlAsapAreaMembership()]),
+      );
+
+      expect(memberIds).toEqual(['area-user-1']);
+    });
+
+    test.each`
+      description                   | props
+      ${'past members'}             | ${{ inactiveSinceDate: '2026-01-01' }}
+      ${'alumni'}                   | ${{ alumniSinceDate: '2026-01-01' }}
+      ${'users not onboarded'}      | ${{ onboarded: false }}
+      ${'memberships with no role'} | ${{ role: null }}
+    `('leaves out $description', async ({ props }) => {
+      const memberIds = await fetchMemberIds(
+        membersOf([
+          getContentfulGraphqlAsapAreaMembership({
+            id: 'area-user-2',
+            ...props,
+          }),
+          getContentfulGraphqlAsapAreaMembership(),
+        ]),
+      );
+
+      expect(memberIds).toEqual(['area-user-1']);
+    });
+
+    test('ignores null memberships and areas without memberships', async () => {
+      expect(await fetchMemberIds(membersOf([null as never]))).toEqual([]);
+      expect(
+        await fetchMemberIds({ linkedFrom: null, membersCollection: null }),
+      ).toEqual([]);
+    });
+
+    test('defaults missing text fields', async () => {
+      const [area] = await fetchAreas({
+        name: null,
+        objective: null,
+        primaryEmail: null,
+        secondaryEmail: null,
+        ...membersOf([
+          getContentfulGraphqlAsapAreaMembership({
+            firstName: null as never,
+            lastName: null as never,
+            nickname: null,
+          }),
+        ]),
+      });
+
+      expect(area).toMatchObject({
+        name: '',
+        objective: '',
+        primaryEmail: '',
+        secondaryEmail: undefined,
+        members: [{ firstName: '', lastName: '', displayName: ' ' }],
       });
     });
   });

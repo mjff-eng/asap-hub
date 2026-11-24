@@ -320,6 +320,291 @@ enum AnnouncementsOrder {
   sys_publishedVersion_DESC
 }
 
+"""[See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/asapAreas)"""
+type AsapAreas implements Entry & _Node {
+  _id: ID!
+  contentfulMetadata: ContentfulMetadata!
+  linkedFrom(allowedLocales: [String]): AsapAreasLinkingCollections
+  membersCollection(limit: Int = 100, locale: String, order: [AsapAreasMembersCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: UsersFilter): AsapAreasMembersCollection
+  membersCursorCollection(limit: Int = 100, locale: String, order: [AsapAreasMembersCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: UsersFilter): AsapAreasMembersCursorCollection
+  name(locale: String, useFallbackLocale: Boolean): String
+  objective(locale: String, useFallbackLocale: Boolean): String
+  primaryEmail(locale: String, useFallbackLocale: Boolean): String
+  secondaryEmail(locale: String, useFallbackLocale: Boolean): String
+  sys: Sys!
+}
+
+type AsapAreasCollection {
+  items: [AsapAreas]!
+  limit: Int!
+  skip: Int!
+  total: Int!
+}
+
+type AsapAreasCursorCollection {
+  items: [AsapAreas]!
+  limit: Int!
+  pages: CursorPages!
+}
+
+input AsapAreasFilter {
+  AND: [AsapAreasFilter]
+  OR: [AsapAreasFilter]
+  contentfulMetadata: ContentfulMetadataFilter
+  members: cfUsersNestedFilter
+  membersCollection_exists: Boolean
+  name: String
+  name_contains: String
+  name_exists: Boolean
+  name_in: [String]
+  name_not: String
+  name_not_contains: String
+  name_not_in: [String]
+  objective: String
+  objective_contains: String
+  objective_exists: Boolean
+  objective_in: [String]
+  objective_not: String
+  objective_not_contains: String
+  objective_not_in: [String]
+  primaryEmail: String
+  primaryEmail_contains: String
+  primaryEmail_exists: Boolean
+  primaryEmail_in: [String]
+  primaryEmail_not: String
+  primaryEmail_not_contains: String
+  primaryEmail_not_in: [String]
+  secondaryEmail: String
+  secondaryEmail_contains: String
+  secondaryEmail_exists: Boolean
+  secondaryEmail_in: [String]
+  secondaryEmail_not: String
+  secondaryEmail_not_contains: String
+  secondaryEmail_not_in: [String]
+  sys: SysFilter
+}
+
+type AsapAreasLinkingCollections {
+  discoverCollection(limit: Int = 100, locale: String, order: [AsapAreasLinkingCollectionsDiscoverCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): DiscoverCollection
+  discoverCursorCollection(limit: Int = 100, locale: String, order: [AsapAreasLinkingCollectionsDiscoverCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): DiscoverCursorCollection
+  entryCollection(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): EntryCollection
+  entryCursorCollection(limit: Int = 100, locale: String, pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): EntryCursorCollection
+  teamMembershipCollection(limit: Int = 100, locale: String, order: [AsapAreasLinkingCollectionsTeamMembershipCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): TeamMembershipCollection
+  teamMembershipCursorCollection(limit: Int = 100, locale: String, order: [AsapAreasLinkingCollectionsTeamMembershipCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): TeamMembershipCursorCollection
+}
+
+enum AsapAreasLinkingCollectionsDiscoverCollectionOrder {
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+enum AsapAreasLinkingCollectionsDiscoverCursorCollectionOrder {
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+enum AsapAreasLinkingCollectionsTeamMembershipCollectionOrder {
+  inactiveSinceDate_ASC
+  inactiveSinceDate_DESC
+  role_ASC
+  role_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+enum AsapAreasLinkingCollectionsTeamMembershipCursorCollectionOrder {
+  inactiveSinceDate_ASC
+  inactiveSinceDate_DESC
+  role_ASC
+  role_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+type AsapAreasMembersCollection {
+  items: [Users]!
+  limit: Int!
+  skip: Int!
+  total: Int!
+}
+
+enum AsapAreasMembersCollectionOrder {
+  activeCampaignCreatedAt_ASC
+  activeCampaignCreatedAt_DESC
+  activeCampaignId_ASC
+  activeCampaignId_DESC
+  alumniLastUpdated_ASC
+  alumniLastUpdated_DESC
+  alumniLocation_ASC
+  alumniLocation_DESC
+  alumniSinceDate_ASC
+  alumniSinceDate_DESC
+  city_ASC
+  city_DESC
+  contactEmail_ASC
+  contactEmail_DESC
+  country_ASC
+  country_DESC
+  createdDate_ASC
+  createdDate_DESC
+  degree_ASC
+  degree_DESC
+  dismissedGettingStarted_ASC
+  dismissedGettingStarted_DESC
+  email_ASC
+  email_DESC
+  firstName_ASC
+  firstName_DESC
+  institution_ASC
+  institution_DESC
+  lastName_ASC
+  lastName_DESC
+  lastUpdated_ASC
+  lastUpdated_DESC
+  middleName_ASC
+  middleName_DESC
+  nickname_ASC
+  nickname_DESC
+  onboarded_ASC
+  onboarded_DESC
+  openScienceTeamMember_ASC
+  openScienceTeamMember_DESC
+  orcidLastModifiedDate_ASC
+  orcidLastModifiedDate_DESC
+  orcidLastSyncDate_ASC
+  orcidLastSyncDate_DESC
+  orcid_ASC
+  orcid_DESC
+  personalEmail_ASC
+  personalEmail_DESC
+  role_ASC
+  role_DESC
+  stateOrProvince_ASC
+  stateOrProvince_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+  techSupport_ASC
+  techSupport_DESC
+}
+
+type AsapAreasMembersCursorCollection {
+  items: [Users]!
+  limit: Int!
+  pages: CursorPages!
+}
+
+enum AsapAreasMembersCursorCollectionOrder {
+  activeCampaignCreatedAt_ASC
+  activeCampaignCreatedAt_DESC
+  activeCampaignId_ASC
+  activeCampaignId_DESC
+  alumniLastUpdated_ASC
+  alumniLastUpdated_DESC
+  alumniLocation_ASC
+  alumniLocation_DESC
+  alumniSinceDate_ASC
+  alumniSinceDate_DESC
+  city_ASC
+  city_DESC
+  contactEmail_ASC
+  contactEmail_DESC
+  country_ASC
+  country_DESC
+  createdDate_ASC
+  createdDate_DESC
+  degree_ASC
+  degree_DESC
+  dismissedGettingStarted_ASC
+  dismissedGettingStarted_DESC
+  email_ASC
+  email_DESC
+  firstName_ASC
+  firstName_DESC
+  institution_ASC
+  institution_DESC
+  lastName_ASC
+  lastName_DESC
+  lastUpdated_ASC
+  lastUpdated_DESC
+  middleName_ASC
+  middleName_DESC
+  nickname_ASC
+  nickname_DESC
+  onboarded_ASC
+  onboarded_DESC
+  openScienceTeamMember_ASC
+  openScienceTeamMember_DESC
+  orcidLastModifiedDate_ASC
+  orcidLastModifiedDate_DESC
+  orcidLastSyncDate_ASC
+  orcidLastSyncDate_DESC
+  orcid_ASC
+  orcid_DESC
+  personalEmail_ASC
+  personalEmail_DESC
+  role_ASC
+  role_DESC
+  stateOrProvince_ASC
+  stateOrProvince_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+  techSupport_ASC
+  techSupport_DESC
+}
+
+enum AsapAreasOrder {
+  name_ASC
+  name_DESC
+  primaryEmail_ASC
+  primaryEmail_DESC
+  secondaryEmail_ASC
+  secondaryEmail_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
 """Represents a binary file in a space. An asset can be any file type."""
 type Asset implements _Node {
   _id: ID!
@@ -1657,6 +1942,10 @@ scalar Dimension
 type Discover implements Entry & _Node {
   _id: ID!
   aboutUs(locale: String, useFallbackLocale: Boolean): DiscoverAboutUs
+  asapAreasCollection(limit: Int = 100, locale: String, order: [DiscoverAsapAreasCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: AsapAreasFilter): DiscoverAsapAreasCollection
+  asapAreasCursorCollection(limit: Int = 100, locale: String, order: [DiscoverAsapAreasCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: AsapAreasFilter): DiscoverAsapAreasCursorCollection
+  cnsQuestMembersCollection(limit: Int = 100, locale: String, order: [DiscoverCnsQuestMembersCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: UsersFilter): DiscoverCnsQuestMembersCollection
+  cnsQuestMembersCursorCollection(limit: Int = 100, locale: String, order: [DiscoverCnsQuestMembersCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: UsersFilter): DiscoverCnsQuestMembersCursorCollection
   contentfulMetadata: ContentfulMetadata!
   linkedFrom(allowedLocales: [String]): DiscoverLinkingCollections
   membersCollection(limit: Int = 100, locale: String, order: [DiscoverMembersCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: UsersFilter): DiscoverMembersCollection
@@ -1707,6 +1996,196 @@ type DiscoverAboutUsResourcesInline implements ResourceLink {
   sys: ResourceSys!
 }
 
+type DiscoverAsapAreasCollection {
+  items: [AsapAreas]!
+  limit: Int!
+  skip: Int!
+  total: Int!
+}
+
+enum DiscoverAsapAreasCollectionOrder {
+  name_ASC
+  name_DESC
+  primaryEmail_ASC
+  primaryEmail_DESC
+  secondaryEmail_ASC
+  secondaryEmail_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+type DiscoverAsapAreasCursorCollection {
+  items: [AsapAreas]!
+  limit: Int!
+  pages: CursorPages!
+}
+
+enum DiscoverAsapAreasCursorCollectionOrder {
+  name_ASC
+  name_DESC
+  primaryEmail_ASC
+  primaryEmail_DESC
+  secondaryEmail_ASC
+  secondaryEmail_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+type DiscoverCnsQuestMembersCollection {
+  items: [Users]!
+  limit: Int!
+  skip: Int!
+  total: Int!
+}
+
+enum DiscoverCnsQuestMembersCollectionOrder {
+  activeCampaignCreatedAt_ASC
+  activeCampaignCreatedAt_DESC
+  activeCampaignId_ASC
+  activeCampaignId_DESC
+  alumniLastUpdated_ASC
+  alumniLastUpdated_DESC
+  alumniLocation_ASC
+  alumniLocation_DESC
+  alumniSinceDate_ASC
+  alumniSinceDate_DESC
+  city_ASC
+  city_DESC
+  contactEmail_ASC
+  contactEmail_DESC
+  country_ASC
+  country_DESC
+  createdDate_ASC
+  createdDate_DESC
+  degree_ASC
+  degree_DESC
+  dismissedGettingStarted_ASC
+  dismissedGettingStarted_DESC
+  email_ASC
+  email_DESC
+  firstName_ASC
+  firstName_DESC
+  institution_ASC
+  institution_DESC
+  lastName_ASC
+  lastName_DESC
+  lastUpdated_ASC
+  lastUpdated_DESC
+  middleName_ASC
+  middleName_DESC
+  nickname_ASC
+  nickname_DESC
+  onboarded_ASC
+  onboarded_DESC
+  openScienceTeamMember_ASC
+  openScienceTeamMember_DESC
+  orcidLastModifiedDate_ASC
+  orcidLastModifiedDate_DESC
+  orcidLastSyncDate_ASC
+  orcidLastSyncDate_DESC
+  orcid_ASC
+  orcid_DESC
+  personalEmail_ASC
+  personalEmail_DESC
+  role_ASC
+  role_DESC
+  stateOrProvince_ASC
+  stateOrProvince_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+  techSupport_ASC
+  techSupport_DESC
+}
+
+type DiscoverCnsQuestMembersCursorCollection {
+  items: [Users]!
+  limit: Int!
+  pages: CursorPages!
+}
+
+enum DiscoverCnsQuestMembersCursorCollectionOrder {
+  activeCampaignCreatedAt_ASC
+  activeCampaignCreatedAt_DESC
+  activeCampaignId_ASC
+  activeCampaignId_DESC
+  alumniLastUpdated_ASC
+  alumniLastUpdated_DESC
+  alumniLocation_ASC
+  alumniLocation_DESC
+  alumniSinceDate_ASC
+  alumniSinceDate_DESC
+  city_ASC
+  city_DESC
+  contactEmail_ASC
+  contactEmail_DESC
+  country_ASC
+  country_DESC
+  createdDate_ASC
+  createdDate_DESC
+  degree_ASC
+  degree_DESC
+  dismissedGettingStarted_ASC
+  dismissedGettingStarted_DESC
+  email_ASC
+  email_DESC
+  firstName_ASC
+  firstName_DESC
+  institution_ASC
+  institution_DESC
+  lastName_ASC
+  lastName_DESC
+  lastUpdated_ASC
+  lastUpdated_DESC
+  middleName_ASC
+  middleName_DESC
+  nickname_ASC
+  nickname_DESC
+  onboarded_ASC
+  onboarded_DESC
+  openScienceTeamMember_ASC
+  openScienceTeamMember_DESC
+  orcidLastModifiedDate_ASC
+  orcidLastModifiedDate_DESC
+  orcidLastSyncDate_ASC
+  orcidLastSyncDate_DESC
+  orcid_ASC
+  orcid_DESC
+  personalEmail_ASC
+  personalEmail_DESC
+  role_ASC
+  role_DESC
+  stateOrProvince_ASC
+  stateOrProvince_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+  techSupport_ASC
+  techSupport_DESC
+}
+
 type DiscoverCollection {
   items: [Discover]!
   limit: Int!
@@ -1726,6 +2205,10 @@ input DiscoverFilter {
   aboutUs_contains: String
   aboutUs_exists: Boolean
   aboutUs_not_contains: String
+  asapAreas: cfAsapAreasNestedFilter
+  asapAreasCollection_exists: Boolean
+  cnsQuestMembers: cfUsersNestedFilter
+  cnsQuestMembersCollection_exists: Boolean
   contentfulMetadata: ContentfulMetadataFilter
   members: cfUsersNestedFilter
   membersCollection_exists: Boolean
@@ -8735,6 +9218,9 @@ type Query {
   announcements(id: String!, locale: String, preview: Boolean, useFallbackLocale: Boolean): Announcements
   announcementsCollection(limit: Int = 100, locale: String, order: [AnnouncementsOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: AnnouncementsFilter): AnnouncementsCollection
   announcementsCursorCollection(limit: Int = 100, locale: String, order: [AnnouncementsOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: AnnouncementsFilter): AnnouncementsCursorCollection
+  asapAreas(id: String!, locale: String, preview: Boolean, useFallbackLocale: Boolean): AsapAreas
+  asapAreasCollection(limit: Int = 100, locale: String, order: [AsapAreasOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: AsapAreasFilter): AsapAreasCollection
+  asapAreasCursorCollection(limit: Int = 100, locale: String, order: [AsapAreasOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: AsapAreasFilter): AsapAreasCursorCollection
   asset(id: String!, locale: String, preview: Boolean, useFallbackLocale: Boolean): Asset
   assetCollection(limit: Int = 100, locale: String, order: [AssetOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: AssetFilter): AssetCollection
   assetCursorCollection(limit: Int = 100, locale: String, order: [AssetOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: AssetFilter): AssetCursorCollection
@@ -11829,6 +12315,8 @@ type TaxonomyConcept {
 """[See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/teamMembership)"""
 type TeamMembership implements Entry & _Node {
   _id: ID!
+  asapAreasCollection(limit: Int = 100, locale: String, order: [TeamMembershipAsapAreasCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: AsapAreasFilter): TeamMembershipAsapAreasCollection
+  asapAreasCursorCollection(limit: Int = 100, locale: String, order: [TeamMembershipAsapAreasCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: AsapAreasFilter): TeamMembershipAsapAreasCursorCollection
   awardsCollection(limit: Int = 100, locale: String, order: [TeamMembershipAwardsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean, where: AwardsFilter): TeamMembershipAwardsCollection
   awardsCursorCollection(limit: Int = 100, locale: String, order: [TeamMembershipAwardsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean, where: AwardsFilter): TeamMembershipAwardsCursorCollection
   contentfulMetadata: ContentfulMetadata!
@@ -11837,6 +12325,53 @@ type TeamMembership implements Entry & _Node {
   role(locale: String, useFallbackLocale: Boolean): String
   sys: Sys!
   team(locale: String, preview: Boolean, useFallbackLocale: Boolean, where: TeamsFilter): Teams
+}
+
+type TeamMembershipAsapAreasCollection {
+  items: [AsapAreas]!
+  limit: Int!
+  skip: Int!
+  total: Int!
+}
+
+enum TeamMembershipAsapAreasCollectionOrder {
+  name_ASC
+  name_DESC
+  primaryEmail_ASC
+  primaryEmail_DESC
+  secondaryEmail_ASC
+  secondaryEmail_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+type TeamMembershipAsapAreasCursorCollection {
+  items: [AsapAreas]!
+  limit: Int!
+  pages: CursorPages!
+}
+
+enum TeamMembershipAsapAreasCursorCollectionOrder {
+  name_ASC
+  name_DESC
+  primaryEmail_ASC
+  primaryEmail_DESC
+  secondaryEmail_ASC
+  secondaryEmail_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
 }
 
 type TeamMembershipAwardsCollection {
@@ -11898,6 +12433,8 @@ type TeamMembershipCursorCollection {
 input TeamMembershipFilter {
   AND: [TeamMembershipFilter]
   OR: [TeamMembershipFilter]
+  asapAreas: cfAsapAreasNestedFilter
+  asapAreasCollection_exists: Boolean
   awards: cfAwardsNestedFilter
   awardsCollection_exists: Boolean
   contentfulMetadata: ContentfulMetadataFilter
@@ -13818,6 +14355,8 @@ enum UsersLabsCursorCollectionOrder {
 }
 
 type UsersLinkingCollections {
+  asapAreasCollection(limit: Int = 100, locale: String, order: [UsersLinkingCollectionsAsapAreasCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): AsapAreasCollection
+  asapAreasCursorCollection(limit: Int = 100, locale: String, order: [UsersLinkingCollectionsAsapAreasCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): AsapAreasCursorCollection
   complianceReportsCollection(limit: Int = 100, locale: String, order: [UsersLinkingCollectionsComplianceReportsCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): ComplianceReportsCollection
   complianceReportsCursorCollection(limit: Int = 100, locale: String, order: [UsersLinkingCollectionsComplianceReportsCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): ComplianceReportsCursorCollection
   discoverCollection(limit: Int = 100, locale: String, order: [UsersLinkingCollectionsDiscoverCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): DiscoverCollection
@@ -13852,6 +14391,40 @@ type UsersLinkingCollections {
   workingGroupLeadersCursorCollection(limit: Int = 100, locale: String, order: [UsersLinkingCollectionsWorkingGroupLeadersCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): WorkingGroupLeadersCursorCollection
   workingGroupMembersCollection(limit: Int = 100, locale: String, order: [UsersLinkingCollectionsWorkingGroupMembersCollectionOrder], preview: Boolean, skip: Int = 0, useFallbackLocale: Boolean): WorkingGroupMembersCollection
   workingGroupMembersCursorCollection(limit: Int = 100, locale: String, order: [UsersLinkingCollectionsWorkingGroupMembersCursorCollectionOrder], pageNext: String, pagePrev: String, preview: Boolean, useFallbackLocale: Boolean): WorkingGroupMembersCursorCollection
+}
+
+enum UsersLinkingCollectionsAsapAreasCollectionOrder {
+  name_ASC
+  name_DESC
+  primaryEmail_ASC
+  primaryEmail_DESC
+  secondaryEmail_ASC
+  secondaryEmail_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+enum UsersLinkingCollectionsAsapAreasCursorCollectionOrder {
+  name_ASC
+  name_DESC
+  primaryEmail_ASC
+  primaryEmail_DESC
+  secondaryEmail_ASC
+  secondaryEmail_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
 }
 
 enum UsersLinkingCollectionsComplianceReportsCollectionOrder {
@@ -15433,6 +16006,42 @@ input cfAnnouncementsNestedFilter {
   sys: SysFilter
 }
 
+input cfAsapAreasNestedFilter {
+  AND: [cfAsapAreasNestedFilter]
+  OR: [cfAsapAreasNestedFilter]
+  contentfulMetadata: ContentfulMetadataFilter
+  membersCollection_exists: Boolean
+  name: String
+  name_contains: String
+  name_exists: Boolean
+  name_in: [String]
+  name_not: String
+  name_not_contains: String
+  name_not_in: [String]
+  objective: String
+  objective_contains: String
+  objective_exists: Boolean
+  objective_in: [String]
+  objective_not: String
+  objective_not_contains: String
+  objective_not_in: [String]
+  primaryEmail: String
+  primaryEmail_contains: String
+  primaryEmail_exists: Boolean
+  primaryEmail_in: [String]
+  primaryEmail_not: String
+  primaryEmail_not_contains: String
+  primaryEmail_not_in: [String]
+  secondaryEmail: String
+  secondaryEmail_contains: String
+  secondaryEmail_exists: Boolean
+  secondaryEmail_in: [String]
+  secondaryEmail_not: String
+  secondaryEmail_not_contains: String
+  secondaryEmail_not_in: [String]
+  sys: SysFilter
+}
+
 input cfAttendanceNestedFilter {
   AND: [cfAttendanceNestedFilter]
   OR: [cfAttendanceNestedFilter]
@@ -16855,6 +17464,7 @@ input cfSupplementGrantNestedFilter {
 input cfTeamMembershipNestedFilter {
   AND: [cfTeamMembershipNestedFilter]
   OR: [cfTeamMembershipNestedFilter]
+  asapAreasCollection_exists: Boolean
   awardsCollection_exists: Boolean
   contentfulMetadata: ContentfulMetadataFilter
   inactiveSinceDate: DateTime

@@ -1,14 +1,5 @@
 import { UserResponse } from './user';
 
-export type DiscoverDataObject = {
-  aboutUs: string;
-  members: UserResponse[];
-  membersTeamId?: string;
-  scientificAdvisoryBoard: UserResponse[];
-};
-
-export type DiscoverResponse = DiscoverDataObject;
-
 export type AsapAreaMember = Pick<
   UserResponse,
   'id' | 'firstName' | 'lastName' | 'displayName' | 'avatarUrl'
@@ -24,3 +15,13 @@ export type AsapAreaDataObject = {
 };
 
 export type AsapAreaResponse = AsapAreaDataObject;
+
+export type DiscoverDataObject = {
+  aboutUs: string;
+  members: UserResponse[];
+  membersTeamId?: string;
+  scientificAdvisoryBoard: UserResponse[];
+  asapAreas: AsapAreaDataObject[];
+};
+
+export type DiscoverResponse = DiscoverDataObject;

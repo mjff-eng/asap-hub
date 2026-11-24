@@ -23,6 +23,7 @@ const props: DiscoverResponse = {
   aboutUs: '',
   members: [],
   scientificAdvisoryBoard: [],
+  asapAreas: [],
 };
 
 const renderPage = async (user: Partial<User>) => {

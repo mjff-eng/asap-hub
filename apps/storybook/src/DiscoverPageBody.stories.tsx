@@ -103,6 +103,7 @@ const props = (): ComponentProps<typeof DiscoverPageBody> => ({
   members,
   scientificAdvisoryBoard: members,
   aboutUs: text('About Us', ''),
+  asapAreas: [],
 });
 
 export const Normal = () => <DiscoverPageBody {...props()} />;

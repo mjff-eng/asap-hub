@@ -500,6 +500,409 @@ export enum AnnouncementsOrder {
   SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
 }
 
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/asapAreas) */
+export type AsapAreas = Entry &
+  _Node & {
+    _id: Scalars['ID'];
+    contentfulMetadata: ContentfulMetadata;
+    linkedFrom?: Maybe<AsapAreasLinkingCollections>;
+    membersCollection?: Maybe<AsapAreasMembersCollection>;
+    membersCursorCollection?: Maybe<AsapAreasMembersCursorCollection>;
+    name?: Maybe<Scalars['String']>;
+    objective?: Maybe<Scalars['String']>;
+    primaryEmail?: Maybe<Scalars['String']>;
+    secondaryEmail?: Maybe<Scalars['String']>;
+    sys: Sys;
+  };
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/asapAreas) */
+export type AsapAreasLinkedFromArgs = {
+  allowedLocales?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/asapAreas) */
+export type AsapAreasMembersCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Array<InputMaybe<AsapAreasMembersCollectionOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<UsersFilter>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/asapAreas) */
+export type AsapAreasMembersCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Array<InputMaybe<AsapAreasMembersCursorCollectionOrder>>>;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<UsersFilter>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/asapAreas) */
+export type AsapAreasNameArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/asapAreas) */
+export type AsapAreasObjectiveArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/asapAreas) */
+export type AsapAreasPrimaryEmailArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/asapAreas) */
+export type AsapAreasSecondaryEmailArgs = {
+  locale?: InputMaybe<Scalars['String']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type AsapAreasCollection = {
+  items: Array<Maybe<AsapAreas>>;
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
+  total: Scalars['Int'];
+};
+
+export type AsapAreasCursorCollection = {
+  items: Array<Maybe<AsapAreas>>;
+  limit: Scalars['Int'];
+  pages: CursorPages;
+};
+
+export type AsapAreasFilter = {
+  AND?: InputMaybe<Array<InputMaybe<AsapAreasFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<AsapAreasFilter>>>;
+  contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  members?: InputMaybe<CfUsersNestedFilter>;
+  membersCollection_exists?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  name_contains?: InputMaybe<Scalars['String']>;
+  name_exists?: InputMaybe<Scalars['Boolean']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  name_not?: InputMaybe<Scalars['String']>;
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  objective?: InputMaybe<Scalars['String']>;
+  objective_contains?: InputMaybe<Scalars['String']>;
+  objective_exists?: InputMaybe<Scalars['Boolean']>;
+  objective_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  objective_not?: InputMaybe<Scalars['String']>;
+  objective_not_contains?: InputMaybe<Scalars['String']>;
+  objective_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  primaryEmail?: InputMaybe<Scalars['String']>;
+  primaryEmail_contains?: InputMaybe<Scalars['String']>;
+  primaryEmail_exists?: InputMaybe<Scalars['Boolean']>;
+  primaryEmail_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  primaryEmail_not?: InputMaybe<Scalars['String']>;
+  primaryEmail_not_contains?: InputMaybe<Scalars['String']>;
+  primaryEmail_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  secondaryEmail?: InputMaybe<Scalars['String']>;
+  secondaryEmail_contains?: InputMaybe<Scalars['String']>;
+  secondaryEmail_exists?: InputMaybe<Scalars['Boolean']>;
+  secondaryEmail_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  secondaryEmail_not?: InputMaybe<Scalars['String']>;
+  secondaryEmail_not_contains?: InputMaybe<Scalars['String']>;
+  secondaryEmail_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  sys?: InputMaybe<SysFilter>;
+};
+
+export type AsapAreasLinkingCollections = {
+  discoverCollection?: Maybe<DiscoverCollection>;
+  discoverCursorCollection?: Maybe<DiscoverCursorCollection>;
+  entryCollection?: Maybe<EntryCollection>;
+  entryCursorCollection?: Maybe<EntryCursorCollection>;
+  teamMembershipCollection?: Maybe<TeamMembershipCollection>;
+  teamMembershipCursorCollection?: Maybe<TeamMembershipCursorCollection>;
+};
+
+export type AsapAreasLinkingCollectionsDiscoverCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<AsapAreasLinkingCollectionsDiscoverCollectionOrder>>
+  >;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type AsapAreasLinkingCollectionsDiscoverCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<AsapAreasLinkingCollectionsDiscoverCursorCollectionOrder>>
+  >;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type AsapAreasLinkingCollectionsEntryCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type AsapAreasLinkingCollectionsEntryCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type AsapAreasLinkingCollectionsTeamMembershipCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<AsapAreasLinkingCollectionsTeamMembershipCollectionOrder>>
+  >;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type AsapAreasLinkingCollectionsTeamMembershipCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<
+      InputMaybe<AsapAreasLinkingCollectionsTeamMembershipCursorCollectionOrder>
+    >
+  >;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export enum AsapAreasLinkingCollectionsDiscoverCollectionOrder {
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export enum AsapAreasLinkingCollectionsDiscoverCursorCollectionOrder {
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export enum AsapAreasLinkingCollectionsTeamMembershipCollectionOrder {
+  InactiveSinceDateAsc = 'inactiveSinceDate_ASC',
+  InactiveSinceDateDesc = 'inactiveSinceDate_DESC',
+  RoleAsc = 'role_ASC',
+  RoleDesc = 'role_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export enum AsapAreasLinkingCollectionsTeamMembershipCursorCollectionOrder {
+  InactiveSinceDateAsc = 'inactiveSinceDate_ASC',
+  InactiveSinceDateDesc = 'inactiveSinceDate_DESC',
+  RoleAsc = 'role_ASC',
+  RoleDesc = 'role_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export type AsapAreasMembersCollection = {
+  items: Array<Maybe<Users>>;
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
+  total: Scalars['Int'];
+};
+
+export enum AsapAreasMembersCollectionOrder {
+  ActiveCampaignCreatedAtAsc = 'activeCampaignCreatedAt_ASC',
+  ActiveCampaignCreatedAtDesc = 'activeCampaignCreatedAt_DESC',
+  ActiveCampaignIdAsc = 'activeCampaignId_ASC',
+  ActiveCampaignIdDesc = 'activeCampaignId_DESC',
+  AlumniLastUpdatedAsc = 'alumniLastUpdated_ASC',
+  AlumniLastUpdatedDesc = 'alumniLastUpdated_DESC',
+  AlumniLocationAsc = 'alumniLocation_ASC',
+  AlumniLocationDesc = 'alumniLocation_DESC',
+  AlumniSinceDateAsc = 'alumniSinceDate_ASC',
+  AlumniSinceDateDesc = 'alumniSinceDate_DESC',
+  CityAsc = 'city_ASC',
+  CityDesc = 'city_DESC',
+  ContactEmailAsc = 'contactEmail_ASC',
+  ContactEmailDesc = 'contactEmail_DESC',
+  CountryAsc = 'country_ASC',
+  CountryDesc = 'country_DESC',
+  CreatedDateAsc = 'createdDate_ASC',
+  CreatedDateDesc = 'createdDate_DESC',
+  DegreeAsc = 'degree_ASC',
+  DegreeDesc = 'degree_DESC',
+  DismissedGettingStartedAsc = 'dismissedGettingStarted_ASC',
+  DismissedGettingStartedDesc = 'dismissedGettingStarted_DESC',
+  EmailAsc = 'email_ASC',
+  EmailDesc = 'email_DESC',
+  FirstNameAsc = 'firstName_ASC',
+  FirstNameDesc = 'firstName_DESC',
+  InstitutionAsc = 'institution_ASC',
+  InstitutionDesc = 'institution_DESC',
+  LastNameAsc = 'lastName_ASC',
+  LastNameDesc = 'lastName_DESC',
+  LastUpdatedAsc = 'lastUpdated_ASC',
+  LastUpdatedDesc = 'lastUpdated_DESC',
+  MiddleNameAsc = 'middleName_ASC',
+  MiddleNameDesc = 'middleName_DESC',
+  NicknameAsc = 'nickname_ASC',
+  NicknameDesc = 'nickname_DESC',
+  OnboardedAsc = 'onboarded_ASC',
+  OnboardedDesc = 'onboarded_DESC',
+  OpenScienceTeamMemberAsc = 'openScienceTeamMember_ASC',
+  OpenScienceTeamMemberDesc = 'openScienceTeamMember_DESC',
+  OrcidLastModifiedDateAsc = 'orcidLastModifiedDate_ASC',
+  OrcidLastModifiedDateDesc = 'orcidLastModifiedDate_DESC',
+  OrcidLastSyncDateAsc = 'orcidLastSyncDate_ASC',
+  OrcidLastSyncDateDesc = 'orcidLastSyncDate_DESC',
+  OrcidAsc = 'orcid_ASC',
+  OrcidDesc = 'orcid_DESC',
+  PersonalEmailAsc = 'personalEmail_ASC',
+  PersonalEmailDesc = 'personalEmail_DESC',
+  RoleAsc = 'role_ASC',
+  RoleDesc = 'role_DESC',
+  StateOrProvinceAsc = 'stateOrProvince_ASC',
+  StateOrProvinceDesc = 'stateOrProvince_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TechSupportAsc = 'techSupport_ASC',
+  TechSupportDesc = 'techSupport_DESC',
+}
+
+export type AsapAreasMembersCursorCollection = {
+  items: Array<Maybe<Users>>;
+  limit: Scalars['Int'];
+  pages: CursorPages;
+};
+
+export enum AsapAreasMembersCursorCollectionOrder {
+  ActiveCampaignCreatedAtAsc = 'activeCampaignCreatedAt_ASC',
+  ActiveCampaignCreatedAtDesc = 'activeCampaignCreatedAt_DESC',
+  ActiveCampaignIdAsc = 'activeCampaignId_ASC',
+  ActiveCampaignIdDesc = 'activeCampaignId_DESC',
+  AlumniLastUpdatedAsc = 'alumniLastUpdated_ASC',
+  AlumniLastUpdatedDesc = 'alumniLastUpdated_DESC',
+  AlumniLocationAsc = 'alumniLocation_ASC',
+  AlumniLocationDesc = 'alumniLocation_DESC',
+  AlumniSinceDateAsc = 'alumniSinceDate_ASC',
+  AlumniSinceDateDesc = 'alumniSinceDate_DESC',
+  CityAsc = 'city_ASC',
+  CityDesc = 'city_DESC',
+  ContactEmailAsc = 'contactEmail_ASC',
+  ContactEmailDesc = 'contactEmail_DESC',
+  CountryAsc = 'country_ASC',
+  CountryDesc = 'country_DESC',
+  CreatedDateAsc = 'createdDate_ASC',
+  CreatedDateDesc = 'createdDate_DESC',
+  DegreeAsc = 'degree_ASC',
+  DegreeDesc = 'degree_DESC',
+  DismissedGettingStartedAsc = 'dismissedGettingStarted_ASC',
+  DismissedGettingStartedDesc = 'dismissedGettingStarted_DESC',
+  EmailAsc = 'email_ASC',
+  EmailDesc = 'email_DESC',
+  FirstNameAsc = 'firstName_ASC',
+  FirstNameDesc = 'firstName_DESC',
+  InstitutionAsc = 'institution_ASC',
+  InstitutionDesc = 'institution_DESC',
+  LastNameAsc = 'lastName_ASC',
+  LastNameDesc = 'lastName_DESC',
+  LastUpdatedAsc = 'lastUpdated_ASC',
+  LastUpdatedDesc = 'lastUpdated_DESC',
+  MiddleNameAsc = 'middleName_ASC',
+  MiddleNameDesc = 'middleName_DESC',
+  NicknameAsc = 'nickname_ASC',
+  NicknameDesc = 'nickname_DESC',
+  OnboardedAsc = 'onboarded_ASC',
+  OnboardedDesc = 'onboarded_DESC',
+  OpenScienceTeamMemberAsc = 'openScienceTeamMember_ASC',
+  OpenScienceTeamMemberDesc = 'openScienceTeamMember_DESC',
+  OrcidLastModifiedDateAsc = 'orcidLastModifiedDate_ASC',
+  OrcidLastModifiedDateDesc = 'orcidLastModifiedDate_DESC',
+  OrcidLastSyncDateAsc = 'orcidLastSyncDate_ASC',
+  OrcidLastSyncDateDesc = 'orcidLastSyncDate_DESC',
+  OrcidAsc = 'orcid_ASC',
+  OrcidDesc = 'orcid_DESC',
+  PersonalEmailAsc = 'personalEmail_ASC',
+  PersonalEmailDesc = 'personalEmail_DESC',
+  RoleAsc = 'role_ASC',
+  RoleDesc = 'role_DESC',
+  StateOrProvinceAsc = 'stateOrProvince_ASC',
+  StateOrProvinceDesc = 'stateOrProvince_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TechSupportAsc = 'techSupport_ASC',
+  TechSupportDesc = 'techSupport_DESC',
+}
+
+export enum AsapAreasOrder {
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  PrimaryEmailAsc = 'primaryEmail_ASC',
+  PrimaryEmailDesc = 'primaryEmail_DESC',
+  SecondaryEmailAsc = 'secondaryEmail_ASC',
+  SecondaryEmailDesc = 'secondaryEmail_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
 /** Represents a binary file in a space. An asset can be any file type. */
 export type Asset = _Node & {
   _id: Scalars['ID'];
@@ -2630,6 +3033,10 @@ export type Discover = Entry &
   _Node & {
     _id: Scalars['ID'];
     aboutUs?: Maybe<DiscoverAboutUs>;
+    asapAreasCollection?: Maybe<DiscoverAsapAreasCollection>;
+    asapAreasCursorCollection?: Maybe<DiscoverAsapAreasCursorCollection>;
+    cnsQuestMembersCollection?: Maybe<DiscoverCnsQuestMembersCollection>;
+    cnsQuestMembersCursorCollection?: Maybe<DiscoverCnsQuestMembersCursorCollection>;
     contentfulMetadata: ContentfulMetadata;
     linkedFrom?: Maybe<DiscoverLinkingCollections>;
     membersCollection?: Maybe<DiscoverMembersCollection>;
@@ -2644,6 +3051,54 @@ export type Discover = Entry &
 export type DiscoverAboutUsArgs = {
   locale?: InputMaybe<Scalars['String']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/discover) */
+export type DiscoverAsapAreasCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Array<InputMaybe<DiscoverAsapAreasCollectionOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<AsapAreasFilter>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/discover) */
+export type DiscoverAsapAreasCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Array<InputMaybe<DiscoverAsapAreasCursorCollectionOrder>>>;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<AsapAreasFilter>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/discover) */
+export type DiscoverCnsQuestMembersCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Array<InputMaybe<DiscoverCnsQuestMembersCollectionOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<UsersFilter>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/discover) */
+export type DiscoverCnsQuestMembersCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<DiscoverCnsQuestMembersCursorCollectionOrder>>
+  >;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<UsersFilter>;
 };
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/discover) */
@@ -2749,6 +3204,196 @@ export type DiscoverAboutUsResourcesInline = ResourceLink & {
   sys: ResourceSys;
 };
 
+export type DiscoverAsapAreasCollection = {
+  items: Array<Maybe<AsapAreas>>;
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
+  total: Scalars['Int'];
+};
+
+export enum DiscoverAsapAreasCollectionOrder {
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  PrimaryEmailAsc = 'primaryEmail_ASC',
+  PrimaryEmailDesc = 'primaryEmail_DESC',
+  SecondaryEmailAsc = 'secondaryEmail_ASC',
+  SecondaryEmailDesc = 'secondaryEmail_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export type DiscoverAsapAreasCursorCollection = {
+  items: Array<Maybe<AsapAreas>>;
+  limit: Scalars['Int'];
+  pages: CursorPages;
+};
+
+export enum DiscoverAsapAreasCursorCollectionOrder {
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  PrimaryEmailAsc = 'primaryEmail_ASC',
+  PrimaryEmailDesc = 'primaryEmail_DESC',
+  SecondaryEmailAsc = 'secondaryEmail_ASC',
+  SecondaryEmailDesc = 'secondaryEmail_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export type DiscoverCnsQuestMembersCollection = {
+  items: Array<Maybe<Users>>;
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
+  total: Scalars['Int'];
+};
+
+export enum DiscoverCnsQuestMembersCollectionOrder {
+  ActiveCampaignCreatedAtAsc = 'activeCampaignCreatedAt_ASC',
+  ActiveCampaignCreatedAtDesc = 'activeCampaignCreatedAt_DESC',
+  ActiveCampaignIdAsc = 'activeCampaignId_ASC',
+  ActiveCampaignIdDesc = 'activeCampaignId_DESC',
+  AlumniLastUpdatedAsc = 'alumniLastUpdated_ASC',
+  AlumniLastUpdatedDesc = 'alumniLastUpdated_DESC',
+  AlumniLocationAsc = 'alumniLocation_ASC',
+  AlumniLocationDesc = 'alumniLocation_DESC',
+  AlumniSinceDateAsc = 'alumniSinceDate_ASC',
+  AlumniSinceDateDesc = 'alumniSinceDate_DESC',
+  CityAsc = 'city_ASC',
+  CityDesc = 'city_DESC',
+  ContactEmailAsc = 'contactEmail_ASC',
+  ContactEmailDesc = 'contactEmail_DESC',
+  CountryAsc = 'country_ASC',
+  CountryDesc = 'country_DESC',
+  CreatedDateAsc = 'createdDate_ASC',
+  CreatedDateDesc = 'createdDate_DESC',
+  DegreeAsc = 'degree_ASC',
+  DegreeDesc = 'degree_DESC',
+  DismissedGettingStartedAsc = 'dismissedGettingStarted_ASC',
+  DismissedGettingStartedDesc = 'dismissedGettingStarted_DESC',
+  EmailAsc = 'email_ASC',
+  EmailDesc = 'email_DESC',
+  FirstNameAsc = 'firstName_ASC',
+  FirstNameDesc = 'firstName_DESC',
+  InstitutionAsc = 'institution_ASC',
+  InstitutionDesc = 'institution_DESC',
+  LastNameAsc = 'lastName_ASC',
+  LastNameDesc = 'lastName_DESC',
+  LastUpdatedAsc = 'lastUpdated_ASC',
+  LastUpdatedDesc = 'lastUpdated_DESC',
+  MiddleNameAsc = 'middleName_ASC',
+  MiddleNameDesc = 'middleName_DESC',
+  NicknameAsc = 'nickname_ASC',
+  NicknameDesc = 'nickname_DESC',
+  OnboardedAsc = 'onboarded_ASC',
+  OnboardedDesc = 'onboarded_DESC',
+  OpenScienceTeamMemberAsc = 'openScienceTeamMember_ASC',
+  OpenScienceTeamMemberDesc = 'openScienceTeamMember_DESC',
+  OrcidLastModifiedDateAsc = 'orcidLastModifiedDate_ASC',
+  OrcidLastModifiedDateDesc = 'orcidLastModifiedDate_DESC',
+  OrcidLastSyncDateAsc = 'orcidLastSyncDate_ASC',
+  OrcidLastSyncDateDesc = 'orcidLastSyncDate_DESC',
+  OrcidAsc = 'orcid_ASC',
+  OrcidDesc = 'orcid_DESC',
+  PersonalEmailAsc = 'personalEmail_ASC',
+  PersonalEmailDesc = 'personalEmail_DESC',
+  RoleAsc = 'role_ASC',
+  RoleDesc = 'role_DESC',
+  StateOrProvinceAsc = 'stateOrProvince_ASC',
+  StateOrProvinceDesc = 'stateOrProvince_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TechSupportAsc = 'techSupport_ASC',
+  TechSupportDesc = 'techSupport_DESC',
+}
+
+export type DiscoverCnsQuestMembersCursorCollection = {
+  items: Array<Maybe<Users>>;
+  limit: Scalars['Int'];
+  pages: CursorPages;
+};
+
+export enum DiscoverCnsQuestMembersCursorCollectionOrder {
+  ActiveCampaignCreatedAtAsc = 'activeCampaignCreatedAt_ASC',
+  ActiveCampaignCreatedAtDesc = 'activeCampaignCreatedAt_DESC',
+  ActiveCampaignIdAsc = 'activeCampaignId_ASC',
+  ActiveCampaignIdDesc = 'activeCampaignId_DESC',
+  AlumniLastUpdatedAsc = 'alumniLastUpdated_ASC',
+  AlumniLastUpdatedDesc = 'alumniLastUpdated_DESC',
+  AlumniLocationAsc = 'alumniLocation_ASC',
+  AlumniLocationDesc = 'alumniLocation_DESC',
+  AlumniSinceDateAsc = 'alumniSinceDate_ASC',
+  AlumniSinceDateDesc = 'alumniSinceDate_DESC',
+  CityAsc = 'city_ASC',
+  CityDesc = 'city_DESC',
+  ContactEmailAsc = 'contactEmail_ASC',
+  ContactEmailDesc = 'contactEmail_DESC',
+  CountryAsc = 'country_ASC',
+  CountryDesc = 'country_DESC',
+  CreatedDateAsc = 'createdDate_ASC',
+  CreatedDateDesc = 'createdDate_DESC',
+  DegreeAsc = 'degree_ASC',
+  DegreeDesc = 'degree_DESC',
+  DismissedGettingStartedAsc = 'dismissedGettingStarted_ASC',
+  DismissedGettingStartedDesc = 'dismissedGettingStarted_DESC',
+  EmailAsc = 'email_ASC',
+  EmailDesc = 'email_DESC',
+  FirstNameAsc = 'firstName_ASC',
+  FirstNameDesc = 'firstName_DESC',
+  InstitutionAsc = 'institution_ASC',
+  InstitutionDesc = 'institution_DESC',
+  LastNameAsc = 'lastName_ASC',
+  LastNameDesc = 'lastName_DESC',
+  LastUpdatedAsc = 'lastUpdated_ASC',
+  LastUpdatedDesc = 'lastUpdated_DESC',
+  MiddleNameAsc = 'middleName_ASC',
+  MiddleNameDesc = 'middleName_DESC',
+  NicknameAsc = 'nickname_ASC',
+  NicknameDesc = 'nickname_DESC',
+  OnboardedAsc = 'onboarded_ASC',
+  OnboardedDesc = 'onboarded_DESC',
+  OpenScienceTeamMemberAsc = 'openScienceTeamMember_ASC',
+  OpenScienceTeamMemberDesc = 'openScienceTeamMember_DESC',
+  OrcidLastModifiedDateAsc = 'orcidLastModifiedDate_ASC',
+  OrcidLastModifiedDateDesc = 'orcidLastModifiedDate_DESC',
+  OrcidLastSyncDateAsc = 'orcidLastSyncDate_ASC',
+  OrcidLastSyncDateDesc = 'orcidLastSyncDate_DESC',
+  OrcidAsc = 'orcid_ASC',
+  OrcidDesc = 'orcid_DESC',
+  PersonalEmailAsc = 'personalEmail_ASC',
+  PersonalEmailDesc = 'personalEmail_DESC',
+  RoleAsc = 'role_ASC',
+  RoleDesc = 'role_DESC',
+  StateOrProvinceAsc = 'stateOrProvince_ASC',
+  StateOrProvinceDesc = 'stateOrProvince_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TechSupportAsc = 'techSupport_ASC',
+  TechSupportDesc = 'techSupport_DESC',
+}
+
 export type DiscoverCollection = {
   items: Array<Maybe<Discover>>;
   limit: Scalars['Int'];
@@ -2768,6 +3413,10 @@ export type DiscoverFilter = {
   aboutUs_contains?: InputMaybe<Scalars['String']>;
   aboutUs_exists?: InputMaybe<Scalars['Boolean']>;
   aboutUs_not_contains?: InputMaybe<Scalars['String']>;
+  asapAreas?: InputMaybe<CfAsapAreasNestedFilter>;
+  asapAreasCollection_exists?: InputMaybe<Scalars['Boolean']>;
+  cnsQuestMembers?: InputMaybe<CfUsersNestedFilter>;
+  cnsQuestMembersCollection_exists?: InputMaybe<Scalars['Boolean']>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
   members?: InputMaybe<CfUsersNestedFilter>;
   membersCollection_exists?: InputMaybe<Scalars['Boolean']>;
@@ -13019,6 +13668,9 @@ export type Query = {
   announcements?: Maybe<Announcements>;
   announcementsCollection?: Maybe<AnnouncementsCollection>;
   announcementsCursorCollection?: Maybe<AnnouncementsCursorCollection>;
+  asapAreas?: Maybe<AsapAreas>;
+  asapAreasCollection?: Maybe<AsapAreasCollection>;
+  asapAreasCursorCollection?: Maybe<AsapAreasCursorCollection>;
   asset?: Maybe<Asset>;
   assetCollection?: Maybe<AssetCollection>;
   assetCursorCollection?: Maybe<AssetCursorCollection>;
@@ -13238,6 +13890,34 @@ export type QueryAnnouncementsCursorCollectionArgs = {
   preview?: InputMaybe<Scalars['Boolean']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
   where?: InputMaybe<AnnouncementsFilter>;
+};
+
+export type QueryAsapAreasArgs = {
+  id: Scalars['String'];
+  locale?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type QueryAsapAreasCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Array<InputMaybe<AsapAreasOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<AsapAreasFilter>;
+};
+
+export type QueryAsapAreasCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Array<InputMaybe<AsapAreasOrder>>>;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<AsapAreasFilter>;
 };
 
 export type QueryAssetArgs = {
@@ -18907,6 +19587,8 @@ export type TaxonomyConcept = {
 export type TeamMembership = Entry &
   _Node & {
     _id: Scalars['ID'];
+    asapAreasCollection?: Maybe<TeamMembershipAsapAreasCollection>;
+    asapAreasCursorCollection?: Maybe<TeamMembershipAsapAreasCursorCollection>;
     awardsCollection?: Maybe<TeamMembershipAwardsCollection>;
     awardsCursorCollection?: Maybe<TeamMembershipAwardsCursorCollection>;
     contentfulMetadata: ContentfulMetadata;
@@ -18916,6 +19598,31 @@ export type TeamMembership = Entry &
     sys: Sys;
     team?: Maybe<Teams>;
   };
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/teamMembership) */
+export type TeamMembershipAsapAreasCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Array<InputMaybe<TeamMembershipAsapAreasCollectionOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<AsapAreasFilter>;
+};
+
+/** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/teamMembership) */
+export type TeamMembershipAsapAreasCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<TeamMembershipAsapAreasCursorCollectionOrder>>
+  >;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<AsapAreasFilter>;
+};
 
 /** [See type definition](https://app.contentful.com/spaces/5v6w5j61tndm/content_types/teamMembership) */
 export type TeamMembershipAwardsCollectionArgs = {
@@ -18966,6 +19673,53 @@ export type TeamMembershipTeamArgs = {
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
   where?: InputMaybe<TeamsFilter>;
 };
+
+export type TeamMembershipAsapAreasCollection = {
+  items: Array<Maybe<AsapAreas>>;
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
+  total: Scalars['Int'];
+};
+
+export enum TeamMembershipAsapAreasCollectionOrder {
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  PrimaryEmailAsc = 'primaryEmail_ASC',
+  PrimaryEmailDesc = 'primaryEmail_DESC',
+  SecondaryEmailAsc = 'secondaryEmail_ASC',
+  SecondaryEmailDesc = 'secondaryEmail_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export type TeamMembershipAsapAreasCursorCollection = {
+  items: Array<Maybe<AsapAreas>>;
+  limit: Scalars['Int'];
+  pages: CursorPages;
+};
+
+export enum TeamMembershipAsapAreasCursorCollectionOrder {
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  PrimaryEmailAsc = 'primaryEmail_ASC',
+  PrimaryEmailDesc = 'primaryEmail_DESC',
+  SecondaryEmailAsc = 'secondaryEmail_ASC',
+  SecondaryEmailDesc = 'secondaryEmail_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
 
 export type TeamMembershipAwardsCollection = {
   items: Array<Maybe<Awards>>;
@@ -19026,6 +19780,8 @@ export type TeamMembershipCursorCollection = {
 export type TeamMembershipFilter = {
   AND?: InputMaybe<Array<InputMaybe<TeamMembershipFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<TeamMembershipFilter>>>;
+  asapAreas?: InputMaybe<CfAsapAreasNestedFilter>;
+  asapAreasCollection_exists?: InputMaybe<Scalars['Boolean']>;
   awards?: InputMaybe<CfAwardsNestedFilter>;
   awardsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
@@ -21923,6 +22679,8 @@ export enum UsersLabsCursorCollectionOrder {
 }
 
 export type UsersLinkingCollections = {
+  asapAreasCollection?: Maybe<AsapAreasCollection>;
+  asapAreasCursorCollection?: Maybe<AsapAreasCursorCollection>;
   complianceReportsCollection?: Maybe<ComplianceReportsCollection>;
   complianceReportsCursorCollection?: Maybe<ComplianceReportsCursorCollection>;
   discoverCollection?: Maybe<DiscoverCollection>;
@@ -21957,6 +22715,29 @@ export type UsersLinkingCollections = {
   workingGroupLeadersCursorCollection?: Maybe<WorkingGroupLeadersCursorCollection>;
   workingGroupMembersCollection?: Maybe<WorkingGroupMembersCollection>;
   workingGroupMembersCursorCollection?: Maybe<WorkingGroupMembersCursorCollection>;
+};
+
+export type UsersLinkingCollectionsAsapAreasCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<UsersLinkingCollectionsAsapAreasCollectionOrder>>
+  >;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type UsersLinkingCollectionsAsapAreasCursorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  locale?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<
+    Array<InputMaybe<UsersLinkingCollectionsAsapAreasCursorCollectionOrder>>
+  >;
+  pageNext?: InputMaybe<Scalars['String']>;
+  pagePrev?: InputMaybe<Scalars['String']>;
+  preview?: InputMaybe<Scalars['Boolean']>;
+  useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type UsersLinkingCollectionsComplianceReportsCollectionArgs = {
@@ -22359,6 +23140,40 @@ export type UsersLinkingCollectionsWorkingGroupMembersCursorCollectionArgs = {
   preview?: InputMaybe<Scalars['Boolean']>;
   useFallbackLocale?: InputMaybe<Scalars['Boolean']>;
 };
+
+export enum UsersLinkingCollectionsAsapAreasCollectionOrder {
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  PrimaryEmailAsc = 'primaryEmail_ASC',
+  PrimaryEmailDesc = 'primaryEmail_DESC',
+  SecondaryEmailAsc = 'secondaryEmail_ASC',
+  SecondaryEmailDesc = 'secondaryEmail_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
+
+export enum UsersLinkingCollectionsAsapAreasCursorCollectionOrder {
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  PrimaryEmailAsc = 'primaryEmail_ASC',
+  PrimaryEmailDesc = 'primaryEmail_DESC',
+  SecondaryEmailAsc = 'secondaryEmail_ASC',
+  SecondaryEmailDesc = 'secondaryEmail_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+}
 
 export enum UsersLinkingCollectionsComplianceReportsCollectionOrder {
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
@@ -24314,6 +25129,42 @@ export type CfAnnouncementsNestedFilter = {
   sys?: InputMaybe<SysFilter>;
 };
 
+export type CfAsapAreasNestedFilter = {
+  AND?: InputMaybe<Array<InputMaybe<CfAsapAreasNestedFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<CfAsapAreasNestedFilter>>>;
+  contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  membersCollection_exists?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  name_contains?: InputMaybe<Scalars['String']>;
+  name_exists?: InputMaybe<Scalars['Boolean']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  name_not?: InputMaybe<Scalars['String']>;
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  objective?: InputMaybe<Scalars['String']>;
+  objective_contains?: InputMaybe<Scalars['String']>;
+  objective_exists?: InputMaybe<Scalars['Boolean']>;
+  objective_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  objective_not?: InputMaybe<Scalars['String']>;
+  objective_not_contains?: InputMaybe<Scalars['String']>;
+  objective_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  primaryEmail?: InputMaybe<Scalars['String']>;
+  primaryEmail_contains?: InputMaybe<Scalars['String']>;
+  primaryEmail_exists?: InputMaybe<Scalars['Boolean']>;
+  primaryEmail_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  primaryEmail_not?: InputMaybe<Scalars['String']>;
+  primaryEmail_not_contains?: InputMaybe<Scalars['String']>;
+  primaryEmail_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  secondaryEmail?: InputMaybe<Scalars['String']>;
+  secondaryEmail_contains?: InputMaybe<Scalars['String']>;
+  secondaryEmail_exists?: InputMaybe<Scalars['Boolean']>;
+  secondaryEmail_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  secondaryEmail_not?: InputMaybe<Scalars['String']>;
+  secondaryEmail_not_contains?: InputMaybe<Scalars['String']>;
+  secondaryEmail_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  sys?: InputMaybe<SysFilter>;
+};
+
 export type CfAttendanceNestedFilter = {
   AND?: InputMaybe<Array<InputMaybe<CfAttendanceNestedFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<CfAttendanceNestedFilter>>>;
@@ -25784,6 +26635,7 @@ export type CfSupplementGrantNestedFilter = {
 export type CfTeamMembershipNestedFilter = {
   AND?: InputMaybe<Array<InputMaybe<CfTeamMembershipNestedFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<CfTeamMembershipNestedFilter>>>;
+  asapAreasCollection_exists?: InputMaybe<Scalars['Boolean']>;
   awardsCollection_exists?: InputMaybe<Scalars['Boolean']>;
   contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
   inactiveSinceDate?: InputMaybe<Scalars['DateTime']>;
@@ -27689,6 +28541,9 @@ export type FetchDashboardQuery = {
                             | ({ __typename: 'Announcements' } & {
                                 sys: Pick<Sys, 'id'>;
                               })
+                            | ({ __typename: 'AsapAreas' } & {
+                                sys: Pick<Sys, 'id'>;
+                              })
                             | ({ __typename: 'Attendance' } & {
                                 sys: Pick<Sys, 'id'>;
                               })
@@ -27878,6 +28733,9 @@ export type FetchDashboardQuery = {
                                 sys: Pick<Sys, 'id'>;
                               })
                             | ({ __typename: 'Announcements' } & {
+                                sys: Pick<Sys, 'id'>;
+                              })
+                            | ({ __typename: 'AsapAreas' } & {
                                 sys: Pick<Sys, 'id'>;
                               })
                             | ({ __typename: 'Attendance' } & {
@@ -28095,6 +28953,7 @@ export type FetchDiscoverQuery = {
                     | ({ __typename: 'Announcements' } & {
                         sys: Pick<Sys, 'id'>;
                       })
+                    | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
                     | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
                     | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
                     | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -28248,6 +29107,50 @@ export type FetchDiscoverQuery = {
                   'id' | 'firstPublishedAt' | 'publishedAt' | 'publishedVersion'
                 >;
                 avatar?: Maybe<Pick<Asset, 'url'>>;
+              }
+            >
+          >;
+        }>;
+        asapAreasCollection?: Maybe<{
+          items: Array<
+            Maybe<
+              Pick<
+                AsapAreas,
+                'name' | 'objective' | 'primaryEmail' | 'secondaryEmail'
+              > & {
+                sys: Pick<Sys, 'id'>;
+                membersCollection?: Maybe<{
+                  items: Array<Maybe<{ sys: Pick<Sys, 'id'> }>>;
+                }>;
+                linkedFrom?: Maybe<{
+                  teamMembershipCollection?: Maybe<{
+                    items: Array<
+                      Maybe<
+                        Pick<TeamMembership, 'role' | 'inactiveSinceDate'> & {
+                          linkedFrom?: Maybe<{
+                            usersCollection?: Maybe<{
+                              items: Array<
+                                Maybe<
+                                  Pick<
+                                    Users,
+                                    | 'onboarded'
+                                    | 'alumniSinceDate'
+                                    | 'firstName'
+                                    | 'nickname'
+                                    | 'lastName'
+                                  > & {
+                                    sys: Pick<Sys, 'id'>;
+                                    avatar?: Maybe<Pick<Asset, 'url'>>;
+                                  }
+                                >
+                              >;
+                            }>;
+                          }>;
+                        }
+                      >
+                    >;
+                  }>;
+                }>;
               }
             >
           >;
@@ -28476,6 +29379,7 @@ export type EventsContentFragment = Pick<
             Maybe<
               | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+              | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -28564,6 +29468,7 @@ export type EventsContentFragment = Pick<
             Maybe<
               | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+              | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -28652,6 +29557,7 @@ export type EventsContentFragment = Pick<
             Maybe<
               | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+              | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -28907,6 +29813,7 @@ export type FetchEventByIdQuery = {
                 Maybe<
                   | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+                  | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -29011,6 +29918,7 @@ export type FetchEventByIdQuery = {
                 Maybe<
                   | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+                  | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -29115,6 +30023,7 @@ export type FetchEventByIdQuery = {
                 Maybe<
                   | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+                  | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -29401,6 +30310,9 @@ export type FetchEventsQuery = {
                         | ({ __typename: 'Announcements' } & {
                             sys: Pick<Sys, 'id'>;
                           })
+                        | ({ __typename: 'AsapAreas' } & {
+                            sys: Pick<Sys, 'id'>;
+                          })
                         | ({ __typename: 'Attendance' } & {
                             sys: Pick<Sys, 'id'>;
                           })
@@ -29553,6 +30465,9 @@ export type FetchEventsQuery = {
                         | ({ __typename: 'Announcements' } & {
                             sys: Pick<Sys, 'id'>;
                           })
+                        | ({ __typename: 'AsapAreas' } & {
+                            sys: Pick<Sys, 'id'>;
+                          })
                         | ({ __typename: 'Attendance' } & {
                             sys: Pick<Sys, 'id'>;
                           })
@@ -29703,6 +30618,9 @@ export type FetchEventsQuery = {
                       Maybe<
                         | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                         | ({ __typename: 'Announcements' } & {
+                            sys: Pick<Sys, 'id'>;
+                          })
+                        | ({ __typename: 'AsapAreas' } & {
                             sys: Pick<Sys, 'id'>;
                           })
                         | ({ __typename: 'Attendance' } & {
@@ -30063,6 +30981,9 @@ export type FetchEventsByUserIdQuery = {
                                     | ({ __typename: 'Announcements' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
+                                    | ({ __typename: 'AsapAreas' } & {
+                                        sys: Pick<Sys, 'id'>;
+                                      })
                                     | ({ __typename: 'Attendance' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
@@ -30240,6 +31161,9 @@ export type FetchEventsByUserIdQuery = {
                                     | ({ __typename: 'Announcements' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
+                                    | ({ __typename: 'AsapAreas' } & {
+                                        sys: Pick<Sys, 'id'>;
+                                      })
                                     | ({ __typename: 'Attendance' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
@@ -30415,6 +31339,9 @@ export type FetchEventsByUserIdQuery = {
                                         sys: Pick<Sys, 'id'>;
                                       })
                                     | ({ __typename: 'Announcements' } & {
+                                        sys: Pick<Sys, 'id'>;
+                                      })
+                                    | ({ __typename: 'AsapAreas' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
                                     | ({ __typename: 'Attendance' } & {
@@ -30823,6 +31750,9 @@ export type FetchEventsByExternalAuthorIdQuery = {
                                     | ({ __typename: 'Announcements' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
+                                    | ({ __typename: 'AsapAreas' } & {
+                                        sys: Pick<Sys, 'id'>;
+                                      })
                                     | ({ __typename: 'Attendance' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
@@ -31000,6 +31930,9 @@ export type FetchEventsByExternalAuthorIdQuery = {
                                     | ({ __typename: 'Announcements' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
+                                    | ({ __typename: 'AsapAreas' } & {
+                                        sys: Pick<Sys, 'id'>;
+                                      })
                                     | ({ __typename: 'Attendance' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
@@ -31175,6 +32108,9 @@ export type FetchEventsByExternalAuthorIdQuery = {
                                         sys: Pick<Sys, 'id'>;
                                       })
                                     | ({ __typename: 'Announcements' } & {
+                                        sys: Pick<Sys, 'id'>;
+                                      })
+                                    | ({ __typename: 'AsapAreas' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
                                     | ({ __typename: 'Attendance' } & {
@@ -31583,6 +32519,9 @@ export type FetchEventsByTeamIdQuery = {
                                     | ({ __typename: 'Announcements' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
+                                    | ({ __typename: 'AsapAreas' } & {
+                                        sys: Pick<Sys, 'id'>;
+                                      })
                                     | ({ __typename: 'Attendance' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
@@ -31760,6 +32699,9 @@ export type FetchEventsByTeamIdQuery = {
                                     | ({ __typename: 'Announcements' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
+                                    | ({ __typename: 'AsapAreas' } & {
+                                        sys: Pick<Sys, 'id'>;
+                                      })
                                     | ({ __typename: 'Attendance' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
@@ -31935,6 +32877,9 @@ export type FetchEventsByTeamIdQuery = {
                                         sys: Pick<Sys, 'id'>;
                                       })
                                     | ({ __typename: 'Announcements' } & {
+                                        sys: Pick<Sys, 'id'>;
+                                      })
+                                    | ({ __typename: 'AsapAreas' } & {
                                         sys: Pick<Sys, 'id'>;
                                       })
                                     | ({ __typename: 'Attendance' } & {
@@ -33911,6 +34856,9 @@ export type FetchResearchOutputByManuscriptVersionIdQuery = {
                           | ({ __typename: 'Announcements' } & {
                               sys: Pick<Sys, 'id'>;
                             })
+                          | ({ __typename: 'AsapAreas' } & {
+                              sys: Pick<Sys, 'id'>;
+                            })
                           | ({ __typename: 'Attendance' } & {
                               sys: Pick<Sys, 'id'>;
                             })
@@ -35370,6 +36318,7 @@ export type NewsContentFragment = Pick<
             Maybe<
               | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+              | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -35473,6 +36422,7 @@ export type FetchNewsByIdQuery = {
                 Maybe<
                   | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+                  | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -35607,6 +36557,9 @@ export type FetchNewsQuery = {
                       Maybe<
                         | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                         | ({ __typename: 'Announcements' } & {
+                            sys: Pick<Sys, 'id'>;
+                          })
+                        | ({ __typename: 'AsapAreas' } & {
                             sys: Pick<Sys, 'id'>;
                           })
                         | ({ __typename: 'Attendance' } & {
@@ -35774,6 +36727,7 @@ export type PageContentFragment = Pick<
             Maybe<
               | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+              | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -35875,6 +36829,9 @@ export type FetchPagesQuery = {
                       Maybe<
                         | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                         | ({ __typename: 'Announcements' } & {
+                            sys: Pick<Sys, 'id'>;
+                          })
+                        | ({ __typename: 'AsapAreas' } & {
                             sys: Pick<Sys, 'id'>;
                           })
                         | ({ __typename: 'Attendance' } & {
@@ -37690,6 +38647,7 @@ export type ResearchOutputsContentFragment = Pick<
             Maybe<
               | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+              | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -38085,6 +39043,7 @@ export type FetchResearchOutputByIdQuery = {
                 Maybe<
                   | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+                  | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -38488,6 +39447,9 @@ export type FetchResearchOutputsQuery = {
                       Maybe<
                         | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                         | ({ __typename: 'Announcements' } & {
+                            sys: Pick<Sys, 'id'>;
+                          })
+                        | ({ __typename: 'AsapAreas' } & {
                             sys: Pick<Sys, 'id'>;
                           })
                         | ({ __typename: 'Attendance' } & {
@@ -39372,6 +40334,7 @@ export type TutorialsContentFragment = Pick<
             Maybe<
               | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+              | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -39524,6 +40487,7 @@ export type FetchTutorialByIdQuery = {
                 Maybe<
                   | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+                  | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -39707,6 +40671,9 @@ export type FetchTutorialsQuery = {
                       Maybe<
                         | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                         | ({ __typename: 'Announcements' } & {
+                            sys: Pick<Sys, 'id'>;
+                          })
+                        | ({ __typename: 'AsapAreas' } & {
                             sys: Pick<Sys, 'id'>;
                           })
                         | ({ __typename: 'Attendance' } & {
@@ -41293,6 +42260,7 @@ export type WorkingGroupsContentFragment = Pick<
             Maybe<
               | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+              | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
               | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -41506,6 +42474,7 @@ export type FetchWorkingGroupByIdQuery = {
                 Maybe<
                   | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Announcements' } & { sys: Pick<Sys, 'id'> })
+                  | ({ __typename: 'AsapAreas' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Attendance' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'AwardType' } & { sys: Pick<Sys, 'id'> })
                   | ({ __typename: 'Awards' } & { sys: Pick<Sys, 'id'> })
@@ -41747,6 +42716,9 @@ export type FetchWorkingGroupsQuery = {
                       Maybe<
                         | ({ __typename: 'Aims' } & { sys: Pick<Sys, 'id'> })
                         | ({ __typename: 'Announcements' } & {
+                            sys: Pick<Sys, 'id'>;
+                          })
+                        | ({ __typename: 'AsapAreas' } & {
                             sys: Pick<Sys, 'id'>;
                           })
                         | ({ __typename: 'Attendance' } & {
@@ -61283,6 +62255,320 @@ export const FetchDiscoverDocument = {
                                     name: {
                                       kind: 'Name',
                                       value: 'PartialUsersContent',
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'asapAreasCollection' },
+                        arguments: [
+                          {
+                            kind: 'Argument',
+                            name: { kind: 'Name', value: 'limit' },
+                            value: { kind: 'IntValue', value: '20' },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'items' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'sys' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: { kind: 'Name', value: 'id' },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'name' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'objective' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'primaryEmail',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'secondaryEmail',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'membersCollection',
+                                    },
+                                    arguments: [
+                                      {
+                                        kind: 'Argument',
+                                        name: { kind: 'Name', value: 'limit' },
+                                        value: {
+                                          kind: 'IntValue',
+                                          value: '100',
+                                        },
+                                      },
+                                    ],
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'items',
+                                          },
+                                          selectionSet: {
+                                            kind: 'SelectionSet',
+                                            selections: [
+                                              {
+                                                kind: 'Field',
+                                                name: {
+                                                  kind: 'Name',
+                                                  value: 'sys',
+                                                },
+                                                selectionSet: {
+                                                  kind: 'SelectionSet',
+                                                  selections: [
+                                                    {
+                                                      kind: 'Field',
+                                                      name: {
+                                                        kind: 'Name',
+                                                        value: 'id',
+                                                      },
+                                                    },
+                                                  ],
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'linkedFrom' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'teamMembershipCollection',
+                                          },
+                                          arguments: [
+                                            {
+                                              kind: 'Argument',
+                                              name: {
+                                                kind: 'Name',
+                                                value: 'limit',
+                                              },
+                                              value: {
+                                                kind: 'IntValue',
+                                                value: '100',
+                                              },
+                                            },
+                                          ],
+                                          selectionSet: {
+                                            kind: 'SelectionSet',
+                                            selections: [
+                                              {
+                                                kind: 'Field',
+                                                name: {
+                                                  kind: 'Name',
+                                                  value: 'items',
+                                                },
+                                                selectionSet: {
+                                                  kind: 'SelectionSet',
+                                                  selections: [
+                                                    {
+                                                      kind: 'Field',
+                                                      name: {
+                                                        kind: 'Name',
+                                                        value: 'role',
+                                                      },
+                                                    },
+                                                    {
+                                                      kind: 'Field',
+                                                      name: {
+                                                        kind: 'Name',
+                                                        value:
+                                                          'inactiveSinceDate',
+                                                      },
+                                                    },
+                                                    {
+                                                      kind: 'Field',
+                                                      name: {
+                                                        kind: 'Name',
+                                                        value: 'linkedFrom',
+                                                      },
+                                                      selectionSet: {
+                                                        kind: 'SelectionSet',
+                                                        selections: [
+                                                          {
+                                                            kind: 'Field',
+                                                            name: {
+                                                              kind: 'Name',
+                                                              value:
+                                                                'usersCollection',
+                                                            },
+                                                            arguments: [
+                                                              {
+                                                                kind: 'Argument',
+                                                                name: {
+                                                                  kind: 'Name',
+                                                                  value:
+                                                                    'limit',
+                                                                },
+                                                                value: {
+                                                                  kind: 'IntValue',
+                                                                  value: '1',
+                                                                },
+                                                              },
+                                                            ],
+                                                            selectionSet: {
+                                                              kind: 'SelectionSet',
+                                                              selections: [
+                                                                {
+                                                                  kind: 'Field',
+                                                                  name: {
+                                                                    kind: 'Name',
+                                                                    value:
+                                                                      'items',
+                                                                  },
+                                                                  selectionSet:
+                                                                    {
+                                                                      kind: 'SelectionSet',
+                                                                      selections:
+                                                                        [
+                                                                          {
+                                                                            kind: 'Field',
+                                                                            name: {
+                                                                              kind: 'Name',
+                                                                              value:
+                                                                                'sys',
+                                                                            },
+                                                                            selectionSet:
+                                                                              {
+                                                                                kind: 'SelectionSet',
+                                                                                selections:
+                                                                                  [
+                                                                                    {
+                                                                                      kind: 'Field',
+                                                                                      name: {
+                                                                                        kind: 'Name',
+                                                                                        value:
+                                                                                          'id',
+                                                                                      },
+                                                                                    },
+                                                                                  ],
+                                                                              },
+                                                                          },
+                                                                          {
+                                                                            kind: 'Field',
+                                                                            name: {
+                                                                              kind: 'Name',
+                                                                              value:
+                                                                                'onboarded',
+                                                                            },
+                                                                          },
+                                                                          {
+                                                                            kind: 'Field',
+                                                                            name: {
+                                                                              kind: 'Name',
+                                                                              value:
+                                                                                'alumniSinceDate',
+                                                                            },
+                                                                          },
+                                                                          {
+                                                                            kind: 'Field',
+                                                                            name: {
+                                                                              kind: 'Name',
+                                                                              value:
+                                                                                'firstName',
+                                                                            },
+                                                                          },
+                                                                          {
+                                                                            kind: 'Field',
+                                                                            name: {
+                                                                              kind: 'Name',
+                                                                              value:
+                                                                                'nickname',
+                                                                            },
+                                                                          },
+                                                                          {
+                                                                            kind: 'Field',
+                                                                            name: {
+                                                                              kind: 'Name',
+                                                                              value:
+                                                                                'lastName',
+                                                                            },
+                                                                          },
+                                                                          {
+                                                                            kind: 'Field',
+                                                                            name: {
+                                                                              kind: 'Name',
+                                                                              value:
+                                                                                'avatar',
+                                                                            },
+                                                                            selectionSet:
+                                                                              {
+                                                                                kind: 'SelectionSet',
+                                                                                selections:
+                                                                                  [
+                                                                                    {
+                                                                                      kind: 'Field',
+                                                                                      name: {
+                                                                                        kind: 'Name',
+                                                                                        value:
+                                                                                          'url',
+                                                                                      },
+                                                                                    },
+                                                                                  ],
+                                                                              },
+                                                                          },
+                                                                        ],
+                                                                    },
+                                                                },
+                                                              ],
+                                                            },
+                                                          },
+                                                        ],
+                                                      },
+                                                    },
+                                                  ],
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
                                     },
                                   },
                                 ],
