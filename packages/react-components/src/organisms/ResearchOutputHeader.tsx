@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { css } from '@emotion/react';
 import { useLocation, useNavigate } from 'react-router';
 import {
@@ -40,7 +40,9 @@ const backStyles = css({
   // flex, not the link style's inline, so the label's line box doesn't add
   // height over the 36px button
   display: 'flex',
+  alignItems: 'center',
   alignSelf: 'flex-start',
+  gap: rem(8),
   padding: `${rem(8)} 0`,
   marginBottom: rem(28),
   color: colour.foreground.button.tertiary.default,
@@ -49,13 +51,7 @@ const backStyles = css({
     color: colour.foreground.button.tertiary.hover,
     textDecoration: 'none',
   },
-});
-
-const backLabelStyles = css({
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: rem(8),
-  svg: {
+  '> svg': {
     width: remUnit(20),
     height: remUnit(20),
   },
@@ -155,19 +151,14 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const { key } = useLocation();
-  const { isBlocked, isSaving, allowNextNavigation } = useNavigationBlocker();
+  const { isBlocked, allowNextNavigation } = useNavigationBlocker();
   const [confirmingDiscard, setConfirmingDiscard] = useState(false);
   // The sign-in redirect replaces a deep link under a new key, but React
   // Router's history index stays 0. Read once: the guard entry the form pushes
   // later has no index.
   const [isFirstEntry] = useState(() => window.history.state?.idx === 0);
-  // The page stays up while the navigation's transition is pending; a second
-  // exit would go back one page too many.
-  const leavingRef = useRef(false);
 
   const goBack = () => {
-    if (leavingRef.current) return;
-    leavingRef.current = true;
     // A form opened straight from its URL has no page of the Hub to go back to
     if (key === 'default' || isFirstEntry) {
       // Replacing the guard entry keeps browser back from showing the form twice
@@ -186,14 +177,13 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
       <div css={contentStyles}>
         <Button
           linkStyle
-          enabled={!isSaving}
           overrideStyles={backStyles}
           onClick={() => (isBlocked ? setConfirmingDiscard(true) : goBack())}
         >
-          <span css={backLabelStyles}>
+          <>
             {arrowLeftIcon}
             Back
-          </span>
+          </>
         </Button>
         <Display styleAsHeading={4}>
           {getHeaderText(entityType, documentType, isProjectOutput)}

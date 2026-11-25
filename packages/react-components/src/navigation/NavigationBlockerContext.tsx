@@ -23,11 +23,6 @@ type NavigationBlockerContextType = {
    */
   allowNextNavigation: () => void;
   consumeAllowedNavigation: () => boolean;
-  /**
-   * Whether the blocking form is saving, so controls outside it can wait
-   */
-  isSaving: boolean;
-  setSaving: (isSaving: boolean) => void;
 };
 
 const defaultMessage =
@@ -47,10 +42,6 @@ const defaultContext: NavigationBlockerContextType = {
     /* noop - nothing to bypass without a provider */
   },
   consumeAllowedNavigation: () => false,
-  isSaving: false,
-  setSaving: () => {
-    /* noop - no controls to tell without a provider */
-  },
 };
 
 const NavigationBlockerContext =
@@ -64,7 +55,6 @@ export const NavigationBlockerProvider: React.FC<
   NavigationBlockerProviderProps
 > = ({ children }) => {
   const [blockerMessage, setBlockerMessage] = useState<string | null>(null);
-  const [isSaving, setSaving] = useState(false);
 
   const register = useCallback((message: string = defaultMessage) => {
     setBlockerMessage(message);
@@ -97,8 +87,6 @@ export const NavigationBlockerProvider: React.FC<
     requestNavigation,
     allowNextNavigation,
     consumeAllowedNavigation,
-    isSaving,
-    setSaving,
   };
 
   return (

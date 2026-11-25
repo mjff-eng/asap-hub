@@ -218,16 +218,6 @@ describe('NavigationBlockerContext', () => {
     expect(screen.getByTestId('results')).toHaveTextContent('false,true,false');
   });
 
-  it('is not saving without a provider, whatever is set', () => {
-    const Saving = () => {
-      const { isSaving, setSaving } = useNavigationBlocker();
-      useEffect(() => setSaving(true), [setSaving]);
-      return <div data-testid="saving">{String(isSaving)}</div>;
-    };
-    render(<Saving />);
-    expect(screen.getByTestId('saving')).toHaveTextContent('false');
-  });
-
   it('never allows a navigation without a provider', async () => {
     render(<AllowedNavigation />);
 

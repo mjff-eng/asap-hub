@@ -5,7 +5,6 @@ import { useNavigationBlocker } from './NavigationBlockerContext';
 type UseNavigationWarningOptions = {
   shouldBlock: boolean;
   message?: string;
-  isSaving?: boolean;
 };
 
 type UseNavigationWarningResult = {
@@ -18,16 +17,10 @@ const defaultMessage =
 export const useNavigationWarning = ({
   shouldBlock,
   message = defaultMessage,
-  isSaving = false,
 }: UseNavigationWarningOptions): UseNavigationWarningResult => {
   const navigate = useNavigate();
-  const { register, requestNavigation, consumeAllowedNavigation, setSaving } =
+  const { register, requestNavigation, consumeAllowedNavigation } =
     useNavigationBlocker();
-
-  useEffect(() => {
-    setSaving(isSaving);
-    return () => setSaving(false);
-  }, [isSaving, setSaving]);
 
   const intentionalNavigationRef = useRef(false);
 
