@@ -22,6 +22,7 @@ import { NavigationLink } from '../atoms';
 import RailTooltip from '../atoms/RailTooltip';
 import { colour } from '../colors';
 import { crossQuery, menuTransitionMs } from '../layout';
+import { isOutputFormPath } from '../utils';
 import {
   networkIcon,
   discoverIcon,
@@ -154,10 +155,6 @@ const labelFadeInStyles = css({
   },
 });
 
-// Output forms aren't part of any section, so no item is highlighted there.
-const outputFormPath =
-  /\/(create-output|duplicate)\/[^/]+\/?$|^\/shared-research\/[^/]+\/(edit|version)\/?$/;
-
 export interface MainNavigationProps {
   readonly userOnboarded: boolean;
   readonly canViewAnalytics?: boolean;
@@ -173,7 +170,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
   animating = false,
   onToggleCollapse,
 }) => {
-  const highlightActive = !outputFormPath.test(useLocation().pathname);
+  const highlightActive = !isOutputFormPath(useLocation().pathname);
   const labelsHidden = collapsed || animating;
   const fadeInLabel = !collapsed && !animating;
   // The tooltip only arms in the steady collapsed rail, not mid-animation.

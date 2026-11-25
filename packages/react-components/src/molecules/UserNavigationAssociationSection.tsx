@@ -1,8 +1,10 @@
 import { css } from '@emotion/react';
+import { useLocation } from 'react-router';
 import { Divider, Headline5, NavigationLink } from '../atoms';
 import { InterestGroupsIcon, TeamIcon, WorkingGroupsIcon } from '../icons';
 import { MAX_NAVIGATION_MENU_WIDTH } from '../layout';
 import { rem } from '../pixels';
+import { isOutputFormPath } from '../utils';
 
 const dividerStyle = css({
   display: 'block',
@@ -63,31 +65,35 @@ const sectionIcon: Partial<
 
 const UserNavigationAssociationSection: React.FC<
   UserNavigationAssociationSectionProps
-> = ({ userOnboarded, association, title }) => (
-  <div>
-    <span css={dividerStyle}>
-      <Divider />
-    </span>
+> = ({ userOnboarded, association, title }) => {
+  const highlightActive = !isOutputFormPath(useLocation().pathname);
+  return (
     <div>
-      <span css={headlineStyle}>
-        <Headline5 noMargin>{title}</Headline5>
+      <span css={dividerStyle}>
+        <Divider />
       </span>
-      {association.map(
-        ({ name, href, active = true, icon }) =>
-          active && (
-            <li css={listStyle} key={href}>
-              <NavigationLink
-                href={href}
-                icon={icon ?? sectionIcon[title]}
-                enabled={userOnboarded}
-              >
-                <span css={listTextItemStyle}>{name}</span>
-              </NavigationLink>
-            </li>
-          ),
-      )}
+      <div>
+        <span css={headlineStyle}>
+          <Headline5 noMargin>{title}</Headline5>
+        </span>
+        {association.map(
+          ({ name, href, active = true, icon }) =>
+            active && (
+              <li css={listStyle} key={href}>
+                <NavigationLink
+                  href={href}
+                  icon={icon ?? sectionIcon[title]}
+                  enabled={userOnboarded}
+                  highlightActive={highlightActive}
+                >
+                  <span css={listTextItemStyle}>{name}</span>
+                </NavigationLink>
+              </li>
+            ),
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default UserNavigationAssociationSection;

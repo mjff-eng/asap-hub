@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useRef, useState } from 'react';
 import { css } from '@emotion/react';
 import { useLocation, useNavigate } from 'react-router';
 import {
@@ -161,8 +161,13 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
   // Router's history index stays 0. Read once: the guard entry the form pushes
   // later has no index.
   const [isFirstEntry] = useState(() => window.history.state?.idx === 0);
+  // The page stays up while the navigation's transition is pending; a second
+  // exit would go back one page too many.
+  const leavingRef = useRef(false);
 
   const goBack = () => {
+    if (leavingRef.current) return;
+    leavingRef.current = true;
     // A form opened straight from its URL has no page of the Hub to go back to
     if (key === 'default' || isFirstEntry) {
       // Replacing the guard entry keeps browser back from showing the form twice
@@ -209,7 +214,10 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
           cancelText="Keep editing"
           confirmText="Discard"
           onCancel={() => setConfirmingDiscard(false)}
-          onSave={goBack}
+          onSave={() => {
+            setConfirmingDiscard(false);
+            goBack();
+          }}
         />
       )}
     </header>

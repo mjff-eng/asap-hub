@@ -238,6 +238,22 @@ describe('the Back button', () => {
       expect(goSpy).toHaveBeenCalledWith(-2);
     });
 
+    it('closes the dialog on discard and leaves only once', async () => {
+      renderDirty(['/first', '/previous', '/form']);
+      await userEvent.click(screen.getByRole('button', { name: 'Back' }));
+      await userEvent.click(screen.getByRole('button', { name: 'Discard' }));
+
+      expect(
+        screen.queryByRole('heading', { name: 'Discard changes?' }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId('location')).toHaveTextContent('/previous');
+
+      // The header is still up, as while a navigation transition is pending
+      await userEvent.click(screen.getByRole('button', { name: 'Back' }));
+      await userEvent.click(screen.getByRole('button', { name: 'Discard' }));
+      expect(screen.getByTestId('location')).toHaveTextContent('/previous');
+    });
+
     it('goes to the dashboard and keeps guarding later browser backs when the form was opened from its URL', async () => {
       renderDirty(['/form']);
       await userEvent.click(screen.getByRole('button', { name: 'Back' }));

@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 
+import { colour } from '../../colors';
 import UserNavigationAssociationSection from '../UserNavigationAssociationSection';
 
 const interestGroup = {
@@ -110,4 +111,43 @@ it('renders a association section with the correct icon', () => {
     </MemoryRouter>,
   );
   expect(getByTitle('Interest Group')).toBeInTheDocument();
+});
+
+describe('the highlight of the current association', () => {
+  const renderAt = (path: string) =>
+    render(
+      <MemoryRouter initialEntries={[path]}>
+        <UserNavigationAssociationSection
+          association={[
+            {
+              ...workingGroup,
+              name: 'My Working Group',
+              href: '/network/working-groups/wg-1',
+            },
+          ]}
+          userOnboarded={true}
+          title="MY WORKING GROUPS"
+        />
+      </MemoryRouter>,
+    );
+  const highlightedBackground = (container: HTMLElement) =>
+    container.querySelector('a')?.firstElementChild;
+
+  it('shows on the association pages', () => {
+    const { container } = renderAt('/network/working-groups/wg-1/about');
+    expect(highlightedBackground(container)).toHaveStyleRule(
+      'background-color',
+      colour.background['color-brand'],
+    );
+  });
+
+  it('is off on its output forms', () => {
+    const { container } = renderAt(
+      '/network/working-groups/wg-1/create-output/protocol',
+    );
+    expect(highlightedBackground(container)).not.toHaveStyleRule(
+      'background-color',
+      colour.background['color-brand'],
+    );
+  });
 });
