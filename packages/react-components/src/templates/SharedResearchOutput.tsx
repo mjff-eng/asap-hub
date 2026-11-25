@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router';
 
 import { Card, Headline2, Link, Markdown } from '../atoms';
 import { createMailTo, mailToSupport, TECH_SUPPORT_EMAIL } from '../mail';
-import { Breadcrumbs, CtaCard } from '../molecules';
+import { BreadcrumbItem, Breadcrumbs, CtaCard } from '../molecules';
 import {
   ConfirmModal,
   GrantDocumentGrantsCard,
@@ -39,6 +39,7 @@ import {
 import { rem } from '../pixels';
 import {
   getIconForDocumentType as getIconForDocumentTypeCRN,
+  getProjectBreadcrumbs,
   getResearchOutputAssociation,
   getResearchOutputAssociationName,
 } from '../utils';
@@ -99,44 +100,63 @@ type SharedResearchOutputProps = Pick<
     checkForNewVersion: () => Promise<boolean>;
   };
 
-const getDuplicateLink = ({
-  id,
+const getOutputOwner = ({
   publishingEntity,
   workingGroups,
   teams,
   project,
 }: Pick<
   ResearchOutputResponse,
-  'id' | 'publishingEntity' | 'workingGroups' | 'teams' | 'project'
+  'publishingEntity' | 'workingGroups' | 'teams' | 'project'
 >) => {
   switch (getResearchOutputEntityType({ publishingEntity })) {
     case 'working-group': {
-      const workingGroupId = workingGroups?.[0]?.id;
-      return workingGroupId
-        ? network({})
-            .workingGroups({})
-            .workingGroup({ workingGroupId })
-            .duplicateOutput({ id }).$
-        : undefined;
+      const workingGroup = workingGroups?.[0];
+      if (!workingGroup?.id) return undefined;
+      return { workingGroup };
     }
-    case 'project': {
-      const projectRoute = project && projectRouteByType[project.projectType];
-      return project?.id && projectRoute
-        ? projectRoute(project.id).duplicateOutput({ id }).$
-        : undefined;
-    }
+    case 'project':
+      return project?.id ? { project } : undefined;
     case 'team': {
-      // Team outputs are duplicated through their linked project's route
+      // Team outputs belong to their team's linked project
       const teamProject = teams[0]?.project;
-      const teamProjectRoute =
-        teamProject && projectRouteByType[teamProject.projectType];
-      return teamProject && teamProjectRoute
-        ? teamProjectRoute(teamProject.id).duplicateOutput({ id }).$
-        : undefined;
+      return teamProject?.id ? { project: teamProject } : undefined;
     }
     default:
       return undefined;
   }
+};
+
+type OutputOwner = ReturnType<typeof getOutputOwner>;
+
+const getDuplicateLink = (id: string, owner: OutputOwner) => {
+  if (!owner) return undefined;
+  if (owner.workingGroup) {
+    return network({})
+      .workingGroups({})
+      .workingGroup({ workingGroupId: owner.workingGroup.id })
+      .duplicateOutput({ id }).$;
+  }
+  return projectRouteByType[owner.project.projectType](
+    owner.project.id,
+  ).duplicateOutput({ id }).$;
+};
+
+const getOwnerBreadcrumbs = (owner: OutputOwner): BreadcrumbItem[] => {
+  if (!owner) return [];
+  if (owner.workingGroup) {
+    return [
+      { label: 'Working Groups', href: network({}).workingGroups({}).$ },
+      {
+        label: owner.workingGroup.title,
+        href: network({})
+          .workingGroups({})
+          .workingGroup({ workingGroupId: owner.workingGroup.id })
+          .about({}).$,
+      },
+    ];
+  }
+  return getProjectBreadcrumbs(owner.project, owner.project.id);
 };
 
 const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
@@ -184,7 +204,8 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
       .$;
   const grantOverview = grantDocument?.[grantDocument.grantType]?.description;
 
-  const duplicateLink = getDuplicateLink({ id, ...props });
+  const owner = getOutputOwner(props);
+  const duplicateLink = getDuplicateLink(id, owner);
 
   const visibleActions = getVisibleResearchOutputActions(permissions, {
     published,
@@ -270,11 +291,16 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
     }
   };
 
+  // Drafts and outputs in review aren't in Shared Research yet, so the trail
+  // goes through the project or working group that owns them.
+  const ownerBreadcrumbs = published ? [] : getOwnerBreadcrumbs(owner);
   const breadcrumbs = (
     <Breadcrumbs
       homeHref={dashboard({}).$}
       items={[
-        { label: 'Shared Research', href: sharedResearch({}).$ },
+        ...(ownerBreadcrumbs.length
+          ? ownerBreadcrumbs
+          : [{ label: 'Shared Research', href: sharedResearch({}).$ }]),
         { label: props.title },
       ]}
     />

@@ -453,6 +453,123 @@ describe('Not Grant Documents', () => {
     );
   });
 
+  describe('breadcrumbs of an output that is not published', () => {
+    const project = {
+      id: 'project-id',
+      title: 'Project title',
+      projectType: 'Discovery Project' as const,
+      projectId: 'DP-1',
+    };
+    const crumbs = () =>
+      within(screen.getByRole('navigation', { name: 'breadcrumbs' }))
+        .getAllByRole('listitem')
+        .map((item) => {
+          const link = within(item).queryByRole('link');
+          return [item.textContent, link?.getAttribute('href')];
+        });
+
+    it.each`
+      state          | isInReview
+      ${'draft'}     | ${false}
+      ${'in review'} | ${true}
+    `('go through the owning working group when $state', ({ isInReview }) => {
+      renderWithRouter(
+        <SharedResearchOutput
+          {...props}
+          published={false}
+          isInReview={isInReview}
+          title="Title"
+        />,
+      );
+      expect(crumbs()).toEqual([
+        ['Home', '/'],
+        ['Working Groups', '/network/working-groups'],
+        ['Example Working Group', '/network/working-groups/wg-123/about'],
+        ['Title', undefined],
+      ]);
+    });
+
+    it('go through the owning project', () => {
+      renderWithRouter(
+        <SharedResearchOutput
+          {...props}
+          published={false}
+          publishingEntity="Project"
+          workingGroups={undefined}
+          project={project}
+          title="Title"
+        />,
+      );
+      expect(crumbs()).toEqual([
+        ['Home', '/'],
+        ['Discovery Projects', '/projects/discovery'],
+        ['Project title', '/projects/discovery/project-id/about'],
+        ['Title', undefined],
+      ]);
+    });
+
+    it("go through the project of the output's first team", () => {
+      renderWithRouter(
+        <SharedResearchOutput
+          {...props}
+          published={false}
+          publishingEntity="Team"
+          workingGroups={undefined}
+          teams={[
+            {
+              id: 'team-id',
+              displayName: 'Team',
+              project: { ...project, projectType: 'Trainee Project' },
+            },
+          ]}
+          title="Title"
+        />,
+      );
+      expect(crumbs()).toEqual([
+        ['Home', '/'],
+        ['Trainee Projects', '/projects/trainee'],
+        ['Project title', '/projects/trainee/project-id/about'],
+        ['Title', undefined],
+      ]);
+    });
+
+    it('fall back to shared research when no owner is linked', () => {
+      renderWithRouter(
+        <SharedResearchOutput
+          {...props}
+          published={false}
+          publishingEntity="Team"
+          workingGroups={undefined}
+          teams={[{ id: 'team-id', displayName: 'Team' }]}
+          title="Title"
+        />,
+      );
+      expect(crumbs()).toEqual([
+        ['Home', '/'],
+        ['Shared Research', '/shared-research'],
+        ['Title', undefined],
+      ]);
+    });
+
+    it('go through shared research once published, whoever owns it', () => {
+      renderWithRouter(
+        <SharedResearchOutput
+          {...props}
+          published
+          publishingEntity="Project"
+          workingGroups={undefined}
+          project={project}
+          title="Title"
+        />,
+      );
+      expect(crumbs()).toEqual([
+        ['Home', '/'],
+        ['Shared Research', '/shared-research'],
+        ['Title', undefined],
+      ]);
+    });
+  });
+
   it('displays access instructions when data provided', () => {
     const { queryByText, getByText, rerender } = renderWithRouter(
       <SharedResearchOutput {...props} documentType="Article" usageNotes="" />,
