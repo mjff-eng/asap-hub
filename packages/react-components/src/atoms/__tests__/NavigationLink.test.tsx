@@ -149,6 +149,20 @@ describe('with a router', () => {
       colour.background['color-brand'],
     );
   });
+
+  it('does not highlight the current link when highlightActive is false', () => {
+    render(
+      <MemoryRouter initialEntries={['/location']}>
+        <NavigationLink href="/location" icon={<svg />} highlightActive={false}>
+          Target
+        </NavigationLink>
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('Target').parentElement).not.toHaveStyleRule(
+      'background-color',
+      colour.background['color-brand'],
+    );
+  });
 });
 
 describe('without a router (external link with matching pathname)', () => {

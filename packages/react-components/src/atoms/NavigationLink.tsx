@@ -122,12 +122,14 @@ interface NavigationProps {
   readonly href: string;
   readonly enabled?: boolean;
   readonly squareBorder?: boolean;
+  readonly highlightActive?: boolean;
 }
 export const Navigation: React.FC<NavigationProps & PropsWithChildren> = ({
   href,
   children,
   enabled = true,
   squareBorder,
+  highlightActive = true,
 }) => {
   const blockedClick = useBlockedClick();
   const [internal, url] = isInternalLink(href);
@@ -138,6 +140,7 @@ export const Navigation: React.FC<NavigationProps & PropsWithChildren> = ({
     // e.g., /network should be highlighted when at /network/interest-groups
     const linkPath = url.split('#')[0];
     const isActive =
+      highlightActive &&
       linkPath &&
       (location.pathname === linkPath ||
         location.pathname.startsWith(`${linkPath}/`));

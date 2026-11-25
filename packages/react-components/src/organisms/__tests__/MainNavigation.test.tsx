@@ -256,3 +256,41 @@ describe('a collapsed navigation item', () => {
     expect(queryByRole('tooltip')).not.toBeInTheDocument();
   });
 });
+
+describe('on an output form', () => {
+  const renderAt = (path: string) =>
+    render(
+      <MemoryRouter initialEntries={[path]}>
+        <MainNavigation userOnboarded={true} />
+      </MemoryRouter>,
+    );
+
+  it.each([
+    '/projects/discovery/1/create-output/article',
+    '/projects/trainee/1/duplicate/2',
+    '/network/working-groups/1/create-output/report',
+    '/network/working-groups/1/duplicate/2',
+    '/shared-research/1/edit',
+    '/shared-research/1/version',
+  ])('highlights no item at %s', (path) => {
+    const { getAllByRole } = renderAt(path);
+    getAllByRole('link').forEach((link) =>
+      expect(link.firstElementChild).not.toHaveStyleRule(
+        'background-color',
+        colour.background['color-brand'],
+      ),
+    );
+  });
+
+  it.each`
+    path                             | section
+    ${'/shared-research/1'}          | ${'Shared Research'}
+    ${'/projects/discovery/1/about'} | ${'Projects'}
+    ${'/network/working-groups/1'}   | ${'Network'}
+  `('still highlights $section at $path', ({ path, section }) => {
+    const { getByRole } = renderAt(path);
+    expect(
+      getByRole('link', { name: new RegExp(`${section}$`) }).firstElementChild,
+    ).toHaveStyleRule('background-color', colour.background['color-brand']);
+  });
+});
