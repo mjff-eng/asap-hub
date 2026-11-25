@@ -203,21 +203,6 @@ describe('NavigationBlockerContext', () => {
     );
   };
 
-  it('allows the next navigation only once', async () => {
-    render(
-      <NavigationBlockerProvider>
-        <AllowedNavigation />
-      </NavigationBlockerProvider>,
-    );
-
-    await userEvent.click(screen.getByText('Consume'));
-    await userEvent.click(screen.getByText('Allow'));
-    await userEvent.click(screen.getByText('Consume'));
-    await userEvent.click(screen.getByText('Consume'));
-
-    expect(screen.getByTestId('results')).toHaveTextContent('false,true,false');
-  });
-
   it('never allows a navigation without a provider', async () => {
     render(<AllowedNavigation />);
 

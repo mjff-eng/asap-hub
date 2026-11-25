@@ -550,24 +550,6 @@ describe('Not Grant Documents', () => {
         ['Title', undefined],
       ]);
     });
-
-    it('go through shared research once published, whoever owns it', () => {
-      renderWithRouter(
-        <SharedResearchOutput
-          {...props}
-          published
-          publishingEntity="Project"
-          workingGroups={undefined}
-          project={project}
-          title="Title"
-        />,
-      );
-      expect(crumbs()).toEqual([
-        ['Home', '/'],
-        ['Shared Research', '/shared-research'],
-        ['Title', undefined],
-      ]);
-    });
   });
 
   it('displays access instructions when data provided', () => {

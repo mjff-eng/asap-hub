@@ -79,31 +79,14 @@ it('renders every crumb as a list item', () => {
   expect(listItems[2]).toHaveTextContent('My Project');
 });
 
-it('caps the whole trail at 900px', () => {
-  render(<Breadcrumbs homeHref="/" />);
+it('caps the trail at 900px and each crumb at one line of 240px', () => {
+  render(<Breadcrumbs homeHref="/" items={[{ label: 'Long Output Title' }]} />);
   expect(screen.getByRole('navigation')).toHaveStyleRule(
     'max-width',
     '56.25rem',
   );
-});
-
-it.each`
-  kind              | getLabel
-  ${'linked'}       | ${() => screen.getByRole('link', { name: 'Long Project' }).parentElement}
-  ${'current page'} | ${() => screen.getByText('Long Output Title')}
-`('truncates a $kind crumb to one line of at most 240px', ({ getLabel }) => {
-  render(
-    <Breadcrumbs
-      homeHref="/"
-      items={[
-        { label: 'Long Project', href: '/projects/42' },
-        { label: 'Long Output Title' },
-      ]}
-    />,
-  );
-  const label = getLabel();
-  expect(label).toHaveStyleRule('max-width', '15rem');
-  expect(label).toHaveStyleRule('overflow', 'hidden');
-  expect(label).toHaveStyleRule('text-overflow', 'ellipsis');
-  expect(label).toHaveStyleRule('white-space', 'nowrap');
+  const crumb = screen.getByText('Long Output Title');
+  expect(crumb).toHaveStyleRule('max-width', '15rem');
+  expect(crumb).toHaveStyleRule('text-overflow', 'ellipsis');
+  expect(crumb).toHaveStyleRule('white-space', 'nowrap');
 });

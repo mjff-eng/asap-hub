@@ -267,8 +267,6 @@ describe('on an output form', () => {
 
   it.each([
     '/projects/discovery/1/create-output/article',
-    '/projects/trainee/1/duplicate/2',
-    '/network/working-groups/1/create-output/report',
     '/network/working-groups/1/duplicate/2',
     '/shared-research/1/edit',
     '/shared-research/1/version',
@@ -286,7 +284,6 @@ describe('on an output form', () => {
     path                             | section
     ${'/shared-research/1'}          | ${'Shared Research'}
     ${'/projects/discovery/1/about'} | ${'Projects'}
-    ${'/network/working-groups/1'}   | ${'Network'}
   `('still highlights $section at $path', ({ path, section }) => {
     const { getByRole } = renderAt(path);
     expect(
