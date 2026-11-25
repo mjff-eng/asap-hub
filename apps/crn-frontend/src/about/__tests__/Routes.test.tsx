@@ -28,6 +28,7 @@ const props: DiscoverResponse = {
   aboutUs: '',
   members: [],
   scientificAdvisoryBoard: [],
+  cnsQuestMembers: [],
   asapAreas: [],
 };
 
@@ -151,5 +152,29 @@ describe('the About page with tabs', () => {
     ).toBeVisible();
     expect(screen.getByRole('heading', { name: 'Events' })).toBeVisible();
     expect(screen.getByRole('link', { name: 'Sarah Jones' })).toBeVisible();
+  });
+
+  it("renders the advisory board and CNS Quest members on the who's involved tab", async () => {
+    mockGetDiscover.mockResolvedValue({
+      ...props,
+      scientificAdvisoryBoard: [
+        { ...createUserResponse(), id: 'sab-1', displayName: 'Ada Board' },
+      ],
+      cnsQuestMembers: [
+        { ...createUserResponse(), id: 'cns-1', displayName: 'Cal Quest' },
+      ],
+    });
+
+    await renderPage(about({}).whosInvolved({}).$);
+    expect(
+      await screen.findByRole('heading', {
+        name: 'Meet the Scientific Advisory Board',
+      }),
+    ).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Ada Board' })).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: 'Meet the CNS Quest Team' }),
+    ).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Cal Quest' })).toBeVisible();
   });
 });

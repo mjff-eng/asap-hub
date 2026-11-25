@@ -1,11 +1,18 @@
 import { FC } from 'react';
-import { MeetAsapTeam } from '@asap-hub/react-components';
+import { AboutWhosInvolved } from '@asap-hub/react-components';
 import { useDiscoverState } from './state';
 
 const WhosInvolved: FC<Record<string, never>> = () => {
-  const { asapAreas } = useDiscoverState();
+  const { asapAreas, scientificAdvisoryBoard, cnsQuestMembers } =
+    useDiscoverState();
 
-  return <MeetAsapTeam areas={asapAreas} />;
+  return (
+    <AboutWhosInvolved
+      asapAreas={asapAreas}
+      scientificAdvisoryBoard={scientificAdvisoryBoard}
+      cnsQuestMembers={cnsQuestMembers}
+    />
+  );
 };
 
 export default WhosInvolved;

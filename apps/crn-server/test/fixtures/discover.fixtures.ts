@@ -75,6 +75,7 @@ export const getDiscoverDataObject = (): DiscoverDataObject => ({
   members: getDiscoverMembersResponse(),
   membersTeamId: 'uuid-team-1',
   scientificAdvisoryBoard: getDiscoverMembersResponse('sab-'),
+  cnsQuestMembers: getDiscoverMembersResponse('cns-'),
   asapAreas: [
     {
       id: 'area-1',
@@ -111,32 +112,32 @@ export const getContentfulGraphqlDiscoverResponse = (props = {}) => ({
   },
 });
 
-export const getContentfulGraphqlDiscoverMembers = () => [
+export const getContentfulGraphqlDiscoverMembers = (prefix = '') => [
   {
     sys: {
-      id: 'uuid-members-1',
+      id: `${prefix}uuid-members-1`,
       firstPublishedAt: '2020-10-15T17:55:21.000Z',
       publishedAt: '2020-10-15T17:55:21Z',
     },
     lastUpdated: '2020-10-15T17:55:21Z',
-    firstName: 'John',
-    nickname: 'Jack',
-    lastName: 'Doe',
-    email: 'john@example.com',
+    firstName: `${prefix}John`,
+    nickname: `${prefix}Jack`,
+    lastName: `${prefix}Doe`,
+    email: `${prefix}john@example.com`,
     avatar: {
-      url: `https://www.contentful.com/api/assets/asap-crn/uuid-1`,
+      url: `https://www.contentful.com/api/assets/asap-crn/${prefix}uuid-1`,
     },
   },
   {
     sys: {
-      id: 'uuid-members-2',
+      id: `${prefix}uuid-members-2`,
       firstPublishedAt: '2020-10-14T17:55:21.000Z',
       publishedAt: '2020-10-15T17:55:21Z',
     },
     lastUpdated: '2020-10-15T17:55:21Z',
-    firstName: 'John',
-    nickname: 'Jack',
-    lastName: 'Do',
+    firstName: `${prefix}John`,
+    nickname: `${prefix}Jack`,
+    lastName: `${prefix}Do`,
     email: '',
   },
 ];
@@ -209,35 +210,10 @@ export const getContentfulGraphqlDiscover = (props = {}) => ({
     },
   },
   scientificAdvisoryBoardCollection: {
-    items: [
-      {
-        sys: {
-          id: 'sab-uuid-members-1',
-          firstPublishedAt: '2020-10-15T17:55:21.000Z',
-          publishedAt: '2020-10-15T17:55:21Z',
-        },
-        firstName: 'sab-John',
-        nickname: 'sab-Jack',
-        lastName: 'sab-Doe',
-        email: 'sab-john@example.com',
-        avatar: {
-          url: `https://www.contentful.com/api/assets/asap-crn/sab-uuid-1`,
-        },
-        lastUpdated: '2020-10-15T17:55:21Z',
-      },
-      {
-        sys: {
-          id: 'sab-uuid-members-2',
-          firstPublishedAt: '2020-10-14T17:55:21.000Z',
-          publishedAt: '2020-10-15T17:55:21Z',
-        },
-        firstName: 'sab-John',
-        nickname: 'sab-Jack',
-        lastName: 'sab-Do',
-        email: '',
-        lastUpdated: '2020-10-15T17:55:21Z',
-      },
-    ],
+    items: getContentfulGraphqlDiscoverMembers('sab-'),
+  },
+  cnsQuestMembersCollection: {
+    items: getContentfulGraphqlDiscoverMembers('cns-'),
   },
   asapAreasCollection: {
     items: [getContentfulGraphqlAsapArea()],

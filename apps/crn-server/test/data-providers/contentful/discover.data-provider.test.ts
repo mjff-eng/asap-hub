@@ -18,6 +18,15 @@ describe('Discover data provider', () => {
   );
 
   describe('Fetch', () => {
+    const emptyDiscover = {
+      members: [],
+      scientificAdvisoryBoard: [],
+      cnsQuestMembers: [],
+      membersTeamId: undefined,
+      aboutUs: '',
+      asapAreas: [],
+    };
+
     test('it should return the Discover object from the mock server', async () => {
       const contentfulGraphqlClientMockServer =
         getContentfulGraphqlClientMockServer({
@@ -79,6 +88,7 @@ describe('Discover data provider', () => {
         ...getContentfulGraphqlDiscoverResponse({
           membersCollection: null,
           scientificAdvisoryBoardCollection: null,
+          cnsQuestMembersCollection: null,
           membersTeam: null,
           aboutUs: null,
           asapAreasCollection: null,
@@ -87,13 +97,7 @@ describe('Discover data provider', () => {
 
       const result = await dataProvider.fetch();
 
-      expect(result).toEqual({
-        members: [],
-        scientificAdvisoryBoard: [],
-        membersTeamId: undefined,
-        aboutUs: '',
-        asapAreas: [],
-      });
+      expect(result).toEqual(emptyDiscover);
     });
 
     test('removes null items from collections', async () => {
@@ -119,13 +123,7 @@ describe('Discover data provider', () => {
 
       const result = await dataProvider.fetch();
 
-      expect(result).toEqual({
-        members: [],
-        scientificAdvisoryBoard: [],
-        membersTeamId: undefined,
-        aboutUs: '',
-        asapAreas: [],
-      });
+      expect(result).toEqual(emptyDiscover);
     });
 
     test('it should return empty data if no discover page is found', async () => {
@@ -137,13 +135,7 @@ describe('Discover data provider', () => {
 
       const result = await dataProvider.fetch();
 
-      expect(result).toEqual({
-        members: [],
-        scientificAdvisoryBoard: [],
-        membersTeamId: undefined,
-        aboutUs: '',
-        asapAreas: [],
-      });
+      expect(result).toEqual(emptyDiscover);
     });
   });
 

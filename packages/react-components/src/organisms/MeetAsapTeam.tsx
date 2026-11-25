@@ -1,22 +1,14 @@
 import { css } from '@emotion/react';
 import { AsapAreaMember, AsapAreaResponse } from '@asap-hub/model';
-import { network } from '@asap-hub/routing';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import {
-  Anchor,
-  Avatar,
-  Card,
-  CopyButton,
-  Headline2,
-  Headline3,
-  Overlay,
-} from '../atoms';
+import { Card, CopyButton, Headline2, Headline3, Overlay } from '../atoms';
 import { CasTextStyle, casTextStyles } from '../cas-tokens.generated';
 import { colour } from '../colors';
 import { chevronDownIcon, chevronUpIcon, mailIcon } from '../icons';
 import { createMailTo } from '../mail';
 import { SearchField } from '../molecules';
+import AboutMember, { aboutMembersGridStyles } from '../molecules/AboutMember';
 import { rem, tabletScreen } from '../pixels';
 import { textStyle } from '../text';
 
@@ -302,58 +294,11 @@ const membersHeadingStyles = css(text(casTextStyles.body.bold), {
   color: colour.foreground.secondary,
 });
 
-const gridStyles = css({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-  columnGap: rem(24),
-  rowGap: rem(24),
-  margin: 0,
-  padding: `${rem(12)} 0`,
-  listStyle: 'none',
-  [mobileQuery]: {
-    gridTemplateColumns: 'minmax(0, 1fr)',
-  },
-});
-
-const memberStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  gap: rem(16),
-});
-
-const memberWithAreasStyles = css({
-  alignItems: 'flex-start',
-});
-
-const avatarStyles = css({
-  flexShrink: 0,
-  width: rem(48),
-  height: rem(48),
-});
-
-const memberDetailsStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: rem(8),
-  minWidth: 0,
-});
-
-const memberNameStyles = css(
-  text({ ...casTextStyles.body.regular, fontSize: 17 }),
-  {
-    color: colour.foreground.brand,
-    textDecoration: 'none',
-    ':hover': {
-      textDecoration: 'underline',
-    },
-  },
-);
-
 const memberAreasStyles = css({
   display: 'flex',
   flexWrap: 'wrap',
   gap: rem(8),
+  marginTop: rem(4),
 });
 
 const areaPillStyles = css(
@@ -422,7 +367,7 @@ const ExpandableList: React.FC<{ readonly items: ReactNode[] }> = ({
 
   return (
     <>
-      <ul css={gridStyles}>
+      <ul css={aboutMembersGridStyles}>
         {expanded ? items : items.slice(0, MEMBERS_LIMIT)}
       </ul>
       {hiddenCount > 0 && (
@@ -443,37 +388,22 @@ const MemberItem: React.FC<{
   readonly areas?: AsapAreaResponse[];
   readonly onAreaClick?: (areaId: string) => void;
 }> = ({ member, areas, onAreaClick }) => (
-  <li css={[memberStyles, areas && memberWithAreasStyles]}>
-    <div css={avatarStyles}>
-      <Avatar
-        firstName={member.firstName}
-        lastName={member.lastName}
-        imageUrl={member.avatarUrl}
-      />
-    </div>
-    <div css={memberDetailsStyles}>
-      <Anchor
-        href={network({}).users({}).user({ userId: member.id }).$}
-        css={memberNameStyles}
-      >
-        {member.displayName}
-      </Anchor>
-      {areas && (
-        <div css={memberAreasStyles}>
-          {areas.map((area) => (
-            <button
-              key={area.id}
-              type="button"
-              css={areaPillStyles}
-              onClick={() => onAreaClick?.(area.id)}
-            >
-              {area.name}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  </li>
+  <AboutMember member={member}>
+    {areas && (
+      <div css={memberAreasStyles}>
+        {areas.map((area) => (
+          <button
+            key={area.id}
+            type="button"
+            css={areaPillStyles}
+            onClick={() => onAreaClick?.(area.id)}
+          >
+            {area.name}
+          </button>
+        ))}
+      </div>
+    )}
+  </AboutMember>
 );
 
 const AreaEmail: React.FC<{ readonly email: string }> = ({ email }) => {

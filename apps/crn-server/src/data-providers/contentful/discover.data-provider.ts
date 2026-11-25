@@ -48,6 +48,9 @@ export class DiscoverContentfulDataProvider implements DiscoverDataProvider {
 
 const reduceUsers = reducer<UserItem, UserResult>(parseContentfulGraphQlUsers);
 
+const parseUsers = (items: UserItem[] | undefined) =>
+  items?.reduce(reduceUsers, []).map(parseUserToResponse) ?? [];
+
 // Same rules as the Teams page and the ASAP Areas Fields app: the membership
 // has a role and no Inactive Since date, and the user is onboarded and not
 // alumni. Worked out here so changes show without an editor resaving the area.
@@ -119,15 +122,12 @@ const parseGraphQLDiscover = (
   aboutUs: discover?.aboutUs
     ? parseRichText(discover.aboutUs as RichTextFromQuery)
     : '',
-  members:
-    discover?.membersCollection?.items
-      ?.reduce(reduceUsers, [])
-      .map(parseUserToResponse) ?? [],
+  members: parseUsers(discover?.membersCollection?.items),
   membersTeamId: discover?.membersTeam?.sys.id,
-  scientificAdvisoryBoard:
-    discover?.scientificAdvisoryBoardCollection?.items
-      ?.reduce(reduceUsers, [])
-      .map(parseUserToResponse) ?? [],
+  scientificAdvisoryBoard: parseUsers(
+    discover?.scientificAdvisoryBoardCollection?.items,
+  ),
+  cnsQuestMembers: parseUsers(discover?.cnsQuestMembersCollection?.items),
   asapAreas:
     discover?.asapAreasCollection?.items
       .filter((area): area is AsapAreaItem => area !== null)

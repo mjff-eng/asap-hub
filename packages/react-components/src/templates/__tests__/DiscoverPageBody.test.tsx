@@ -7,6 +7,7 @@ const props: ComponentProps<typeof DiscoverPageBody> = {
   aboutUs: '',
   members: [],
   scientificAdvisoryBoard: [],
+  cnsQuestMembers: [],
   asapAreas: [],
 };
 

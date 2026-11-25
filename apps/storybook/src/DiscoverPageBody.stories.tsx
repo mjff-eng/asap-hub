@@ -103,6 +103,7 @@ const props = (): ComponentProps<typeof DiscoverPageBody> => ({
   members,
   scientificAdvisoryBoard: members,
   aboutUs: text('About Us', ''),
+  cnsQuestMembers: [],
   asapAreas: [],
 });
 
