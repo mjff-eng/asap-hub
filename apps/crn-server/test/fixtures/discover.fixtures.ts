@@ -75,6 +75,31 @@ export const getDiscoverDataObject = (): DiscoverDataObject => ({
   members: getDiscoverMembersResponse(),
   membersTeamId: 'uuid-team-1',
   scientificAdvisoryBoard: getDiscoverMembersResponse('sab-'),
+  asapAreas: [
+    {
+      id: 'area-1',
+      name: 'Events',
+      objective: 'Plan and execute scientific meetings.',
+      primaryEmail: 'meetings@example.com',
+      secondaryEmail: 'cosa@example.com',
+      members: [
+        {
+          id: 'area-user-2',
+          firstName: 'Jane',
+          lastName: 'Smith',
+          displayName: 'Jane Smith',
+          avatarUrl: undefined,
+        },
+        {
+          id: 'area-user-1',
+          firstName: 'John',
+          lastName: 'Doe',
+          displayName: 'John (Jack) Doe',
+          avatarUrl: 'https://www.contentful.com/api/assets/asap-crn/area-1',
+        },
+      ],
+    },
+  ],
 });
 
 export const getDiscoverResponse = (): DiscoverResponse =>
@@ -116,6 +141,64 @@ export const getContentfulGraphqlDiscoverMembers = () => [
   },
 ];
 
+export const getContentfulGraphqlAsapAreaMembership = ({
+  id = 'area-user-1',
+  firstName = 'John',
+  nickname = 'Jack' as string | null,
+  lastName = 'Doe',
+  avatar = {
+    url: 'https://www.contentful.com/api/assets/asap-crn/area-1',
+  } as { url: string } | null,
+  role = 'Project Manager' as string | null,
+  inactiveSinceDate = null as string | null,
+  onboarded = true,
+  alumniSinceDate = null as string | null,
+} = {}) => ({
+  role,
+  inactiveSinceDate,
+  linkedFrom: {
+    usersCollection: {
+      items: [
+        {
+          sys: { id },
+          onboarded,
+          alumniSinceDate,
+          firstName,
+          nickname,
+          lastName,
+          avatar,
+        },
+      ],
+    },
+  },
+});
+
+export const getContentfulGraphqlAsapArea = (props = {}) => ({
+  sys: { id: 'area-1' },
+  name: 'Events',
+  objective: 'Plan and execute scientific meetings.',
+  primaryEmail: 'meetings@example.com',
+  secondaryEmail: 'cosa@example.com',
+  membersCollection: {
+    items: [{ sys: { id: 'area-user-2' } }, { sys: { id: 'area-user-1' } }],
+  },
+  linkedFrom: {
+    teamMembershipCollection: {
+      items: [
+        getContentfulGraphqlAsapAreaMembership(),
+        getContentfulGraphqlAsapAreaMembership({
+          id: 'area-user-2',
+          firstName: 'Jane',
+          nickname: null,
+          lastName: 'Smith',
+          avatar: null,
+        }),
+      ],
+    },
+  },
+  ...props,
+});
+
 export const getContentfulGraphqlDiscover = (props = {}) => ({
   membersCollection: {
     items: getContentfulGraphqlDiscoverMembers(),
@@ -155,6 +238,9 @@ export const getContentfulGraphqlDiscover = (props = {}) => ({
         lastUpdated: '2020-10-15T17:55:21Z',
       },
     ],
+  },
+  asapAreasCollection: {
+    items: [getContentfulGraphqlAsapArea()],
   },
   aboutUs: {
     json: {

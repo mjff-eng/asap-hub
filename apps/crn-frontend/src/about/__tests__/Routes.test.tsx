@@ -28,6 +28,7 @@ const props: DiscoverResponse = {
   aboutUs: '',
   members: [],
   scientificAdvisoryBoard: [],
+  asapAreas: [],
 };
 
 const renderPage = async (initialEntry = '/about') => {
@@ -121,5 +122,34 @@ describe('the About page with tabs', () => {
         name: 'Changing the way science is typically done',
       }),
     ).not.toBeInTheDocument();
+  });
+
+  it("renders the ASAP areas on the who's involved tab", async () => {
+    mockGetDiscover.mockResolvedValue({
+      ...props,
+      asapAreas: [
+        {
+          id: 'area-1',
+          name: 'Events',
+          objective: 'Plan scientific meetings.',
+          primaryEmail: 'meetings@example.com',
+          members: [
+            {
+              id: 'user-1',
+              firstName: 'Sarah',
+              lastName: 'Jones',
+              displayName: 'Sarah Jones',
+            },
+          ],
+        },
+      ],
+    });
+
+    await renderPage(about({}).whosInvolved({}).$);
+    expect(
+      await screen.findByRole('heading', { name: 'Meet the ASAP team' }),
+    ).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Events' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Sarah Jones' })).toBeVisible();
   });
 });
