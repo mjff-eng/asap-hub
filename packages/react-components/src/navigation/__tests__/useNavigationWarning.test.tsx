@@ -378,6 +378,36 @@ describe('useNavigationWarning', () => {
   });
 
   describe('context registration', () => {
+    it('tells the context while the form is saving, until it unmounts', () => {
+      const SavingState = () => (
+        <div data-testid="saving">
+          {String(useNavigationBlocker().isSaving)}
+        </div>
+      );
+      const SavingForm = ({ isSaving }: { isSaving: boolean }) => {
+        useNavigationWarning({ shouldBlock: true, isSaving });
+        return null;
+      };
+      const ui = (form: React.ReactNode) => (
+        <MemoryRouter>
+          <NavigationBlockerProvider>
+            {form}
+            <SavingState />
+          </NavigationBlockerProvider>
+        </MemoryRouter>
+      );
+
+      const { rerender } = render(ui(<SavingForm isSaving />));
+      expect(screen.getByTestId('saving')).toHaveTextContent('true');
+
+      rerender(ui(<SavingForm isSaving={false} />));
+      expect(screen.getByTestId('saving')).toHaveTextContent('false');
+
+      rerender(ui(<SavingForm isSaving />));
+      rerender(ui(null));
+      expect(screen.getByTestId('saving')).toHaveTextContent('false');
+    });
+
     it('registers with context when shouldBlock is true', async () => {
       renderWithProviders(<TestComponent shouldBlock={true} />);
 

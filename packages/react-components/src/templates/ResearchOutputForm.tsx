@@ -225,6 +225,7 @@ const ResearchOutputForm: React.FC<ResearchOutputFormProps> = ({
 
   const { blockedNavigate } = useNavigationWarning({
     shouldBlock: isDirty || isSaving,
+    isSaving,
   });
 
   const handleCancel = () => {

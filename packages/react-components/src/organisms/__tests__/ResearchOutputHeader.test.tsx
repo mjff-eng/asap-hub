@@ -5,7 +5,7 @@ import {
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps, ReactNode } from 'react';
-import { MemoryRouter, useLocation } from 'react-router';
+import { MemoryRouter, useLocation, useNavigationType } from 'react-router';
 
 import {
   NavigationBlockerProvider,
@@ -113,7 +113,10 @@ describe('the Back button', () => {
   };
 
   const LocationDisplay = () => (
-    <div data-testid="location">{useLocation().pathname}</div>
+    <>
+      <div data-testid="location">{useLocation().pathname}</div>
+      <div data-testid="navigation-type">{useNavigationType()}</div>
+    </>
   );
 
   const DirtyForm = () => {
@@ -130,6 +133,7 @@ describe('the Back button', () => {
   });
   afterEach(() => {
     jest.restoreAllMocks();
+    window.history.replaceState(null, '');
   });
 
   it('goes back to the previous page', async () => {
@@ -153,6 +157,34 @@ describe('the Back button', () => {
     );
     await userEvent.click(screen.getByRole('button', { name: 'Back' }));
     expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/);
+    expect(screen.getByTestId('navigation-type')).toHaveTextContent('PUSH');
+  });
+
+  it('goes to the dashboard when the sign-in redirect replaced the form URL', async () => {
+    // What React Router leaves on the first entry after a replace
+    window.history.replaceState({ idx: 0 }, '');
+    renderWithRouter(
+      <>
+        <ResearchOutputHeader {...headerProps} />
+        <LocationDisplay />
+      </>,
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Back' }));
+    expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/);
+  });
+
+  it('is disabled while the form is saving', () => {
+    const SavingForm = () => {
+      useNavigationWarning({ shouldBlock: true, isSaving: true });
+      return null;
+    };
+    renderWithRouter(
+      <>
+        <SavingForm />
+        <ResearchOutputHeader {...headerProps} />
+      </>,
+    );
+    expect(screen.getByRole('button', { name: 'Back' })).toBeDisabled();
   });
 
   describe('with unsaved changes', () => {
@@ -212,6 +244,10 @@ describe('the Back button', () => {
       await userEvent.click(screen.getByRole('button', { name: 'Discard' }));
 
       expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/);
+      // Replaces the form's guard entry so browser back shows the form once
+      expect(screen.getByTestId('navigation-type')).toHaveTextContent(
+        'REPLACE',
+      );
       window.dispatchEvent(new PopStateEvent('popstate'));
       expect(confirmSpy).toHaveBeenCalled();
     });

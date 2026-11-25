@@ -155,13 +155,18 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const { key } = useLocation();
-  const { isBlocked, allowNextNavigation } = useNavigationBlocker();
+  const { isBlocked, isSaving, allowNextNavigation } = useNavigationBlocker();
   const [confirmingDiscard, setConfirmingDiscard] = useState(false);
+  // The sign-in redirect replaces a deep link under a new key, but React
+  // Router's history index stays 0. Read once: the guard entry the form pushes
+  // later has no index.
+  const [isFirstEntry] = useState(() => window.history.state?.idx === 0);
 
   const goBack = () => {
     // A form opened straight from its URL has no page of the Hub to go back to
-    if (key === 'default') {
-      void navigate(dashboard({}).$);
+    if (key === 'default' || isFirstEntry) {
+      // Replacing the guard entry keeps browser back from showing the form twice
+      void navigate(dashboard({}).$, { replace: isBlocked });
       return;
     }
     // The form's browser back guard would ask again with the native confirm
@@ -176,6 +181,7 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
       <div css={contentStyles}>
         <Button
           linkStyle
+          enabled={!isSaving}
           overrideStyles={backStyles}
           onClick={() => (isBlocked ? setConfirmingDiscard(true) : goBack())}
         >
