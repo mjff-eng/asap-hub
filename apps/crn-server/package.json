@@ -21,6 +21,7 @@
     "import:link-lab-pis": "ts-node ./scripts/link-lab-pis.ts",
     "publish:team-entities": "ts-node ./scripts/publish-team-entities.ts",
     "import:aims-milestones": "ts-node ./scripts/import-aims-and-milestones.ts",
+    "update:manuscripts": "ts-node ./scripts/update-manuscripts.ts",
     "sync:opensearch": "ts-node ./scripts/opensearch/sync-opensearch-analytics.ts",
     "sync:compliance-sheet": "ts-node ./scripts/sync-compliance-sheet.ts",
     "sync:preprint-compliance-local": "ts-node ./scripts/opensearch/sync-opensearch-preprint-compliance-local.ts",
