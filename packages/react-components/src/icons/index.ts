@@ -6,6 +6,7 @@ export { default as aiGenerate } from './ai-generate';
 export { default as AlphabeticalSortingIcon } from './alphabetical-sorting';
 export { default as alumniBadgeIcon } from './alumni-badge';
 export { default as analyticsIcon } from './analytics';
+export { default as arrowLeftIcon } from './arrow-left';
 export { default as article } from './article';
 export { default as asapEventIcon } from './asap-event';
 export { default as asapLogo } from './asap-logo';

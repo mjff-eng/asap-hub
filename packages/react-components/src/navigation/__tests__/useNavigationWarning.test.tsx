@@ -2,7 +2,10 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, useLocation } from 'react-router';
 import { useState } from 'react';
-import { NavigationBlockerProvider } from '../NavigationBlockerContext';
+import {
+  NavigationBlockerProvider,
+  useNavigationBlocker,
+} from '../NavigationBlockerContext';
 import { useNavigationWarning } from '../useNavigationWarning';
 
 describe('useNavigationWarning', () => {
@@ -258,6 +261,37 @@ describe('useNavigationWarning', () => {
       window.dispatchEvent(new PopStateEvent('popstate'));
 
       expect(window.confirm).toHaveBeenCalledWith(customMessage);
+    });
+
+    it('goes back without the confirm when the navigation was already allowed, once', async () => {
+      const goSpy = jest.spyOn(window.history, 'go');
+      jest.spyOn(window, 'confirm').mockReturnValue(false);
+      const AllowButton = () => {
+        const { allowNextNavigation } = useNavigationBlocker();
+        return <button onClick={allowNextNavigation}>Allow</button>;
+      };
+
+      renderWithProviders(
+        <>
+          <TestComponent shouldBlock={true} />
+          <AllowButton />
+        </>,
+      );
+      goSpy.mockClear();
+
+      await userEvent.click(screen.getByRole('button', { name: 'Allow' }));
+      window.dispatchEvent(new PopStateEvent('popstate'));
+
+      expect(window.confirm).not.toHaveBeenCalled();
+      expect(goSpy).toHaveBeenCalledWith(-2);
+
+      goSpy.mockClear();
+      // The first popstate is the one go(-2) fires; the next back is a new one
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      window.dispatchEvent(new PopStateEvent('popstate'));
+
+      expect(window.confirm).toHaveBeenCalledTimes(1);
+      expect(goSpy).not.toHaveBeenCalled();
     });
   });
 

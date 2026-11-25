@@ -183,4 +183,47 @@ describe('NavigationBlockerContext', () => {
       'Are you sure you want to leave? Unsaved changes will be lost.',
     );
   });
+
+  const AllowedNavigation = () => {
+    const { allowNextNavigation, consumeAllowedNavigation } =
+      useNavigationBlocker();
+    const [results, setResults] = useState<boolean[]>([]);
+    return (
+      <div>
+        <button onClick={allowNextNavigation}>Allow</button>
+        <button
+          onClick={() =>
+            setResults((prev) => [...prev, consumeAllowedNavigation()])
+          }
+        >
+          Consume
+        </button>
+        <div data-testid="results">{results.join(',')}</div>
+      </div>
+    );
+  };
+
+  it('allows the next navigation only once', async () => {
+    render(
+      <NavigationBlockerProvider>
+        <AllowedNavigation />
+      </NavigationBlockerProvider>,
+    );
+
+    await userEvent.click(screen.getByText('Consume'));
+    await userEvent.click(screen.getByText('Allow'));
+    await userEvent.click(screen.getByText('Consume'));
+    await userEvent.click(screen.getByText('Consume'));
+
+    expect(screen.getByTestId('results')).toHaveTextContent('false,true,false');
+  });
+
+  it('never allows a navigation without a provider', async () => {
+    render(<AllowedNavigation />);
+
+    await userEvent.click(screen.getByText('Allow'));
+    await userEvent.click(screen.getByText('Consume'));
+
+    expect(screen.getByTestId('results')).toHaveTextContent('false');
+  });
 });

@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
 
 type NavigationBlockerContextType = {
   /**
@@ -11,6 +17,12 @@ type NavigationBlockerContextType = {
    * Shows the confirm window (window.confirm) and returns user choice
    */
   requestNavigation: () => boolean;
+  /**
+   * Lets the next browser back go through without the confirm window,
+   * for callers that already asked the user with their own dialog
+   */
+  allowNextNavigation: () => void;
+  consumeAllowedNavigation: () => boolean;
 };
 
 const defaultMessage =
@@ -26,6 +38,10 @@ const defaultContext: NavigationBlockerContextType = {
   isBlocked: false,
   message: defaultMessage,
   requestNavigation: () => true,
+  allowNextNavigation: () => {
+    /* noop - nothing to bypass without a provider */
+  },
+  consumeAllowedNavigation: () => false,
 };
 
 const NavigationBlockerContext =
@@ -54,11 +70,23 @@ export const NavigationBlockerProvider: React.FC<
     return window.confirm(blockerMessage);
   }, [blockerMessage]);
 
+  const allowedNavigationRef = useRef(false);
+  const allowNextNavigation = useCallback(() => {
+    allowedNavigationRef.current = true;
+  }, []);
+  const consumeAllowedNavigation = useCallback(() => {
+    const allowed = allowedNavigationRef.current;
+    allowedNavigationRef.current = false;
+    return allowed;
+  }, []);
+
   const value: NavigationBlockerContextType = {
     register,
     isBlocked: blockerMessage !== null,
     message: blockerMessage ?? defaultMessage,
     requestNavigation,
+    allowNextNavigation,
+    consumeAllowedNavigation,
   };
 
   return (

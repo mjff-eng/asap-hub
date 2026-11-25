@@ -19,7 +19,8 @@ export const useNavigationWarning = ({
   message = defaultMessage,
 }: UseNavigationWarningOptions): UseNavigationWarningResult => {
   const navigate = useNavigate();
-  const { register, requestNavigation } = useNavigationBlocker();
+  const { register, requestNavigation, consumeAllowedNavigation } =
+    useNavigationBlocker();
 
   const intentionalNavigationRef = useRef(false);
 
@@ -63,7 +64,7 @@ export const useNavigationWarning = ({
 
       window.history.pushState(null, '', window.location.href);
 
-      if (!window.confirm(message)) {
+      if (!consumeAllowedNavigation() && !window.confirm(message)) {
         return;
       }
 
@@ -79,7 +80,7 @@ export const useNavigationWarning = ({
 
     window.addEventListener('popstate', handlePopstate);
     return () => window.removeEventListener('popstate', handlePopstate);
-  }, [shouldBlock, message]);
+  }, [shouldBlock, message, consumeAllowedNavigation]);
 
   useEffect(() => {
     if (!shouldBlock && hasDummyEntryRef.current) {
