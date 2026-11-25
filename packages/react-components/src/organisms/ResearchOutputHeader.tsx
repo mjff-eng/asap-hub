@@ -37,6 +37,9 @@ const contentStyles = css({
 // The title's own 12px top margin completes the 40px gap below Back.
 const backStyles = css({
   ...textStyle(casTextStyles.button.mid),
+  // flex, not the link style's inline, so the label's line box doesn't add
+  // height over the 36px button
+  display: 'flex',
   alignSelf: 'flex-start',
   padding: `${rem(8)} 0`,
   marginBottom: rem(28),

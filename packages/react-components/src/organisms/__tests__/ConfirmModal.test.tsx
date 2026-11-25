@@ -134,3 +134,12 @@ it('hides the close button when hideClose is set', () => {
   expect(queryByTitle('Close')).not.toBeInTheDocument();
   expect(getByRole('button', { name: 'Cancel' })).toBeVisible();
 });
+
+it('keeps the title on the left when the close button is hidden', () => {
+  const { getByRole } = renderModal(
+    <ConfirmModal title="Discard changes?" onCancel={jest.fn()} hideClose />,
+  );
+  expect(
+    getByRole('heading', { name: 'Discard changes?' }).closest('header'),
+  ).toHaveStyleRule('flex-direction', 'row');
+});

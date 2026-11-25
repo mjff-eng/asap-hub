@@ -100,7 +100,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   return (
     <Modal padding={false}>
       {status === 'hasError' && <Toast>{error}</Toast>}
-      <header css={headerStyles}>
+      <header
+        css={[
+          headerStyles,
+          // row-reverse would push the lone title to the right
+          hideClose && { flexDirection: 'row' },
+        ]}
+      >
         {!hideClose && (
           <div css={controlsContainerStyles}>
             {backHref ? (
