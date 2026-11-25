@@ -726,7 +726,7 @@ const MeetAsapTeam: React.FC<MeetAsapTeamProps> = ({ areas }) => {
   };
 
   return (
-    <Card padding={false} overrideStyles={cardStyles}>
+    <Card shadow={false} padding={false} overrideStyles={cardStyles}>
       <div css={introStyles}>
         <Headline2 styleAsHeading={5} noMargin>
           Meet the ASAP team
