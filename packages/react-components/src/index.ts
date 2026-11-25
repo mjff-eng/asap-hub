@@ -166,6 +166,7 @@ export {
 } from './molecules';
 export {
   AboutInitiative,
+  AboutMembersCard,
   AdditionalMaterials,
   articlesToOptions,
   AuthorSelect,
@@ -328,6 +329,7 @@ export {
   AboutPage,
   AboutPageBody,
   AboutPageHeader,
+  AboutWhosInvolved,
   AnalyticsAwardsPageBody,
   AnalyticsPage,
   AnalyticsCollaborationPageBody,

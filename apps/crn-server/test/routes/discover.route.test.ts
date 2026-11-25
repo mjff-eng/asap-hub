@@ -18,6 +18,7 @@ describe('/discover/ route', () => {
         aboutUs: '',
         members: [],
         scientificAdvisoryBoard: [],
+        cnsQuestMembers: [],
         asapAreas: [],
       });
 
@@ -28,6 +29,7 @@ describe('/discover/ route', () => {
         aboutUs: '',
         members: [],
         scientificAdvisoryBoard: [],
+        cnsQuestMembers: [],
         asapAreas: [],
       });
     });

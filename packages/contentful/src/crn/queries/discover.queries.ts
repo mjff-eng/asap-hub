@@ -70,6 +70,11 @@ export const FETCH_DISCOVER = gql`
             ...PartialUsersContent
           }
         }
+        cnsQuestMembersCollection {
+          items {
+            ...PartialUsersContent
+          }
+        }
         asapAreasCollection(limit: 20) {
           items {
             sys {

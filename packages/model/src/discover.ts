@@ -21,6 +21,7 @@ export type DiscoverDataObject = {
   members: UserResponse[];
   membersTeamId?: string;
   scientificAdvisoryBoard: UserResponse[];
+  cnsQuestMembers: UserResponse[];
   asapAreas: AsapAreaDataObject[];
 };
 

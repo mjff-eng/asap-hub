@@ -29111,6 +29111,28 @@ export type FetchDiscoverQuery = {
             >
           >;
         }>;
+        cnsQuestMembersCollection?: Maybe<{
+          items: Array<
+            Maybe<
+              Pick<
+                Users,
+                | 'lastUpdated'
+                | 'email'
+                | 'firstName'
+                | 'nickname'
+                | 'institution'
+                | 'jobTitle'
+                | 'lastName'
+              > & {
+                sys: Pick<
+                  Sys,
+                  'id' | 'firstPublishedAt' | 'publishedAt' | 'publishedVersion'
+                >;
+                avatar?: Maybe<Pick<Asset, 'url'>>;
+              }
+            >
+          >;
+        }>;
         asapAreasCollection?: Maybe<{
           items: Array<
             Maybe<
@@ -62240,6 +62262,34 @@ export const FetchDiscoverDocument = {
                         name: {
                           kind: 'Name',
                           value: 'scientificAdvisoryBoardCollection',
+                        },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'items' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'FragmentSpread',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'PartialUsersContent',
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: {
+                          kind: 'Name',
+                          value: 'cnsQuestMembersCollection',
                         },
                         selectionSet: {
                           kind: 'SelectionSet',
