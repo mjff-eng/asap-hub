@@ -78,3 +78,15 @@ it('renders every crumb as a list item', () => {
   expect(listItems[1]).toHaveTextContent('Discovery Projects');
   expect(listItems[2]).toHaveTextContent('My Project');
 });
+
+it('caps the trail at 900px and each crumb at one line of 240px', () => {
+  render(<Breadcrumbs homeHref="/" items={[{ label: 'Long Output Title' }]} />);
+  expect(screen.getByRole('navigation')).toHaveStyleRule(
+    'max-width',
+    '56.25rem',
+  );
+  const crumb = screen.getByText('Long Output Title');
+  expect(crumb).toHaveStyleRule('max-width', '15rem');
+  expect(crumb).toHaveStyleRule('text-overflow', 'ellipsis');
+  expect(crumb).toHaveStyleRule('white-space', 'nowrap');
+});

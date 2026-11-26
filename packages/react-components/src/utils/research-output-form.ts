@@ -381,3 +381,10 @@ export function transformResearchOutputResponseToRequest(
     projectId: _project?.id ?? undefined,
   };
 }
+
+// Output forms aren't part of any section, so no navigation item is
+// highlighted there.
+const outputFormPath =
+  /\/(create-output|duplicate)\/[^/]+\/?$|^\/shared-research\/[^/]+\/(edit|version)\/?$/;
+export const isOutputFormPath = (pathname: string) =>
+  outputFormPath.test(pathname);

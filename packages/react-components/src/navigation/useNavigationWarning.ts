@@ -19,7 +19,12 @@ export const useNavigationWarning = ({
   message = defaultMessage,
 }: UseNavigationWarningOptions): UseNavigationWarningResult => {
   const navigate = useNavigate();
-  const { register, requestNavigation } = useNavigationBlocker();
+  const {
+    register,
+    requestNavigation,
+    consumeAllowedNavigation,
+    openDiscardDialog,
+  } = useNavigationBlocker();
 
   const intentionalNavigationRef = useRef(false);
 
@@ -63,8 +68,11 @@ export const useNavigationWarning = ({
 
       window.history.pushState(null, '', window.location.href);
 
-      if (!window.confirm(message)) {
-        return;
+      if (!consumeAllowedNavigation()) {
+        // The page's dialog leaves on its own if the user discards
+        if (openDiscardDialog() || !window.confirm(message)) {
+          return;
+        }
       }
 
       intentionalNavigationRef.current = true;
@@ -79,7 +87,7 @@ export const useNavigationWarning = ({
 
     window.addEventListener('popstate', handlePopstate);
     return () => window.removeEventListener('popstate', handlePopstate);
-  }, [shouldBlock, message]);
+  }, [shouldBlock, message, consumeAllowedNavigation, openDiscardDialog]);
 
   useEffect(() => {
     if (!shouldBlock && hasDummyEntryRef.current) {

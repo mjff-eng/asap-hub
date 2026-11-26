@@ -63,6 +63,7 @@ type ConfirmModalProps = {
   readonly confirmText?: string;
   readonly cancelText?: string;
   readonly confirmButtonStyle?: 'primary' | 'warning';
+  readonly hideClose?: boolean;
 
   readonly successHref?: string;
   readonly successState?: unknown;
@@ -87,6 +88,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   successHref,
   successState,
   confirmButtonStyle = 'primary',
+  hideClose = false,
   onCancel = noop,
   onSave = noop,
 }) => {
@@ -98,18 +100,26 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   return (
     <Modal padding={false}>
       {status === 'hasError' && <Toast>{error}</Toast>}
-      <header css={headerStyles}>
-        <div css={controlsContainerStyles}>
-          {backHref ? (
-            <Link small buttonStyle href={backHref}>
-              {crossIcon}
-            </Link>
-          ) : (
-            <Button small onClick={onCancel}>
-              {crossIcon}
-            </Button>
-          )}
-        </div>
+      <header
+        css={[
+          headerStyles,
+          // row-reverse would push the lone title to the right
+          hideClose && { flexDirection: 'row' },
+        ]}
+      >
+        {!hideClose && (
+          <div css={controlsContainerStyles}>
+            {backHref ? (
+              <Link small buttonStyle href={backHref}>
+                {crossIcon}
+              </Link>
+            ) : (
+              <Button small onClick={onCancel}>
+                {crossIcon}
+              </Button>
+            )}
+          </div>
+        )}
         <Headline3 styleAsHeading={5}>{title}</Headline3>
       </header>
       <div css={[paddingStyles, { paddingTop: 0 }]}>

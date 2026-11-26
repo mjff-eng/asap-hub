@@ -1,4 +1,5 @@
 import { css, keyframes } from '@emotion/react';
+import { useLocation } from 'react-router';
 import {
   about,
   discover,
@@ -21,6 +22,7 @@ import { NavigationLink } from '../atoms';
 import RailTooltip from '../atoms/RailTooltip';
 import { colour } from '../colors';
 import { crossQuery, menuTransitionMs } from '../layout';
+import { isOutputFormPath } from '../utils';
 import {
   networkIcon,
   discoverIcon,
@@ -168,6 +170,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
   animating = false,
   onToggleCollapse,
 }) => {
+  const highlightActive = !isOutputFormPath(useLocation().pathname);
   const labelsHidden = collapsed || animating;
   const fadeInLabel = !collapsed && !animating;
   // The tooltip only arms in the steady collapsed rail, not mid-animation.
@@ -183,6 +186,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
             collapsed={railSettled}
             labelsHidden={labelsHidden}
             fadeInLabel={fadeInLabel}
+            highlightActive={highlightActive}
           >
             Network
           </NavigationLink>
@@ -195,6 +199,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
             collapsed={railSettled}
             labelsHidden={labelsHidden}
             fadeInLabel={fadeInLabel}
+            highlightActive={highlightActive}
           >
             Projects
           </NavigationLink>
@@ -207,6 +212,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
             collapsed={railSettled}
             labelsHidden={labelsHidden}
             fadeInLabel={fadeInLabel}
+            highlightActive={highlightActive}
           >
             Shared Research
           </NavigationLink>
@@ -219,6 +225,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
             collapsed={railSettled}
             labelsHidden={labelsHidden}
             fadeInLabel={fadeInLabel}
+            highlightActive={highlightActive}
           >
             Calendar &amp; Events
           </NavigationLink>
@@ -231,6 +238,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
             collapsed={railSettled}
             labelsHidden={labelsHidden}
             fadeInLabel={fadeInLabel}
+            highlightActive={highlightActive}
           >
             News
           </NavigationLink>
@@ -243,6 +251,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
             collapsed={railSettled}
             labelsHidden={labelsHidden}
             fadeInLabel={fadeInLabel}
+            highlightActive={highlightActive}
           >
             Guides &amp; Tutorials
           </NavigationLink>
@@ -255,6 +264,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
             collapsed={railSettled}
             labelsHidden={labelsHidden}
             fadeInLabel={fadeInLabel}
+            highlightActive={highlightActive}
           >
             About ASAP
           </NavigationLink>
@@ -268,6 +278,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({
               collapsed={railSettled}
               labelsHidden={labelsHidden}
               fadeInLabel={fadeInLabel}
+              highlightActive={highlightActive}
             >
               Analytics
             </NavigationLink>

@@ -119,3 +119,18 @@ it('displays error message when save fails', async () => {
     expect(getByText(/Publish and Explore/i).closest('button')).toBeEnabled(),
   );
 });
+
+it('shows the close button by default', () => {
+  const { getByTitle } = renderModal(
+    <ConfirmModal title="Discard changes?" onCancel={jest.fn()} />,
+  );
+  expect(getByTitle('Close')).toBeInTheDocument();
+});
+
+it('hides the close button when hideClose is set', () => {
+  const { queryByTitle, getByRole } = renderModal(
+    <ConfirmModal title="Discard changes?" onCancel={jest.fn()} hideClose />,
+  );
+  expect(queryByTitle('Close')).not.toBeInTheDocument();
+  expect(getByRole('button', { name: 'Cancel' })).toBeVisible();
+});

@@ -3,7 +3,11 @@ import { css } from '@emotion/react';
 import { Link } from '../atoms';
 import { colour } from '../colors';
 import { breadcrumbSeparatorIcon, homeIcon } from '../icons';
-import { rem } from '../pixels';
+import { rem, remUnit } from '../pixels';
+
+const navStyles = css({
+  maxWidth: remUnit(900),
+});
 
 const listStyles = css({
   display: 'flex',
@@ -20,10 +24,22 @@ const itemStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: rem(8),
+  minWidth: 0,
+  maxWidth: '100%',
 });
 
 const labelStyles = css({
   fontSize: rem(15.5),
+});
+
+// remUnit, not rem: rem() emits em, which would shrink the cap on the
+// 15.5px label.
+const truncateStyles = css({
+  minWidth: 0,
+  maxWidth: remUnit(240),
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
 });
 
 const homeStyles = css({
@@ -61,7 +77,7 @@ type BreadcrumbsProps = {
 };
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ homeHref, items = [] }) => (
-  <nav aria-label="breadcrumbs">
+  <nav aria-label="breadcrumbs" css={navStyles}>
     <ol css={listStyles}>
       <li css={[itemStyles, homeStyles]}>
         <Link href={homeHref} label="Home">
@@ -77,13 +93,15 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ homeHref, items = [] }) => (
             </span>
             {isLast || !href ? (
               <span
-                css={plainItemStyles}
+                css={[plainItemStyles, truncateStyles]}
                 aria-current={isLast ? 'page' : undefined}
               >
                 {label}
               </span>
             ) : (
-              <Link href={href}>{label}</Link>
+              <span css={truncateStyles}>
+                <Link href={href}>{label}</Link>
+              </span>
             )}
           </li>
         );

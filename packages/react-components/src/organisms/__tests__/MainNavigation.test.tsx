@@ -256,3 +256,34 @@ describe('a collapsed navigation item', () => {
     expect(queryByRole('tooltip')).not.toBeInTheDocument();
   });
 });
+
+describe('on an output form', () => {
+  const renderAt = (path: string) =>
+    render(
+      <MemoryRouter initialEntries={[path]}>
+        <MainNavigation userOnboarded={true} />
+      </MemoryRouter>,
+    );
+
+  it.each([
+    '/projects/discovery/1/create-output/article',
+    '/network/working-groups/1/duplicate/2',
+    '/shared-research/1/edit',
+    '/shared-research/1/version',
+  ])('highlights no item at %s', (path) => {
+    const { getAllByRole } = renderAt(path);
+    getAllByRole('link').forEach((link) =>
+      expect(link.firstElementChild).not.toHaveStyleRule(
+        'background-color',
+        colour.background['color-brand'],
+      ),
+    );
+  });
+
+  it('still highlights Shared Research on the output itself', () => {
+    const { getByRole } = renderAt('/shared-research/1');
+    expect(
+      getByRole('link', { name: /Shared Research$/ }).firstElementChild,
+    ).toHaveStyleRule('background-color', colour.background['color-brand']);
+  });
+});

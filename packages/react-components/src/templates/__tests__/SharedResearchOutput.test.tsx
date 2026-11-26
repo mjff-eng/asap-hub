@@ -13,6 +13,7 @@ import { researchOutputDocumentTypes } from '@asap-hub/model';
 import { MemoryRouter, useLocation } from 'react-router';
 import { sharedResearch } from '@asap-hub/routing';
 
+import { HighlightedNavigationContext } from '../../navigation';
 import SharedResearchOutput from '../SharedResearchOutput';
 
 let currentLocation: { pathname: string; search: string } | null = null;
@@ -451,6 +452,134 @@ describe('Not Grant Documents', () => {
       'aria-current',
       'page',
     );
+  });
+
+  describe('breadcrumbs of an output that is not published', () => {
+    const project = {
+      id: 'project-id',
+      title: 'Project title',
+      projectType: 'Discovery Project' as const,
+      projectId: 'DP-1',
+    };
+    const crumbs = () =>
+      within(screen.getByRole('navigation', { name: 'breadcrumbs' }))
+        .getAllByRole('listitem')
+        .map((item) => {
+          const link = within(item).queryByRole('link');
+          return [item.textContent, link?.getAttribute('href')];
+        });
+
+    it.each`
+      state          | isInReview
+      ${'draft'}     | ${false}
+      ${'in review'} | ${true}
+    `('go through the owning working group when $state', ({ isInReview }) => {
+      renderWithRouter(
+        <SharedResearchOutput
+          {...props}
+          published={false}
+          isInReview={isInReview}
+          title="Title"
+        />,
+      );
+      expect(crumbs()).toEqual([
+        ['Home', '/'],
+        ['Working Groups', '/network/working-groups'],
+        ['Example Working Group', '/network/working-groups/wg-123/about'],
+        ['Title', undefined],
+      ]);
+    });
+
+    it('go through the owning project', () => {
+      renderWithRouter(
+        <SharedResearchOutput
+          {...props}
+          published={false}
+          publishingEntity="Project"
+          workingGroups={undefined}
+          project={project}
+          title="Title"
+        />,
+      );
+      expect(crumbs()).toEqual([
+        ['Home', '/'],
+        ['Discovery Projects', '/projects/discovery'],
+        ['Project title', '/projects/discovery/project-id/about'],
+        ['Title', undefined],
+      ]);
+    });
+
+    it("go through the project of the output's first team", () => {
+      renderWithRouter(
+        <SharedResearchOutput
+          {...props}
+          published={false}
+          publishingEntity="Team"
+          workingGroups={undefined}
+          teams={[
+            {
+              id: 'team-id',
+              displayName: 'Team',
+              project: { ...project, projectType: 'Trainee Project' },
+            },
+          ]}
+          title="Title"
+        />,
+      );
+      expect(crumbs()).toEqual([
+        ['Home', '/'],
+        ['Trainee Projects', '/projects/trainee'],
+        ['Project title', '/projects/trainee/project-id/about'],
+        ['Title', undefined],
+      ]);
+    });
+
+    it('highlight Projects in the navigation for a project draft', () => {
+      const setHighlightedHref = jest.fn();
+      renderWithRouter(
+        <HighlightedNavigationContext.Provider value={{ setHighlightedHref }}>
+          <SharedResearchOutput
+            {...props}
+            published={false}
+            publishingEntity="Project"
+            workingGroups={undefined}
+            project={project}
+            title="Title"
+          />
+        </HighlightedNavigationContext.Provider>,
+      );
+      expect(setHighlightedHref).toHaveBeenCalledWith('/projects/discovery');
+    });
+
+    it('highlight Network in the navigation for a working group draft', () => {
+      const setHighlightedHref = jest.fn();
+      renderWithRouter(
+        <HighlightedNavigationContext.Provider value={{ setHighlightedHref }}>
+          <SharedResearchOutput {...props} published={false} title="Title" />
+        </HighlightedNavigationContext.Provider>,
+      );
+      expect(setHighlightedHref).toHaveBeenCalledWith(
+        '/network/working-groups',
+      );
+    });
+
+    it('fall back to shared research when no owner is linked', () => {
+      renderWithRouter(
+        <SharedResearchOutput
+          {...props}
+          published={false}
+          publishingEntity="Team"
+          workingGroups={undefined}
+          teams={[{ id: 'team-id', displayName: 'Team' }]}
+          title="Title"
+        />,
+      );
+      expect(crumbs()).toEqual([
+        ['Home', '/'],
+        ['Shared Research', '/shared-research'],
+        ['Title', undefined],
+      ]);
+    });
   });
 
   it('displays access instructions when data provided', () => {

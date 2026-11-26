@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router';
 import { Card, Headline2, Link, Markdown } from '../atoms';
 import { createMailTo, mailToSupport, TECH_SUPPORT_EMAIL } from '../mail';
 import { Breadcrumbs, CtaCard } from '../molecules';
+import { useHighlightedNavigation } from '../navigation';
 import {
   ConfirmModal,
   GrantDocumentGrantsCard,
@@ -39,6 +40,7 @@ import {
 import { rem } from '../pixels';
 import {
   getIconForDocumentType as getIconForDocumentTypeCRN,
+  getProjectBreadcrumbs,
   getResearchOutputAssociation,
   getResearchOutputAssociationName,
 } from '../utils';
@@ -270,11 +272,33 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
     }
   };
 
+  // Drafts and outputs in review aren't in Shared Research yet, so the trail
+  // goes through their owner, picked in the server's publishingEntity order:
+  // working group, then project, then the team's project.
+  const workingGroup = props.workingGroups?.[0];
+  const ownerProject = props.project ?? props.teams[0]?.project;
+  const ownerBreadcrumbs = published
+    ? []
+    : workingGroup
+      ? [
+          { label: 'Working Groups', href: network({}).workingGroups({}).$ },
+          {
+            label: workingGroup.title,
+            href: network({})
+              .workingGroups({})
+              .workingGroup({ workingGroupId: workingGroup.id })
+              .about({}).$,
+          },
+        ]
+      : getProjectBreadcrumbs(ownerProject, ownerProject?.id ?? '');
+  useHighlightedNavigation(ownerBreadcrumbs[0]?.href);
   const breadcrumbs = (
     <Breadcrumbs
       homeHref={dashboard({}).$}
       items={[
-        { label: 'Shared Research', href: sharedResearch({}).$ },
+        ...(ownerBreadcrumbs.length
+          ? ownerBreadcrumbs
+          : [{ label: 'Shared Research', href: sharedResearch({}).$ }]),
         { label: props.title },
       ]}
     />

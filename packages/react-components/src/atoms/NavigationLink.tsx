@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css, keyframes, Theme } from '@emotion/react';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useContext } from 'react';
 import { NavLink, useInRouterContext, useLocation } from 'react-router';
 import { activePrimaryStyles } from '../button';
 import { colour } from '../colors';
 import { crossQuery } from '../layout';
-import { useBlockedClick } from '../navigation';
+import { HighlightedNavigationContext, useBlockedClick } from '../navigation';
 import { lineHeight, rem } from '../pixels';
 import { isInternalLink } from '../utils';
 import RailTooltip from './RailTooltip';
@@ -122,25 +122,29 @@ interface NavigationProps {
   readonly href: string;
   readonly enabled?: boolean;
   readonly squareBorder?: boolean;
+  readonly highlightActive?: boolean;
 }
 export const Navigation: React.FC<NavigationProps & PropsWithChildren> = ({
   href,
   children,
   enabled = true,
   squareBorder,
+  highlightActive = true,
 }) => {
   const blockedClick = useBlockedClick();
   const [internal, url] = isInternalLink(href);
   const location = useLocation();
+  const { highlightedHref } = useContext(HighlightedNavigationContext);
 
   if (useInRouterContext() && internal) {
     // Use prefix matching to highlight parent sections when viewing subsections
     // e.g., /network should be highlighted when at /network/interest-groups
     const linkPath = url.split('#')[0];
+    const pathname = highlightedHref ?? location.pathname;
     const isActive =
+      highlightActive &&
       linkPath &&
-      (location.pathname === linkPath ||
-        location.pathname.startsWith(`${linkPath}/`));
+      (pathname === linkPath || pathname.startsWith(`${linkPath}/`));
 
     return (
       <NavLink

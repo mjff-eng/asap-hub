@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
 
 type NavigationBlockerContextType = {
   /**
@@ -11,6 +17,18 @@ type NavigationBlockerContextType = {
    * Shows the confirm window (window.confirm) and returns user choice
    */
   requestNavigation: () => boolean;
+  /**
+   * Lets the next browser back go through without the confirm window,
+   * for callers that already asked the user with their own dialog
+   */
+  allowNextNavigation: () => void;
+  consumeAllowedNavigation: () => boolean;
+  /**
+   * Lets a page show its own discard dialog on browser back, instead of the
+   * confirm window
+   */
+  setDiscardDialog: (open: (() => void) | null) => void;
+  openDiscardDialog: () => boolean;
 };
 
 const defaultMessage =
@@ -26,6 +44,14 @@ const defaultContext: NavigationBlockerContextType = {
   isBlocked: false,
   message: defaultMessage,
   requestNavigation: () => true,
+  allowNextNavigation: () => {
+    /* noop - nothing to bypass without a provider */
+  },
+  consumeAllowedNavigation: () => false,
+  setDiscardDialog: () => {
+    /* noop - no dialog to show without a provider */
+  },
+  openDiscardDialog: () => false,
 };
 
 const NavigationBlockerContext =
@@ -54,11 +80,35 @@ export const NavigationBlockerProvider: React.FC<
     return window.confirm(blockerMessage);
   }, [blockerMessage]);
 
+  const allowedNavigationRef = useRef(false);
+  const allowNextNavigation = useCallback(() => {
+    allowedNavigationRef.current = true;
+  }, []);
+  const consumeAllowedNavigation = useCallback(() => {
+    const allowed = allowedNavigationRef.current;
+    allowedNavigationRef.current = false;
+    return allowed;
+  }, []);
+
+  const discardDialogRef = useRef<(() => void) | null>(null);
+  const setDiscardDialog = useCallback((open: (() => void) | null) => {
+    discardDialogRef.current = open;
+  }, []);
+  const openDiscardDialog = useCallback(() => {
+    if (!discardDialogRef.current) return false;
+    discardDialogRef.current();
+    return true;
+  }, []);
+
   const value: NavigationBlockerContextType = {
     register,
     isBlocked: blockerMessage !== null,
     message: blockerMessage ?? defaultMessage,
     requestNavigation,
+    allowNextNavigation,
+    consumeAllowedNavigation,
+    setDiscardDialog,
+    openDiscardDialog,
   };
 
   return (

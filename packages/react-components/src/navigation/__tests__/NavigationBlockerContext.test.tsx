@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useEffect, useState } from 'react';
 import {
@@ -182,5 +182,15 @@ describe('NavigationBlockerContext', () => {
     expect(screen.getByTestId('message')).toHaveTextContent(
       'Are you sure you want to leave? Unsaved changes will be lost.',
     );
+  });
+
+  it('allows no navigation and opens no discard dialog without a provider', () => {
+    const { result } = renderHook(() => useNavigationBlocker());
+
+    result.current.allowNextNavigation();
+    result.current.setDiscardDialog(jest.fn());
+
+    expect(result.current.consumeAllowedNavigation()).toBe(false);
+    expect(result.current.openDiscardDialog()).toBe(false);
   });
 });
