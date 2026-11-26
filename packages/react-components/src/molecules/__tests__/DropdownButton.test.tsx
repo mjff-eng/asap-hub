@@ -101,3 +101,40 @@ it('closes menu when clicking an option', () => {
 
   expect(queryByText('Option 1')).not.toBeVisible();
 });
+
+describe('menu alignment', () => {
+  const { getBoundingClientRect } = Element.prototype;
+  const renderAt = (left: number, alignLeft?: boolean) => {
+    Element.prototype.getBoundingClientRect = () =>
+      ({ left, width: 100 }) as DOMRect;
+    const result = render(
+      <DropdownButton buttonChildren={() => <>test</>} alignLeft={alignLeft}>
+        {{ item: 'Option 1', href: '#' }}
+        {{ item: 'Option 2', href: '#' }}
+      </DropdownButton>,
+    );
+    fireEvent.click(result.getByRole('button'));
+    return result.getByRole('list').parentElement!;
+  };
+
+  beforeEach(() => {
+    window.innerWidth = 1000;
+  });
+  afterEach(() => {
+    Element.prototype.getBoundingClientRect = getBoundingClientRect;
+  });
+
+  it('opens to the right when the button is on the left half of the viewport', () => {
+    expect(getComputedStyle(renderAt(100)).left).toBe('0px');
+  });
+
+  it('opens to the left when the button is on the right half of the viewport', () => {
+    const menu = renderAt(800);
+    expect(getComputedStyle(menu).left).toBe('');
+    expect(getComputedStyle(menu).right).toBe('0px');
+  });
+
+  it('always opens to the right when alignLeft is set', () => {
+    expect(getComputedStyle(renderAt(800, true)).left).toBe('0px');
+  });
+});

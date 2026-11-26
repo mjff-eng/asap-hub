@@ -151,8 +151,16 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   customMenuWidth,
 }) => {
   const reference = useRef<HTMLDivElement>(null);
-  const handleClick = () => setMenuShown(!menuShown);
   const [menuShown, setMenuShown] = useState(false);
+  const [openToRight, setOpenToRight] = useState(alignLeft);
+
+  const handleClick = () => {
+    if (!menuShown && !alignLeft && reference.current) {
+      const { left, width } = reference.current.getBoundingClientRect();
+      setOpenToRight(left + width / 2 < window.innerWidth / 2);
+    }
+    setMenuShown(!menuShown);
+  };
 
   const trimmedListStyles = dropdownHeight
     ? css({
@@ -188,7 +196,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
             menuContainerStyles(customMenuWidth),
             menuShown && showMenuStyles,
             trimmedListStyles,
-            alignLeft && alignLeftStyles,
+            (alignLeft || openToRight) && alignLeftStyles,
           ]}
         >
           <ul css={listStyles}>
