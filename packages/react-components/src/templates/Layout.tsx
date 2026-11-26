@@ -7,6 +7,7 @@ import {
   FC,
   lazy,
   ReactNode,
+  useMemo,
   useRef,
 } from 'react';
 import { useLocation } from 'react-router';
@@ -333,6 +334,10 @@ const Layout: FC<LayoutProps> = ({
   const markMenuLoaded = useCallback(() => setMenuLoaded(true), []);
   const [menuAnimating, setMenuAnimating] = useState(false);
   const [highlightedHref, setHighlightedHref] = useState<string>();
+  const highlightedNavigation = useMemo(
+    () => ({ highlightedHref, setHighlightedHref }),
+    [highlightedHref],
+  );
   const animateTimer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(
     () => () => {
@@ -401,9 +406,7 @@ const Layout: FC<LayoutProps> = ({
   };
 
   return (
-    <HighlightedNavigationContext.Provider
-      value={{ highlightedHref, setHighlightedHref }}
-    >
+    <HighlightedNavigationContext.Provider value={highlightedNavigation}>
       <ToastStack>
         <article
           data-testid="layout-article-testid"
