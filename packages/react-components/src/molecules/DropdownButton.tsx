@@ -154,7 +154,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   const [menuShown, setMenuShown] = useState(false);
   const [openToRight, setOpenToRight] = useState(alignLeft);
 
-  const onClick = () => {
+  const handleClick = () => {
     if (!menuShown && !alignLeft && reference.current) {
       const { left, width } = reference.current.getBoundingClientRect();
       setOpenToRight(left + width / 2 < window.innerWidth / 2);
@@ -170,7 +170,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
     : null;
 
   useEffect(() => {
-    const onClickOutside = (event: Event) => {
+    const handleClickOutside = (event: Event) => {
       if (
         reference.current &&
         !reference.current.contains(event.target as Node)
@@ -179,15 +179,15 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
       }
     };
 
-    document.addEventListener('mousedown', onClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', onClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [reference]);
 
   return (
     <div css={containerStyles} ref={reference}>
-      <Button small primary={primary} noMargin={noMargin} onClick={onClick}>
+      <Button small primary={primary} noMargin={noMargin} onClick={handleClick}>
         {buttonChildren(menuShown)}
       </Button>
       <div css={menuWrapperStyles}>
