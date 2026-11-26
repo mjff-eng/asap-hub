@@ -290,6 +290,21 @@ describe('describeError', () => {
     );
   });
 
+  test('leaves out the request body when the Contentful error details have an unexpected shape', () => {
+    const error = new Error(
+      JSON.stringify({
+        status: 422,
+        details: { errors: [null] },
+        request: { payloadData: '{"email":"jane@example.org"}' },
+      }),
+    );
+    error.name = 'ValidationFailed';
+
+    expect(describeError(error)).toBe(
+      'ValidationFailed, 422, undefined at undefined',
+    );
+  });
+
   test('keeps the message of an error that is not a Contentful response', () => {
     expect(describeError(new TypeError('socket hang up'))).toBe(
       'TypeError: socket hang up',

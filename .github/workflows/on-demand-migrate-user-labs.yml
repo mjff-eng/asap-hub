@@ -20,6 +20,11 @@ on:
         description: Preview the changes without writing to Contentful
         default: true
 
+# two runs on the same environment would both create the missing memberships
+concurrency:
+  group: migrate-user-labs-${{ inputs.contentful-env }}
+  cancel-in-progress: false
+
 jobs:
   migrate_user_labs:
     runs-on: ubuntu-latest
@@ -45,14 +50,31 @@ jobs:
           CONTENTFUL_SPACE_ID: ${{ steps.setup.outputs.crn-contentful-space-id }}
           CONTENTFUL_ENV_ID: ${{ inputs.contentful-env }}
           DRY_RUN: ${{ inputs.dry-run }}
-      - name: Upload backup and report
+      - name: Upload backup
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: migrate-user-labs-${{ inputs.contentful-env }}-${{ github.run_number }}
-          path: packages/contentful/scripts/lab-memberships-*.json
+          name: migrate-user-labs-backup-${{ inputs.contentful-env }}-${{ github.run_number }}
+          path: packages/contentful/scripts/lab-memberships-backup-*.json
           if-no-files-found: warn
           retention-days: 30
+      # The report names users and the repo is public, so it is kept for a short time only
+      - name: Upload report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: migrate-user-labs-report-${{ inputs.contentful-env }}-${{ github.run_number }}
+          path: packages/contentful/scripts/lab-memberships-report-*.json
+          if-no-files-found: warn
+          retention-days: 3
+      - name: Summary
+        if: ${{ always() }}
+        env:
+          ARTIFACT_SUFFIX: ${{ inputs.contentful-env }}-${{ github.run_number }}
+        run: |
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Report:** artifact \`migrate-user-labs-report-$ARTIFACT_SUFFIX\` on this run (kept for 3 days, contains personal data; delete it once downloaded)" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Backup:** artifact \`migrate-user-labs-backup-$ARTIFACT_SUFFIX\` (entry ids only, kept for 30 days)" >> "$GITHUB_STEP_SUMMARY"
 
   notify_failure:
     runs-on: ubuntu-latest

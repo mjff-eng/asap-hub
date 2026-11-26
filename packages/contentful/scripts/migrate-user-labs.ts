@@ -8,21 +8,28 @@
  * the memberships.
  *
  * Runs in preview mode unless DRY_RUN=false. Writes a backup and a report next
- * to this file; both hold entry ids only, never names.
+ * to this file. The backup holds entry ids only. The report also names the
+ * users that were skipped or still differ (AC04), so it holds personal data and
+ * must never be printed to the job log.
  *
- * Usage:
+ * Usage, from packages/contentful (from the repo root, yarn loads the root .env
+ * over these variables and the run goes to the environment named there):
  *   CONTENTFUL_SPACE_ID=<spaceId> \
  *   CONTENTFUL_MANAGEMENT_ACCESS_TOKEN=<cma token> \
  *   CONTENTFUL_ENV_ID=<environmentId> \
  *   DRY_RUN=false \
- *   yarn workspace @asap-hub/contentful migrate-user-labs
+ *   yarn migrate-user-labs
  */
 import fs from 'fs/promises';
 import { resolve } from 'path';
 import { RateLimiter } from 'limiter';
 import * as contentful from 'contentful-management';
 import type { Entry, Environment, QueryOptions } from 'contentful-management';
-import { addLocaleToFields, createLink } from '../src/utils/parse-fields';
+import {
+  addLocaleToFields,
+  createLink,
+  updateEntryFields,
+} from '../src/utils/parse-fields';
 
 // the day the 2024 lab membership attempt was rolled back in Production
 export const ROLLBACK_DATE = '2025-02-06';
@@ -240,7 +247,8 @@ const fetchAll = async (environment: Environment, query: QueryOptions) => {
     const page = await callContentful(() =>
       environment.getEntries({
         ...query,
-        order: 'sys.createdAt',
+        // sys.id breaks createdAt ties so no entry is repeated or skipped between pages
+        order: 'sys.createdAt,sys.id',
         limit: PAGE_SIZE,
         skip: entries.length,
       }),
@@ -258,7 +266,8 @@ const fetchUsers = (environment: Environment) =>
   fetchAll(environment, {
     content_type: 'users',
     'sys.archivedAt[exists]': false,
-    select: 'sys,fields.labs,fields.labMemberships,fields.connections',
+    select:
+      'sys,fields.labs,fields.labMemberships,fields.connections,fields.firstName,fields.lastName',
   });
 
 const fetchMemberships = (environment: Environment) =>
@@ -300,19 +309,20 @@ export const describeError = (error: unknown) => {
   if (!(error instanceof Error)) {
     return String(error);
   }
+  let data: ContentfulErrorData | null;
   try {
-    const { status, requestId, details }: ContentfulErrorData = JSON.parse(
-      error.message,
-    );
-    const fieldErrors = (details?.errors ?? []).map(
-      ({ name, path }) => `${name} at ${JSON.stringify(path)}`,
-    );
-    return [error.name, status, requestId, ...fieldErrors]
-      .filter(Boolean)
-      .join(', ');
+    data = JSON.parse(error.message);
   } catch {
     return String(error);
   }
+  const errors = data?.details?.errors;
+  const fieldErrors = (Array.isArray(errors) ? errors : []).map(
+    (fieldError) =>
+      `${fieldError?.name} at ${JSON.stringify(fieldError?.path)}`,
+  );
+  return [error.name, data?.status, data?.requestId, ...fieldErrors]
+    .filter(Boolean)
+    .join(', ');
 };
 
 type Skipped = { userId: string; reason: string; message?: string };
@@ -331,9 +341,7 @@ const writeUser = async (
 
   for (const { id, fields } of plan.updates) {
     const entry = await callContentful(() => environment.getEntry(id));
-    Object.entries(fields).forEach(([field, value]) => {
-      entry.fields[field] = { 'en-US': value };
-    });
+    updateEntryFields(entry, fields);
     const updated = await callContentful(() => entry.update());
     await callContentful(() => updated.publish());
   }
@@ -366,10 +374,10 @@ const writeUser = async (
     return { userId, reason: 'update-failed', message: describeError(error) };
   }
 
-  for (const entry of created) {
-    await callContentful(() => entry.publish());
-  }
   try {
+    for (const entry of created) {
+      await callContentful(() => entry.publish());
+    }
     await callContentful(() => savedUser.publish());
   } catch (error) {
     return { userId, reason: 'publish-failed', message: describeError(error) };
@@ -512,10 +520,11 @@ const main = async () => {
     }
   }
 
+  const finalUserEntries = dryRun ? userEntries : await fetchUsers(environment);
   const finalState = dryRun
     ? simulate(users, membershipsById, plans)
     : {
-        users: (await fetchUsers(environment)).map(toUserRecord),
+        users: finalUserEntries.map(toUserRecord),
         membershipsById: new Map(
           (await fetchMemberships(environment)).map((entry) => [
             entry.sys.id,
@@ -523,10 +532,28 @@ const main = async () => {
           ]),
         ),
       };
+  // a user created during a real run is only in the second fetch
+  const userEntriesForNames = new Map(
+    [...userEntries, ...finalUserEntries].map((entry) => [entry.sys.id, entry]),
+  );
+  const nameOf = (userId: string) => {
+    const entry = userEntriesForNames.get(userId);
+    const name = entry
+      ? [
+          fieldValue<string>(entry, 'firstName'),
+          fieldValue<string>(entry, 'lastName'),
+        ]
+      : [];
+    return name.filter(Boolean).join(' ') || null;
+  };
   const skippedIds = new Set(skipped.map(({ userId }) => userId));
   const differences = verify(finalState.users, finalState.membershipsById)
     .filter(({ userId }) => !skippedIds.has(userId))
-    .map((difference) => ({ ...difference, url: entryUrl(difference.userId) }));
+    .map((difference) => ({
+      ...difference,
+      name: nameOf(difference.userId),
+      url: entryUrl(difference.userId),
+    }));
 
   const allPlans = [...plans];
   const counts = {
@@ -578,6 +605,7 @@ const main = async () => {
         counts,
         skipped: skipped.map((item) => ({
           ...item,
+          name: nameOf(item.userId),
           url: entryUrl(item.userId),
         })),
         differences,
