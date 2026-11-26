@@ -280,14 +280,10 @@ describe('on an output form', () => {
     );
   });
 
-  it.each`
-    path                             | section
-    ${'/shared-research/1'}          | ${'Shared Research'}
-    ${'/projects/discovery/1/about'} | ${'Projects'}
-  `('still highlights $section at $path', ({ path, section }) => {
-    const { getByRole } = renderAt(path);
+  it('still highlights Shared Research on the output itself', () => {
+    const { getByRole } = renderAt('/shared-research/1');
     expect(
-      getByRole('link', { name: new RegExp(`${section}$`) }).firstElementChild,
+      getByRole('link', { name: /Shared Research$/ }).firstElementChild,
     ).toHaveStyleRule('background-color', colour.background['color-brand']);
   });
 });

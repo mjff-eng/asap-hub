@@ -4,7 +4,6 @@ import { Decorator } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router';
 import { select } from './knobs';
 
-// The Back button navigates, so the header needs a router in scope.
 const RouterDecorator: Decorator = (storyFn) => (
   <MemoryRouter>{storyFn()}</MemoryRouter>
 );

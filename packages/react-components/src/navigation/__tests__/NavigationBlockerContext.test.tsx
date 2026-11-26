@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useEffect, useState } from 'react';
 import {
@@ -184,53 +184,13 @@ describe('NavigationBlockerContext', () => {
     );
   });
 
-  const AllowedNavigation = () => {
-    const { allowNextNavigation, consumeAllowedNavigation } =
-      useNavigationBlocker();
-    const [results, setResults] = useState<boolean[]>([]);
-    return (
-      <div>
-        <button onClick={allowNextNavigation}>Allow</button>
-        <button
-          onClick={() =>
-            setResults((prev) => [...prev, consumeAllowedNavigation()])
-          }
-        >
-          Consume
-        </button>
-        <div data-testid="results">{results.join(',')}</div>
-      </div>
-    );
-  };
+  it('allows no navigation and opens no discard dialog without a provider', () => {
+    const { result } = renderHook(() => useNavigationBlocker());
 
-  it('never allows a navigation without a provider', async () => {
-    render(<AllowedNavigation />);
+    result.current.allowNextNavigation();
+    result.current.setDiscardDialog(jest.fn());
 
-    await userEvent.click(screen.getByText('Allow'));
-    await userEvent.click(screen.getByText('Consume'));
-
-    expect(screen.getByTestId('results')).toHaveTextContent('false');
-  });
-
-  it('has no discard dialog to open without a provider', async () => {
-    const DiscardDialog = () => {
-      const { setDiscardDialog, openDiscardDialog } = useNavigationBlocker();
-      const [opened, setOpened] = useState<boolean>();
-      return (
-        <button
-          onClick={() => {
-            setDiscardDialog(jest.fn());
-            setOpened(openDiscardDialog());
-          }}
-        >
-          {String(opened)}
-        </button>
-      );
-    };
-    render(<DiscardDialog />);
-
-    await userEvent.click(screen.getByRole('button'));
-
-    expect(screen.getByRole('button')).toHaveTextContent('false');
+    expect(result.current.consumeAllowedNavigation()).toBe(false);
+    expect(result.current.openDiscardDialog()).toBe(false);
   });
 });

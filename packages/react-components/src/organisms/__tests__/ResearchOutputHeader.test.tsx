@@ -256,7 +256,6 @@ describe('the Back button', () => {
       await userEvent.click(screen.getByRole('button', { name: 'Discard' }));
 
       expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/);
-      // Replaces the form's guard entry so browser back shows the form once
       expect(screen.getByTestId('navigation-type')).toHaveTextContent(
         'REPLACE',
       );

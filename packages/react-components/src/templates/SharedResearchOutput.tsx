@@ -291,7 +291,6 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
           },
         ]
       : getProjectBreadcrumbs(ownerProject, ownerProject?.id ?? '');
-  // The navigation highlights the owner's section too
   useHighlightedNavigation(ownerBreadcrumbs[0]?.href);
   const breadcrumbs = (
     <Breadcrumbs

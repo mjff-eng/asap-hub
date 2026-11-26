@@ -154,7 +154,6 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
   const { isBlocked, allowNextNavigation, setDiscardDialog } =
     useNavigationBlocker();
   const [confirmingDiscard, setConfirmingDiscard] = useState(false);
-  // Browser back on a form with changes asks with this dialog too
   useEffect(() => {
     setDiscardDialog(() => setConfirmingDiscard(true));
     return () => setDiscardDialog(null);
@@ -171,7 +170,6 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
       void navigate(dashboard({}).$, { replace: isBlocked });
       return;
     }
-    // Otherwise the form's browser back guard would ask again
     if (isBlocked) {
       allowNextNavigation();
     }
