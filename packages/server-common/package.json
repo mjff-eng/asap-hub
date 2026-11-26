@@ -58,7 +58,7 @@
     "pump": "3.0.3",
     "source-map-support": "0.5.21",
     "through2-concurrent": "2.0.0",
-    "uuid": "8.3.2"
+    "uuid": "11.1.1"
   },
   "devDependencies": {
     "@asap-hub/eslint-config-asap-hub": "workspace:*",
