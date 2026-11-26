@@ -7,6 +7,7 @@ import {
   dashboard,
   network,
   projectRouteByType,
+  projects,
   sharedResearch,
 } from '@asap-hub/routing';
 import { getResearchOutputEntityType } from '@asap-hub/validation';
@@ -17,6 +18,7 @@ import { useNavigate } from 'react-router';
 import { Card, Headline2, Link, Markdown } from '../atoms';
 import { createMailTo, mailToSupport, TECH_SUPPORT_EMAIL } from '../mail';
 import { Breadcrumbs, CtaCard } from '../molecules';
+import { useHighlightedNavigation } from '../navigation';
 import {
   ConfirmModal,
   GrantDocumentGrantsCard,
@@ -290,6 +292,10 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
           },
         ]
       : getProjectBreadcrumbs(ownerProject, ownerProject?.id ?? '');
+  // Same reason for the navigation: a project's draft highlights Projects
+  useHighlightedNavigation(
+    !published && !workingGroup && ownerProject ? projects({}).$ : undefined,
+  );
   const breadcrumbs = (
     <Breadcrumbs
       homeHref={dashboard({}).$}

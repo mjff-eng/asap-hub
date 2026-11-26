@@ -13,6 +13,7 @@ import { researchOutputDocumentTypes } from '@asap-hub/model';
 import { MemoryRouter, useLocation } from 'react-router';
 import { sharedResearch } from '@asap-hub/routing';
 
+import { HighlightedNavigationContext } from '../../navigation';
 import SharedResearchOutput from '../SharedResearchOutput';
 
 let currentLocation: { pathname: string; search: string } | null = null;
@@ -531,6 +532,34 @@ describe('Not Grant Documents', () => {
         ['Project title', '/projects/trainee/project-id/about'],
         ['Title', undefined],
       ]);
+    });
+
+    it('highlight Projects in the navigation for a project draft', () => {
+      const setHighlightedHref = jest.fn();
+      renderWithRouter(
+        <HighlightedNavigationContext.Provider value={{ setHighlightedHref }}>
+          <SharedResearchOutput
+            {...props}
+            published={false}
+            publishingEntity="Project"
+            workingGroups={undefined}
+            project={project}
+            title="Title"
+          />
+        </HighlightedNavigationContext.Provider>,
+      );
+      expect(setHighlightedHref).toHaveBeenCalledWith('/projects');
+    });
+
+    it('leave the navigation to the URL for a working group draft', () => {
+      const setHighlightedHref = jest.fn();
+      renderWithRouter(
+        <HighlightedNavigationContext.Provider value={{ setHighlightedHref }}>
+          <SharedResearchOutput {...props} published={false} title="Title" />
+        </HighlightedNavigationContext.Provider>,
+      );
+      expect(setHighlightedHref).toHaveBeenCalledWith(undefined);
+      expect(setHighlightedHref).not.toHaveBeenCalledWith('/projects');
     });
 
     it('fall back to shared research when no owner is linked', () => {

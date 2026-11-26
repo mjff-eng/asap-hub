@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { useScrollToTop } from '@asap-hub/react-context';
 
+import { colour } from '../../colors';
+import { useHighlightedNavigation } from '../../navigation';
 import Layout from '../Layout';
 
 const props: ComponentProps<typeof Layout> = {
@@ -298,4 +300,24 @@ it('displays onboarding footer', async () => {
     </MemoryRouter>,
   );
   expect(getByText(/profile.+% complete/i)).toBeVisible();
+});
+
+it('highlights the section a page asks for, whatever its URL', async () => {
+  const ProjectDraft = () => {
+    useHighlightedNavigation('/projects');
+    return null;
+  };
+  const { findByRole, getByRole } = render(
+    <MemoryRouter initialEntries={['/shared-research/1']}>
+      <Layout {...props}>
+        <ProjectDraft />
+      </Layout>
+    </MemoryRouter>,
+  );
+  expect(
+    (await findByRole('link', { name: /^Projects$/ })).firstElementChild,
+  ).toHaveStyleRule('background-color', colour.background['color-brand']);
+  expect(
+    getByRole('link', { name: /Shared Research$/ }).firstElementChild,
+  ).not.toHaveStyleRule('background-color', colour.background['color-brand']);
 });

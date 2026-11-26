@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, useLocation } from 'react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   NavigationBlockerProvider,
   useNavigationBlocker,
@@ -261,6 +261,32 @@ describe('useNavigationWarning', () => {
       window.dispatchEvent(new PopStateEvent('popstate'));
 
       expect(window.confirm).toHaveBeenCalledWith(customMessage);
+    });
+
+    it("opens the page's discard dialog instead of the confirm", () => {
+      const goSpy = jest.spyOn(window.history, 'go');
+      const openDialog = jest.fn();
+      const DiscardDialog = () => {
+        const { setDiscardDialog } = useNavigationBlocker();
+        useEffect(() => {
+          setDiscardDialog(openDialog);
+          return () => setDiscardDialog(null);
+        }, [setDiscardDialog]);
+        return null;
+      };
+
+      renderWithProviders(
+        <>
+          <TestComponent shouldBlock={true} />
+          <DiscardDialog />
+        </>,
+      );
+      goSpy.mockClear();
+      window.dispatchEvent(new PopStateEvent('popstate'));
+
+      expect(openDialog).toHaveBeenCalledTimes(1);
+      expect(window.confirm).not.toHaveBeenCalled();
+      expect(goSpy).not.toHaveBeenCalled();
     });
 
     it('goes back without the confirm when the navigation was already allowed, once', async () => {

@@ -23,6 +23,12 @@ type NavigationBlockerContextType = {
    */
   allowNextNavigation: () => void;
   consumeAllowedNavigation: () => boolean;
+  /**
+   * Lets a page show its own discard dialog on browser back, instead of the
+   * confirm window
+   */
+  setDiscardDialog: (open: (() => void) | null) => void;
+  openDiscardDialog: () => boolean;
 };
 
 const defaultMessage =
@@ -42,6 +48,10 @@ const defaultContext: NavigationBlockerContextType = {
     /* noop - nothing to bypass without a provider */
   },
   consumeAllowedNavigation: () => false,
+  setDiscardDialog: () => {
+    /* noop - no dialog to show without a provider */
+  },
+  openDiscardDialog: () => false,
 };
 
 const NavigationBlockerContext =
@@ -80,6 +90,16 @@ export const NavigationBlockerProvider: React.FC<
     return allowed;
   }, []);
 
+  const discardDialogRef = useRef<(() => void) | null>(null);
+  const setDiscardDialog = useCallback((open: (() => void) | null) => {
+    discardDialogRef.current = open;
+  }, []);
+  const openDiscardDialog = useCallback(() => {
+    if (!discardDialogRef.current) return false;
+    discardDialogRef.current();
+    return true;
+  }, []);
+
   const value: NavigationBlockerContextType = {
     register,
     isBlocked: blockerMessage !== null,
@@ -87,6 +107,8 @@ export const NavigationBlockerProvider: React.FC<
     requestNavigation,
     allowNextNavigation,
     consumeAllowedNavigation,
+    setDiscardDialog,
+    openDiscardDialog,
   };
 
   return (

@@ -211,4 +211,26 @@ describe('NavigationBlockerContext', () => {
 
     expect(screen.getByTestId('results')).toHaveTextContent('false');
   });
+
+  it('has no discard dialog to open without a provider', async () => {
+    const DiscardDialog = () => {
+      const { setDiscardDialog, openDiscardDialog } = useNavigationBlocker();
+      const [opened, setOpened] = useState<boolean>();
+      return (
+        <button
+          onClick={() => {
+            setDiscardDialog(jest.fn());
+            setOpened(openDiscardDialog());
+          }}
+        >
+          {String(opened)}
+        </button>
+      );
+    };
+    render(<DiscardDialog />);
+
+    await userEvent.click(screen.getByRole('button'));
+
+    expect(screen.getByRole('button')).toHaveTextContent('false');
+  });
 });

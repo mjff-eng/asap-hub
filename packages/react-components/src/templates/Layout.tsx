@@ -31,6 +31,7 @@ import { rem } from '../pixels';
 import { Navigation } from '../atoms/NavigationLink';
 import { LoadingUserButton, LoadingMenu } from './LoadingLayout';
 import { useScrollToHash } from '../routing';
+import { HighlightedNavigationContext } from '../navigation';
 
 const UserMenuButton = lazy(
   () =>
@@ -331,6 +332,7 @@ const Layout: FC<LayoutProps> = ({
   const [menuLoaded, setMenuLoaded] = useState(false);
   const markMenuLoaded = useCallback(() => setMenuLoaded(true), []);
   const [menuAnimating, setMenuAnimating] = useState(false);
+  const [highlightedHref, setHighlightedHref] = useState<string>();
   const animateTimer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(
     () => () => {
@@ -399,83 +401,90 @@ const Layout: FC<LayoutProps> = ({
   };
 
   return (
-    <ToastStack>
-      <article
-        data-testid="layout-article-testid"
-        css={[
-          styles,
-          menuCollapsed && menuLoaded && collapsedStyles,
-          drawerShown || userMenuShown || { overflow: 'hidden' },
-        ]}
-      >
-        {/* order relevant for overlap */}
-        <div css={[headerStyles, drawerShown && headerMenuShownStyles]}>
-          <MenuHeader
-            enabled={userNavProps.userOnboarded}
-            menuOpen={drawerShown}
-            onToggleMenu={() => setDrawerShown((prev) => !prev)}
-          />
-        </div>
-        <div css={userButtonStyles}>
-          <Suspense fallback={<LoadingUserButton />}>
-            <UserMenuButton
-              ref={userButtonRef}
-              onClick={() => setUserMenuShown((prev) => !prev)}
-              open={userMenuShown}
-              {...userNavProps}
+    <HighlightedNavigationContext.Provider
+      value={{ highlightedHref, setHighlightedHref }}
+    >
+      <ToastStack>
+        <article
+          data-testid="layout-article-testid"
+          css={[
+            styles,
+            menuCollapsed && menuLoaded && collapsedStyles,
+            drawerShown || userMenuShown || { overflow: 'hidden' },
+          ]}
+        >
+          {/* order relevant for overlap */}
+          <div css={[headerStyles, drawerShown && headerMenuShownStyles]}>
+            <MenuHeader
+              enabled={userNavProps.userOnboarded}
+              menuOpen={drawerShown}
+              onToggleMenu={() => setDrawerShown((prev) => !prev)}
             />
-          </Suspense>
-        </div>
-        <div css={searchButtonAreaStyles}>
-          <Navigation squareBorder href={tags({}).$}>
-            <div css={SearchIconStyles}>{tagSearchIcon}</div>
-          </Navigation>
-        </div>
-        <ScrollContext.Provider value={{ scrollToTop }}>
-          <main ref={mainRef} css={contentStyles}>
-            {children}
-          </main>
-        </ScrollContext.Provider>
-        <div css={[overlayStyles, drawerShown && overlayMenuShownStyles]}>
-          <Overlay shown={drawerShown} onClick={() => setDrawerShown(false)} />
-        </div>
-        <div css={[menuStyles, drawerShown && menuMenuShownStyles]}>
-          <div css={[mainMenuStyles]}>
-            <Suspense fallback={<LoadingMenu />}>
-              <OnMount onMount={markMenuLoaded} />
-              <MainNavigation
-                userOnboarded={userNavProps.userOnboarded}
-                canViewAnalytics={canViewAnalytics}
-                collapsed={menuCollapsed}
-                animating={menuAnimating}
-                onToggleCollapse={toggleMenuCollapsed}
+          </div>
+          <div css={userButtonStyles}>
+            <Suspense fallback={<LoadingUserButton />}>
+              <UserMenuButton
+                ref={userButtonRef}
+                onClick={() => setUserMenuShown((prev) => !prev)}
+                open={userMenuShown}
+                {...userNavProps}
               />
             </Suspense>
           </div>
-          <div
-            css={[
-              userMenuStyles,
-              (drawerShown || userMenuShown) && userMenuShownStyles,
-            ]}
-            ref={userMenuRef}
-          >
-            <Suspense fallback={<Loading />}>
-              <UserNavigation {...userNavProps} />
-            </Suspense>
+          <div css={searchButtonAreaStyles}>
+            <Navigation squareBorder href={tags({}).$}>
+              <div css={SearchIconStyles}>{tagSearchIcon}</div>
+            </Navigation>
           </div>
-        </div>
-        {onboardable && (
-          <div
-            css={{ gridArea: 'footer', marginTop: networkContentTopPadding }}
-          >
-            <OnboardingFooter
-              onboardModalHref={onboardModalHref}
-              onboardable={onboardable}
+          <ScrollContext.Provider value={{ scrollToTop }}>
+            <main ref={mainRef} css={contentStyles}>
+              {children}
+            </main>
+          </ScrollContext.Provider>
+          <div css={[overlayStyles, drawerShown && overlayMenuShownStyles]}>
+            <Overlay
+              shown={drawerShown}
+              onClick={() => setDrawerShown(false)}
             />
           </div>
-        )}
-      </article>
-    </ToastStack>
+          <div css={[menuStyles, drawerShown && menuMenuShownStyles]}>
+            <div css={[mainMenuStyles]}>
+              <Suspense fallback={<LoadingMenu />}>
+                <OnMount onMount={markMenuLoaded} />
+                <MainNavigation
+                  userOnboarded={userNavProps.userOnboarded}
+                  canViewAnalytics={canViewAnalytics}
+                  collapsed={menuCollapsed}
+                  animating={menuAnimating}
+                  onToggleCollapse={toggleMenuCollapsed}
+                />
+              </Suspense>
+            </div>
+            <div
+              css={[
+                userMenuStyles,
+                (drawerShown || userMenuShown) && userMenuShownStyles,
+              ]}
+              ref={userMenuRef}
+            >
+              <Suspense fallback={<Loading />}>
+                <UserNavigation {...userNavProps} />
+              </Suspense>
+            </div>
+          </div>
+          {onboardable && (
+            <div
+              css={{ gridArea: 'footer', marginTop: networkContentTopPadding }}
+            >
+              <OnboardingFooter
+                onboardModalHref={onboardModalHref}
+                onboardable={onboardable}
+              />
+            </div>
+          )}
+        </article>
+      </ToastStack>
+    </HighlightedNavigationContext.Provider>
   );
 };
 

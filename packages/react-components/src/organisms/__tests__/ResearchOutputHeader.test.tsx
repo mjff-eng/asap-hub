@@ -2,7 +2,7 @@ import {
   ResearchOutputDocumentType,
   ResearchOutputEntityType,
 } from '@asap-hub/model';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps, ReactNode } from 'react';
 import { MemoryRouter, useLocation, useNavigationType } from 'react-router';
@@ -224,6 +224,21 @@ describe('the Back button', () => {
       expect(goSpy).toHaveBeenCalledWith(-2);
     });
 
+    it('asks with the same dialog on browser back, and leaves on discard', async () => {
+      renderDirty();
+      act(() => {
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      });
+
+      expect(
+        screen.getByRole('heading', { name: 'Discard changes?' }),
+      ).toBeVisible();
+      expect(confirmSpy).not.toHaveBeenCalled();
+
+      await userEvent.click(screen.getByRole('button', { name: 'Discard' }));
+      expect(screen.getByTestId('location')).toHaveTextContent('/previous');
+    });
+
     it('closes the dialog on discard, so a double click leaves only once', async () => {
       renderDirty(['/first', '/previous', '/form']);
       await userEvent.click(screen.getByRole('button', { name: 'Back' }));
@@ -245,8 +260,13 @@ describe('the Back button', () => {
       expect(screen.getByTestId('navigation-type')).toHaveTextContent(
         'REPLACE',
       );
-      window.dispatchEvent(new PopStateEvent('popstate'));
-      expect(confirmSpy).toHaveBeenCalled();
+      // A later browser back still asks, so no allowed navigation was left over
+      act(() => {
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      });
+      expect(
+        screen.getByRole('heading', { name: 'Discard changes?' }),
+      ).toBeVisible();
     });
   });
 });

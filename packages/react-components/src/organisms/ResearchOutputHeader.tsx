@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import { useLocation, useNavigate } from 'react-router';
 import {
@@ -151,8 +151,14 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const { key } = useLocation();
-  const { isBlocked, allowNextNavigation } = useNavigationBlocker();
+  const { isBlocked, allowNextNavigation, setDiscardDialog } =
+    useNavigationBlocker();
   const [confirmingDiscard, setConfirmingDiscard] = useState(false);
+  // Browser back on a form with changes asks with this dialog too
+  useEffect(() => {
+    setDiscardDialog(() => setConfirmingDiscard(true));
+    return () => setDiscardDialog(null);
+  }, [setDiscardDialog]);
   // The sign-in redirect replaces a deep link under a new key, but React
   // Router's history index stays 0. Read once: the guard entry the form pushes
   // later has no index.
@@ -165,7 +171,7 @@ const ResearchOutputHeader: React.FC<ResearchOutputHeaderProps> = ({
       void navigate(dashboard({}).$, { replace: isBlocked });
       return;
     }
-    // The form's browser back guard would ask again with the native confirm
+    // Otherwise the form's browser back guard would ask again
     if (isBlocked) {
       allowNextNavigation();
     }
