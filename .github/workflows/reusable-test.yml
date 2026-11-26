@@ -72,6 +72,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history so `turbo --affected` can diff against the PR base branch.
+          fetch-depth: 0
       - name: Re-Build
         uses: ./.github/actions/build-rebuild
       - name: Setup turborepo test pipeline

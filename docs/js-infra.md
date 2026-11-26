@@ -40,6 +40,20 @@ Projects can have their own `jest.config.js`, completely replacing the default o
 
 There are some special `jest-*.config`s in the root or in projects, which run test files with a name matching their particular pattern.
 
+## Task orchestration (Turbo)
+
+[Turborepo](https://turborepo.dev) (**2.x**) orchestrates the `build`, `build:babel`, `typecheck`, `test`, and `test:coverage` tasks across the workspace, caching outputs in `.turbo/`. The task graph lives in the root `turbo.json` under the `tasks` key (this was `pipeline` in Turbo 1.x — renamed in the 2.0 upgrade). `build:typecheck:tsc` is a root-only task (the `//#` prefix), and `topo` is a synthetic task used only to enforce topological ordering for `test`.
+
+The cached tasks (`build:babel`, `build`) exclude `build/**/*.d.ts` and `build/**/*.d.ts.map` from their `outputs`. Babel emits `.js` into `build/`, but the TypeScript declarations in that same directory are owned by `//#build:typecheck:tsc`, which is `cache: false` and always regenerates them. If `build:babel` cached the `.d.ts` files, a babel cache hit would restore a stale declaration on top of the fresh one, producing phantom "has no exported member" typecheck errors in downstream packages. Keep declarations out of the cached task outputs — only the `cache: false` typecheck task should manage them. (`turbo.json` does not allow comments, which is why this is documented here.)
+
+`turbo.json` sets `"envMode": "loose"` on purpose. Turbo 2.x defaults to **strict** env mode, where only env vars declared in a task's `env`/`passThroughEnv` (plus a small built-in passlist) reach the task process. Several tasks here depend on ambient env passthrough — most notably `build:babel`, which runs `babel-plugin-transform-inline-environment-variables` to inline `VITE_APP_*` (and similar) values at compile time. Under strict mode those undeclared vars would be stripped and inlined as `undefined`, silently corrupting build output. Loose mode preserves the Turbo 1.x behaviour. To move to strict later, declare the needed vars per task (`passThroughEnv` for `VITE_APP_*` on the frontend build, `VITE_APP_ENVIRONMENT` on `build:babel`) and then drop `envMode`.
+
+All CLI invocations (`--filter`, `--only`, `--cache-dir`, `--dry-run=json`) are unchanged from v1 — none of the removed v1 flags (`--scope`, `--since`) were in use.
+
+### `--affected` in CI
+
+On pull requests, the test matrix (`.github/scripts/manage-workflows/create-test-matrix.js`) runs `turbo test --affected`, so only packages touched by the diff — plus their dependents — are tested, rather than the full ~36-package suite. The script gates this on `GITHUB_BASE_REF` (set on `pull_request` events); pushes to a branch still run the full suite so the coverage baseline stays complete. If a PR touches no testable package (docs/CI only), the affected set is empty and the script falls back to the full suite so the downstream coverage-merge and Codecov jobs always have artifacts. The `setup-turbo` checkout uses `fetch-depth: 0` because `--affected` needs full git history to diff against the base branch. Turbo auto-detects the PR base in GitHub Actions; locally you can override the range with `TURBO_SCM_BASE` / `TURBO_SCM_HEAD`.
+
 ## Known bundle issues
 
 ### `react-router` pulled into the server bundles
