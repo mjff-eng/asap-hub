@@ -66,3 +66,6 @@ tramp
 .gitnexus/*
 CLAUDE.md
 AGENTS.md
+
+# migrate-user-labs backups and reports (the reports name users)
+packages/contentful/scripts/lab-memberships-*.json
