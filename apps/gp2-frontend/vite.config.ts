@@ -7,6 +7,21 @@ export default defineConfig({
   build: {
     sourcemap: true,
     target: browserslistToEsbuild(),
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes('/lexical') || id.includes('/@lexical/')) {
+            return 'vendor-lexical';
+          }
+          if (id.includes('/react-select')) {
+            return 'vendor-react-select';
+          }
+          if (id.includes('/csv-stringify')) {
+            return 'vendor-csv';
+          }
+        },
+      },
+    },
   },
   server: {
     open: true,

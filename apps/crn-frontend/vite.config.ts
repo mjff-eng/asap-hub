@@ -65,6 +65,22 @@ export default defineConfig({
         if (warning.code === 'UNRESOLVED_IMPORT') return;
         warn(warning);
       },
+      output: {
+        manualChunks(id: string) {
+          if (id.includes('/lexical') || id.includes('/@lexical/')) {
+            return 'vendor-lexical';
+          }
+          if (id.includes('/react-select')) {
+            return 'vendor-react-select';
+          }
+          if (id.includes('/xlsx')) {
+            return 'vendor-xlsx';
+          }
+          if (id.includes('/csv-stringify')) {
+            return 'vendor-csv';
+          }
+        },
+      },
     },
   },
   server: {
