@@ -7,7 +7,6 @@ import {
   dashboard,
   network,
   projectRouteByType,
-  projects,
   sharedResearch,
 } from '@asap-hub/routing';
 import { getResearchOutputEntityType } from '@asap-hub/validation';
@@ -292,10 +291,8 @@ const SharedResearchOutput: React.FC<SharedResearchOutputProps> = ({
           },
         ]
       : getProjectBreadcrumbs(ownerProject, ownerProject?.id ?? '');
-  // Same reason for the navigation: a project's draft highlights Projects
-  useHighlightedNavigation(
-    !published && !workingGroup && ownerProject ? projects({}).$ : undefined,
-  );
+  // The navigation highlights the owner's section too
+  useHighlightedNavigation(ownerBreadcrumbs[0]?.href);
   const breadcrumbs = (
     <Breadcrumbs
       homeHref={dashboard({}).$}

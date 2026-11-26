@@ -548,18 +548,19 @@ describe('Not Grant Documents', () => {
           />
         </HighlightedNavigationContext.Provider>,
       );
-      expect(setHighlightedHref).toHaveBeenCalledWith('/projects');
+      expect(setHighlightedHref).toHaveBeenCalledWith('/projects/discovery');
     });
 
-    it('leave the navigation to the URL for a working group draft', () => {
+    it('highlight Network in the navigation for a working group draft', () => {
       const setHighlightedHref = jest.fn();
       renderWithRouter(
         <HighlightedNavigationContext.Provider value={{ setHighlightedHref }}>
           <SharedResearchOutput {...props} published={false} title="Title" />
         </HighlightedNavigationContext.Provider>,
       );
-      expect(setHighlightedHref).toHaveBeenCalledWith(undefined);
-      expect(setHighlightedHref).not.toHaveBeenCalledWith('/projects');
+      expect(setHighlightedHref).toHaveBeenCalledWith(
+        '/network/working-groups',
+      );
     });
 
     it('fall back to shared research when no owner is linked', () => {
