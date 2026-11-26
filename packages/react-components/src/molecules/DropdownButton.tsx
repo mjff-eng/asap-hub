@@ -151,8 +151,16 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   customMenuWidth,
 }) => {
   const reference = useRef<HTMLDivElement>(null);
-  const handleClick = () => setMenuShown(!menuShown);
   const [menuShown, setMenuShown] = useState(false);
+  const [openToRight, setOpenToRight] = useState(alignLeft);
+
+  const onClick = () => {
+    if (!menuShown && !alignLeft && reference.current) {
+      const { left, width } = reference.current.getBoundingClientRect();
+      setOpenToRight(left + width / 2 < window.innerWidth / 2);
+    }
+    setMenuShown(!menuShown);
+  };
 
   const trimmedListStyles = dropdownHeight
     ? css({
@@ -162,7 +170,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
     : null;
 
   useEffect(() => {
-    const handleClickOutside = (event: Event) => {
+    const onClickOutside = (event: Event) => {
       if (
         reference.current &&
         !reference.current.contains(event.target as Node)
@@ -171,15 +179,15 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', onClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', onClickOutside);
     };
   }, [reference]);
 
   return (
     <div css={containerStyles} ref={reference}>
-      <Button small primary={primary} noMargin={noMargin} onClick={handleClick}>
+      <Button small primary={primary} noMargin={noMargin} onClick={onClick}>
         {buttonChildren(menuShown)}
       </Button>
       <div css={menuWrapperStyles}>
@@ -188,7 +196,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
             menuContainerStyles(customMenuWidth),
             menuShown && showMenuStyles,
             trimmedListStyles,
-            alignLeft && alignLeftStyles,
+            (alignLeft || openToRight) && alignLeftStyles,
           ]}
         >
           <ul css={listStyles}>
