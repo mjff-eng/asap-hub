@@ -1,3 +1,4 @@
+import '@emotion/jest';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -44,4 +45,9 @@ it('enables the header link when user is onboarded', () => {
 
   rerender(<Header enabled={false} />);
   expect(container.querySelector('a')).not.toHaveAttribute('href', '');
+});
+
+it('is 80px high', () => {
+  const { getByRole } = render(<Header />);
+  expect(getByRole('banner')).toHaveStyleRule('height', '5rem');
 });

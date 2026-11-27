@@ -1,6 +1,6 @@
 import { gp2 } from '@asap-hub/model';
 import {
-  crossQuery,
+  mediaFrom,
   ExternalLink,
   Paragraph,
   pixels,
@@ -31,7 +31,7 @@ const Milestone: React.FC<ProjectMilestoneProps> = ({ milestone }) => (
         <div
           css={css({
             paddingLeft: rem(44),
-            [crossQuery]: {
+            [mediaFrom.laptop]: {
               marginLeft: 'auto',
             },
           })}

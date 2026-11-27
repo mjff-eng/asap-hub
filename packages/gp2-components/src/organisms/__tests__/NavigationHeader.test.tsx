@@ -1,3 +1,4 @@
+import '@emotion/jest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
@@ -48,5 +49,33 @@ describe('NavigationHeader', () => {
     );
     await userEvent.click(screen.getByLabelText(/toggle menu/i));
     expect(onMenuToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows the 4px gradient bar from tablet up only', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <NavigationHeader {...props} />
+      </MemoryRouter>,
+    );
+    const bar = container.querySelector('header > div:last-child');
+    expect(bar).toHaveStyleRule('height', '0.25rem');
+    expect(bar).toHaveStyleRule('display', 'none');
+    expect(bar).toHaveStyleRule('display', 'block', {
+      media: '(min-width: 40.0625em)',
+    });
+  });
+
+  it('hides the tag search icon below laptop, where it is in the menu', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <NavigationHeader {...props} />
+      </MemoryRouter>,
+    );
+    const searchArea = container.querySelector(
+      'header > div:first-child > div:last-child',
+    );
+    expect(searchArea).toHaveStyleRule('display', 'none', {
+      media: 'not all and (min-width: 64.0625em)',
+    });
   });
 });

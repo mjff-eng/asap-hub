@@ -10,7 +10,9 @@ type EventsPageProps = ComponentProps<typeof EventsPageHeader> & {
 const EventsPage: React.FC<EventsPageProps> = ({ children, ...props }) => (
   <article>
     <EventsPageHeader {...props} />
-    <PageConstraints as="main">{children}</PageConstraints>
+    <PageConstraints width="content" as="main">
+      {children}
+    </PageConstraints>
   </article>
 );
 

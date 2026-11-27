@@ -7,7 +7,7 @@ import { rem, tabletScreen } from '../pixels';
 import { colour } from '../colors';
 import { formatDateToTimezone } from '../date';
 import { ExternalLinkIcon } from '../icons';
-import { contentSidePaddingWithNavigation } from '../layout';
+import { contentWidthStyles, pageMarginStyles } from '../layout';
 import { mailToSupport, TECH_SUPPORT_EMAIL } from '../mail';
 import { ThemeVariant } from '../theme';
 
@@ -97,14 +97,9 @@ export const themeStyles: Record<ThemeVariant, SerializedStyles> = {
   }),
 };
 
-const mainStyles = css({
-  padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} 0`,
+const mainStyles = css(pageMarginStyles.crn, {
+  paddingTop: rem(36),
   display: 'grid',
-  justifyContent: 'center',
-});
-
-const createVersionWrapperStyles = css({
-  maxWidth: rem(800),
 });
 
 const createVersionCardStyles = css({
@@ -141,7 +136,7 @@ const OutputVersions: React.FC<OutputVersionsProps> = ({
 
   return (
     <main css={versionAction && app === 'crn' ? [mainStyles] : []}>
-      <div css={versionAction ? [createVersionWrapperStyles] : []}>
+      <div css={versionAction ? [contentWidthStyles] : []}>
         <Card
           padding={false}
           overrideStyles={versionAction ? createVersionCardStyles : undefined}

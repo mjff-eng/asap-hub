@@ -1,11 +1,12 @@
 import {
   ceruleanFernGradientStyles,
-  drawerQuery,
+  mediaBelow,
   pixels,
   colour,
+  withoutPageMargins,
 } from '@asap-hub/react-components';
 
-import { css } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
 import { layoutContentStyles } from '../layout';
 
 import HeaderLogo from '../molecules/HeaderLogo';
@@ -14,7 +15,7 @@ const { rem } = pixels;
 
 const logoStyles = css({ padding: `0 ${rem(24)}` });
 const desktopNavigationStyles = css({
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     display: 'none',
   },
 });
@@ -42,7 +43,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({ children, logoHref }) => (
       </div>
       <div css={[bottomBorderStyles, desktopNavigationStyles]} />
     </header>
-    <main css={layoutContentStyles}>{children}</main>
+    <main css={layoutContentStyles}>
+      <ThemeProvider theme={withoutPageMargins}>{children}</ThemeProvider>
+    </main>
   </article>
 );
 

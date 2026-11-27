@@ -4,13 +4,11 @@ import { ReactNode } from 'react';
 
 import { Display, Paragraph, Link } from '../atoms';
 import { mobileScreen, remUnit } from '../pixels';
-import { contentSidePaddingWithNavigation } from '../layout';
+import { pageMarginStyles } from '../layout';
 import { LibraryIcon } from '../icons';
 import { colour } from '../colors';
 
-const styles = css({
-  padding: `0 ${contentSidePaddingWithNavigation()}`,
-
+const styles = css(pageMarginStyles.crn, {
   display: 'grid',
   textAlign: 'center',
 

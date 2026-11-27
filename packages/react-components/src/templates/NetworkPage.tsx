@@ -8,7 +8,9 @@ const NetworkPage: React.FC<
 > = ({ children, ...props }) => (
   <article>
     <NetworkPageHeader {...props} />
-    <PageConstraints as="main">{children}</PageConstraints>
+    <PageConstraints width="content" as="main">
+      {children}
+    </PageConstraints>
   </article>
 );
 

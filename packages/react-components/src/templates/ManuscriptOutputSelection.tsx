@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router';
 import { components } from 'react-select';
 import {
   Button,
-  contentSidePaddingWithNavigation,
   FormCard,
   LabeledMultiSelect,
+  contentWidthStyles,
+  pageGutter,
+  pageMarginStyles,
   LabeledRadioButtonGroup,
   MultiSelectOptionsType,
   Pill,
@@ -15,17 +17,16 @@ import {
 } from '..';
 import { mobileScreen, rem } from '../pixels';
 
-const mainStyles = css({
+const mainStyles = css(pageMarginStyles.crn, {
   display: 'flex',
   justifyContent: 'center',
-  padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(60)}`,
+  paddingTop: rem(36),
+  paddingBottom: rem(60),
 });
 
-const contentStyles = css({
+const contentStyles = css(contentWidthStyles, {
   display: 'grid',
   gridTemplateColumns: '1fr',
-  maxWidth: rem(800),
-  width: '100%',
   justifyContent: 'center',
   gridAutoFlow: 'row',
   rowGap: rem(32),
@@ -35,6 +36,7 @@ const optionListStyles = css({
   marginTop: rem(16),
   display: 'grid',
   gridTemplateColumns: '1fr 1fr',
+  columnGap: pageGutter,
   [`@media (max-width: ${mobileScreen.max}px)`]: {
     gridTemplateColumns: '1fr',
   },

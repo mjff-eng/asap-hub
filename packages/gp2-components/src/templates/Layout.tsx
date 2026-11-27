@@ -1,6 +1,6 @@
 import {
   colour,
-  crossQuery,
+  mediaFrom,
   Loading,
   Overlay,
   ToastStack,
@@ -38,7 +38,7 @@ const styles = css({
     "main-menu  content" max-content
     "user-menu  content" 1fr / 70% 1fr
 `,
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -54,7 +54,7 @@ const overlayStyles = css({
   gridColumn: '1 / -1',
 
   visibility: 'hidden',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'none',
   },
 });
@@ -72,7 +72,7 @@ const menuStyles = css({
   visibility: 'hidden',
   transform: 'translateX(-100%)',
   transition: `transform 250ms ease, visibility 0s 250ms`,
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'none',
   },
 });

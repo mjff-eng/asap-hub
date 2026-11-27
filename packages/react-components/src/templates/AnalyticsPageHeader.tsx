@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { isEnabled } from '@asap-hub/flags';
 import { analytics } from '@asap-hub/routing';
 import { Button, Display, Paragraph, TabLink } from '../atoms';
-import { rem, smallDesktopScreen } from '../pixels';
 import TabNav from '../molecules/TabNav';
 import {
   AwardsIcon,
@@ -15,15 +14,12 @@ import {
   downloadIcon,
 } from '../icons';
 import PageInfoContainer from './PageInfoContainer';
+import { pageHeaderTextStyles } from '../layout';
 
 const containerStyles = css({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
-});
-
-const textStyles = css({
-  maxWidth: rem(smallDesktopScreen.width),
 });
 
 const buttonsStyles = css({
@@ -76,7 +72,7 @@ const AnalyticsPageHeader: React.FC<AnalyticsPageHeaderProps> = ({
     >
       <Display>Analytics</Display>
       <div css={containerStyles}>
-        <div css={textStyles}>
+        <div css={pageHeaderTextStyles}>
           <Paragraph accent="tertiary">
             Explore dashboards related to CRN activities.
           </Paragraph>

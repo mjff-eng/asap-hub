@@ -38,7 +38,11 @@ import {
 import { Controller, useForm } from 'react-hook-form';
 import { colour, LabeledDateInput } from '..';
 import { Button, Link, MultiSelectOptionsType, Paragraph } from '../atoms';
-import { defaultPageLayoutPaddingStyle } from '../layout';
+import {
+  defaultContentTopPadding,
+  contentWidthStyles,
+  pageMarginStyles,
+} from '../layout';
 import { mobileScreen, rem } from '../pixels';
 import { ExternalLinkIcon, GlobeIcon } from '../icons';
 import { LabeledDropdownType } from '../molecules/LabeledDropdown';
@@ -98,16 +102,16 @@ const LabeledTextArea = lazy(() => import('../molecules/LabeledTextArea'));
 const MAX_FILE_SIZE = 100_000_000;
 const KRT_GUIDANCE_FILE =
   'https://docs.google.com/document/d/1FCnqC3VpvLFPLcshLSkmGPtRIFfh70MR7KkrXi7IMX4/edit?usp=sharing';
-const mainStyles = css({
+const mainStyles = css(pageMarginStyles.crn, {
   display: 'flex',
   justifyContent: 'center',
-  padding: defaultPageLayoutPaddingStyle,
+  paddingTop: defaultContentTopPadding,
+  paddingBottom: defaultContentTopPadding,
 });
 
-const contentStyles = css({
+const contentStyles = css(contentWidthStyles, {
   display: 'grid',
   gridTemplateColumns: '1fr',
-  maxWidth: rem(800),
   justifyContent: 'center',
   rowGap: rem(32),
 });

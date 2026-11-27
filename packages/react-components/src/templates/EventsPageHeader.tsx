@@ -8,14 +8,11 @@ import {
   EventMonthFilterSelection,
   EventSearch,
 } from '../organisms';
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
 import { queryParamString } from '../routing';
 import PageConstraints from './PageConstraints';
 import PageInfoContainer from './PageInfoContainer';
-
-const textStyles = css({
-  maxWidth: rem(smallDesktopScreen.width),
-});
+import { pageHeaderTextStyles } from '../layout';
 
 const searchRowStyles = css({
   display: 'flex',
@@ -71,6 +68,7 @@ const EventsPageHeader: React.FC<EventsPageHeaderProps> = ({
   return (
     <header>
       <PageInfoContainer
+        width="content"
         nav={
           <TabNav>
             <TabLink
@@ -90,7 +88,7 @@ const EventsPageHeader: React.FC<EventsPageHeaderProps> = ({
         }
       >
         <Display>Calendar & Events</Display>
-        <div css={textStyles}>
+        <div css={pageHeaderTextStyles}>
           <Paragraph accent="tertiary">
             Find out about upcoming events from ASAP and Groups. You can easily
             add specific calendars to your own Google Calendar to easily stay
@@ -100,7 +98,7 @@ const EventsPageHeader: React.FC<EventsPageHeaderProps> = ({
       </PageInfoContainer>
 
       {searchQuery === undefined ? null : (
-        <PageConstraints noPaddingBottom>
+        <PageConstraints width="content" noPaddingBottom>
           <div role="search" css={searchRowStyles}>
             <SearchField
               placeholder="Search by topic, presenting team, …"

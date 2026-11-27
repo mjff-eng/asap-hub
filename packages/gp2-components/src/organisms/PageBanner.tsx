@@ -1,12 +1,12 @@
 import {
   accents,
-  drawerQuery,
+  mediaBelow,
+  pageContainerStyles,
   Paragraph,
   pixels,
   text,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
-import { smallerScreenQuery } from '../layout';
 
 const { mobileScreen, rem, tabletScreen, vminLinearCalcClamped } = pixels;
 
@@ -20,8 +20,6 @@ type PageBannerProp = {
   noBorderTop?: boolean;
   children?: React.ReactNode;
 };
-
-const headerMaxWidth = 748;
 
 const headerStyles = css({
   width: '100%',
@@ -38,18 +36,14 @@ const cardStyles = css({
   borderStyle: 'solid',
 });
 
+// The card is as wide as the screen, so the text takes the GP2 page grid
+// again to line up with the page content under it.
 const textContainerStyles = (noMarginBottom: boolean) =>
-  css({
-    maxWidth: rem(headerMaxWidth),
-    margin: `${rem(48)} auto ${noMarginBottom ? 0 : rem(32)}`,
-    [smallerScreenQuery]: {
-      margin: `${rem(32)} ${vminLinearCalcClamped(
-        mobileScreen,
-        24,
-        tabletScreen,
-        72,
-        'px',
-      )} ${noMarginBottom ? 0 : rem(32)}`,
+  css(pageContainerStyles.gp2, {
+    marginTop: rem(48),
+    marginBottom: noMarginBottom ? 0 : rem(32),
+    [mediaBelow.tablet]: {
+      marginTop: rem(32),
     },
   });
 
@@ -60,9 +54,8 @@ const removeLayoutPaddingStyles = {
 const imageBannerStyles = (image: string, position: string) =>
   css({
     width: '100%',
-    maxWidth: rem(headerMaxWidth),
     height: rem(72),
-    [drawerQuery]: {
+    [mediaBelow.laptop]: {
       height: rem(48),
     },
     backgroundImage: `url(${image})`,

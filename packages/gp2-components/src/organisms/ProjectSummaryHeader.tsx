@@ -1,6 +1,6 @@
 import { gp2 as gp2Model } from '@asap-hub/model';
 import {
-  crossQuery,
+  mediaFrom,
   ExternalLink,
   Pill,
   pixels,
@@ -13,7 +13,7 @@ const { rem } = pixels;
 const rowStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     flexDirection: 'row',
   },
 });
@@ -40,7 +40,7 @@ const ProjectSummaryHeader: React.FC<ProjectSummaryHeaderProps> = ({
     {projectProposalUrl && (
       <div
         css={css({
-          [crossQuery]: {
+          [mediaFrom.laptop]: {
             marginLeft: 'auto',
           },
         })}

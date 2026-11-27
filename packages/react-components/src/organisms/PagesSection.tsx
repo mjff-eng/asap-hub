@@ -2,23 +2,18 @@ import { css } from '@emotion/react';
 import { PageResponse } from '@asap-hub/model';
 
 import PageCard from './PageCard';
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
 import { Headline2 } from '../atoms';
+import { tileGridStyles } from '../layout';
 
 type PagesProps = {
   readonly title: string;
   readonly pages: ReadonlyArray<PageResponse>;
 };
 
-const gridContainerStyles = css({
-  display: 'grid',
-  gridGap: rem(36),
-  gridTemplateColumns: '1fr 1fr',
+const gridContainerStyles = css(tileGridStyles, {
+  rowGap: rem(36),
   marginTop: rem(24),
-
-  [`@media (max-width: ${smallDesktopScreen.min}px)`]: {
-    gridTemplateColumns: '1fr',
-  },
 });
 
 const Pages: React.FC<PagesProps> = ({ title, pages }) => (

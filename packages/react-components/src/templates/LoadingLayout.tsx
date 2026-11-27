@@ -1,6 +1,6 @@
 import { css, keyframes } from '@emotion/react';
 import { colour, colourWithAlpha } from '../colors';
-import { contentSidePaddingWithNavigation } from '../layout';
+import { pageMarginStyles } from '../layout';
 import { Header } from '../molecules';
 import {
   menuButtonStyles,
@@ -67,12 +67,13 @@ const userButtonContainerStyles = css({
   paddingRight: rem(24),
 });
 
-const contentHeaderContainerStyles = css({
+const contentHeaderContainerStyles = css(pageMarginStyles.crn, {
   display: `grid`,
   width: '100%',
   boxSizing: 'border-box',
   gridColumn: '1 / -1',
-  padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(48)}`,
+  paddingTop: rem(36),
+  paddingBottom: rem(48),
   borderBottom: `1px solid ${colour.border.tertiary}`,
   backgroundColor: colour.background.primary,
   rowGap: rem(12),

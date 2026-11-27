@@ -28,7 +28,11 @@ import { Controller, FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { MultiSelectOptionsType } from '../atoms';
-import { defaultPageLayoutPaddingStyle } from '../layout';
+import {
+  defaultContentTopPadding,
+  contentWidthStyles,
+  pageMarginStyles,
+} from '../layout';
 import { useNavigationWarning } from '../navigation';
 import {
   ResearchOutputConfirmModal,
@@ -101,8 +105,9 @@ type ResearchOutputFormProps = Pick<
     availableActions: ResearchOutputAvailableActions;
   };
 
-const mainStyles = css({
-  padding: defaultPageLayoutPaddingStyle,
+const mainStyles = css(pageMarginStyles.crn, {
+  paddingTop: defaultContentTopPadding,
+  paddingBottom: defaultContentTopPadding,
 });
 
 const serverErrorMessages: Record<
@@ -126,10 +131,9 @@ const formErrorMessage =
 const saveErrorMessage =
   'There was an error and we were unable to save your changes. Please try again.';
 
-const contentStyles = css({
+const contentStyles = css(contentWidthStyles, {
   display: 'grid',
   gridTemplateColumns: '1fr',
-  maxWidth: rem(800),
   justifyContent: 'center',
   gridAutoFlow: 'row',
   rowGap: rem(32),

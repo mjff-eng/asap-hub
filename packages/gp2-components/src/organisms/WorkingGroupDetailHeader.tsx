@@ -1,6 +1,6 @@
 import { gp2 as gp2Model } from '@asap-hub/model';
 import {
-  drawerQuery,
+  mediaBelow,
   pixels,
   Subtitle,
   TabLink,
@@ -35,7 +35,7 @@ const infoContainerStyles = css({
   display: 'flex',
   flexDirection: 'row',
   gap: rem(32),
-  [drawerQuery]: {
+  [mediaBelow.laptop]: {
     display: 'unset',
   },
 });

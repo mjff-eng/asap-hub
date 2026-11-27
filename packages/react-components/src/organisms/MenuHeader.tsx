@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { colour } from '../colors';
-import { crossQuery } from '../layout';
+import { mediaFrom } from '../layout';
 import { Header, MenuButton } from '../molecules';
 import { rem } from '../pixels';
 import { noop } from '../utils';
@@ -11,7 +11,7 @@ const menuButtonWidth = 72;
 export const styles = css({
   display: 'flex',
   // On desktop the logo sits at the left of the full-width top bar.
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     alignItems: 'center',
     // Override the Header's internal centering so the logo aligns left.
     '& header': {
@@ -23,7 +23,7 @@ export const styles = css({
 });
 
 export const menuButtonStyles = css({
-  [crossQuery]: {
+  [mediaFrom.laptop]: {
     display: 'none',
   },
 

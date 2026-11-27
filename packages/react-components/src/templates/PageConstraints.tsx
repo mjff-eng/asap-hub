@@ -1,37 +1,24 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { ReactNode } from 'react';
-import { MAX_PAGE_CONTENT_WIDTH } from '../layout';
+import { pageContainerStyles, pageContentContainerStyles } from '../layout';
 
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
 
 const containerStyles = css({
   display: 'flex',
   flexFlow: 'column',
-  padding: `${rem(48)} ${rem(88)}`,
-  [`@media (max-width: ${smallDesktopScreen.width - 1}px)`]: {
-    padding: `${rem(48)} ${rem(24)}`,
-  },
-});
-
-const constrainedContainerStyles = css({
-  maxWidth: rem(MAX_PAGE_CONTENT_WIDTH),
-  width: '100%',
-  margin: '0 auto',
+  padding: `${rem(48)} 0`,
 });
 
 const noPaddingBottomStyles = css({
   paddingBottom: 0,
-  [`@media (max-width: ${smallDesktopScreen.width - 1}px)`]: {
-    paddingBottom: 0,
-  },
 });
 
 const noPaddingTopStyles = css({
   paddingTop: 0,
-  [`@media (max-width: ${smallDesktopScreen.width - 1}px)`]: {
-    paddingTop: 0,
-  },
 });
+
+export type PageWidth = 'container' | 'content';
 
 type PageConstraintsProps = {
   children: ReactNode;
@@ -39,6 +26,12 @@ type PageConstraintsProps = {
   noPaddingBottom?: boolean;
   noPaddingTop?: boolean;
   unconstrainedStyles?: SerializedStyles;
+  /**
+   * `container` fills the page grid: detail pages, tables, dashboards,
+   * charts and tile grids. `content` is at most 900px wide and centred:
+   * search and directory lists.
+   */
+  width?: PageWidth;
 };
 
 /**
@@ -46,9 +39,9 @@ type PageConstraintsProps = {
  * padding across different screen sizes.
  *
  * Use `PageConstraints` to create consistent layout boundaries for page sections.
- * It applies responsive horizontal padding and max-width constraints to ensure
- * content sections behave uniformly across different screen sizes and
- * maintains visual consistency throughout the application.
+ * The side margins and max width follow the CRN page grid of the CAS Design
+ * System at each breakpoint (see cas-layout.ts), so content sections line up
+ * across pages. Another product sets its own page grid through the theme.
  */
 const PageConstraints: React.FC<PageConstraintsProps> = ({
   children,
@@ -56,6 +49,7 @@ const PageConstraints: React.FC<PageConstraintsProps> = ({
   noPaddingBottom,
   noPaddingTop,
   unconstrainedStyles,
+  width = 'container',
 }) => (
   <Component
     css={css([
@@ -65,7 +59,17 @@ const PageConstraints: React.FC<PageConstraintsProps> = ({
       unconstrainedStyles,
     ])}
   >
-    <div css={constrainedContainerStyles}>{children}</div>
+    <div
+      css={({ components }) =>
+        width === 'content'
+          ? components?.PageConstraints?.contentStyles ??
+            pageContentContainerStyles.crn
+          : components?.PageConstraints?.containerStyles ??
+            pageContainerStyles.crn
+      }
+    >
+      {children}
+    </div>
   </Component>
 );
 

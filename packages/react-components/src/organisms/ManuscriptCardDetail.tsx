@@ -18,7 +18,8 @@ import {
   Tooltip,
   colour,
 } from '..';
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import DiscussionCard from './DiscussionCard';
 import DiscussionModal from './DiscussionModal';
 import ManuscriptVersionCard from './ManuscriptVersionCard';
@@ -63,7 +64,7 @@ const buttonsStyles = css({
   padding: `${rem(24)} ${rem(16)}`,
   borderRadius: rem(8),
   gap: rem(16),
-  [`@media (max-width: ${smallDesktopScreen.max}px)`]: {
+  [mediaBelow.laptop]: {
     flexDirection: 'column',
   },
 });

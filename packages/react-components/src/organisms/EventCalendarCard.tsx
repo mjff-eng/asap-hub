@@ -3,7 +3,8 @@ import { ReactNode } from 'react';
 
 import { Card, Headline3, Link, Paragraph } from '../atoms';
 import { CalendarLink } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { mediaBelow } from '../layout';
+import { rem } from '../pixels';
 
 const containerStyles = css({
   padding: `${rem(32)} ${rem(24)}`,
@@ -19,7 +20,7 @@ const rowStyles = css({
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: rem(16),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'stretch',
   },

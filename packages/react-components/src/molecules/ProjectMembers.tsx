@@ -4,11 +4,13 @@ import { useMemo } from 'react';
 import { rem, tabletScreen } from '../pixels';
 import { groupProjectMembersByUserId } from '../utils';
 import ProjectMemberCard from './ProjectMemberCard';
+import { pageGutter } from '../layout';
 
 const membersListStyles = css({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
-  gap: rem(24),
+  rowGap: rem(24),
+  columnGap: pageGutter,
   [`@media (max-width: ${tabletScreen.min}px)`]: {
     gridTemplateColumns: '1fr',
   },

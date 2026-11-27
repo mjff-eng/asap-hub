@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import { Card, Avatar, Ellipsis, Paragraph } from '../atoms';
 import { ImageLink, LinkHeadline, TagList } from '../molecules';
 import { rem, tabletScreen } from '../pixels';
+import { pageGutter } from '../layout';
 
 const NUMBER_OF_TAGS_TO_DISPLAY = 5;
 
@@ -14,7 +15,8 @@ const recommendedUsersStyles = css({
   [`@media (min-width: ${tabletScreen.width}px)`]: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr 1fr',
-    gridGap: rem(15),
+    rowGap: rem(15),
+    columnGap: pageGutter,
   },
 });
 

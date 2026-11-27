@@ -3,16 +3,13 @@ import { css } from '@emotion/react';
 import { CRNTagSearchEntities } from '@asap-hub/algolia';
 
 import { Display, MultiSelect, Paragraph } from '../atoms';
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
 import { Filter } from '../organisms';
 import { searchIcon } from '../icons';
 import { noop } from '../utils';
 import PageConstraints from './PageConstraints';
 import PageInfoContainer from './PageInfoContainer';
-
-const textStyles = css({
-  maxWidth: rem(smallDesktopScreen.width),
-});
+import { pageHeaderTextStyles } from '../layout';
 
 const styles = css({
   display: 'grid',
@@ -41,9 +38,9 @@ const TagsPageHeader: React.FC<TagsPageHeaderProps> = ({
   loadTags = noop,
 }) => (
   <header>
-    <PageInfoContainer>
+    <PageInfoContainer width="content">
       <Display styleAsHeading={4}>Tags Search</Display>
-      <div css={textStyles}>
+      <div css={pageHeaderTextStyles}>
         <Paragraph accent="tertiary">
           Search for all CRN Hub areas that include selected tags (research
           outputs, events, people, projects, teams, tutorials, interest groups,
@@ -51,7 +48,7 @@ const TagsPageHeader: React.FC<TagsPageHeaderProps> = ({
         </Paragraph>
       </div>
     </PageInfoContainer>
-    <PageConstraints noPaddingBottom>
+    <PageConstraints width="content" noPaddingBottom>
       <div role="search" css={styles}>
         <MultiSelect
           noMargin

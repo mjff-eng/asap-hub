@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { Display, Link, Paragraph } from '../atoms';
 import { colour } from '../colors';
 import { LockIcon } from '../icons';
-import { contentSidePaddingWithNavigation } from '../layout';
+import { pageMarginStyles } from '../layout';
 import {
   largeDesktopScreen,
   mobileScreen,
@@ -12,14 +12,17 @@ import {
   vminLinearCalc,
 } from '../pixels';
 
-const styles = css({
-  padding: `${vminLinearCalc(
-    mobileScreen,
-    36,
-    largeDesktopScreen,
-    72,
-    'px',
-  )} ${contentSidePaddingWithNavigation()}`,
+const verticalPadding = vminLinearCalc(
+  mobileScreen,
+  36,
+  largeDesktopScreen,
+  72,
+  'px',
+);
+
+const styles = css(pageMarginStyles.crn, {
+  paddingTop: verticalPadding,
+  paddingBottom: verticalPadding,
 
   display: 'grid',
   gridRowGap: rem(12),

@@ -10,7 +10,9 @@ type NewsPageProps = ComponentProps<typeof NewsPageHeader> & {
 const NewsPage: React.FC<NewsPageProps> = ({ children, ...props }) => (
   <article>
     <NewsPageHeader {...props} />
-    <PageConstraints as="main">{children}</PageConstraints>
+    <PageConstraints width="content" as="main">
+      {children}
+    </PageConstraints>
   </article>
 );
 

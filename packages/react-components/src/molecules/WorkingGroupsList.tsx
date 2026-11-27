@@ -5,6 +5,7 @@ import { network } from '@asap-hub/routing';
 
 import { rem, tabletScreen } from '../pixels';
 import { Link, Divider } from '../atoms';
+import { pageGutter } from '../layout';
 
 const containerStyles = css({
   display: 'grid',
@@ -27,7 +28,7 @@ const listItemStyle = css({
   gridTemplateColumns: '1fr',
   gridTemplateRows: '1fr 1fr',
   gridRowGap: rem(12),
-  gridColumnGap: rem(12),
+  gridColumnGap: pageGutter,
 
   '&:not(:last-of-type)': {
     marginBottom: rem(8),

@@ -9,10 +9,11 @@ import { news } from '@asap-hub/routing';
 import { Display, Link, Paragraph } from '../atoms';
 import { rem } from '../pixels';
 import { colour } from '../colors';
-import { contentSidePaddingWithNavigation } from '../layout';
+import { contentWidthStyles, pageMarginStyles } from '../layout';
 
-const headerStyles = css({
-  padding: `${rem(36)} ${contentSidePaddingWithNavigation(8)} ${rem(60)}`,
+const headerStyles = css(pageMarginStyles.crn, {
+  paddingTop: rem(36),
+  paddingBottom: rem(60),
   background: colour.background.primary,
   boxShadow: `0 2px 4px -2px ${colour.neutral[100]}`,
   marginBottom: rem(30),
@@ -20,11 +21,9 @@ const headerStyles = css({
   justifyContent: 'center',
 });
 
-const contentStyles = css({
+const contentStyles = css(contentWidthStyles, {
   display: 'flex',
   flexDirection: 'column',
-  maxWidth: rem(800),
-  width: '100%',
   justifyContent: 'center',
 });
 

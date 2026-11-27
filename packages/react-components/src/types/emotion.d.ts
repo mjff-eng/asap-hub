@@ -43,6 +43,13 @@ declare module '@emotion/react' {
       ContentPage?: {
         styles: SerializedStyles;
       };
+      PageMargins?: {
+        styles: SerializedStyles;
+      };
+      PageConstraints?: {
+        containerStyles: SerializedStyles;
+        contentStyles: SerializedStyles;
+      };
     };
   }
 }

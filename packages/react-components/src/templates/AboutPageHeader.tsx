@@ -1,15 +1,10 @@
-import { css } from '@emotion/react';
 import { isEnabled } from '@asap-hub/flags';
 import { about } from '@asap-hub/routing';
 
 import { Display, Paragraph, TabLink } from '../atoms';
 import TabNav from '../molecules/TabNav';
-import { rem, smallDesktopScreen } from '../pixels';
 import PageInfoContainer from './PageInfoContainer';
-
-const textStyles = css({
-  maxWidth: rem(smallDesktopScreen.width),
-});
+import { pageHeaderTextStyles } from '../layout';
 
 const AboutPageHeader: React.FC = () => {
   const showTabs = isEnabled('ABOUT_ASAP_TABS');
@@ -28,7 +23,7 @@ const AboutPageHeader: React.FC = () => {
     >
       <header>
         <Display>About ASAP</Display>
-        <div css={textStyles}>
+        <div css={pageHeaderTextStyles}>
           <Paragraph accent="tertiary">
             {showTabs
               ? 'Background on the initiative, its structure, and the teams behind it.'

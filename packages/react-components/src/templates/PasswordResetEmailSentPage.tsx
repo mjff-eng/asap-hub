@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { contentSidePaddingWithoutNavigation } from '../layout';
+import { themedPageMarginStyles } from '../layout';
 import { Display, Link, Paragraph } from '../atoms';
 import {
   largeDesktopScreen,
@@ -13,7 +13,8 @@ import { BannerCard } from '../molecules';
 const layoutStyles = css({
   flexGrow: 1,
   alignSelf: 'stretch',
-  padding: `${rem(24)} ${contentSidePaddingWithoutNavigation()}`,
+  paddingTop: rem(24),
+  paddingBottom: rem(24),
 
   display: 'grid',
   justifyContent: 'center',
@@ -33,7 +34,7 @@ interface PasswordResetEmailSentPageProps {
 const PasswordResetEmailSentPage: React.FC<PasswordResetEmailSentPageProps> = ({
   signInHref,
 }) => (
-  <div css={layoutStyles}>
+  <div css={(theme) => [themedPageMarginStyles(theme), layoutStyles]}>
     <BannerCard type="success">
       <Display styleAsHeading={4}>Email sent!</Display>
       <Paragraph accent="tertiary">
