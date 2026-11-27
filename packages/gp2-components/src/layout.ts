@@ -2,27 +2,13 @@ import {
   casHeader,
   pixels,
   colour,
+  mediaBelow,
   mediaFrom,
   pageContainerStyles,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 
-const {
-  largeDesktopScreen,
-  mobileScreen,
-  perRem,
-  rem,
-  remUnit,
-  tabletScreen,
-  vminLinearCalcClamped,
-} = pixels;
-
-// From the laptop breakpoint, where the navigation leaves the drawer, up to
-// the large desktop width. Both bounds are in em so they follow the browser
-// font size together with the navigation.
-export const smallDesktopQuery = `${mediaFrom.laptop} and (max-width: ${
-  (largeDesktopScreen.width - 1) / perRem
-}em)`;
+const { rem, remUnit } = pixels;
 
 // A navigation link in the header, set on the element that wraps it. The
 // link's own vertical padding makes it taller than the header, so it takes
@@ -39,23 +25,34 @@ export const headerLinkStyles = css({
   },
 });
 
-export const mobileQuery = `@media (max-width: ${tabletScreen.width - 1}px)`;
-export const nonMobileQuery = `@media (min-width: ${tabletScreen.width}px)`;
-export const layoutContentVerticalPadding = vminLinearCalcClamped(
-  mobileScreen,
-  33,
-  tabletScreen,
-  48,
-  'px',
-);
+export const mobileQuery = mediaBelow.tablet;
+export const nonMobileQuery = mediaFrom.tablet;
+
+const layoutContentVerticalPadding = { mobile: 33, tablet: 48 };
+
+export const layoutContentVerticalPaddingStyles = {
+  paddingTop: remUnit(layoutContentVerticalPadding.mobile),
+  paddingBottom: remUnit(layoutContentVerticalPadding.mobile),
+  [mediaFrom.tablet]: {
+    paddingTop: remUnit(layoutContentVerticalPadding.tablet),
+    paddingBottom: remUnit(layoutContentVerticalPadding.tablet),
+  },
+};
+
+export const removeLayoutPaddingStyles = {
+  marginTop: remUnit(-layoutContentVerticalPadding.mobile),
+  [mediaFrom.tablet]: {
+    marginTop: remUnit(-layoutContentVerticalPadding.tablet),
+  },
+};
 
 // The page content of every GP2 page: the GP2 page grid of the CAS Design
 // System (24px margins on mobile, 56px from tablet up, at most 900px wide and
 // centred) with the vertical padding shared by the pages.
-export const layoutContentStyles = css(pageContainerStyles.gp2, {
-  paddingTop: layoutContentVerticalPadding,
-  paddingBottom: layoutContentVerticalPadding,
-});
+export const layoutContentStyles = css(
+  pageContainerStyles.gp2,
+  layoutContentVerticalPaddingStyles,
+);
 
 export const detailHeaderStyles = css({
   display: 'flex',

@@ -4,7 +4,8 @@ import { FC } from 'react';
 
 import { Card, Headline3, Paragraph } from '../atoms';
 import { CalendarLink } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 const cardStyles = css({
   borderWidth: 0,
@@ -21,7 +22,7 @@ const rowStyles = css({
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: rem(24),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'stretch',
   },

@@ -9,7 +9,8 @@ import {
   CircleInfoIcon,
   crossIcon,
 } from '../icons';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 // Not in the palette: the toast is drawn with detached values.
 const toastText = colour.foreground.primary;
@@ -58,7 +59,7 @@ const toastStyles = (accent: Accent, hasUndo: boolean) =>
     color: accents[accent].text,
     fontSize: rem(16),
     lineHeight: 24 / 16,
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       // A grid, not flex-wrap: the icon has to stay on the message's first
       // line however far the message wraps.
       ...(hasUndo
@@ -82,7 +83,7 @@ const iconStyles = css({
 });
 
 const mobileTextStyles = {
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     fontSize: rem(14),
     lineHeight: 16 / 14,
   },
@@ -137,7 +138,7 @@ const dismissStyles = (accent: Accent) =>
     backgroundColor: 'transparent',
     '> svg': { width: rem(20), height: rem(20) },
     'svg path': { stroke: accents[accent].text },
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       flexGrow: 0,
       minWidth: rem(24),
     },

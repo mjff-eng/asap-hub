@@ -17,7 +17,8 @@ import PillList from './PillList';
 import TagList from './TagList';
 import { formatDate } from '../date';
 import { colour } from '../colors';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import {
   alumniBadgeIcon,
   DiscoveryProjectIcon,
@@ -62,7 +63,7 @@ export type ProjectOutput = Pick<
 
 const mobileOnlyStyles = css({
   display: 'none',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'flex',
   },
 });
@@ -81,7 +82,7 @@ const mobilePillListStyles = css({
 });
 
 const desktopOnlyStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });
@@ -99,7 +100,7 @@ const metadataRowStyles = css({
   justifyContent: 'space-between',
   columnGap: rem(12),
   height: rem(32),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     height: 'auto',
     flexWrap: 'wrap',
   },
@@ -129,7 +130,7 @@ const associationRowStyles = css({
   alignItems: 'center',
   columnGap: rem(8),
   rowGap: rem(8),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     rowGap: rem(16),
   },
 });
@@ -158,7 +159,7 @@ const counterBaseStyles = css({
 
 const associationCounterStyles = css(counterBaseStyles, {
   marginLeft: rem(32),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginLeft: 0,
     flexBasis: '100%',
   },
@@ -179,7 +180,7 @@ const titleStyles = css({
   alignItems: 'center',
   marginTop: rem(4),
   marginBottom: rem(4),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: 0,
     marginBottom: rem(16),
   },
@@ -198,19 +199,19 @@ const datesStyles = css({
   '& > *, & p': {
     lineHeight: rem(16),
   },
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });
 
 const dateSeparatorStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });
 
 const dateAddedStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     '& > p::after': {
       content: '"  •"',
     },
@@ -223,7 +224,7 @@ const authorRowStyles = css({
   alignItems: 'center',
   columnGap: rem(40),
   rowGap: rem(8),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     rowGap: rem(16),

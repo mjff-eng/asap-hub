@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 
 import { colourWithAlpha, colour } from '../colors';
-import { mobileScreen, rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 
 export const contentStyles = css({
   padding: `${rem(32)} ${rem(24)}`,
@@ -32,7 +33,7 @@ export const iconButtonStyles = css({
   ':hover, :focus': {
     borderColor: colour.border.secondary,
   },
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     // Button re-asserts flexGrow:1 at this breakpoint; re-declare it so the
     // fixed 40px icon button doesn't stretch.
     flexGrow: 0,
@@ -56,7 +57,7 @@ export const metricsStyles = css({
   gridTemplateColumns: `minmax(0, ${rem(380)})`,
   gap: rem(24),
   marginTop: rem(24),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: `repeat(2, minmax(0, ${rem(380)}))`,
   },
 });
@@ -163,7 +164,7 @@ export const deleteButtonStyles = (
       ? undefined
       : `0 2px 4px ${colourWithAlpha(colour.neutral[100], 0.3)}`,
     color: enabled ? colour.foreground.primary : colour.foreground.tertiary,
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       minWidth: rem(24),
     },
     '> svg': {

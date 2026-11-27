@@ -15,7 +15,8 @@ import {
   Pill,
   colour,
 } from '..';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 
 const mainStyles = css(pageMarginStyles.crn, {
   display: 'flex',
@@ -37,7 +38,7 @@ const optionListStyles = css({
   display: 'grid',
   gridTemplateColumns: '1fr 1fr',
   columnGap: pageGutter,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     gridTemplateColumns: '1fr',
   },
 });
@@ -54,7 +55,7 @@ const buttonContainerStyles = css({
   display: 'grid',
   columnGap: rem(24),
   gridTemplateRows: 'max-content 12px max-content',
-  [`@media (min-width: ${mobileScreen.max - 100}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: 'max-content max-content',
     gridTemplateRows: 'auto',
     justifyContent: 'flex-end',
@@ -66,7 +67,7 @@ const confirmButtonStyles = css({
   justifyContent: 'center',
   gridRow: '1 / span 2',
   gridColumn: '1',
-  [`@media (min-width: ${mobileScreen.max - 100}px)`]: {
+  [mediaFrom.tablet]: {
     gridRow: '1',
     gridColumn: '2',
   },
@@ -77,7 +78,7 @@ const dismissButtonStyles = css({
   justifyContent: 'center',
   gridRow: '2 / span 2',
   gridColumn: '1',
-  [`@media (min-width: ${mobileScreen.max - 100}px)`]: {
+  [mediaFrom.tablet]: {
     gridRow: '1',
   },
 });
@@ -96,7 +97,7 @@ const pillContainerStyles = (isFocused?: boolean) =>
     display: 'flex',
     gap: rem(8),
     marginTop: rem(8),
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       flexDirection: 'column',
     },
     '& > *:nth-of-type(1), & > *:nth-of-type(2)': {

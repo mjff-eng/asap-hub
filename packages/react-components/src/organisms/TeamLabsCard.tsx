@@ -3,7 +3,8 @@ import { css } from '@emotion/react';
 import { LabDataObject } from '@asap-hub/model';
 
 import { Card, Paragraph, Button, Headline3, Ellipsis, Link } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 
 import { LabIcon } from '../icons';
 import { colour } from '../colors';
@@ -19,7 +20,7 @@ const containerStyles = css({
   margin: 0,
   display: 'grid',
   rowGap: '0.5rem',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: '1fr 1fr',
     columnGap: rem(32),
   },

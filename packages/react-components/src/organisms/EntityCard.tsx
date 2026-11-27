@@ -4,7 +4,8 @@ import { Anchor, Card, Ellipsis, Link, Pill } from '../atoms';
 import { colour } from '../colors';
 import { googleDriveIcon } from '../icons';
 import { LinkHeadline, TagList } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 
 const titleContainerStyles = css({
   display: 'flex',
@@ -18,7 +19,7 @@ const titleStyle = css({
   gap: rem(12),
   alignItems: 'flex-start',
 
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     flexFlow: 'row',
     gap: rem(16),
     alignItems: 'center',

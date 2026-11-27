@@ -4,7 +4,8 @@ import { css } from '@emotion/react';
 import React, { useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { colour } from '../colors';
 import { formatDateToTimezone } from '../date';
 
@@ -16,14 +17,14 @@ const container = css({
 const descriptionStyles = css({
   marginTop: rem(24),
   marginBottom: rem(12),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     marginBottom: rem(32),
   },
 });
 
 const gridTitleStyles = css({
   display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'inherit',
     paddingBottom: rem(16),
   },
@@ -33,12 +34,12 @@ const rowTitleStyles = css({
   paddingTop: rem(16),
   paddingBottom: rem(16),
   ':first-of-type': { paddingTop: 0 },
-  [`@media (min-width: ${tabletScreen.min}px)`]: { display: 'none' },
+  [mediaFrom.tablet]: { display: 'none' },
 });
 
 const gridStyles = css({
   display: 'grid',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: 'auto max-content',
     columnGap: rem(15),
     rowGap: rem(16),
@@ -46,7 +47,7 @@ const gridStyles = css({
 });
 
 const underlineStyles = css({
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     paddingBottom: rem(16),
     '&:not(:last-child)': {
       borderBottom: `1px solid ${colour.border.tertiary}`,

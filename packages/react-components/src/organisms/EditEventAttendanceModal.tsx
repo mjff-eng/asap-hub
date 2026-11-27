@@ -30,7 +30,8 @@ import {
 } from '../icons';
 import { useSectionExpansion } from '../hooks';
 import { ConfirmableModalFooter, InlineToast, Modal } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { pluralizeTeams, triggerDownloadFile } from '../utils';
 import { EventAttendanceTeam, summarizeAttendance } from './EventAttendance';
 import { teamIcon } from './shared-event-card';
@@ -96,7 +97,7 @@ const spacingLarge = css({ marginTop: rem(48) });
 // wider top/bottom spacing there (48 above, 56 below).
 const searchSpacingStyles = css({
   marginTop: rem(32),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: rem(48),
   },
 });
@@ -105,7 +106,7 @@ const toastSpacingStyles = css({ marginTop: rem(24) });
 
 const attendeesSpacingStyles = css({
   marginTop: rem(48),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: rem(56),
   },
 });
@@ -153,7 +154,7 @@ const uploadButtonStyles = (enabled: boolean) =>
     borderRadius: rem(4),
     color: enabled ? colour.foreground.primary : colour.foreground.tertiary,
     maxWidth: 'none',
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       flexGrow: 0,
       minWidth: 'auto',
     },
@@ -172,7 +173,7 @@ const attendeesHeaderStyles = css({
   justifyContent: 'space-between',
   flexWrap: 'wrap',
   gap: rem(12),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'stretch',
     gap: rem(24),
@@ -183,7 +184,7 @@ const attendeesStatsStyles = css({
   display: 'flex',
   alignItems: 'center',
   flexWrap: 'wrap',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     gap: rem(4),
@@ -204,13 +205,13 @@ const attendeesStatStyles = css({
 const separatorStyles = css([attendeesStatStyles, { padding: `0 ${rem(8)}` }]);
 
 const hideOnMobileStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });
 
 const hideOnDesktopStyles = css({
-  [`@media (min-width: ${mobileScreen.max + 1}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'none',
   },
 });
@@ -219,7 +220,7 @@ const attendeesSectionStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(16),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     gap: rem(24),
   },
 });
@@ -258,7 +259,7 @@ const attendanceGridStyles = css({
   gridTemplateColumns: '1fr 40px 24px',
   columnGap: '32px',
   alignItems: 'center',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     columnGap: '16px',
   },
 });
@@ -270,7 +271,7 @@ const attendeesTableHeaderStyles = css({
   letterSpacing: rem(0.1),
   color: colour.foreground.primary,
   paddingBottom: rem(12),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     fontSize: rem(14),
     lineHeight: 16 / 14,
     letterSpacing: 'normal',
@@ -339,7 +340,7 @@ const teamCellStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: rem(8),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     fontSize: rem(14),
     lineHeight: 16 / 14,
     '> svg': {
@@ -357,14 +358,14 @@ const searchOptionStyles = css({
     height: rem(24),
     flexShrink: 0,
   },
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexWrap: 'wrap',
     rowGap: 0,
   },
 });
 
 const searchOptionLabelStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flex: '1 1 0',
     minWidth: 0,
   },
@@ -376,7 +377,7 @@ const unfocusedSearchOptionLabelStyles = css({
 
 const searchOptionMetaStyles = css({
   color: colour.foreground.quaternary,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexBasis: '100%',
     paddingLeft: rem(32),
   },

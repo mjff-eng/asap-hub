@@ -6,7 +6,8 @@ import { useState } from 'react';
 
 import { Button, Card, Headline3, Link, Paragraph, Pill } from '../atoms';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 
 const container = css({
   display: 'grid',
@@ -16,14 +17,14 @@ const container = css({
 const descriptionStyles = css({
   marginTop: rem(24),
   marginBottom: rem(12),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     marginBottom: rem(32),
   },
 });
 
 const gridTitleStyles = css({
   display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'inherit',
     paddingBottom: rem(16),
   },
@@ -33,7 +34,7 @@ const rowTitleStyles = css({
   paddingTop: rem(32),
   paddingBottom: rem(16),
   ':first-of-type': { paddingTop: 0 },
-  [`@media (min-width: ${tabletScreen.min}px)`]: { display: 'none' },
+  [mediaFrom.tablet]: { display: 'none' },
 });
 
 const rowStyles = css({
@@ -46,7 +47,7 @@ const rowStyles = css({
     marginBottom: 0,
     paddingBottom: 0,
   },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: '1fr 1.2fr 0.8fr',
     columnGap: rem(15),
     paddingTop: rem(0),
@@ -56,7 +57,7 @@ const rowStyles = css({
 });
 
 const rowDivider = css({
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     paddingTop: rem(16),
     borderBottom: `1px solid ${colour.border.tertiary}`,
   },

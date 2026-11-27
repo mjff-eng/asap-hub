@@ -4,7 +4,8 @@ import { css } from '@emotion/react';
 
 import { Card, Paragraph, Button, Headline2, Anchor, Pill } from '../atoms';
 import { colour } from '../colors';
-import { rem, tabletScreen, unitlessLineHeight } from '../pixels';
+import { rem, unitlessLineHeight } from '../pixels';
+import { mediaBelow } from '../layout';
 import { getProjectRoute } from '../utils';
 import { getStatusPillAccent } from './ProjectCard';
 
@@ -23,7 +24,7 @@ const tableStyles = css({
   marginTop: rem(32),
   width: '100%',
   borderCollapse: 'collapse',
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none !important',
   },
 });
@@ -120,7 +121,7 @@ const mobileProjectsList = css({
   marginTop: rem(32),
   display: 'none',
   flexDirection: 'column',
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'flex !important',
   },
 });

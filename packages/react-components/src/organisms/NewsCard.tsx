@@ -3,7 +3,8 @@ import { NewsResponse, NewsType, TutorialsResponse } from '@asap-hub/model';
 import { news, discover } from '@asap-hub/routing';
 
 import { Card, Headline4, Ellipsis } from '../atoms';
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { formatDate } from '../date';
 import { newsPlaceholder, trainingPlaceholderIcon } from '../icons';
 import { ExternalLink, LinkHeadline, ImageLink } from '../molecules';
@@ -25,7 +26,7 @@ const imageContainerStyle = css({
   width: rem(192),
   overflow: 'hidden',
 
-  [`@media (max-width: ${smallDesktopScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });

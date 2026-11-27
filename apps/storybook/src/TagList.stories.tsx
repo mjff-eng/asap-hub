@@ -8,8 +8,7 @@ export default {
 
 export const Normal = () => (
   <TagList
-    min={number('Minimum number of tags shown on mobile', 3)}
-    max={number('Maximum number of tags shown on desktop', 5)}
+    max={number('Maximum number of tags shown', 5)}
     enabled={boolean('Enabled', true)}
     tags={array('Tags', [
       'Neurological Diseases',
@@ -27,8 +26,7 @@ export const Normal = () => (
 
 export const CenterContent = () => (
   <TagList
-    min={number('Minimum number of tags shown on mobile', 3)}
-    max={number('Maximum number of tags shown on desktop', 5)}
+    max={number('Maximum number of tags shown', 5)}
     enabled={boolean('Enabled', true)}
     tags={array('Tags', [
       'Neurological Diseases',

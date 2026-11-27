@@ -5,7 +5,8 @@ import { cloneElement } from 'react';
 import { Link } from '../atoms';
 import { colour } from '../colors';
 import { GlobeIcon } from '../icons';
-import { rem, tabletScreen } from '../pixels';
+import { mediaFrom } from '../layout';
+import { rem } from '../pixels';
 import { getSocialLinks } from './SocialIcons';
 
 const ICON_COLOR = colour.neutral[600];
@@ -20,7 +21,7 @@ const containerStyles = css({
   gap: rem(16),
   color: colour.foreground.tertiary,
 
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',

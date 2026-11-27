@@ -5,11 +5,12 @@ import { urlExpression } from '@asap-hub/validation';
 import { Link, Tooltip } from '../atoms';
 import { colour } from '../colors';
 import { useTooltipTrigger } from '../hooks';
-import { rem, mobileScreen, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { captionRegularStyles } from '../text';
 
 const containerStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: rem(15),
     width: '100%',
   },
@@ -26,7 +27,7 @@ const tooltipBubbleStyles = css({
   padding: rem(12),
   borderRadius: rem(8),
 
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     maxWidth: rem(tooltipWidth),
     marginLeft: 0,
     marginRight: 0,

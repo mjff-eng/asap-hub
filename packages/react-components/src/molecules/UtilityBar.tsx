@@ -2,12 +2,8 @@ import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 import { Link, Paragraph } from '../atoms';
-import {
-  largeDesktopScreen,
-  mobileScreen,
-  rem,
-  vminLinearCalcClamped,
-} from '../pixels';
+import { rem, remUnit } from '../pixels';
+import { mediaFrom } from '../layout';
 import { asapLogo, gp2Logo } from '../icons';
 import { colour } from '../colors';
 
@@ -17,16 +13,11 @@ const headerStyles = css({
   backgroundColor: colour.brand.gp2[900],
   gap: rem(24),
   color: colour.foreground['primary-inverse'],
-  padding: `${rem(6)} ${vminLinearCalcClamped(
-    mobileScreen,
-    24,
-    largeDesktopScreen,
-    36,
-    'px',
-  )}`,
-  justifyContent: 'right',
-  [`@media (max-width: ${largeDesktopScreen.min}px)`]: {
-    justifyContent: 'left',
+  padding: `${rem(6)} ${remUnit(24)}`,
+  justifyContent: 'left',
+  [mediaFrom.laptop]: {
+    padding: `${rem(6)} ${remUnit(36)}`,
+    justifyContent: 'right',
   },
 });
 

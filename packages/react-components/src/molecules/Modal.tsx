@@ -3,12 +3,8 @@ import { css, SerializedStyles } from '@emotion/react';
 
 import { Card, Overlay } from '../atoms';
 
-import {
-  vminLinearCalcClamped,
-  mobileScreen,
-  tabletScreen,
-  rem,
-} from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 
 const overlayContainerStyles = css({
   position: 'fixed',
@@ -42,13 +38,10 @@ const modalStyles = css({
   maxHeight: '80%',
 
   display: 'flex',
-  padding: `${rem(12)} ${vminLinearCalcClamped(
-    mobileScreen,
-    24,
-    tabletScreen,
-    48,
-    'px',
-  )}`,
+  padding: `${rem(12)} ${rem(24)}`,
+  [mediaFrom.tablet]: {
+    padding: `${rem(12)} ${rem(48)}`,
+  },
   boxSizing: 'border-box',
 });
 const scrollStyles = css({

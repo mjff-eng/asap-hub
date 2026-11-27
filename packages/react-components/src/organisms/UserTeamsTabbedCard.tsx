@@ -5,7 +5,7 @@ import React, { Fragment } from 'react';
 import { Divider, Link, Paragraph } from '../atoms';
 import { InactiveBadgeIcon } from '../icons';
 import { TabbedCard } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 import { colour } from '../colors';
 import {
   byTeamRolePriority,
@@ -13,7 +13,7 @@ import {
   splitListBy,
 } from '../utils';
 import { formatDateToTimezone, weekdayShortDateFormat } from '../date';
-import { pageGutter } from '../layout';
+import { mediaFrom, pageGutter } from '../layout';
 
 const MAX_TEAMS = 5;
 
@@ -30,7 +30,7 @@ const listItemStyle = css({
   gridTemplateRows: '1fr 1fr',
   rowGap: rem(16),
 
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridAutoFlow: 'column',
     gridTemplateColumns: '1fr 1fr',
     gridTemplateRows: 'auto 1fr',
@@ -55,7 +55,7 @@ const containerStyle = css({
   margin: 0,
   marginTop: rem(32),
 
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     marginTop: rem(24),
   },
 
@@ -69,14 +69,14 @@ const titleStyle = css({
 
 const dividerMobileStyle = css({
   marginBottom: rem(8),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     marginBottom: 0,
   },
 });
 
 const roleTitleMobileStyle = css({
   marginTop: rem(16),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     marginTop: 0,
   },
 });
@@ -86,7 +86,7 @@ const rolesColumnStyle = css({
   display: 'flex',
   flexDirection: 'column',
   gap: rem(16),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gap: 0,
   },
 });

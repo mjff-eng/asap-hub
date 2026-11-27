@@ -17,14 +17,15 @@ import { colour } from '../colors';
 import { chevronDownIcon, chevronUpIcon, mailIcon } from '../icons';
 import { createMailTo } from '../mail';
 import { SearchField } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
+import { rem } from '../pixels';
 import { textStyle } from '../text';
 
 const MEMBERS_LIMIT = 10;
 const ALL_MATCHING_AREAS = 'all-matching-areas';
 
-const mobileQuery = `@media (max-width: ${tabletScreen.max}px)`;
-const desktopQuery = `@media (min-width: ${tabletScreen.max + 1}px)`;
+const mobileQuery = mediaBelow.tablet;
+const desktopQuery = mediaFrom.tablet;
 
 const text = (style: CasTextStyle) => ({ margin: 0, ...textStyle(style) });
 

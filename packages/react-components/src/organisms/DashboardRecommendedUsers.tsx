@@ -3,8 +3,8 @@ import { network } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { Card, Avatar, Ellipsis, Paragraph } from '../atoms';
 import { ImageLink, LinkHeadline, TagList } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
-import { pageGutter } from '../layout';
+import { rem } from '../pixels';
+import { mediaFrom, pageGutter } from '../layout';
 
 const NUMBER_OF_TAGS_TO_DISPLAY = 5;
 
@@ -12,7 +12,7 @@ const recommendedUsersStyles = css({
   display: 'flex',
   flexFlow: 'column',
   gap: rem(24),
-  [`@media (min-width: ${tabletScreen.width}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr 1fr',
     rowGap: rem(15),

@@ -5,7 +5,8 @@ import { css } from '@emotion/react';
 import { Card, Headline2, Link, Paragraph, Subtitle } from '../atoms';
 import { colour } from '../colors';
 import { formatProjectDate } from '../date';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 type GrantDocumentGrantsCardProps = {
   grantType: GrantType;
@@ -22,7 +23,7 @@ const grantsStyles = css({
   flexDirection: 'column',
   gap: rem(24),
   marginTop: rem(24),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     gap: rem(36),
     paddingBottom: rem(24),
     '& > * + *': {
@@ -37,7 +38,7 @@ const grantRowStyles = css({
   gridTemplateColumns: `1fr ${rem(168)}`,
   columnGap: rem(48),
   rowGap: rem(24),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     gridTemplateColumns: '1fr',
   },
 });

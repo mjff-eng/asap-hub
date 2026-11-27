@@ -3,16 +3,16 @@ import { css } from '@emotion/react';
 
 import AnalyticsPageHeader from './AnalyticsPageHeader';
 import AnalyticsMobilePage from './AnalyticsMobilePage';
-import { mobileScreen } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import PageConstraints from './PageConstraints';
 
 const pageMobileStyles = css({
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'none',
   },
 });
 const pageDesktopStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });

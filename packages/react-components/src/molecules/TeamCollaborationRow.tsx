@@ -11,12 +11,13 @@ import { borderRadius } from '../card';
 import { colour } from '../colors';
 import { plusRectIcon, minusRectIcon, InactiveBadgeIcon } from '../icons';
 import { TeamCollaborationMetric } from '../organisms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 import { getPerformanceIcon } from '../utils';
 
 const rowStyles = css({
   display: 'grid',
-  padding: `${rem(20)} ${rem(24)} 0`,
+  columnGap: rem(15),
+  padding: `0 ${rem(24)} ${rem(15)}`,
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':nth-of-type(2n+3)': {
     background: colour.neutral[50],
@@ -25,12 +26,6 @@ const rowStyles = css({
     borderBottom: 'none',
     marginBottom: 0,
     borderRadius: rem(borderRadius),
-  },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    columnGap: rem(15),
-    paddingTop: 0,
-    paddingBottom: rem(15),
-    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -47,26 +42,20 @@ const iconStyles = css({
 
 const columnsStyles = (isWithinTeam: boolean) =>
   css({
-    [`@media (min-width: ${tabletScreen.min}px)`]: {
-      gridTemplateColumns: isWithinTeam
-        ? '1fr 1fr 1fr 1fr 1fr 1fr'
-        : '0.3fr 1fr 1fr 1fr 1fr 1fr 1fr',
-    },
+    gridTemplateColumns: isWithinTeam
+      ? '1fr 1fr 1fr 1fr 1fr 1fr'
+      : '0.3fr 1fr 1fr 1fr 1fr 1fr 1fr',
   });
 
 const collapsedRowStyles = css({
   display: 'grid',
+  gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
+  columnGap: rem(15),
   margin: `0 ${rem(24)} 0 ${rem(75)}`,
+  paddingBottom: rem(15),
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':last-child': {
     borderBottom: 'none',
-  },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    paddingTop: 0,
-    paddingBottom: rem(15),
-    borderBottom: `1px solid ${colour.border.tertiary}`,
-    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
-    columnGap: rem(15),
   },
 });
 
@@ -84,11 +73,6 @@ const rowContainerStyles = css({
     marginBottom: 0,
     paddingBottom: rem(15),
     borderRadius: rem(borderRadius),
-  },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    paddingTop: 0,
-    paddingBottom: 0,
-    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 

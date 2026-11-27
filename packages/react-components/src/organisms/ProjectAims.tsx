@@ -3,7 +3,8 @@ import { css } from '@emotion/react';
 import { FC, useState } from 'react';
 import { Headline3, Card, Button, TabButton, Link, Paragraph } from '../atoms';
 import { TabNav } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { colour } from '../colors';
 import Aim from './Aim';
 
@@ -20,7 +21,7 @@ const aimsGridStyles = css({
   display: 'grid',
   gridTemplateColumns: `${rem(33)} 1fr auto`,
   columnGap: rem(24),
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     gridTemplateColumns: '1fr',
   },
 });
@@ -30,7 +31,7 @@ const headerRowStyles = css({
   gridColumn: '1 / -1',
   gridTemplateColumns: 'subgrid',
   marginBottom: rem(16),
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });

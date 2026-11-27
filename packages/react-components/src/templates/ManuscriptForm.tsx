@@ -39,11 +39,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { colour, LabeledDateInput } from '..';
 import { Button, Link, MultiSelectOptionsType, Paragraph } from '../atoms';
 import {
+  mediaBelow,
   defaultContentTopPadding,
   contentWidthStyles,
   pageMarginStyles,
 } from '../layout';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
 import { ExternalLinkIcon, GlobeIcon } from '../icons';
 import { LabeledDropdownType } from '../molecules/LabeledDropdown';
 import { LabeledRadioButtonGroupType } from '../molecules/LabeledRadioButtonGroup';
@@ -119,7 +120,7 @@ const contentStyles = css(contentWidthStyles, {
 const buttonsOuterContainerStyles = css({
   display: 'flex',
   justifyContent: 'end',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     width: '100%',
   },
 });
@@ -128,7 +129,7 @@ const buttonsInnerContainerStyles = css({
   display: 'flex',
   flexDirection: 'row',
   gap: rem(24),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column-reverse',
     width: '100%',
   },

@@ -19,7 +19,7 @@ import {
   InactiveBadgeIcon,
   NumericalSortingIcon,
 } from '../icons';
-import { rem, remUnit, tabletScreen } from '../pixels';
+import { rem, remUnit } from '../pixels';
 import { getPerformanceIcon } from '../utils';
 
 const container = css({
@@ -28,23 +28,14 @@ const container = css({
 });
 
 const gridTitleStyles = css({
-  display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    display: 'inherit',
-    paddingBottom: rem(16),
-  },
-});
-
-const rowTitleStyles = css({
-  paddingTop: rem(32),
   paddingBottom: rem(16),
-  ':first-of-type': { paddingTop: 0 },
-  [`@media (min-width: ${tabletScreen.min}px)`]: { display: 'none' },
 });
 
 const rowStyles = css({
   display: 'grid',
-  padding: `${rem(20)} ${rem(24)} 0`,
+  gridTemplateColumns: '1fr 1fr 1fr 1fr 1.1fr 0.5fr',
+  columnGap: rem(15),
+  padding: `0 ${rem(24)}`,
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
@@ -57,13 +48,6 @@ const rowStyles = css({
     marginBottom: 0,
     paddingBottom: rem(15),
     borderRadius: rem(borderRadius),
-  },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    gridTemplateColumns: '1fr 1fr 1fr 1fr 1.1fr 0.5fr',
-    columnGap: rem(15),
-    paddingTop: 0,
-    paddingBottom: 0,
-    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -345,25 +329,18 @@ const UserProductivityTable: React.FC<UserProductivityTableProps> = ({
           </div>
           {data.map((row) => (
             <div key={row.id} css={[rowStyles]}>
-              <span css={[titleStyles, rowTitleStyles]}>User</span>
               <p css={iconStyles}>
                 <Link href={network({}).users({}).user({ userId: row.id }).$}>
                   {row.name}
                 </Link>
                 {row.isAlumni && alumniBadgeIcon}
               </p>
-              <span css={[titleStyles, rowTitleStyles]}>Team</span>
               <p>{displayTeams(row.teams)}</p>
-              <span css={[titleStyles, rowTitleStyles]}>Role</span>
               <p>{displayRoles(row.teams)}</p>
-              <span css={[titleStyles, rowTitleStyles]}>ASAP Output</span>
               <p css={rowValueStyles}>
                 {row.asapOutput}{' '}
                 {getPerformanceIcon(row.asapOutput, performance.asapOutput)}
               </p>
-              <span css={[titleStyles, rowTitleStyles]}>
-                ASAP Public Output
-              </span>
               <p css={rowValueStyles}>
                 {row.asapPublicOutput}{' '}
                 {getPerformanceIcon(
@@ -371,7 +348,6 @@ const UserProductivityTable: React.FC<UserProductivityTableProps> = ({
                   performance.asapPublicOutput,
                 )}
               </p>
-              <span css={[titleStyles, rowTitleStyles]}>Ratio</span>
               <p css={rowValueStyles}>
                 {row.ratio.toFixed(2)}{' '}
                 {getPerformanceIcon(row.ratio, performance.ratio)}

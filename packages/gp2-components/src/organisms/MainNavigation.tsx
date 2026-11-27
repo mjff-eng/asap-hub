@@ -18,32 +18,7 @@ import newsIcon from '../icons/news-icon';
 import NavigationLink from '../molecules/NavigationLink';
 
 const { workingGroups, users, projects, outputs, events, newsList, tags } = gp2;
-const {
-  largeDesktopScreen,
-  mobileScreen,
-  perRem,
-  vminLinearCalc,
-  rem,
-  smallDesktopScreen,
-} = pixels;
-
-const containerStyles = css({
-  [mediaBelow.laptop]: {
-    minWidth: `max(${vminLinearCalc(
-      mobileScreen,
-      312,
-      smallDesktopScreen,
-      228,
-      'px',
-    )}, ${vminLinearCalc(
-      smallDesktopScreen,
-      228,
-      largeDesktopScreen,
-      258,
-      'px',
-    )})`,
-  },
-});
+const { rem } = pixels;
 
 const listStyles = css({
   margin: '0',
@@ -51,18 +26,10 @@ const listStyles = css({
   display: 'flex',
   flexDirection: 'row',
   listStyle: 'none',
-  gap: rem(16),
   [mediaBelow.laptop]: {
     flexDirection: 'column',
     gap: 0,
-    padding: rem(12),
-    paddingTop: `max(${rem(12)}, ${vminLinearCalc(
-      mobileScreen,
-      18 / perRem,
-      largeDesktopScreen,
-      12 / perRem,
-      'em',
-    )})`,
+    padding: rem(16),
   },
 });
 
@@ -75,7 +42,7 @@ const menuOnlyStyles = css({
 });
 
 const MainNavigation: React.FC = () => (
-  <nav css={containerStyles}>
+  <nav>
     <ul css={listStyles}>
       <li>
         <NavigationLink href={users({}).$} icon={userIcon}>

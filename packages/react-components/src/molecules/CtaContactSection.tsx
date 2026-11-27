@@ -1,13 +1,14 @@
 import { css } from '@emotion/react';
 
 import { CopyButton, Link } from '../atoms';
-import { rem, smallDesktopScreen, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { colour } from '..';
 
 const contactStyles = css({
   display: 'flex',
   gap: rem(8),
-  [`@media (min-width: ${smallDesktopScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     alignSelf: 'center',
   },
 });
@@ -15,7 +16,7 @@ const contactStyles = css({
 const buttonStyles = css({
   display: 'flex',
   flexGrow: 1,
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     flexGrow: 'unset',
   },
 });

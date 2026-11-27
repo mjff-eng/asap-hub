@@ -13,14 +13,15 @@ import { colour } from '../colors';
 import { crossIcon, externalUserAvatarIcon, searchIcon } from '../icons';
 import { EventTeamType } from '../organisms/shared-event-card';
 import { statePillStyles } from '../atoms/SpeakerRoleBadge';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import {
   flexRowGap8Styles,
   placeholderAvatarStyles,
   squareIconButtonStyles,
 } from './SpeakerUserRow';
 
-const mobileQuery = `@media (max-width: ${mobileScreen.max}px)`;
+const mobileQuery = mediaBelow.tablet;
 
 const cardStyles = css({
   display: 'flex',

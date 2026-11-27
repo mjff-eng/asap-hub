@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { tags as tagsRoute } from '@asap-hub/routing';
 
-import { mobileScreen, rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 import { Tag } from '../atoms';
 
 const listStyles = css({
@@ -38,7 +38,7 @@ const centredItemStyles = css({
   },
 });
 
-const summarizedListItemStyles = (min: number, max: number) =>
+const summarizedListItemStyles = (max: number) =>
   css({
     counterIncrement: 'tags -1',
     [`:nth-of-type(n + ${max + 1})`]: {
@@ -46,36 +46,6 @@ const summarizedListItemStyles = (min: number, max: number) =>
       '~ .overflow': {
         display: 'unset',
       },
-    },
-
-    [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
-      [`:nth-of-type(n + ${min + 1})`]: {
-        display: 'none',
-        '~ .overflow': {
-          display: 'unset',
-        },
-      },
-    },
-  });
-
-type TagsPerLine = { desktop: number; mobile: number };
-
-const perLineListStyles = ({ desktop, mobile }: TagsPerLine) =>
-  css({
-    display: 'grid',
-    gridTemplateColumns: `repeat(${desktop}, minmax(0, max-content))`,
-    justifyItems: 'start',
-    columnGap: rem(8),
-    rowGap: rem(16),
-    // let tags shrink into their column and truncate instead of overflowing it
-    '& > li, & > li a': {
-      minWidth: 0,
-    },
-    '& > li': {
-      maxWidth: '100%',
-    },
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
-      gridTemplateColumns: `repeat(${mobile}, minmax(0, max-content))`,
     },
   });
 
@@ -89,23 +59,19 @@ const SAFARI_MAX_SAFE_INTEGER = 2 ** 31 - 2;
 interface TagListProps {
   tags: ReadonlyArray<string>;
   enabled?: boolean;
-  min?: number;
   max?: number;
   centerContent?: boolean;
   noMargin?: boolean;
   large?: boolean;
-  perLine?: TagsPerLine;
 }
 
 const TagList: React.FC<TagListProps> = ({
   tags,
-  min = SAFARI_MAX_SAFE_INTEGER,
   max = SAFARI_MAX_SAFE_INTEGER,
   enabled = true,
   centerContent = false,
   noMargin = false,
   large = false,
-  perLine,
 }) =>
   tags.length ? (
     <ul
@@ -114,15 +80,14 @@ const TagList: React.FC<TagListProps> = ({
         { counterReset: `tags ${tags.length}` },
         centerContent && centerListStyles,
         noMargin && { margin: 0 },
-        perLine && perLineListStyles(perLine),
       ]}
     >
       {tags.map((tag, index) => (
         <li
           key={index}
           css={[
-            !perLine && normalListItemStyles,
-            summarizedListItemStyles(min, max),
+            normalListItemStyles,
+            summarizedListItemStyles(max),
             centerContent && centredItemStyles,
           ]}
         >

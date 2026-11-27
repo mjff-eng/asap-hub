@@ -3,9 +3,9 @@ import { css } from '@emotion/react';
 import { Link } from '../atoms';
 import { colour } from '../colors';
 import { crnLogoFull, crnLogoFullWhite, crnLogoMobile } from '../icons';
-import { pageMarginStyles } from '../layout';
+import { mediaFrom, pageMarginStyles } from '../layout';
 import { casHeader } from '../cas-layout';
-import { mobileScreen, remUnit } from '../pixels';
+import { remUnit } from '../pixels';
 
 const height = remUnit(casHeader.crn.height);
 
@@ -32,13 +32,13 @@ const logoStyles = css({
 });
 
 const logoMobileStyles = css({
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'none',
   },
 });
 const logoDesktopStyles = css({
   display: 'none',
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'inherit',
   },
 });

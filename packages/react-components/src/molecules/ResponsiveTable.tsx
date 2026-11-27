@@ -3,10 +3,8 @@ import { ReactNode, useState } from 'react';
 
 import { colour } from '../colors';
 import { chevronDownIcon, chevronUpIcon } from '../icons';
-import { rem, tabletScreen } from '../pixels';
-
-const mobileQuery = `@media (max-width: ${tabletScreen.min - 1}px)`;
-const desktopQuery = `@media (min-width: ${tabletScreen.min}px)`;
+import { mediaBelow, mediaFrom } from '../layout';
+import { rem } from '../pixels';
 
 const rowBorder = `1px solid ${colour.border.tertiary}`;
 
@@ -14,7 +12,7 @@ const tableStyles = css({
   width: '100%',
   tableLayout: 'fixed',
   borderCollapse: 'collapse',
-  [mobileQuery]: { display: 'none' },
+  [mediaBelow.tablet]: { display: 'none' },
 });
 
 const headerCellStyles = css({
@@ -49,7 +47,7 @@ const listStyles = css({
   padding: 0,
   overflowWrap: 'anywhere',
   '& li *': { WebkitLineClamp: 'unset' },
-  [desktopQuery]: { display: 'none' },
+  [mediaFrom.tablet]: { display: 'none' },
 });
 
 const listItemStyles = css({

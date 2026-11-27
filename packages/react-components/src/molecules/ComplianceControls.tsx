@@ -9,7 +9,8 @@ import {
 import { css } from '@emotion/react';
 import { DropdownButton, ExportButton, ExportTooltip } from '.';
 import { dropdownChevronIcon } from '../icons';
-import { rem, remUnit, tabletScreen } from '../pixels';
+import { rem, remUnit } from '../pixels';
+import { mediaBelow } from '../layout';
 
 const countContainerStyles = css({
   display: 'flex',
@@ -35,7 +36,7 @@ const filterContainerStyles = css({
     },
   },
 
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginTop: rem(24),

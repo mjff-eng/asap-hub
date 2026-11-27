@@ -3,9 +3,9 @@ import { Fragment } from 'react';
 import { css } from '@emotion/react';
 import { network } from '@asap-hub/routing';
 
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 import { Link, Divider } from '../atoms';
-import { pageGutter } from '../layout';
+import { mediaFrom, pageGutter } from '../layout';
 
 const containerStyles = css({
   display: 'grid',
@@ -34,7 +34,7 @@ const listItemStyle = css({
     marginBottom: rem(8),
   },
 
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridAutoFlow: 'column',
     gridTemplateColumns: '1fr 1fr',
 

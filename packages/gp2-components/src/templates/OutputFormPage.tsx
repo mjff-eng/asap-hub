@@ -5,7 +5,7 @@ import {
   Toast,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
-import { layoutContentVerticalPadding, mainStyles } from '../layout';
+import { layoutContentVerticalPaddingStyles, mainStyles } from '../layout';
 
 import PageNotifications from './PageNotifications';
 
@@ -14,8 +14,7 @@ const { rem } = pixels;
 // The GP2 page margins and the same vertical padding as the other GP2 pages;
 // the form inside takes the width shared with the CRN forms.
 const containerStyles = css(pageMarginStyles.gp2, {
-  paddingTop: layoutContentVerticalPadding,
-  paddingBottom: layoutContentVerticalPadding,
+  ...layoutContentVerticalPaddingStyles,
 });
 
 export type OutputFormPageProps = {

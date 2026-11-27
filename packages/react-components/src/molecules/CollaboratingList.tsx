@@ -3,9 +3,10 @@ import { useState } from 'react';
 
 import { Button } from '../atoms';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 
-export const nonMobileQuery = `@media (min-width: ${tabletScreen.min}px)`;
+export const nonMobileQuery = mediaFrom.tablet;
 
 export const ARTICLES_BEFORE_SCROLL = 7;
 export const ARTICLE_ROW_HEIGHT = 40;

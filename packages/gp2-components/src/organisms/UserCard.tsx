@@ -8,13 +8,14 @@ import {
   StateTag,
   TagList,
   text,
+  mediaFrom,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import UserCardInfo from '../molecules/UserCardInfo';
 
-const { rem, tabletScreen } = pixels;
+const { rem } = pixels;
 
 const avatarSize = 132;
 
@@ -41,7 +42,7 @@ const containerStyles = css({
   display: 'grid',
   columnGap: rem(32),
   rowGap: rem(12),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: `${rem(avatarSize)} auto`,
   },
 });

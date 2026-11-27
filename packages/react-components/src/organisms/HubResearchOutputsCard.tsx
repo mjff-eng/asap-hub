@@ -3,7 +3,8 @@ import { css } from '@emotion/react';
 import { Card, Paragraph, Subtitle } from '../atoms';
 import { colour } from '../colors';
 import { ExpandableText, TooltipInfo } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 export type HubResearchOutputRow = {
   outputType: string;
@@ -34,7 +35,7 @@ const tableStyles = css({
   'tbody tr:not(:last-child) td': {
     borderBottom: `1px solid ${colour.border.tertiary}`,
   },
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none !important',
   },
 });
@@ -82,7 +83,7 @@ const detailsBlockStyles = css({
 const mobileListStyles = css({
   display: 'none',
   flexDirection: 'column',
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'flex',
   },
 });

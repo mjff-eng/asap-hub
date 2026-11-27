@@ -16,7 +16,8 @@ import {
   LabeledDropdown,
   Modal,
 } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { Title, Option } from './CheckboxGroup';
 import Toast from './Toast';
 import { colour } from '..';
@@ -28,7 +29,7 @@ const contentStyles = css({
   gap: 32,
 });
 
-const buttonMediaQuery = `@media (min-width: ${mobileScreen.max - 100}px)`;
+const buttonMediaQuery = mediaFrom.tablet;
 
 const buttonContainerStyles = css({
   display: 'grid',

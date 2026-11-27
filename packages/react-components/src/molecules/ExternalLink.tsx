@@ -4,7 +4,8 @@ import { css, CSSObject } from '@emotion/react';
 import { Anchor } from '../atoms';
 import { ExternalLinkIcon } from '../icons';
 import { colour } from '../colors';
-import { mobileScreen, rem, remUnit } from '../pixels';
+import { rem, remUnit } from '../pixels';
+import { mediaBelow } from '../layout';
 import { getLinkColors } from '../atoms/Link';
 
 const containerStyles = css({
@@ -24,7 +25,7 @@ const styles = (withLabel: boolean, noMargin: boolean, full: boolean) =>
     border: `${borderWidth}px solid ${colour.border.brand}`,
     margin: noMargin ? '0' : `${rem(12)} 0`,
     padding: withLabel ? `0 ${rem(12 - borderWidth)}` : rem(3),
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       padding: full ? `0 ${rem(12 - borderWidth)}` : rem(3),
     },
     svg: {
@@ -35,7 +36,7 @@ const styles = (withLabel: boolean, noMargin: boolean, full: boolean) =>
 const textStyles = (full: boolean) =>
   css({
     paddingTop: rem(1),
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       display: full ? 'initial' : 'none',
     },
   });

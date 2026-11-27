@@ -6,7 +6,8 @@ import { Button, Headline3, Paragraph, Subtitle } from '../atoms';
 import { paddingStyles } from '../card';
 import { crossIcon } from '../icons';
 import { Modal } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { AuthorOption } from './AuthorSelect';
 import ComplianceTableRow from './ComplianceTableRow';
 
@@ -22,7 +23,7 @@ const controlsContainerStyles = css({
   alignItems: 'flex-start',
 });
 
-const buttonMediaQuery = `@media (min-width: ${mobileScreen.max - 100}px)`;
+const buttonMediaQuery = mediaFrom.tablet;
 
 const buttonContainerStyles = css({
   display: 'grid',

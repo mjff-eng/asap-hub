@@ -17,7 +17,7 @@ import {
 import { Card } from '../atoms';
 import { borderRadius } from '../card';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 
 const container = css({
   display: 'grid',
@@ -26,24 +26,18 @@ const container = css({
 
 const columnsStyles = (isWithinTeam: boolean) =>
   css({
-    [`@media (min-width: ${tabletScreen.min}px)`]: {
-      gridTemplateColumns: isWithinTeam
-        ? '1fr 1fr 1fr 1fr 1fr 1fr'
-        : '0.3fr 1fr 1fr 1fr 1fr 1fr 1fr',
-    },
+    gridTemplateColumns: isWithinTeam
+      ? '1fr 1fr 1fr 1fr 1fr 1fr'
+      : '0.3fr 1fr 1fr 1fr 1fr 1fr 1fr',
   });
 
 const gridTitleStyles = css({
-  display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    display: 'inherit',
-    padding: `${rem(20)} ${rem(24)} 0`,
-    paddingBottom: rem(16),
-  },
+  padding: `${rem(20)} ${rem(24)} ${rem(16)}`,
 });
 
 const rowStyles = css({
   display: 'grid',
+  columnGap: rem(15),
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
@@ -53,12 +47,6 @@ const rowStyles = css({
     marginBottom: 0,
     paddingBottom: rem(15),
     borderRadius: rem(borderRadius),
-  },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    columnGap: rem(15),
-    paddingTop: 0,
-    paddingBottom: 0,
-    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 

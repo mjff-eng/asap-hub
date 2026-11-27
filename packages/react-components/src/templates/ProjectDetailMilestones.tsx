@@ -6,7 +6,8 @@ import { useScrollToTop } from '@asap-hub/react-context';
 import { Button, Headline3, Link, Paragraph } from '../atoms';
 import { formatDateToTimezone } from '../date';
 import { LabeledDropdown, LabeledMultiSelect } from '../molecules';
-import { rem, mobileScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { colour } from '../colors';
 import MilestonesMobilePage from './MilestonesMobilePage';
 import { plusIcon } from '../icons';
@@ -54,13 +55,13 @@ const lastUpdatedBarStyles = css({
 });
 
 const pageMobileStyles = css({
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'none',
   },
 });
 
 const pageDesktopStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });

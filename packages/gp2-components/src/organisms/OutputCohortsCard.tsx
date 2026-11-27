@@ -9,9 +9,10 @@ import {
   Paragraph,
   pixels,
   colour,
+  mediaFrom,
 } from '@asap-hub/react-components';
 
-const { rem, tabletScreen } = pixels;
+const { rem } = pixels;
 
 const container = css({
   display: 'grid',
@@ -21,14 +22,14 @@ const container = css({
 const descriptionStyles = css({
   marginTop: rem(24),
   marginBottom: rem(12),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     marginBottom: rem(32),
   },
 });
 
 const gridTitleStyles = css({
   display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'inherit',
     paddingBottom: rem(16),
   },
@@ -38,12 +39,12 @@ const rowTitleStyles = css({
   paddingTop: rem(16),
   paddingBottom: rem(16),
   ':first-of-type': { paddingTop: 0 },
-  [`@media (min-width: ${tabletScreen.min}px)`]: { display: 'none' },
+  [mediaFrom.tablet]: { display: 'none' },
 });
 
 const gridStyles = css({
   display: 'grid',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: 'auto max-content',
     columnGap: rem(15),
     rowGap: rem(16),

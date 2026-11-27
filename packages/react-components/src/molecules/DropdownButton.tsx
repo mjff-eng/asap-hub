@@ -9,14 +9,15 @@ import {
 } from 'react';
 import { css } from '@emotion/react';
 import { Anchor, Button } from '../atoms';
-import { rem, mobileScreen, formTargetWidth } from '../pixels';
+import { rem, formTargetWidth } from '../pixels';
+import { mediaBelow } from '../layout';
 
 import { colourWithAlpha, colour } from '../colors';
 
 const containerStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     width: '100%',
   },
 });

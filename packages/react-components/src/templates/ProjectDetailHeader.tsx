@@ -34,7 +34,8 @@ import {
   ProjectDuration,
   DropdownButton,
 } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { getStatusPillAccent } from '../organisms/ProjectCard';
 import { withMemberHref } from '../utils';
 import PageInfoContainer from './PageInfoContainer';
@@ -63,7 +64,7 @@ const contactButtonStyles = css({
   display: 'flex',
   gap: rem(8),
   alignItems: 'center',
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     width: '100%',
   },
 });
@@ -74,7 +75,7 @@ const driveButtonStyles = css({
 });
 
 const buttonStyles = css({
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'flex',
     flexGrow: 1,
   },
@@ -122,14 +123,14 @@ const teamLinkStyles = css({
 
 const discoveryProjectDurationStyles = css({
   marginLeft: rem(16),
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     marginLeft: 0,
     width: '100%',
   },
 });
 
 const discoveryDurationMediaStyles = css({
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     marginLeft: 0,
     flexDirection: 'column',
     gap: rem(16),
@@ -138,6 +139,13 @@ const discoveryDurationMediaStyles = css({
 
 const toastContainerStyles = css({
   marginBottom: rem(24),
+});
+
+const shareOutputStyles = css({
+  marginLeft: 'auto',
+  [mediaBelow.tablet]: {
+    width: '100%',
+  },
 });
 
 const dropdownButtonStyling = css({
@@ -295,7 +303,7 @@ const ProjectDetailHeader = (project: ProjectDetailHeaderProps) => {
               )}
 
               {canShareOutput && (
-                <div css={css({ marginLeft: 'auto' })}>
+                <div css={shareOutputStyles}>
                   <DropdownButton
                     noMargin
                     buttonChildren={() => (

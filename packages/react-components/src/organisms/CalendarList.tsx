@@ -3,7 +3,8 @@ import { BasicCalendarResponse } from '@asap-hub/model';
 import { FC, ReactNode, useState } from 'react';
 
 import { Card, Headline3, Paragraph, Link, Button } from '../atoms';
-import { tabletScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { CalendarLink } from '../molecules';
 import { colour } from '../colors';
 
@@ -50,7 +51,7 @@ const gridButton = css({
   gridColumn: '1',
   gridRow: '2 / span 2',
   alignSelf: 'middle',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridColumn: 'auto',
     gridRow: '1 / span 2',
   },
@@ -66,7 +67,7 @@ const orderList = css({
     display: 'inline-flex',
   },
   '&> li + li': {
-    [`@media (max-width: ${tabletScreen.min}px)`]: {
+    [mediaBelow.tablet]: {
       marginTop: rem(12),
     },
     borderTop: `1px solid ${colour.border.tertiary}`,

@@ -7,10 +7,11 @@ import {
   Headline2,
   Link,
   pixels,
+  mediaBelow,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 
-const { mobileScreen, rem } = pixels;
+const { rem } = pixels;
 
 const additionalInformationListStyles = css({
   listStyle: 'none',
@@ -21,12 +22,12 @@ const additionalInformationEntryStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   padding: `${rem(6)} 0`,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });
 const additionalInformationValueStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: rem(12),
   },
 });

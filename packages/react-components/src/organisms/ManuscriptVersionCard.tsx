@@ -26,7 +26,8 @@ import {
 import { paddingStyles } from '../card';
 import ManuscriptFileSection from '../molecules/ManuscriptFileSection';
 import UserTeamInfo from '../molecules/UserTeamInfo';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { getTeams, getUserHref } from '../utils';
 import ComplianceReportCard from './ComplianceReportCard';
 
@@ -57,7 +58,7 @@ const toastHeaderStyles = css({
   display: 'flex',
   alignItems: 'center',
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     alignItems: 'flex-start',
   },
 });
@@ -75,7 +76,7 @@ const titleContainerStyles = css({
   width: '100%',
   gap: rem(16),
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     gap: rem(8),
@@ -127,7 +128,7 @@ const additionalInformationEntryStyles = css({
   justifyContent: 'space-between',
   columnGap: rem(24),
   padding: `${rem(8)} 0`,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });
@@ -136,7 +137,7 @@ const additionalInformationValueStyles = css({
   color: colour.foreground.tertiary,
   overflowWrap: 'anywhere',
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: `${rem(12)}`,
     textAlign: 'inherit',
   },
@@ -154,7 +155,7 @@ const updatedByAndEditContainerStyles = css({
   flexDirection: 'row',
   gap: rem(16),
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });
@@ -172,7 +173,7 @@ const updatedByTextStyles = css({
   alignSelf: 'flex-end',
   gap: rem(6),
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     justifyContent: 'flex-start',
     alignSelf: 'flex-start',
   },

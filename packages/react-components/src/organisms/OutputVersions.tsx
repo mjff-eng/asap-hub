@@ -3,11 +3,11 @@ import { css, SerializedStyles } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button, Card, Headline2, Link, Paragraph, Pill } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 import { colour } from '../colors';
 import { formatDateToTimezone } from '../date';
 import { ExternalLinkIcon } from '../icons';
-import { contentWidthStyles, pageMarginStyles } from '../layout';
+import { mediaFrom, contentWidthStyles, pageMarginStyles } from '../layout';
 import { mailToSupport, TECH_SUPPORT_EMAIL } from '../mail';
 import { ThemeVariant } from '../theme';
 
@@ -19,7 +19,7 @@ const container = css({
 const descriptionStyles = css({
   marginTop: rem(24),
   marginBottom: rem(12),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     marginBottom: rem(32),
   },
   color: colour.foreground.tertiary,
@@ -27,7 +27,7 @@ const descriptionStyles = css({
 
 const gridTitleStyles = css({
   display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'inherit',
     paddingBottom: rem(16),
   },
@@ -37,7 +37,7 @@ const rowTitleStyles = css({
   paddingTop: rem(32),
   paddingBottom: rem(16),
   ':first-of-type': { paddingTop: 0 },
-  [`@media (min-width: ${tabletScreen.min}px)`]: { display: 'none' },
+  [mediaFrom.tablet]: { display: 'none' },
 });
 
 const rowStyles = css({
@@ -50,7 +50,7 @@ const rowStyles = css({
     marginBottom: 0,
     paddingBottom: 0,
   },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: '0.2fr 0.5fr 1fr 1fr 1fr',
     columnGap: rem(15),
     paddingTop: rem(0),

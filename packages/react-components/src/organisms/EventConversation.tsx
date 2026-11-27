@@ -3,7 +3,8 @@ import { EventResponse } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
 
 import { Card, Headline3, Paragraph, Link } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { slackIcon } from '../icons';
 
 const BUTTON_SPACING = rem(12);
@@ -21,7 +22,7 @@ const button = css({
   marginRight: BUTTON_SPACING,
   flexGrow: 1,
 
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     flexGrow: 0,
   },
 });

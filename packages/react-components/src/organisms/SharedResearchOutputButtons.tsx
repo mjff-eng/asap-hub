@@ -2,7 +2,8 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { ResearchOutputDetailActionAvailability } from '@asap-hub/react-context';
 import { sharedResearch } from '@asap-hub/routing';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { Link, Button } from '../atoms';
 import { editIcon, duplicateIcon, actionIcon, VersionIcon } from '../icons';
 import { colour } from '../colors';
@@ -15,7 +16,7 @@ const commonStyles = {
 };
 
 const commonMediaQueries = {
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     ...commonStyles,
     width: 'auto',
   },
@@ -26,7 +27,7 @@ const buttonsContainer = css({
   flexFlow: 'column',
   gap: rem(16),
   paddingBottom: rem(32),
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     flexFlow: 'row',
     width: '100%',
   },
@@ -44,7 +45,7 @@ const reviewButton = css({
     ...commonMediaQueries,
     marginLeft: 'auto',
   },
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: rem(12),
     paddingTop: rem(28),
     borderTop: `1px solid ${colour.border.tertiary}`,

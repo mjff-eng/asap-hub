@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 import { Card, Paragraph } from '../atoms';
-import { smallDesktopScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import CtaContactSection from './CtaContactSection';
 import { colour } from '../colors';
 
@@ -13,7 +14,7 @@ const getInTouchStyles = css({
   gap: rem(24),
   color: colour.foreground.brand,
   padding: `${rem(32)} ${rem(24)}`,
-  [`@media (min-width: ${smallDesktopScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: 'auto max-content',
   },
 });

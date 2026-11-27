@@ -1,13 +1,14 @@
 import { UserResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { noop } from '../utils';
 import { Button, Link } from '../atoms';
 import EditModal from './EditModal';
 import { FormSection } from '../molecules';
 
-const mobileQuery = `@media (max-width: ${tabletScreen.width - 1}px)`;
+const mobileQuery = mediaBelow.tablet;
 const buttonStyles = css({
   width: 'fit-content',
   [mobileQuery]: {

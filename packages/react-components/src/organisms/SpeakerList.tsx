@@ -3,7 +3,8 @@ import { EventSpeaker } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
 import { useState } from 'react';
 import { Headline3, Headline4, Avatar, Link, Button } from '../atoms';
-import { tabletScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import {
   externalUserAvatarIcon,
   chevronCircleDownIcon,
@@ -19,7 +20,7 @@ const gridStyles = css({
   display: 'grid',
   flexFlow: 'column',
   gap: rem(15),
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     gap: 0,
   },
 });
@@ -34,7 +35,7 @@ const userStyles = css({
 
 const gridMixin = {
   display: 'grid',
-  [`@media (min-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: '1fr 1fr 1fr',
     gridAutoFlow: 'column',
     alignItems: 'start',
@@ -43,7 +44,7 @@ const gridMixin = {
 
 const headerStyle = css({
   ...gridMixin,
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });
@@ -53,7 +54,7 @@ const placeholderStyle = css({
 });
 
 const labelStyle = css({
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     gridTemplateColumns: '1fr 1fr 1fr',
     gridAutoFlow: 'column',
     alignItems: 'start',
@@ -66,7 +67,7 @@ const labelStyle = css({
 const groupStyle = css({
   display: 'flex',
   flexFlow: 'column',
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     paddingBottom: rem(12),
     paddingTop: rem(12),
   },
@@ -108,7 +109,7 @@ const internalSpeakerStyle = css({
 
 const speakerListStyles = {
   ...gridMixin,
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     ...speakerListMobileMixin,
     [`:nth-last-of-type(2)`]: { borderBottom: 'transparent' },
   },
@@ -124,7 +125,7 @@ const hideStyles = css({
   ...gridMixin,
   [`:nth-of-type(4)`]: { ...previewStyle, borderBottom: 'transparent' },
   [`:nth-of-type(n+5)`]: { display: 'none' },
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     ...speakerListMobileMixin,
   },
 });
@@ -136,7 +137,7 @@ const buttonWrapperStyles = css({
   justifyContent: 'center',
   width: '100%',
   borderBottom: `1px solid ${colour.border.tertiary}`,
-  [`@media (min-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaFrom.tablet]: {
     borderBottom: `transparent`,
   },
 });
@@ -158,7 +159,7 @@ const SpeakerList: React.FC<SpeakerListProps> = ({ speakers, endDate }) => {
     if (speakers.length < 6) {
       return {
         ...speakerListStyles,
-        [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+        [mediaBelow.tablet]: {
           borderBottom: `1px solid ${colour.border.tertiary}`,
         },
       };

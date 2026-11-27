@@ -2,7 +2,8 @@ import { css } from '@emotion/react';
 
 import { EventResponse } from '@asap-hub/model';
 import { Card, Headline2, Headline3 } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { colour } from '../colors';
 import { ExternalLink } from '../molecules';
 
@@ -14,7 +15,7 @@ const orderList = css({
     borderTop: `1px solid ${colour.border.tertiary}`,
     marginTop: rem(12),
     paddingTop: rem(6),
-    [`@media (min-width: ${tabletScreen.min}px)`]: {
+    [mediaFrom.tablet]: {
       marginTop: '0',
       paddingTop: '0',
     },

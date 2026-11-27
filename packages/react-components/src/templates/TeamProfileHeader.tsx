@@ -12,7 +12,8 @@ import {
 } from '../icons';
 import { createMailTo } from '../mail';
 import { Breadcrumbs, UserAvatarList, TabNav } from '../molecules';
-import { mobileScreen, rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import {
   getCounterString,
   getProjectRoute,
@@ -26,7 +27,7 @@ const titleStyle = css({
   gap: 3,
   alignItems: 'flex-start',
   paddingBottom: rem(12),
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     flexFlow: 'row',
     gap: rem(15),
     alignItems: 'center',
@@ -45,7 +46,7 @@ const contactSectionStyles = css({
     "lab"     auto
   `,
 
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     grid: `
       "contact members"
       "info info"
@@ -61,7 +62,7 @@ const pointOfContactStyles = css({
 });
 
 const buttonStyles = css({
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'flex',
     flexGrow: 1,
   },

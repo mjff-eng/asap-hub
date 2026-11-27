@@ -3,10 +3,11 @@ import { ReactNode } from 'react';
 
 import { Link } from '../atoms';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { captionRegularStyles } from '../text';
 
-const mobileQuery = `@media (max-width: ${tabletScreen.min - 1}px)`;
+const mobileQuery = mediaBelow.tablet;
 
 const nameStyles = css({
   display: 'flex',

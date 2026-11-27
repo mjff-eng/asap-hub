@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { colour } from '../colors';
 
 export const descriptionContainerStyles = css({
@@ -15,7 +16,7 @@ export const mobileLabelStyles = css({
   fontWeight: 'bold',
   color: colour.foreground.primary,
   display: 'none',
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'block',
   },
 });
@@ -58,7 +59,7 @@ export const statusContainerStyles = css({
   justifyContent: 'flex-start',
   paddingBlock: rem(4),
   paddingLeft: rem(8),
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     paddingBlock: 0,
     paddingLeft: 0,

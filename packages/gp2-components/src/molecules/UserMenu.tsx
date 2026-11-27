@@ -15,7 +15,7 @@ import { useLocation } from 'react-router';
 import { projectIcon, userIcon, workingGroupIcon } from '../icons';
 import { nonMobileQuery } from '../layout';
 
-const { vminLinearCalc, mobileScreen, largeDesktopScreen, rem } = pixels;
+const { rem } = pixels;
 const {
   users: usersRoutes,
   projects: projectsRoute,
@@ -27,14 +27,9 @@ const containerStyles = css({
   display: 'flex',
   flexDirection: 'column',
   boxSizing: 'border-box',
-  padding: `${rem(12)} ${rem(12)} ${vminLinearCalc(
-    mobileScreen,
-    8,
-    largeDesktopScreen,
-    12,
-    'px',
-  )}`,
+  padding: `${rem(12)} ${rem(12)} ${rem(8)}`,
   [nonMobileQuery]: {
+    paddingBottom: rem(12),
     minWidth: '312px',
   },
 });

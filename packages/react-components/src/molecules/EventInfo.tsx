@@ -168,7 +168,7 @@ const EventInfo: React.FC<EventInfoProps> = ({
         {eventSpeakers}
         {!hideTags && tags.length > 0 && (
           <div css={tagContainerStyles}>
-            <TagList tags={tags} min={TAG_LIMIT} max={TAG_LIMIT} />
+            <TagList tags={tags} max={TAG_LIMIT} />
           </div>
         )}
         {footer}

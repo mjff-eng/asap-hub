@@ -21,7 +21,7 @@ import {
   NumericalSortingIcon,
 } from '../icons';
 import HoverTable from '../molecules/HoverTable';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 import { getPerformanceIcon } from '../utils';
 
 const container = css({
@@ -30,23 +30,14 @@ const container = css({
 });
 
 const gridTitleStyles = css({
-  display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    display: 'inherit',
-    paddingBottom: rem(16),
-  },
-});
-
-const rowTitleStyles = css({
-  paddingTop: rem(32),
   paddingBottom: rem(16),
-  ':first-of-type': { paddingTop: 0 },
-  [`@media (min-width: ${tabletScreen.min}px)`]: { display: 'none' },
 });
 
 const rowStyles = css({
   display: 'grid',
-  padding: `${rem(20)} ${rem(24)} 0`,
+  gridTemplateColumns: '1fr 1fr 1fr 1fr',
+  columnGap: rem(15),
+  padding: `0 ${rem(24)}`,
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
@@ -59,13 +50,6 @@ const rowStyles = css({
     marginBottom: 0,
     paddingBottom: rem(15),
     borderRadius: rem(borderRadius),
-  },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    gridTemplateColumns: '1fr 1fr 1fr 1fr',
-    columnGap: rem(15),
-    paddingTop: 0,
-    paddingBottom: 0,
-    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -355,20 +339,14 @@ const UserCollaborationTable: React.FC<UserCollaborationTableProps> = ({
           </div>
           {data.map((row) => (
             <div key={row.id} css={[rowStyles]}>
-              <span css={[titleStyles, rowTitleStyles]}>User</span>
               <p css={iconStyles}>
                 <Link href={network({}).users({}).user({ userId: row.id }).$}>
                   {row.name}
                 </Link>
                 {row.isAlumni && alumniBadgeIcon}
               </p>
-              <span css={[titleStyles, rowTitleStyles]}>Team</span>
               <p>{displayTeams(row.teams)}</p>
-              <span css={[titleStyles, rowTitleStyles]}>Role</span>
               <p>{displayRoles(row.teams)}</p>
-              <span css={[titleStyles, rowTitleStyles]}>
-                Outputs Co-Authored
-              </span>
               <p>{displayOutputsCount(row.teams, performance)}</p>
             </div>
           ))}

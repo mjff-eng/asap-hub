@@ -6,7 +6,8 @@ import { Paragraph, StateTag } from '../atoms';
 import { colour } from '../colors';
 import { InactiveBadgeIcon, TeamIcon } from '../icons';
 import { LinkHeadline, TabbedCard } from '../molecules';
-import { mobileScreen, rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { splitListBy } from '../utils';
 
 const itemsListWrapper = css({
@@ -14,7 +15,7 @@ const itemsListWrapper = css({
   margin: 0,
   display: 'grid',
   rowGap: rem(12),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     columnGap: rem(15),
   },
 });
@@ -56,7 +57,7 @@ const titleStyle = css({
   gap: rem(12),
   alignItems: 'flex-start',
 
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     flexFlow: 'row',
     gap: rem(16),
     alignItems: 'center',

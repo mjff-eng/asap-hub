@@ -2,7 +2,8 @@ import { css } from '@emotion/react';
 
 import AttendanceProgressBar from '../atoms/AttendanceProgressBar';
 import { colour } from '../colors';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 export const containerStyles = css({
   boxSizing: 'border-box',
@@ -31,7 +32,7 @@ export const valueStyles = css({
   // font size, so `rem(40)` here would render 40/16 x 32px.
   lineHeight: 40 / 32,
   color: colour.foreground.primary,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     fontSize: rem(24),
     lineHeight: 32 / 24,
   },
@@ -50,7 +51,7 @@ const captionStyles = css({
   fontWeight: 'bold',
   lineHeight: 28 / 20,
   color: colour.foreground.primary,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     fontSize: rem(14),
     fontWeight: 600,
     lineHeight: 16 / 14,

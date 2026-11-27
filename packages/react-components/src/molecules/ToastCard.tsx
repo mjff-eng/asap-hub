@@ -1,7 +1,8 @@
 import { ComponentProps, ReactNode } from 'react';
 import { css } from '@emotion/react';
 
-import { rem, mobileScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { Card } from '../atoms';
 import { colour } from '../colors';
 import { WarningIcon, infoInfoIcon, LiveIcon, paperClipIcon } from '../icons';
@@ -14,7 +15,7 @@ const toastStyles = css({
   padding: `${rem(15)} ${rem(24)}`,
   borderRadius: `${borderRadius - 1}px ${borderRadius - 1}px 0px 0px`,
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
@@ -74,7 +75,7 @@ const toastContentStyles = css({
   alignItems: 'center',
   fontSize: rem(16),
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     alignItems: 'flex-start',
   },
 });

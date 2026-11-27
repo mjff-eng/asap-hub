@@ -3,7 +3,8 @@ import { TeamListItemResponse } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
 
 import { StateTag } from '../atoms';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { colour } from '../colors';
 import {
   TeamIcon,
@@ -22,7 +23,7 @@ const footerStyles = css({
   flexDirection: 'column',
   gap: rem(16),
 
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     flexDirection: 'row',
     gap: rem(32),
   },

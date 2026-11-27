@@ -2,7 +2,8 @@ import { Aim as AimType, AimStatus, ArticleItem } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Pill } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { colour } from '../colors';
 import { useTextTruncation } from '../hooks';
 import {
@@ -23,7 +24,7 @@ const aimRowStyles = css({
   paddingBottom: rem(20),
   borderBottom: `1px solid ${colour.border.tertiary}`,
   marginBottom: rem(20),
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     gridColumn: 'auto',
     gridTemplateColumns: '1fr',
     gap: rem(24),
@@ -41,7 +42,7 @@ const aimNumberContainerStyles = css({
   alignSelf: 'start',
   placeSelf: 'start',
   justifyContent: 'center',
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     gap: rem(16),
     justifyContent: 'flex-start',
     flexFlow: 'column',

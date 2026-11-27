@@ -3,7 +3,8 @@ import { TutorialsResponse } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
 
 import { Card, Display } from '../atoms';
-import { rem, mobileScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { formatDate } from '../date';
 import { ExternalLink, UsersList, AssociationList } from '../molecules';
 import { colour } from '..';
@@ -16,7 +17,7 @@ const timestampStyles = css({
   whiteSpace: 'pre',
   marginTop: rem(24),
   marginBottom: 0,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     marginTop: rem(12),
     marginBottom: rem(12),
@@ -29,7 +30,7 @@ const headerStyle = css({
   alignItems: 'flex-start',
   justifyContent: 'space-between',
   paddingBottom: rem(24),
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

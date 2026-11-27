@@ -5,7 +5,8 @@ import { WorkingGroupResponse } from '@asap-hub/model';
 import { dashboard, network } from '@asap-hub/routing';
 import { useContext } from 'react';
 
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import {
   Link,
   Display,
@@ -48,7 +49,7 @@ const titleStyle = css({
 const rowStyles = css({
   display: 'flex',
   flexFlow: 'column',
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     flexFlow: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
@@ -60,11 +61,11 @@ const toolsStyles = css({
   display: 'flex',
   flexFlow: 'column',
   gap: rem(12),
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     flexFlow: 'row',
     justifyContent: 'space-between',
   },
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     '> a': {
       marginBottom: 0,
     },
@@ -74,7 +75,7 @@ const toolsStyles = css({
 
 const lastUpdatedStyles = css({
   alignSelf: 'center',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginRight: 'auto',
   },
 });
@@ -92,7 +93,7 @@ const contactSectionStyles = css({
     "create"  auto
   `,
 
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     grid: `
       "contact members create"
       "lab lab lab"/ max-content 1fr
@@ -110,7 +111,7 @@ const pointOfContactStyles = css({
 const createStyles = css({
   gridArea: 'create',
   display: 'flex',
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'block',
   },
 });

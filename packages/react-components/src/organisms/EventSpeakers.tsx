@@ -14,7 +14,8 @@ import SpeakerUserRow, {
   findingsColumnStyles,
   trailingColumnsStyles,
 } from '../molecules/SpeakerUserRow';
-import { mobileScreen, rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { pluralize } from '../utils';
 
 import {
@@ -34,7 +35,7 @@ import {
 } from './speaker-group';
 import SpeakerSection from './speaker-section';
 
-const mobileQuery = `@media (max-width: ${tabletScreen.min}px)`;
+const mobileQuery = mediaBelow.tablet;
 
 const rowsWrapperStyles = css({
   marginTop: rem(32),
@@ -74,7 +75,7 @@ const speakerMetricsStyles = css({
   gap: rem(24),
   marginTop: rem(24),
   '> *': { flex: `1 1 ${rem(264)}` },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     '> *:first-of-type': { maxWidth: rem(264) },
   },
   '> *:nth-of-type(2)': { flex: `1 1 ${rem(380)}`, maxWidth: rem(413) },
@@ -91,7 +92,7 @@ const countHeadlineStyles = css({
 const countValueStyles = css([
   valueStyles,
   {
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       fontSize: rem(32),
       lineHeight: 40 / 32,
     },
@@ -118,7 +119,7 @@ const breakdownLabelStyles = css({
   fontSize: rem(16),
   fontWeight: 500,
   lineHeight: 24 / 16,
-  [`@media (max-width: ${mobileScreen.max}px)`]: { fontWeight: 400 },
+  [mediaBelow.tablet]: { fontWeight: 400 },
 });
 
 const breakdownValueStyles = css({

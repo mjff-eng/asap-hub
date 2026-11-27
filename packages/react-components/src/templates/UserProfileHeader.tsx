@@ -16,17 +16,10 @@ import {
 } from '../molecules';
 import { Toast } from '../organisms';
 import { badgesAnchorId } from '../organisms/UserProfileBadges';
-import {
-  largeDesktopScreen,
-  mobileScreen,
-  rem,
-  vminLinearCalc,
-} from '../pixels';
+import { rem } from '../pixels';
 import { mediaFrom } from '../layout';
 import { formatDateToTimezone } from '../date';
 import PageInfoContainer from './PageInfoContainer';
-
-const middleSizeQuery = '@media (min-width: 620px)';
 
 const containerStyles = css({
   display: 'grid',
@@ -40,7 +33,7 @@ const containerStyles = css({
   `,
   gridColumnGap: rem(12),
 
-  [middleSizeQuery]: {
+  [mediaFrom.tablet]: {
     grid: `
       ".             .             edit-personal-info avatar" ${rem(24)}
       "personal-info personal-info personal-info      avatar" auto
@@ -55,13 +48,7 @@ const containerStyles = css({
       "edit-contact-info  contact       social        avatar"
         / ${rem(36)} max-content 1fr max-content
     `,
-    gridColumnGap: vminLinearCalc(
-      mobileScreen,
-      24,
-      largeDesktopScreen,
-      30,
-      'px',
-    ),
+    gridColumnGap: rem(30),
   },
 });
 
@@ -94,7 +81,7 @@ const editContactStyles = css({
 const contactStyles = css({
   gridArea: 'contact',
 
-  [middleSizeQuery]: {
+  [mediaFrom.tablet]: {
     justifySelf: 'start',
     gridTemplateColumns: 'min-content min-content',
   },
@@ -105,7 +92,7 @@ const contactStyles = css({
 });
 const contactNoEditStyles = css({
   gridColumnEnd: 'edit-contact-info',
-  [middleSizeQuery]: {
+  [mediaFrom.tablet]: {
     gridColumnEnd: 'contact',
   },
 });
@@ -122,7 +109,7 @@ const avatarContainer = css({
   height: rem(avatarSize),
   justifySelf: 'start',
 
-  [middleSizeQuery]: {
+  [mediaFrom.tablet]: {
     justifySelf: 'end',
   },
 

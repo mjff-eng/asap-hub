@@ -15,7 +15,8 @@ import { Headline2, Paragraph, Anchor, Link } from '../atoms';
 import { WarningIcon } from '../icons';
 import { colour } from '../colors';
 import { layoutStyles } from '../text';
-import { rem, mobileScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { mailToSupport } from '../mail';
 import { useDateHasPassed } from '../date';
 
@@ -95,7 +96,7 @@ const JoinEvent: React.FC<JoinEventProps> = ({
             We’re sorry but we couldn’t find the link to this event.{' '}
             <br
               css={{
-                [`@media (max-width: ${mobileScreen.max}px)`]: {
+                [mediaBelow.tablet]: {
                   display: 'none',
                 },
               }}

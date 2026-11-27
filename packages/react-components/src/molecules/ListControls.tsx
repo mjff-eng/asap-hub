@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { dropdownChevronIcon } from '../icons';
 import DropdownButton from './DropdownButton';
-import { rem, remUnit, tabletScreen } from '../pixels';
+import { rem, remUnit } from '../pixels';
+import { mediaBelow } from '../layout';
 
 const containerStyles = css({
   display: 'flex',
@@ -15,7 +16,7 @@ const containerStyles = css({
     padding: `${rem(8)} ${rem(16)}`,
   },
 
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginTop: rem(24),

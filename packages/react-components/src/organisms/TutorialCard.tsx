@@ -3,7 +3,8 @@ import { TutorialsResponse } from '@asap-hub/model';
 import { network, discover } from '@asap-hub/routing';
 
 import { Card, Paragraph } from '../atoms';
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { formatDate } from '../date';
 import { trainingPlaceholderIcon } from '../icons';
 import {
@@ -34,7 +35,7 @@ const imageContainerStyle = css({
   width: rem(184),
   overflow: 'hidden',
 
-  [`@media (max-width: ${smallDesktopScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });

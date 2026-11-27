@@ -21,7 +21,8 @@ import { createMailTo, mailToSupport } from '../mail';
 import { EligibilityModal, ToolCard } from '../organisms';
 import type DiscussionCard from '../organisms/DiscussionCard';
 import ManuscriptCard from '../organisms/ManuscriptCard';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 
 const containerStyles = css({
   display: 'grid',
@@ -29,13 +30,13 @@ const containerStyles = css({
 });
 
 const desktopOnlyStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });
 
 const mobileOnlyStyles = css({
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'none',
   },
 });
@@ -48,7 +49,7 @@ const mobileContainerStyles = css({
 
 const newToolStyles = css({
   display: 'flex',
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'block',
   },
 });
