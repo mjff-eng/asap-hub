@@ -11,7 +11,7 @@ import {
   formTargetWidth,
   rem,
 } from '../pixels';
-import { pageMarginStyles } from '../layout';
+import { themedPageMarginStyles } from '../layout';
 import { colour } from '../colors';
 
 const verticalPadding = vminLinearCalc(
@@ -22,7 +22,7 @@ const verticalPadding = vminLinearCalc(
   'px',
 );
 
-const styles = css(pageMarginStyles.crn, {
+const styles = css({
   width: 'max-content',
   maxWidth: '100%',
 
@@ -74,7 +74,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
 }) => {
   const formRef = useRef<HTMLFormElement>(null);
   return (
-    <div css={styles}>
+    <div css={(theme) => [themedPageMarginStyles(theme), styles]}>
       <div css={textStyles}>
         <Display styleAsHeading={4}>Forgot Password</Display>
         <Paragraph primary>

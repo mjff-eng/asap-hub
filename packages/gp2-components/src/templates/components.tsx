@@ -1,4 +1,9 @@
-import { pixels } from '@asap-hub/react-components';
+import {
+  pageContainerStyles,
+  pageMarginStyles,
+  pageContentContainerStyles,
+  pixels,
+} from '@asap-hub/react-components';
 import { layoutContentStyles } from '../layout';
 
 const { rem } = pixels;
@@ -51,6 +56,13 @@ const components = {
   },
   ContentPage: {
     styles: { padding: 0 },
+  },
+  PageMargins: {
+    styles: pageMarginStyles.gp2,
+  },
+  PageConstraints: {
+    containerStyles: pageContainerStyles.gp2,
+    contentStyles: pageContentContainerStyles.gp2,
   },
 };
 

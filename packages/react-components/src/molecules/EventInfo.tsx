@@ -6,13 +6,14 @@ import { ComponentProps } from 'react';
 import { EventDateBlock, EventTime, LinkHeadline, TagList } from '.';
 import { Headline3 } from '..';
 import { colour } from '../colors';
-import { largeDesktopScreen, mobileScreen, rem } from '../pixels';
+import { mediaBelow } from '../layout';
+import { rem } from '../pixels';
 
 const TITLE_LIMIT = 55;
 const TAG_LIMIT = 3;
 
 const dateBlockContainerStyle = css({
-  [`@media (max-width: ${largeDesktopScreen.min}px)`]: {
+  [mediaBelow.laptop]: {
     display: 'none',
   },
 });
@@ -35,7 +36,7 @@ const contentStyles = css({
   flexDirection: 'column',
   gap: rem(16),
   minWidth: 0,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     width: '100%',
   },
 });
@@ -70,7 +71,7 @@ const cardStyles = css({
 
   gap: rem(24),
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
   },

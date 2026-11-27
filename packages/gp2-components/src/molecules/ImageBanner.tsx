@@ -1,7 +1,5 @@
-import { pixels } from '@asap-hub/react-components';
+import { mediaBelow, pixels } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
-
-import { mobileQuery } from '../layout';
 
 const { rem } = pixels;
 
@@ -12,7 +10,7 @@ const bannerStyles = (image: string, position: string) =>
     backgroundImage: `url(${image})`,
     backgroundSize: 'cover',
     backgroundPosition: position,
-    [mobileQuery]: {
+    [mediaBelow.tablet]: {
       height: rem(48),
     },
   });

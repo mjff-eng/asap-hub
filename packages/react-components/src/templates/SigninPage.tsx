@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 import SigninForm from './SigninForm';
 import { AgreeToTerms } from '../molecules';
 import { vminLinearCalc, mobileScreen, largeDesktopScreen } from '../pixels';
-import { pageMarginStyles } from '../layout';
+import { themedPageMarginStyles } from '../layout';
 
 const verticalPadding = vminLinearCalc(
   mobileScreen,
@@ -17,8 +17,8 @@ type SigninPageProps = ComponentProps<typeof SigninForm> &
   ComponentProps<typeof AgreeToTerms>;
 const SigninPage: React.FC<SigninPageProps> = ({ appOrigin, ...props }) => (
   <div
-    css={[
-      pageMarginStyles.crn,
+    css={(theme) => [
+      themedPageMarginStyles(theme),
       {
         boxSizing: 'border-box',
         width: 'max-content',

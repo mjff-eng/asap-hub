@@ -1,6 +1,8 @@
 import '@emotion/jest';
+import { ThemeProvider } from '@emotion/react';
 import { render } from '@testing-library/react';
 
+import { pageContainerStyles, pageContentContainerStyles } from '../../layout';
 import PageConstraints from '../PageConstraints';
 
 it('renders children', () => {
@@ -71,5 +73,33 @@ it('caps the content at 900px when the width is content', () => {
   // 900px content plus 76px margins on each side
   expect(getByText('Test Content')).toHaveStyleRule('max-width', '65.75rem', {
     media: '(min-width: 80.0625em)',
+  });
+});
+
+it('uses the page grid of the theme when it sets one', () => {
+  const { getByText } = render(
+    <ThemeProvider
+      theme={{
+        components: {
+          PageConstraints: {
+            containerStyles: pageContainerStyles.gp2,
+            contentStyles: pageContentContainerStyles.gp2,
+          },
+        },
+      }}
+    >
+      <PageConstraints>Container</PageConstraints>
+      <PageConstraints width="content">Content</PageConstraints>
+    </ThemeProvider>,
+  );
+  // 900px content plus 56px margins on each side
+  expect(getByText('Container')).toHaveStyleRule('max-width', '63.25rem', {
+    media: '(min-width: 40.0625em)',
+  });
+  expect(getByText('Content')).toHaveStyleRule('max-width', '63.25rem', {
+    media: '(min-width: 40.0625em)',
+  });
+  expect(getByText('Container')).not.toHaveStyleRule('max-width', '64rem', {
+    media: '(min-width: 64.0625em)',
   });
 });

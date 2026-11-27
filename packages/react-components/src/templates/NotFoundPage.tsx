@@ -8,7 +8,7 @@ import {
   rem,
   tabletScreen,
 } from '../pixels';
-import { pageMarginStyles } from '../layout';
+import { themedPageMarginStyles } from '../layout';
 
 const verticalPadding = vminLinearCalc(
   mobileScreen,
@@ -18,7 +18,7 @@ const verticalPadding = vminLinearCalc(
   'px',
 );
 
-const styles = css(pageMarginStyles.crn, {
+const styles = css({
   paddingTop: verticalPadding,
   paddingBottom: verticalPadding,
 
@@ -38,7 +38,7 @@ const tabletAndAbove = css({
 });
 
 const NotFoundPage: React.FC<Record<string, never>> = () => (
-  <div css={styles}>
+  <div css={(theme) => [themedPageMarginStyles(theme), styles]}>
     <div>
       <Display styleAsHeading={4}>
         Sorry! We can’t seem to find that page.

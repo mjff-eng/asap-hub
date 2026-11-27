@@ -1,4 +1,4 @@
-import { css, SerializedStyles } from '@emotion/react';
+import { css, SerializedStyles, Theme } from '@emotion/react';
 import {
   CasBreakpoint,
   casBreakpoints,
@@ -97,6 +97,20 @@ export const pageMarginStyles: Record<Product, SerializedStyles> = {
   crn: css(gridRules(casGrid.crn, pageMarginGridStyles)),
   gp2: css(gridRules(casGrid.gp2, pageMarginGridStyles)),
 };
+
+export const themedPageMarginStyles = ({
+  components,
+}: Theme): SerializedStyles =>
+  components?.PageMargins?.styles ?? pageMarginStyles.crn;
+
+const noPageMarginStyles = css({});
+export const withoutPageMargins = (theme: Theme): Theme => ({
+  ...theme,
+  components: {
+    ...theme.components,
+    PageMargins: { styles: noPageMarginStyles },
+  },
+});
 
 const pageContentContainerGridStyles = (grid: CasGrid) => ({
   ...pageMarginGridStyles(grid),

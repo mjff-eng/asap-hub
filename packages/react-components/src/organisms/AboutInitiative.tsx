@@ -11,9 +11,10 @@ import {
   aboutApproachDiagramMobileImage,
 } from '../images';
 import { mailToSupport } from '../mail';
-import { mobileScreen, rem, remUnit, unitlessLineHeight } from '../pixels';
+import { mediaBelow, mediaCondition } from '../layout';
+import { rem, remUnit, unitlessLineHeight } from '../pixels';
 
-const mobileQuery = `@media (max-width: ${mobileScreen.max}px)`;
+const mobileQuery = mediaBelow.tablet;
 
 const containerStyles = css({
   display: 'flex',
@@ -128,7 +129,7 @@ const ResponsiveImage: React.FC<{
   alt: string;
 }> = ({ src, mobileSrc, alt }) => (
   <picture css={pictureStyles}>
-    <source media={`(max-width: ${mobileScreen.max}px)`} srcSet={mobileSrc} />
+    <source media={mediaCondition.below.tablet} srcSet={mobileSrc} />
     <img src={src} alt={alt} />
   </picture>
 );

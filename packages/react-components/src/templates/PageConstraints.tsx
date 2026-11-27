@@ -41,7 +41,7 @@ type PageConstraintsProps = {
  * Use `PageConstraints` to create consistent layout boundaries for page sections.
  * The side margins and max width follow the CRN page grid of the CAS Design
  * System at each breakpoint (see cas-layout.ts), so content sections line up
- * across pages.
+ * across pages. Another product sets its own page grid through the theme.
  */
 const PageConstraints: React.FC<PageConstraintsProps> = ({
   children,
@@ -60,10 +60,12 @@ const PageConstraints: React.FC<PageConstraintsProps> = ({
     ])}
   >
     <div
-      css={
+      css={({ components }) =>
         width === 'content'
-          ? pageContentContainerStyles.crn
-          : pageContainerStyles.crn
+          ? components?.PageConstraints?.contentStyles ??
+            pageContentContainerStyles.crn
+          : components?.PageConstraints?.containerStyles ??
+            pageContainerStyles.crn
       }
     >
       {children}
