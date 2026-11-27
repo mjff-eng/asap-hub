@@ -404,56 +404,67 @@ const RepresentationOfPresentersTable: React.FC<
               />
             </span>
           </div>
-          {data.map((row) => (
-            <div key={row.id} css={[rowStyles]}>
-              <span css={[titleStyles, rowTitleStyles]}>Team</span>
-              <p css={iconStyles}>
-                <Link href={network({}).teams({}).team({ teamId: row.id }).$}>
-                  {row.name}
-                </Link>
+          {data.map((row) => {
+            const isLimitedData = row.eventCount === 0 || row.memberCount === 0;
 
-                {row.inactiveSince && <InactiveBadgeIcon />}
-              </p>
-              <span css={[titleStyles, rowTitleStyles]}>Members</span>
-              <p css={rowValueStyles}>{row.memberCount} </p>
-              <span css={[titleStyles, rowTitleStyles]}>Events</span>
-              <p css={rowValueStyles}>
-                {row.eventCount}{' '}
-                {getPerformanceIcon(row.eventCount, performance.events)}
-              </p>
+            return (
+              <div key={row.id} css={[rowStyles]}>
+                <span css={[titleStyles, rowTitleStyles]}>Team</span>
+                <p css={iconStyles}>
+                  <Link href={network({}).teams({}).team({ teamId: row.id }).$}>
+                    {row.name}
+                  </Link>
 
-              <span css={[titleStyles, rowTitleStyles]}>Total Speakers</span>
-              <p css={rowValueStyles}>
-                {row.totalSpeakerCount}{' '}
-                {getPerformanceIcon(
-                  row.totalSpeakerCount,
-                  performance.totalSpeakers,
-                )}
-              </p>
+                  {row.inactiveSince && <InactiveBadgeIcon />}
+                </p>
+                <span css={[titleStyles, rowTitleStyles]}>Members</span>
+                <p css={rowValueStyles}>{row.memberCount} </p>
+                <span css={[titleStyles, rowTitleStyles]}>Events</span>
+                <p css={rowValueStyles}>
+                  {row.eventCount}{' '}
+                  {getPerformanceIcon(
+                    row.eventCount,
+                    performance.events,
+                    isLimitedData,
+                  )}
+                </p>
 
-              <span css={[titleStyles, rowTitleStyles]}>
-                Unique Speakers: All Roles
-              </span>
-              <p css={rowValueStyles}>
-                {`${row.uniqueAllRolesCount} (${row.uniqueAllRolesCountPercentage}%)`}{' '}
-                {getPerformanceIcon(
-                  row.uniqueAllRolesCountPercentage,
-                  performance.uniqueAllRoles,
-                )}
-              </p>
+                <span css={[titleStyles, rowTitleStyles]}>Total Speakers</span>
+                <p css={rowValueStyles}>
+                  {row.totalSpeakerCount}{' '}
+                  {getPerformanceIcon(
+                    row.totalSpeakerCount,
+                    performance.totalSpeakers,
+                    isLimitedData,
+                  )}
+                </p>
 
-              <span css={[titleStyles, rowTitleStyles]}>
-                Unique Speakers: Key Personnel
-              </span>
-              <p css={rowValueStyles}>
-                {`${row.uniqueKeyPersonnelCount} (${row.uniqueKeyPersonnelCountPercentage}%)`}{' '}
-                {getPerformanceIcon(
-                  row.uniqueKeyPersonnelCountPercentage,
-                  performance.uniqueKeyPersonnel,
-                )}
-              </p>
-            </div>
-          ))}
+                <span css={[titleStyles, rowTitleStyles]}>
+                  Unique Speakers: All Roles
+                </span>
+                <p css={rowValueStyles}>
+                  {`${row.uniqueAllRolesCount} (${row.uniqueAllRolesCountPercentage}%)`}{' '}
+                  {getPerformanceIcon(
+                    row.uniqueAllRolesCountPercentage,
+                    performance.uniqueAllRoles,
+                    isLimitedData,
+                  )}
+                </p>
+
+                <span css={[titleStyles, rowTitleStyles]}>
+                  Unique Speakers: Key Personnel
+                </span>
+                <p css={rowValueStyles}>
+                  {`${row.uniqueKeyPersonnelCount} (${row.uniqueKeyPersonnelCountPercentage}%)`}{' '}
+                  {getPerformanceIcon(
+                    row.uniqueKeyPersonnelCountPercentage,
+                    performance.uniqueKeyPersonnel,
+                    isLimitedData,
+                  )}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </Card>
       <section css={pageControlsStyles}>

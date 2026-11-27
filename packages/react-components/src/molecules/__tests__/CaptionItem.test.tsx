@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import CaptionItem from '../CaptionItem';
+import CaptionItem, { LimitedDataCaptionItem } from '../CaptionItem';
 
 it('renders label, values and icons', () => {
   render(
@@ -81,4 +81,10 @@ it('renders percentage when percentage is enabled', () => {
   expect(screen.getByText('0% - 10%')).toBeVisible();
   expect(screen.getByText('11% - 40%')).toBeVisible();
   expect(screen.getByText('41% - 100%')).toBeVisible();
+});
+
+it('renders the limited data caption', () => {
+  render(<LimitedDataCaptionItem />);
+  expect(screen.getByRole('heading', { name: 'Limited data' })).toBeVisible();
+  expect(screen.getByTitle('Limited data')).toBeInTheDocument();
 });

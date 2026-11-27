@@ -57,6 +57,34 @@ describe('RepresentationOfPresentersTable', () => {
     expect(getByText('Test Team')).toBeInTheDocument();
   });
 
+  it('renders performance icons when the team has events and members', () => {
+    const { getAllByTitle } = render(
+      <RepresentationOfPresentersTable
+        {...defaultProps}
+        data={[engagementData]}
+      />,
+    );
+    expect(getAllByTitle(/average/i)).toHaveLength(4);
+  });
+
+  it.each`
+    description         | override
+    ${'has no events'}  | ${{ eventCount: 0 }}
+    ${'has no members'} | ${{ memberCount: 0 }}
+  `(
+    'renders limited data instead of performance icons when the team $description',
+    ({ override }) => {
+      const { getAllByTitle, queryAllByTitle } = render(
+        <RepresentationOfPresentersTable
+          {...defaultProps}
+          data={[{ ...engagementData, ...override }]}
+        />,
+      );
+      expect(getAllByTitle('Limited data')).toHaveLength(4);
+      expect(queryAllByTitle(/average/i)).toHaveLength(0);
+    },
+  );
+
   it('renders inactive badge', () => {
     const data = [
       {

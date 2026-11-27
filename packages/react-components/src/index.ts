@@ -130,6 +130,7 @@ export {
   LabeledTextField,
   LabeledTypeahead,
   MilestoneStatusDropdown,
+  LimitedDataCaptionItem,
   LinkHeadline,
   Loading,
   LabsList,

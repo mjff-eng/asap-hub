@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { belowAverageIcon, averageIcon, aboveAverageIcon } from '../icons';
+import {
+  belowAverageIcon,
+  averageIcon,
+  aboveAverageIcon,
+  informationInverseIcon,
+} from '../icons';
 import { Subtitle } from '../atoms';
 import { colour } from '../colors';
 import { rem } from '../pixels';
@@ -72,5 +77,12 @@ const CaptionItem: React.FC<CaptionItemProps> = ({
     </div>
   );
 };
+
+export const LimitedDataCaptionItem: React.FC = () => (
+  <div css={dataContainerStyles}>
+    {informationInverseIcon}
+    <Subtitle noMargin>Limited data</Subtitle>
+  </div>
+);
 
 export default CaptionItem;

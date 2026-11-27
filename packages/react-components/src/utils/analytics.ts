@@ -12,7 +12,12 @@ import {
 export const getPerformanceIcon = (
   value: number,
   performanceMetrics: PerformanceMetrics,
+  isLimitedData: boolean = false,
 ) => {
+  if (isLimitedData) {
+    return informationInverseIcon;
+  }
+
   if (value <= performanceMetrics.belowAverageMax) {
     return belowAverageIcon;
   }

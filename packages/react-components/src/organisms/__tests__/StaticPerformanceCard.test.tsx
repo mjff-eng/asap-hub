@@ -11,7 +11,9 @@ describe('StaticPerformanceCard', () => {
     expect(screen.getByText('80% - 89%')).toBeInTheDocument();
     expect(screen.getByText('Needs Improvement:')).toBeInTheDocument();
     expect(screen.getByText('< 80%')).toBeInTheDocument();
-    expect(screen.getByText('Limited data')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Limited data' }),
+    ).toBeInTheDocument();
   });
 
   it('renders with custom performance thresholds', () => {
@@ -94,7 +96,7 @@ describe('StaticPerformanceCard', () => {
       .closest('div')
       ?.querySelector('svg');
     const infoIcon = screen
-      .getByText('Limited data')
+      .getByRole('heading', { name: 'Limited data' })
       .closest('div')
       ?.querySelector('svg');
 

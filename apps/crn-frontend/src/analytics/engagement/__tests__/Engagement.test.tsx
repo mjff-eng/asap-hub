@@ -231,6 +231,9 @@ describe('Engagement', () => {
       expect(screen.getAllByText('3')).toHaveLength(1);
       expect(screen.getAllByText('3 (100%)')).toHaveLength(1);
       expect(screen.getAllByText('4')).toHaveLength(1);
+      expect(
+        screen.getByRole('heading', { name: 'Limited data' }),
+      ).toBeVisible();
     });
   });
 
