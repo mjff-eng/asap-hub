@@ -9,13 +9,14 @@ import {
   UsersList,
   TagList,
   colour,
+  mediaBelow,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
 
 import { AssociationList } from '../molecules';
 
-const { rem, mobileScreen } = pixels;
+const { rem } = pixels;
 
 const cardContainerStyles = css({
   padding: rem(24),
@@ -48,7 +49,7 @@ const timestampStyles = css({
   whiteSpace: 'pre',
   fontSize: rem(14),
   fontWeight: 400,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });

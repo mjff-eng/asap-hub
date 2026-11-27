@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 import { css, Theme } from '@emotion/react';
 
 import { Anchor } from '../atoms';
-import { formTargetWidth, mobileScreen, rem } from '../pixels';
+import { formTargetWidth, rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { themeColour } from '../theme';
 
 const borderWidth = 1;
@@ -35,7 +36,7 @@ const styles = ({
     color: themeColour('crn', 'colour/foreground/button/primary/default'),
     backgroundColor: buttonBackground,
     borderColor: buttonBorder,
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       minWidth: '100%',
     },
   });

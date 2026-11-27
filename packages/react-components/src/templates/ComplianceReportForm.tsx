@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router';
 import { Button, Card, Paragraph } from '../atoms';
 import { GlobeIcon } from '../icons';
 import {
+  mediaBelow,
   defaultContentTopPadding,
   contentWidthStyles,
   pageMarginStyles,
@@ -28,7 +29,7 @@ import {
   StatusBadge,
 } from '../molecules';
 import { ConfirmModal } from '../organisms';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
 import { Option } from '../select';
 
 const mainStyles = css(pageMarginStyles.crn, {
@@ -53,7 +54,7 @@ const contentStyles = css(contentWidthStyles, {
 const buttonsOuterContainerStyles = css({
   display: 'flex',
   justifyContent: 'end',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     width: '100%',
   },
 });
@@ -62,7 +63,7 @@ const buttonsInnerContainerStyles = css({
   display: 'flex',
   flexDirection: 'row',
   gap: rem(24),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column-reverse',
     width: '100%',
   },

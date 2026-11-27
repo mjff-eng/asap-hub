@@ -22,7 +22,8 @@ import {
   StatusButton,
   Subtitle,
 } from '..';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { getReviewerStatusType } from '../utils';
 import ConfirmStatusChangeModal from './ConfirmStatusChangeModal';
 import DiscussionCard from './DiscussionCard';
@@ -78,7 +79,7 @@ const toastStyles = css({
   padding: rem(16),
   borderRadius: `${rem(8)} ${rem(8)} 0 0`,
   alignItems: 'flex-start',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
@@ -97,7 +98,7 @@ const toastHeaderStyles = css({
   justifyContent: 'space-between',
   gap: rem(32),
   alignItems: 'flex-start',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     alignItems: 'flex-start',
   },
 });

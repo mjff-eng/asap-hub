@@ -11,7 +11,8 @@ import { Button, Headline3 } from '../atoms';
 import { paddingStyles } from '../card';
 import { crossIcon, MoneyIcon } from '../icons';
 import { Modal } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 
 const headerStyles = css(paddingStyles, {
   paddingBottom: 0,
@@ -25,7 +26,7 @@ const controlsContainerStyles = css({
   alignItems: 'flex-start',
 });
 
-const buttonMediaQuery = `@media (min-width: ${mobileScreen.max - 100}px)`;
+const buttonMediaQuery = mediaFrom.tablet;
 
 const buttonContainerStyles = css({
   display: 'grid',

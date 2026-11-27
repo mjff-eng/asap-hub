@@ -1,13 +1,8 @@
 import { css } from '@emotion/react';
 
-import { themedPageMarginStyles } from '../layout';
+import { mediaFrom, themedPageMarginStyles } from '../layout';
 import { Display, Link, Paragraph } from '../atoms';
-import {
-  largeDesktopScreen,
-  vminLinearCalc,
-  tabletScreen,
-  rem,
-} from '../pixels';
+import { rem, remUnit } from '../pixels';
 import { BannerCard } from '../molecules';
 
 const layoutStyles = css({
@@ -19,13 +14,10 @@ const layoutStyles = css({
   display: 'grid',
   justifyContent: 'center',
   alignContent: 'center',
-  gridTemplateColumns: `min(${vminLinearCalc(
-    tabletScreen,
-    384,
-    largeDesktopScreen,
-    415,
-    'px',
-  )}, 100%)`,
+  gridTemplateColumns: `min(${remUnit(384)}, 100%)`,
+  [mediaFrom.laptop]: {
+    gridTemplateColumns: `min(${remUnit(415)}, 100%)`,
+  },
 });
 
 interface PasswordResetEmailSentPageProps {

@@ -13,7 +13,8 @@ import {
   Paragraph,
   Link,
 } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { ExternalLinkIcon, OrcidIcon } from '../icons';
 import { colour } from '../colors';
 import { mailToSupport } from '../mail';
@@ -73,7 +74,7 @@ const headerStyles = css({
   gridTemplateColumns: '100% 0 0',
   overflow: 'hidden',
 
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: '1fr max-content 28px',
   },
 });

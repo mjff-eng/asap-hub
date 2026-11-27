@@ -9,7 +9,8 @@ import {
   UserProfilePersonalText,
   ImageLink,
 } from '../molecules';
-import { tabletScreen, rem, remUnit } from '../pixels';
+import { rem, remUnit } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { formatDate } from '../date';
 import { alumniBadgeIcon } from '../icons';
 
@@ -17,7 +18,7 @@ const containerStyles = css({
   display: 'grid',
   columnGap: remUnit(25),
   rowGap: '12px',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: `${remUnit(90)} auto`,
   },
 });
@@ -35,14 +36,14 @@ const profileTextStyles = css({
 });
 
 const moveStyles = css({
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'flex',
     alignItems: 'baseline',
     columnGap: rem(15),
     flexBasis: 'auto',
     order: -1,
   },
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     marginBottom: rem(15),
   },
 });

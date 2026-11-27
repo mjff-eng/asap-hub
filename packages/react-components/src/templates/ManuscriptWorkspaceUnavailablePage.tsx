@@ -3,26 +3,12 @@ import { css } from '@emotion/react';
 import { Display, Link, Paragraph } from '../atoms';
 import { colour } from '../colors';
 import { LockIcon } from '../icons';
-import { pageMarginStyles } from '../layout';
-import {
-  largeDesktopScreen,
-  mobileScreen,
-  rem,
-  remUnit,
-  vminLinearCalc,
-} from '../pixels';
-
-const verticalPadding = vminLinearCalc(
-  mobileScreen,
-  36,
-  largeDesktopScreen,
-  72,
-  'px',
-);
+import { mediaFrom, pageMarginStyles } from '../layout';
+import { rem, remUnit } from '../pixels';
 
 const styles = css(pageMarginStyles.crn, {
-  paddingTop: verticalPadding,
-  paddingBottom: verticalPadding,
+  paddingTop: remUnit(36),
+  paddingBottom: remUnit(36),
 
   display: 'grid',
   gridRowGap: rem(12),
@@ -30,7 +16,9 @@ const styles = css(pageMarginStyles.crn, {
   maxWidth: rem(664),
   margin: '0 auto',
 
-  [`@media (min-width: ${mobileScreen.width + 1}px)`]: {
+  [mediaFrom.tablet]: {
+    paddingTop: remUnit(72),
+    paddingBottom: remUnit(72),
     justifyItems: 'center',
   },
 });

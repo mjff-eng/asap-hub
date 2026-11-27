@@ -2,7 +2,8 @@ import { css } from '@emotion/react';
 
 import { Button } from '../atoms';
 import { colour } from '../colors';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 const footerStyles = (isConfirming: boolean) =>
   css({
@@ -11,7 +12,7 @@ const footerStyles = (isConfirming: boolean) =>
     justifyContent: isConfirming ? 'space-between' : 'flex-end',
     gap: rem(24),
     padding: `${rem(48)} ${rem(24)} ${rem(32)}`,
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       flexDirection: 'column',
       alignItems: 'stretch',
       paddingTop: rem(56),
@@ -22,7 +23,7 @@ const actionsStyles = css({
   display: 'flex',
   gap: rem(24),
   flexShrink: 0,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column-reverse',
   },
 });
@@ -30,7 +31,7 @@ const actionsStyles = css({
 const buttonStyles = css({
   width: 'fit-content',
   flexShrink: 0,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     width: '100%',
   },
 });

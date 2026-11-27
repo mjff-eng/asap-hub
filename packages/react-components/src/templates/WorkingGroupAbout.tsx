@@ -1,11 +1,11 @@
 import { WorkingGroupResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
-import { Card, Headline3, Paragraph, Subtitle } from '../atoms';
+import { Card, Headline3, Paragraph } from '../atoms';
 import { colour } from '../colors';
 import { createMailTo } from '../mail';
-import { Collapsible, CtaContactSection, TagList } from '../molecules';
+import { Collapsible, CtaCard, CtaContactSection, TagList } from '../molecules';
 import { DeliverablesCard, WorkingGroupMembers, RichText } from '../organisms';
-import { rem, smallDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
 
 type WorkingGroupAboutProps = {
   readonly showCollaborationCard: boolean;
@@ -29,16 +29,6 @@ const containerStyles = css({
 const tagListStyle = css({
   marginTop: rem(12),
   marginBottom: rem(24),
-});
-
-const getInTouchStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  gap: rem(24),
-  [`@media (min-width: ${smallDesktopScreen.min}px)`]: {
-    flexDirection: 'row',
-  },
 });
 
 const WorkingGroupAbout: React.FC<WorkingGroupAboutProps> = ({
@@ -100,21 +90,14 @@ const WorkingGroupAbout: React.FC<WorkingGroupAboutProps> = ({
       />
     </section>
     {!complete && pointOfContact && (
-      <Card accent="green">
-        <div css={getInTouchStyles}>
-          <div css={{ display: 'flex', flexDirection: 'column' }}>
-            <Subtitle noMargin>Have additional questions?</Subtitle>
-            <div>Members are here to help.</div>
-          </div>
-          {pointOfContact && (
-            <CtaContactSection
-              href={createMailTo(pointOfContact.user.email)}
-              buttonText={'Contact'}
-              displayCopy
-            />
-          )}
-        </div>
-      </Card>
+      <CtaCard
+        href={createMailTo(pointOfContact.user.email)}
+        buttonText="Contact"
+        displayCopy
+      >
+        <strong>Have additional questions?</strong>
+        <br /> Members are here to help.
+      </CtaCard>
     )}
   </div>
 );

@@ -14,7 +14,8 @@ import {
 } from '../organisms/shared-event-card';
 import { chevronButtonStyles } from '../organisms/shared-event-card-styles';
 import { groupFindings, showMoreLabel } from '../organisms/speaker-group';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import SpeakerUserRow, {
   findingsColumnStyles,
   findingsIcon,
@@ -44,7 +45,7 @@ const headerStyles = css({
 // On mobile the findings pill and chevron move under the name; without the
 // pill the chevron stays on the name's line.
 const stackedHeaderStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     gap: rem(8),
@@ -54,7 +55,7 @@ const stackedHeaderStyles = css({
 const groupTrailingStyles = css([
   trailingColumnsStyles,
   {
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       alignSelf: 'stretch',
       justifyContent: 'space-between',
     },

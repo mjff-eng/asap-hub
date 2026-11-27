@@ -29,7 +29,7 @@ const GrantDocumentTagsCard: React.FC<GrantDocumentTagsCardProps> = ({
       </Paragraph>
     </div>
     <div css={tagsStyles}>
-      <TagList tags={tags} large perLine={{ desktop: 4, mobile: 2 }} />
+      <TagList tags={tags} large />
     </div>
   </Card>
 );

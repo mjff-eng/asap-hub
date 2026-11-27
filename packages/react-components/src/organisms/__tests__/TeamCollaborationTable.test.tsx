@@ -71,11 +71,13 @@ describe('TeamCollaborationTable', () => {
   });
 
   it('allows collapsing and expanding rows', () => {
-    const { getByRole, getByText, queryByText } = render(
+    const { getAllByRole, getByText, queryByText } = render(
       <TeamCollaborationTable {...defaultProps} />,
     );
     expect(queryByText('Other Team')).not.toBeInTheDocument();
-    fireEvent.click(getByRole('button'));
+    // The row's expand button comes after the sort buttons of the header.
+    const [expandButton] = getAllByRole('button').slice(-1);
+    fireEvent.click(expandButton!);
     expect(getByText('Other Team')).toBeVisible();
   });
 

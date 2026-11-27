@@ -5,7 +5,8 @@ import { ArticleItem, ResearchOutputType } from '@asap-hub/model';
 import { LabeledMultiSelect, Modal } from '../molecules';
 import { crossIcon } from '../icons';
 import { Button, Headline3, Paragraph, Spinner } from '../atoms';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { colour } from '../colors';
 import { ResearchOutputOption } from '../utils';
 import { articleSelectComponents } from '../utils/article-select-components';
@@ -30,7 +31,7 @@ const widerModalStyles = css({
   boxSizing: 'content-box',
 });
 
-const buttonMediaQuery = `@media (min-width: ${mobileScreen.max - 100}px)`;
+const buttonMediaQuery = mediaFrom.tablet;
 
 const buttonContainerStyles = (menuOpen: boolean) =>
   css({

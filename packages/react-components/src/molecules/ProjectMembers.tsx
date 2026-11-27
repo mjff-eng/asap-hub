@@ -1,17 +1,17 @@
 import { css } from '@emotion/react';
 import { ProjectMember } from '@asap-hub/model';
 import { useMemo } from 'react';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 import { groupProjectMembersByUserId } from '../utils';
 import ProjectMemberCard from './ProjectMemberCard';
-import { pageGutter } from '../layout';
+import { mediaBelow, pageGutter } from '../layout';
 
 const membersListStyles = css({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
   rowGap: rem(24),
   columnGap: pageGutter,
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     gridTemplateColumns: '1fr',
   },
 });

@@ -11,14 +11,7 @@ import {
 } from '@asap-hub/routing';
 
 import { casSidenav } from '../cas-layout';
-import {
-  rem,
-  remUnit,
-  vminLinearCalc,
-  largeDesktopScreen,
-  mobileScreen,
-  lineHeight,
-} from '../pixels';
+import { rem, remUnit, lineHeight } from '../pixels';
 import { NavigationLink } from '../atoms';
 import RailTooltip from '../atoms/RailTooltip';
 import { colour } from '../colors';
@@ -47,14 +40,7 @@ const listStyles = css({
   listStyle: 'none',
   margin: 0,
   boxSizing: 'border-box',
-  padding: rem(12),
-  paddingTop: `max(${rem(12)}, ${vminLinearCalc(
-    mobileScreen,
-    18,
-    largeDesktopScreen,
-    12,
-    'px',
-  )})`,
+  padding: rem(16),
   li: {
     marginBottom: '3px',
   },

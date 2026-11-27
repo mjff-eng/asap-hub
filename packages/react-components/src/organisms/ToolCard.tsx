@@ -3,7 +3,8 @@ import { TeamTool } from '@asap-hub/model';
 
 import { Card, Headline3, Paragraph, Anchor, Link, Button } from '../atoms';
 import { placeholderIcon } from '../icons';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { getIconFromUrl } from '../utils';
 
 type ToolCardProps = Pick<TeamTool, 'description' | 'name' | 'url'> & {
@@ -16,7 +17,7 @@ const containerStyle = css({
   display: 'flex',
   flexDirection: 'column',
 
-  [`@media (min-width: ${tabletScreen.width}px)`]: {
+  [mediaFrom.tablet]: {
     flexDirection: 'row',
   },
 
@@ -24,7 +25,7 @@ const containerStyle = css({
 });
 
 const logoIconStyle = css({
-  [`@media (min-width: ${tabletScreen.width}px)`]: {
+  [mediaFrom.tablet]: {
     marginTop: '10px',
   },
 });

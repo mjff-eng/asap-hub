@@ -3,7 +3,8 @@ import { css } from '@emotion/react';
 
 import { ExportButton, ListControls, PageControls } from '../molecules';
 import { Headline3, Paragraph } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { colour } from '../colors';
 
 const headerStyles = css({
@@ -21,7 +22,7 @@ const resultsHeaderStyles = css({
   width: '100%',
   alignItems: 'center',
 
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
@@ -30,7 +31,7 @@ const resultsHeaderStyles = css({
 const viewOptionsStyles = css({
   display: 'flex',
   gap: rem(33),
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     width: '100%',

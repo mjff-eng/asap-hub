@@ -14,7 +14,8 @@ import { minusRectIcon, plusRectIcon, replyIcon } from '../icons';
 import DiscussionAttachedFiles from '../molecules/DiscussionAttachedFiles';
 import UserComment from '../molecules/UserComment';
 import UserTeamInfo from '../molecules/UserTeamInfo';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { getTeams, getUserHref } from '../utils';
 
 const containerStyles = (isLast: boolean, unread: boolean) =>
@@ -31,7 +32,7 @@ const containerStyles = (isLast: boolean, unread: boolean) =>
     borderTop: `1px solid ${colour.border.tertiary}`,
     borderBottom: isLast ? `1px solid ${colour.border.tertiary}` : 0,
 
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       flexDirection: 'column',
       alignItems: 'flex-start',
     },

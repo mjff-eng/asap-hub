@@ -3,13 +3,8 @@
 
 import { css } from '@emotion/react';
 
-import {
-  rem,
-  tabletScreen,
-  vminLinearCalc,
-  mobileScreen,
-  largeDesktopScreen,
-} from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { colour } from '../colors';
 import {
   firstPageIcon,
@@ -33,7 +28,10 @@ const listStyles = css({
   gridAutoFlow: 'column',
   gridTemplateRows: rem(30),
   gridAutoColumns: rem(30),
-  gridGap: vminLinearCalc(mobileScreen, 6, largeDesktopScreen, 12, 'px'),
+  gridGap: rem(6),
+  [mediaFrom.tablet]: {
+    gridGap: rem(12),
+  },
 
   backgroundColor: colour.background.primary,
 });
@@ -52,7 +50,7 @@ const itemStyles = css({
     content: '"..."',
   },
 
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     '&.wide-screen-only': {
       display: 'none',
     },

@@ -2,7 +2,8 @@ import { TutorialsResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
 import { Card, Divider, Headline2 } from '../atoms';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 const additionalInformationListStyles = css({
   listStyle: 'none',
@@ -13,12 +14,12 @@ const additionalInformationEntryStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   padding: `${rem(6)} 0`,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });
 const additionalInformationValueStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: rem(12),
   },
 });

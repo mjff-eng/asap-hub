@@ -3,7 +3,8 @@ import { WorkingGroupResponse } from '@asap-hub/model';
 import { css } from '@emotion/react';
 
 import { Button, Card, Headline3, Headline5, Paragraph, Pill } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { colour } from '../colors';
 import { paddingStyles } from '../card';
 
@@ -19,7 +20,7 @@ const statusToAccent: Record<
 };
 
 const deliverablesRowStyles = css({
-  [`@media (min-width: ${tabletScreen.width}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'grid',
     columnGap: rem(24),
     gridTemplateColumns: `1fr ${rem(128)}`,
@@ -46,7 +47,7 @@ const showMoreStyles = css({
 });
 
 const mobileTitle = {
-  [`@media (min-width: ${tabletScreen.width}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'none',
   },
 };

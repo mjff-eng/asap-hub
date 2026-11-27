@@ -4,7 +4,8 @@ import { events as eventsRoute } from '@asap-hub/routing';
 
 import { Card, Link, MaterialAvailability } from '../atoms';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { formatDateToTimezone } from '../date';
 
 const container = css({
@@ -14,7 +15,7 @@ const container = css({
 
 const gridTitleStyles = css({
   display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'inherit',
     borderBottom: 0,
     marginBottom: 0,
@@ -26,7 +27,7 @@ const rowTitleStyles = css({
   paddingTop: rem(33),
   paddingBottom: rem(15),
   ':first-of-type': { paddingTop: 0 },
-  [`@media (min-width: ${tabletScreen.min}px)`]: { display: 'none' },
+  [mediaFrom.tablet]: { display: 'none' },
 });
 
 const rowStyles = css({
@@ -39,7 +40,7 @@ const rowStyles = css({
     marginBottom: 0,
     paddingBottom: 0,
   },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: '3fr 2fr 2fr',
     columnGap: rem(15),
   },

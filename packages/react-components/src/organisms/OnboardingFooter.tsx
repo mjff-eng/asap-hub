@@ -4,7 +4,8 @@ import { successIcon } from '../icons';
 import { Link, Headline2, Paragraph } from '../atoms';
 import { colour } from '../colors';
 
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { irisCeruleanGradientStyles } from '../appearance';
 
 const footerStyles = css({
@@ -25,7 +26,7 @@ const containerStyles = css({
     "title  " max-content
     "button " ${rem(18)}
     "button " max-content / 1fr `,
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     grid: `
     "title    button" max-content
     "subtitle button" ${rem(24)}
@@ -41,7 +42,7 @@ const titleStyles = css({
 const subtitleStyles = css({
   color: colour.foreground['primary-inverse'],
   display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridArea: 'subtitle / subtitle / span 2',
     display: 'unset',
   },

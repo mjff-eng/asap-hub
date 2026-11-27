@@ -2,7 +2,8 @@
 import { FC, ReactNode, useState } from 'react';
 import { css } from '@emotion/react';
 import { Headline5, Link, Paragraph } from '..';
-import { lineHeight, rem, tabletScreen } from '../pixels';
+import { lineHeight, rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { chevronDownIcon, ExternalLinkIcon, infoInfoIcon } from '../icons';
 import { isInternalLink } from '../utils';
 import { colour } from '../colors';
@@ -82,14 +83,14 @@ const infoItem = css({
   alignItems: 'center',
   alignContent: 'center',
   rowGap: rem(9),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     paddingTop: rem(9),
   },
 });
 
 const infoButtonWrap = css({
   gridColumn: 'span 2',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridColumn: 'unset',
   },
   '> a': {

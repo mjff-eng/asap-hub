@@ -5,7 +5,8 @@ import { css } from '@emotion/react';
 import { useValidation, styles, validationMessageStyles } from '../form';
 import { noop } from '../utils';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 
 const containerStyles = css({
   flexBasis: '100%',
@@ -21,7 +22,7 @@ const textareaStyles = css({
 
   boxSizing: 'border-box',
   height: rem(318),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     height: rem(150),
   },
 

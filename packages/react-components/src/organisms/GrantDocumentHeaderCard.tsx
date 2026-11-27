@@ -11,7 +11,8 @@ import { colour } from '../colors';
 import { formatDate } from '../date';
 import { TeamIcon } from '../icons';
 import { AssociationRow } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { getProjectConfig, titleCase } from '../utils';
 
 const cardStyles = css({
@@ -22,7 +23,7 @@ const labelsStyles = css({
   display: 'flex',
   flexWrap: 'wrap',
   gap: rem(8),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
@@ -80,7 +81,7 @@ const datesStyles = css({
 });
 
 const desktopOnlyStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });

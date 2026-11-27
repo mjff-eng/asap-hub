@@ -3,7 +3,8 @@ import React from 'react';
 
 import { WorkingGroupMembership } from '@asap-hub/model';
 import { TabbedCard, WorkingGroupsList } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { splitListBy } from '../utils';
 import { Paragraph } from '../atoms';
 
@@ -11,7 +12,7 @@ const containerStyles = css({
   marginTop: rem(32),
   display: 'grid',
   rowGap: rem(12),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     columnGap: rem(15),
   },
 });

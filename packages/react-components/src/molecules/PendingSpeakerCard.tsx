@@ -5,7 +5,8 @@ import { Avatar, Button, Link, Paragraph, PillSelector } from '../atoms';
 import { colour } from '../colors';
 import { crossIcon, plusIcon } from '../icons';
 import { projectIcon, teamIcon } from '../organisms/shared-event-card';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { splitDisplayName } from '../utils/user';
 import {
   affiliationKey,
@@ -13,7 +14,7 @@ import {
 } from './ExternalSpeakerAffiliationCard';
 import { avatar24Styles, squareIconButtonStyles } from './SpeakerUserRow';
 
-const mobileQuery = `@media (max-width: ${mobileScreen.max}px)`;
+const mobileQuery = mediaBelow.tablet;
 
 const cardStyles = css({
   display: 'flex',

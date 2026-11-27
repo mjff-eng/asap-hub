@@ -20,7 +20,7 @@ import {
 import { Card, Link } from '../atoms';
 import { borderRadius } from '../card';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 import { getPerformanceIcon } from '../utils';
 import EngagementSort from './EngagementSort';
 
@@ -30,23 +30,14 @@ const container = css({
 });
 
 const gridTitleStyles = css({
-  display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    display: 'inherit',
-    paddingBottom: rem(16),
-  },
-});
-
-const rowTitleStyles = css({
-  paddingTop: rem(32),
   paddingBottom: rem(16),
-  ':first-of-type': { paddingTop: 0 },
-  [`@media (min-width: ${tabletScreen.min}px)`]: { display: 'none' },
 });
 
 const rowStyles = css({
   display: 'grid',
-  padding: `${rem(20)} ${rem(24)} 0`,
+  gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
+  columnGap: rem(15),
+  padding: `0 ${rem(24)}`,
   borderBottom: `1px solid ${colour.border.tertiary}`,
   ':first-of-type': {
     borderBottom: 'none',
@@ -59,13 +50,6 @@ const rowStyles = css({
     marginBottom: 0,
     paddingBottom: rem(15),
     borderRadius: rem(borderRadius),
-  },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
-    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
-    columnGap: rem(15),
-    paddingTop: 0,
-    paddingBottom: 0,
-    borderBottom: `1px solid ${colour.border.tertiary}`,
   },
 });
 
@@ -406,7 +390,6 @@ const RepresentationOfPresentersTable: React.FC<
           </div>
           {data.map((row) => (
             <div key={row.id} css={[rowStyles]}>
-              <span css={[titleStyles, rowTitleStyles]}>Team</span>
               <p css={iconStyles}>
                 <Link href={network({}).teams({}).team({ teamId: row.id }).$}>
                   {row.name}
@@ -414,15 +397,11 @@ const RepresentationOfPresentersTable: React.FC<
 
                 {row.inactiveSince && <InactiveBadgeIcon />}
               </p>
-              <span css={[titleStyles, rowTitleStyles]}>Members</span>
               <p css={rowValueStyles}>{row.memberCount} </p>
-              <span css={[titleStyles, rowTitleStyles]}>Events</span>
               <p css={rowValueStyles}>
                 {row.eventCount}{' '}
                 {getPerformanceIcon(row.eventCount, performance.events)}
               </p>
-
-              <span css={[titleStyles, rowTitleStyles]}>Total Speakers</span>
               <p css={rowValueStyles}>
                 {row.totalSpeakerCount}{' '}
                 {getPerformanceIcon(
@@ -430,10 +409,6 @@ const RepresentationOfPresentersTable: React.FC<
                   performance.totalSpeakers,
                 )}
               </p>
-
-              <span css={[titleStyles, rowTitleStyles]}>
-                Unique Speakers: All Roles
-              </span>
               <p css={rowValueStyles}>
                 {`${row.uniqueAllRolesCount} (${row.uniqueAllRolesCountPercentage}%)`}{' '}
                 {getPerformanceIcon(
@@ -441,10 +416,6 @@ const RepresentationOfPresentersTable: React.FC<
                   performance.uniqueAllRoles,
                 )}
               </p>
-
-              <span css={[titleStyles, rowTitleStyles]}>
-                Unique Speakers: Key Personnel
-              </span>
               <p css={rowValueStyles}>
                 {`${row.uniqueKeyPersonnelCount} (${row.uniqueKeyPersonnelCountPercentage}%)`}{' '}
                 {getPerformanceIcon(

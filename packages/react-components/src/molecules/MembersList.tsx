@@ -3,7 +3,7 @@ import { css, SerializedStyles } from '@emotion/react';
 import { UserAward, UserResponse, UserTeam } from '@asap-hub/model';
 import { network } from '@asap-hub/routing';
 
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
 import { colour } from '../colors';
 import { Link, Anchor, Ellipsis } from '../atoms';
 import { alumniBadgeIcon } from '../icons';
@@ -11,7 +11,7 @@ import { hoverStyle } from './ImageLink';
 import { styles } from '../atoms/Link';
 import { hover } from './LinkHeadline';
 import UserAvatar from './UserAvatar';
-import { pageGutter } from '../layout';
+import { mediaFrom, pageGutter } from '../layout';
 
 const containerStyles = css({
   margin: 0,
@@ -21,7 +21,7 @@ const containerStyles = css({
   listStyle: 'none',
 });
 const multiColumnContainerStyles = css({
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: '1fr 1fr',
     columnGap: pageGutter,
   },

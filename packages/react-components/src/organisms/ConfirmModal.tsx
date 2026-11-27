@@ -4,7 +4,8 @@ import useIsMounted from 'ismounted';
 
 import { Modal } from '../molecules';
 import { noop } from '../utils';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { crossIcon } from '../icons';
 import { Button, Headline3, Link, Paragraph } from '../atoms';
 import { paddingStyles } from '../card';
@@ -23,7 +24,7 @@ const controlsContainerStyles = css({
   alignItems: 'flex-start',
 });
 
-const buttonMediaQuery = `@media (min-width: ${mobileScreen.max - 100}px)`;
+const buttonMediaQuery = mediaFrom.tablet;
 
 const buttonContainerStyles = css({
   display: 'grid',

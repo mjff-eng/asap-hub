@@ -5,7 +5,8 @@ import { css, SerializedStyles } from '@emotion/react';
 import { Option } from '../select';
 import { noop } from '../utils';
 import { LabeledRadioButton } from '.';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { validationMessageStyles } from '../form';
 import { colour } from '../colors';
 
@@ -27,7 +28,7 @@ const optionListStyles = css({
   display: 'grid',
   gridTemplateColumns: '1fr 1fr 1fr',
   rowGap: rem(16),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     gridTemplateColumns: '1fr',
   },
 });

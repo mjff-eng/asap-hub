@@ -14,7 +14,8 @@ import {
 } from '../icons';
 import { useSectionExpansion } from '../hooks';
 import { EventAttendanceMetric } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { pluralizeTeams } from '../utils/events';
 
 import { teamIcon } from './shared-event-card';
@@ -43,7 +44,7 @@ const rowDividerStyles = css({
 });
 
 const minGapOnMobile = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: { paddingRight: rem(16) },
+  [mediaBelow.tablet]: { paddingRight: rem(16) },
 });
 
 const teamCellStyles = css([
@@ -64,12 +65,12 @@ const teamInnerStyles = css({
 // table's font size.
 const attendanceColStyles = css({
   width: '204px',
-  [`@media (max-width: ${mobileScreen.max}px)`]: { width: '1%' },
+  [mediaBelow.tablet]: { width: '1%' },
 });
 
 const attendanceCellStyles = css([
   statusCellStyles,
-  { [`@media (max-width: ${mobileScreen.max}px)`]: { textAlign: 'center' } },
+  { [mediaBelow.tablet]: { textAlign: 'center' } },
 ]);
 
 const metricStyles = css({ marginTop: rem(24) });
@@ -102,7 +103,7 @@ const sectionTitleStyles = css([
   {
     fontWeight: 700,
     color: colour.foreground.primary,
-    [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'block' },
+    [mediaBelow.tablet]: { display: 'block' },
   },
 ]);
 
@@ -111,7 +112,7 @@ const sectionSeparatorStyles = css([
   {
     color: colour.foreground.tertiary,
     padding: `0 ${rem(8)}`,
-    [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
+    [mediaBelow.tablet]: { display: 'none' },
   },
 ]);
 
@@ -119,7 +120,7 @@ const sectionCountStyles = css([
   sectionLineStyles,
   {
     color: colour.foreground.tertiary,
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       display: 'block',
       marginTop: rem(8),
     },

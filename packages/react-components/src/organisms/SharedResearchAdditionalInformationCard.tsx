@@ -3,7 +3,8 @@ import { css } from '@emotion/react';
 
 import { Card, Divider, Headline2, Link } from '../atoms';
 import { ExternalLinkIcon } from '../icons';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { isLink } from '../utils';
 
 const additionalInformationListStyles = css({
@@ -15,12 +16,12 @@ const additionalInformationEntryStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   padding: `${rem(6)} 0`,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });
 const additionalInformationValueStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: rem(12),
   },
 });

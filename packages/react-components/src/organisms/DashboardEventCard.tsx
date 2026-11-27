@@ -7,7 +7,8 @@ import { EventInfo, EventMaterialsList } from '../molecules';
 import { InPersonPill, Link } from '../atoms';
 import { colour } from '../colors';
 import { EventsUpcomingIcon, LiveIcon } from '../icons';
-import { rem, mobileScreen, largeDesktopScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { useEventLiveStatus } from '../utils';
 
 const positionedWrapperStyles = css({
@@ -15,12 +16,12 @@ const positionedWrapperStyles = css({
 });
 
 const buttonWrapperStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     marginTop: rem(15),
     width: '100%',
   },
 
-  [`@media (min-width: ${largeDesktopScreen.min}px)`]: {
+  [mediaFrom.laptop]: {
     position: 'absolute',
     top: 0,
     right: 0,

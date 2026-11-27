@@ -3,19 +3,17 @@ import { ComponentProps } from 'react';
 
 import { Display, Divider, Paragraph } from '../atoms';
 import { EmailPasswordSignin, SsoButtons } from '../organisms';
-import {
-  formTargetWidth,
-  largeDesktopScreen,
-  mobileScreen,
-  rem,
-  vminLinearCalc,
-} from '../pixels';
+import { formTargetWidth, rem, remUnit } from '../pixels';
+import { mediaFrom } from '../layout';
 
 const styles = css({
   width: rem(formTargetWidth),
   maxWidth: '100%',
   display: 'grid',
-  gridGap: vminLinearCalc(mobileScreen, 12, largeDesktopScreen, 24, 'px'),
+  gridGap: remUnit(12),
+  [mediaFrom.tablet]: {
+    gridGap: remUnit(24),
+  },
 });
 const headerStyles = css({
   textAlign: 'center',

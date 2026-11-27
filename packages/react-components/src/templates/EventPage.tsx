@@ -7,7 +7,8 @@ import formatDistance from 'date-fns/formatDistance';
 import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { EventInfo, BackLink } from '../molecules';
 import { Card, Paragraph } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import {
   EventMaterials,
   JoinEvent,
@@ -26,7 +27,7 @@ const cardsStyles = css({
 });
 const updatedParagraphStyles = css({
   display: 'flex',
-  [`@media (min-width: ${tabletScreen.width}px)`]: {
+  [mediaFrom.tablet]: {
     justifyContent: 'end',
   },
 });

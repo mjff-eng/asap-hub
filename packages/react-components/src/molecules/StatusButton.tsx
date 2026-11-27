@@ -16,7 +16,8 @@ import {
   infoCircleYellowIcon,
 } from '..';
 
-import { rem, remUnit, mobileScreen, formTargetWidth } from '../pixels';
+import { rem, remUnit, formTargetWidth } from '../pixels';
+import { mediaBelow } from '../layout';
 import { Portal } from '../utils/portal';
 
 import { colourWithAlpha, colour } from '../colors';
@@ -24,7 +25,7 @@ import { colourWithAlpha, colour } from '../colors';
 const containerStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     width: '100%',
   },
 });

@@ -1,7 +1,8 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { colour } from '../colors';
 import { borderWidth } from '../form';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 const containerStyles = css({
   padding: rem(6),
@@ -15,11 +16,11 @@ const containerStyles = css({
 // breakpoint) so it aligns flush with the parent's content width exactly.
 const fullWidthOnMobileContainerStyles = css({
   padding: 0,
-  [`@media (max-width: ${mobileScreen.max}px)`]: { gap: rem(16) },
+  [mediaBelow.tablet]: { gap: rem(16) },
 });
 
 const fullWidthOnMobilePillStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: { width: '100%' },
+  [mediaBelow.tablet]: { width: '100%' },
 });
 
 const disabledStyles = css({

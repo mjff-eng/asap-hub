@@ -15,24 +15,12 @@ import {
   deleteButtonStyles,
   statusIconStyles,
 } from '../organisms/shared-event-card-styles';
-import {
-  mobileScreen,
-  rem,
-  tabletScreen,
-  vminLinearCalcClamped,
-} from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { splitDisplayName } from '../utils/user';
 
 const findingsColumnWidth = 152;
 const chevronColumnWidth = 24;
-
-export const actionsGap = vminLinearCalcClamped(
-  mobileScreen,
-  12,
-  tabletScreen,
-  24,
-  'px',
-);
 
 export const findingsColumnStyles = css({
   display: 'flex',
@@ -43,20 +31,21 @@ export const findingsColumnStyles = css({
   minWidth: 0,
   width: rem(findingsColumnWidth),
   whiteSpace: 'nowrap',
-  [`@media (max-width: ${mobileScreen.max}px)`]: { width: 'auto' },
+  [mediaBelow.tablet]: { width: 'auto' },
 });
 
 export const chevronSpacerStyles = css({
   flexShrink: 0,
   width: rem(chevronColumnWidth),
-  [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
+  [mediaBelow.tablet]: { display: 'none' },
 });
 
 export const trailingColumnsStyles = css({
   display: 'flex',
   alignItems: 'center',
   flexShrink: 0,
-  gap: actionsGap,
+  gap: rem(12),
+  [mediaFrom.tablet]: { gap: rem(24) },
 });
 
 // getButtonStyles grows every button to `min-width: 100%` on mobile.
@@ -66,7 +55,7 @@ export const squareIconButtonStyles = (enabled: boolean) =>
     {
       flex: `0 0 ${rem(24)}`,
       maxWidth: rem(24),
-      [`@media (max-width: ${mobileScreen.max}px)`]: {
+      [mediaBelow.tablet]: {
         flexGrow: 0,
         minWidth: rem(24),
         maxWidth: rem(24),
@@ -112,7 +101,7 @@ const rowStyles = css([
   flexRowGap8Styles,
   {
     columnGap: rem(16),
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       display: 'grid',
       gridTemplateColumns: '1fr auto',
       columnGap: rem(8),
@@ -128,7 +117,7 @@ const userInfoStyles = css([
     flexGrow: 1,
     flexWrap: 'wrap',
     minWidth: 0,
-    [`@media (max-width: ${mobileScreen.max}px)`]: {
+    [mediaBelow.tablet]: {
       flexDirection: 'column',
       flexWrap: 'nowrap',
       alignItems: 'flex-start',
@@ -148,7 +137,7 @@ const nameTextStyles = {
   fontSize: rem(16),
   fontWeight: 400,
   lineHeight: 24 / 16,
-  [`@media (max-width: ${mobileScreen.max}px)`]: { whiteSpace: 'nowrap' },
+  [mediaBelow.tablet]: { whiteSpace: 'nowrap' },
 } as const;
 
 const nameStyles = css(nameTextStyles);

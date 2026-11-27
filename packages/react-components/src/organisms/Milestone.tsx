@@ -6,7 +6,8 @@ import {
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useState } from 'react';
 import { Button, Link } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { colour } from '../colors';
 import { article as articleIcon, minusRectIcon, plusRectIcon } from '../icons';
 import { useTextTruncation } from '../hooks';
@@ -55,7 +56,7 @@ const milestoneRowStyles = css({
   borderBottom: `1px solid ${colour.border.tertiary}`,
   marginBottom: rem(20),
   alignItems: 'flex-start',
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     gridTemplateColumns: '1fr',
     gap: rem(12),
   },

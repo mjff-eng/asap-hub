@@ -1,7 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { colour } from '../../colors';
-import { rem, remUnit, tabletScreen } from '../../pixels';
+import { rem, remUnit } from '../../pixels';
+import { mediaCondition } from '../../layout';
 import JoinMeetingButton from '../JoinMeetingButton';
 
 it('links to the meeting when the meeting link is valid', () => {
@@ -120,10 +121,10 @@ it('styles the missing link tooltip with the event page design', () => {
     backgroundColor: colour.foreground['color-blue'],
   });
   expect(tooltip).toHaveStyleRule('max-width', rem(160), {
-    media: `(max-width: ${tabletScreen.width - 1}px)`,
+    media: mediaCondition.below.tablet,
   });
   expect(tooltip).toHaveStyleRule('margin-left', '0', {
-    media: `(max-width: ${tabletScreen.width - 1}px)`,
+    media: mediaCondition.below.tablet,
   });
   expect(tooltip).not.toHaveStyleRule('font-size', expect.anything());
   expect(tooltip.firstElementChild).toHaveStyleRule(

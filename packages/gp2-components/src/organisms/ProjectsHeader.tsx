@@ -1,9 +1,14 @@
-import { Link, ExternalLinkIcon, pixels } from '@asap-hub/react-components';
+import {
+  Link,
+  ExternalLinkIcon,
+  pixels,
+  mediaBelow,
+} from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { projectsImage } from '../images';
 import PageBanner from './PageBanner';
 
-const { rem, mobileScreen } = pixels;
+const { rem } = pixels;
 const props = {
   image: projectsImage,
   position: 'center',
@@ -13,7 +18,7 @@ const props = {
 };
 
 const buttonStyle = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     width: '72%',
   },
 });

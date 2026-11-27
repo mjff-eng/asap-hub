@@ -9,9 +9,10 @@ import { FormSection, LabeledTextField } from '../molecules';
 import { noop } from '../utils';
 import { EditModal } from '../organisms';
 import { GlobeIcon } from '../icons';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 
-const buttonMediaQuery = `@media (min-width: ${mobileScreen.max - 100}px)`;
+const buttonMediaQuery = mediaFrom.tablet;
 
 const buttonContainerStyles = css({
   display: 'grid',

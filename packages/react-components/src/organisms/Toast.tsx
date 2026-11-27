@@ -12,12 +12,8 @@ import {
   successIcon,
   successLargeIcon,
 } from '../icons';
-import {
-  rem,
-  vminLinearCalcClamped,
-  mobileScreen,
-  largeDesktopScreen,
-} from '../pixels';
+import { rem, remUnit } from '../pixels';
+import { mediaFrom } from '../layout';
 import { colour } from '../colors';
 
 const SIDE_PADDING = 24;
@@ -41,13 +37,11 @@ const alignIconWithParagraphStyles = css({
 const styles = css({
   boxSizing: 'border-box',
   width: '100%',
-  padding: `${vminLinearCalcClamped(
-    mobileScreen,
-    12,
-    largeDesktopScreen,
-    6,
-    'px',
-  )} ${rem(SIDE_PADDING)}`,
+  padding: `${remUnit(12)} ${rem(SIDE_PADDING)}`,
+  [mediaFrom.tablet]: {
+    paddingTop: remUnit(6),
+    paddingBottom: remUnit(6),
+  },
   position: 'relative',
 });
 

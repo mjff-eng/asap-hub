@@ -3,10 +3,10 @@ import { css, SerializedStyles } from '@emotion/react';
 import { network } from '@asap-hub/routing';
 
 import { Card, Headline3, Paragraph, Pill } from '../atoms';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
 import { colour } from '../colors';
 import { ThemeVariant } from '../theme';
-import { contentWidthStyles, pageMarginStyles } from '../layout';
+import { mediaBelow, contentWidthStyles, pageMarginStyles } from '../layout';
 
 const container = css({
   display: 'grid',
@@ -21,7 +21,7 @@ const descriptionStyles = css({
 const pillContainerStyles = css({
   display: 'flex',
   gap: rem(8),
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });

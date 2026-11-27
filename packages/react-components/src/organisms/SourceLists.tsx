@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { Button, Paragraph } from '../atoms';
 import { colour } from '../colors';
 import { ExportIcon, linkIcon } from '../icons';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { UploadListSourceFile } from './UploadListModal';
 
 const buttonIconGapReset = { '> svg + span': { marginLeft: 0 } } as const;
@@ -51,7 +52,7 @@ const rowStyles = css({
     borderTop: 'none',
     paddingTop: 0,
   },
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'stretch',
   },
@@ -104,7 +105,7 @@ const downloadButtonStyles = css({
     padding: rem(5),
   },
   ...buttonIconGapReset,
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     width: '100%',
   },
 });

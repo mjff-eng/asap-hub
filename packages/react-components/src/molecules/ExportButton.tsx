@@ -11,7 +11,8 @@ import {
 import { Button, Spinner } from '../atoms';
 import { colour } from '../colors';
 import { ExportIcon } from '../icons';
-import { mobileScreen, rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import TooltipInfo from './TooltipInfo';
 
 const exportSectionStyles = css({
@@ -19,7 +20,7 @@ const exportSectionStyles = css({
   alignItems: 'center',
   gap: rem(15),
 
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginTop: rem(24),
@@ -33,14 +34,9 @@ const exportButtonStyles = css({
   alignItems: 'center',
   padding: rem(9),
   paddingRight: rem(15),
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     width: '100%',
   },
-
-  [`@media (min-width:${tabletScreen.min}px) and (max-width: ${mobileScreen.max}px)`]:
-    {
-      minWidth: 'auto',
-    },
 });
 
 const infoWrapperStyle = css({

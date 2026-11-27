@@ -25,11 +25,12 @@ import {
 } from '../molecules';
 import { Toast } from '../organisms';
 import { badgesAnchorId } from '../organisms/UserProfileBadges';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { captionRegularStyles, fontStyles } from '../text';
 import PageInfoContainer from './PageInfoContainer';
 
-const desktopQuery = `@media (min-width: ${tabletScreen.min}px)`;
+const desktopQuery = mediaFrom.tablet;
 
 const AVATAR_SIZE = 96;
 const AVATAR_SIZE_DESKTOP = 120;

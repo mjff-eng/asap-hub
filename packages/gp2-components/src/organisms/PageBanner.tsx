@@ -7,8 +7,9 @@ import {
   text,
 } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
+import { removeLayoutPaddingStyles } from '../layout';
 
-const { mobileScreen, rem, tabletScreen, vminLinearCalcClamped } = pixels;
+const { rem } = pixels;
 
 type PageBannerProp = {
   image?: string;
@@ -46,10 +47,6 @@ const textContainerStyles = (noMarginBottom: boolean) =>
       marginTop: rem(32),
     },
   });
-
-const removeLayoutPaddingStyles = {
-  marginTop: vminLinearCalcClamped(mobileScreen, -33, tabletScreen, -48, 'px'),
-};
 
 const imageBannerStyles = (image: string, position: string) =>
   css({

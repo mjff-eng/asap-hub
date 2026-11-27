@@ -12,7 +12,8 @@ import { add } from 'date-fns';
 
 import { dropdownChevronIcon } from '../icons';
 import DropdownButton from './DropdownButton';
-import { rem, remUnit, tabletScreen } from '../pixels';
+import { rem, remUnit } from '../pixels';
+import { mediaBelow } from '../layout';
 import { MultiSelect, Paragraph, Subtitle } from '../atoms';
 import { formatDateToTimezone, noop, searchIcon } from '..';
 import ExportButton from './ExportButton';
@@ -39,7 +40,7 @@ const controlsContainerStyles = css({
     padding: `${rem(8)} ${rem(16)}`,
   },
 
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginTop: rem(24),
@@ -59,7 +60,7 @@ const selectContainerStyles = css({
     padding: `${rem(8)} ${rem(16)}`,
   },
 
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginTop: rem(24),
@@ -97,7 +98,7 @@ const exportContainerStyles = css({
   display: 'flex',
   justifyContent: 'right',
   gap: rem(33),
-  [`@media (max-width: ${tabletScreen.min}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     width: '100%',

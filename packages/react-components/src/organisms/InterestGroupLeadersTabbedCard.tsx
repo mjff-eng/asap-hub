@@ -3,14 +3,15 @@ import { css } from '@emotion/react';
 import React from 'react';
 import { Paragraph } from '../atoms';
 import { MembersList, TabbedCard } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { splitListBy } from '../utils';
 
 const containerStyles = css({
   padding: `${rem(32)} 0`,
   display: 'grid',
   rowGap: rem(12),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     columnGap: rem(15),
   },
 });

@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 
 import { colour } from './colors';
-import { formTargetWidth, mobileScreen, rem } from './pixels';
+import { formTargetWidth, rem } from './pixels';
+import { mediaBelow } from './layout';
 
 const borderWidth = 1;
 const styles = css({
@@ -30,7 +31,7 @@ const styles = css({
 
   transition: '200ms',
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexGrow: 1,
     minWidth: '100%',
   },

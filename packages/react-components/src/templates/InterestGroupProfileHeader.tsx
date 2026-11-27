@@ -5,7 +5,8 @@ import { dashboard, network } from '@asap-hub/routing';
 import { InterestGroupResponse, InterestGroupTools } from '@asap-hub/model';
 
 import { colour } from '../colors';
-import { mobileScreen, rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { CopyButton, Display, Link, StateTag, TabLink } from '../atoms';
 import {
   googleDriveIcon,
@@ -24,7 +25,7 @@ const belowHeadlineStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   flexFlow: 'column',
-  [`@media (min-width: ${tabletScreen.width}px)`]: {
+  [mediaFrom.tablet]: {
     flexFlow: 'row',
     flexWrap: 'wrap',
   },
@@ -35,7 +36,7 @@ const titleStyle = css({
   flexFlow: 'row',
   gap: rem(15),
   alignItems: 'center',
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     flexFlow: 'column',
     gap: 3,
     alignItems: 'flex-start',
@@ -50,7 +51,7 @@ const contactStyles = css({
 });
 
 const buttonStyles = css({
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'flex',
     flexGrow: 1,
   },
@@ -59,7 +60,7 @@ const buttonStyles = css({
 const toolsStyles = css({
   display: 'flex',
   gap: rem(12),
-  [`@media (max-width: ${mobileScreen.max - 1}px)`]: {
+  [mediaBelow.tablet]: {
     flexFlow: 'column',
     gap: 0,
   },

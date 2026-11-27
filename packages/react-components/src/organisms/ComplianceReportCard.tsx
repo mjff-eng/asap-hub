@@ -17,7 +17,8 @@ import {
 } from '..';
 import { paddingStyles } from '../card';
 import UserTeamInfo from '../molecules/UserTeamInfo';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { getTeams, getUserHref } from '../utils';
 
 export type ComplianceReportCardProps =
@@ -41,7 +42,7 @@ const toastHeaderStyles = css({
   display: 'flex',
   alignItems: 'center',
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     alignItems: 'flex-start',
   },
 });
@@ -85,7 +86,7 @@ const addedByContainerStyles = css({
   flexDirection: 'row',
   gap: rem(16),
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });
@@ -97,7 +98,7 @@ const addedByTextStyles = css({
   alignSelf: 'flex-end',
   gap: rem(6),
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     justifyContent: 'flex-start',
     alignSelf: 'flex-start',
   },
@@ -111,7 +112,7 @@ const titleContainerStyles = css({
   width: '100%',
   gap: rem(16),
 
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     gap: rem(8),

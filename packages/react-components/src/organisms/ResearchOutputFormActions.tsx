@@ -1,16 +1,13 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { Button } from '../atoms';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 const formControlsContainerStyles = css({
   display: 'flex',
   justifyContent: 'end',
   paddingBottom: rem(200), // Hack for labs selector
-  [`@media (max-width: 810px)`]: {
-    justifySelf: 'end',
-    width: '100%',
-  },
 });
 
 const formControlsTwoButtonsStyles = css({
@@ -18,7 +15,7 @@ const formControlsTwoButtonsStyles = css({
   alignItems: 'end',
   gridGap: rem(24),
   gridTemplateColumns: '1fr 1fr',
-  [`@media (max-width: ${mobileScreen.width}px)`]: {
+  [mediaBelow.tablet]: {
     gridTemplateColumns: '1fr',
     width: '100%',
     'button:nth-of-type(1)': {
@@ -37,7 +34,7 @@ const formControlsThreeButtonsStyles = css({
   alignItems: 'end',
   gap: rem(24),
   gridTemplateColumns: '1fr 1fr 1fr',
-  [`@media (max-width: 1110px)`]: {
+  [mediaBelow.laptop]: {
     gridTemplateColumns: '1fr',
     width: '100%',
     'button:nth-of-type(1)': {

@@ -4,12 +4,12 @@ import { UserProfileContext } from '@asap-hub/react-context';
 
 import { Card, Headline2, Paragraph, Link } from '../atoms';
 import { docsIcon } from '../icons';
-import { mobileScreen } from '../pixels';
+import { mediaBelow } from '../layout';
 import UserProfilePlaceholderCard from './UserProfilePlaceholderCard';
 
 const stretchOnMobile = css({
   display: 'flex',
-  [`@media (max-width: ${mobileScreen.width}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
   },
 });

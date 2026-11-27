@@ -8,7 +8,8 @@ import {
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { Card, Headline3, Paragraph } from '../atoms';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import Milestone from './Milestone';
 import { colour } from '../colors';
 import type { ResearchOutputOption } from '../utils';
@@ -39,7 +40,7 @@ const milestonesGridStyles = css({
   display: 'grid',
   gridTemplateColumns: '150px 1fr auto',
   columnGap: rem(24),
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     gridTemplateColumns: '1fr',
   },
 });
@@ -49,7 +50,7 @@ const tableHeaderStyles = css({
   gridColumn: '1 / -1',
   gridTemplateColumns: 'subgrid',
   marginBottom: rem(16),
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });

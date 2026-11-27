@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 import { css, SerializedStyles } from '@emotion/react';
 
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 const triangleHeight = 5;
 
@@ -10,7 +11,7 @@ const positionerStyles = css({
   display: 'block',
   position: 'relative',
   height: 0,
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     position: 'relative',
     width: '100%',
   },
@@ -41,7 +42,7 @@ const tooltipStyles = css({
     marginRight: `-${triangleHeight}px`,
   },
 
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     width: 'max-content',
   },
 });
@@ -69,7 +70,7 @@ const bubbleStyles = css({
 
   borderRadius: rem(4),
 
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     maxWidth: '100%',
     marginLeft: rem(12),
     marginRight: rem(12),

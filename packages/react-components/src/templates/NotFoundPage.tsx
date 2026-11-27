@@ -1,38 +1,26 @@
 import { css } from '@emotion/react';
 
 import { Display, Paragraph, Link } from '../atoms';
-import {
-  vminLinearCalc,
-  mobileScreen,
-  largeDesktopScreen,
-  rem,
-  tabletScreen,
-} from '../pixels';
-import { themedPageMarginStyles } from '../layout';
-
-const verticalPadding = vminLinearCalc(
-  mobileScreen,
-  36,
-  largeDesktopScreen,
-  72,
-  'px',
-);
+import { rem, remUnit } from '../pixels';
+import { mediaBelow, mediaFrom, themedPageMarginStyles } from '../layout';
 
 const styles = css({
-  paddingTop: verticalPadding,
-  paddingBottom: verticalPadding,
+  paddingTop: remUnit(36),
+  paddingBottom: remUnit(36),
 
   display: 'grid',
   gridRowGap: rem(12),
   textAlign: 'center',
 
-  [`@media (min-width: ${mobileScreen.width + 1}px)`]: {
+  [mediaFrom.tablet]: {
+    paddingTop: remUnit(72),
+    paddingBottom: remUnit(72),
     justifyItems: 'center',
   },
 });
 
 const tabletAndAbove = css({
-  [`@media (max-width: ${tabletScreen.min - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'none',
   },
 });

@@ -2,7 +2,8 @@ import { css } from '@emotion/react';
 import { ReactElement } from 'react';
 import { Dropdown, DropdownProps, Label, Paragraph } from '../atoms';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import { TooltipInfo } from '.';
 
 const subtitleStyles = css({
@@ -12,7 +13,7 @@ const subtitleStyles = css({
 const descriptionStyles = css({
   color: colour.foreground.tertiary,
   display: 'inline-block',
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'unset',
   },
 });

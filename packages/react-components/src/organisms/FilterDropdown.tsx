@@ -4,17 +4,12 @@ import { useEffect, useRef } from 'react';
 import { Button } from '../atoms';
 import { colour, colourWithAlpha } from '../colors';
 import { filterIcon } from '../icons';
-import {
-  largeDesktopScreen,
-  mobileScreen,
-  rem,
-  tabletScreen,
-  vminLinearCalc,
-} from '../pixels';
+import { rem, remUnit } from '../pixels';
+import { mediaFrom } from '../layout';
 
 const buttonTextStyles = css({
   display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'unset',
   },
 });
@@ -51,13 +46,10 @@ const dropdownContainer = css({
   flexDirection: 'column',
 
   boxSizing: 'border-box',
-  padding: `${rem(6)} ${rem(18)} ${vminLinearCalc(
-    mobileScreen,
-    6,
-    largeDesktopScreen,
-    12,
-    'px',
-  )}`,
+  padding: `${rem(6)} ${rem(18)} ${remUnit(6)}`,
+  [mediaFrom.tablet]: {
+    paddingBottom: remUnit(12),
+  },
 });
 
 const showMenuStyles = css({

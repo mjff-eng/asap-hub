@@ -5,7 +5,8 @@ import { ArticleItem, ResearchOutputType } from '@asap-hub/model';
 import { LabeledMultiSelect, Modal } from '../molecules';
 import { crossIcon } from '../icons';
 import { Button, Headline3 } from '../atoms';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { ResearchOutputOption } from '../utils';
 import { articleSelectComponents } from '../utils/article-select-components';
 import Toast from './Toast';
@@ -28,7 +29,7 @@ const widerModalStyles = css({
   boxSizing: 'content-box',
 });
 
-const buttonMediaQuery = `@media (min-width: ${mobileScreen.max - 100}px)`;
+const buttonMediaQuery = mediaFrom.tablet;
 
 const buttonContainerStyles = (menuOpen: boolean) =>
   css({

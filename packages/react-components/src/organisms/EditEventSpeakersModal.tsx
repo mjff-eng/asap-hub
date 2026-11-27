@@ -34,7 +34,8 @@ import SpeakerUserRow, {
   placeholderAvatarStyles,
   trailingColumnsStyles,
 } from '../molecules/SpeakerUserRow';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { splitDisplayName } from '../utils/user';
 import { EventTeamType } from './shared-event-card';
 import { iconButtonStyles } from './shared-event-card-styles';
@@ -107,11 +108,11 @@ const bodyStyles = css({
 const searchSpacingStyles = css({ marginTop: rem(32) });
 
 const hideOnMobileStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: { display: 'none' },
+  [mediaBelow.tablet]: { display: 'none' },
 });
 
 const hideOnDesktopStyles = css({
-  [`@media (min-width: ${mobileScreen.max + 1}px)`]: { display: 'none' },
+  [mediaFrom.tablet]: { display: 'none' },
 });
 
 const placeholderStyles = css({ color: colour.foreground.disabled });

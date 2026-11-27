@@ -4,43 +4,29 @@ import { css } from '@emotion/react';
 import { Display, Paragraph, Button } from '../atoms';
 import { LabeledTextField } from '../molecules';
 import { noop } from '../utils';
-import {
-  vminLinearCalc,
-  mobileScreen,
-  largeDesktopScreen,
-  formTargetWidth,
-  rem,
-} from '../pixels';
-import { themedPageMarginStyles } from '../layout';
+import { formTargetWidth, rem, remUnit } from '../pixels';
+import { mediaFrom, themedPageMarginStyles } from '../layout';
 import { colour } from '../colors';
-
-const verticalPadding = vminLinearCalc(
-  mobileScreen,
-  36,
-  largeDesktopScreen,
-  72,
-  'px',
-);
 
 const styles = css({
   width: 'max-content',
   maxWidth: '100%',
 
   boxSizing: 'border-box',
-  paddingTop: verticalPadding,
-  paddingBottom: verticalPadding,
+  paddingTop: remUnit(36),
+  paddingBottom: remUnit(36),
 
   display: 'grid',
   gridTemplateColumns: '100%',
-  gridRowGap: `${vminLinearCalc(
-    mobileScreen,
-    12,
-    largeDesktopScreen,
-    24,
-    'px',
-  )}`,
+  gridRowGap: remUnit(12),
 
   textAlign: 'center',
+
+  [mediaFrom.tablet]: {
+    paddingTop: remUnit(72),
+    paddingBottom: remUnit(72),
+    gridRowGap: remUnit(24),
+  },
 });
 
 const textStyles = css({

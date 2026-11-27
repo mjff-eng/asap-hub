@@ -4,8 +4,8 @@ import { css } from '@emotion/react';
 import React, { Fragment } from 'react';
 import { Divider, Link } from '../atoms';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
-import { pageGutter } from '../layout';
+import { rem } from '../pixels';
+import { mediaFrom, pageGutter } from '../layout';
 
 const titleStyle = css({
   fontWeight: 'bold',
@@ -34,7 +34,7 @@ const listItemStyle = css({
   gridTemplateRows: '1fr 1fr',
   gridRowGap: rem(12),
 
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridAutoFlow: 'column',
     gridTemplateColumns: '1fr 1fr',
     columnGap: pageGutter,

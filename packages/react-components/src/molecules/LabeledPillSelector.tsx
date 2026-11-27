@@ -3,7 +3,8 @@ import { ComponentProps } from 'react';
 import { Paragraph, PillSelector } from '../atoms';
 import { validationMessageStyles } from '../form';
 import { colour } from '../colors';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 
 const fieldsetStyles = css({
   border: 'none',
@@ -23,7 +24,7 @@ const subtitleStyles = css({
 const descriptionStyles = css({
   color: colour.foreground.tertiary,
   display: 'inline-block',
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     display: 'unset',
   },
 });

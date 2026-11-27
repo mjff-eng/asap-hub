@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { useNavigate } from 'react-router';
 import { Button, crossIcon, Headline3, Modal, Paragraph } from '..';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 
 type modal = 'submit' | 'cancel' | null;
 
@@ -17,7 +18,7 @@ const controlsContainerStyles = css({
   alignItems: 'flex-start',
 });
 
-const buttonMediaQuery = `@media (min-width: ${mobileScreen.max - 100}px)`;
+const buttonMediaQuery = mediaFrom.tablet;
 
 const buttonContainerStyles = css({
   display: 'grid',

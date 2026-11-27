@@ -7,7 +7,8 @@ import { colour } from '../colors';
 import { CircleInfoIcon, ExternalLinkIcon, OrcidIcon } from '../icons';
 import { mailToSupport } from '../mail';
 import { LinkHeadline } from '../molecules';
-import { mobileScreen, rem } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow } from '../layout';
 import {
   bodyTextStyles,
   cardContentStyles,
@@ -17,7 +18,7 @@ import {
 import { formatOrcidPublicationDate, orcidWorkTypeLabels } from './orcid-works';
 
 const worksHeaderStyles = css({
-  [`@media (max-width: ${mobileScreen.max}px)`]: {
+  [mediaBelow.tablet]: {
     flexDirection: 'column',
     alignItems: 'flex-start',
   },

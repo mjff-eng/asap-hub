@@ -5,7 +5,8 @@ import React, { ComponentProps } from 'react';
 import { Link, Paragraph } from '../atoms';
 import { InactiveBadgeIcon, TeamIcon } from '../icons';
 import { TabbedCard } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { splitListBy } from '../utils';
 
 const inactiveBadgeStyles = css({
@@ -25,7 +26,7 @@ const containerStyles = css({
   padding: `${rem(32)} 0`,
   display: 'grid',
   rowGap: rem(12),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridTemplateColumns: '1fr 1fr',
     columnGap: rem(15),
   },

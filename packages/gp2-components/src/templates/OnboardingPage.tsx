@@ -1,11 +1,11 @@
-import { pixels } from '@asap-hub/react-components';
+import { mediaFrom, pixels } from '@asap-hub/react-components';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { layoutContentStyles } from '../layout';
 
 import { OnboardingPageHeader, OnboardingPageFooter } from '../organisms';
 
-const { vminLinearCalcClamped, mobileScreen, tabletScreen } = pixels;
+const { rem } = pixels;
 
 type OnboardingPageProps = ComponentProps<typeof OnboardingPageHeader> &
   ComponentProps<typeof OnboardingPageFooter> & {
@@ -15,14 +15,12 @@ type OnboardingPageProps = ComponentProps<typeof OnboardingPageHeader> &
 const containerStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  gap: vminLinearCalcClamped(mobileScreen, 24, tabletScreen, 32, 'px'),
-  padding: `${vminLinearCalcClamped(
-    mobileScreen,
-    32,
-    tabletScreen,
-    48,
-    'px',
-  )} 0`,
+  gap: rem(24),
+  padding: `${rem(32)} 0`,
+  [mediaFrom.tablet]: {
+    gap: rem(32),
+    padding: `${rem(48)} 0`,
+  },
 });
 
 const OnboardingPage: React.FC<OnboardingPageProps> = ({

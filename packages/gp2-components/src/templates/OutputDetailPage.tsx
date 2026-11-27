@@ -11,6 +11,7 @@ import {
   RelatedResearchCard,
   SharedResearchDetailsTagsCard,
   OutputVersions,
+  mediaFrom,
 } from '@asap-hub/react-components';
 import { gp2 as gp2Routing } from '@asap-hub/routing';
 import { css } from '@emotion/react';
@@ -22,7 +23,7 @@ import PageNotifications from './PageNotifications';
 import { getIconForDocumentType, getSourceIcon } from '../utils';
 import { layoutContentStyles } from '../layout';
 
-const { rem, mobileScreen } = pixels;
+const { rem } = pixels;
 const { createMailTo, INVITE_SUPPORT_EMAIL } = mail;
 
 const containerStyles = css({
@@ -40,7 +41,7 @@ const commonStyles = {
 };
 
 const commonMediaQueries = {
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     ...commonStyles,
     width: 'auto',
   },
@@ -50,7 +51,7 @@ const buttonsContainer = css({
   ...commonStyles,
   flexFlow: 'column',
   gap: rem(16),
-  [`@media (min-width: ${mobileScreen.max}px)`]: {
+  [mediaFrom.tablet]: {
     flexFlow: 'row',
     width: '100%',
   },

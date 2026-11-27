@@ -5,7 +5,8 @@ import React from 'react';
 import { Divider, Link, Paragraph } from '../atoms';
 import { colour } from '../colors';
 import { TabbedCard } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { splitListBy } from '../utils';
 
 const itemsListWrapper = css({
@@ -37,7 +38,7 @@ const listItemStyle = css({
   gridTemplateRows: '1fr 1fr',
   gridRowGap: rem(12),
 
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     gridAutoFlow: 'column',
     gridTemplateColumns: '1fr 1fr',
 

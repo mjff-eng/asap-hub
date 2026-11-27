@@ -5,7 +5,8 @@ import { Button, Card, Paragraph, Subtitle } from '../atoms';
 import { colour } from '../colors';
 import { minusRectIcon, plusRectIcon } from '../icons';
 import { ExpandableText, Info } from '../molecules';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaBelow, mediaFrom } from '../layout';
 import { getPerformanceMoodIcon, getPerformanceMoodLabel } from '../utils';
 
 const gridTemplateColumns = `${rem(24)} minmax(0, 1fr) ${rem(64)}`;
@@ -18,7 +19,7 @@ const cardStyles = css({
 
 const headerStyles = css({
   display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'grid',
     gridTemplateColumns,
     columnGap: rem(16),
@@ -43,7 +44,7 @@ const rowStyles = css({
   '&:not(:last-of-type)': {
     borderBottom: `1px solid ${colour.border.tertiary}`,
   },
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'grid',
     gridTemplateColumns,
     columnGap: rem(16),
@@ -58,7 +59,7 @@ const rowHeaderStyles = css({
   display: 'grid',
   gridTemplateColumns: '1fr',
   gap: rem(16),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'contents',
   },
 });
@@ -66,7 +67,7 @@ const rowHeaderStyles = css({
 const iconButtonStyles = css({
   display: 'none',
   lineHeight: 0,
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'inline-flex',
   },
 });
@@ -78,7 +79,7 @@ const fieldStyles = css({
   color: colour.foreground.tertiary,
   fontSize: rem(16),
   lineHeight: rem(24),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'block',
   },
 });
@@ -86,7 +87,7 @@ const fieldStyles = css({
 const fieldLabelStyles = css({
   color: colour.foreground.primary,
   fontWeight: 'bold',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'none',
   },
 });
@@ -105,7 +106,7 @@ const detailsBlockStyles = css({
 
 const desktopDetailsStyles = css({
   display: 'none',
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'block',
     gridColumn: 2,
     minWidth: 0,
@@ -115,7 +116,7 @@ const desktopDetailsStyles = css({
 
 const mobileDetailsStyles = css({
   marginTop: rem(32),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     display: 'none',
   },
 });
@@ -144,7 +145,7 @@ const moodLabelStyles = css({
   textAlign: 'center',
   fontSize: rem(moodTooltipFontSize),
   lineHeight: 16 / moodTooltipFontSize,
-  [`@media (max-width: ${tabletScreen.width - 1}px)`]: {
+  [mediaBelow.tablet]: {
     maxWidth: rem(90),
   },
 });

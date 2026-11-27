@@ -1,7 +1,8 @@
 import { TeamMember } from '@asap-hub/model';
 import { css } from '@emotion/react';
 import React, { ComponentProps, useMemo } from 'react';
-import { rem, tabletScreen } from '../pixels';
+import { rem } from '../pixels';
+import { mediaFrom } from '../layout';
 import { LabsList, MembersList, RolesList, TabbedCard } from '../molecules';
 import { colour } from '../colors';
 import { getTeamMembersByStatus, GroupedTeamMember } from '../utils';
@@ -13,7 +14,7 @@ const containerStyles = css({
   paddingTop: `${rem(32)}`,
   display: 'grid',
   rowGap: rem(24),
-  [`@media (min-width: ${tabletScreen.min}px)`]: {
+  [mediaFrom.tablet]: {
     columnGap: rem(15),
   },
 });

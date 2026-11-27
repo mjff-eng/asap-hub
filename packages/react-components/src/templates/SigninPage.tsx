@@ -2,16 +2,8 @@ import { ComponentProps } from 'react';
 
 import SigninForm from './SigninForm';
 import { AgreeToTerms } from '../molecules';
-import { vminLinearCalc, mobileScreen, largeDesktopScreen } from '../pixels';
-import { themedPageMarginStyles } from '../layout';
-
-const verticalPadding = vminLinearCalc(
-  mobileScreen,
-  36,
-  largeDesktopScreen,
-  72,
-  'px',
-);
+import { remUnit } from '../pixels';
+import { mediaFrom, themedPageMarginStyles } from '../layout';
 
 type SigninPageProps = ComponentProps<typeof SigninForm> &
   ComponentProps<typeof AgreeToTerms>;
@@ -23,9 +15,13 @@ const SigninPage: React.FC<SigninPageProps> = ({ appOrigin, ...props }) => (
         boxSizing: 'border-box',
         width: 'max-content',
         maxWidth: '100%',
-        paddingTop: verticalPadding,
-        paddingBottom: verticalPadding,
+        paddingTop: remUnit(36),
+        paddingBottom: remUnit(36),
         margin: 'auto',
+        [mediaFrom.tablet]: {
+          paddingTop: remUnit(72),
+          paddingBottom: remUnit(72),
+        },
       },
     ]}
   >
