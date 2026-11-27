@@ -7,6 +7,7 @@ import {
 import {
   CaptionCard,
   CaptionItem,
+  LimitedDataCaptionItem,
   LoadingContentBodyTable,
   RepresentationOfPresentersTable,
 } from '@asap-hub/react-components';
@@ -62,6 +63,7 @@ const RepresentationOfPresentersContent: FC<
             percentage
             {...performance.uniqueKeyPersonnel}
           />
+          <LimitedDataCaptionItem />
         </>
       </CaptionCard>
       <RepresentationOfPresentersTable

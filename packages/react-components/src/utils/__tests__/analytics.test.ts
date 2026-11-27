@@ -1,15 +1,45 @@
 import { PerformanceMetrics } from '@asap-hub/model';
 import {
+  aboveAverageIcon,
+  averageIcon,
+  belowAverageIcon,
   happyFaceIcon,
   neutralFaceIcon,
   sadFaceIcon,
   informationInverseIcon,
 } from '../../icons';
 import {
+  getPerformanceIcon,
   getPerformanceText,
   getPerformanceMoodIcon,
   getPerformanceMoodLabel,
 } from '../analytics';
+
+describe('getPerformanceIcon', () => {
+  const performanceMetrics: PerformanceMetrics = {
+    belowAverageMin: 0,
+    belowAverageMax: 4,
+    averageMin: 5,
+    averageMax: 10,
+    aboveAverageMin: 11,
+    aboveAverageMax: 20,
+  };
+
+  it('returns the icon matching the value range', () => {
+    expect(getPerformanceIcon(3, performanceMetrics)).toBe(belowAverageIcon);
+    expect(getPerformanceIcon(6, performanceMetrics)).toBe(averageIcon);
+    expect(getPerformanceIcon(15, performanceMetrics)).toBe(aboveAverageIcon);
+  });
+
+  it('returns the limited data icon when isLimitedData is true', () => {
+    expect(getPerformanceIcon(0, performanceMetrics, true)).toBe(
+      informationInverseIcon,
+    );
+    expect(getPerformanceIcon(15, performanceMetrics, true)).toBe(
+      informationInverseIcon,
+    );
+  });
+});
 
 describe('getPerformanceText', () => {
   const performanceMetrics: PerformanceMetrics = {

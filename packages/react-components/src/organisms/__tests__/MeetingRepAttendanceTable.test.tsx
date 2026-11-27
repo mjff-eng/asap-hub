@@ -50,7 +50,9 @@ describe('MeetingRepAttendanceTable', () => {
     expect(screen.getByText(/Outstanding/i)).toBeInTheDocument();
     expect(screen.getByText(/Adequate/i)).toBeInTheDocument();
     expect(screen.getByText(/Needs Improvement/i)).toBeInTheDocument();
-    expect(screen.getByText(/Limited data/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /Limited data/i }),
+    ).toBeInTheDocument();
   });
 
   it('renders table headers correctly', () => {
